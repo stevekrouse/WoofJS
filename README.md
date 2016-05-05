@@ -5,29 +5,29 @@ Woof is a small JavaScript library inspired by Scratch for making interactive ca
 
 ## Getting Started
 
-1. Include the Woof library in your code between the `<head>` tags.
+1) Include the Woof library in your code between the `<head>` tags.
 ```html
 <script src="https://cdn.rawgit.com/stevekrouse/Woof/master/woof.js"></script>
 ```
 
-2. Add a canvas tag between the `<body>` tags. Give it an ID, width and height.
+2) Add a canvas tag between the `<body>` tags. Give it an ID, width and height.
 ```html
 <canvas id="project" width="400" height="400"></canvas>
 ```
-3. Set up your Woof project by referencing the ID of your canvas.
+3) Set up your Woof project by referencing the ID of your canvas.
 ```javascript
 var project = new Proejct("project");
 ```
-4. Add a backdrop URL (preferably of similar dimensions to your canvas).
+4) Add a backdrop URL (preferably of similar dimensions to your canvas).
 ```javascript
 project.addBackdropURL("http://cdn.mysitemyway.com/etc-mysitemyway/webtreats/assets/posts/857/thumbs/tileable-classic-nebula-space-patterns-6.jpg");
 ```
-5. Add a sprite.
+5) Add a sprite.
 ```javascript
 var rectangle = project.addSprite();
 rectangle.addCostumeURL("http://www.urdu-english.com/images/lessons/beginner/shapes/shapes-pics/rectangle.png");
 ```
-6. Make it move with the arrow keys.
+6) Make it move with the arrow keys.
 ```javascript
 rectangle.every(40, "miliseconds", () => {
   if (project.keysDown.includes("LEFT")){
@@ -44,7 +44,7 @@ rectangle.every(40, "miliseconds", () => {
   }
 });
 ```
-7. Add a timer.
+7) Add a timer.
 ```javascript
 var timer = 20;
 var timerSprite = project.addSprite();
@@ -60,7 +60,7 @@ scoreSprite.every("1", "second", () => {
 
 ## Project API
 
-  - Create a proejct: `var project = new Project('canvasID');`
+  - Create a project: `var project = new Project('canvasID');`
   - Add a backdrop: `project.addBackDropURL("http://example.com/img.jpg");`
   - Change the backdrop: `project.backdrop = 0;`
   - Create a sprite: `var sprite = project.addSprite();`
