@@ -1,18 +1,15 @@
 // To Dos
-// sprite layering (render order)
-// Better setText API
 // more accurate mouseover and touching sprites(including angle) (steal from phsophorus)
 // touching colors (steal from phosphorus)
-// hour, min, second, day, month, year
-// setRotationStyle no rotate (or only left-right)
+// hour, min, second, day, month, year helpers
 
-// https://github.com/nathan/phosphorus/blob/master/phosphorus.js
+Number.prototype.between = function(a, b, inclusive) {
+  var min = Math.min.apply(Math, [a, b]),
+    max = Math.max.apply(Math, [a, b]);
+  return inclusive ? this >= min && this <= max : this > min && this < max;
+};
 
-// http://jsbin.com/patafol/35/edit?html,js,output
-
-var Woof = {};
-
-Woof.keyCodeToString = (keyCode) => {
+var keyCodeToString = (keyCode) => {
   if (keyCode == 38) {
     return "UP";
   }
@@ -26,11 +23,11 @@ Woof.keyCodeToString = (keyCode) => {
     return "DOWN";
   }
   else {
-    return String.fromCharCode(event.keyCode);
+    return String.fromCharCode(keyCode);
   }
 };
 
-Woof.unitsToMiliseconds = (time, units) => {
+var unitsToMiliseconds = (time, units) => {
   if (units == "miliseconds" || units == "milisecond"){
     return time;
   } else if (units == "seconds" || units == "second"){
@@ -42,21 +39,25 @@ Woof.unitsToMiliseconds = (time, units) => {
   }
 };
 
-Woof.randomInt = (low, high) => {
+var randomInt = (low, high) => {
   return Math.floor(Math.random() * high + low);
 };
 
-Woof.Project = function(canvasId) {
+var Project = function(canvasId) {
   this.sprites = [];
   this.backdrops = [];
   this.backdrop = 0;
   
-  // set up canvas context
-  this._canvas = document.getElementById(canvasId); // TODO catch fail
+  try {
+    this._canvas = document.getElementById(canvasId);
+  } catch (e){
+    console.error(e);
+    console.error("Could not find a canvas on the page with id " + canvasId);
+    return null;
+  }
   this._context = this._canvas.getContext("2d");
   
   this._render = function(){
-    
     this._context.clearRect(0, 0, this._canvas.width, this._canvas.height);
     this._renderBackdrop();
     this._renderSprites();
@@ -76,7 +77,7 @@ Woof.Project = function(canvasId) {
   };
   
   this.addSprite = function() {
-    var sprite = new Woof.Sprite(this);
+    var sprite = new Sprite(this);
     this.sprites.push(sprite);
     return sprite;
   };
@@ -97,51 +98,61 @@ Woof.Project = function(canvasId) {
     this.sprites.forEach(sprite => sprite.delete());
   };
   
+  
   this.mouseDown = false;
-  document.body.onmousedown = () => { 
+  var mousedown = () => { 
     this.mouseDown = true;
   };
-  document.body.onmouseup = () => {
+  var mouseup = () => {
     this.mouseDown = false;
   };
+  document.body.addEventListener("mousedown", mousedown);
+  document.body.addEventListener("mouseup", mouseup);
+  document.body.addEventListener("touchstart", mousedown);
+  document.body.addEventListener("touchend", mouseup);
+
   
   this.mouseX = 0;
   this.mouseY = 0;
-  document.body.onmousemove = (event) => { 
+  document.body.addEventListener("mousemove", (event) => { 
     this.mouseX = event.clientX;
     this.mouseY = event.clientY;
-  };
+  });
+  this._canvas.addEventListener("touchmove", event => {
+    this.mouseX = event.targetTouches[0].pageX;
+    this.mouseY = event.targetTouches[0].pageY;
+    event.preventDefault();
+  });
   
   this.keysDown = [];
-  document.body.onkeydown = event => {
-    var key = Woof.keyCodeToString(event.keyCode);
+  document.body.addEventListener("keydown", event => {
+    var key = keyCodeToString(event.keyCode);
     if (!this.keysDown.includes(key)){
      this.keysDown.push(key); 
     }
-  };
-  document.body.onkeyup = event => {
-    var key = Woof.keyCodeToString(event.keyCode);
+  });
+  document.body.addEventListener("keyup", event => {
+    var key = keyCodeToString(event.keyCode);
     if (this.keysDown.includes(key)){
       this.keysDown.splice(this.keysDown.indexOf(key), 1);
     }
-  };
+  });
 
   this._everys = [];
   this.every = (time, units, func) => {
-    this._everys.push(setInterval(func, Woof.unitsToMiliseconds(time, units)));
+    this._everys.push(setInterval(func, unitsToMiliseconds(time, units)));
   };
   
   this._afters = [];
   this.after = (time, units, func) => {
-    this._afters.push(setTimeout(func, Woof.unitsToMiliseconds(time, units)));
+    this._afters.push(setTimeout(func, unitsToMiliseconds(time, units)));
   };
   
   this._onloads = [];
-    document.body.onload = function(event){
+    document.body.addEventListener("onload", event => {
     this._onloads.forEach((func) => {func.call();});
-  }.bind(this);
+  });
   
-  // TODO catch render errors and stop rendering
   var renderInterval = setInterval(() => {
     try {
       this._render();
@@ -153,7 +164,7 @@ Woof.Project = function(canvasId) {
   }, 40);
 };
 
-Woof.Sprite = function(project) {
+var Sprite = function(project) {
   this.project = project;
   
   this.xPosition = 0;
@@ -165,6 +176,8 @@ Woof.Sprite = function(project) {
   this.costume = 0;
   this.height = null;
   this.width = null;
+  
+  this.rotationStyle = "ROTATE";
   
   this.showing = true;
 
@@ -184,31 +197,39 @@ Woof.Sprite = function(project) {
   
   this._everys = [];
   this.every = (time, units, func) => {
-    this._everys.push(setInterval(func, Woof.unitsToMiliseconds(time, units)));
+    this._everys.push(setInterval(func, unitsToMiliseconds(time, units)));
   };
   
   this._afters = [];
   this.after = (time, units, func) => {
-    this._afters.push(setTimeout(func, Woof.unitsToMiliseconds(time, units)));
+    this._afters.push(setTimeout(func, unitsToMiliseconds(time, units)));
   };
   
-  this._render = function(project) {
+  this._render = function() {
     var costume = this.costumes[this.costume];
+    
+    var angle;
+    if (this.rotationStyle == "ROTATE"){
+      angle = this.angle;
+    } else if (this.rotationStyle == "NO ROTATE"){
+      angle = 0;
+    }
+    
     if (costume && this.showing) {
-      project._context.save();
-      project._context.translate(this.xPosition, this.yPosition);
-      project._context.translate(costume, costume.width/2, costume.height / 2);
-      project._context.rotate(this.angle * Math.PI / 180);
+      this.project._context.save();
+      this.project._context.translate(this.xPosition, this.yPosition);
+      this.project._context.translate(costume, costume.width/2, costume.height / 2);
+      this.project._context.rotate(angle * Math.PI / 180);
       
       if (costume.nodeName == "IMG") {
-        project._context.drawImage(costume, -costume.width/2, -costume.height / 2);
+        this.project._context.drawImage(costume, -costume.width/2, -costume.height / 2);
       }
       else {
-        project._context.font = costume.size + "px " + costume.font;
-        project._context.fillStyle = costume.color;
-        project._context.fillText(costume.text, costume.x, costume.y);  
+        this.project._context.font = costume.size + "px " + costume.font;
+        this.project._context.fillStyle = costume.color;
+        this.project._context.fillText(costume.text, costume.x, costume.y);  
       }
-      project._context.restore();
+      this.project._context.restore();
     }
   };
   
@@ -217,24 +238,34 @@ Woof.Sprite = function(project) {
     this.yPosition += steps * Math.sin(this.angle * Math.PI / 180);
   };
   
+  this.setRotationStyle = style => {
+    if (style == "ROTATE"){
+      this.rotationStyle = "ROTATE";
+    }
+    else if (style == "NO ROTATE") {
+      this.rotationStyle = "NO ROTATE";
+    }
+    else {
+      throw Error("Unrecognized rotation style: " + style);
+    }
+  };
+  
   this.bounds = () => {
     var leftBounds = this.xPosition - (this.width() / 2);
     var rightBounds = this.xPosition + (this.width() / 2);
-    var upBounds = this.yPosition - (this.height() / 2);
-    var downBounds = this.yPosition + (this.height() / 2);
-    return {left: leftBounds, right: rightBounds, top: upBounds, bottom: downBounds};
+    var topBounds = this.yPosition - (this.height() / 2);
+    var bottomBounds = this.yPosition + (this.height() / 2);
+    return {left: leftBounds, right: rightBounds, top: topBounds, bottom: bottomBounds};
   };
   
   this.touching = sprite => {
-    var containsLeftEdge = this.bounds().left <= sprite.bounds().right && this.bounds().left >= sprite.bounds().left;
-    var containsRightEdge = this.bounds().right >= sprite.bounds().left && this.bounds().right <= sprite.bounds().right;
-    var overlapsHorizontally = containsLeftEdge || containsRightEdge;
+    var r1 = this.bounds();
+    var r2 = sprite.bounds();
     
-    var containsTopEdge = this.bounds().top >= sprite.bounds().top && this.bounds().top <= sprite.bounds().bottom;
-    var containsBottomEdge = this.bounds().bottom >= sprite.bounds().top && this.bounds().bottom <= sprite.bounds().bottom;
-    var overlapsVertically = containsTopEdge || containsBottomEdge;
-    
-    return overlapsHorizontally && overlapsVertically;
+    return !(r2.left > r1.right || 
+             r2.right < r1.left || 
+             r2.top > r1.bottom ||
+             r2.bottom < r1.top);
   };
   
   this.mouseOver = function() {
@@ -248,6 +279,32 @@ Woof.Sprite = function(project) {
   
   this.currentCostume = () => {
     return this.costumes[this.costume];
+  };
+  
+  this.sendToBack = () => {
+    var sprites = this.project.sprites;
+    sprites.splice(0, 0, sprites.splice(sprites.indexOf(this), 1)[0]);
+  };
+  
+  this.sendToFront = () => {
+    var sprites = this.project.sprites;
+    sprites.splice(sprites.length, 0, sprites.splice(sprites.indexOf(this), 1)[0]);
+  };
+  
+  this.pointTowards = sprite => {
+    var x1 = this.xPosition;
+    var y1 = this.yPosition;
+    var x2 = sprite.xPosition;
+    var y2 = sprite.yPosition;
+    
+    this.angle = Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
+  };
+  
+  this.pointTowards = (x2,y2) => {
+    var x1 = this.xPosition;
+    var y1 = this.yPosition;
+    
+    this.angle = Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
   };
   
   this.height = () => {
