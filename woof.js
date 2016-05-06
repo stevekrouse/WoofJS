@@ -193,11 +193,12 @@ var Sprite = function Sprite(project) {
     return this.costumes.length - 1;
   };
 
-  this.setText = function (text, x, y, size, color, font) {
+  this.setText = function (text, x, y, size, color, font, align) {
     var s = size || 12;
     var c = color || "black";
     var f = font || "Arial";
-    _this2.costumes[0] = { text: text, x: x, y: y, size: s, color: c, font: f };
+    var a = align || "left";
+    _this2.costumes[0] = { text: text, x: x, y: y, size: s, color: c, font: f, align: a };
   };
 
   this._everys = [];
@@ -232,6 +233,7 @@ var Sprite = function Sprite(project) {
       } else if (costume.text) {
         this.project._context.font = costume.size + "px " + costume.font;
         this.project._context.fillStyle = costume.color;
+        this.project._context.textAlign = costume.align;
         this.project._context.fillText(costume.text, costume.x, costume.y);
       } else if (costume.radius) {
         this.project._context.beginPath();
