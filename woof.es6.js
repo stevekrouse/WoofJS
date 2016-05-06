@@ -140,6 +140,7 @@ var Project = function(canvasId) {
 
   this._everys = [];
   this.every = (time, units, func) => {
+    func();
     this._everys.push(setInterval(func, unitsToMiliseconds(time, units)));
   };
   
@@ -197,6 +198,7 @@ var Sprite = function(project) {
   
   this._everys = [];
   this.every = (time, units, func) => {
+    func();
     this._everys.push(setInterval(func, unitsToMiliseconds(time, units)));
   };
   
