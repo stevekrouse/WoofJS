@@ -224,14 +224,23 @@ var Sprite = function(project) {
       if (costume.nodeName == "IMG") {
         this.project._context.drawImage(costume, -costume.width/2, -costume.height / 2);
       }
-      else {
+      else if (costume.text) {
         this.project._context.font = costume.size + "px " + costume.font;
         this.project._context.fillStyle = costume.color;
         this.project._context.fillText(costume.text, costume.x, costume.y);  
-      }
+      } else if (costume.radius) {
+				this.project._context.beginPath();
+				this.project._context.arc(costume.x,costume.y,costume.radius,0,2*Math.PI);
+				this.project._context.fillStyle=costume.color;
+				this.project._context.fill();
+			}
       this.project._context.restore();
     }
   };
+  
+  this.addCostumeCircle = (x, y, radius, color) => {
+		this.costumes.push({x:x, y:y, radius: radius, color:color});
+	};
   
   this.move = function(steps){
     this.xPosition += steps * Math.cos(this.angle * Math.PI / 180);
