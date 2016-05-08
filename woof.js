@@ -1,10 +1,5 @@
 "use strict";
 
-// To Dos
-// more accurate mouseover and touching sprites(including angle) (steal from phsophorus)
-// touching colors (steal from phosphorus)
-// hour, min, second, day, month, year helpers
-
 Number.prototype.between = function (a, b, inclusive) {
   var min = Math.min.apply(Math, [a, b]),
       max = Math.max.apply(Math, [a, b]);
@@ -56,6 +51,8 @@ var Project = function Project(canvasId) {
     return null;
   }
   this._context = this._canvas.getContext("2d");
+  this.height = this._canvas.height;
+  this.width = this._canvas.width;
 
   this._render = function () {
     this._context.clearRect(0, 0, this._canvas.width, this._canvas.height);
@@ -201,17 +198,6 @@ var Sprite = function Sprite(project) {
     _this2.costumes[0] = { text: text, x: x, y: y, size: s, color: c, font: f, align: a };
   };
 
-  this._everys = [];
-  this.every = function (time, units, func) {
-    func();
-    _this2._everys.push(setInterval(func, unitsToMiliseconds(time, units)));
-  };
-
-  this._afters = [];
-  this.after = function (time, units, func) {
-    _this2._afters.push(setTimeout(func, unitsToMiliseconds(time, units)));
-  };
-
   this._render = function () {
     var costume = this.costumes[this.costume];
 
@@ -324,10 +310,6 @@ var Sprite = function Sprite(project) {
 
   this.width = function () {
     return _this2.currentCostume().width;
-  };
-
-  this.onload = function (func) {
-    this.project._onloads.push(func);
   };
 
   this.delete = function () {
