@@ -16,7 +16,7 @@ Woof is a small JavaScript library inspired by Scratch for making interactive ca
 ```
 3) Set up your Woof project by referencing the ID of your canvas.
 ```javascript
-var project = new Proejct("project");
+var project = new Project("project");
 ```
 4) Add a backdrop URL (preferably of similar dimensions to your canvas).
 ```javascript
@@ -76,7 +76,8 @@ scoreSprite.every("1", "second", () => {
 ## Sprite API
   
   - Create new sprite: `var sprite = project.addSprite();`
-  - Add a costume: `project.addCostumeURL("http://example.com/img.jpg");`
+  - Add a costume: `rectangle.addCostumeURL("http://www.urdu-english.com/images/lessons/beginner/shapes/shapes-pics/rectangle.png");`
+`
   - Change the costume: `project.costume = 0;`
   - Set the X position: `sprite.xPosition = 200;`
   - Change the Y position: `sprite.yPosition += 10;`
