@@ -1,8 +1,3 @@
-// To Dos
-// more accurate mouseover and touching sprites(including angle) (steal from phsophorus)
-// touching colors (steal from phosphorus)
-// hour, min, second, day, month, year helpers
-
 Number.prototype.between = function(a, b, inclusive) {
   var min = Math.min.apply(Math, [a, b]),
     max = Math.max.apply(Math, [a, b]);
