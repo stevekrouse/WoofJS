@@ -93,8 +93,6 @@ scoreSprite.every("1", "second", () => {
   - Point the sprite towards another sprite: `sprite.pointTowards(sprite2)`
   - Point the sprite towards an X,Y position: `sprite.pointTowards(project.mouseX, project.mouseY)`
   - Delete this sprite: `sprite.delete();`
-  - Do this every second: `sprite.every(1, "second", () => {...});`
-  - Do this after one second: `sprite.after(1, "second", () => {...});`
 
 ## Text API
 
