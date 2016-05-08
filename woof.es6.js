@@ -56,6 +56,8 @@ var Project = function(canvasId) {
     return null;
   }
   this._context = this._canvas.getContext("2d");
+  this.height = this._canvas.height;
+  this.width = this._canvas.width;
   
   this._render = function(){
     this._context.clearRect(0, 0, this._canvas.width, this._canvas.height);
@@ -98,7 +100,6 @@ var Project = function(canvasId) {
     this.sprites.forEach(sprite => sprite.delete());
   };
   
-  
   this.mouseDown = false;
   var mousedown = () => { 
     this.mouseDown = true;
@@ -110,8 +111,7 @@ var Project = function(canvasId) {
   document.body.addEventListener("mouseup", mouseup);
   document.body.addEventListener("touchstart", mousedown);
   document.body.addEventListener("touchend", mouseup);
-
-  
+ 
   this.mouseX = 0;
   this.mouseY = 0;
   document.body.addEventListener("mousemove", (event) => { 
@@ -197,17 +197,6 @@ var Sprite = function(project) {
     this.costumes[0] = {text: text, x: x, y: y, size: s, color: c, font: f, align: a};
   };
   
-  this._everys = [];
-  this.every = (time, units, func) => {
-    func();
-    this._everys.push(setInterval(func, unitsToMiliseconds(time, units)));
-  };
-  
-  this._afters = [];
-  this.after = (time, units, func) => {
-    this._afters.push(setTimeout(func, unitsToMiliseconds(time, units)));
-  };
-  
   this._render = function() {
     var costume = this.costumes[this.costume];
     
@@ -243,8 +232,8 @@ var Sprite = function(project) {
   };
   
   this.addCostumeCircle = (x, y, radius, color) => {
-		this.costumes.push({x:x, y:y, radius: radius, color:color});
-	};
+    this.costumes.push({x:x, y:y, radius: radius, color:color});
+  };
   
   this.move = function(steps){
     this.xPosition += steps * Math.cos(this.angle * Math.PI / 180);
@@ -326,10 +315,6 @@ var Sprite = function(project) {
   
   this.width = () => {
     return this.currentCostume().width;
-  };
-  
-  this.onload = function(func){
-    this.project._onloads.push(func);
   };
   
   this.delete = () => {
