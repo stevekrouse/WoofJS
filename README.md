@@ -29,7 +29,7 @@ rectangle.addCostumeURL("http://www.urdu-english.com/images/lessons/beginner/sha
 ```
 6) Make it move with the arrow keys.
 ```javascript
-rectangle.every(40, "miliseconds", () => {
+project.every(40, "miliseconds", () => {
   if (project.keysDown.includes("LEFT")){
     rectangle.xPosition -= 5; 
   }
@@ -49,7 +49,7 @@ rectangle.every(40, "miliseconds", () => {
 var timer = 20;
 var timerSprite = project.addSprite();
 timerSprite.setText("Timer: " + timer, 300, 30, 20, "white");
-scoreSprite.every("1", "second", () => {
+project.every("1", "second", () => {
   timerSprite.setText("Timer: " + timer, 300, 30, 20, "white");
   if (timer === 0){
     project.stopAll();
@@ -103,7 +103,7 @@ var timerSprite = project.addSprite();
 2) Use `sprite.setText(text, x, y, size, font)` every time you want to change the text.
 ```javascript
 var timer = 20;
-scoreSprite.every("1", "second", () => {
+project.every("1", "second", () => {
   timerSprite.setText("Timer: " + timer, 300, 30, 20, "white");
   if (timer === 0){
     project.stopAll();
