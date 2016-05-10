@@ -111,3 +111,9 @@ scoreSprite.every("1", "second", () => {
   timer--;
 });
 ```
+## Helper Functions
+
+1) Get a random integer between any two numbers
+```javascript
+var number = randomInt(10, 20);
+```
