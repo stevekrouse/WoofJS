@@ -1,12 +1,18 @@
 "use strict";
 
+var Project = function Project() {
+  console.error('In this version of Woof, please use "Woof.Project" instead of "Project"');
+};
+
+var Woof = {};
+
 Number.prototype.between = function (a, b, inclusive) {
   var min = Math.min.apply(Math, [a, b]),
       max = Math.max.apply(Math, [a, b]);
   return inclusive ? this >= min && this <= max : this > min && this < max;
 };
 
-var keyCodeToString = function keyCodeToString(keyCode) {
+Woof.keyCodeToString = function (keyCode) {
   if (keyCode == 38) {
     return "UP";
   } else if (keyCode == 37) {
@@ -20,8 +26,8 @@ var keyCodeToString = function keyCodeToString(keyCode) {
   }
 };
 
-var unitsToMiliseconds = function unitsToMiliseconds(time, units) {
-  if (units == "miliseconds" || units == "milisecond") {
+Woof.unitsToMiliseconds = function (time, units) {
+  if (units == "milliseconds" || units == "millisecond") {
     return time;
   } else if (units == "seconds" || units == "second") {
     return time * 1000;
@@ -32,11 +38,11 @@ var unitsToMiliseconds = function unitsToMiliseconds(time, units) {
   }
 };
 
-var randomInt = function randomInt(low, high) {
+Woof.randomInt = function (low, high) {
   return Math.floor(Math.random() * high + low);
 };
 
-var Project = function Project(canvasId) {
+Woof.Project = function (canvasId) {
   var _this = this;
 
   this.sprites = [];
@@ -74,7 +80,7 @@ var Project = function Project(canvasId) {
   };
 
   this.addSprite = function () {
-    var sprite = new Sprite(this);
+    var sprite = new Woof.Sprite(this);
     this.sprites.push(sprite);
     return sprite;
   };
@@ -123,13 +129,13 @@ var Project = function Project(canvasId) {
 
   this.keysDown = [];
   document.body.addEventListener("keydown", function (event) {
-    var key = keyCodeToString(event.keyCode);
+    var key = Woof.keyCodeToString(event.keyCode);
     if (!_this.keysDown.includes(key)) {
       _this.keysDown.push(key);
     }
   });
   document.body.addEventListener("keyup", function (event) {
-    var key = keyCodeToString(event.keyCode);
+    var key = Woof.keyCodeToString(event.keyCode);
     if (_this.keysDown.includes(key)) {
       _this.keysDown.splice(_this.keysDown.indexOf(key), 1);
     }
@@ -138,12 +144,12 @@ var Project = function Project(canvasId) {
   this._everys = [];
   this.every = function (time, units, func) {
     func();
-    _this._everys.push(setInterval(func, unitsToMiliseconds(time, units)));
+    _this._everys.push(setInterval(func, Woof.unitsToMiliseconds(time, units)));
   };
 
   this._afters = [];
   this.after = function (time, units, func) {
-    _this._afters.push(setTimeout(func, unitsToMiliseconds(time, units)));
+    _this._afters.push(setTimeout(func, Woof.unitsToMiliseconds(time, units)));
   };
 
   this._onloads = [];
@@ -164,7 +170,7 @@ var Project = function Project(canvasId) {
   }, 40);
 };
 
-var Sprite = function Sprite(project) {
+Woof.Sprite = function (project) {
   var _this2 = this;
 
   this.project = project;
