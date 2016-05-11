@@ -16,7 +16,7 @@ Woof is a small JavaScript library inspired by Scratch for making interactive ca
 ```
 3) Set up your Woof project by referencing the ID of your canvas.
 ```javascript
-var project = new Project("project");
+var project = new Woof.Project("project"); 
 ```
 4) Add a backdrop URL (preferably of similar dimensions to your canvas).
 ```javascript
@@ -115,5 +115,5 @@ project.every("1", "second", () => {
 
 1) Get a random integer between any two numbers
 ```javascript
-var number = randomInt(10, 20);
+var number = Woof.randomInt(10, 20);
 ```
