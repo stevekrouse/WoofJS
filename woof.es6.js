@@ -1,10 +1,16 @@
+var Project = () => {
+  console.error('In this version of Woof, please use "Woof.Project" instead of "Project"');
+}
+
+var Woof = {};
+
 Number.prototype.between = function(a, b, inclusive) {
   var min = Math.min.apply(Math, [a, b]),
     max = Math.max.apply(Math, [a, b]);
   return inclusive ? this >= min && this <= max : this > min && this < max;
 };
 
-var keyCodeToString = (keyCode) => {
+Woof.keyCodeToString = (keyCode) => {
   if (keyCode == 38) {
     return "UP";
   }
@@ -22,8 +28,8 @@ var keyCodeToString = (keyCode) => {
   }
 };
 
-var unitsToMiliseconds = (time, units) => {
-  if (units == "miliseconds" || units == "milisecond"){
+Woof.unitsToMiliseconds = (time, units) => {
+  if (units == "milliseconds" || units == "millisecond"){
     return time;
   } else if (units == "seconds" || units == "second"){
     return time * 1000;
@@ -34,11 +40,11 @@ var unitsToMiliseconds = (time, units) => {
   }
 };
 
-var randomInt = (low, high) => {
+Woof.randomInt = (low, high) => {
   return Math.floor(Math.random() * high + low);
 };
 
-var Project = function(canvasId) {
+Woof.Project = function(canvasId) {
   this.sprites = [];
   this.backdrops = [];
   this.backdrop = 0;
@@ -74,7 +80,7 @@ var Project = function(canvasId) {
   };
   
   this.addSprite = function() {
-    var sprite = new Sprite(this);
+    var sprite = new Woof.Sprite(this);
     this.sprites.push(sprite);
     return sprite;
   };
@@ -121,13 +127,13 @@ var Project = function(canvasId) {
   
   this.keysDown = [];
   document.body.addEventListener("keydown", event => {
-    var key = keyCodeToString(event.keyCode);
+    var key = Woof.keyCodeToString(event.keyCode);
     if (!this.keysDown.includes(key)){
      this.keysDown.push(key); 
     }
   });
   document.body.addEventListener("keyup", event => {
-    var key = keyCodeToString(event.keyCode);
+    var key = Woof.keyCodeToString(event.keyCode);
     if (this.keysDown.includes(key)){
       this.keysDown.splice(this.keysDown.indexOf(key), 1);
     }
@@ -136,12 +142,12 @@ var Project = function(canvasId) {
   this._everys = [];
   this.every = (time, units, func) => {
     func();
-    this._everys.push(setInterval(func, unitsToMiliseconds(time, units)));
+    this._everys.push(setInterval(func, Woof.unitsToMiliseconds(time, units)));
   };
   
   this._afters = [];
   this.after = (time, units, func) => {
-    this._afters.push(setTimeout(func, unitsToMiliseconds(time, units)));
+    this._afters.push(setTimeout(func, Woof.unitsToMiliseconds(time, units)));
   };
   
   this._onloads = [];
@@ -160,7 +166,7 @@ var Project = function(canvasId) {
   }, 40);
 };
 
-var Sprite = function(project) {
+Woof.Sprite = function(project) {
   this.project = project;
   
   this.xPosition = 0;
@@ -320,3 +326,4 @@ var Sprite = function(project) {
     }
   };
 };
+
