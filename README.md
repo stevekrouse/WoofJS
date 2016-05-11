@@ -7,7 +7,7 @@ Woof is a small JavaScript library inspired by Scratch for making interactive ca
 
 1) Include the Woof library in your code between the `<head>` tags.
 ```html
-<script src="https://cdn.rawgit.com/stevekrouse/Woof/master/woof.js"></script>
+<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/cf76c10595fb50eaf853650f470c954927be4a9f/woof.js"></script>
 ```
 
 2) Add a canvas tag between the `<body>` tags. Give it an ID, width and height.
@@ -60,7 +60,7 @@ project.every("1", "second", () => {
 
 ## Project API
 
-  - Create a project: `var project = new Project('canvasID');`
+  - Create a project: `var project = new Woof.Project('canvasID');`
   - Add a backdrop: `project.addBackDropURL("http://example.com/img.jpg");`
   - Change the backdrop: `project.backdrop = 0;`
   - Create a sprite: `var sprite = project.addSprite();`
