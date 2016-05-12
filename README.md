@@ -99,27 +99,18 @@ project.every("1", "second", () => {
 
 ## Text API
 
-1) Create a text sprite.
-```javascript
-var timerSprite = project.addTextSprite();
-```
-2) Give it some styles (if you don't like the defaults).
-```javascript
-timerSprite.xPosition = 300;
-timerSprite.yPosition = 30;
-timerSprite.fontSize = 20;
-timerSprite.fontColor = "white";
-```
-3) Set the text every time you want it to change.
-```javascript
-project.every("1", "second", () => {
-  timerSprite.text = "Timer: " + timer;
-  if (timer === 0){
-    project.stopAll();
-  }
-  timer--;
-});
-```
+The `Woof.TextSprite` inherits `Woof.Sprite`, so many of its methods work the same. For example, `xPosition`, `yPosition`, `showing`, and `delete` all work on `TextSprite`. 
+
+These are the `TextSprite`-specific methods:
+
+  - Create new text sprite: `textSprite = project.addTextSprite();`
+  - Set the text value: `textSprite.text = "Sample Text";`
+  - Set the font size: `textSprite.fontSize = 20;`
+  - Set the font color: `textSprite.fontColor = "white";`
+  - Set the font color to a hex value: `textSprite.fontColor = "#32CD32";`
+  - Set the font family: `textSprite.fontFamily = "arial";`
+  - Set the text-align: `textSprite.textAlign: "center";`
+
 ## Helper Functions
 
 1) Get a random integer between any two numbers
