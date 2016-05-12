@@ -7,7 +7,7 @@ Woof is a small JavaScript library inspired by Scratch for making interactive ca
 
 1) Include the Woof library in your code between the `<head>` tags.
 ```html
-<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/cf76c10595fb50eaf853650f470c954927be4a9f/woof.js"></script>
+<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/fa46b7dac357ad5402c0e2ce6296b06c84c0e7f8/woof.js"></script>
 ```
 
 2) Add a canvas tag between the `<body>` tags. Give it an ID, width and height.
@@ -29,7 +29,7 @@ rectangle.addCostumeURL("http://www.urdu-english.com/images/lessons/beginner/sha
 ```
 6) Make it move with the arrow keys.
 ```javascript
-project.every(40, "miliseconds", () => {
+project.every(40, "milliseconds", () => {
   if (project.keysDown.includes("LEFT")){
     rectangle.xPosition -= 5; 
   }
@@ -47,10 +47,13 @@ project.every(40, "miliseconds", () => {
 7) Add a timer.
 ```javascript
 var timer = 20;
-var timerSprite = project.addSprite();
-timerSprite.setText("Timer: " + timer, 300, 30, 20, "white");
+var timerSprite = project.addTextSprite();
+timerSprite.xPosition = 300;
+timerSprite.yPosition = 30;
+timerSprite.fontSize = 20;
+timerSprite.fontColor = "white";
 project.every("1", "second", () => {
-  timerSprite.setText("Timer: " + timer, 300, 30, 20, "white");
+  timerSprite.text = "Timer: " + timer;
   if (timer === 0){
     project.stopAll();
   }
@@ -96,15 +99,21 @@ project.every("1", "second", () => {
 
 ## Text API
 
-1) Create a sprite.
+1) Create a text sprite.
 ```javascript
-var timerSprite = project.addSprite();
+var timerSprite = project.addTextSprite();
 ```
-2) Use `sprite.setText(text, x, y, size, font)` every time you want to change the text.
+2) Give it some styles (if you don't like the defaults).
 ```javascript
-var timer = 20;
+timerSprite.xPosition = 300;
+timerSprite.yPosition = 30;
+timerSprite.fontSize = 20;
+timerSprite.fontColor = "white";
+```
+3) Set the text every time you want it to change.
+```javascript
 project.every("1", "second", () => {
-  timerSprite.setText("Timer: " + timer, 300, 30, 20, "white");
+  timerSprite.text = "Timer: " + timer;
   if (timer === 0){
     project.stopAll();
   }
