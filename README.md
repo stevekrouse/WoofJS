@@ -29,7 +29,7 @@ rectangle.addCostumeURL("http://www.urdu-english.com/images/lessons/beginner/sha
 ```
 6) Make it move with the arrow keys.
 ```javascript
-project.every(40, "miliseconds", () => {
+project.every(40, "milliseconds", () => {
   if (project.keysDown.includes("LEFT")){
     rectangle.xPosition -= 5; 
   }
