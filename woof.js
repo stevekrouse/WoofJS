@@ -1,6 +1,4 @@
-"use strict";
-
-var Project = function Project() {
+var Project = () => {
   console.error('In this version of Woof, please use "Woof.Project" instead of "Project"');
 };
 
@@ -12,7 +10,7 @@ Number.prototype.between = function (a, b, inclusive) {
   return inclusive ? this >= min && this <= max : this > min && this < max;
 };
 
-Woof.keyCodeToString = function (keyCode) {
+Woof.keyCodeToString = keyCode => {
   if (keyCode == 38) {
     return "UP";
   } else if (keyCode == 37) {
@@ -26,7 +24,7 @@ Woof.keyCodeToString = function (keyCode) {
   }
 };
 
-Woof.unitsToMiliseconds = function (time, units) {
+Woof.unitsToMiliseconds = (time, units) => {
   if (units == "milliseconds" || units == "millisecond") {
     return time;
   } else if (units == "seconds" || units == "second") {
@@ -38,13 +36,11 @@ Woof.unitsToMiliseconds = function (time, units) {
   }
 };
 
-Woof.randomInt = function (low, high) {
+Woof.randomInt = (low, high) => {
   return Math.floor(Math.random() * high + low);
 };
 
 Woof.Project = function (canvasId) {
-  var _this = this;
-
   this.sprites = [];
   this.backdrops = [];
   this.backdrop = 0;
@@ -69,13 +65,13 @@ Woof.Project = function (canvasId) {
   this._renderBackdrop = function () {
     if (this.backdrops[this.backdrop]) {
       var image = this.backdrops[this.backdrop];
-      project._context.drawImage(image, 0, 0);
+      this._context.drawImage(image, 0, 0);
     }
   };
 
-  this._renderSprites = function () {
-    _this.sprites.forEach(function (sprite) {
-      sprite._render(_this);
+  this._renderSprites = () => {
+    this.sprites.forEach(sprite => {
+      sprite._render(this);
     });
   };
 
@@ -91,77 +87,88 @@ Woof.Project = function (canvasId) {
     this.backdrops.push(backdrop);
   };
 
-  this.stopAll = function () {
-    _this._render();
+  this.stopAll = () => {
+    this._render();
     clearInterval(renderInterval);
 
-    _this._everys.forEach(clearInterval);
-    _this._afters.forEach(clearInterval);
+    this._everys.forEach(clearInterval);
+    this._afters.forEach(clearInterval);
 
-    _this.sprites.forEach(function (sprite) {
-      return sprite.delete();
-    });
+    this.sprites.forEach(sprite => sprite.delete());
   };
 
   this.mouseDown = false;
-  var mousedown = function mousedown() {
-    _this.mouseDown = true;
-  };
-  var mouseup = function mouseup() {
-    _this.mouseDown = false;
-  };
-  document.body.addEventListener("mousedown", mousedown);
-  document.body.addEventListener("mouseup", mouseup);
-  document.body.addEventListener("touchstart", mousedown);
-  document.body.addEventListener("touchend", mouseup);
-
   this.mouseX = 0;
   this.mouseY = 0;
-  document.body.addEventListener("mousemove", function (event) {
-    _this.mouseX = event.clientX;
-    _this.mouseY = event.clientY;
+  this._canvas.addEventListener("mousedown", event => {
+    this.mouseDown = true;
+    this.mouseX = event.clientX;
+    this.mouseY = event.clientY;
   });
-  this._canvas.addEventListener("touchmove", function (event) {
-    _this.mouseX = event.targetTouches[0].pageX;
-    _this.mouseY = event.targetTouches[0].pageY;
+  this._canvas.addEventListener("mouseup", event => {
+    this.mouseDown = false;
+    this.mouseX = event.clientX;
+    this.mouseY = event.clientY;
+  });
+  this._canvas.addEventListener("touchstart", event => {
+    this.mouseDown = true;
+    this.mouseX = event.targetTouches[0].pageX;
+    this.mouseY = event.targetTouches[0].pageY;
+  });
+  this._canvas.addEventListener("touchend", event => {
+    // for some reason touchend events are firing too quickly
+    // and are not getting picked up in 40 ms every-if's
+    // so this setTimeout slows things down just enouch so
+    // touch events mirror mouse events
+    setTimeout(() => {
+      this.mouseDown = false;
+    }, 0);
+  });
+  this._canvas.addEventListener("mousemove", event => {
+    this.mouseX = event.clientX;
+    this.mouseY = event.clientY;
+  });
+  this._canvas.addEventListener("touchmove", event => {
+    this.mouseX = event.targetTouches[0].pageX;
+    this.mouseY = event.targetTouches[0].pageY;
     event.preventDefault();
   });
 
   this.keysDown = [];
-  document.body.addEventListener("keydown", function (event) {
+  this._canvas.addEventListener("keydown", event => {
     var key = Woof.keyCodeToString(event.keyCode);
-    if (!_this.keysDown.includes(key)) {
-      _this.keysDown.push(key);
+    if (!this.keysDown.includes(key)) {
+      this.keysDown.push(key);
     }
   });
-  document.body.addEventListener("keyup", function (event) {
+  this._canvas.addEventListener("keyup", event => {
     var key = Woof.keyCodeToString(event.keyCode);
-    if (_this.keysDown.includes(key)) {
-      _this.keysDown.splice(_this.keysDown.indexOf(key), 1);
+    if (this.keysDown.includes(key)) {
+      this.keysDown.splice(this.keysDown.indexOf(key), 1);
     }
   });
 
   this._everys = [];
-  this.every = function (time, units, func) {
+  this.every = (time, units, func) => {
     func();
-    _this._everys.push(setInterval(func, Woof.unitsToMiliseconds(time, units)));
+    this._everys.push(setInterval(func, Woof.unitsToMiliseconds(time, units)));
   };
 
   this._afters = [];
-  this.after = function (time, units, func) {
-    _this._afters.push(setTimeout(func, Woof.unitsToMiliseconds(time, units)));
+  this.after = (time, units, func) => {
+    this._afters.push(setTimeout(func, Woof.unitsToMiliseconds(time, units)));
   };
 
   this._onloads = [];
-  document.body.addEventListener("onload", function (event) {
-    _this._onloads.forEach(function (func) {
+  document.body.addEventListener("onload", event => {
+    this._onloads.forEach(func => {
       func.call();
     });
   });
 
-  var renderInterval = setInterval(function () {
+  var renderInterval = setInterval(() => {
     try {
-      _this._render();
+      this._render();
     } catch (e) {
       console.error(e);
       console.error("Error in render: " + e.message);
@@ -171,8 +178,6 @@ Woof.Project = function (canvasId) {
 };
 
 Woof.Sprite = function (project) {
-  var _this2 = this;
-
   this.project = project;
 
   this.xPosition = 0;
@@ -196,12 +201,12 @@ Woof.Sprite = function (project) {
     return this.costumes.length - 1;
   };
 
-  this.setText = function (text, x, y, size, color, font, align) {
+  this.setText = (text, x, y, size, color, font, align) => {
     var s = size || 12;
     var c = color || "black";
     var f = font || "Arial";
     var a = align || "left";
-    _this2.costumes[0] = { text: text, x: x, y: y, size: s, color: c, font: f, align: a };
+    this.costumes[0] = { text: text, x: x, y: y, size: s, color: c, font: f, align: a };
   };
 
   this._render = function () {
@@ -237,8 +242,8 @@ Woof.Sprite = function (project) {
     }
   };
 
-  this.addCostumeCircle = function (x, y, radius, color) {
-    _this2.costumes.push({ x: x, y: y, radius: radius, color: color });
+  this.addCostumeCircle = (x, y, radius, color) => {
+    this.costumes.push({ x: x, y: y, radius: radius, color: color });
   };
 
   this.move = function (steps) {
@@ -246,26 +251,26 @@ Woof.Sprite = function (project) {
     this.yPosition += steps * Math.sin(this.angle * Math.PI / 180);
   };
 
-  this.setRotationStyle = function (style) {
+  this.setRotationStyle = style => {
     if (style == "ROTATE") {
-      _this2.rotationStyle = "ROTATE";
+      this.rotationStyle = "ROTATE";
     } else if (style == "NO ROTATE") {
-      _this2.rotationStyle = "NO ROTATE";
+      this.rotationStyle = "NO ROTATE";
     } else {
       throw Error("Unrecognized rotation style: " + style);
     }
   };
 
-  this.bounds = function () {
-    var leftBounds = _this2.xPosition - _this2.width() / 2;
-    var rightBounds = _this2.xPosition + _this2.width() / 2;
-    var topBounds = _this2.yPosition - _this2.height() / 2;
-    var bottomBounds = _this2.yPosition + _this2.height() / 2;
+  this.bounds = () => {
+    var leftBounds = this.xPosition - this.width() / 2;
+    var rightBounds = this.xPosition + this.width() / 2;
+    var topBounds = this.yPosition - this.height() / 2;
+    var bottomBounds = this.yPosition + this.height() / 2;
     return { left: leftBounds, right: rightBounds, top: topBounds, bottom: bottomBounds };
   };
 
-  this.touching = function (sprite) {
-    var r1 = _this2.bounds();
+  this.touching = sprite => {
+    var r1 = this.bounds();
     var r2 = sprite.bounds();
 
     return !(r2.left > r1.right || r2.right < r1.left || r2.top > r1.bottom || r2.bottom < r1.top);
@@ -280,49 +285,49 @@ Woof.Sprite = function (project) {
     return belowTop && aboveBottom && rightLeft && leftRight;
   };
 
-  this.currentCostume = function () {
-    return _this2.costumes[_this2.costume];
+  this.currentCostume = () => {
+    return this.costumes[this.costume];
   };
 
-  this.sendToBack = function () {
-    var sprites = _this2.project.sprites;
-    sprites.splice(0, 0, sprites.splice(sprites.indexOf(_this2), 1)[0]);
+  this.sendToBack = () => {
+    var sprites = this.project.sprites;
+    sprites.splice(0, 0, sprites.splice(sprites.indexOf(this), 1)[0]);
   };
 
-  this.sendToFront = function () {
-    var sprites = _this2.project.sprites;
-    sprites.splice(sprites.length, 0, sprites.splice(sprites.indexOf(_this2), 1)[0]);
+  this.sendToFront = () => {
+    var sprites = this.project.sprites;
+    sprites.splice(sprites.length, 0, sprites.splice(sprites.indexOf(this), 1)[0]);
   };
 
-  this.pointTowards = function (sprite) {
-    var x1 = _this2.xPosition;
-    var y1 = _this2.yPosition;
+  this.pointTowards = sprite => {
+    var x1 = this.xPosition;
+    var y1 = this.yPosition;
     var x2 = sprite.xPosition;
     var y2 = sprite.yPosition;
 
-    _this2.angle = Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
+    this.angle = Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
   };
 
-  this.pointTowards = function (x2, y2) {
-    var x1 = _this2.xPosition;
-    var y1 = _this2.yPosition;
+  this.pointTowards = (x2, y2) => {
+    var x1 = this.xPosition;
+    var y1 = this.yPosition;
 
-    _this2.angle = Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
+    this.angle = Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
   };
 
-  this.height = function () {
-    return _this2.currentCostume().height;
+  this.height = () => {
+    return this.currentCostume().height;
   };
 
-  this.width = function () {
-    return _this2.currentCostume().width;
+  this.width = () => {
+    return this.currentCostume().width;
   };
 
-  this.delete = function () {
-    if (_this2.project.sprites.includes(_this2)) {
-      _this2.project.sprites.splice(_this2.project.sprites.indexOf(_this2), 1);
-      _this2._everys.forEach(clearInterval);
-      _this2._afters.forEach(clearInterval);
+  this.delete = () => {
+    if (this.project.sprites.includes(this)) {
+      this.project.sprites.splice(this.project.sprites.indexOf(this), 1);
+      this._everys.forEach(clearInterval);
+      this._afters.forEach(clearInterval);
     }
   };
 };

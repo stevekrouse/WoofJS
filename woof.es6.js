@@ -69,7 +69,7 @@ Woof.Project = function(canvasId) {
   this._renderBackdrop = function() {
     if (this.backdrops[this.backdrop]) {
       var image = this.backdrops[this.backdrop];
-      project._context.drawImage(image, 0, 0);
+      this._context.drawImage(image, 0, 0);
     }
   };
   
@@ -102,20 +102,31 @@ Woof.Project = function(canvasId) {
   };
   
   this.mouseDown = false;
-  var mousedown = () => { 
-    this.mouseDown = true;
-  };
-  var mouseup = () => {
-    this.mouseDown = false;
-  };
-  document.body.addEventListener("mousedown", mousedown);
-  document.body.addEventListener("mouseup", mouseup);
-  document.body.addEventListener("touchstart", mousedown);
-  document.body.addEventListener("touchend", mouseup);
- 
   this.mouseX = 0;
   this.mouseY = 0;
-  document.body.addEventListener("mousemove", (event) => { 
+  this._canvas.addEventListener("mousedown", (event) => {
+    this.mouseDown = true;
+    this.mouseX = event.clientX;
+    this.mouseY = event.clientY;
+  });
+  this._canvas.addEventListener("mouseup", (event) => {
+    this.mouseDown = false;
+    this.mouseX = event.clientX;
+    this.mouseY = event.clientY;
+  });
+  this._canvas.addEventListener("touchstart", (event) => {
+    this.mouseDown = true;
+    this.mouseX = event.targetTouches[0].pageX;
+    this.mouseY = event.targetTouches[0].pageY;
+  });
+  this._canvas.addEventListener("touchend", (event) => {
+    // for some reason touchend events are firing too quickly
+    // and are not getting picked up in 40 ms every-if's
+    // so this setTimeout slows things down just enouch so
+    // touch events mirror mouse events
+    setTimeout(() => {this.mouseDown = false;}, 0);
+  });
+  this._canvas.addEventListener("mousemove", (event) => { 
     this.mouseX = event.clientX;
     this.mouseY = event.clientY;
   });
@@ -126,13 +137,13 @@ Woof.Project = function(canvasId) {
   });
   
   this.keysDown = [];
-  document.body.addEventListener("keydown", event => {
+  this._canvas.addEventListener("keydown", event => {
     var key = Woof.keyCodeToString(event.keyCode);
     if (!this.keysDown.includes(key)){
      this.keysDown.push(key); 
     }
   });
-  document.body.addEventListener("keyup", event => {
+  this._canvas.addEventListener("keyup", event => {
     var key = Woof.keyCodeToString(event.keyCode);
     if (this.keysDown.includes(key)){
       this.keysDown.splice(this.keysDown.indexOf(key), 1);
