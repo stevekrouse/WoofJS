@@ -36,7 +36,7 @@ Woof.randomInt = (low, high) => {
   return Math.floor(Math.random() * high + low);
 };
 
-Woof.Project = function(canvasId) {
+Woof.Project = function(canvasId, {debug}) {
   this.sprites = [];
   this.backdrops = [];
   this.backdrop = 0;
@@ -104,23 +104,30 @@ Woof.Project = function(canvasId) {
     this.sprites.forEach(sprite => sprite.delete());
   };
   
+  this.translateToCenter = (x, y) => {
+    return [x - (this.width / 2), (this.height / 2) - y];
+  };
+  
   this.mouseDown = false;
   this.mouseX = 0;
   this.mouseY = 0;
   this._canvas.addEventListener("mousedown", (event) => {
     this.mouseDown = true;
-    this.mouseX = event.clientX - this._canvas.offsetLeft;
-    this.mouseY = event.clientY - this._canvas.offsetTop;
+    var mouseX = event.clientX - this._canvas.offsetLeft;
+    var mouseY = event.clientY - this._canvas.offsetTop;
+    [this.mouseX, this.mouseY] = this.translateToCenter(mouseX, mouseY);
   });
   this._canvas.addEventListener("mouseup", (event) => {
     this.mouseDown = false;
-    this.mouseX = event.clientX - this._canvas.offsetLeft;
-    this.mouseY = event.clientY - this._canvas.offsetTop;
+    var mouseX = event.clientX - this._canvas.offsetLeft;
+    var mouseY = event.clientY - this._canvas.offsetTop;
+    [this.mouseX, this.mouseY] = this.translateToCenter(mouseX, mouseY);
   });
   this._canvas.addEventListener("touchstart", (event) => {
     this.mouseDown = true;
-    this.mouseX = event.targetTouches[0].clientX - this._canvas.offsetLeft;
-    this.mouseY = event.targetTouches[0].clientY - this._canvas.offsetTop;
+    var mouseX = event.targetTouches[0].clientX - this._canvas.offsetLeft;
+    var mouseY = event.targetTouches[0].clientY - this._canvas.offsetTop;
+    [this.mouseX, this.mouseY] = this.translateToCenter(mouseX, mouseY);
   });
   this._canvas.addEventListener("touchend", (event) => {
     // for some reason touchend events are firing too quickly
@@ -130,12 +137,14 @@ Woof.Project = function(canvasId) {
     setTimeout(() => {this.mouseDown = false;}, 0);
   });
   this._canvas.addEventListener("mousemove", (event) => { 
-    this.mouseX = event.clientX - this._canvas.offsetLeft;
-    this.mouseY = event.clientY - this._canvas.offsetTop;
+    var mouseX = event.clientX - this._canvas.offsetLeft;
+    var mouseY = event.clientY - this._canvas.offsetTop;
+    [this.mouseX, this.mouseY] = this.translateToCenter(mouseX, mouseY);
   });
   this._canvas.addEventListener("touchmove", event => {
-    this.mouseX = event.targetTouches[0].clientX - this._canvas.offsetLeft;
-    this.mouseY = event.targetTouches[0].clientY - this._canvas.offsetTop;
+    var mouseX = event.targetTouches[0].clientX - this._canvas.offsetLeft;
+    var mouseY = event.targetTouches[0].clientY - this._canvas.offsetTop;
+    [this.mouseX, this.mouseY] = this.translateToCenter(mouseX, mouseY);
     event.preventDefault();
   });
   
@@ -168,9 +177,20 @@ Woof.Project = function(canvasId) {
     document.body.addEventListener("onload", event => {
     this._onloads.forEach((func) => {func.call();});
   });
+
+  if (debug){
+    this.debugMouseX = this.addText({xPosition: -this.width/2, yPosition: -this.height/2 + 36, textAlign: "left"});
+    this.debugMouseY = this.addText({xPosition: -this.width/2, yPosition: -this.height/2 + 24, textAlign: "left"});
+    this.debugKeysDown = this.addText({xPosition: -this.width/2, yPosition: -this.height/2 + 12, textAlign: "left"});
+  }
   
   var renderInterval = setInterval(() => {
     try {
+      if (debug){
+        this.debugMouseX.text = "project.mouseX: " + this.mouseX;
+        this.debugMouseY.text = "project.mouseY: " + this.mouseY;
+        this.debugKeysDown.text = "project.keysDown: " + this.keysDown;
+      }
       this._render();
     } catch (e) {
       console.error(e);
@@ -192,7 +212,7 @@ Woof.Sprite = function(project, {xPosition = 0, yPosition = 0, angle = 0, rotati
     if (this.showing) {
       var radians = this.rotationStyle == "ROTATE" ? this.radians() : 0;
       this.project._context.save();
-      this.project._context.translate(this.xPosition, this.yPosition);
+      this.project._context.translate(this.canvasX(), this.canvasY());
       this.project._context.rotate(radians);
       
       if (this instanceof Woof.Image) {
@@ -225,6 +245,14 @@ Woof.Sprite = function(project, {xPosition = 0, yPosition = 0, angle = 0, rotati
   
   this.radians = () => {
     return this.angle * Math.PI / 180;
+  };
+  
+  this.canvasX = () => {
+    return this.xPosition + (this.project.width / 2);
+  };
+  
+  this.canvasY = () => {
+    return (this.project.height / 2) - this.yPosition;
   };
   
   this.bounds = () => {
