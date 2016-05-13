@@ -8,7 +8,7 @@ You can either [clone this JSBin](https://jsbin.com/lekovu/edit?js,output) or fo
 
 1) Throw the Woof library between the `<head>` tags.
 ```html
-<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/0fd7ac9650f4c88e950ba5e4e9c004d504584602/woof.js"></script>
+<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/a64f5776c1c331e6dea876de40ee280ec3bf26c9/woof.js"></script>
 ```
 2) Throw a `<canvas>` tag between the `<body>` tags.
 ```html

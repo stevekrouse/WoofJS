@@ -113,7 +113,6 @@ Woof.Project = function (canvasId, { debug }) {
   this.mouseY = 0;
   this._canvas.addEventListener("mousedown", event => {
     this.mouseDown = true;
-    console.log('mousedown');
     var mouseX = event.clientX - this._canvas.offsetLeft;
     var mouseY = event.clientY - this._canvas.offsetTop;
     [this.mouseX, this.mouseY] = this.translateToCenter(mouseX, mouseY);
