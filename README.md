@@ -1,35 +1,35 @@
-# Woof
+# WoofJS
 *The canvas' best friend*
 
 Woof is a small JavaScript library inspired by Scratch for making interactive canvas games.
 
 ## Getting Started
 
-1) Include the Woof library in your code between the `<head>` tags.
-```html
-<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/22feaa07aacb174a93b8d545f19a9cf14aaea7dc/woof.js"></script>
-```
+You can either [clone this JSBin](https://jsbin.com/lekovu/edit?js,output) or follow the steps below to setup your first WoofJS project.
 
-2) Add a canvas tag between the `<body>` tags. Give it an ID, width and height.
+1) Throw the Woof library between the `<head>` tags.
+```html
+<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/05113a45f2f3938c523243e0f66a31f6836d41d4/woof.js"></script>
+```
+2) Throw a `<canvas>` tag between the `<body>` tags.
 ```html
 <canvas id="project" width="350" height="500"></canvas>
 ```
-3) Set up your Woof project by referencing the ID of your canvas.
+3) Throw in some JavaScript, and tell Woof to fetch it.
 ```javascript
+// Set up your Woof project by referencing the ID of your canvas.
 var project = new Woof.Project("project"); 
-```
-4) Add a backdrop URL (preferably of similar dimensions to your canvas).
-```javascript
-project.addBackdropURL("http://cdn.mysitemyway.com/etc-mysitemyway/webtreats/assets/posts/857/thumbs/tileable-classic-nebula-space-patterns-6.jpg");
-```
-5) Add an image.
-```javascript
-var rectangle = project.addImage({url: "http://www.urdu-english.com/images/lessons/beginner/shapes/shapes-pics/rectangle.png"});
-```
-6) Make it move with the arrow keys.
-```javascript
+// Add a backdrop URL (preferably of similar dimensions to your canvas).
+project.addBackdropURL("http://media.salon.com/2014/09/shutterstock_111293468.jpg");
+
+// Add an image via a url, and optionally setting its xPosition and yPosition.
+var rectangle = project.addImage({url: "http://www.urdu-english.com/images/lessons/beginner/shapes/shapes-pics/rectangle.png", xPosition: project.width / 2, yPosition: project.height / 2});
+
+// Make it move with the arrow keys by checking which keys are down every 40 milliseconds
 project.every(40, "milliseconds", () => {
+  // if the left key is down...
   if (project.keysDown.includes("LEFT")){
+    // move left by 5
     rectangle.xPosition -= 5; 
   }
   if (project.keysDown.includes("RIGHT")){
@@ -42,18 +42,22 @@ project.every(40, "milliseconds", () => {
     rectangle.yPosition += 5; 
   }
 });
-```
-7) Add a timer.
-```javascript
+
+// make the timer start at 20
 var timer = 20;
-var timerSprite = project.addText({xPosition: project.width / 2, yPosition: project.height / 2, fontSize: 20, fontColor: "white"});
+// add text that diplays the timer
+var timerSprite = project.addText({xPosition: project.width / 2, yPosition: 25, fontSize: 20, fontColor: "white"});
 project.every("1", "second", () => {
+  // change the text to refer to the timer's new value every second
   timerSprite.text = "Timer: " + timer;
   if (timer === 0){
+    // stop everything when the timer reaches 0
     project.stopAll();
   }
+  // make the timer go down every second
   timer--;
 });
+
 ```
 
 ## Woof.Project
@@ -61,7 +65,6 @@ project.every("1", "second", () => {
   - Create a project: `var project = new Woof.Project('canvasID');`
   - Add a backdrop: `project.addBackDropURL("http://example.com/img.jpg");`
   - Change the backdrop: `project.backdrop = 0;`
-  - Create a sprite: `var sprite = project.addSprite();`
   - Stop all: `project.stopAll();`
   - Mouse X: `project.mouseX`
   - Mouse Y: `project.mouseY`
@@ -78,9 +81,9 @@ project.every("1", "second", () => {
 When creating a new `Woof.Image`, `Woof.Text`, or `Woof.Circle`, you may use the following parameters as so:
 ```javascript
   // notice how we can use the same parameters for the different types
-  var image = project.addImageSprite({xPosition = 0, yPosition = 0, angle = 0, rotationStyle = "ROTATE", showing = true});
-  var text = project.addTextSprite({xPosition = 0, yPosition = 0, angle = 0, rotationStyle = "ROTATE", showing = true});
-  var circle = project.addCircleSprite({xPosition = 0, yPosition = 0, angle = 0, rotationStyle = "ROTATE", showing = true});
+  var image = project.addImageSprite({xPosition: 0, yPosition: 0, angle: 0, rotationStyle: "ROTATE", showing: true});
+  var text = project.addTextSprite({xPosition: 0, yPosition: 0, angle: 0, rotationStyle: "ROTATE", showing: true});
+  var circle = project.addCircleSprite({xPosition: 0, yPosition: 0, angle: 0, rotationStyle: "ROTATE", showing: true});
 ```
 
   - Set the X position: `sprite.xPosition = 200;`
