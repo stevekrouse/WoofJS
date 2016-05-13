@@ -7,7 +7,7 @@ Woof is a small JavaScript library inspired by Scratch for making interactive ca
 
 1) Include the Woof library in your code between the `<head>` tags.
 ```html
-<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/43d2772583f44a91917a120fe262b6aa45cc80d2/woof.js"></script>
+<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/22feaa07aacb174a93b8d545f19a9cf14aaea7dc/woof.js"></script>
 ```
 
 2) Add a canvas tag between the `<body>` tags. Give it an ID, width and height.
@@ -78,6 +78,16 @@ project.every("1", "second", () => {
 
 ## Woof.Sprite
 
+`Woof.Sprite` represents all of the commonalities between `Woof.Image`, `Woof.Text`, and `Woof.Circle`.
+
+When creating a new `Woof.Image`, `Woof.Text`, or `Woof.Circle`, you may use the following parameters as so:
+```javascript
+  // notice how we can use the same parameters for the different types
+  var image = project.addImageSprite({xPosition = 0, yPosition = 0, angle = 0, rotationStyle = "ROTATE", showing = true});
+  var text = project.addTextSprite({xPosition = 0, yPosition = 0, angle = 0, rotationStyle = "ROTATE", showing = true});
+  var circle = project.addCircleSprite({xPosition = 0, yPosition = 0, angle = 0, rotationStyle = "ROTATE", showing = true});
+```
+
   - Set the X position: `sprite.xPosition = 200;`
   - Change the Y position: `sprite.yPosition += 10;`
   - Set the angle: `sprite.angle = 30;`
@@ -97,22 +107,21 @@ project.every("1", "second", () => {
 
 ## Woof.Image
 
-  - Create a new image: `image = project.addImage();`
+  - Create a new image: `var image = project.addImage({url: "http://www.abeka.com/BookImages/ClipArt/205427/46x46y50fx50fh/205427-Brown-Dog-with-Blue-Collar,-Holding-a-Bone-in-Mouth-color-png.png", imageWidth: 30, imageHeight: 30});`
   - Add a costume: `image.addCostumeURL("http://www.urdu-english.com/images/lessons/beginner/shapes/shapes-pics/rectangle.png");`
   - Change the costume: `image.costume = 0;`
   - Set the width: `image.imageWidth = 10;`
   - Set the height `image.imageHeight = 20;`
-  
 
 ## Woof.Circle
 
-  - Create a new circle: `circle = project.addCircle();`
+  - Create a new circle: `var circle = project.addCircle({radius: 10, color: "black"});`
   - Change the radius: `circle.radius = 15;`
   - Change the color: `circle.color = "blue";`
 
 ## Woof.Text
 
-  - Create a new text: `text = project.addText();`
+  - Create a new text: `var text = project.addText({text: "Text", fontSize: 12, fontColor: "black", fontFamily: "arial", textAlign: "center"});`
   - Set the text value: `text.text = "Sample Text";`
   - Set the font size: `text.fontSize = 20;`
   - Set the font color: `text.fontColor = "white";`
