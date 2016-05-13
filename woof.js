@@ -34,8 +34,7 @@ Woof.randomInt = (low, high) => {
 
 Woof.Project = function (canvasId, { debug }) {
   this.sprites = [];
-  this.backdrops = [];
-  this.backdrop = 0;
+  this.backdrop = undefined;
 
   try {
     this._canvas = document.getElementById(canvasId);
@@ -58,9 +57,8 @@ Woof.Project = function (canvasId, { debug }) {
   };
 
   this._renderBackdrop = function () {
-    if (this.backdrops[this.backdrop]) {
-      var backdrop = this.backdrops[this.backdrop];
-      this._context.drawImage(backdrop, 0, 0);
+    if (this.backdrop) {
+      this._context.drawImage(this.backdrop, 0, 0);
     }
   };
 
@@ -88,10 +86,10 @@ Woof.Project = function (canvasId, { debug }) {
     return sprite;
   };
 
-  this.addBackdropURL = function (url) {
+  this.setBackdropURL = function (url) {
     var backdrop = new Image();
     backdrop.src = url;
-    this.backdrops.push(backdrop);
+    this.backdrop = backdrop;
   };
 
   this.stopAll = () => {
