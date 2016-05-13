@@ -1,7 +1,6 @@
 # WoofJS
-*The canvas' best friend*
 
-Woof is a small JavaScript library inspired by Scratch for making interactive canvas games.
+Woof is a JavaScript library inspired by Scratch for making interactive web and mobile games.
 
 ## Getting Started
 
