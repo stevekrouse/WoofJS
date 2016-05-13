@@ -65,20 +65,20 @@ Woof.Project = function (canvasId) {
     });
   };
 
-  this.addText = function () {
-    var sprite = new Woof.Text(this);
+  this.addText = options => {
+    var sprite = new Woof.Text(this, options);
     this.sprites.push(sprite);
     return sprite;
   };
 
-  this.addCircle = function () {
-    var sprite = new Woof.Circle(this);
+  this.addCircle = options => {
+    var sprite = new Woof.Circle(this, options);
     this.sprites.push(sprite);
     return sprite;
   };
 
-  this.addImage = function () {
-    var sprite = new Woof.Image(this);
+  this.addImage = options => {
+    var sprite = new Woof.Image(this, options);
     this.sprites.push(sprite);
     return sprite;
   };
@@ -179,20 +179,20 @@ Woof.Project = function (canvasId) {
   }, 40);
 };
 
-Woof.Sprite = function (project) {
+Woof.Sprite = function (project, { xPosition = 0, yPosition = 0, angle = 0, rotationStyle = "ROTATE", showing = true }) {
   this.project = project;
-  this.xPosition = 0;
-  this.yPosition = 0;
-  this.angle = 0;
-  this.rotationStyle = "ROTATE";
-  this.showing = true;
+  this.xPosition = xPosition;
+  this.yPosition = yPosition;
+  this.angle = angle;
+  this.rotationStyle = rotationStyle;
+  this.showing = showing;
 
   this._render = function () {
     if (this.showing) {
-      var angle = this.rotationStyle == "ROTATE" ? this.angle : 0;
+      var radians = this.rotationStyle == "ROTATE" ? this.radians() : 0;
       this.project._context.save();
       this.project._context.translate(this.xPosition, this.yPosition);
-      this.project._context.rotate(angle * Math.PI / 180);
+      this.project._context.rotate(radians);
 
       if (this instanceof Woof.Image) {
         this.imageRender();
@@ -206,8 +206,8 @@ Woof.Sprite = function (project) {
   };
 
   this.move = function (steps) {
-    this.xPosition += steps * Math.cos(this.angle * Math.PI / 180);
-    this.yPosition += steps * Math.sin(this.angle * Math.PI / 180);
+    this.xPosition += steps * Math.cos(this.radians());
+    this.yPosition += steps * Math.sin(this.radians());
   };
 
   this.setRotationStyle = style => {
@@ -220,12 +220,20 @@ Woof.Sprite = function (project) {
     }
   };
 
+  this.radians = () => {
+    return this.angle * Math.PI / 180;
+  };
+
   this.bounds = () => {
-    var leftBounds = this.xPosition - this.width() / 2;
-    var rightBounds = this.xPosition + this.width() / 2;
-    var topBounds = this.yPosition - this.height() / 2;
-    var bottomBounds = this.yPosition + this.height() / 2;
-    return { left: leftBounds, right: rightBounds, top: topBounds, bottom: bottomBounds };
+    // TODO account for rotation
+    var halfWidth = this.width() / 2;
+    var halfHeight = this.height() / 2;
+
+    var left = this.xPosition - halfWidth;
+    var right = this.xPosition + halfWidth;
+    var top = this.yPosition - halfHeight;
+    var bottom = this.yPosition + halfHeight;
+    return { left: left, right: right, top: top, bottom: bottom };
   };
 
   this.touching = sprite => {
@@ -235,11 +243,11 @@ Woof.Sprite = function (project) {
   };
 
   this.mouseOver = function () {
-    // TODO account for rotation
-    var belowTop = this.project.mouseY >= this.yPosition - this.height() / 2;
-    var aboveBottom = this.project.mouseY <= this.yPosition + this.height() / 2;
-    var rightLeft = this.project.mouseX >= this.xPosition - this.width() / 2;
-    var leftRight = this.project.mouseX <= this.xPosition + this.width() / 2;
+    var r1 = this.bounds();
+    var belowTop = this.project.mouseY >= r1.top;
+    var aboveBottom = this.project.mouseY <= r1.bottom;
+    var rightLeft = this.project.mouseX >= r1.left;
+    var leftRight = this.project.mouseX <= r1.right;
     return belowTop && aboveBottom && rightLeft && leftRight;
   };
 
@@ -275,13 +283,13 @@ Woof.Sprite = function (project) {
   };
 };
 
-Woof.Text = function (project) {
-  Woof.Sprite.call(this, project);
-  this.text = "";
-  this.fontSize = 12;
-  this.fontColor = "black";
-  this.fontFamily = "Arial";
-  this.textAlign = "left";
+Woof.Text = function (project, { text = "Text", fontSize = 12, fontColor = "black", fontFamily = "arial", textAlign = "center" }) {
+  Woof.Sprite.call(this, project, arguments[1]);
+  this.text = text;
+  this.fontSize = fontSize;
+  this.fontColor = fontColor;
+  this.fontFamily = fontFamily;
+  this.textAlign = textAlign;
 
   this.width = () => {
     var width;
@@ -318,10 +326,10 @@ Woof.Text = function (project) {
   };
 };
 
-Woof.Circle = function (project) {
-  Woof.Sprite.call(this, project);
-  this.radius = 10;
-  this.color = "black";
+Woof.Circle = function (project, { radius = 10, color = "black" }) {
+  Woof.Sprite.call(this, project, arguments[1]);
+  this.radius = radius;
+  this.color = color;
 
   this.width = () => {
     return 2 * this.radius;
@@ -339,8 +347,8 @@ Woof.Circle = function (project) {
   };
 };
 
-Woof.Image = function (project) {
-  Woof.Sprite.call(this, project);
+Woof.Image = function (project, { url = "http://www.abeka.com/BookImages/ClipArt/205427/46x46y50fx50fh/205427-Brown-Dog-with-Blue-Collar,-Holding-a-Bone-in-Mouth-color-png.png", imageHeight, imageWidth }) {
+  Woof.Sprite.call(this, project, arguments[1]);
   this.images = [];
   this.image = 0;
   this.imageHeight = undefined;
@@ -352,6 +360,7 @@ Woof.Image = function (project) {
     this.images.push(image);
     return this.images.length - 1;
   };
+  this.addImageURL(url);
 
   this.width = () => {
     return this.imageWidth || this.currentImage().width;
