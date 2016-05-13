@@ -7,7 +7,7 @@ Woof is a small JavaScript library inspired by Scratch for making interactive ca
 
 1) Include the Woof library in your code between the `<head>` tags.
 ```html
-<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/17d8a023852a0788cf3b734ba55a55d10bcfcfe3/woof.js"></script>
+<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/05113a45f2f3938c523243e0f66a31f6836d41d4/woof.js"></script>
 ```
 2) Add a canvas tag between the `<body>` tags. Give it an ID, width and height.
 ```html
