@@ -1,7 +1,3 @@
-var Project = () => {
-  console.error('In this version of Woof, please use "Woof.Project" instead of "Project"');
-}
-
 var Woof = {};
 
 Woof.keyCodeToString = (keyCode) => {
@@ -73,26 +69,20 @@ Woof.Project = function(canvasId) {
     });
   };
   
-  this.addSprite = function() {
-    var sprite = new Woof.Sprite(this);
+  this.addText = function() {
+    var sprite = new Woof.Text(this);
     this.sprites.push(sprite);
     return sprite;
   };
   
-  this.addTextSprite = function() {
-    var sprite = new Woof.TextSprite(this);
+  this.addCircle = function() {
+    var sprite = new Woof.Circle(this);
     this.sprites.push(sprite);
     return sprite;
   };
   
-  this.addCircleSprite = function() {
-    var sprite = new Woof.CircleSprite(this);
-    this.sprites.push(sprite);
-    return sprite;
-  };
-  
-  this.addImageSprite = function() {
-    var sprite = new Woof.ImageSprite(this);
+  this.addImage = function() {
+    var sprite = new Woof.Image(this);
     this.sprites.push(sprite);
     return sprite;
   };
@@ -191,7 +181,6 @@ Woof.Project = function(canvasId) {
 
 Woof.Sprite = function(project) {
   this.project = project;
-  
   this.xPosition = 0;
   this.yPosition = 0;
   this.angle = 0;
@@ -205,11 +194,11 @@ Woof.Sprite = function(project) {
       this.project._context.translate(this.xPosition, this.yPosition);
       this.project._context.rotate(angle * Math.PI / 180);
       
-      if (this instanceof Woof.ImageSprite) {
+      if (this instanceof Woof.Image) {
         this.imageRender();
-      } else if (this instanceof Woof.TextSprite) {
+      } else if (this instanceof Woof.Text) {
         this.textRender();
-      } else if (this instanceof Woof.CircleSprite) {
+      } else if (this instanceof Woof.Circle) {
       	this.circleRender();
 			}
       this.project._context.restore();
@@ -244,7 +233,6 @@ Woof.Sprite = function(project) {
   this.touching = sprite => {
     var r1 = this.bounds();
     var r2 = sprite.bounds();
-    
     return !(r2.left > r1.right || 
              r2.right < r1.left || 
              r2.top > r1.bottom ||
@@ -292,7 +280,7 @@ Woof.Sprite = function(project) {
   };
 };
 
-Woof.TextSprite = function(project) {
+Woof.Text = function(project) {
   Woof.Sprite.call(this, project);
   this.text = "";
   this.fontSize = 12;
@@ -335,7 +323,7 @@ Woof.TextSprite = function(project) {
   };
 };
 
-Woof.CircleSprite = function(project) {
+Woof.Circle = function(project) {
   Woof.Sprite.call(this, project);
   this.radius = 10;
   this.color = "black";
@@ -356,7 +344,7 @@ Woof.CircleSprite = function(project) {
   };
 };
 
-Woof.ImageSprite = function(project) {
+Woof.Image = function(project) {
   Woof.Sprite.call(this, project);
   this.images = [];
   this.image = 0;
