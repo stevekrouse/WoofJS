@@ -139,13 +139,13 @@ Woof.Project = function(canvasId) {
   });
   
   this.keysDown = [];
-  this._canvas.addEventListener("keydown", event => {
+  document.body.addEventListener("keydown", event => {
     var key = Woof.keyCodeToString(event.keyCode);
     if (!this.keysDown.includes(key)){
      this.keysDown.push(key); 
     }
   });
-  this._canvas.addEventListener("keyup", event => {
+  document.body.addEventListener("keyup", event => {
     var key = Woof.keyCodeToString(event.keyCode);
     if (this.keysDown.includes(key)){
       this.keysDown.splice(this.keysDown.indexOf(key), 1);
