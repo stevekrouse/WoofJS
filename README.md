@@ -7,12 +7,12 @@ Woof is a small JavaScript library inspired by Scratch for making interactive ca
 
 1) Include the Woof library in your code between the `<head>` tags.
 ```html
-<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/fa46b7dac357ad5402c0e2ce6296b06c84c0e7f8/woof.js"></script>
+<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/43d2772583f44a91917a120fe262b6aa45cc80d2/woof.js"></script>
 ```
 
 2) Add a canvas tag between the `<body>` tags. Give it an ID, width and height.
 ```html
-<canvas id="project" width="400" height="400"></canvas>
+<canvas id="project" width="350" height="500"></canvas>
 ```
 3) Set up your Woof project by referencing the ID of your canvas.
 ```javascript
@@ -22,9 +22,9 @@ var project = new Woof.Project("project");
 ```javascript
 project.addBackdropURL("http://cdn.mysitemyway.com/etc-mysitemyway/webtreats/assets/posts/857/thumbs/tileable-classic-nebula-space-patterns-6.jpg");
 ```
-5) Add a sprite.
+5) Add an image.
 ```javascript
-var rectangle = project.addSprite();
+var rectangle = project.addImage();
 rectangle.addCostumeURL("http://www.urdu-english.com/images/lessons/beginner/shapes/shapes-pics/rectangle.png");
 ```
 6) Make it move with the arrow keys.
@@ -47,7 +47,7 @@ project.every(40, "milliseconds", () => {
 7) Add a timer.
 ```javascript
 var timer = 20;
-var timerSprite = project.addTextSprite();
+var timerSprite = project.addText();
 timerSprite.xPosition = 300;
 timerSprite.yPosition = 30;
 timerSprite.fontSize = 20;
@@ -61,7 +61,7 @@ project.every("1", "second", () => {
 });
 ```
 
-## Project API
+## Woof.Project
 
   - Create a project: `var project = new Woof.Project('canvasID');`
   - Add a backdrop: `project.addBackDropURL("http://example.com/img.jpg");`
@@ -76,12 +76,8 @@ project.every("1", "second", () => {
   - Do this every second: `project.every(1, "second", () => {...});`
   - Do this after one second: `project.after(1, "second", () => {...});`
 
-## Sprite API
-  
-  - Create new sprite: `var sprite = project.addSprite();`
-  - Add a costume: `rectangle.addCostumeURL("http://www.urdu-english.com/images/lessons/beginner/shapes/shapes-pics/rectangle.png");`
-`
-  - Change the costume: `project.costume = 0;`
+## Woof.Sprite
+
   - Set the X position: `sprite.xPosition = 200;`
   - Change the Y position: `sprite.yPosition += 10;`
   - Set the angle: `sprite.angle = 30;`
@@ -96,20 +92,33 @@ project.every("1", "second", () => {
   - Point the sprite towards another sprite: `sprite.pointTowards(sprite2)`
   - Point the sprite towards an X,Y position: `sprite.pointTowards(project.mouseX, project.mouseY)`
   - Delete this sprite: `sprite.delete();`
+  - Get the width: `sprite.width()`
+  - Get the height: `sprite.height()`
 
-## Text API
+## Woof.Image
 
-The `Woof.TextSprite` inherits `Woof.Sprite`, so many of its methods work the same. For example, `xPosition`, `yPosition`, `showing`, and `delete` all work on `TextSprite`. 
+  - Create a new image: `image = project.addImage();`
+  - Add a costume: `image.addCostumeURL("http://www.urdu-english.com/images/lessons/beginner/shapes/shapes-pics/rectangle.png");`
+  - Change the costume: `image.costume = 0;`
+  - Set the width: `image.imageWidth = 10;`
+  - Set the height `image.imageHeight = 20;`
+  
 
-These are the `TextSprite`-specific methods:
+## Woof.Circle
 
-  - Create new text sprite: `textSprite = project.addTextSprite();`
-  - Set the text value: `textSprite.text = "Sample Text";`
-  - Set the font size: `textSprite.fontSize = 20;`
-  - Set the font color: `textSprite.fontColor = "white";`
-  - Set the font color to a hex value: `textSprite.fontColor = "#32CD32";`
-  - Set the font family: `textSprite.fontFamily = "arial";`
-  - Set the text-align: `textSprite.textAlign: "center";`
+  - Create a new circle: `circle = project.addCircle();`
+  - Change the radius: `circle.radius = 15;`
+  - Change the color: `circle.color = "blue";`
+
+## Woof.Text
+
+  - Create a new text: `text = project.addText();`
+  - Set the text value: `text.text = "Sample Text";`
+  - Set the font size: `text.fontSize = 20;`
+  - Set the font color: `text.fontColor = "white";`
+  - Set the font color to a hex value: `text.fontColor = "#32CD32";`
+  - Set the font family: `text.fontFamily = "arial";`
+  - Set the text-align: `text.textAlign: "center";`
 
 ## Helper Functions
 
