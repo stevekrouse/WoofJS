@@ -1,34 +1,35 @@
-# Woof
+# WoofJS
 *The canvas' best friend*
 
 Woof is a small JavaScript library inspired by Scratch for making interactive canvas games.
 
 ## Getting Started
 
-1) Include the Woof library in your code between the `<head>` tags.
+You can either [clone this JSBin](https://jsbin.com/lekovu/edit?js,output) or follow the steps below to setup your first WoofJS project.
+
+1) Throw the Woof library between the `<head>` tags.
 ```html
 <script src="https://cdn.rawgit.com/stevekrouse/WoofJS/05113a45f2f3938c523243e0f66a31f6836d41d4/woof.js"></script>
 ```
-2) Add a canvas tag between the `<body>` tags. Give it an ID, width and height.
+2) Throw a `<canvas>` tag between the `<body>` tags.
 ```html
 <canvas id="project" width="350" height="500"></canvas>
 ```
-3) Set up your Woof project by referencing the ID of your canvas.
+3) Throw in some JavaScript, and tell Woof to fetch it.
 ```javascript
+// Set up your Woof project by referencing the ID of your canvas.
 var project = new Woof.Project("project"); 
-```
-4) Add a backdrop URL (preferably of similar dimensions to your canvas).
-```javascript
+// Add a backdrop URL (preferably of similar dimensions to your canvas).
 project.addBackdropURL("http://media.salon.com/2014/09/shutterstock_111293468.jpg");
-```
-5) Add an image.
-```javascript
+
+// Add an image via a url, and optionally setting its xPosition and yPosition.
 var rectangle = project.addImage({url: "http://www.urdu-english.com/images/lessons/beginner/shapes/shapes-pics/rectangle.png", xPosition: project.width / 2, yPosition: project.height / 2});
-```
-6) Make it move with the arrow keys. (If you changed the variable name above from `rectangle`, be sure to change it in this code as well.)
-```javascript
+
+// Make it move with the arrow keys by checking which keys are down every 40 milliseconds
 project.every(40, "milliseconds", () => {
+  // if the left key is down...
   if (project.keysDown.includes("LEFT")){
+    // move left by 5
     rectangle.xPosition -= 5; 
   }
   if (project.keysDown.includes("RIGHT")){
@@ -41,18 +42,22 @@ project.every(40, "milliseconds", () => {
     rectangle.yPosition += 5; 
   }
 });
-```
-7) Add a timer.
-```javascript
+
+// make the timer start at 20
 var timer = 20;
-var timerSprite = project.addText({xPosition: project.width / 2, yPosition: project.height / 2, fontSize: 20, fontColor: "white"});
+// add text that diplays the timer
+var timerSprite = project.addText({xPosition: project.width / 2, yPosition: 25, fontSize: 20, fontColor: "white"});
 project.every("1", "second", () => {
+  // change the text to refer to the timer's new value every second
   timerSprite.text = "Timer: " + timer;
   if (timer === 0){
+    // stop everything when the timer reaches 0
     project.stopAll();
   }
+  // make the timer go down every second
   timer--;
 });
+
 ```
 
 ## Woof.Project
