@@ -65,7 +65,6 @@ project.every("1", "second", () => {
   - Create a project: `var project = new Woof.Project('canvasID');`
   - Add a backdrop: `project.addBackDropURL("http://example.com/img.jpg");`
   - Change the backdrop: `project.backdrop = 0;`
-  - Create a sprite: `var sprite = project.addSprite();`
   - Stop all: `project.stopAll();`
   - Mouse X: `project.mouseX`
   - Mouse Y: `project.mouseY`
