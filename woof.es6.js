@@ -1,6 +1,6 @@
 var Woof = {};
 
-Woof.keyCodeToString = (keyCode) => {
+Woof.keyCodeToString = keyCode => {
   if (keyCode == 38) {
     return "UP";
   }
@@ -45,8 +45,7 @@ Woof.Project = function(canvasId) {
     this._canvas = document.getElementById(canvasId);
   } catch (e){
     console.error(e);
-    console.error("Could not find a canvas on the page with id " + canvasId);
-    return null;
+    throw Error("Could not find a canvas on the page with id " + canvasId);
   }
   this._context = this._canvas.getContext("2d");
   this.height = this._canvas.height;
@@ -175,7 +174,7 @@ Woof.Project = function(canvasId) {
       this._render();
     } catch (e) {
       console.error(e);
-      console.error("Error in render: " + e.message);
+      throw Error("Error in render: " + e.message);
       clearInterval(renderInterval);
     }
   }, 40);
@@ -269,18 +268,15 @@ Woof.Sprite = function(project, {xPosition = 0, yPosition = 0, angle = 0, rotati
   };
   
   this.pointTowards = (x2,y2) => {
-    var x1 = this.xPosition;
-    var y1 = this.yPosition;
-    
-    this.angle = Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
+    this.angle = Math.atan2(y2 - this.yPosition, x2 - this.xPosition) * 180 / Math.PI;
   };
   
   this.height = () => {
-    console.error("Implemented in subclass");
+    throw Error("Implemented in subclass");
   };
   
   this.width = () => {
-    console.error("Implemented in subclass");
+    throw Error("Implemented in subclass");
   };
   
   this.delete = () => {
