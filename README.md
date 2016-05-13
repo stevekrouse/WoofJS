@@ -19,7 +19,7 @@ var project = new Woof.Project("project");
 ```
 4) Add a backdrop URL (preferably of similar dimensions to your canvas).
 ```javascript
-project.addBackdropURL("http://cdn.mysitemyway.com/etc-mysitemyway/webtreats/assets/posts/857/thumbs/tileable-classic-nebula-space-patterns-6.jpg");
+project.addBackdropURL("http://media.salon.com/2014/09/shutterstock_111293468.jpg");
 ```
 5) Add an image.
 ```javascript
@@ -77,9 +77,9 @@ project.every("1", "second", () => {
 When creating a new `Woof.Image`, `Woof.Text`, or `Woof.Circle`, you may use the following parameters as so:
 ```javascript
   // notice how we can use the same parameters for the different types
-  var image = project.addImageSprite({xPosition = 0, yPosition = 0, angle = 0, rotationStyle = "ROTATE", showing = true});
-  var text = project.addTextSprite({xPosition = 0, yPosition = 0, angle = 0, rotationStyle = "ROTATE", showing = true});
-  var circle = project.addCircleSprite({xPosition = 0, yPosition = 0, angle = 0, rotationStyle = "ROTATE", showing = true});
+  var image = project.addImageSprite({xPosition: 0, yPosition: 0, angle: 0, rotationStyle: "ROTATE", showing: true});
+  var text = project.addTextSprite({xPosition: 0, yPosition: 0, angle: 0, rotationStyle: "ROTATE", showing: true});
+  var circle = project.addCircleSprite({xPosition: 0, yPosition: 0, angle: 0, rotationStyle: "ROTATE", showing: true});
 ```
 
   - Set the X position: `sprite.xPosition = 200;`
