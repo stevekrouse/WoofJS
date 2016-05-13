@@ -23,31 +23,31 @@ var project = new Woof.Project("project", {debug: true});
 // Set the backdrop URL (preferably of similar dimensions to your canvas).
 project.setBackdropURL("http://cdn.theatlantic.com/assets/media/img/mt/2016/03/RTX283V4/lead_960.jpg?1457553386");
 
-// Add an image via a url, and optionally setting its xPosition and yPosition.
-var rectangle = project.addImage({url: "http://www.urdu-english.com/images/lessons/beginner/shapes/shapes-pics/rectangle.png", xPosition: 0, yPosition: 0});
+// Add an image via a url, and optionally setting its x and y.
+var rectangle = project.addImage({url: "http://www.urdu-english.com/images/lessons/beginner/shapes/shapes-pics/rectangle.png", x: 0, y: 0});
 
 // Make it move with the arrow keys by checking which keys are down every 40 milliseconds
 project.every(40, "milliseconds", () => {
   // if the left key is down...
   if (project.keysDown.includes("LEFT")){
     // move left by 5
-    rectangle.xPosition -= 5; 
+    rectangle.x -= 5; 
   }
   if (project.keysDown.includes("RIGHT")){
-    rectangle.xPosition +=5; 
+    rectangle.x +=5; 
   }
   if (project.keysDown.includes("UP")){
-    rectangle.yPosition += 5; 
+    rectangle.y += 5; 
   }
   if (project.keysDown.includes("DOWN")){
-    rectangle.yPosition -= 5; 
+    rectangle.y -= 5; 
   }
 });
 
 // make the timer start at 20
 var timer = 20;
 // add text that diplays the timer
-var timerText = project.addText({xPosition: 0, yPosition: project.maxY - 20, fontSize: 20, fontColor: "white"});
+var timerText = project.addText({x: 0, y: project.maxY - 20, fontSize: 20, fontColor: "white"});
 project.every("1", "second", () => {
   // change the text to refer to the timer's new value every second
   timerText.text = "Timer: " + timer;
@@ -88,13 +88,13 @@ project.every("1", "second", () => {
 When creating a new `Woof.Image`, `Woof.Text`, or `Woof.Circle`, you may use the following parameters as so:
 ```javascript
   // notice how we can use the same parameters for the different types
-  var image = project.addImageSprite({xPosition: 0, yPosition: 0, angle: 0, rotationStyle: "ROTATE", showing: true});
-  var text = project.addTextSprite({xPosition: 0, yPosition: 0, angle: 0, rotationStyle: "ROTATE", showing: true});
-  var circle = project.addCircleSprite({xPosition: 0, yPosition: 0, angle: 0, rotationStyle: "ROTATE", showing: true});
+  var image = project.addImageSprite({x: 0, y: 0, angle: 0, rotationStyle: "ROTATE", showing: true});
+  var text = project.addTextSprite({x: 0, y: 0, angle: 0, rotationStyle: "ROTATE", showing: true});
+  var circle = project.addCircleSprite({x: 0, y: 0, angle: 0, rotationStyle: "ROTATE", showing: true});
 ```
 
-  - Set the X position: `sprite.xPosition = 200;`
-  - Change the Y position: `sprite.yPosition += 10;`
+  - Set the X position: `sprite.x = 200;`
+  - Change the Y position: `sprite.y += 10;`
   - Set the angle: `sprite.angle = 30;`
   - Don't rotate the sprites costume when the angle changes: `sprite.setRotationStyle("NO ROTATE");`
   - Hide the sprite: `sprite.showing = false;`
@@ -106,7 +106,7 @@ When creating a new `Woof.Image`, `Woof.Text`, or `Woof.Circle`, you may use the
   - Send this sprite to the back layer: `sprite.sendToBack();`
   - Send this sprite to the front layer: `sprite.sendToFront();`
   - Point the sprite towards another sprite: `sprite.pointTowards(sprite2)`
-  - Point the sprite towards an X,Y position: `sprite.pointTowards(project.mouseX, project.mouseY)`
+  - Point the sprite towards an X,Y : `sprite.pointTowards(project.mouseX, project.mouseY)`
   - Delete this sprite: `sprite.delete();`
   - Get the width: `sprite.width()`
   - Get the height: `sprite.height()`

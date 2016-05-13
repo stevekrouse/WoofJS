@@ -176,10 +176,10 @@ Woof.Project = function (canvasId, { debug }) {
   this._canvas.addEventListener("mousedown", this._onClickHandler);
 
   if (debug) {
-    this.debugMouseX = this.addText({ xPosition: this.minX, yPosition: this.minY + 48, textAlign: "left" });
-    this.debugMouseY = this.addText({ xPosition: this.minX, yPosition: this.minY + 36, textAlign: "left" });
-    this.debugMouseDown = this.addText({ xPosition: this.minX, yPosition: this.minY + 24, textAlign: "left" });
-    this.debugKeysDown = this.addText({ xPosition: this.minX, yPosition: this.minY + 12, textAlign: "left" });
+    this.debugMouseX = this.addText({ x: this.minX, y: this.minY + 48, textAlign: "left" });
+    this.debugMouseY = this.addText({ x: this.minX, y: this.minY + 36, textAlign: "left" });
+    this.debugMouseDown = this.addText({ x: this.minX, y: this.minY + 24, textAlign: "left" });
+    this.debugKeysDown = this.addText({ x: this.minX, y: this.minY + 12, textAlign: "left" });
   }
 
   var renderInterval = setInterval(() => {
@@ -199,10 +199,10 @@ Woof.Project = function (canvasId, { debug }) {
   }, 10);
 };
 
-Woof.Sprite = function (project, { xPosition = 0, yPosition = 0, angle = 0, rotationStyle = "ROTATE", showing = true }) {
+Woof.Sprite = function (project, { x = 0, y = 0, angle = 0, rotationStyle = "ROTATE", showing = true }) {
   this.project = project;
-  this.xPosition = xPosition;
-  this.yPosition = yPosition;
+  this.x = x;
+  this.y = y;
   this.angle = angle;
   this.rotationStyle = rotationStyle;
   this.showing = showing;
@@ -226,8 +226,8 @@ Woof.Sprite = function (project, { xPosition = 0, yPosition = 0, angle = 0, rota
   };
 
   this.move = function (steps) {
-    this.xPosition += steps * Math.cos(this.radians());
-    this.yPosition += steps * Math.sin(this.radians());
+    this.x += steps * Math.cos(this.radians());
+    this.y += steps * Math.sin(this.radians());
   };
 
   this.setRotationStyle = style => {
@@ -245,11 +245,11 @@ Woof.Sprite = function (project, { xPosition = 0, yPosition = 0, angle = 0, rota
   };
 
   this.canvasX = () => {
-    return this.xPosition + this.project.maxX;
+    return this.x + this.project.maxX;
   };
 
   this.canvasY = () => {
-    return this.project.maxY - this.yPosition;
+    return this.project.maxY - this.y;
   };
 
   this.bounds = () => {
@@ -257,10 +257,10 @@ Woof.Sprite = function (project, { xPosition = 0, yPosition = 0, angle = 0, rota
     var halfWidth = this.width() / 2;
     var halfHeight = this.height() / 2;
 
-    var left = this.xPosition - halfWidth;
-    var right = this.xPosition + halfWidth;
-    var bottom = this.yPosition - halfHeight;
-    var top = this.yPosition + halfHeight;
+    var left = this.x - halfWidth;
+    var right = this.x + halfWidth;
+    var bottom = this.y - halfHeight;
+    var top = this.y + halfHeight;
     return { left: left, right: right, top: top, bottom: bottom };
   };
 
@@ -294,7 +294,7 @@ Woof.Sprite = function (project, { xPosition = 0, yPosition = 0, angle = 0, rota
   };
 
   this.pointTowards = (x2, y2) => {
-    this.angle = Math.atan2(y2 - this.yPosition, x2 - this.xPosition) * 180 / Math.PI;
+    this.angle = Math.atan2(y2 - this.y, x2 - this.x) * 180 / Math.PI;
   };
 
   this.height = () => {
