@@ -69,6 +69,7 @@ project.every("1", "second", () => {
   - Mouse X: `project.mouseX`
   - Mouse Y: `project.mouseY`
   - Mouse down?: `project.mouseDown`
+  - Do something on click: `project.onClick(() => { ... });`
   - List of keys currently pressed: `project.keysDown`
   - Is 'A' pressed?: `project.keysDown.includes('A')`
   - Do this every second: `project.every(1, "second", () => {...});`
@@ -100,7 +101,8 @@ When creating a new `Woof.Image`, `Woof.Text`, or `Woof.Circle`, you may use the
   - Move the sprite in the direction of the angle: `sprite.move(10);`
   - Touching another sprite?: `if (sprite.touching(sprite2)) { ... }`
   - Mouse over this sprite?: `if (sprite.mouseOver()) { ... }`
-  - Clicking on this sprite?: `if (project.mouseDown && sprite.mouseOver()) { ... }`
+  - Do something on click: `sprite.onClick(() => { ... });`
+  - Clicking and holding on this sprite?: `if (project.mouseDown && sprite.mouseOver()) { ... }`
   - Send this sprite to the back layer: `sprite.sendToBack();`
   - Send this sprite to the front layer: `sprite.sendToFront();`
   - Point the sprite towards another sprite: `sprite.pointTowards(sprite2)`

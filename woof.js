@@ -98,12 +98,13 @@ Woof.Project = function (canvasId, { debug }) {
 
     this._everys.forEach(clearInterval);
     this._afters.forEach(clearInterval);
+    this.project._canvas.removeEventListener("mousedown", this._onClickHandler);
 
     this.sprites.forEach(sprite => sprite.delete());
   };
 
   this.translateToCenter = (x, y) => {
-    return [x - this.maxX, this.maxY - y];
+    return [x - this.maxX - this._canvas.offsetLeft, this.maxY - y + this._canvas.offsetTop];
   };
 
   this.mouseDown = false;
@@ -111,21 +112,15 @@ Woof.Project = function (canvasId, { debug }) {
   this.mouseY = 0;
   this._canvas.addEventListener("mousedown", event => {
     this.mouseDown = true;
-    var mouseX = event.clientX - this._canvas.offsetLeft;
-    var mouseY = event.clientY - this._canvas.offsetTop;
-    [this.mouseX, this.mouseY] = this.translateToCenter(mouseX, mouseY);
+    [this.mouseX, this.mouseY] = this.translateToCenter(event.clientX, event.clientY);
   });
   this._canvas.addEventListener("mouseup", event => {
     this.mouseDown = false;
-    var mouseX = event.clientX - this._canvas.offsetLeft;
-    var mouseY = event.clientY - this._canvas.offsetTop;
-    [this.mouseX, this.mouseY] = this.translateToCenter(mouseX, mouseY);
+    [this.mouseX, this.mouseY] = this.translateToCenter(event.clientX, event.clientY);
   });
   this._canvas.addEventListener("touchstart", event => {
     this.mouseDown = true;
-    var mouseX = event.targetTouches[0].clientX - this._canvas.offsetLeft;
-    var mouseY = event.targetTouches[0].clientY - this._canvas.offsetTop;
-    [this.mouseX, this.mouseY] = this.translateToCenter(mouseX, mouseY);
+    [this.mouseX, this.mouseY] = this.translateToCenter(event.clientX, event.clientY);
   });
   this._canvas.addEventListener("touchend", event => {
     // for some reason touchend events are firing too quickly
@@ -137,14 +132,10 @@ Woof.Project = function (canvasId, { debug }) {
     }, 0);
   });
   this._canvas.addEventListener("mousemove", event => {
-    var mouseX = event.clientX - this._canvas.offsetLeft;
-    var mouseY = event.clientY - this._canvas.offsetTop;
-    [this.mouseX, this.mouseY] = this.translateToCenter(mouseX, mouseY);
+    [this.mouseX, this.mouseY] = this.translateToCenter(event.clientX, event.clientY);
   });
   this._canvas.addEventListener("touchmove", event => {
-    var mouseX = event.targetTouches[0].clientX - this._canvas.offsetLeft;
-    var mouseY = event.targetTouches[0].clientY - this._canvas.offsetTop;
-    [this.mouseX, this.mouseY] = this.translateToCenter(mouseX, mouseY);
+    [this.mouseX, this.mouseY] = this.translateToCenter(eventevent.targetTouches[0].clientX, event.targetTouches[0].clientY);
     event.preventDefault();
   });
 
@@ -173,12 +164,16 @@ Woof.Project = function (canvasId, { debug }) {
     this._afters.push(setTimeout(func, Woof.unitsToMiliseconds(time, units)));
   };
 
-  this._onloads = [];
-  document.body.addEventListener("onload", event => {
-    this._onloads.forEach(func => {
-      func.call();
+  this._onClicks = [];
+  this.onClick = func => {
+    this._onClicks.push(func);
+  };
+  this._onClickHandler = event => {
+    this._onClicks.forEach(func => {
+      func();
     });
-  });
+  };
+  this._canvas.addEventListener("mousedown", this._onClickHandler);
 
   if (debug) {
     this.debugMouseX = this.addText({ xPosition: this.minX, yPosition: this.minY + 48, textAlign: "left" });
@@ -275,13 +270,17 @@ Woof.Sprite = function (project, { xPosition = 0, yPosition = 0, angle = 0, rota
     return !(r2.left > r1.right || r2.right < r1.left || r2.top < r1.bottom || r2.bottom > r1.top);
   };
 
-  this.mouseOver = function () {
+  this.over = (x, y) => {
     var r1 = this.bounds();
-    var belowTop = this.project.mouseY <= r1.top;
-    var aboveBottom = this.project.mouseY >= r1.bottom;
-    var rightLeft = this.project.mouseX >= r1.left;
-    var leftRight = this.project.mouseX <= r1.right;
+    var belowTop = y <= r1.top;
+    var aboveBottom = y >= r1.bottom;
+    var rightLeft = x >= r1.left;
+    var leftRight = x <= r1.right;
     return belowTop && aboveBottom && rightLeft && leftRight;
+  };
+
+  this.mouseOver = function () {
+    return this.over(this.project.mouseX, this.project.mouseY);
   };
 
   this.sendToBack = () => {
@@ -306,9 +305,23 @@ Woof.Sprite = function (project, { xPosition = 0, yPosition = 0, angle = 0, rota
     throw Error("Implemented in subclass");
   };
 
+  this._onClicks = [];
+  this.onClick = func => {
+    this._onClicks.push(func);
+  };
+  this._onClickHandler = event => {
+    if (this.showing && this.over(...project.translateToCenter(event.clientX, event.clientY))) {
+      this._onClicks.forEach(func => {
+        func();
+      });
+    }
+  };
+  this.project._canvas.addEventListener("mousedown", this._onClickHandler);
+
   this.delete = () => {
     if (this.project.sprites.includes(this)) {
       this.project.sprites.splice(this.project.sprites.indexOf(this), 1);
+      this.project._canvas.removeEventListener("mousedown", this._onClickHandler);
     }
   };
 };
