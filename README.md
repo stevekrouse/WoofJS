@@ -45,7 +45,7 @@ project.every(40, "milliseconds", () => {
 // make the timer start at 20
 var timer = 20;
 // add text that diplays the timer
-var timerText = project.addText({xPosition: 0, yPosition: project.height/2 - 20, fontSize: 20, fontColor: "white"});
+var timerText = project.addText({xPosition: 0, yPosition: project.maxY - 20, fontSize: 20, fontColor: "white"});
 project.every("1", "second", () => {
   // change the text to refer to the timer's new value every second
   timerText.text = "Timer: " + timer;
@@ -62,7 +62,7 @@ project.every("1", "second", () => {
 
   - Create a project: `var project = new Woof.Project('canvasID', {debug: true});`
   - Add a backdrop: `project.addBackDropURL("http://example.com/img.jpg");`
-  - Change the backdrop: `project.backdrop = 0;`
+  - Change the backdrop: `project.backdrop = 1;`
   - Stop all: `project.stopAll();`
   - Mouse X: `project.mouseX`
   - Mouse Y: `project.mouseY`
@@ -71,6 +71,12 @@ project.every("1", "second", () => {
   - Is 'A' pressed?: `project.keysDown.includes('A')`
   - Do this every second: `project.every(1, "second", () => {...});`
   - Do this after one second: `project.after(1, "second", () => {...});`
+  - Right edge of the screen: `project.maxX`
+  - Left edge of the screen: `project.minX`
+  - Top edge of the screen: `project.maxY`
+  - Bottom edge of the screen: `project.minY`
+  - Width of the screen: `project.width`
+  - Height of the screen: `project.height`
 
 ## Woof.Sprite
 

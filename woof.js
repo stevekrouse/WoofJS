@@ -46,6 +46,10 @@ Woof.Project = function (canvasId, { debug }) {
   this._context = this._canvas.getContext("2d");
   this.height = this._canvas.height;
   this.width = this._canvas.width;
+  this.minX = -this.width / 2;
+  this.maxX = this.width / 2;
+  this.minY = -this.height / 2;
+  this.maxY = this.height / 2;
 
   this._render = function () {
     this._context.clearRect(0, 0, this._canvas.width, this._canvas.height);
@@ -101,7 +105,7 @@ Woof.Project = function (canvasId, { debug }) {
   };
 
   this.translateToCenter = (x, y) => {
-    return [x - this.width / 2, this.height / 2 - y];
+    return [x - this.maxX, this.maxY - y];
   };
 
   this.mouseDown = false;
@@ -109,6 +113,7 @@ Woof.Project = function (canvasId, { debug }) {
   this.mouseY = 0;
   this._canvas.addEventListener("mousedown", event => {
     this.mouseDown = true;
+    console.log('mousedown');
     var mouseX = event.clientX - this._canvas.offsetLeft;
     var mouseY = event.clientY - this._canvas.offsetTop;
     [this.mouseX, this.mouseY] = this.translateToCenter(mouseX, mouseY);
@@ -179,9 +184,10 @@ Woof.Project = function (canvasId, { debug }) {
   });
 
   if (debug) {
-    this.debugMouseX = this.addText({ xPosition: -this.width / 2, yPosition: -this.height / 2 + 36, textAlign: "left" });
-    this.debugMouseY = this.addText({ xPosition: -this.width / 2, yPosition: -this.height / 2 + 24, textAlign: "left" });
-    this.debugKeysDown = this.addText({ xPosition: -this.width / 2, yPosition: -this.height / 2 + 12, textAlign: "left" });
+    this.debugMouseX = this.addText({ xPosition: this.minX, yPosition: this.minY + 48, textAlign: "left" });
+    this.debugMouseY = this.addText({ xPosition: this.minX, yPosition: this.minY + 36, textAlign: "left" });
+    this.debugMouseDown = this.addText({ xPosition: this.minX, yPosition: this.minY + 24, textAlign: "left" });
+    this.debugKeysDown = this.addText({ xPosition: this.minX, yPosition: this.minY + 12, textAlign: "left" });
   }
 
   var renderInterval = setInterval(() => {
@@ -189,6 +195,7 @@ Woof.Project = function (canvasId, { debug }) {
       if (debug) {
         this.debugMouseX.text = "project.mouseX: " + this.mouseX;
         this.debugMouseY.text = "project.mouseY: " + this.mouseY;
+        this.debugMouseDown.text = "project.mouseDown: " + this.mouseDown;
         this.debugKeysDown.text = "project.keysDown: " + this.keysDown;
       }
       this._render();
@@ -197,7 +204,7 @@ Woof.Project = function (canvasId, { debug }) {
       throw Error("Error in render: " + e.message);
       clearInterval(renderInterval);
     }
-  }, 40);
+  }, 10);
 };
 
 Woof.Sprite = function (project, { xPosition = 0, yPosition = 0, angle = 0, rotationStyle = "ROTATE", showing = true }) {
@@ -246,11 +253,11 @@ Woof.Sprite = function (project, { xPosition = 0, yPosition = 0, angle = 0, rota
   };
 
   this.canvasX = () => {
-    return this.xPosition + this.project.width / 2;
+    return this.xPosition + this.project.maxX;
   };
 
   this.canvasY = () => {
-    return this.project.height / 2 - this.yPosition;
+    return this.project.maxY - this.yPosition;
   };
 
   this.bounds = () => {
@@ -260,21 +267,21 @@ Woof.Sprite = function (project, { xPosition = 0, yPosition = 0, angle = 0, rota
 
     var left = this.xPosition - halfWidth;
     var right = this.xPosition + halfWidth;
-    var top = this.yPosition - halfHeight;
-    var bottom = this.yPosition + halfHeight;
+    var bottom = this.yPosition - halfHeight;
+    var top = this.yPosition + halfHeight;
     return { left: left, right: right, top: top, bottom: bottom };
   };
 
   this.touching = sprite => {
     var r1 = this.bounds();
     var r2 = sprite.bounds();
-    return !(r2.left > r1.right || r2.right < r1.left || r2.top > r1.bottom || r2.bottom < r1.top);
+    return !(r2.left > r1.right || r2.right < r1.left || r2.top < r1.bottom || r2.bottom > r1.top);
   };
 
   this.mouseOver = function () {
     var r1 = this.bounds();
-    var belowTop = this.project.mouseY >= r1.top;
-    var aboveBottom = this.project.mouseY <= r1.bottom;
+    var belowTop = this.project.mouseY <= r1.top;
+    var aboveBottom = this.project.mouseY >= r1.bottom;
     var rightLeft = this.project.mouseX >= r1.left;
     var leftRight = this.project.mouseX <= r1.right;
     return belowTop && aboveBottom && rightLeft && leftRight;
