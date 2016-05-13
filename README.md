@@ -24,8 +24,7 @@ project.addBackdropURL("http://cdn.mysitemyway.com/etc-mysitemyway/webtreats/ass
 ```
 5) Add an image.
 ```javascript
-var rectangle = project.addImage();
-rectangle.addCostumeURL("http://www.urdu-english.com/images/lessons/beginner/shapes/shapes-pics/rectangle.png");
+var rectangle = project.addImage({url: "http://www.urdu-english.com/images/lessons/beginner/shapes/shapes-pics/rectangle.png"});
 ```
 6) Make it move with the arrow keys.
 ```javascript
@@ -47,11 +46,7 @@ project.every(40, "milliseconds", () => {
 7) Add a timer.
 ```javascript
 var timer = 20;
-var timerSprite = project.addText();
-timerSprite.xPosition = 300;
-timerSprite.yPosition = 30;
-timerSprite.fontSize = 20;
-timerSprite.fontColor = "white";
+var timerSprite = project.addText({xPosition: project.width / 2, yPosition: project.height / 2, fontSize: 20, fontColor: "white"});
 project.every("1", "second", () => {
   timerSprite.text = "Timer: " + timer;
   if (timer === 0){
