@@ -107,7 +107,7 @@ When creating a new `Woof.Image`, `Woof.Text`, or `Woof.Circle`, you may use the
 
 ## Woof.Image
 
-  - Create a new image: `var image = project.addImage({url: "http://www.abeka.com/BookImages/ClipArt/205427/46x46y50fx50fh/205427-Brown-Dog-with-Blue-Collar,-Holding-a-Bone-in-Mouth-color-png.png", imageWidth: 30, imageHeight: 30});`
+  - Create a new image: `var image = project.addImage({url: "http://www.loveyourdog.com/image3.gif", imageWidth: 30, imageHeight: 30});`
   - Add a costume: `image.addCostumeURL("http://www.urdu-english.com/images/lessons/beginner/shapes/shapes-pics/rectangle.png");`
   - Change the costume: `image.costume = 0;`
   - Set the width: `image.imageWidth = 10;`

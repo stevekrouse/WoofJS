@@ -352,7 +352,7 @@ Woof.Circle = function(project, {radius = 10, color = "black"}) {
   };
 };
 
-Woof.Image = function(project, {url = "http://www.abeka.com/BookImages/ClipArt/205427/46x46y50fx50fh/205427-Brown-Dog-with-Blue-Collar,-Holding-a-Bone-in-Mouth-color-png.png", imageHeight, imageWidth}) {
+Woof.Image = function(project, {url = "http://www.loveyourdog.com/image3.gif", imageHeight, imageWidth}) {
   Woof.Sprite.call(this, project, arguments[1]);
   this.images = [];
   this.image = 0;
