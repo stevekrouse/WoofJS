@@ -62,8 +62,8 @@ Woof.Project = function(canvasId) {
   
   this._renderBackdrop = function() {
     if (this.backdrops[this.backdrop]) {
-      var image = this.backdrops[this.backdrop];
-      this._context.drawImage(image, 0, 0);
+      var backdrop = this.backdrops[this.backdrop];
+      this._context.drawImage(backdrop, 0, 0);
     }
   };
   
@@ -87,6 +87,12 @@ Woof.Project = function(canvasId) {
   
   this.addCircleSprite = function() {
     var sprite = new Woof.CircleSprite(this);
+    this.sprites.push(sprite);
+    return sprite;
+  };
+  
+  this.addImageSprite = function() {
+    var sprite = new Woof.ImageSprite(this);
     this.sprites.push(sprite);
     return sprite;
   };
@@ -188,42 +194,20 @@ Woof.Sprite = function(project) {
   
   this.xPosition = 0;
   this.yPosition = 0;
-  
   this.angle = 0;
-
-  this.costumes = [];
-  this.costume = 0;
-  this.height = null;
-  this.width = null;
-  
   this.rotationStyle = "ROTATE";
-  
   this.showing = true;
-
-  this.addCostumeURL = function(url){    
-    var costume = new Image();
-    costume.src = url;
-    this.costumes.push(costume);
-    return this.costumes.length - 1;
-  };
   
   this._render = function() {
-    var angle;
-    if (this.rotationStyle == "ROTATE"){
-      angle = this.angle;
-    } else if (this.rotationStyle == "NO ROTATE"){
-      angle = 0;
-    }
-    
     if (this.showing) {
+      var angle = this.rotationStyle == "ROTATE" ? this.angle : 0;
       this.project._context.save();
       this.project._context.translate(this.xPosition, this.yPosition);
       this.project._context.rotate(angle * Math.PI / 180);
       
-      if (this.currentCostume() && this.currentCostume().nodeName == "IMG") {
-        this.project._context.drawImage(this.currentCostume(), -this.width()/2, -this.height() / 2);
-      }
-      else if (this instanceof Woof.TextSprite) {
+      if (this instanceof Woof.ImageSprite) {
+        this.imageRender();
+      } else if (this instanceof Woof.TextSprite) {
         this.textRender();
       } else if (this instanceof Woof.CircleSprite) {
       	this.circleRender();
@@ -276,10 +260,6 @@ Woof.Sprite = function(project) {
     return belowTop && aboveBottom && rightLeft && leftRight;
   };
   
-  this.currentCostume = () => {
-    return this.costumes[this.costume];
-  };
-  
   this.sendToBack = () => {
     var sprites = this.project.sprites;
     sprites.splice(0, 0, sprites.splice(sprites.indexOf(this), 1)[0]);
@@ -298,18 +278,16 @@ Woof.Sprite = function(project) {
   };
   
   this.height = () => {
-    return this.currentCostume().height;
+    console.error("Implemented in subclass");
   };
   
   this.width = () => {
-    return this.currentCostume().width;
+    console.error("Implemented in subclass");
   };
   
   this.delete = () => {
     if (this.project.sprites.includes(this)){
       this.project.sprites.splice(this.project.sprites.indexOf(this), 1);
-      this._everys.forEach(clearInterval);
-      this._afters.forEach(clearInterval);
     }
   };
 };
@@ -378,3 +356,33 @@ Woof.CircleSprite = function(project) {
   };
 };
 
+Woof.ImageSprite = function(project) {
+  Woof.Sprite.call(this, project);
+  this.images = [];
+  this.image = 0;
+  this.imageHeight = undefined;
+  this.imageWidth = undefined;
+  
+  this.addImageURL = function(url){    
+    var image = new Image();
+    image.src = url;
+    this.images.push(image);
+    return this.images.length - 1;
+  };
+
+  this.width = () => {
+    return this.imageWidth || this.currentImage().width;
+  };
+
+  this.height = () => {
+    return this.imageHeight || this.currentImage().height;
+  };
+  
+  this.currentImage = () => {
+    return this.images[this.image];
+  };
+
+  this.imageRender = () => {
+    this.project._context.drawImage(this.currentImage(), -this.width()/2, -this.height() / 2, this.width(), this.height());
+  };
+};
