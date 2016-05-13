@@ -2,13 +2,15 @@
 
 Woof is a JavaScript library inspired by Scratch for making interactive web and mobile games.
 
+*Notice: this software is under constant development, so expect things to break and be frequently changed.*
+
 ## Getting Started
 
 You can either [clone this JSBin](https://jsbin.com/lekovu/edit?js,output) or follow the steps below to setup your first WoofJS project.
 
 1) Throw the Woof library between the `<head>` tags.
 ```html
-<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/a64f5776c1c331e6dea876de40ee280ec3bf26c9/woof.js"></script>
+<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/ee326ebbd5efbfd4a6413c5d3e892be43e086b05/woof.js"></script>
 ```
 2) Throw a `<canvas>` tag between the `<body>` tags.
 ```html
@@ -18,8 +20,8 @@ You can either [clone this JSBin](https://jsbin.com/lekovu/edit?js,output) or fo
 ```javascript
 // Set up your Woof project by referencing the ID of your canvas, optionally setting debug, so you can see mouseX, mouseY and keysDown.
 var project = new Woof.Project("project", {debug: true}); 
-// Add a backdrop URL (preferably of similar dimensions to your canvas).
-project.addBackdropURL("http://cdn.theatlantic.com/assets/media/img/mt/2016/03/RTX283V4/lead_960.jpg?1457553386");
+// Set the backdrop URL (preferably of similar dimensions to your canvas).
+project.setBackdropURL("http://cdn.theatlantic.com/assets/media/img/mt/2016/03/RTX283V4/lead_960.jpg?1457553386");
 
 // Add an image via a url, and optionally setting its xPosition and yPosition.
 var rectangle = project.addImage({url: "http://www.urdu-english.com/images/lessons/beginner/shapes/shapes-pics/rectangle.png", xPosition: 0, yPosition: 0});
@@ -61,7 +63,7 @@ project.every("1", "second", () => {
 ## Woof.Project
 
   - Create a project: `var project = new Woof.Project('canvasID', {debug: true});`
-  - Add a backdrop: `project.addBackDropURL("http://example.com/img.jpg");`
+  - Set the backdrop: `project.setBackdropURL("http://example.com/img.jpg");`
   - Change the backdrop: `project.backdrop = 1;`
   - Stop all: `project.stopAll();`
   - Mouse X: `project.mouseX`
