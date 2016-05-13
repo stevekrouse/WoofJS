@@ -1,6 +1,10 @@
-# WoofJS
+# WoofJS - *JavaScript Unleashed*
 
-Woof is a JavaScript library inspired by Scratch for making interactive web and mobile games.
+WoofJS is a JavaScript library for making interactive web and mobile games.
+
+It was inspired by Scratch and was designed to ease the trasition from Scratch to JavaScript.
+
+WoofJS is developed with :heart: by [The Coding Space](http://thecodingspace.com).
 
 *Notice: this software is under constant development, so expect things to break and be frequently changed.*
 
