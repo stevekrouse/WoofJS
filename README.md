@@ -9,7 +9,7 @@ You can either [clone this JSBin](https://jsbin.com/lekovu/edit?js,output) or fo
 
 1) Throw the Woof library between the `<head>` tags.
 ```html
-<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/05113a45f2f3938c523243e0f66a31f6836d41d4/woof.js"></script>
+<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/0fd7ac9650f4c88e950ba5e4e9c004d504584602/woof.js"></script>
 ```
 2) Throw a `<canvas>` tag between the `<body>` tags.
 ```html
@@ -17,13 +17,13 @@ You can either [clone this JSBin](https://jsbin.com/lekovu/edit?js,output) or fo
 ```
 3) Throw in some JavaScript, and tell Woof to fetch it.
 ```javascript
-// Set up your Woof project by referencing the ID of your canvas.
-var project = new Woof.Project("project"); 
+// Set up your Woof project by referencing the ID of your canvas, optionally setting debug, so you can see mouseX, mouseY and keysDown.
+var project = new Woof.Project("project", {debug: true}); 
 // Add a backdrop URL (preferably of similar dimensions to your canvas).
-project.addBackdropURL("http://media.salon.com/2014/09/shutterstock_111293468.jpg");
+project.addBackdropURL("http://cdn.theatlantic.com/assets/media/img/mt/2016/03/RTX283V4/lead_960.jpg?1457553386");
 
 // Add an image via a url, and optionally setting its xPosition and yPosition.
-var rectangle = project.addImage({url: "http://www.urdu-english.com/images/lessons/beginner/shapes/shapes-pics/rectangle.png", xPosition: project.width / 2, yPosition: project.height / 2});
+var rectangle = project.addImage({url: "http://www.urdu-english.com/images/lessons/beginner/shapes/shapes-pics/rectangle.png", xPosition: 0, yPosition: 0});
 
 // Make it move with the arrow keys by checking which keys are down every 40 milliseconds
 project.every(40, "milliseconds", () => {
@@ -36,20 +36,20 @@ project.every(40, "milliseconds", () => {
     rectangle.xPosition +=5; 
   }
   if (project.keysDown.includes("UP")){
-    rectangle.yPosition -= 5; 
+    rectangle.yPosition += 5; 
   }
   if (project.keysDown.includes("DOWN")){
-    rectangle.yPosition += 5; 
+    rectangle.yPosition -= 5; 
   }
 });
 
 // make the timer start at 20
 var timer = 20;
 // add text that diplays the timer
-var timerSprite = project.addText({xPosition: project.width / 2, yPosition: 25, fontSize: 20, fontColor: "white"});
+var timerText = project.addText({xPosition: 0, yPosition: project.height/2 - 20, fontSize: 20, fontColor: "white"});
 project.every("1", "second", () => {
   // change the text to refer to the timer's new value every second
-  timerSprite.text = "Timer: " + timer;
+  timerText.text = "Timer: " + timer;
   if (timer === 0){
     // stop everything when the timer reaches 0
     project.stopAll();
@@ -57,12 +57,11 @@ project.every("1", "second", () => {
   // make the timer go down every second
   timer--;
 });
-
 ```
 
 ## Woof.Project
 
-  - Create a project: `var project = new Woof.Project('canvasID');`
+  - Create a project: `var project = new Woof.Project('canvasID', {debug: true});`
   - Add a backdrop: `project.addBackDropURL("http://example.com/img.jpg");`
   - Change the backdrop: `project.backdrop = 0;`
   - Stop all: `project.stopAll();`
