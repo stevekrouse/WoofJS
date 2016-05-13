@@ -21,6 +21,8 @@ Woof.keyCodeToString = (keyCode) => {
 Woof.unitsToMiliseconds = (time, units) => {
   if (units == "milliseconds" || units == "millisecond"){
     return time;
+  } else if (units == "miliseconds" || units == "milisecond"){
+    return time;
   } else if (units == "seconds" || units == "second"){
     return time * 1000;
   } else if (units == "minutes" || units == "minute"){
