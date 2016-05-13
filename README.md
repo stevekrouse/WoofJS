@@ -7,9 +7,8 @@ Woof is a small JavaScript library inspired by Scratch for making interactive ca
 
 1) Include the Woof library in your code between the `<head>` tags.
 ```html
-<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/22feaa07aacb174a93b8d545f19a9cf14aaea7dc/woof.js"></script>
+<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/17d8a023852a0788cf3b734ba55a55d10bcfcfe3/woof.js"></script>
 ```
-
 2) Add a canvas tag between the `<body>` tags. Give it an ID, width and height.
 ```html
 <canvas id="project" width="350" height="500"></canvas>
@@ -24,9 +23,9 @@ project.addBackdropURL("http://cdn.mysitemyway.com/etc-mysitemyway/webtreats/ass
 ```
 5) Add an image.
 ```javascript
-var rectangle = project.addImage({url: "http://www.urdu-english.com/images/lessons/beginner/shapes/shapes-pics/rectangle.png"});
+var rectangle = project.addImage({url: "http://www.urdu-english.com/images/lessons/beginner/shapes/shapes-pics/rectangle.png", xPosition: project.width / 2, yPosition: project.height / 2});
 ```
-6) Make it move with the arrow keys.
+6) Make it move with the arrow keys. (If you changed the variable name above from `rectangle`, be sure to change it in this code as well.)
 ```javascript
 project.every(40, "milliseconds", () => {
   if (project.keysDown.includes("LEFT")){
