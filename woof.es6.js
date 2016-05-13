@@ -85,6 +85,12 @@ Woof.Project = function(canvasId) {
     return sprite;
   };
   
+  this.addCircleSprite = function() {
+    var sprite = new Woof.CircleSprite(this);
+    this.sprites.push(sprite);
+    return sprite;
+  };
+  
   this.addBackdropURL = function(url){    
     var backdrop = new Image();
     backdrop.src = url;
@@ -219,18 +225,11 @@ Woof.Sprite = function(project) {
       }
       else if (this instanceof Woof.TextSprite) {
         this.textRender();
-      } else if (this.currentCostume() && this.currentCostume().radius) {
-      	this.project._context.beginPath();
-      	this.project._context.arc(this.currentCostume().x,this.currentCostume().y,this.currentCostume().radius,0,2*Math.PI);
-      	this.project._context.fillStyle=this.currentCostume().color;
-      	this.project._context.fill();
+      } else if (this instanceof Woof.CircleSprite) {
+      	this.circleRender();
 			}
       this.project._context.restore();
     }
-  };
-  
-  this.addCostumeCircle = (x, y, radius, color) => {
-    this.costumes.push({x:x, y:y, radius: radius, color:color});
   };
   
   this.move = function(steps){
@@ -289,15 +288,6 @@ Woof.Sprite = function(project) {
   this.sendToFront = () => {
     var sprites = this.project.sprites;
     sprites.splice(sprites.length, 0, sprites.splice(sprites.indexOf(this), 1)[0]);
-  };
-  
-  this.pointTowards = sprite => {
-    var x1 = this.xPosition;
-    var y1 = this.yPosition;
-    var x2 = sprite.xPosition;
-    var y2 = sprite.yPosition;
-    
-    this.angle = Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
   };
   
   this.pointTowards = (x2,y2) => {
@@ -366,3 +356,25 @@ Woof.TextSprite = function(project) {
     });
   };
 };
+
+Woof.CircleSprite = function(project) {
+  Woof.Sprite.call(this, project);
+  this.radius = 10;
+  this.color = "black";
+  
+  this.width = () => {
+    return 2 * this.radius;
+  };
+  
+  this.height = () => {
+    return 2 * this.radius;
+  };
+  
+  this.circleRender = () => {
+    this.project._context.beginPath();
+    this.project._context.arc(0, 0, this.radius, 0, 2*Math.PI);
+    this.project._context.fillStyle=this.color;
+    this.project._context.fill();
+  };
+};
+
