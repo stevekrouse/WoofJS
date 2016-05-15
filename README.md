@@ -148,20 +148,12 @@ var number = Woof.randomInt(10, 20);
 
 ## Learnable Programming
 
-Despite its many noted flaws, Processing still remains the dominent graphics programming framework for beginners. Woof strives to solve the same problems of Processing, and be a beginner-friendly graphics frameworks for art, animation and game development, but it also hopes to improve upon Processing's main flaws:
+Despite its many [noted](http://worrydream.com/LearnableProgramming/) flaws, Processing still remains the dominent graphics programming framework for beginners. Woof strives to solve the same problems of Processing, and be a beginner-friendly graphics frameworks for art, animation and game development, but it also hopes to improve upon Processing's main flaws:
 
-  - side effects in render
-  - render
-  - stroke
-  - non modularity
-  - lack of control flow metaphor
-  - lack of code anthropomorphizing
-
-Woof shamelessly steals:
-
-  - everything is an object that you can immediately see from Scratch, and origially from Smalltalk
-  - pen, angles, turning and moving from LOGO
-  - abstracting over the UI/rendering details from ReactJS
-
-
-
+  - opaque parameters setting - In Woof, all object properties can be set explicitly with dot notation or as named-parameters in the constructor.
+  - side effects in render - In Woof, you can cause state to change in response to events or intervals. You don't have to hook your effectful code into your render method to make things move.
+  - render - In Woof, (like ReactJS) we take care of rendering your objects onto the canvas for you. This means you don't even have to think about how your view layer works. It just does.
+  - hidden state - In Woof, there's no hidden view-layer state. If you make one circle red, only that circle is red.
+  - non-modular - In Woof, because all view-layer state is encapulated into objects, it allows you to easily build modular and functional code without worrying about side effects.
+  - poor decomposition - In Woof, you can have infinitely many objects listen to infinitely many events. You don't have to funnel all of your code through the same top-level events that forces you to build tangled code.
+  - lack of identity / metaphor - Woof steals Scratch's and Smalltalk's everything-is-an-object-that-you-can-see-on-the-screen metaphor. It also takes the pen, angles, turning and moving athropomorphic metaphors from LOGO.
