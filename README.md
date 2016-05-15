@@ -2,11 +2,11 @@
 
 WoofJS is a JavaScript library for making interactive web and mobile games.
 
-It was inspired by Scratch and was designed to ease the trasition from Scratch to JavaScript.
+It was inspired by Scratch and was designed to ease the trasition to JavaScript.
 
 WoofJS is developed with :heart: by [The Coding Space](http://thecodingspace.com).
 
-*Notice: this software is under constant development, so expect things to break and be frequently changed.*
+*Notice: this is new software and is under rapid development, so expect things to break and be frequently changed. We expect our first stable release will come out by June 2016.*
 
 ## Getting Started
 
@@ -145,3 +145,23 @@ When creating a new `Woof.Image`, `Woof.Text`, or `Woof.Circle`, you may use the
 ```javascript
 var number = Woof.randomInt(10, 20);
 ```
+
+## Learnable Programming
+
+Despite its many noted flaws, Processing still remains the dominent graphics programming framework for beginners. Woof strives to solve the same problems of Processing, and be a beginner-friendly graphics frameworks for art, animation and game development, but it also hopes to improve upon Processing's main flaws:
+
+  - side effects in render
+  - render
+  - stroke
+  - non modularity
+  - lack of control flow metaphor
+  - lack of code anthropomorphizing
+
+Woof shamelessly steals:
+
+  - everything is an object that you can immediately see from Scratch, and origially from Smalltalk
+  - pen, angles, turning and moving from LOGO
+  - abstracting over the UI/rendering details from ReactJS
+
+
+
