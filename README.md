@@ -67,8 +67,7 @@ project.every("1", "second", () => {
 ## Woof.Project
 
   - Create a project: `var project = new Woof.Project('canvasID', {debug: true});`
-  - Set the backdrop: `project.setBackdropURL("http://example.com/img.jpg");`
-  - Change the backdrop: `project.backdrop = 1;`
+  - Set/change the backdrop: `project.setBackdropURL("http://example.com/img.jpg");`
   - Stop all: `project.stopAll();`
   - Mouse X: `project.mouseX`
   - Mouse Y: `project.mouseY`
@@ -87,7 +86,7 @@ project.every("1", "second", () => {
 
 ## Woof.Sprite
 
-`Woof.Sprite` represents all of the commonalities between `Woof.Image`, `Woof.Text`, and `Woof.Circle`.
+`Woof.Sprite` functions work on `Woof.Image`, `Woof.Text`, and `Woof.Circle`.
 
 When creating a new `Woof.Image`, `Woof.Text`, or `Woof.Circle`, you may use the following parameters as so:
 ```javascript
@@ -118,8 +117,8 @@ When creating a new `Woof.Image`, `Woof.Text`, or `Woof.Circle`, you may use the
 ## Woof.Image
 
   - Create a new image: `var image = project.addImage({url: "http://www.loveyourdog.com/image3.gif", imageWidth: 30, imageHeight: 30});`
-  - Add a costume: `image.addImageURL("http://www.urdu-english.com/images/lessons/beginner/shapes/shapes-pics/rectangle.png");`
-  - Change the costume: `image.image = 0;`
+  - Add another image: `image.addImageURL("http://www.urdu-english.com/images/lessons/beginner/shapes/shapes-pics/rectangle.png");`
+  - Change the image: `image.image = 0;`
   - Set the width: `image.imageWidth = 10;`
   - Set the height `image.imageHeight = 20;`
 
@@ -148,7 +147,7 @@ var number = Woof.randomInt(10, 20);
 
 ## [Learnable Programming](http://worrydream.com/LearnableProgramming/)
 
-Despite its many [noted](http://worrydream.com/LearnableProgramming/) flaws, Processing still remains the dominent graphics programming framework for beginners. Woof strives to solve the same problems of Processing, and be a beginner-friendly graphics frameworks for art, animation and game development, but it also hopes to improve upon Processing's main flaws:
+Despite its many [noted](http://worrydream.com/LearnableProgramming/) flaws, Processing still remains the dominent graphics programming framework for beginners. Woof strives to solve the same problems as Processing, and be a beginner-friendly graphics frameworks for art, animation and game development, but it also hopes to improve upon Processing's main flaws:
 
   - **opaque parameters setting** - In Woof, all object properties can be set explicitly with dot notation or as named-parameters in the constructor.
   - **side effects in render** - In Woof, you can cause state to change in response to events or intervals. You don't have to hook your effectful code into your render method to make things move.
