@@ -151,8 +151,9 @@ Woof.Project = function (canvasId, { debug }) {
     this._onClicks.push(func);
   };
   this._onClickHandler = event => {
+    var [mouseX, mouseY] = this.translateToCenter(event.clientX, event.clientY);
     this._onClicks.forEach(func => {
-      func();
+      func(mouseX, mouseY);
     });
   };
   this._canvas.addEventListener("mousedown", this._onClickHandler);
@@ -306,9 +307,10 @@ Woof.Sprite = function (project, { x = 0, y = 0, angle = 0, rotationStyle = "ROT
     this._onClicks.push(func);
   };
   this._onClickHandler = event => {
-    if (this.showing && this.over(...project.translateToCenter(event.clientX, event.clientY))) {
+    var [mouseX, mouseY] = this.project.translateToCenter(event.clientX, event.clientY);
+    if (this.showing && this.over(mouseX, mouseY)) {
       this._onClicks.forEach(func => {
-        func();
+        func(mouseX, mouseY);
       });
     }
   };
