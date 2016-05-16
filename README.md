@@ -2,7 +2,7 @@
 
 WoofJS is a JavaScript library for making interactive web and mobile games.
 
-It was inspired by Scratch and was designed to ease the trasition to JavaScript.
+It was originally inspired by Scratch and can help ease the trasition to JavaScript.
 
 WoofJS is developed with :heart: by [The Coding Space](http://thecodingspace.com).
 
