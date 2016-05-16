@@ -32,6 +32,56 @@ Woof.randomInt = (min, max) => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
+Woof.dayOfMonth = function dayOfMonth() {
+  var date = new Date();
+  return date.getDate();
+};
+
+Woof.dayOfWeek = function dayOfWeek() {
+  var date = new Date();
+  var day = date.getDay();
+  if (day === 0) {
+    return "Sunday";
+  } else if (day == 1) {
+    return "Monday";
+  } else if (day == 2) {
+    return "Tuesday";
+  } else if (day == 3) {
+    return "Wednesday";
+  } else if (day == 4) {
+    return "Thursday";
+  } else if (day == 5) {
+    return "Friday";
+  } else if (day == 6) {
+    return "Saturday";
+  }
+};
+
+Woof.currentHourMilitary = function currentHourMilitary() {
+  var date = new Date();
+  return date.getHours();
+};
+
+Woof.currentHour = function currentHour() {
+  var date = new Date();
+  var hour = date.getHours();
+  if (hour < 13) {
+    return date.getHours();
+  } else if (hour >= 13) {
+    return Number(date.getHours()) - 12;
+  }
+};
+
+Woof.currentMinute = function currentMinute() {
+  var date = new Date();
+  return date.getMinutes();
+};
+
+Woof.currentSecond = function currentSecond() {
+  var date = new Date();
+  return date.getSeconds();
+};
+
 Woof.Project = function (canvasId, { debug }) {
   this.sprites = [];
   this.backdrop = undefined;
@@ -219,6 +269,19 @@ Woof.Sprite = function (project, { x = 0, y = 0, angle = 0, rotationStyle = "ROT
         this.circleRender();
       }
       this.project._context.restore();
+    }
+  };
+
+  this.distanceTo = function distanceTo(xGiven, yGiven) {
+    if (arguments.length === 1) {
+      var x = this.x - xGiven.x;
+      var y = this.y - xGiven.y;
+      return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
+    }
+    if (arguments.length === 2) {
+      var x = this.x - xGiven;
+      var y = this.y - yGiven;
+      return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
     }
   };
 

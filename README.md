@@ -111,6 +111,8 @@ When creating a new `Woof.Image`, `Woof.Text`, or `Woof.Circle`, you may use the
   - Point the sprite towards another sprite: `sprite.pointTowards(sprite2)`
   - Point the sprite towards an X,Y : `sprite.pointTowards(project.mouseX, project.mouseY)`
   - Delete this sprite: `sprite.delete();`
+  - Get the distance between two sprites `sprite.distanceTo(sprite2);`
+  - Get the distance to an X,Y : `sprite.distanceTo(X, Y);`
   - Get the width: `sprite.width()`
   - Get the height: `sprite.height()`
 
@@ -140,10 +142,14 @@ When creating a new `Woof.Image`, `Woof.Text`, or `Woof.Circle`, you may use the
 
 ## Helper Functions
 
-1) Get a random integer between any two numbers
-```javascript
-var number = Woof.randomInt(10, 20);
-```
+  - Get a random integer between any two numbers: `Woof.randomInt(10, 20);`
+  - Get the current hour: `Woof.currentHour();`
+  - Get the current hour in military time: `Woof.currentHourMilitary();`
+  - Get the current minute: `Woof.currentMinute();`
+  - Get the current second: `Woof.currentSecond();`
+  - Get the current day of the month (1-31): `Woof.dayOfMonth();`
+  - Get the current day of the week (Monday-Sunday): `Woof.dayOfWeek();`
+
 
 ## [Learnable Programming](http://worrydream.com/LearnableProgramming/)
 
