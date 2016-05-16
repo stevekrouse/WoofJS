@@ -54,24 +54,6 @@ Woof.Project = function(canvasId, {debug}) {
   this.minY = -this.height / 2;
   this.maxY = this.height / 2;
   
-  this._render = function(){
-    this._context.clearRect(0, 0, this._canvas.width, this._canvas.height);
-    this._renderBackdrop();
-    this._renderSprites();
-  };
-  
-  this._renderBackdrop = function() {
-    if (this.backdrop) {
-      this._context.drawImage(this.backdrop, 0, 0);
-    }
-  };
-  
-  this._renderSprites = () => {
-    this.sprites.forEach((sprite) => {
-      sprite._render(this);
-    });
-  };
-  
   this.addText = options => {
     var sprite = new Woof.Text(this, options);
     this.sprites.push(sprite);
@@ -98,7 +80,7 @@ Woof.Project = function(canvasId, {debug}) {
   
   this.stopAll = () => {
     this._render();
-    clearInterval(renderInterval);
+    window.cancelAnimationFrame(this.renderInterval);
     
     this._everys.forEach(clearInterval);
     this._afters.forEach(clearInterval);
@@ -137,7 +119,7 @@ Woof.Project = function(canvasId, {debug}) {
     [this.mouseX, this.mouseY] = this.translateToCenter(event.clientX, event.clientY);
   });
   this._canvas.addEventListener("touchmove", event => {
-    [this.mouseX, this.mouseY] = this.translateToCenter(eventevent.targetTouches[0].clientX, event.targetTouches[0].clientY);
+    [this.mouseX, this.mouseY] = this.translateToCenter(event.targetTouches[0].clientX, event.targetTouches[0].clientY);
     event.preventDefault();
   });
   
@@ -180,21 +162,35 @@ Woof.Project = function(canvasId, {debug}) {
     this.debugKeysDown = this.addText({x: this.minX, y: this.minY + 12, textAlign: "left"});
   }
   
-  var renderInterval = setInterval(() => {
-    try {
-      if (debug){
-        this.debugMouseX.text = "project.mouseX: " + this.mouseX;
-        this.debugMouseY.text = "project.mouseY: " + this.mouseY;
-        this.debugMouseDown.text = "project.mouseDown: " + this.mouseDown;
-        this.debugKeysDown.text = "project.keysDown: " + this.keysDown;
-      }
-      this._render();
-    } catch (e) {
-      console.error(e);
-      throw Error("Error in render: " + e.message);
-      clearInterval(renderInterval);
+  this._updateDebug = () => {
+    if (debug){
+      this.debugMouseX.text = "project.mouseX: " + this.mouseX;
+      this.debugMouseY.text = "project.mouseY: " + this.mouseY;
+      this.debugMouseDown.text = "project.mouseDown: " + this.mouseDown;
+      this.debugKeysDown.text = "project.keysDown: " + this.keysDown;
     }
-  }, 10);
+  };
+  
+  this._renderBackdrop = function() {
+    if (this.backdrop) {
+      this._context.drawImage(this.backdrop, 0, 0);
+    }
+  };
+  
+  this._renderSprites = () => {
+    this.sprites.forEach((sprite) => {
+      sprite._render(this);
+    });
+  };
+  
+  this._render = () => {
+    this.renderInterval = window.requestAnimationFrame(this._render);
+    this._updateDebug();
+    this._context.clearRect(0, 0, this._canvas.width, this._canvas.height);
+    this._renderBackdrop();
+    this._renderSprites();
+  };
+  this._render();
 };
 
 Woof.Sprite = function(project, {x = 0, y = 0, angle = 0, rotationStyle = "ROTATE", showing = true}) {
