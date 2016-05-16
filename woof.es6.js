@@ -84,7 +84,7 @@ Woof.Project = function(canvasId, {debug}) {
     
     this._everys.forEach(clearInterval);
     this._afters.forEach(clearInterval);
-    this.project._canvas.removeEventListener("mousedown", this._onClickHandler);
+    this._canvas.removeEventListener("mousedown", this._onClickHandler);
     
     this.sprites.forEach(sprite => sprite.delete());
   };
