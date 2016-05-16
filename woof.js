@@ -29,7 +29,7 @@ Woof.unitsToMiliseconds = (time, units) => {
 };
 
 Woof.randomInt = (low, high) => {
-  return Math.floor(Math.random() * high + low);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
 Woof.Project = function (canvasId, { debug }) {
