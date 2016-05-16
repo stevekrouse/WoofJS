@@ -2,11 +2,11 @@
 
 WoofJS is a JavaScript library for making interactive web and mobile games.
 
-It was inspired by Scratch and was designed to ease the trasition from Scratch to JavaScript.
+It was inspired by Scratch and was designed to ease the trasition to JavaScript.
 
 WoofJS is developed with :heart: by [The Coding Space](http://thecodingspace.com).
 
-*Notice: this software is under constant development, so expect things to break and be frequently changed.*
+*Notice: this is new software and is under rapid development, so expect things to break and be frequently changed. We expect our first stable release will come out by June 2016.*
 
 ## Getting Started
 
@@ -145,3 +145,15 @@ When creating a new `Woof.Image`, `Woof.Text`, or `Woof.Circle`, you may use the
 ```javascript
 var number = Woof.randomInt(10, 20);
 ```
+
+## [Learnable Programming](http://worrydream.com/LearnableProgramming/)
+
+Despite its many [noted](http://worrydream.com/LearnableProgramming/) flaws, Processing still remains the dominent graphics programming framework for beginners. Woof strives to solve the same problems of Processing, and be a beginner-friendly graphics frameworks for art, animation and game development, but it also hopes to improve upon Processing's main flaws:
+
+  - **opaque parameters setting** - In Woof, all object properties can be set explicitly with dot notation or as named-parameters in the constructor.
+  - **side effects in render** - In Woof, you can cause state to change in response to events or intervals. You don't have to hook your effectful code into your render method to make things move.
+  - **render** - In Woof, (like ReactJS) we take care of rendering your objects onto the canvas for you. This means you don't even have to think about how your view layer works. It just does.
+  - **hidden state** - In Woof, there's no hidden view-layer state. If you make one circle red, only that circle is red.
+  - **non-modular** - In Woof, because all view-layer state is encapulated into objects, it allows you to easily build modular and functional code without worrying about side effects.
+  - **poor decomposition** - In Woof, you can have infinitely many objects listen to infinitely many events. You don't have to funnel all of your code through the same top-level events that forces you to build tangled code.
+  - **lack of identity / metaphor** - Woof steals Scratch's and Smalltalk's everything-is-an-object-that-you-can-see-on-the-screen metaphor. It also takes the pen, angles, turning and moving athropomorphic metaphors from LOGO.
