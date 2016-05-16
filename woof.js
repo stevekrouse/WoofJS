@@ -28,7 +28,7 @@ Woof.unitsToMiliseconds = (time, units) => {
   }
 };
 
-Woof.randomInt = (min, high) => {
+Woof.randomInt = (min, max) => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
