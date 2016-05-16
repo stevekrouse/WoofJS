@@ -14,7 +14,7 @@ You can either [clone this JSBin](https://jsbin.com/lekovu/edit?js,output) or fo
 
 1) Throw the Woof library between the `<head>` tags.
 ```html
-<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/a14536c6670b7c390d782c5d3efd51ca42516784/woof.js"></script>
+<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/883ebd8ff991c797113997b5aa49d24b9d5ed928/woof.js"></script>
 ```
 2) Throw a `<canvas>` tag between the `<body>` tags.
 ```html
@@ -73,7 +73,7 @@ project.every("1", "second", () => {
   - Mouse X: `project.mouseX`
   - Mouse Y: `project.mouseY`
   - Mouse down?: `project.mouseDown`
-  - Do something on click: `project.onClick(() => { ... });`
+  - Do something on click: `project.onClick((mouseX, mouseY) => { ... });`
   - List of keys currently pressed: `project.keysDown`
   - Is 'A' pressed?: `project.keysDown.includes('A')`
   - Do this every second: `project.every(1, "second", () => {...});`
@@ -105,7 +105,7 @@ When creating a new `Woof.Image`, `Woof.Text`, or `Woof.Circle`, you may use the
   - Move the sprite in the direction of the angle: `sprite.move(10);`
   - Touching another sprite?: `if (sprite.touching(sprite2)) { ... }`
   - Mouse over this sprite?: `if (sprite.mouseOver()) { ... }`
-  - Do something on click: `sprite.onClick(() => { ... });`
+  - Do something on click: `sprite.onClick((mouseX, mouseY) => { ... });`
   - Clicking and holding on this sprite?: `if (project.mouseDown && sprite.mouseOver()) { ... }`
   - Send this sprite to the back layer: `sprite.sendToBack();`
   - Send this sprite to the front layer: `sprite.sendToFront();`
