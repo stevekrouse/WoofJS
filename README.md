@@ -14,7 +14,7 @@ You can either [clone this JSBin](https://jsbin.com/lekovu/edit?js,output) or fo
 
 1) Throw the Woof library between the `<head>` tags.
 ```html
-<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/ad8b9a85687f046a331956eff1d9bf333b5c7465/woof.js"></script>
+<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/a14536c6670b7c390d782c5d3efd51ca42516784/woof.js"></script>
 ```
 2) Throw a `<canvas>` tag between the `<body>` tags.
 ```html
