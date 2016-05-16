@@ -395,7 +395,7 @@ Woof.Image = function (project, { url = "http://www.loveyourdog.com/image3.gif",
   this.images = [];
   this.image = 0;
   this.imageHeight = imageHeight;
-  this.imageWidth = imageHeight;
+  this.imageWidth = imageWidth;
 
   this.addImageURL = function (url) {
     var image = new Image();
