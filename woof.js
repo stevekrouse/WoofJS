@@ -394,8 +394,8 @@ Woof.Image = function (project, { url = "http://www.loveyourdog.com/image3.gif",
   Woof.Sprite.call(this, project, arguments[1]);
   this.images = [];
   this.image = 0;
-  this.imageHeight = undefined;
-  this.imageWidth = undefined;
+  this.imageHeight = imageHeight;
+  this.imageWidth = imageHeight;
 
   this.addImageURL = function (url) {
     var image = new Image();
