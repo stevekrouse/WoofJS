@@ -32,8 +32,8 @@ Woof.unitsToMiliseconds = (time, units) => {
   }
 };
 
-Woof.randomInt = (low, high) => {
-  return Math.floor(Math.random() * high + low);
+Woof.randomInt = (min, max) => {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
 Woof.repeat = (times, func) => {
@@ -90,7 +90,7 @@ Woof.Project = function(canvasId, {debug}) {
     
     this._everys.forEach(clearInterval);
     this._afters.forEach(clearInterval);
-    this.project._canvas.removeEventListener("mousedown", this._onClickHandler);
+    this._canvas.removeEventListener("mousedown", this._onClickHandler);
     
     this.sprites.forEach(sprite => sprite.delete());
   };
