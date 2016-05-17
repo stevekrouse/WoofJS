@@ -145,6 +145,12 @@ When creating a new `Woof.Image`, `Woof.Text`, or `Woof.Circle`, you may use the
 ```javascript
 var number = Woof.randomInt(10, 20);
 ```
+2) Repeat something 10 times
+```javascript
+Woof.repeat(10, (time) => {
+  console.log(`I'm going to repeat this ${10-time} more times!`)
+});
+```
 
 ## [Learnable Programming](http://worrydream.com/LearnableProgramming/)
 

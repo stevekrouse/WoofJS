@@ -34,7 +34,7 @@ Woof.randomInt = (low, high) => {
 
 Woof.repeat = (times, func) => {
   for (var i = 0; i < times; i++) {
-    func();
+    func(i + 1);
   }
 };
 
