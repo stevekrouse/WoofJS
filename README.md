@@ -111,6 +111,8 @@ When creating a new `Woof.Image`, `Woof.Text`, or `Woof.Circle`, you may use the
   - Point the sprite towards another sprite: `sprite.pointTowards(sprite2)`
   - Point the sprite towards an X,Y : `sprite.pointTowards(project.mouseX, project.mouseY)`
   - Delete this sprite: `sprite.delete();`
+  - Get the distance between two sprites `sprite.distanceTo(sprite2);`
+  - Get the distance to an X,Y : `sprite.distanceTo(X, Y);`
   - Get the width: `sprite.width()`
   - Get the height: `sprite.height()`
 
@@ -150,6 +152,13 @@ Woof.repeat(10, (time) => {
   console.log(`I'm going to repeat this ${10-time} more times!`)
 });
 ```
+3) Get a random integer between any two numbers: `Woof.randomInt(10, 20);`
+4) Get the current hour: `Woof.hour();`
+5) Get the current hour in military time: `Woof.hourMilitary();`
+6) Get the current minute: `Woof.minute();`
+7) Get the current second: `Woof.second();`
+8) Get the current day of the month (1-31): `Woof.dayOfMonth();`
+9) Get the current day of the week (Monday-Sunday): `Woof.dayOfWeek();`
 
 ## [Learnable Programming](http://worrydream.com/LearnableProgramming/)
 
