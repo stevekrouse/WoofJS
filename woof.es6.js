@@ -36,6 +36,12 @@ Woof.randomInt = (low, high) => {
   return Math.floor(Math.random() * high + low);
 };
 
+Woof.repeat = (times, func) => {
+  for (var i = 0; i < times; i++){
+    func();
+  }
+};
+
 Woof.Project = function(canvasId, {debug}) {
   this.sprites = [];
   this.backdrop = undefined;
