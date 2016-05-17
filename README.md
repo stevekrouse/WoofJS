@@ -14,7 +14,7 @@ You can either [clone this JSBin](https://jsbin.com/lekovu/edit?js,output) or fo
 
 1) Throw the Woof library between the `<head>` tags.
 ```html
-<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/883ebd8ff991c797113997b5aa49d24b9d5ed928/woof.js"></script>
+<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/2459e260f9b70287f066363b4be8d4075b66bc32/woof.js"></script>
 ```
 2) Throw a `<canvas>` tag between the `<body>` tags.
 ```html
@@ -51,7 +51,7 @@ project.every(40, "milliseconds", () => {
 // make the timer start at 20
 var timer = 20;
 // add text that diplays the timer
-var timerText = project.addText({x: 0, y: project.maxY - 20, fontSize: 20, fontColor: "white"});
+var timerText = project.addText({x: 0, y: project.maxY - 20, size: 20, color: "white"});
 project.every("1", "second", () => {
   // change the text to refer to the timer's new value every second
   timerText.text = "Timer: " + timer;
@@ -132,7 +132,7 @@ When creating a new `Woof.Image`, `Woof.Text`, or `Woof.Circle`, you may use the
 
 ## Woof.Text
 
-  - Create a new text: `var text = project.addText({text: "Text", fontSize: 12, fontColor: "black", fontFamily: "arial", textAlign: "center"});`
+  - Create a new text: `var text = project.addText({text: "Text", size: 12, color: "black", fontFamily: "arial", textAlign: "center"});`
   - Set the text value: `text.text = "Sample Text";`
   - Set the font size: `text.size = 20;`
   - Set the font color: `text.color = "white";`
