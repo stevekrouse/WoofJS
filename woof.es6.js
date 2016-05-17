@@ -94,7 +94,7 @@ Woof.second = () => {
 	return date.getSeconds();
 };
 
-Woof.Project = function(canvasId, {debug}) {
+Woof.Project = function(canvasId, {debug = false} = {}) {
   this.sprites = [];
   this.backdrop = undefined;
   
@@ -221,6 +221,8 @@ Woof.Project = function(canvasId, {debug}) {
     this.debugKeysDown = this.addText({x: this.minX, y: this.minY + 12, textAlign: "left"});
   }
   
+  
+  
   this._updateDebug = () => {
     if (debug){
       this.debugMouseX.text = "project.mouseX: " + this.mouseX;
@@ -244,15 +246,15 @@ Woof.Project = function(canvasId, {debug}) {
   
   this._render = () => {
     this.renderInterval = window.requestAnimationFrame(this._render);
-    this._updateDebug();
     this._context.clearRect(0, 0, this._canvas.width, this._canvas.height);
     this._renderBackdrop();
     this._renderSprites();
+    this._updateDebug();
   };
   this._render();
 };
 
-Woof.Sprite = function(project, {x = 0, y = 0, angle = 0, rotationStyle = "ROTATE", showing = true}) {
+Woof.Sprite = function(project, {x = 0, y = 0, angle = 0, rotationStyle = "ROTATE", showing = true} = {}) {
   this.project = project;
   this.x = x;
   this.y = y;
@@ -394,11 +396,11 @@ Woof.Sprite = function(project, {x = 0, y = 0, angle = 0, rotationStyle = "ROTAT
   };
 };
 
-Woof.Text = function(project, {text = "Text", fontSize = 12, fontColor = "black", fontFamily = "arial", textAlign = "center"}) {
+Woof.Text = function(project, {text = "Text", size = 12, color = "black", fontFamily = "arial", textAlign = "center"} = {}) {
   Woof.Sprite.call(this, project, arguments[1]);
   this.text = text;
-  this.fontSize = fontSize;
-  this.fontColor = fontColor;
+  this.size = size;
+  this.color = color;
   this.fontFamily = fontFamily;
   this.textAlign = textAlign;
   
@@ -421,8 +423,8 @@ Woof.Text = function(project, {text = "Text", fontSize = 12, fontColor = "black"
   this._applyInContext = (func) => {
     this.project._context.save();
     
-    this.project._context.font = this.fontSize + "px " + this.fontFamily;
-    this.project._context.fillStyle = this.fontColor;
+    this.project._context.font = this.size + "px " + this.fontFamily;
+    this.project._context.fillStyle = this.color;
     this.project._context.textAlign = this.textAlign;
     
     func();
@@ -437,7 +439,7 @@ Woof.Text = function(project, {text = "Text", fontSize = 12, fontColor = "black"
   };
 };
 
-Woof.Circle = function(project, {radius = 10, color = "black"}) {
+Woof.Circle = function(project, {radius = 10, color = "black"} = {}) {
   Woof.Sprite.call(this, project, arguments[1]);
   this.radius = radius;
   this.color = color;
@@ -458,7 +460,7 @@ Woof.Circle = function(project, {radius = 10, color = "black"}) {
   };
 };
 
-Woof.Image = function(project, {url = "http://www.loveyourdog.com/image3.gif", imageHeight, imageWidth}) {
+Woof.Image = function(project, {url = "http://www.loveyourdog.com/image3.gif", imageHeight, imageWidth} = {}) {
   Woof.Sprite.call(this, project, arguments[1]);
   this.images = [];
   this.image = 0;
@@ -471,8 +473,9 @@ Woof.Image = function(project, {url = "http://www.loveyourdog.com/image3.gif", i
     this.images.push(image);
     return this.images.length - 1;
   };
-  this.addImageURL(url);
-
+  if (url) {
+    this.addImageURL(url);
+  }
   this.width = () => {
     return this.imageWidth || this.currentImage().width;
   };

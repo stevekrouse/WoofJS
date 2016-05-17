@@ -134,9 +134,9 @@ When creating a new `Woof.Image`, `Woof.Text`, or `Woof.Circle`, you may use the
 
   - Create a new text: `var text = project.addText({text: "Text", fontSize: 12, fontColor: "black", fontFamily: "arial", textAlign: "center"});`
   - Set the text value: `text.text = "Sample Text";`
-  - Set the font size: `text.fontSize = 20;`
-  - Set the font color: `text.fontColor = "white";`
-  - Set the font color to a hex value: `text.fontColor = "#32CD32";`
+  - Set the font size: `text.size = 20;`
+  - Set the font color: `text.color = "white";`
+  - Set the font color to a hex value: `text.color = "#32CD32";`
   - Set the font family: `text.fontFamily = "arial";`
   - Set the text-align: `text.textAlign: "center";`
 
