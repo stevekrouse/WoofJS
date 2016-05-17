@@ -94,9 +94,10 @@ Woof.second = () => {
 	return date.getSeconds();
 };
 
-Woof.Project = function(canvasId, {debug = false} = {}) {
+Woof.Project = function(canvasId, {debug = []} = {}) {
   this.sprites = [];
   this.backdrop = undefined;
+  this.debug = debug;
   
   try {
     this._canvas = document.getElementById(canvasId);
@@ -214,21 +215,17 @@ Woof.Project = function(canvasId, {debug = false} = {}) {
   };
   this._canvas.addEventListener("mousedown", this._onClickHandler);
 
-  if (debug){
-    this.debugMouseX = this.addText({x: this.minX, y: this.minY + 48, textAlign: "left"});
-    this.debugMouseY = this.addText({x: this.minX, y: this.minY + 36, textAlign: "left"});
-    this.debugMouseDown = this.addText({x: this.minX, y: this.minY + 24, textAlign: "left"});
-    this.debugKeysDown = this.addText({x: this.minX, y: this.minY + 12, textAlign: "left"});
+  this.debugText = [];
+  for (var i = 0; i < this.debug.length; i++){
+    this.debugText.push(this.addText({x: this.minX, y: this.minY + (12 * (i+1)), textAlign: "left"}));
   }
   
-  
-  
   this._updateDebug = () => {
-    if (debug){
-      this.debugMouseX.text = "project.mouseX: " + this.mouseX;
-      this.debugMouseY.text = "project.mouseY: " + this.mouseY;
-      this.debugMouseDown.text = "project.mouseDown: " + this.mouseDown;
-      this.debugKeysDown.text = "project.keysDown: " + this.keysDown;
+    for (var i = 0; i < this.debug.length; i++) {
+      var expr = this.debug[i];
+      var value;
+      try { value = eval(expr); } catch(e) { value = e; }
+      this.debugText[i].text = `${expr}: ${value}`;
     }
   };
   

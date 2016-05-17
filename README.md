@@ -23,7 +23,7 @@ You can either [clone this JSBin](https://jsbin.com/lekovu/edit?js,output) or fo
 3) Throw in some JavaScript, and tell Woof to fetch it.
 ```javascript
 // Set up your Woof project by referencing the ID of your canvas, optionally setting debug, so you can see mouseX, mouseY and keysDown.
-var project = new Woof.Project("project", {debug: true}); 
+var project = new Woof.Project("project", {debug: ["project.keysDown", "project.mouseX", "project.mouseY", "timer"]}); 
 // Set the backdrop URL (preferably of similar dimensions to your canvas).
 project.setBackdropURL("http://cdn.theatlantic.com/assets/media/img/mt/2016/03/RTX283V4/lead_960.jpg?1457553386");
 
@@ -66,7 +66,7 @@ project.every("1", "second", () => {
 
 ## Woof.Project
 
-  - Create a project: `var project = new Woof.Project('canvasID', {debug: true});`
+  - Create a project: `var project = new Woof.Project('canvasID', {debug: ["project.keysDown", "project.mouseX", "project.mouseY"]});`
   - Set/change the backdrop: `project.setBackdropURL("http://example.com/img.jpg");`
   - Stop all: `project.stopAll();`
   - Mouse X: `project.mouseX`
