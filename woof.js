@@ -268,11 +268,13 @@ Woof.Sprite = function (project, { x = 0, y = 0, angle = 0, rotationStyle = "ROT
       } else if (this.rotationStyle == "NO ROTATE") {
         var radians = 0;
       } else if (this.rotationStyle == "ROTATE LEFT RIGHT") {
-        var radians = this.radians();
-        if (this.angle >= 180 && this.angle < 360) {
+        if (this.angle >= 90 && this.angle < 270) {
+          var radians = this.radians();
           this.project._context.rotate(this.radians());
           this.project._context.translate(this.width, 0);
           this.project._context.scale(-1, 1);
+        } else if (this.angle >= 0 && this.angle < 90 || this.angle <= 360 && this.angle >= 270) {
+          var radians = 0;
         }
       }
       this.project._context.rotate(radians);
