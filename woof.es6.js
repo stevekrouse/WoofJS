@@ -261,9 +261,20 @@ Woof.Sprite = function(project, {x = 0, y = 0, angle = 0, rotationStyle = "ROTAT
   
   this._render = function() {
     if (this.showing) {
-      var radians = this.rotationStyle == "ROTATE" ? this.radians() : 0;
       this.project._context.save();
       this.project._context.translate(this.canvasX(), this.canvasY());
+      if (this.rotationStyle == "ROTATE") {
+        var radians = this.radians();
+      } else if (this.rotationStyle == "NO ROTATE"){
+        var radians = 0;
+      } else if (this.rotationStyle == "ROTATE LEFT RIGHT"){
+        var radians = this.radians();
+        if (this.angle >= 180 && this.angle < 360){
+					this.project._context.rotate(this.radians());
+          this.project._context.translate(this.width, 0);
+          this.project._context.scale(-1, 1);
+        }
+      }
       this.project._context.rotate(radians);
       
       if (this instanceof Woof.Image) {
@@ -298,11 +309,11 @@ Woof.Sprite = function(project, {x = 0, y = 0, angle = 0, rotationStyle = "ROTAT
   this.setRotationStyle = style => {
     if (style == "ROTATE"){
       this.rotationStyle = "ROTATE";
-    }
-    else if (style == "NO ROTATE") {
+    } else if (style == "NO ROTATE") {
       this.rotationStyle = "NO ROTATE";
-    }
-    else {
+    } else if (style == "ROTATE LEFT RIGHT") {
+      this.rotationStyle = "ROTATE LEFT RIGHT";
+    } else {
       throw Error("Unrecognized rotation style: " + style);
     }
   };

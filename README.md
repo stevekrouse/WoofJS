@@ -100,6 +100,7 @@ When creating a new `Woof.Image`, `Woof.Text`, or `Woof.Circle`, you may use the
   - Change the Y position: `sprite.y += 10;`
   - Set the angle: `sprite.angle = 30;`
   - Don't rotate the sprites costume when the angle changes: `sprite.setRotationStyle("NO ROTATE");`
+  - Rotate the sprite left to right when it points in a direction and moves `sprite.setRotationStyle("ROTATE LEFT RIGHT");`
   - Hide the sprite: `sprite.showing = false;`
   - Move the sprite in the direction of the angle: `sprite.move(10);`
   - Touching another sprite?: `if (sprite.touching(sprite2)) { ... }`
