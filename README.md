@@ -10,11 +10,11 @@ WoofJS is developed with :heart: by [The Coding Space](http://thecodingspace.com
 
 ## Getting Started
 
-You can either [clone this JSBin](https://jsbin.com/lekovu/edit?js,output) or follow the steps below to setup your first WoofJS project.
+You can either [clone this JSBin](https://jsbin.com/lucuko/edit?html,js,output) or follow the steps below to setup your first WoofJS project.
 
 1) Throw the Woof library between the `<head>` tags.
 ```html
-<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/2459e260f9b70287f066363b4be8d4075b66bc32/woof.js"></script>
+<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/d072d368d3afe1c7b894833eecd1e64467b8fdad/woof.js"></script>
 ```
 2) Throw a `<canvas>` tag between the `<body>` tags.
 ```html
@@ -100,6 +100,7 @@ When creating a new `Woof.Image`, `Woof.Text`, or `Woof.Circle`, you may use the
   - Change the Y position: `sprite.y += 10;`
   - Set the angle: `sprite.angle = 30;`
   - Don't rotate the sprites costume when the angle changes: `sprite.setRotationStyle("NO ROTATE");`
+  - Rotate the sprite left to right when it points in a direction and moves `sprite.setRotationStyle("ROTATE LEFT RIGHT");`
   - Hide the sprite: `sprite.showing = false;`
   - Move the sprite in the direction of the angle: `sprite.move(10);`
   - Touching another sprite?: `if (sprite.touching(sprite2)) { ... }`
