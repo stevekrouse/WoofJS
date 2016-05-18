@@ -84,6 +84,11 @@ Woof.second = () => {
   return date.getSeconds();
 };
 
+Woof.RIGHT = 0;
+Woof.LEFT = 180;
+Woof.UP = 90;
+Woof.DOWN = 270;
+
 Woof.Project = function (canvasId, { debug = [] } = {}) {
   this.sprites = [];
   this.backdrop = undefined;
