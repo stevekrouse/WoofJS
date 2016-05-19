@@ -14,7 +14,7 @@ You can either [clone this JSBin](https://jsbin.com/lucuko/edit?html,js,output) 
 
 1) Throw the Woof library between the `<head>` tags.
 ```html
-<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/d072d368d3afe1c7b894833eecd1e64467b8fdad/woof.js"></script>
+<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/7e4589e45edbd10cd79223550473a92e02dc61c1/woof.js"></script>
 ```
 2) Throw a `<canvas>` tag between the `<body>` tags.
 ```html
@@ -99,6 +99,7 @@ When creating a new `Woof.Image`, `Woof.Text`, or `Woof.Circle`, you may use the
   - Set the X position: `sprite.x = 200;`
   - Change the Y position: `sprite.y += 10;`
   - Set the angle: `sprite.angle = 30;`
+  - Set the angle using direction: `sprite.angle = Woof.LEFT;` 
   - Don't rotate the sprites costume when the angle changes: `sprite.setRotationStyle("NO ROTATE");`
   - Rotate the sprite left to right when it points in a direction and moves `sprite.setRotationStyle("ROTATE LEFT RIGHT");`
   - Hide the sprite: `sprite.showing = false;`
