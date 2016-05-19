@@ -66,7 +66,12 @@ project.every("1", "second", () => {
 
 ## Woof.Project
 
-  - Create a project: `var project = new Woof.Project('canvasID', {debug: ["project.keysDown", "project.mouseX", "project.mouseY"]});`
+Create a project: 
+
+```javascript
+var project = new Woof.Project('canvasID', {debug: ["project.keysDown", "project.mouseX", "project.mouseY"]});
+```
+
   - Set/change the backdrop: `project.setBackdropURL("http://example.com/img.jpg");`
   - Stop all: `project.stopAll();`
   - Mouse X: `project.mouseX`
@@ -84,63 +89,70 @@ project.every("1", "second", () => {
   - Width of the screen: `project.width`
   - Height of the screen: `project.height`
 
-## Woof.Sprite
+## Woof.Image, Woof.Text, and Woof.Circle General Functions
 
-`Woof.Sprite` functions work on `Woof.Image`, `Woof.Text`, and `Woof.Circle`.
+In Woof you can create `Woof.Image`, `Woof.Text`, and `Woof.Circle`.  The General Functions work on all of them. 
 
-When creating a new `Woof.Image`, `Woof.Text`, or `Woof.Circle`, you may use the following parameters as so:
+When creating a new `Woof.Image`, `Woof.Text`, or `Woof.Circle`, you may use the following parameters:
+
 ```javascript
-  // notice how we can use the same parameters for the different types
   var image = project.addImageSprite({x: 0, y: 0, angle: 0, rotationStyle: "ROTATE", showing: true});
   var text = project.addTextSprite({x: 0, y: 0, angle: 0, rotationStyle: "ROTATE", showing: true});
   var circle = project.addCircleSprite({x: 0, y: 0, angle: 0, rotationStyle: "ROTATE", showing: true});
 ```
 
-  - Set the X position: `sprite.x = 200;`
-  - Change the Y position: `sprite.y += 10;`
-  - Set the angle: `sprite.angle = 30;`
-  - Set the angle using direction: `sprite.angle = Woof.LEFT;` 
-  - Don't rotate the sprites costume when the angle changes: `sprite.setRotationStyle("NO ROTATE");`
-  - Rotate the sprite left to right when it points in a direction and moves `sprite.setRotationStyle("ROTATE LEFT RIGHT");`
-  - Hide the sprite: `sprite.showing = false;`
-  - Move the sprite in the direction of the angle: `sprite.move(10);`
-  - Touching another sprite?: `if (sprite.touching(sprite2)) { ... }`
-  - Mouse over this sprite?: `if (sprite.mouseOver()) { ... }`
-  - Do something on click: `sprite.onClick((mouseX, mouseY) => { ... });`
-  - Clicking and holding on this sprite?: `if (project.mouseDown && sprite.mouseOver()) { ... }`
-  - Send this sprite to the back layer: `sprite.sendToBack();`
-  - Send this sprite to the front layer: `sprite.sendToFront();`
-  - Point the sprite towards another sprite: `sprite.pointTowards(sprite2)`
-  - Point the sprite towards an X,Y : `sprite.pointTowards(project.mouseX, project.mouseY)`
-  - Delete this sprite: `sprite.delete();`
-  - Get the distance between two sprites `sprite.distanceTo(sprite2);`
-  - Get the distance to an X,Y : `sprite.distanceTo(X, Y);`
-  - Get the width: `sprite.width()`
-  - Get the height: `sprite.height()`
+  - Set the X position: `NAME.x = 200;`
+  - Change the Y position: `NAME.y += 10;`
+  - Set the angle: `NAME.angle = 30;`
+  - Set the angle using direction: `NAME.angle = Woof.LEFT;` 
+  - Don't rotate the sprites costume when the angle changes: `NAME.setRotationStyle("NO ROTATE");`
+  - Rotate left to right when it points in a direction and moves `NAME.setRotationStyle("ROTATE LEFT RIGHT");`
+  - Hide: `NAME.showing = false;`
+  - Move in the direction of the angle: `NAME.move(10);`
+  - Touching another thing?: `if (NAME.touching(OTHER_NAME)) { ... }`
+  - Mouse over?: `if (NAME.mouseOver()) { ... }`
+  - Do something on click: `NAME.onClick((mouseX, mouseY) => { ... });`
+  - Clicking and holding?: `if (project.mouseDown && NAME.mouseOver()) { ... }`
+  - Send to the back layer: `NAME.sendToBack();`
+  - Send to the front layer: `NAME.sendToFront();`
+  - Point towards another thing: `NAME.pointTowards(OTHER_NAME)`
+  - Point towards an X,Y : `NAME.pointTowards(project.mouseX, project.mouseY)`
+  - Delete: `NAME.delete();`
+  - Get the distance between two things: `NAME.distanceTo(OTHER_NAME);`
+  - Get the distance to an X,Y: `NAME.distanceTo(X, Y);`
+  - Get the width: `NAME.width()`
+  - Get the height: `NAME.height()`
 
-## Woof.Image
+### Woof.Image
+Create a new image: 
+```javascript 
+var IMAGE_NAME = project.addImage({url: "http://www.loveyourdog.com/image3.gif", imageWidth: 30, imageHeight: 30});
+```
+  - Add another image: `IMAGE_NAME.addImageURL("http://www.urdu-english.com/images/lessons/beginner/shapes/shapes-pics/rectangle.png");`
+  - Change the image: `IMAGE_NAME.image = 0;`
+  - Set the width: `IMAGE_NAME.imageWidth = 10;`
+  - Set the height `IMAGE_NAME.imageHeight = 20;`
 
-  - Create a new image: `var image = project.addImage({url: "http://www.loveyourdog.com/image3.gif", imageWidth: 30, imageHeight: 30});`
-  - Add another image: `image.addImageURL("http://www.urdu-english.com/images/lessons/beginner/shapes/shapes-pics/rectangle.png");`
-  - Change the image: `image.image = 0;`
-  - Set the width: `image.imageWidth = 10;`
-  - Set the height `image.imageHeight = 20;`
+### Woof.Circle
+Create a new circle: 
+```javascript
+var CIRCLE_NAME = project.addCircle({radius: 10, color: "black"});
+```
+  - Change the radius: `CIRCLE_NAME.radius = 15;`
+  - Change the color: `CIRCLE_NAME.color = "blue";`
 
-## Woof.Circle
+### Woof.Text
 
-  - Create a new circle: `var circle = project.addCircle({radius: 10, color: "black"});`
-  - Change the radius: `circle.radius = 15;`
-  - Change the color: `circle.color = "blue";`
-
-## Woof.Text
-
-  - Create a new text: `var text = project.addText({text: "Text", size: 12, color: "black", fontFamily: "arial", textAlign: "center"});`
-  - Set the text value: `text.text = "Sample Text";`
-  - Set the font size: `text.size = 20;`
-  - Set the font color: `text.color = "white";`
-  - Set the font color to a hex value: `text.color = "#32CD32";`
-  - Set the font family: `text.fontFamily = "arial";`
-  - Set the text-align: `text.textAlign: "center";`
+Create a new text: 
+```javascript 
+var TEXT_NAME = project.addText({text: "Text", size: 12, color: "black", fontFamily: "arial", textAlign: "center"});
+```
+  - Set the text value: `TEXT_NAME.text = "Sample Text";`
+  - Set the font size: `TEXT_NAME.size = 20;`
+  - Set the font color: `TEXT_NAME.color = "white";`
+  - Set the font color to a hex value: `TEXT_NAME.color = "#32CD32";`
+  - Set the font family: `TEXT_NAME.fontFamily = "arial";`
+  - Set the text-align: `TEXT_NAME.textAlign: "center";`
 
 ## Helper Functions
 
@@ -155,11 +167,17 @@ Woof.repeat(10, (time) => {
 });
 ```
 3) Get a random integer between any two numbers: `Woof.randomInt(10, 20);`
+
 4) Get the current hour: `Woof.hour();`
+
 5) Get the current hour in military time: `Woof.hourMilitary();`
+
 6) Get the current minute: `Woof.minute();`
+
 7) Get the current second: `Woof.second();`
+
 8) Get the current day of the month (1-31): `Woof.dayOfMonth();`
+
 9) Get the current day of the week (Monday-Sunday): `Woof.dayOfWeek();`
 
 ## [Learnable Programming](http://worrydream.com/LearnableProgramming/)
