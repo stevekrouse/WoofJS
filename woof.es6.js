@@ -36,7 +36,7 @@ Woof.randomInt = (min, max) => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-Woof.repeat = (times, func) => {
+Woof.repeatInstant = (times, func) => {
   for (var i = 0; i < times; i++){
     func(i+1);
   }

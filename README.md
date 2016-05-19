@@ -150,7 +150,7 @@ var number = Woof.randomInt(10, 20);
 ```
 2) Repeat something 10 times
 ```javascript
-Woof.repeat(10, (time) => {
+Woof.repeatInstant(10, (time) => {
   console.log(`I'm going to repeat this ${10-time} more times!`)
 });
 ```
