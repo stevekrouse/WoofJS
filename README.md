@@ -94,6 +94,7 @@ When creating a new `Woof.Image`, `Woof.Text`, or `Woof.Circle`, you may use the
   var image = project.addImageSprite({x: 0, y: 0, angle: 0, rotationStyle: "ROTATE", showing: true});
   var text = project.addTextSprite({x: 0, y: 0, angle: 0, rotationStyle: "ROTATE", showing: true});
   var circle = project.addCircleSprite({x: 0, y: 0, angle: 0, rotationStyle: "ROTATE", showing: true});
+  var rectangle = project.addRectangle({x: 0, y: 0, angle: 0, rotationStyle: "ROTATE", showing: true});
 ```
 
   - Set the X position: `sprite.x = 200;`
@@ -131,6 +132,16 @@ When creating a new `Woof.Image`, `Woof.Text`, or `Woof.Circle`, you may use the
   - Create a new circle: `var circle = project.addCircle({radius: 10, color: "black"});`
   - Change the radius: `circle.radius = 15;`
   - Change the color: `circle.color = "blue";`
+
+## Woof.Rectangle
+
+Create a new rectangle: 
+```javascript
+var RECTANGLE_NAME = project.addRectangle({rectangleHeight: 10, rectangleWidth: 20, color: "pink"});
+```
+  - Change the width: `RECTANGLE_NAME.rectangleWidth = 20;`
+  - Change the height: `RECTANGLE_NAME.rectangleHeight = 45;`
+  - Change the color: `RECTANGLE_NAME.color = "purple";`
 
 ## Woof.Text
 

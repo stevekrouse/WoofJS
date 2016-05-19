@@ -120,6 +120,12 @@ Woof.Project = function (canvasId, { debug = [] } = {}) {
     return sprite;
   };
 
+  this.addRectangle = options => {
+    var sprite = new Woof.Rectangle(this, options);
+    this.sprites.push(sprite);
+    return sprite;
+  };
+
   this.addImage = options => {
     var sprite = new Woof.Image(this, options);
     this.sprites.push(sprite);
@@ -288,6 +294,8 @@ Woof.Sprite = function (project, { x = 0, y = 0, angle = 0, rotationStyle = "ROT
         this.textRender();
       } else if (this instanceof Woof.Circle) {
         this.circleRender();
+      } else if (this instanceof Woof.Rectangle) {
+        this.rectangleRender();
       }
       this.project._context.restore();
     }
@@ -471,6 +479,26 @@ Woof.Circle = function (project, { radius = 10, color = "black" } = {}) {
     this.project._context.arc(0, 0, this.radius, 0, 2 * Math.PI);
     this.project._context.fillStyle = this.color;
     this.project._context.fill();
+  };
+};
+
+Woof.Rectangle = function (project, { rectangleHeight = 10, rectangleWidth = 10, color = "black" } = {}) {
+  Woof.Sprite.call(this, project, arguments[1]);
+  this.rectangleHeight = rectangleHeight;
+  this.rectangleWidth = rectangleWidth;
+  this.color = color;
+
+  this.width = () => {
+    return this.rectangleWidth;
+  };
+
+  this.height = () => {
+    return this.rectangleHeight;
+  };
+
+  this.rectangleRender = () => {
+    this.project._context.fillStyle = this.color;
+    this.project._context.fillRect(-this.width() / 2, -this.height() / 2, this.width(), this.height());
   };
 };
 

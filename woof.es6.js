@@ -43,55 +43,55 @@ Woof.repeat = (times, func) => {
 };
 
 Woof.dayOfMonth = () =>{
-	var date = new Date();
-	return date.getDate();
+  var date = new Date();
+  return date.getDate();
 };
 
 Woof.dayOfWeek = () => {
-	var date = new Date();
-	var day = date.getDay();
-	if (day === 0){
-		return "Sunday";
-	}
-	else if (day == 1){
-		return "Monday";
-	}
-	else if (day == 2){
-		return "Tuesday";
-	}
-	else if (day == 3){
-		return "Wednesday";
-	}
-	else if (day == 4){
-		return "Thursday";
-	}
-	else if (day == 5){
-		return "Friday";
-	}
-	else if (day == 6){
-		return "Saturday";
-	}
+  var date = new Date();
+  var day = date.getDay();
+  if (day === 0){
+    return "Sunday";
+  }
+  else if (day == 1){
+    return "Monday";
+  }
+  else if (day == 2){
+    return "Tuesday";
+  }
+  else if (day == 3){
+    return "Wednesday";
+  }
+  else if (day == 4){
+    return "Thursday";
+  }
+  else if (day == 5){
+    return "Friday";
+  }
+  else if (day == 6){
+    return "Saturday";
+  }
 };
 
 Woof.hourMilitary =  () => {
-	var date = new Date();
-	return date.getHours();
+  var date = new Date();
+  return date.getHours();
 };
 
 Woof.hour = () => {
-	var date = new Date();
-	var hour = date.getHours();
-	return hour <= 12 ? hour : hour - 12;
+  var date = new Date();
+  var hour = date.getHours();
+  return hour <= 12 ? hour : hour - 12;
 };
 
 Woof.minute =  () => {
-	var date = new Date();
-	return date.getMinutes();
+  var date = new Date();
+  return date.getMinutes();
 };
 
 Woof.second = () => {
-	var date = new Date();
-	return date.getSeconds();
+  var date = new Date();
+  return date.getSeconds();
 };
 
 Woof.RIGHT = 0;
@@ -126,6 +126,12 @@ Woof.Project = function(canvasId, {debug = []} = {}) {
   
   this.addCircle = options => {
     var sprite = new Woof.Circle(this, options);
+    this.sprites.push(sprite);
+    return sprite;
+  };
+  
+  this.addRectangle = options => {
+    var sprite = new Woof.Rectangle(this, options);
     this.sprites.push(sprite);
     return sprite;
   };
@@ -275,7 +281,7 @@ Woof.Sprite = function(project, {x = 0, y = 0, angle = 0, rotationStyle = "ROTAT
       } else if (this.rotationStyle == "ROTATE LEFT RIGHT"){
         var radians = this.radians();
         if (this.angle >= 180 && this.angle < 360){
-					this.project._context.rotate(this.radians());
+          this.project._context.rotate(this.radians());
           this.project._context.translate(this.width, 0);
           this.project._context.scale(-1, 1);
         }
@@ -287,23 +293,25 @@ Woof.Sprite = function(project, {x = 0, y = 0, angle = 0, rotationStyle = "ROTAT
       } else if (this instanceof Woof.Text) {
         this.textRender();
       } else if (this instanceof Woof.Circle) {
-      	this.circleRender();
-			}
+        this.circleRender();
+      } else if (this instanceof Woof.Rectangle) {
+        this.rectangleRender();
+      }
       this.project._context.restore();
     }
   };
   
-	this.distanceTo = function distanceTo(xGiven, yGiven){
-	  if (arguments.length === 1){
-	    var x = this.x - xGiven.x;
-	    var y = this.y - xGiven.y;
-	    return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
-	  }
-	  if (arguments.length === 2) {
-	    var x = this.x - xGiven;
-	    var y = this.y - yGiven;
-	    return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
-	  }
+  this.distanceTo = function distanceTo(xGiven, yGiven){
+    if (arguments.length === 1){
+      var x = this.x - xGiven.x;
+      var y = this.y - xGiven.y;
+      return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
+    }
+    if (arguments.length === 2) {
+      var x = this.x - xGiven;
+      var y = this.y - yGiven;
+      return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
+    }
 };
   
   this.move = function(steps){
@@ -470,6 +478,26 @@ Woof.Circle = function(project, {radius = 10, color = "black"} = {}) {
     this.project._context.arc(0, 0, this.radius, 0, 2*Math.PI);
     this.project._context.fillStyle=this.color;
     this.project._context.fill();
+  };
+};
+
+Woof.Rectangle = function(project, {rectangleHeight = 10, rectangleWidth = 10, color = "black"} = {}) {
+  Woof.Sprite.call(this, project, arguments[1]);
+  this.rectangleHeight = rectangleHeight;
+  this.rectangleWidth = rectangleWidth;
+  this.color = color;
+  
+  this.width = () => {
+    return this.rectangleWidth;
+  };
+  
+  this.height = () => {
+    return this.rectangleHeight;
+  };
+  
+  this.rectangleRender = () => {
+    this.project._context.fillStyle=this.color;
+    this.project._context.fillRect(-this.width() / 2, -this.height() / 2, this.width(), this.height());
   };
 };
 
