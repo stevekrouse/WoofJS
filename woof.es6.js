@@ -474,26 +474,21 @@ Woof.Circle = function(project, {radius = 10, color = "black"} = {}) {
 
 Woof.Image = function(project, {url = "http://www.loveyourdog.com/image3.gif", imageHeight, imageWidth} = {}) {
   Woof.Sprite.call(this, project, arguments[1]);
-  this.images = [];
-  this.image = 0;
   this.imageHeight = imageHeight;
   this.imageWidth = imageWidth;
   
-  this.addImageURL = function(url){    
-    var image = new Image();
-    image.src = url;
-    this.images.push(image);
-    return this.images.length - 1;
+  this.setImageURL = function(url){    
+    this.image = new Image();
+    this.image.src = url;
   };
-  if (url) {
-    this.addImageURL(url);
-  }
+  this.setImageURL(url);
+
   this.width = () => {
-    return this.imageWidth || this.currentImage().width;
+    return this.imageWidth || this.image.width;
   };
 
   this.height = () => {
-    return this.imageHeight || this.currentImage().height;
+    return this.imageHeight || this.image.height;
   };
   
   this.currentImage = () => {
@@ -501,6 +496,6 @@ Woof.Image = function(project, {url = "http://www.loveyourdog.com/image3.gif", i
   };
 
   this.imageRender = () => {
-    this.project._context.drawImage(this.currentImage(), -this.width() / 2, -this.height() / 2, this.width(), this.height());
+    this.project._context.drawImage(this.image, -this.width() / 2, -this.height() / 2, this.width(), this.height());
   };
 };

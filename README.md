@@ -91,9 +91,9 @@ project.every("1", "second", () => {
 When creating a new `Woof.Image`, `Woof.Text`, or `Woof.Circle`, you may use the following parameters as so:
 ```javascript
   // notice how we can use the same parameters for the different types
-  var image = project.addImageSprite({x: 0, y: 0, angle: 0, rotationStyle: "ROTATE", showing: true});
-  var text = project.addTextSprite({x: 0, y: 0, angle: 0, rotationStyle: "ROTATE", showing: true});
-  var circle = project.addCircleSprite({x: 0, y: 0, angle: 0, rotationStyle: "ROTATE", showing: true});
+  var image = project.addImage({x: 0, y: 0, angle: 0, rotationStyle: "ROTATE", showing: true});
+  var text = project.addText({x: 0, y: 0, angle: 0, rotationStyle: "ROTATE", showing: true});
+  var circle = project.addCircle({x: 0, y: 0, angle: 0, rotationStyle: "ROTATE", showing: true});
 ```
 
   - Set the X position: `sprite.x = 200;`
@@ -121,8 +121,12 @@ When creating a new `Woof.Image`, `Woof.Text`, or `Woof.Circle`, you may use the
 ## Woof.Image
 
   - Create a new image: `var image = project.addImage({url: "http://www.loveyourdog.com/image3.gif", imageWidth: 30, imageHeight: 30});`
-  - Add another image: `image.addImageURL("http://www.urdu-english.com/images/lessons/beginner/shapes/shapes-pics/rectangle.png");`
-  - Change the image: `image.image = 0;`
+  - Change the image: 
+
+```javascript
+var dawgCostume = "http://worldartsme.com/images/dawg-clipart-1.jpg";
+image.setImageURL(dawgCostume);
+```  
   - Set the width: `image.imageWidth = 10;`
   - Set the height `image.imageHeight = 20;`
 
