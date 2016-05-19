@@ -16,14 +16,10 @@ You can either [clone this JSBin](https://jsbin.com/lucuko/edit?html,js,output) 
 ```html
 <script src="https://cdn.rawgit.com/stevekrouse/WoofJS/7e4589e45edbd10cd79223550473a92e02dc61c1/woof.js"></script>
 ```
-2) Throw a `<canvas>` tag between the `<body>` tags.
-```html
-<canvas id="project" width="350" height="500"></canvas>
-```
-3) Throw in some JavaScript, and tell Woof to fetch it.
+2) Throw in some JavaScript, and tell Woof to fetch it.
 ```javascript
-// Set up your Woof project by referencing the ID of your canvas, optionally setting debug, so you can see mouseX, mouseY and keysDown.
-var project = new Woof.Project("project", {debug: ["project.keysDown", "project.mouseX", "project.mouseY", "timer"]}); 
+// Set up your Woof project, optionally setting height, width, and debug, so you can see mouseX, mouseY and keysDown.
+var project = new Woof.Project({height: 500, width: 350, debug: ["project.keysDown", "project.mouseX", "project.mouseY", "timer"]}); 
 // Set the backdrop URL (preferably of similar dimensions to your canvas).
 project.setBackdropURL("http://cdn.theatlantic.com/assets/media/img/mt/2016/03/RTX283V4/lead_960.jpg?1457553386");
 
@@ -66,7 +62,8 @@ project.every("1", "second", () => {
 
 ## Woof.Project
 
-  - Create a project: `var project = new Woof.Project('canvasID', {debug: ["project.keysDown", "project.mouseX", "project.mouseY"]});`
+  - Create a project: `var project = new Woof.Project({height: 500, width: 350, debug: ["project.keysDown", "project.mouseX", "project.mouseY"]});`
+  - Create a project with a pre-existing `<canvas id="project">` element by id: ``var project = new Woof.Project({id: "project"});`
   - Set/change the backdrop: `project.setBackdropURL("http://example.com/img.jpg");`
   - Stop all: `project.stopAll();`
   - Mouse X: `project.mouseX`

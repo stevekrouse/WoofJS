@@ -89,16 +89,23 @@ Woof.LEFT = 180;
 Woof.UP = 90;
 Woof.DOWN = 270;
 
-Woof.Project = function (canvasId, { debug = [] } = {}) {
+Woof.Project = function ({ canvasId = undefined, height = 500, width = 350, debug = [] } = {}) {
   this.sprites = [];
   this.backdrop = undefined;
   this.debug = debug;
 
-  try {
-    this._canvas = document.getElementById(canvasId);
-  } catch (e) {
-    console.error(e);
-    throw Error("Could not find a canvas on the page with id " + canvasId);
+  if (canvasId) {
+    try {
+      this._canvas = document.getElementById(canvasId);
+    } catch (e) {
+      console.error(e);
+      throw Error("Could not find a canvas on the page with id " + canvasId);
+    }
+  } else {
+    this._canvas = document.createElement("canvas");
+    this._canvas.width = width;
+    this._canvas.height = height;
+    document.body.appendChild(this._canvas);
   }
   this._context = this._canvas.getContext("2d");
   this.height = this._canvas.height;
