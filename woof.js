@@ -269,18 +269,17 @@ Woof.Sprite = function (project, { x = 0, y = 0, angle = 0, rotationStyle = "ROT
       this.project._context.save();
       this.project._context.translate(this.canvasX(), this.canvasY());
       if (this.rotationStyle == "ROTATE") {
-        var radians = this.radians();
+        this.project._context.rotate(this.radians());
       } else if (this.rotationStyle == "NO ROTATE") {
-        var radians = 0;
+        // no rotate
       } else if (this.rotationStyle == "ROTATE LEFT RIGHT") {
-        var radians = this.radians();
-        if (this.angle >= 180 && this.angle < 360) {
-          this.project._context.rotate(this.radians());
-          this.project._context.translate(this.width, 0);
-          this.project._context.scale(-1, 1);
+          if (this.angle % 360 >= 90 && this.angle % 360 < 270) {
+            this.project._context.translate(this.width, 0);
+            this.project._context.scale(-1, 1);
+          } else if (this.angle % 360 >= 0 && this.angle % 360 < 90 || this.angle % 360 <= 360 && this.angle % 360 >= 270) {
+            // no rotate
+          }
         }
-      }
-      this.project._context.rotate(radians);
 
       if (this instanceof Woof.Image) {
         this.imageRender();

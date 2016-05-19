@@ -43,55 +43,55 @@ Woof.repeat = (times, func) => {
 };
 
 Woof.dayOfMonth = () =>{
-	var date = new Date();
-	return date.getDate();
+  var date = new Date();
+  return date.getDate();
 };
 
 Woof.dayOfWeek = () => {
-	var date = new Date();
-	var day = date.getDay();
-	if (day === 0){
-		return "Sunday";
-	}
-	else if (day == 1){
-		return "Monday";
-	}
-	else if (day == 2){
-		return "Tuesday";
-	}
-	else if (day == 3){
-		return "Wednesday";
-	}
-	else if (day == 4){
-		return "Thursday";
-	}
-	else if (day == 5){
-		return "Friday";
-	}
-	else if (day == 6){
-		return "Saturday";
-	}
+  var date = new Date();
+  var day = date.getDay();
+  if (day === 0){
+    return "Sunday";
+  }
+  else if (day == 1){
+    return "Monday";
+  }
+  else if (day == 2){
+    return "Tuesday";
+  }
+  else if (day == 3){
+    return "Wednesday";
+  }
+  else if (day == 4){
+    return "Thursday";
+  }
+  else if (day == 5){
+    return "Friday";
+  }
+  else if (day == 6){
+    return "Saturday";
+  }
 };
 
 Woof.hourMilitary =  () => {
-	var date = new Date();
-	return date.getHours();
+  var date = new Date();
+  return date.getHours();
 };
 
 Woof.hour = () => {
-	var date = new Date();
-	var hour = date.getHours();
-	return hour <= 12 ? hour : hour - 12;
+  var date = new Date();
+  var hour = date.getHours();
+  return hour <= 12 ? hour : hour - 12;
 };
 
 Woof.minute =  () => {
-	var date = new Date();
-	return date.getMinutes();
+  var date = new Date();
+  return date.getMinutes();
 };
 
 Woof.second = () => {
-	var date = new Date();
-	return date.getSeconds();
+  var date = new Date();
+  return date.getSeconds();
 };
 
 Woof.RIGHT = 0;
@@ -269,41 +269,40 @@ Woof.Sprite = function(project, {x = 0, y = 0, angle = 0, rotationStyle = "ROTAT
       this.project._context.save();
       this.project._context.translate(this.canvasX(), this.canvasY());
       if (this.rotationStyle == "ROTATE") {
-        var radians = this.radians();
+        this.project._context.rotate(this.radians());
       } else if (this.rotationStyle == "NO ROTATE"){
-        var radians = 0;
+          // no rotate
       } else if (this.rotationStyle == "ROTATE LEFT RIGHT"){
-        var radians = this.radians();
-        if (this.angle >= 180 && this.angle < 360){
-					this.project._context.rotate(this.radians());
+        if (this.angle%360 >= 90 && this.angle%360 < 270){
           this.project._context.translate(this.width, 0);
           this.project._context.scale(-1, 1);
+        } else if (this.angle%360 >=0 && this.angle%360 < 90 || this.angle%360 <= 360 && this.angle%360 >=270){
+          // no rotate
         }
       }
-      this.project._context.rotate(radians);
       
       if (this instanceof Woof.Image) {
         this.imageRender();
       } else if (this instanceof Woof.Text) {
         this.textRender();
       } else if (this instanceof Woof.Circle) {
-      	this.circleRender();
-			}
+        this.circleRender();
+      }
       this.project._context.restore();
     }
   };
   
-	this.distanceTo = function distanceTo(xGiven, yGiven){
-	  if (arguments.length === 1){
-	    var x = this.x - xGiven.x;
-	    var y = this.y - xGiven.y;
-	    return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
-	  }
-	  if (arguments.length === 2) {
-	    var x = this.x - xGiven;
-	    var y = this.y - yGiven;
-	    return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
-	  }
+  this.distanceTo = function distanceTo(xGiven, yGiven){
+    if (arguments.length === 1){
+      var x = this.x - xGiven.x;
+      var y = this.y - xGiven.y;
+      return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
+    }
+    if (arguments.length === 2) {
+      var x = this.x - xGiven;
+      var y = this.y - yGiven;
+      return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
+    }
 };
   
   this.move = function(steps){
