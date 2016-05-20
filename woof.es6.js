@@ -155,6 +155,10 @@ Woof.Project = function({canvasId = undefined, height = 500, width = 350, debug 
     this.backdrop = backdrop;
   };
   
+  this.setBackdropColor = function(color){    
+    this.backdrop = color;
+  };
+  
   this.stopAll = () => {
     this._render();
     window.cancelAnimationFrame(this.renderInterval);
@@ -263,9 +267,14 @@ Woof.Project = function({canvasId = undefined, height = 500, width = 350, debug 
     }
   };
   
-  this._renderBackdrop = function() {
-    if (this.backdrop) {
+  this._renderBackdrop = () => {
+    if (this.backdrop instanceof Image) {
       this._context.drawImage(this.backdrop, 0, 0);
+    } else if (typeof this.backdrop == "string"){
+      this._context.save();
+      this._context.fillStyle=this.backdrop;
+      this._context.fillRect(0, 0, this.width, this.height);
+      this._context.restore();
     }
   };
   

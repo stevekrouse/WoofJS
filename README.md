@@ -69,7 +69,8 @@ var project = new Woof.Project({height: 500, width: 350, debug: ["project.keysDo
 ```
 
   - Create a project with a pre-existing `<canvas id="project">` element by id: ``var project = new Woof.Project({id: "project"});`
-  - Set/change the backdrop: `project.setBackdropURL("http://example.com/img.jpg");`
+  - Set/change the backdrop to an image URL: `project.setBackdropURL("http://example.com/img.jpg");`
+  - Set/change the backdrop to an color: `project.setBackdropColor("blue");`
   - Stop all: `project.stopAll();`
   - Mouse X: `project.mouseX`
   - Mouse Y: `project.mouseY`
