@@ -14,16 +14,16 @@ You can either [clone this JSBin](https://jsbin.com/lekovu/edit?js,output) or fo
 
 1) Throw the Woof library between the `<head>` tags.
 ```html
-<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/78af956b60bf0a7c9b022adcb1f412ad5cbd765a/woof.js"></script>
+<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/70678b0671a5572d07ac1e1864550456d5dc2b89/woof.js"></script>
 ```
 2) Throw in some JavaScript, and tell Woof to fetch it.
 ```javascript
-// Set up your Woof project, optionally setting height, width, and debug, so you can see mouseX, mouseY and keysDown.
-var project = new Woof.Project({height: 500, width: 350, debug: ["project.keysDown", "project.mouseX", "project.mouseY", "timer"]}); 
-// Set the backdrop URL (preferably of similar dimensions to your canvas).
-project.setBackdropURL("http://cdn.theatlantic.com/assets/media/img/mt/2016/03/RTX283V4/lead_960.jpg?1457553386");
+// Set up your Woof project
+var project = new Woof.Project({fullScreen: true, debug: ["project.keysDown", "project.mouseX", "project.mouseY", "timer"]}); 
+// Set the backdrop URL (preferably of similar dimensions to your canvas)
+project.setBackdropURL("http://efdreams.com/data_images/dreams/sky/sky-05.jpg");
 
-// Add an image via a url, and optionally setting its x and y.
+// Add an image via a url, and optionally setting its x and y
 var rectangle = project.addImage({url: "http://www.urdu-english.com/images/lessons/beginner/shapes/shapes-pics/rectangle.png", x: 0, y: 0});
 
 // Make it move with the arrow keys by checking which keys are down every 40 milliseconds
@@ -65,9 +65,9 @@ project.every("1", "second", () => {
 Create a project: 
 
 ```javascript
-var project = new Woof.Project({height: 500, width: 350, debug: ["project.keysDown", "project.mouseX", "project.mouseY"]});
+var project = new Woof.Project({fullScreen: true, debug: ["project.keysDown", "project.mouseX", "project.mouseY"]});
 ```
-  - Create a full-screen project: ``var project = new Woof.Project({fullScreen: true});`
+  - Create a project with a height and width: ``var project = new Woof.Project({height: 500, width: 350});`
   - Create a project with a pre-existing `<canvas id="project">` element by id: ``var project = new Woof.Project({id: "project"});`
   - Set/change the backdrop to an image URL: `project.setBackdropURL("http://example.com/img.jpg");`
   - Set/change the backdrop to an color: `project.setBackdropColor("blue");`
