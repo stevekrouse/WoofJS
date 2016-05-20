@@ -201,3 +201,7 @@ Despite its many [noted](http://worrydream.com/LearnableProgramming/) flaws, Pro
   - **non-modular** - In Woof, because all view-layer state is encapulated into objects, it allows you to easily build modular and functional code without worrying about side effects.
   - **poor decomposition** - In Woof, you can have infinitely many objects listen to infinitely many events. You don't have to funnel all of your code through the same top-level events that forces you to build tangled code.
   - **lack of identity / metaphor** - Woof steals Scratch's and Smalltalk's everything-is-an-object-that-you-can-see-on-the-screen metaphor. It also takes the pen, angles, turning and moving athropomorphic metaphors from LOGO.
+
+## Showing off
+
+  - What takes Pixi.js [80 lines](http://www.goodboydigital.com/pixijs/examples/8/), takes WoofJS [20](https://jsbin.com/fuheki/edit?js,output).

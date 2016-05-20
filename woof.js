@@ -93,6 +93,7 @@ Woof.Project = function ({ canvasId = undefined, fullScreen = false, height = 50
   this.sprites = [];
   this.backdrop = undefined;
   this.debug = debug;
+  this.stopped = false;
   if (fullScreen) {
     width = window.innerWidth;
     height = window.innerHeight;
@@ -169,7 +170,7 @@ Woof.Project = function ({ canvasId = undefined, fullScreen = false, height = 50
 
   this.stopAll = () => {
     this._render();
-    window.cancelAnimationFrame(this.renderInterval);
+    this.stopped = true;
 
     this._everys.forEach(clearInterval);
     this._afters.forEach(clearInterval);
@@ -306,6 +307,7 @@ Woof.Project = function ({ canvasId = undefined, fullScreen = false, height = 50
   };
 
   this._render = () => {
+    if (this.stopped) return;
     this.renderInterval = window.requestAnimationFrame(this._render);
     this._runRepeats();
     this._context.clearRect(0, 0, this.width, this.height);
