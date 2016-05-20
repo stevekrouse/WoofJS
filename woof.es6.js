@@ -126,12 +126,23 @@ Woof.Project = function({canvasId = undefined, fullScreen = false, height = 500,
     document.body.appendChild(this._canvas);
   }
   this._context = this._canvas.getContext("2d");
-  this.height = this._canvas.height;
-  this.width = this._canvas.width;
-  this.minX = -this.width / 2;
-  this.maxX = this.width / 2;
-  this.minY = -this.height / 2;
-  this.maxY = this.height / 2;
+  this.setCanvasSize = () => {
+    this.height = this._canvas.height;
+    this.width = this._canvas.width;
+    this.minX = -this.width / 2;
+    this.maxX = this.width / 2;
+    this.minY = -this.height / 2;
+    this.maxY = this.height / 2;
+  };
+  this.setCanvasSize();
+  if (fullScreen) {
+    window.addEventListener("resize", () => {
+      this._canvas.width = window.innerWidth;
+      this._canvas.height = window.innerHeight;
+      this.setCanvasSize();
+    });
+  }
+  
   
   this.addText = options => {
     var sprite = new Woof.Text(this, options);
