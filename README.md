@@ -80,6 +80,8 @@ project.every("1", "second", () => {
   - Bottom edge of the screen: `project.minY`
   - Width of the screen: `project.width`
   - Height of the screen: `project.height`
+  - Repeat 10 times: `project.repeat(10, () => { ... });`
+  - Repeat until (you have to put the condition in "quotes"): `project.repeatUntil("image.x < project.minX", () => { ... });`
 
 ## Woof.Sprite
 

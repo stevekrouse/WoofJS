@@ -214,6 +214,20 @@ Woof.Project = function({canvasId = undefined, height = 500, width = 350, debug 
     this._everys.push(setInterval(func, Woof.unitsToMiliseconds(time, units)));
   };
   
+  this._repeats = [];
+  this.repeat = (times, func) => {
+    this._repeats.push(new Woof.Repeat(times, func));
+  };
+  this.repeatUntil = (condition, func) => {
+    this._repeats.push(new Woof.RepeatUntil(condition, func));
+  };
+  this._runRepeats = () => {
+    this._repeats.forEach(repeat => {
+      repeat.next();
+    });
+    this._repeats = this._repeats.filter(repeat => {return !repeat.done});
+  };
+  
   this._afters = [];
   this.after = (time, units, func) => {
     this._afters.push(setTimeout(func, Woof.unitsToMiliseconds(time, units)));
@@ -255,7 +269,8 @@ Woof.Project = function({canvasId = undefined, height = 500, width = 350, debug 
   
   this._render = () => {
     this.renderInterval = window.requestAnimationFrame(this._render);
-    this._context.clearRect(0, 0, this._canvas.width, this._canvas.height);
+    this._runRepeats();
+    this._context.clearRect(0, 0, this.width, this.height);
     this._renderBackdrop();
     this._renderSprites();
     this._updateDebug();
@@ -504,5 +519,51 @@ Woof.Image = function(project, {url = "http://www.loveyourdog.com/image3.gif", i
 
   this.imageRender = () => {
     this.project._context.drawImage(this.image, -this.width() / 2, -this.height() / 2, this.width(), this.height());
+  };
+};
+
+Woof.Repeat = function(times, func) {
+  this.func = func;
+  this.times = times;
+  this.done = false;
+  
+  this.next = () => {
+    if (this.done){
+      return;
+    }
+    if (this.times <= 0){
+      this.done = true;
+      return;
+    } else {
+      this.func();
+      this.times--;
+    }
+  };
+};
+
+Woof.RepeatUntil = function(condition, func){
+  if (typeof condition !== "string") { throw Error("You must give repeatUntil a string condition in quotes. You gave it: " + condition); }
+  this.func = func;
+  this.condition = condition;
+  this.done = false;
+  
+  this.next = () => {
+    if (this.done){
+      return;
+    }
+    var cond;
+    try {
+      cond = eval(this.condition);
+    } catch (e) {
+      console.error("Error in Repeat Until");
+      throw e;
+    }
+    
+    if (cond){
+      this.done = true;
+      return;
+    } else {
+      this.func();
+    }
   };
 };
