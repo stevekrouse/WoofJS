@@ -89,10 +89,16 @@ Woof.LEFT = 180;
 Woof.UP = 90;
 Woof.DOWN = 270;
 
-Woof.Project = function ({ canvasId = undefined, height = 500, width = 350, debug = [] } = {}) {
+Woof.Project = function ({ canvasId = undefined, fullScreen = false, height = 500, width = 350, debug = [] } = {}) {
   this.sprites = [];
   this.backdrop = undefined;
   this.debug = debug;
+  if (fullScreen) {
+    width = window.innerWidth;
+    height = window.innerHeight;
+    document.body.style.margin = 0;
+    document.body.style.padding = 0;
+  }
 
   if (canvasId) {
     try {
@@ -103,8 +109,10 @@ Woof.Project = function ({ canvasId = undefined, height = 500, width = 350, debu
     }
   } else {
     this._canvas = document.createElement("canvas");
+    this._canvas.id = "project";
     this._canvas.width = width;
     this._canvas.height = height;
+    this._canvas.style.display = "block";
     document.body.appendChild(this._canvas);
   }
   this._context = this._canvas.getContext("2d");
