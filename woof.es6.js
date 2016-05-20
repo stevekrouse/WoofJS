@@ -249,15 +249,17 @@ Woof.Project = function({canvasId = undefined, height = 500, width = 350, debug 
 
   this.debugText = [];
   for (var i = 0; i < this.debug.length; i++){
-    this.debugText.push(this.addText({x: this.minX, y: this.minY + (12 * (i+1)), textAlign: "left"}));
+    var sprite = new Woof.Text(this, {x: this.minX, y: this.minY + (12 * (i+1)), textAlign: "left"});
+    this.debugText.push(sprite);
   }
   
-  this._updateDebug = () => {
+  this._renderDebug = () => {
     for (var i = 0; i < this.debug.length; i++) {
       var expr = this.debug[i];
       var value;
       try { value = eval(expr); } catch(e) { value = e; }
       this.debugText[i].text = `${expr}: ${value}`;
+      this.debugText[i]._render(this);
     }
   };
   
@@ -279,7 +281,7 @@ Woof.Project = function({canvasId = undefined, height = 500, width = 350, debug 
     this._context.clearRect(0, 0, this.width, this.height);
     this._renderBackdrop();
     this._renderSprites();
-    this._updateDebug();
+    this._renderDebug();
   };
   this._render();
 };
