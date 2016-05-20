@@ -14,7 +14,7 @@ You can either [clone this JSBin](https://jsbin.com/lekovu/edit?js,output) or fo
 
 1) Throw the Woof library between the `<head>` tags.
 ```html
-<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/59fdd03d365996be278faf0cc9fca101b497826a/woof.js"></script>
+<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/78af956b60bf0a7c9b022adcb1f412ad5cbd765a/woof.js"></script>
 ```
 2) Throw in some JavaScript, and tell Woof to fetch it.
 ```javascript
@@ -124,7 +124,7 @@ When creating a new `Woof.Image`, `Woof.Text`, `Woof.Rectangle` or `Woof.Circle`
   - Get the height: `NAME.height()`
 
 ### Woof.Image
-Create a new image: 
+In addition to the default parameters (`x`, `y`, `angle`, `rotationStyle`, and `showing`), you may use these parameters to create a new image: 
 ```javascript 
 var IMAGE_NAME = project.addImage({url: "http://www.loveyourdog.com/image3.gif", imageWidth: 30, imageHeight: 30});
 ```
@@ -134,7 +134,7 @@ var IMAGE_NAME = project.addImage({url: "http://www.loveyourdog.com/image3.gif",
   - Set the height `IMAGE_NAME.imageHeight = 20;`
 
 ### Woof.Circle
-Create a new circle: 
+In addition to the default parameters (`x`, `y`, `angle`, `rotationStyle`, and `showing`), you may use these parameters to create a new circle: 
 ```javascript
 var CIRCLE_NAME = project.addCircle({radius: 10, color: "black"});
 ```
@@ -143,7 +143,7 @@ var CIRCLE_NAME = project.addCircle({radius: 10, color: "black"});
 
 ## Woof.Rectangle
 
-Create a new rectangle: 
+In addition to the default parameters (`x`, `y`, `angle`, `rotationStyle`, and `showing`), you may use these parameters to create a new rectangle: 
 ```javascript
 var RECTANGLE_NAME = project.addRectangle({rectangleHeight: 10, rectangleWidth: 20, color: "pink"});
 ```
@@ -153,7 +153,7 @@ var RECTANGLE_NAME = project.addRectangle({rectangleHeight: 10, rectangleWidth: 
 
 ### Woof.Text
 
-Create a new text: 
+In addition to the default parameters (`x`, `y`, `angle`, `rotationStyle`, and `showing`), you may use these parameters to create a new text: 
 ```javascript 
 var TEXT_NAME = project.addText({text: "Text", size: 12, color: "black", fontFamily: "arial", textAlign: "center"});
 ```
