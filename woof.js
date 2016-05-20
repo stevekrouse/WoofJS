@@ -269,7 +269,7 @@ Woof.Project = function ({ canvasId = undefined, fullScreen = false, height = 50
 
   this.debugText = [];
   for (var i = 0; i < this.debug.length; i++) {
-    var sprite = new Woof.Text(this, { x: this.minX, y: this.minY + 12 * (i + 1), textAlign: "left" });
+    var sprite = new Woof.Text(this, { textAlign: "left" });
     this.debugText.push(sprite);
   }
 
@@ -282,6 +282,7 @@ Woof.Project = function ({ canvasId = undefined, fullScreen = false, height = 50
       } catch (e) {
         value = e;
       }
+      [this.debugText[i].x, this.debugText[i].y] = [this.minX + 5, this.minY + 12 * (i + 1)];
       this.debugText[i].text = `${ expr }: ${ value }`;
       this.debugText[i]._render(this);
     }
