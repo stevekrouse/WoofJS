@@ -6,7 +6,7 @@ It was originally inspired by Scratch and can help ease the trasition to JavaScr
 
 WoofJS is developed with :heart: by [The Coding Space](http://thecodingspace.com).
 
-*Notice: this is new software and is under rapid development, so expect things to break and be frequently changed. We expect our first stable release will come out by June 2016.*
+<b>Notice</b>: *This is new software and is under rapid development, so expect things to break and be frequently changed. We expect our first stable release will come out by the end of Summer 2016. Until our first stable release, this software <b>only runs on desktop Chrome</b>, at which point we will support all modern desktop and mobile browsers.*
 
 ## Getting Started
 
