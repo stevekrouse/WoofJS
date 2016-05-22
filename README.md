@@ -14,7 +14,7 @@ You can either <a href="https://jsbin.com/lekovu/edit?js,output" target="_blank"
 
 1) Throw the Woof library between the `<head>` tags.
 ```html
-<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/69ec2a95c0eff9aea48ad6cbd767e78357202686/woof.js"></script>
+<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/bf0965ea9bff791491603437e2bed20724becb79/woof.js"></script>
 ```
 2) Throw in some JavaScript, and tell Woof to fetch it.
 ```javascript
@@ -115,7 +115,7 @@ When creating a new `Woof.Image`, `Woof.Text`, `Woof.Rectangle` or `Woof.Circle`
   - Touching another thing?: `if (NAME.touching(OTHER_NAME)) { ... }`
   - Mouse over?: `if (NAME.mouseOver()) { ... }`
   - Do something on click: `NAME.onClick((mouseX, mouseY) => { ... });`
-  - Clicking and holding?: `if (project.mouseDown && NAME.mouseOver()) { ... }`
+  - Clicking and holding?: `if (NAME.mouseDown()) { ... }`
   - Send to the back layer: `NAME.sendToBack();`
   - Send to the front layer: `NAME.sendToFront();`
   - Point towards another thing: `NAME.pointTowards(OTHER_NAME)`
