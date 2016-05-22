@@ -258,6 +258,21 @@ Woof.Project = function({canvasId = undefined, fullScreen = false, height = 500,
     this.repeatUntil("false", func);
   };
   
+  this.when = (condition, func) => {
+    this.forever(() => {
+      var cond;
+      try {
+        cond = eval(condition);
+      } catch (e) {
+        console.error("Bad condition in Woof.Project#when: " + condition);
+        throw e;
+      }
+      if (cond) {
+        func();
+      };
+    });
+  };
+  
   this._repeats = [];
   this.repeat = (times, func, after) => {
     this._repeats.push(new Woof.Repeat(times, func, after));

@@ -184,6 +184,14 @@ project.every("1", "second", () => {
   timerText.text = "Timer: " + timer;
 });
 ```
+
+  - Do this when a condition (in "quotes") is true. This is a short-hand for a forever-if statement.
+
+```javascript
+project.when('project.keysDown.includes("LEFT")', () => {
+    rectangle.x -= 5; 
+});
+```
   
   - Do this after one second: `project.after(1, "second", () => {...});`
 
