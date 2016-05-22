@@ -14,7 +14,7 @@ You can either <a href="https://jsbin.com/lekovu/edit?js,output" target="_blank"
 
 1) Throw the Woof library between the `<head>` tags.
 ```html
-<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/bf0965ea9bff791491603437e2bed20724becb79/woof.js"></script>
+<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/15b015bcad557cf8498ff15553a4ad3262985f1a/woof.js"></script>
 ```
 2) Throw in some JavaScript, and tell Woof to fetch it.
 ```javascript
@@ -25,7 +25,7 @@ project.setBackdropURL("http://efdreams.com/data_images/dreams/sky/sky-05.jpg");
 // Add an image via a url, and optionally setting its x and y
 var rectangle = project.addImage({url: "http://www.urdu-english.com/images/lessons/beginner/shapes/shapes-pics/rectangle.png", x: 0, y: 0});
 
-// Make it move with the arrow keys by constantly checking which keys are down 
+// Make it move with the arrow keys by checking which keys are down every 40 milliseconds
 project.forever(() => {
   if (project.keysDown.includes("LEFT")){
     // move left by 5
@@ -74,6 +74,9 @@ var project = new Woof.Project({fullScreen: true, debug: ["project.keysDown", "p
   - Do something on click: `project.onClick((mouseX, mouseY) => { ... });`
   - List of keys currently pressed: `project.keysDown`
   - Is 'A' pressed?: `project.keysDown.includes('A')`
+  - Repeat 10 times: `project.repeat(10, () => { ... });`
+  - Repeat constantly until (you have to put the condition in "quotes"): `project.repeatUntil("IMAGE_NAME.x < project.minX", () => { ... });`
+  - Do this constantly forever: `project.forever(() => { ... })`;
   - Do this every second: `project.every(1, "second", () => {...});`
   - Do this after one second: `project.after(1, "second", () => {...});`
   - Right edge of the screen: `project.maxX`
@@ -82,8 +85,7 @@ var project = new Woof.Project({fullScreen: true, debug: ["project.keysDown", "p
   - Bottom edge of the screen: `project.minY`
   - Width of the screen: `project.width`
   - Height of the screen: `project.height`
-  - Repeat 10 times: `project.repeat(10, () => { ... });`
-  - Repeat until (you have to put the condition in "quotes"): `project.repeatUntil("IMAGE_NAME.x < project.minX", () => { ... });`
+  
 
 ## Woof.Image, Woof.Text, Woof.Rectangle and Woof.Circle General Functions
 
