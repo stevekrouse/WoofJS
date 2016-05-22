@@ -1,6 +1,6 @@
 # WoofJS - *JavaScript Unleashed*
 
-WoofJS is a JavaScript library for making interactive web and mobile games.
+WoofJS is a JavaScript library for making web and mobile games and animations.
 
 It was originally inspired by Scratch and can help ease the trasition to JavaScript.
 
@@ -290,6 +290,8 @@ Woof.repeat(10, (time) => {
 8) Get the current day of the month (1-31): `Woof.dayOfMonth();`
 
 9) Get the current day of the week (Monday-Sunday): `Woof.dayOfWeek();`
+
+10) Random color: `Woof.randomColor()`
 
 ## [Learnable Programming](http://worrydream.com/LearnableProgramming/)
 

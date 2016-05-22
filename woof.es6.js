@@ -94,6 +94,10 @@ Woof.second = () => {
   return date.getSeconds();
 };
 
+Woof.randomColor = function(){
+  return "rgb(" + Woof.randomInt(0, 255) + ", " + Woof.randomInt(0, 255) + ", " + Woof.randomInt(0, 255)+ ")";
+}
+
 Woof.RIGHT = 0;
 Woof.LEFT = 180;
 Woof.UP = 90;
