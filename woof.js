@@ -134,6 +134,14 @@ Woof.Project = function ({ canvasId = undefined, fullScreen = false, height = 50
     });
   }
 
+  this.randomX = () => {
+    return Woof.randomInt(this.minX, this.maxX);
+  };
+
+  this.randomY = () => {
+    return Woof.randomInt(this.minY, this.maxY);
+  };
+
   this.addText = options => {
     var sprite = new Woof.Text(this, options);
     this.sprites.push(sprite);
