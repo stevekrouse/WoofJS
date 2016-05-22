@@ -86,6 +86,25 @@ var project = new Woof.Project({fullScreen: true, debug: ["project.keysDown", "p
 
 ### Project Control Flow
 
+There are two types of commands in JavaScript:
+
+1) **Synchronous**: "Do this immediately and then move on when it's done."
+
+2) **Asynchronous**: "Start this immediately, but don't wait till it's done. Just go ahead and move on to the next command immediately after you start this command."
+
+Most commands are synchronous. For example, if-statements, setting or changing variables, and calling most Woof methods like rectangle.move(10) are all synchronous commands.
+
+`Woof.forever` is an example of an asynchronous command. Think about it: if Woof.forever told the computer to wait until it was done before moving on, it would never move on to the next line.
+
+`Woof.repeat`, `Woof.repeatUntil`, `Woof.every`, `Woof.after` are also asynchronous. 
+
+This second type allows us to do useful things - like do this 10 times - but it's also confusing because if you want to have something happen after the 10th time, you can't just put it on the line below the `Woof.repeat`. Why? Because the line below `Woof.repeat` happens immediately after the asynchronously command *starts*, not after it ends. 
+
+So what you have to do give your "after" code to the async function as it's 3rd parameter and it'll make sure to run it after the async function is really finished. This works for `Woof.repeat` and `Woof.repeatUntil`.
+
+Also, be sure not to nest async commands within each other. For example if you want to make an image move in a square for forever, you can't just put four nested repeats inside a forever. Instead you have to use recursion and tell your repeat code to start over only after the 4th repeat is finished finished. (If you put a repeat in a forever, it'll  keep starting new repeats for forever really quickly.)
+
+
   - Repeat 10 times: 
 
 ```javascript
