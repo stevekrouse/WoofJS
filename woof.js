@@ -429,6 +429,10 @@ Woof.Sprite = function (project, { x = 0, y = 0, angle = 0, rotationStyle = "ROT
     return this.over(this.project.mouseX, this.project.mouseY);
   };
 
+  this.mouseDown = () => {
+    return this.mouseOver() && project.mouseDown;
+  };
+
   this.turnLeft = degrees => {
     this.angle += degrees;
   };
