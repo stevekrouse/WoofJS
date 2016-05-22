@@ -18,7 +18,6 @@ You can either <a href="https://jsbin.com/lekovu/edit?js,output" target="_blank"
 ```
 2) Throw in some JavaScript, and tell Woof to fetch it.
 ```javascript
-// Set up your Woof project
 var project = new Woof.Project({fullScreen: true, debug: ["project.keysDown", "project.mouseX", "project.mouseY", "timer"]}); 
 // Set the backdrop URL (preferably of similar dimensions to your canvas)
 project.setBackdropURL("http://efdreams.com/data_images/dreams/sky/sky-05.jpg");
@@ -26,9 +25,8 @@ project.setBackdropURL("http://efdreams.com/data_images/dreams/sky/sky-05.jpg");
 // Add an image via a url, and optionally setting its x and y
 var rectangle = project.addImage({url: "http://www.urdu-english.com/images/lessons/beginner/shapes/shapes-pics/rectangle.png", x: 0, y: 0});
 
-// Make it move with the arrow keys by checking which keys are down every 40 milliseconds
-project.every(40, "milliseconds", () => {
-  // if the left key is down...
+// Make it move with the arrow keys by constantly checking which keys are down 
+project.forever(() => {
   if (project.keysDown.includes("LEFT")){
     // move left by 5
     rectangle.x -= 5; 
@@ -49,14 +47,12 @@ var timer = 20;
 // add text that diplays the timer
 var timerText = project.addText({x: 0, y: project.maxY - 20, size: 20, color: "white"});
 project.every("1", "second", () => {
-  // change the text to refer to the timer's new value every second
-  timerText.text = "Timer: " + timer;
-  if (timer === 0){
-    // stop everything when the timer reaches 0
-    project.stopAll();
-  }
+  // stop everything when the timer reaches 0
+  if (timer === 0){ project.stopAll(); }
   // make the timer go down every second
   timer--;
+  // change the text to refer to the timer's new value every second
+  timerText.text = "Timer: " + timer;
 });
 ```
 

@@ -243,6 +243,9 @@ Woof.Project = function({canvasId = undefined, fullScreen = false, height = 500,
     func();
     this._everys.push(setInterval(func, Woof.unitsToMiliseconds(time, units)));
   };
+  this.forever = (func) => {
+    this.repeatUntil("false", func);
+  };
   
   this._repeats = [];
   this.repeat = (times, func) => {
