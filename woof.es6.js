@@ -426,6 +426,7 @@ Woof.Sprite = function(project, {x = 0, y = 0, angle = 0, rotationStyle = "ROTAT
   this.touching = sprite => {
     var r1 = this.bounds();
     var r2 = sprite.bounds();
+    if (!this.showing || !sprite.showing) { return false; }
     return !(r2.left > r1.right || 
              r2.right < r1.left || 
              r2.top < r1.bottom ||
