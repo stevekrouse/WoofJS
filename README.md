@@ -10,7 +10,7 @@ WoofJS is developed with :heart: by [The Coding Space](http://thecodingspace.com
 
 ## Getting Started
 
-You can either [clone this JSBin](https://jsbin.com/lekovu/edit?js,output) or follow the steps below to setup your first WoofJS project.
+You can either <a href="https://jsbin.com/lekovu/edit?js,output" target="_blank">clone this JSBin</a> or follow the steps below to setup your first WoofJS project.
 
 1) Throw the Woof library between the `<head>` tags.
 ```html
