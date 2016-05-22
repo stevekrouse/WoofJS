@@ -14,7 +14,7 @@ You can either <a href="https://jsbin.com/lekovu/edit?js,output" target="_blank"
 
 1) Throw the Woof library between the `<head>` tags.
 ```html
-<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/15b015bcad557cf8498ff15553a4ad3262985f1a/woof.js"></script>
+<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/6ebb55005e12a248de96a929cc1abdd94ff250f3/woof.js"></script>
 ```
 2) Throw in some JavaScript, and tell Woof to fetch it.
 ```javascript
