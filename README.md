@@ -74,11 +74,6 @@ var project = new Woof.Project({fullScreen: true, debug: ["project.keysDown", "p
   - Do something on click: `project.onClick((mouseX, mouseY) => { ... });`
   - List of keys currently pressed: `project.keysDown`
   - Is 'A' pressed?: `project.keysDown.includes('A')`
-  - Repeat 10 times: `project.repeat(10, () => { ... });`
-  - Repeat constantly until (you have to put the condition in "quotes"): `project.repeatUntil("IMAGE_NAME.x < project.minX", () => { ... });`
-  - Do this constantly forever: `project.forever(() => { ... })`;
-  - Do this every second: `project.every(1, "second", () => {...});`
-  - Do this after one second: `project.after(1, "second", () => {...});`
   - Right edge of the screen: `project.maxX`
   - Left edge of the screen: `project.minX`
   - Top edge of the screen: `project.maxY`
@@ -88,6 +83,91 @@ var project = new Woof.Project({fullScreen: true, debug: ["project.keysDown", "p
   - Width of the screen: `project.width`
   - Height of the screen: `project.height`
   
+
+### Project Control Flow
+
+  - Repeat 10 times: 
+
+```javascript
+project.repeat(10, () => { 
+  NAME.x++;
+});
+```
+
+  - Do something after done repeating:
+
+```javascript
+project.repeat(10, () => { 
+  NAME.x++;
+}, () => {
+  NAME.color = "blue";
+});
+```
+
+  - Chaining repeats:
+
+```javascript
+project.repeat(100, () => {
+  NAME.angle = Woof.RIGHT;
+  NAME.move(1);
+}, () => { 
+  project.repeat(100, () => {
+    NAME.angle = Woof.UP;
+    NAME.move(1);
+  }, () => { 
+    project.repeat(100, () => {
+      NAME.angle = Woof.LEFT;
+      NAME.move(1);
+    }, () => { 
+      project.repeat(100, () => {
+        NAME.angle = Woof.DOWN;
+        NAME.move(1);
+      });
+    });
+  });
+});
+```
+
+  - Repeat constantly until (you have to put the condition in "quotes"): 
+
+```javascript
+project.repeatUntil("IMAGE_NAME.y < project.minY", () => {
+  IMAGE_NAME.y -= SPEED;
+});
+```
+
+  - Do seomthing after a `repeatUntil`:
+
+```javascript
+project.repeatUntil("IMAGE_NAME.y < project.minY", () => {
+  IMAGE_NAME.y -= SPEED;
+}, () => {
+  project.stopAll();  
+});
+```  
+
+  - Do this constantly forever: 
+
+```javascript
+project.forever(() => { 
+  CIRCLE_NAME.radius = CIRCLE_NAME.distanceTo(project.mouseX, project.mouseY);
+});
+```
+  
+  - Do this every second: 
+
+```javascript
+var timer = 20;
+var timerText = project.addText({x: 0, y: project.maxY - 20, size: 20, color: "white"});
+project.every("1", "second", () => {
+  if (timer === 0){ project.stopAll(); }
+  timer--;
+  timerText.text = "Timer: " + timer;
+});
+```
+  
+  - Do this after one second: `project.after(1, "second", () => {...});`
+
 
 ## Woof.Image, Woof.Text, Woof.Rectangle and Woof.Circle General Functions
 

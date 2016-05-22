@@ -247,11 +247,11 @@ Woof.Project = function ({ canvasId = undefined, fullScreen = false, height = 50
   };
 
   this._repeats = [];
-  this.repeat = (times, func) => {
-    this._repeats.push(new Woof.Repeat(times, func));
+  this.repeat = (times, func, after) => {
+    this._repeats.push(new Woof.Repeat(times, func, after));
   };
-  this.repeatUntil = (condition, func) => {
-    this._repeats.push(new Woof.RepeatUntil(condition, func));
+  this.repeatUntil = (condition, func, after) => {
+    this._repeats.push(new Woof.RepeatUntil(condition, func, after));
   };
   this._runRepeats = () => {
     this._repeats.forEach(repeat => {
@@ -608,7 +608,7 @@ Woof.Image = function (project, { url = "http://www.loveyourdog.com/image3.gif",
   };
 };
 
-Woof.Repeat = function (times, func) {
+Woof.Repeat = function (times, func, after) {
   this.func = func;
   this.times = times;
   this.done = false;
@@ -619,6 +619,9 @@ Woof.Repeat = function (times, func) {
     }
     if (this.times <= 0) {
       this.done = true;
+      if (after) {
+        after();
+      }
       return;
     } else {
       this.func();
@@ -627,7 +630,7 @@ Woof.Repeat = function (times, func) {
   };
 };
 
-Woof.RepeatUntil = function (condition, func) {
+Woof.RepeatUntil = function (condition, func, after) {
   if (typeof condition !== "string") {
     throw Error("You must give repeatUntil a string condition in quotes. You gave it: " + condition);
   }
@@ -649,6 +652,9 @@ Woof.RepeatUntil = function (condition, func) {
 
     if (cond) {
       this.done = true;
+      if (after) {
+        after();
+      }
       return;
     } else {
       this.func();
