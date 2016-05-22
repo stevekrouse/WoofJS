@@ -331,7 +331,7 @@ Woof.Sprite = function (project, { x = 0, y = 0, angle = 0, rotationStyle = "ROT
       this.project._context.save();
       this.project._context.translate(this.canvasX(), this.canvasY());
       if (this.rotationStyle == "ROTATE") {
-        this.project._context.rotate(this.radians());
+        this.project._context.rotate(-this.radians());
       } else if (this.rotationStyle == "NO ROTATE") {
         // no rotate
       } else if (this.rotationStyle == "ROTATE LEFT RIGHT") {
