@@ -106,6 +106,8 @@ When creating a new `Woof.Image`, `Woof.Text`, `Woof.Rectangle` or `Woof.Circle`
   - Change the Y position: `NAME.y += 10;`
   - Set the angle: `NAME.angle = 30;`
   - Set the angle using direction: `NAME.angle = Woof.LEFT;` 
+  - Turn left: `NAME.turnLeft(10);`
+  - Turn right: `NAME.turnRight(10);`
   - Don't rotate the sprites costume when the angle changes: `NAME.setRotationStyle("NO ROTATE");`
   - Rotate left to right when it points in a direction and moves `NAME.setRotationStyle("ROTATE LEFT RIGHT");`
   - Hide: `NAME.showing = false;`

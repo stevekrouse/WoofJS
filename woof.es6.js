@@ -431,6 +431,14 @@ Woof.Sprite = function(project, {x = 0, y = 0, angle = 0, rotationStyle = "ROTAT
     return this.over(this.project.mouseX, this.project.mouseY);
   };
   
+  this.turnLeft = (degrees) => {
+    this.angle += degrees;
+  };
+  
+  this.turnRight = (degrees) => {
+    this.angle -= degrees;
+  };
+  
   this.sendToBack = () => {
     var sprites = this.project.sprites;
     sprites.splice(0, 0, sprites.splice(sprites.indexOf(this), 1)[0]);
