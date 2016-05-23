@@ -264,12 +264,14 @@ var RECTANGLE_NAME = project.addRectangle({rectangleHeight: 10, rectangleWidth: 
 
 ## Woof.Line
 
-In addition to the default parameters (`x`, `y`, `angle`, `rotationStyle`, and `showing`), you may use these parameters to create a new line between (x,y) and (x1, y1): 
+In addition to the default parameters (`angle`, `rotationStyle`, and `showing`), you may use these parameters to create a new line between (x,y) and (x1, y1): 
 ```javascript
-var LINE_NAME = project.addLine({x1: 10, y1: 20, color: "pink", lineWidth: 10});
+var LINE_NAME = project.addLine({x: -100, y: 100, x1: 10, y1: 20, color: "pink", lineWidth: 10});
 ```
-  - Change the x endpoint: `LINE_NAME.x1 = 100;`
-  - Change the y endpoint: `LINE_NAME.y1 = 200;`
+  - Change the x startpoint: `LINE_NAME.x = -100;`
+  - Change the y startpoint: `LINE_NAME.y = 100;`
+  - Change the x endpoint: `LINE_NAME.x1 = 10;`
+  - Change the y endpoint: `LINE_NAME.y1 = 20;`
   - Change the width: `LINE_NAME.lineWidth = 5;`
   - Change the color: `LINE_NAME.color = "purple";`
 
