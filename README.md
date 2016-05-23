@@ -232,6 +232,8 @@ When creating a new `Woof.Image`, `Woof.Text`, `Woof.Rectangle` or `Woof.Circle`
   - Get the distance to an X,Y: `NAME.distanceTo(X, Y);`
   - Get the width: `NAME.width()`
   - Get the height: `NAME.height()`
+  - Draw a line behind a sprite: `NAME.penDown = true;`
+  - Stop drawing a line behind a sprite: `NAME.penDown = false;`
 
 ### Woof.Image
 In addition to the default parameters (`x`, `y`, `angle`, `rotationStyle`, and `showing`), you may use these parameters to create a new image: 

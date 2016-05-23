@@ -216,6 +216,9 @@ Woof.Project = function({canvasId = undefined, fullScreen = false, height = 500,
   this.translateToCenter = (x, y) => {
     return [(x - this.maxX) - this._canvas.offsetLeft, (this.maxY - y) + this._canvas.offsetTop];
   };
+  this.translateToCanvas = (x, y) => {
+    return [(x + this.maxX) - this._canvas.offsetLeft, (this.maxY - y) + this._canvas.offsetTop];
+  };
   
   this.mouseDown = false;
   this.mouseX = 0;
@@ -346,12 +349,36 @@ Woof.Project = function({canvasId = undefined, fullScreen = false, height = 500,
     });
   };
   
+  this._renderPen = () => {
+    this._context.save();
+    this.sprites.forEach((sprite) => {
+      for (var i = 0; i < sprite.pen.length; i++){
+        var last = i == 0 ? false : sprite.pen[i-1];
+        var current = sprite.pen[i];
+        if (sprite.pen[i] == false){
+          //do nothing
+        } else if (last === false && current !== false){
+           this._context.beginPath();
+           this._context.moveTo(...this.translateToCanvas(current.x, current.y));
+        } else if (current !== false) {
+          this._context.lineTo(...this.translateToCanvas(current.x, current.y));
+          this._context.lineCap = "round";
+          this._context.strokeStyle = "purple";
+          this._context.stroke();
+        }
+      }
+    });
+    
+    this._context.restore();
+  };
+  
   this._render = () => {
     if (this.stopped) return;
     this.renderInterval = window.requestAnimationFrame(this._render);
     this._runRepeats();
     this._context.clearRect(0, 0, this.width, this.height);
     this._renderBackdrop();
+    this._renderPen();
     this._renderSprites();
     this._renderDebug();
   };
@@ -365,6 +392,18 @@ Woof.Sprite = function(project, {x = 0, y = 0, angle = 0, rotationStyle = "ROTAT
   this.angle = angle;
   this.rotationStyle = rotationStyle;
   this.showing = showing;
+  
+  this.pen = [];
+  this.project.forever(() => {
+    var last = this.pen.length == 0 ? false : this.pen[this.pen.length - 1];
+    if (this.penDown) {
+      if(last === false || !(last.x == this.x && last.y == this.y)) {
+        this.pen.push({x: this.x, y: this.y});
+      } 
+    } else if (!this.penDown && last !== false) {
+      this.pen.push(false);
+    }
+  });
   
   this._render = function() {
     if (this.showing) {
