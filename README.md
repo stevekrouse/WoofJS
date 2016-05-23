@@ -272,6 +272,22 @@ var TEXT_NAME = project.addText({text: "Text", size: 12, color: "black", fontFam
   - Set the font color: `TEXT_NAME.color = "white";`
   - Set the font color to a hex value: `TEXT_NAME.color = "#32CD32";`
   - Set the font family: `TEXT_NAME.fontFamily = "arial";`
+  
+
+### Clones
+
+1) Create a sprite within a function: 
+```javascript
+function makeClone() {
+  var clone = project.addCircle ({radius: 10, color: "pink", x: Woof.randomInt(project.minX, project.maxX), y: Woof.randomInt(project.minY, project.maxY)});
+}
+```
+2)  Call that function however often you want to make a new clone: 
+```javascript
+project.every(4, "second", () => {
+  makeClone();
+});
+```
 
 ## Helper Functions
 
