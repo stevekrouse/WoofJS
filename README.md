@@ -301,6 +301,39 @@ Woof.repeat(10, (time) => {
 
 10) Random color: `Woof.randomColor()`
 
+## Cloud Data via Firebase
+
+1) Login to [Firebase](https://firebase.google.com/) with your Google account.
+
+2) Create a new project.
+
+3) Make reading and writing to your database possible via the Database rules tab.
+
+4) Whitelist your project's domain via the Auth sign-in tab.
+
+5) Copy the Firebase config into your `Woof.Project`:
+
+```javascript
+project.firebaseConfig({
+    apiKey: "AIzaSyAWa4XzsdE5haWBWq4fTef2Ko1dpbsE4qM",
+    authDomain: "sample-a81f9.firebaseapp.com",
+    databaseURL: "https://sample-a81f9.firebaseio.com",
+    storageBucket: "",
+});
+```
+
+6) Set some data:
+```javascript
+project.setCloud("high_score", 100);
+project.setCloud("player1", {x: project.mouseX, y: project.mouseY});
+```
+
+7) Get some data:
+```javascript
+project.getCloud("high_score", 0) // returns 100, with a default of 0
+project.setCloud("player1", {x: 0, y: 0}) // returns  {x: 14, y: 104}, with a default of {x: 0, y: 0}
+```
+
 ## [Learnable Programming](http://worrydream.com/LearnableProgramming/)
 
 Despite its many [noted](http://worrydream.com/LearnableProgramming/) flaws, Processing still remains the dominent graphics programming framework for beginners. Woof strives to solve the same problems as Processing, and be a beginner-friendly graphics frameworks for art, animation and game development, but it also hopes to improve upon Processing's main flaws:

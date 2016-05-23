@@ -190,6 +190,12 @@ Woof.Project = function({canvasId = undefined, fullScreen = false, height = 500,
     this.backdrop = color;
   };
   
+  this.firebaseConfig = config => {
+    this.firebase = new Woof.Firebase(config);
+    this.getCloud = this.firebase.getCloud;
+    this.setCloud = this.firebase.setCloud;
+  };
+  
   this.stopAll = () => {
     this._render();
     this.stopped = true;
@@ -670,5 +676,32 @@ Woof.RepeatUntil = function(condition, func, after){
     } else {
       this.func();
     }
+  };
+};
+
+Woof.Firebase = function(config){
+  this.data = {};
+  
+  this.loadFirebaseLibrary = callback => {
+    var lib = document.createElement("script");
+    lib.type = "text/javascript";
+    lib.src = "https://www.gstatic.com/firebasejs/live/3.0/firebase.js";
+    lib.onload = callback;
+    document.body.appendChild(lib);
+  };
+  
+  this.loadFirebaseLibrary(() => {
+    firebase.initializeApp(config);
+    firebase.database().ref().on('value', snapshot => {
+      this.data = snapshot.val() || {};
+    });
+  });
+  
+  this.setCloud = (key, val) => {
+    firebase.database().ref().child("/" + key).set(val);
+  };
+  
+  this.getCloud = (key, defaultVal) => {
+    return this.data[key] || defaultVal;
   };
 };
