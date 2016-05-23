@@ -164,6 +164,12 @@ Woof.Project = function ({ canvasId = undefined, fullScreen = false, height = 50
     return sprite;
   };
 
+  this.addLine = options => {
+    var sprite = new Woof.Line(this, options);
+    this.sprites.push(sprite);
+    return sprite;
+  };
+
   this.addImage = options => {
     var sprite = new Woof.Image(this, options);
     this.sprites.push(sprite);
@@ -387,6 +393,8 @@ Woof.Sprite = function (project, { x = 0, y = 0, angle = 0, rotationStyle = "ROT
         this.circleRender();
       } else if (this instanceof Woof.Rectangle) {
         this.rectangleRender();
+      } else if (this instanceof Woof.Line) {
+        this.lineRender();
       }
       this.project._context.restore();
     }
@@ -605,6 +613,31 @@ Woof.Rectangle = function (project, { rectangleHeight = 10, rectangleWidth = 10,
   this.rectangleRender = () => {
     this.project._context.fillStyle = this.color;
     this.project._context.fillRect(-this.width() / 2, -this.height() / 2, this.width(), this.height());
+  };
+};
+
+Woof.Line = function (project, { lineWidth = 1, x1 = 10, y1 = 10, color = "black" } = {}) {
+  Woof.Sprite.call(this, project, arguments[1]);
+  this.x1 = x1;
+  this.y1 = y1;
+  this.color = color;
+  this.lineWidth = lineWidth;
+
+  this.width = () => {
+    return this.lineWidth;
+  };
+
+  this.height = () => {
+    return Math.sqrt(Math.pow(this.x - this.x1, 2) + Math.pow(this.y - this.y1, 2));
+  };
+
+  this.lineRender = () => {
+    this.project._context.beginPath();
+    this.project._context.moveTo(0, 0);
+    this.project._context.lineTo(this.x1 + this.x, this.y1 + this.y);
+    this.project._context.strokeStyle = color;
+    this.project._context.lineWidth = lineWidth;
+    this.project._context.stroke();
   };
 };
 
