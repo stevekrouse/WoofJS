@@ -43,80 +43,118 @@ Woof.repeatInstant = (times, func) => {
 };
 
 Woof.dayOfMonth = () =>{
-	var date = new Date();
-	return date.getDate();
+  var date = new Date();
+  return date.getDate();
 };
 
 Woof.dayOfWeek = () => {
-	var date = new Date();
-	var day = date.getDay();
-	if (day === 0){
-		return "Sunday";
-	}
-	else if (day == 1){
-		return "Monday";
-	}
-	else if (day == 2){
-		return "Tuesday";
-	}
-	else if (day == 3){
-		return "Wednesday";
-	}
-	else if (day == 4){
-		return "Thursday";
-	}
-	else if (day == 5){
-		return "Friday";
-	}
-	else if (day == 6){
-		return "Saturday";
-	}
+  var date = new Date();
+  var day = date.getDay();
+  if (day === 0){
+    return "Sunday";
+  }
+  else if (day == 1){
+    return "Monday";
+  }
+  else if (day == 2){
+    return "Tuesday";
+  }
+  else if (day == 3){
+    return "Wednesday";
+  }
+  else if (day == 4){
+    return "Thursday";
+  }
+  else if (day == 5){
+    return "Friday";
+  }
+  else if (day == 6){
+    return "Saturday";
+  }
 };
 
 Woof.hourMilitary =  () => {
-	var date = new Date();
-	return date.getHours();
+  var date = new Date();
+  return date.getHours();
 };
 
 Woof.hour = () => {
-	var date = new Date();
-	var hour = date.getHours();
-	return hour <= 12 ? hour : hour - 12;
+  var date = new Date();
+  var hour = date.getHours();
+  return hour <= 12 ? hour : hour - 12;
 };
 
 Woof.minute =  () => {
-	var date = new Date();
-	return date.getMinutes();
+  var date = new Date();
+  return date.getMinutes();
 };
 
 Woof.second = () => {
-	var date = new Date();
-	return date.getSeconds();
+  var date = new Date();
+  return date.getSeconds();
 };
+
+Woof.randomColor = function(){
+  return "rgb(" + Woof.randomInt(0, 255) + ", " + Woof.randomInt(0, 255) + ", " + Woof.randomInt(0, 255)+ ")";
+}
 
 Woof.RIGHT = 0;
 Woof.LEFT = 180;
 Woof.UP = 90;
 Woof.DOWN = 270;
 
-Woof.Project = function(canvasId, {debug = []} = {}) {
+Woof.Project = function({canvasId = undefined, fullScreen = false, height = 500, width = 350, debug = []} = {}) {
   this.sprites = [];
   this.backdrop = undefined;
   this.debug = debug;
+  this.stopped = false;
+  if (fullScreen) {
+    width = window.innerWidth;
+    height = window.innerHeight;
+    document.body.style.margin = 0;
+    document.body.style.padding = 0;
+  } 
   
-  try {
-    this._canvas = document.getElementById(canvasId);
-  } catch (e){
-    console.error(e);
-    throw Error("Could not find a canvas on the page with id " + canvasId);
+  if (canvasId) {
+    try {
+      this._canvas = document.getElementById(canvasId);
+    } catch (e){
+      console.error(e);
+      throw Error("Could not find a canvas on the page with id " + canvasId);
+    }
+  } else {
+    this._canvas = document.createElement("canvas");
+    this._canvas.id = "project";
+    this._canvas.width = width;
+    this._canvas.height = height;
+    this._canvas.style.display = "block";
+    document.body.appendChild(this._canvas);
   }
   this._context = this._canvas.getContext("2d");
-  this.height = this._canvas.height;
-  this.width = this._canvas.width;
-  this.minX = -this.width / 2;
-  this.maxX = this.width / 2;
-  this.minY = -this.height / 2;
-  this.maxY = this.height / 2;
+  this.setCanvasSize = () => {
+    this.height = this._canvas.height;
+    this.width = this._canvas.width;
+    this.minX = -this.width / 2;
+    this.maxX = this.width / 2;
+    this.minY = -this.height / 2;
+    this.maxY = this.height / 2;
+  };
+  this.setCanvasSize();
+  if (fullScreen) {
+    window.addEventListener("resize", () => {
+      this._canvas.width = window.innerWidth;
+      this._canvas.height = window.innerHeight;
+      this.setCanvasSize();
+    });
+  }
+  
+  this.randomX = () => {
+    return Woof.randomInt(this.minX, this.maxX);
+  };
+  
+  this.randomY = () => {
+    return Woof.randomInt(this.minY, this.maxY);
+  };
   
   this.addText = options => {
     var sprite = new Woof.Text(this, options);
@@ -126,6 +164,12 @@ Woof.Project = function(canvasId, {debug = []} = {}) {
   
   this.addCircle = options => {
     var sprite = new Woof.Circle(this, options);
+    this.sprites.push(sprite);
+    return sprite;
+  };
+  
+  this.addRectangle = options => {
+    var sprite = new Woof.Rectangle(this, options);
     this.sprites.push(sprite);
     return sprite;
   };
@@ -142,9 +186,19 @@ Woof.Project = function(canvasId, {debug = []} = {}) {
     this.backdrop = backdrop;
   };
   
+  this.setBackdropColor = function(color){    
+    this.backdrop = color;
+  };
+  
+  this.firebaseConfig = config => {
+    this.firebase = new Woof.Firebase(config);
+    this.getCloud = this.firebase.getCloud;
+    this.setCloud = this.firebase.setCloud;
+  };
+  
   this.stopAll = () => {
     this._render();
-    window.cancelAnimationFrame(this.renderInterval);
+    this.stopped = true;
     
     this._everys.forEach(clearInterval);
     this._afters.forEach(clearInterval);
@@ -206,6 +260,38 @@ Woof.Project = function(canvasId, {debug = []} = {}) {
     func();
     this._everys.push(setInterval(func, Woof.unitsToMiliseconds(time, units)));
   };
+  this.forever = (func) => {
+    this.repeatUntil("false", func);
+  };
+  
+  this.when = (condition, func) => {
+    this.forever(() => {
+      var cond;
+      try {
+        cond = eval(condition);
+      } catch (e) {
+        console.error("Bad condition in Woof.Project#when: " + condition);
+        throw e;
+      }
+      if (cond) {
+        func();
+      };
+    });
+  };
+  
+  this._repeats = [];
+  this.repeat = (times, func, after) => {
+    this._repeats.push(new Woof.Repeat(times, func, after));
+  };
+  this.repeatUntil = (condition, func, after) => {
+    this._repeats.push(new Woof.RepeatUntil(condition, func, after));
+  };
+  this._runRepeats = () => {
+    this._repeats.forEach(repeat => {
+      repeat.next();
+    });
+    this._repeats = this._repeats.filter(repeat => {return !repeat.done});
+  };
   
   this._afters = [];
   this.after = (time, units, func) => {
@@ -222,21 +308,29 @@ Woof.Project = function(canvasId, {debug = []} = {}) {
 
   this.debugText = [];
   for (var i = 0; i < this.debug.length; i++){
-    this.debugText.push(this.addText({x: this.minX, y: this.minY + (12 * (i+1)), textAlign: "left"}));
+    var sprite = new Woof.Text(this, {textAlign: "left"});
+    this.debugText.push(sprite);
   }
   
-  this._updateDebug = () => {
+  this._renderDebug = () => {
     for (var i = 0; i < this.debug.length; i++) {
       var expr = this.debug[i];
       var value;
       try { value = eval(expr); } catch(e) { value = e; }
+      [this.debugText[i].x, this.debugText[i].y] = [this.minX + 5, this.minY + (12 * (i+1))];
       this.debugText[i].text = `${expr}: ${value}`;
+      this.debugText[i]._render(this);
     }
   };
   
-  this._renderBackdrop = function() {
-    if (this.backdrop) {
+  this._renderBackdrop = () => {
+    if (this.backdrop instanceof Image) {
       this._context.drawImage(this.backdrop, 0, 0);
+    } else if (typeof this.backdrop == "string"){
+      this._context.save();
+      this._context.fillStyle=this.backdrop;
+      this._context.fillRect(0, 0, this.width, this.height);
+      this._context.restore();
     }
   };
   
@@ -247,11 +341,13 @@ Woof.Project = function(canvasId, {debug = []} = {}) {
   };
   
   this._render = () => {
+    if (this.stopped) return;
     this.renderInterval = window.requestAnimationFrame(this._render);
-    this._context.clearRect(0, 0, this._canvas.width, this._canvas.height);
+    this._runRepeats();
+    this._context.clearRect(0, 0, this.width, this.height);
     this._renderBackdrop();
     this._renderSprites();
-    this._updateDebug();
+    this._renderDebug();
   };
   this._render();
 };
@@ -269,42 +365,43 @@ Woof.Sprite = function(project, {x = 0, y = 0, angle = 0, rotationStyle = "ROTAT
       this.project._context.save();
       this.project._context.translate(this.canvasX(), this.canvasY());
       if (this.rotationStyle == "ROTATE") {
-        var radians = this.radians();
+        this.project._context.rotate(-this.radians());
       } else if (this.rotationStyle == "NO ROTATE"){
-        var radians = 0;
+          // no rotate
       } else if (this.rotationStyle == "ROTATE LEFT RIGHT"){
-        var radians = this.radians();
-        if (this.angle >= 180 && this.angle < 360){
-					this.project._context.rotate(this.radians());
+        if (this.angle%360 >= 90 && this.angle%360 < 270){
           this.project._context.translate(this.width, 0);
           this.project._context.scale(-1, 1);
+        } else if (this.angle%360 >=0 && this.angle%360 < 90 || this.angle%360 <= 360 && this.angle%360 >=270){
+          // no rotate
         }
       }
-      this.project._context.rotate(radians);
       
       if (this instanceof Woof.Image) {
         this.imageRender();
       } else if (this instanceof Woof.Text) {
         this.textRender();
       } else if (this instanceof Woof.Circle) {
-      	this.circleRender();
-			}
+        this.circleRender();
+      } else if (this instanceof Woof.Rectangle) {
+        this.rectangleRender();
+      }
       this.project._context.restore();
     }
   };
   
-	this.distanceTo = function distanceTo(xGiven, yGiven){
-	  if (arguments.length === 1){
-	    var x = this.x - xGiven.x;
-	    var y = this.y - xGiven.y;
-	    return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
-	  }
-	  if (arguments.length === 2) {
-	    var x = this.x - xGiven;
-	    var y = this.y - yGiven;
-	    return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
-	  }
-};
+  this.distanceTo = function distanceTo(xGiven, yGiven){
+    if (arguments.length === 1){
+      var x = this.x - xGiven.x;
+      var y = this.y - xGiven.y;
+      return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
+    }
+    if (arguments.length === 2) {
+      var x = this.x - xGiven;
+      var y = this.y - yGiven;
+      return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
+    }
+  };
   
   this.move = function(steps){
     this.x += steps * Math.cos(this.radians());
@@ -350,6 +447,7 @@ Woof.Sprite = function(project, {x = 0, y = 0, angle = 0, rotationStyle = "ROTAT
   this.touching = sprite => {
     var r1 = this.bounds();
     var r2 = sprite.bounds();
+    if (!this.showing || !sprite.showing) { return false; }
     return !(r2.left > r1.right || 
              r2.right < r1.left || 
              r2.top < r1.bottom ||
@@ -367,6 +465,18 @@ Woof.Sprite = function(project, {x = 0, y = 0, angle = 0, rotationStyle = "ROTAT
   
   this.mouseOver = function() {
     return this.over(this.project.mouseX, this.project.mouseY);
+  };
+  
+  this.mouseDown = () => {
+    return this.mouseOver() && project.mouseDown;
+  };
+  
+  this.turnLeft = (degrees) => {
+    this.angle += degrees;
+  };
+  
+  this.turnRight = (degrees) => {
+    this.angle -= degrees;
   };
   
   this.sendToBack = () => {
@@ -473,28 +583,43 @@ Woof.Circle = function(project, {radius = 10, color = "black"} = {}) {
   };
 };
 
+Woof.Rectangle = function(project, {rectangleHeight = 10, rectangleWidth = 10, color = "black"} = {}) {
+  Woof.Sprite.call(this, project, arguments[1]);
+  this.rectangleHeight = rectangleHeight;
+  this.rectangleWidth = rectangleWidth;
+  this.color = color;
+  
+  this.width = () => {
+    return this.rectangleWidth;
+  };
+  
+  this.height = () => {
+    return this.rectangleHeight;
+  };
+  
+  this.rectangleRender = () => {
+    this.project._context.fillStyle=this.color;
+    this.project._context.fillRect(-this.width() / 2, -this.height() / 2, this.width(), this.height());
+  };
+};
+
 Woof.Image = function(project, {url = "http://www.loveyourdog.com/image3.gif", imageHeight, imageWidth} = {}) {
   Woof.Sprite.call(this, project, arguments[1]);
-  this.images = [];
-  this.image = 0;
   this.imageHeight = imageHeight;
   this.imageWidth = imageWidth;
   
-  this.addImageURL = function(url){    
-    var image = new Image();
-    image.src = url;
-    this.images.push(image);
-    return this.images.length - 1;
+  this.setImageURL = function(url){    
+    this.image = new Image();
+    this.image.src = url;
   };
-  if (url) {
-    this.addImageURL(url);
-  }
+  this.setImageURL(url);
+
   this.width = () => {
-    return this.imageWidth || this.currentImage().width;
+    return this.imageWidth || this.image.width;
   };
 
   this.height = () => {
-    return this.imageHeight || this.currentImage().height;
+    return this.imageHeight || this.image.height;
   };
   
   this.currentImage = () => {
@@ -502,6 +627,81 @@ Woof.Image = function(project, {url = "http://www.loveyourdog.com/image3.gif", i
   };
 
   this.imageRender = () => {
-    this.project._context.drawImage(this.currentImage(), -this.width() / 2, -this.height() / 2, this.width(), this.height());
+    this.project._context.drawImage(this.image, -this.width() / 2, -this.height() / 2, this.width(), this.height());
+  };
+};
+
+Woof.Repeat = function(times, func, after) {
+  this.func = func;
+  this.times = times;
+  this.done = false;
+  
+  this.next = () => {
+    if (this.done){
+      return;
+    }
+    if (this.times <= 0){
+      this.done = true;
+      if (after) { after(); }
+      return;
+    } else {
+      this.func();
+      this.times--;
+    }
+  };
+};
+
+Woof.RepeatUntil = function(condition, func, after){
+  if (typeof condition !== "string") { throw Error("You must give repeatUntil a string condition in quotes. You gave it: " + condition); }
+  this.func = func;
+  this.condition = condition;
+  this.done = false;
+  
+  this.next = () => {
+    if (this.done){
+      return;
+    }
+    var cond;
+    try {
+      cond = eval(this.condition);
+    } catch (e) {
+      console.error("Error in Repeat Until");
+      throw e;
+    }
+    
+    if (cond){
+      this.done = true;
+      if (after) { after(); }
+      return;
+    } else {
+      this.func();
+    }
+  };
+};
+
+Woof.Firebase = function(config){
+  this.data = {};
+  
+  this.loadFirebaseLibrary = callback => {
+    var lib = document.createElement("script");
+    lib.type = "text/javascript";
+    lib.src = "https://www.gstatic.com/firebasejs/live/3.0/firebase.js";
+    lib.onload = callback;
+    document.body.appendChild(lib);
+  };
+  
+  this.loadFirebaseLibrary(() => {
+    firebase.initializeApp(config);
+    firebase.database().ref().on('value', snapshot => {
+      this.data = snapshot.val() || {};
+    });
+  });
+  
+  this.setCloud = (key, val) => {
+    firebase.database().ref().child("/" + key).set(val);
+  };
+  
+  this.getCloud = (key, defaultVal) => {
+    return this.data[key] || defaultVal;
   };
 };
