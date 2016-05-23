@@ -363,7 +363,8 @@ Woof.Project = function({canvasId = undefined, fullScreen = false, height = 500,
         } else if (current !== false) {
           this._context.lineTo(...this.translateToCanvas(current.x, current.y));
           this._context.lineCap = "round";
-          this._context.strokeStyle = "purple";
+          this._context.strokeStyle = current.color;
+          this._context.lineWidth = current.width;
           this._context.stroke();
         }
       }
@@ -385,27 +386,31 @@ Woof.Project = function({canvasId = undefined, fullScreen = false, height = 500,
   this._render();
 };
 
-Woof.Sprite = function(project, {x = 0, y = 0, angle = 0, rotationStyle = "ROTATE", showing = true} = {}) {
+Woof.Sprite = function(project, {x = 0, y = 0, angle = 0, rotationStyle = "ROTATE", showing = true, penColor = "black", penWidth = 1} = {}) {
   this.project = project;
   this.x = x;
   this.y = y;
   this.angle = angle;
   this.rotationStyle = rotationStyle;
   this.showing = showing;
+  this.penDown = false;
+  this.penColor = penColor;
+  this.penWidth = penWidth;
   
   this.pen = [];
-  this.project.forever(() => {
+  this.trackPen = () => {
     var last = this.pen.length == 0 ? false : this.pen[this.pen.length - 1];
     if (this.penDown) {
       if(last === false || !(last.x == this.x && last.y == this.y)) {
-        this.pen.push({x: this.x, y: this.y});
+        this.pen.push({x: this.x, y: this.y, color: this.penColor, width: this.penWidth});
       } 
     } else if (!this.penDown && last !== false) {
       this.pen.push(false);
     }
-  });
+  };
   
   this._render = function() {
+    this.trackPen();
     if (this.showing) {
       this.project._context.save();
       this.project._context.translate(this.canvasX(), this.canvasY());
