@@ -14,7 +14,7 @@ You can either <a href="https://jsbin.com/lekovu/edit?js,output" target="_blank"
 
 1) Throw the Woof library between the `<head>` tags.
 ```html
-<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/6ebb55005e12a248de96a929cc1abdd94ff250f3/woof.js"></script>
+<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/aa1cfdc721003716db0b6781849dbb40160a434e/woof.js"></script>
 ```
 2) Throw in some JavaScript, and tell Woof to fetch it.
 ```javascript
@@ -302,6 +302,8 @@ Woof.repeat(10, (time) => {
 10) Random color: `Woof.randomColor()`
 
 ## Cloud Data via Firebase
+
+Cloud data can be used to create high scores, logins, and multiplayer games.
 
 1) Login to [Firebase](https://firebase.google.com/) with your Google account.
 
