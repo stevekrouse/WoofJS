@@ -14,7 +14,7 @@ You can either <a href="https://jsbin.com/lekovu/edit?js,output" target="_blank"
 
 1) Throw the Woof library between the `<head>` tags.
 ```html
-<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/aa1cfdc721003716db0b6781849dbb40160a434e/woof.js"></script>
+<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/608440d8e9c984a44dcaef399dbe2008e8eee02d/woof.js"></script>
 ```
 2) Throw in some JavaScript, and tell Woof to fetch it.
 ```javascript
@@ -234,6 +234,8 @@ When creating a new `Woof.Image`, `Woof.Text`, `Woof.Rectangle` or `Woof.Circle`
   - Get the height: `NAME.height()`
   - Draw a line behind a sprite: `NAME.penDown = true;`
   - Stop drawing a line behind a sprite: `NAME.penDown = false;`
+  - - Set pen color: `NAME.penColor = "blue";`
+  - - Set pen width: `NAME.penWidth = 10;`
 
 ### Woof.Image
 In addition to the default parameters (`x`, `y`, `angle`, `rotationStyle`, and `showing`), you may use these parameters to create a new image: 
