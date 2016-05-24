@@ -88,21 +88,25 @@ var project = new Woof.Project({fullScreen: true, debug: ["project.keysDown", "p
 
 There are two types of commands in JavaScript:
 
-1) **Synchronous**: "Do this immediately and then move on when it's done."
+1) **Synchronous**: "Do this immediately and move on when it's done."
 
-2) **Asynchronous**: "Start this immediately, but don't wait till it's done. Just go ahead and move on to the next command immediately after you start this command."
+*Synchronous example in real life*: Open heart surgery. When a doctor begins open heart surery on a patient, she stays in the operating room with the patient until the surgery is done and the patient is stitched back up. She doesn't start open surgery with one patient and then move on to another room where she begins operating on a second patient before the first operation is done. She starts and finishing one operation before starting a second.
 
-Most commands are synchronous. For example, if-statements, setting or changing variables, and calling most Woof methods like rectangle.move(10) are all synchronous commands.
+2) **Asynchronous**: "Start this immediately, but don't wait till it's done. Move on to the next command immediately after you start this command (which might be before this command is done)."
 
-`Woof.forever` is an example of an asynchronous command. Think about it: if Woof.forever told the computer to wait until it was done before moving on, it would never move on to the next line.
+*Asynchronous example in real life*: Ordering food or drinks. First, let's imagine what a synchronous resturant would look like. A waiter would come to your table, take 1 person's order, rush it back to the kitchen, wait for the kitchen to finish with that person's order, and then bring it back to that person. Finally once this first order is taken care of, the waiter would ask the 2nd person at the table for their order. Of course this would be ridiculous. It makes much more sense for a resturant to process its customers' orders asynchronously. That is, after a waiter takes one person's order, he is free to take another person's order before finishing the first order.
 
-`Woof.repeat`, `Woof.repeatUntil`, `Woof.every`, `Woof.after` are also asynchronous. 
+Most commands are synchronous. For example, if-statements, setting or changing variables, and calling most Woof methods like `rectangle.move(10)` are all synchronous commands.
 
-This second type allows us to do useful things - like do this 10 times - but it's also confusing because if you want to have something happen after the 10th time, you can't just put it on the line below the `Woof.repeat`. Why? Because the line below `Woof.repeat` happens immediately after the asynchronously command *starts*, not after it ends. 
+`project.forever` is an example of an asynchronous command. Think about it: if `project.forever` told the computer to wait until it was done, it would never move on to the next line.
 
-So what you have to do give your "after" code to the async function as it's 3rd parameter and it'll make sure to run it after the async function is really finished. This works for `Woof.repeat` and `Woof.repeatUntil`.
+`project.repeat`, `project.repeatUntil`, `project.every`, `project.after` are also asynchronous.
 
-Also, be sure not to nest async commands within each other. For example if you want to make an image move in a square for forever, you can't just put four nested repeats inside a forever. Instead you have to use recursion and tell your repeat code to start over only after the 4th repeat is finished finished. (If you put a repeat in a forever, it'll  keep starting new repeats for forever really quickly.)
+Asynchronous commands become quite confusing when you something happen after an asynchronous command is *finished*. If you want something after the 10th time you `project.repeat` it, you can't just put it on the line below the `project.repeat`. Why? Because the line below `project.repeat` happens immediately after the asynchronously command *starts*, not after it finishes. 
+
+So how do we tell the computer to do something after an asynchronous command is *finished*? This is different for each language, but for Woof's `project.repeat` and `project.repeatUntil`, add a function as an extra parameter to those commands that specifies what should happen after the asynchonous command is *finished*. This is called a "callback" because that function is "called back" and run *after* the main part of the command is done.
+
+Also, be sure not to nest async commands within each other's main body. For example if you want to make an image move in a square for forever, you can't just put four nested repeats inside a forever. Instead you have to use recursion and tell your repeat code to start-over only after the 4th repeat is finished finished. (If you put a repeat in a forever, it'll  keep starting new repeats for forever really quickly. It's like repeatedly asking a waiter for seconds before your first course has arrived.)
 
 
   - Repeat 10 times: 
