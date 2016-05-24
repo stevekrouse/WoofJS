@@ -92,11 +92,11 @@ There are two types of commands in JavaScript:
 
 2) **Asynchronous**: "Start this immediately, but don't wait till it's done. Just go ahead and move on to the next command immediately after you start this command."
 
-Most commands are synchronous. For example, if-statements, setting or changing variables, and calling most Woof methods like rectangle.move(10) are all synchronous commands.
+Most commands are synchronous. For example, if-statements, `project.repeatInstant`, setting or changing variables, and calling most Woof methods like rectangle.move(10) are all synchronous commands.
 
-`Woof.forever` is an example of an asynchronous command. Think about it: if Woof.forever told the computer to wait until it was done before moving on, it would never move on to the next line.
+`project.forever` is an example of an asynchronous command. Think about it: if project.forever told the computer to wait until it was done before moving on, it would never move on to the next line.
 
-`Woof.repeat`, `Woof.repeatUntil`, `Woof.every`, `Woof.after` are also asynchronous. 
+`project.repeat`, `project.repeatUntil`, `project.every`, `project.after` are also asynchronous. 
 
 This second type allows us to do useful things - like do this 10 times - but it's also confusing because if you want to have something happen after the 10th time, you can't just put it on the line below the `Woof.repeat`. Why? Because the line below `Woof.repeat` happens immediately after the asynchronously command *starts*, not after it ends. 
 
@@ -194,6 +194,7 @@ project.when('project.keysDown.includes("LEFT")', () => {
 ```
   
   - Do this after one second: `project.after(1, "second", () => {...});`
+  - Repeat a command instantly without animating it: `project.repeatInstant(10, () => {...});`
 
 
 ## Woof.Image, Woof.Text, Woof.Rectangle and Woof.Circle General Functions
@@ -319,7 +320,7 @@ var number = Woof.randomInt(10, 20);
 ```
 2) Repeat something 10 times
 ```javascript
-Woof.repeat(10, (time) => {
+Woof.repeatInstant(10, (time) => {
   console.log(`I'm going to repeat this ${10-time} more times!`)
 });
 ```
