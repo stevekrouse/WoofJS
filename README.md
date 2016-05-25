@@ -81,7 +81,7 @@ var project = new Woof.Project({fullScreen: true, debug: ["project.keysDown", "p
   - Top edge of the screen: `project.maxY`
   - Bottom edge of the screen: `project.minY`
   - Random X value on the screen: `project.randomX()`
-  - Rnadom Y value on the screen: `project.randomY()`
+  - Random Y value on the screen: `project.randomY()`
   - Width of the screen: `project.width`
   - Height of the screen: `project.height`
   
