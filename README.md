@@ -301,7 +301,7 @@ var TEXT_NAME = project.addText({text: "Text", size: 12, color: "black", fontFam
 1) Create a sprite within a function: 
 ```javascript
 function makeClone() {
-  var CLONE_NAME = project.addCircle ({radius: 10, color: "pink", x: Woof.randomX, y: Woof.randomY()});
+  var CLONE_NAME = project.addCircle ({radius: 10, color: "pink", x: project.randomX(), y: project.randomY()});
   project.forever(() => { 
     CLONE_NAME.x++; 
     if (CLONE_NAME.x > project.maxX) CLONE_NAME.delete();
