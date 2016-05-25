@@ -74,6 +74,8 @@ var project = new Woof.Project({fullScreen: true, debug: ["project.keysDown", "p
   - Do something on click: `project.onClick((mouseX, mouseY) => { ... });`
   - List of keys currently pressed: `project.keysDown`
   - Is 'A' pressed?: `project.keysDown.includes('A')`
+  - Is the space key pressed?: `project.keysDown.includes(' ')`
+  - Is the up key pressed?: `project.keysDown.includes('UP')`
   - Right edge of the screen: `project.maxX`
   - Left edge of the screen: `project.minX`
   - Top edge of the screen: `project.maxY`
