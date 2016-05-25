@@ -12,7 +12,7 @@ WoofJS is developed with :heart: by [The Coding Space](http://thecodingspace.com
 
 You can either <a href="https://jsbin.com/lekovu/edit?js,output" target="_blank">clone this JSBin</a> or follow the steps below to setup your first WoofJS project.
 
-1) Throw the Woof library between the `<head>` tags.
+1) Put the Woof library between the `<head>` tags.
 ```html
 <script src="https://cdn.rawgit.com/stevekrouse/WoofJS/608440d8e9c984a44dcaef399dbe2008e8eee02d/woof.js"></script>
 ```
@@ -25,7 +25,7 @@ project.setBackdropURL("http://efdreams.com/data_images/dreams/sky/sky-05.jpg");
 // Add an image via a url, and optionally setting its x and y
 var rectangle = project.addImage({url: "http://www.urdu-english.com/images/lessons/beginner/shapes/shapes-pics/rectangle.png", x: 0, y: 0});
 
-// Make it move with the arrow keys by checking which keys are down every 40 milliseconds
+// Make it move with the arrow keys by checking which keys are down
 project.forever(() => {
   if (project.keysDown.includes("LEFT")){
     // move left by 5
