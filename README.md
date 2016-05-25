@@ -298,20 +298,17 @@ var TEXT_NAME = project.addText({text: "Text", size: 12, color: "black", fontFam
 
 ### Clones
 
-1) Create a sprite within a function: 
+If you want to make many objects that look and act very similar to each other, it's pretty straight-forward:
+
 ```javascript
-function makeClone() {
+project.every(4, "second", () => {
   var CLONE_NAME = project.addCircle ({radius: 10, color: "pink", x: project.randomX(), y: project.randomY()});
   project.forever(() => { 
     CLONE_NAME.x++; 
-    if (CLONE_NAME.x > project.maxX) CLONE_NAME.delete();
+    if (CLONE_NAME.x > project.maxX) {
+      CLONE_NAME.delete();
+    }
   });
-}
-```
-2)  Call that function however often you want to make a new clone: 
-```javascript
-project.every(4, "second", () => {
-  makeClone();
 });
 ```
 
