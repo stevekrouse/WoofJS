@@ -240,11 +240,9 @@ project.when('project.keysDown.includes("LEFT")', () => {
 project.after(1, "second", () => {...});
 ```
 
-## Woof.Image, Woof.Text, Woof.Rectangle and Woof.Circle General Functions
+## Woof Objects (Images, Text, Rectangles, and Circles)
 
-In Woof you can create `Woof.Image`, `Woof.Text`, `Woof.Rectangle` and `Woof.Circle`.  The General Functions work on all of them. 
-
-When creating a new `Woof.Image`, `Woof.Text`, `Woof.Rectangle` or `Woof.Circle`, you may use the following parameters:
+When creating a new Image, Text, Rectangle or Circle, you may use the following parameters:
 
 ```javascript
   var IMAGE_NAME = project.addImage({x: 0, y: 0, angle: 0, rotationStyle: "ROTATE", showing: true});
@@ -252,6 +250,22 @@ When creating a new `Woof.Image`, `Woof.Text`, `Woof.Rectangle` or `Woof.Circle`
   var CIRCLE_NAME = project.addCircle({x: 0, y: 0, angle: 0, rotationStyle: "ROTATE", showing: true});
   var RECTANGLE_NAME = project.addRectangle({x: 0, y: 0, angle: 0, rotationStyle: "ROTATE", showing: true});
 ```
+
+### Detecting
+
+  - Get the x-position: `NAME.x`
+  - Get the y-position: `NAME.y`
+  - Get the angle: `NAME.angle`
+  - Get the width: `NAME.width()`
+  - Get the height: `NAME.height()`
+  - Touching another thing?: `if (NAME.touching(OTHER_NAME)) { ... }`
+  - Mouse over?: `if (NAME.mouseOver()) { ... }`
+  - Do something on click: `NAME.onClick((mouseX, mouseY) => { ... });`
+  - Clicking and holding?: `if (NAME.mouseDown()) { ... }`
+  - Get the distance between two things: `NAME.distanceTo(OTHER_NAME);`
+  - Get the distance to an X,Y: `NAME.distanceTo(X, Y);`
+
+### Changing
 
   - Set the X position: `NAME.x = 200;`
   - Change the Y position: `NAME.y += 10;`
@@ -263,26 +277,20 @@ When creating a new `Woof.Image`, `Woof.Text`, `Woof.Rectangle` or `Woof.Circle`
   - Rotate left to right when it points in a direction and moves `NAME.setRotationStyle("ROTATE LEFT RIGHT");`
   - Hide: `NAME.showing = false;`
   - Move in the direction of the angle: `NAME.move(10);`
-  - Touching another thing?: `if (NAME.touching(OTHER_NAME)) { ... }`
-  - Mouse over?: `if (NAME.mouseOver()) { ... }`
-  - Do something on click: `NAME.onClick((mouseX, mouseY) => { ... });`
-  - Clicking and holding?: `if (NAME.mouseDown()) { ... }`
   - Send to the back layer: `NAME.sendToBack();`
   - Send to the front layer: `NAME.sendToFront();`
   - Point towards another thing: `NAME.pointTowards(OTHER_NAME)`
   - Point towards an X,Y : `NAME.pointTowards(project.mouseX, project.mouseY)`
   - Delete: `NAME.delete();`
-  - Get the distance between two things: `NAME.distanceTo(OTHER_NAME);`
-  - Get the distance to an X,Y: `NAME.distanceTo(X, Y);`
-  - Get the width: `NAME.width()`
-  - Get the height: `NAME.height()`
   - Draw a line behind a sprite: `NAME.penDown = true;`
   - Stop drawing a line behind a sprite: `NAME.penDown = false;`
-  - - Set pen color: `NAME.penColor = "blue";`
-  - - Set pen width: `NAME.penWidth = 10;`
+  - Set pen color: `NAME.penColor = "blue";`
+  - Set pen width: `NAME.penWidth = 10;`
 
-### Woof.Image
+
+### Image
 In addition to the default parameters (`x`, `y`, `angle`, `rotationStyle`, and `showing`), you may use these parameters to create a new image: 
+
 ```javascript 
 var IMAGE_NAME = project.addImage({url: "http://www.loveyourdog.com/image3.gif", imageWidth: 30, imageHeight: 30});
 ```
@@ -291,17 +299,19 @@ var IMAGE_NAME = project.addImage({url: "http://www.loveyourdog.com/image3.gif",
   - Set the width: `IMAGE_NAME.imageWidth = 10;`
   - Set the height `IMAGE_NAME.imageHeight = 20;`
 
-### Woof.Circle
-In addition to the default parameters (`x`, `y`, `angle`, `rotationStyle`, and `showing`), you may use these parameters to create a new circle: 
+### Circle
+In addition to the default parameters (`x`, `y`, `angle`, `rotationStyle`, and `showing`), you may use these parameters to create a new circle:
+
 ```javascript
 var CIRCLE_NAME = project.addCircle({radius: 10, color: "black"});
 ```
   - Change the radius: `CIRCLE_NAME.radius = 15;`
   - Change the color: `CIRCLE_NAME.color = "blue";`
 
-## Woof.Rectangle
+## Rectangle
 
 In addition to the default parameters (`x`, `y`, `angle`, `rotationStyle`, and `showing`), you may use these parameters to create a new rectangle: 
+
 ```javascript
 var RECTANGLE_NAME = project.addRectangle({rectangleHeight: 10, rectangleWidth: 20, color: "pink"});
 ```
@@ -310,9 +320,10 @@ var RECTANGLE_NAME = project.addRectangle({rectangleHeight: 10, rectangleWidth: 
   - Change the color: `RECTANGLE_NAME.color = "purple";`
   
 
-## Woof.Line
+## Line
 
-In addition to the default parameters (`angle`, `rotationStyle`, and `showing`), you may use these parameters to create a new line between (x,y) and (x1, y1): 
+In addition to the default parameters (`angle`, `rotationStyle`, and `showing`), you may use these parameters to create a new line between (`x`,`y`) and (`x1`, `y1`): 
+
 ```javascript
 var LINE_NAME = project.addLine({x: -100, y: 100, x1: 10, y1: 20, color: "pink", lineWidth: 10});
 ```
@@ -323,9 +334,10 @@ var LINE_NAME = project.addLine({x: -100, y: 100, x1: 10, y1: 20, color: "pink",
   - Change the width: `LINE_NAME.lineWidth = 5;`
   - Change the color: `LINE_NAME.color = "purple";`
 
-### Woof.Text
+### Text
 
-In addition to the default parameters (`x`, `y`, `angle`, `rotationStyle`, and `showing`), you may use these parameters to create a new text: 
+In addition to the default parameters (`x`, `y`, `angle`, `rotationStyle`, and `showing`), you may use these parameters to create new text: 
+
 ```javascript 
 var TEXT_NAME = project.addText({text: "Text", size: 12, color: "black", fontFamily: "arial", textAlign: "center"});
 ```
@@ -355,10 +367,12 @@ project.every(4, "second", () => {
 ## Helper Functions
 
 1) Get a random integer between any two numbers
+
 ```javascript
 var number = Woof.randomInt(10, 20);
 ```
 2) Repeat something 10 times
+
 ```javascript
 Woof.repeat(10, (time) => {
   console.log(`I'm going to repeat this ${10-time} more times!`)
@@ -379,6 +393,7 @@ Woof.repeat(10, (time) => {
 9) Get the current day of the week (Monday-Sunday): `Woof.dayOfWeek();`
 
 10) Random color: `Woof.randomColor()`
+
 
 ## Cloud Data via Firebase
 
@@ -404,12 +419,14 @@ project.firebaseConfig({
 ```
 
 6) Set some data:
+
 ```javascript
 project.setCloud("high_score", 100);
 project.setCloud("player1", {x: project.mouseX, y: project.mouseY});
 ```
 
 7) Get some data:
+
 ```javascript
 project.getCloud("high_score", 0) // returns 100, with a default of 0
 project.setCloud("player1", {x: 0, y: 0}) // returns  {x: 14, y: 104}, with a default of {x: 0, y: 0}
