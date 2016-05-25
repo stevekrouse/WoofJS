@@ -392,4 +392,4 @@ Despite its many [noted](http://worrydream.com/LearnableProgramming/) flaws, Pro
   - Making a bunch of crazy bouncing images takes Pixi.js [254 lines](http://www.goodboydigital.com/pixijs/bunnymark/), but only takes WoofJS [32 lines](http://output.jsbin.com/nuhoben).
   - Making pong using JQuery and Underscore.js takes [146 lines](https://jenniferdewalt.com/pong.html), while it takes WoofJS [under 60 lines](http://output.jsbin.com/keborur) (and our version has more elements PLUS it works on mobile!).
   - Making this analog clock takes [125 lines](https://jenniferdewalt.com/analog_clock.html) of JavaScript, but only [40 lines](http://output.jsbin.com/yaciqe) using WoofJS.
-  - Recreating the insanely viral game [Flappy Birds](http://output.jsbin.com/rarexo) takes only 65 lines using WoofJS.
+  - Recreating the insanely viral game [Flappy Birds](http://output.jsbin.com/rarexo) takes under 70 lines using WoofJS.
