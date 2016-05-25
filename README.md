@@ -14,64 +14,85 @@ You can either <a href="https://jsbin.com/lekovu/edit?js,output" target="_blank"
 
 1) Put the Woof library between the `<head>` tags.
 ```html
-<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/608440d8e9c984a44dcaef399dbe2008e8eee02d/woof.js"></script>
+<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/94f58acbd254a9f867826ef5ed7607e2341b7f59/woof.js"></script>
 ```
 2) Throw in some JavaScript, and tell Woof to fetch it.
 ```javascript
 var project = new Woof.Project({fullScreen: true, debug: ["project.keysDown", "project.mouseX", "project.mouseY", "timer"]}); 
-// Set the backdrop URL (preferably of similar dimensions to your canvas)
-project.setBackdropURL("http://efdreams.com/data_images/dreams/sky/sky-05.jpg");
 
-// Add an image via a url, and optionally setting its x and y
-var rectangle = project.addImage({url: "http://www.urdu-english.com/images/lessons/beginner/shapes/shapes-pics/rectangle.png", x: 0, y: 0});
+// Set the backdrop URL (preferably of similar dimensions to your canvas)
+project.setBackdropURL("http://pic.1fotonin.com//data/wallpapers/24/WDF_715771.jpg");
+
+// Add an image via a url
+var dawg = project.addImage({url: "http://t11.deviantart.net/e9EiWxrehU301T_fNZMt01PyBSA=/300x200/filters:fixed_height(100,100):origin()/pre11/c3dc/th/pre/f/2008/295/c/3/c3f0e39599272ba0b3bcdbcdda81ace2.png", x: 0, y: 0, imageHeight: 100, imageWidth: 135});
 
 // Make it move with the arrow keys by checking which keys are down
 project.forever(() => {
   if (project.keysDown.includes("LEFT")){
-    // move left by 5
-    rectangle.x -= 5; 
+    dawg.x -= 5;  // move left by 5
   }
   if (project.keysDown.includes("RIGHT")){
-    rectangle.x +=5; 
+    dawg.x +=5; 
   }
   if (project.keysDown.includes("UP")){
-    rectangle.y += 5; 
+    dawg.y += 5; 
   }
   if (project.keysDown.includes("DOWN")){
-    rectangle.y -= 5; 
+    dawg.y -= 5; 
   }
 });
 
-// make the timer start at 20
-var timer = 20;
-// add text that diplays the timer
-var timerText = project.addText({x: 0, y: project.maxY - 20, size: 20, color: "white"});
+var timer = 20;  // make the timer start at 20
+var timerText = project.addText({x: 0, y: project.maxY - 20, size: 20, color: "white"}); // add text that diplays the timer
 project.every("1", "second", () => {
-  // stop everything when the timer reaches 0
-  if (timer === 0){ project.stopAll(); }
-  // make the timer go down every second
-  timer--;
-  // change the text to refer to the timer's new value every second
-  timerText.text = "Timer: " + timer;
+  if (timer === 0){ project.stopAll(); } // stop everything when the timer reaches 0
+  timer--;   // make the timer go down every second
+  timerText.text = "Timer: " + timer;   // change the text to refer to the timer's new value every second
 });
 ```
 
 ## Woof.Project
 
-Create a project: 
+### Creating a Project
+
+  - **Reccomended**: Create a full-screen project: 
 
 ```javascript
 var project = new Woof.Project({fullScreen: true, debug: ["project.keysDown", "project.mouseX", "project.mouseY"]});
 ```
-  - Create a project with a height and width: ``var project = new Woof.Project({height: 500, width: 350});`
-  - Create a project with a pre-existing `<canvas id="project">` element by id: ``var project = new Woof.Project({id: "project"});`
-  - Set/change the backdrop to an image URL: `project.setBackdropURL("http://example.com/img.jpg");`
-  - Set/change the backdrop to an color: `project.setBackdropColor("blue");`
-  - Stop all: `project.stopAll();`
+
+  - Create a project with a fixed height and width:
+
+```javascript
+var project = new Woof.Project({height: 500, width: 350});
+```
+
+  - Create a project with a pre-existing `<canvas id="project">` element by id:
+
+```javascript 
+var project = new Woof.Project({id: "project"});
+```
+
+### Setting the Backdrop
+
+  - Set/change the backdrop to an image URL: 
+  
+
+```javascript
+project.setBackdropURL("http://example.com/img.jpg");
+```
+
+  - Set/change the backdrop to an color: 
+
+```javascript
+project.setBackdropColor("blue");
+```
+  
+### Detecting
+  
   - Mouse X: `project.mouseX`
   - Mouse Y: `project.mouseY`
   - Mouse down?: `project.mouseDown`
-  - Do something on click: `project.onClick((mouseX, mouseY) => { ... });`
   - List of keys currently pressed: `project.keysDown`
   - Is 'A' pressed?: `project.keysDown.includes('A')`
   - Is the space key pressed?: `project.keysDown.includes(' ')`
@@ -84,7 +105,21 @@ var project = new Woof.Project({fullScreen: true, debug: ["project.keysDown", "p
   - Random Y value on the screen: `project.randomY()`
   - Width of the screen: `project.width`
   - Height of the screen: `project.height`
+
   
+### Responding to Events
+
+- Do something on-click once: `project.onClick((mouseX, mouseY) => { ... });`
+
+  
+### Stopping Everything
+
+To stop your whole project and freeze everything on the screen:
+
+
+```javascript
+project.stopAll();
+```
 
 ### Project Control Flow
 
@@ -96,7 +131,7 @@ There are two types of commands in JavaScript:
 
 2) **Asynchronous**: "Start this immediately, but don't wait till it's done. Move on to the next command immediately after you start this command (which might be before this command is done)."
 
-*Asynchronous example in real life*: Ordering food or drinks. First, let's imagine what a synchronous resturant would look like. A waiter would come to your table, take 1 person's order, rush it back to the kitchen, wait for the kitchen to finish with that person's order, and then bring it back to that person. Finally once this first order is taken care of, the waiter would ask the 2nd person at the table for their order. Of course this would be ridiculous. It makes much more sense for a resturant to process its customers' orders asynchronously. That is, after a waiter takes one person's order, he is free to take another person's order before finishing the first order.
+*Asynchronous example in real life*: Ordering food or drinks. First, let's imagine what a synchronous resturant would look like. A waiter would come to your table, take 1 person's order, rush it back to the kitchen, wait for the kitchen to finish with that person's order, and then bring it back to that person. Finally once this first order is taken care of, the waiter would ask the 2nd person at the table for their order. Of course this would be ridiculous. It makes much more sense for a resturant to process its customers' orders asynchronously. That is, after a waiter takes one person's order, he is free to take another person's order before finishing the first order. This allows the resturant to do multiple things at once, which is ultimately faster for some types of tasks.
 
 Most commands are synchronous. For example, if-statements, setting or changing variables, and calling most Woof methods like `rectangle.move(10)` are all synchronous commands.
 
@@ -199,8 +234,11 @@ project.when('project.keysDown.includes("LEFT")', () => {
 });
 ```
   
-  - Do this after one second: `project.after(1, "second", () => {...});`
+  - Do this after one second: 
 
+```javascript
+project.after(1, "second", () => {...});
+```
 
 ## Woof.Image, Woof.Text, Woof.Rectangle and Woof.Circle General Functions
 
