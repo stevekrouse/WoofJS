@@ -88,7 +88,7 @@ project.setBackdropURL("http://example.com/img.jpg");
 project.setBackdropColor("blue");
 ```
   
-### Detecting
+### Sensing
   
   - Mouse X: `project.mouseX`
   - Mouse Y: `project.mouseY`
