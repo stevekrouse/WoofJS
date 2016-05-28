@@ -793,3 +793,20 @@ Woof.Firebase = function (config) {
     return this.data[key] || defaultVal;
   };
 };
+
+Woof.extend = function (a, b) {
+  console.log(b);
+  for (var key in b) {
+    console.log(key);
+    a[key] = b[key];
+  }
+};
+
+var global = true;
+if (global) {
+  window.addEventListener("load", function () {
+    Woof.proj = new Woof.Project({ fullScreen: true, debug: ["proj.mouseX", "proj.mouseY"] });
+    Woof.extend(window, Woof);
+    Woof.extend(window, proj);
+  });
+}

@@ -10,67 +10,65 @@ WoofJS is developed with :heart: by [The Coding Space](http://thecodingspace.com
 
 ## Getting Started
 
-You can either <a href="https://jsbin.com/lekovu/edit?js,output" target="_blank">clone this JSBin</a> or follow the steps below to setup your first WoofJS project.
+You can either <a href="https://jsbin.com/lekovu/edit?js,output" target="_blank">clone this JSBin</a> or follow the steps below to setup your first WoofJS 
 
 1) Put the Woof library between the `<head>` tags.
 ```html
-<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/94f58acbd254a9f867826ef5ed7607e2341b7f59/woof.js"></script>
+<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/94f58acbd254a9f867826ef5ed7607e2341b7f59/js"></script>
 ```
 2) Throw in some JavaScript, and tell Woof to fetch it.
 ```javascript
-var project = new Woof.Project({fullScreen: true, debug: ["project.keysDown", "project.mouseX", "project.mouseY", "timer"]}); 
-
 // Set the backdrop URL (preferably of similar dimensions to your canvas)
-project.setBackdropURL("http://pic.1fotonin.com//data/wallpapers/24/WDF_715771.jpg");
+setBackdropURL("http://pic.1fotonin.com//data/wallpapers/24/WDF_715771.jpg");
 
 // Add an image via a url
-var dawg = project.addImage({url: "http://t11.deviantart.net/e9EiWxrehU301T_fNZMt01PyBSA=/300x200/filters:fixed_height(100,100):origin()/pre11/c3dc/th/pre/f/2008/295/c/3/c3f0e39599272ba0b3bcdbcdda81ace2.png", x: 0, y: 0, imageHeight: 100, imageWidth: 135});
+var dawg = addImage({url: "http://t11.deviantart.net/e9EiWxrehU301T_fNZMt01PyBSA=/300x200/filters:fixed_height(100,100):origin()/pre11/c3dc/th/pre/f/2008/295/c/3/c3f0e39599272ba0b3bcdbcdda81ace2.png", x: 0, y: 0, imageHeight: 100, imageWidth: 135});
 
 // Make it move with the arrow keys by checking which keys are down
-project.forever(() => {
-  if (project.keysDown.includes("LEFT")){
+forever(() => {
+  if (keysDown.includes("LEFT")){
     dawg.x -= 5;  // move left by 5
   }
-  if (project.keysDown.includes("RIGHT")){
+  if (keysDown.includes("RIGHT")){
     dawg.x +=5; 
   }
-  if (project.keysDown.includes("UP")){
+  if (keysDown.includes("UP")){
     dawg.y += 5; 
   }
-  if (project.keysDown.includes("DOWN")){
+  if (keysDown.includes("DOWN")){
     dawg.y -= 5; 
   }
 });
 
 var timer = 20;  // make the timer start at 20
-var timerText = project.addText({x: 0, y: project.maxY - 20, size: 20, color: "white"}); // add text that diplays the timer
-project.every("1", "second", () => {
-  if (timer === 0){ project.stopAll(); } // stop everything when the timer reaches 0
+var timerText = addText({x: 0, y: maxY - 20, size: 20, color: "white"}); // add text that diplays the timer
+every("1", "second", () => {
+  if (timer === 0){ stopAll(); } // stop everything when the timer reaches 0
   timer--;   // make the timer go down every second
   timerText.text = "Timer: " + timer;   // change the text to refer to the timer's new value every second
 });
 ```
 
-## Woof.Project
+## Project
 
 ### Creating a Project
 
   - **Reccomended**: Create a full-screen project: 
 
 ```javascript
-var project = new Woof.Project({fullScreen: true, debug: ["project.keysDown", "project.mouseX", "project.mouseY"]});
+var project = new Project({fullScreen: true, debug: ["keysDown", "mouseX", "mouseY"]});
 ```
 
   - Create a project with a fixed height and width:
 
 ```javascript
-var project = new Woof.Project({height: 500, width: 350});
+var project = new Project({height: 500, width: 350});
 ```
 
   - Create a project with a pre-existing `<canvas id="project">` element by id:
 
 ```javascript 
-var project = new Woof.Project({id: "project"});
+var project = new Project({id: "project"});
 ```
 
 ### Setting the Backdrop
@@ -79,37 +77,37 @@ var project = new Woof.Project({id: "project"});
   
 
 ```javascript
-project.setBackdropURL("http://example.com/img.jpg");
+setBackdropURL("http://example.com/img.jpg");
 ```
 
   - Set/change the backdrop to an color: 
 
 ```javascript
-project.setBackdropColor("blue");
+setBackdropColor("blue");
 ```
   
 ### Sensing
   
-  - Mouse X: `project.mouseX`
-  - Mouse Y: `project.mouseY`
-  - Mouse down?: `project.mouseDown`
-  - List of keys currently pressed: `project.keysDown`
-  - Is 'A' pressed?: `project.keysDown.includes('A')`
-  - Is the space key pressed?: `project.keysDown.includes(' ')`
-  - Is the up key pressed?: `project.keysDown.includes('UP')`
-  - Right edge of the screen: `project.maxX`
-  - Left edge of the screen: `project.minX`
-  - Top edge of the screen: `project.maxY`
-  - Bottom edge of the screen: `project.minY`
-  - Random X value on the screen: `project.randomX()`
-  - Random Y value on the screen: `project.randomY()`
-  - Width of the screen: `project.width`
-  - Height of the screen: `project.height`
+  - Mouse X: `mouseX`
+  - Mouse Y: `mouseY`
+  - Mouse down?: `mouseDown`
+  - List of keys currently pressed: `keysDown`
+  - Is 'A' pressed?: `keysDown.includes('A')`
+  - Is the space key pressed?: `keysDown.includes(' ')`
+  - Is the up key pressed?: `keysDown.includes('UP')`
+  - Right edge of the screen: `maxX`
+  - Left edge of the screen: `minX`
+  - Top edge of the screen: `maxY`
+  - Bottom edge of the screen: `minY`
+  - Random X value on the screen: `randomX()`
+  - Random Y value on the screen: `randomY()`
+  - Width of the screen: `width`
+  - Height of the screen: `height`
 
   
 ### Responding to Events
 
-- Do something on-click once: `project.onClick((mouseX, mouseY) => { ... });`
+- Do something on-click once: `onClick((mouseX, mouseY) => { ... });`
 
   
 ### Stopping Everything
@@ -118,7 +116,7 @@ To stop your whole project and freeze everything on the screen:
 
 
 ```javascript
-project.stopAll();
+stopAll();
 ```
 
 ### Project Control Flow
@@ -135,13 +133,13 @@ There are two types of commands in JavaScript:
 
 Most commands are synchronous. For example, if-statements, setting or changing variables, and calling most Woof methods like `rectangle.move(10)` are all synchronous commands.
 
-`project.forever` is an example of an asynchronous command. Think about it: if `project.forever` told the computer to wait until it was done, it would never move on to the next line.
+`forever` is an example of an asynchronous command. Think about it: if `forever` told the computer to wait until it was done, it would never move on to the next line.
 
-`project.repeat`, `project.repeatUntil`, `project.every`, `project.after` are also asynchronous.
+`repeat`, `repeatUntil`, `every`, `after` are also asynchronous.
 
-Asynchronous commands become quite confusing when you something happen after an asynchronous command is *finished*. If you want something after the 10th time you `project.repeat` it, you can't just put it on the line below the `project.repeat`. Why? Because the line below `project.repeat` happens immediately after the asynchronously command *starts*, not after it finishes. 
+Asynchronous commands become quite confusing when you something happen after an asynchronous command is *finished*. If you want something after the 10th time you `repeat` it, you can't just put it on the line below the `repeat`. Why? Because the line below `repeat` happens immediately after the asynchronously command *starts*, not after it finishes. 
 
-So how do we tell the computer to do something after an asynchronous command is *finished*? This is different for each language, but for Woof's `project.repeat` and `project.repeatUntil`, add a function as an extra parameter to those commands that specifies what should happen after the asynchonous command is *finished*. This is called a "callback" because that function is "called back" and run *after* the main part of the command is done.
+So how do we tell the computer to do something after an asynchronous command is *finished*? This is different for each language, but for Woof's `repeat` and `repeatUntil`, add a function as an extra parameter to those commands that specifies what should happen after the asynchonous command is *finished*. This is called a "callback" because that function is "called back" and run *after* the main part of the command is done.
 
 Also, be sure not to nest async commands within each other's main body. For example if you want to make an image move in a square for forever, you can't just put four nested repeats inside a forever. Instead you have to use recursion and tell your repeat code to start-over only after the 4th repeat is finished finished. (If you put a repeat in a forever, it'll  keep starting new repeats for forever really quickly. It's like repeatedly asking a waiter for seconds before your first course has arrived.)
 
@@ -149,7 +147,7 @@ Also, be sure not to nest async commands within each other's main body. For exam
   - Repeat 10 times: 
 
 ```javascript
-project.repeat(10, () => { 
+repeat(10, () => { 
   NAME.x++;
 });
 ```
@@ -157,7 +155,7 @@ project.repeat(10, () => {
   - Do something after done repeating:
 
 ```javascript
-project.repeat(10, () => { 
+repeat(10, () => { 
   NAME.x++;
 }, () => {
   NAME.color = "blue";
@@ -167,20 +165,20 @@ project.repeat(10, () => {
   - Chaining repeats:
 
 ```javascript
-project.repeat(100, () => {
-  NAME.angle = Woof.RIGHT;
+repeat(100, () => {
+  NAME.angle = RIGHT;
   NAME.move(1);
 }, () => { 
-  project.repeat(100, () => {
-    NAME.angle = Woof.UP;
+  repeat(100, () => {
+    NAME.angle = UP;
     NAME.move(1);
   }, () => { 
-    project.repeat(100, () => {
-      NAME.angle = Woof.LEFT;
+    repeat(100, () => {
+      NAME.angle = LEFT;
       NAME.move(1);
     }, () => { 
-      project.repeat(100, () => {
-        NAME.angle = Woof.DOWN;
+      repeat(100, () => {
+        NAME.angle = DOWN;
         NAME.move(1);
       });
     });
@@ -191,7 +189,7 @@ project.repeat(100, () => {
   - Repeat constantly until (you have to put the condition in "quotes"): 
 
 ```javascript
-project.repeatUntil("IMAGE_NAME.y < project.minY", () => {
+repeatUntil("IMAGE_NAME.y < minY", () => {
   IMAGE_NAME.y -= SPEED;
 });
 ```
@@ -199,18 +197,18 @@ project.repeatUntil("IMAGE_NAME.y < project.minY", () => {
   - Do seomthing after a `repeatUntil`:
 
 ```javascript
-project.repeatUntil("IMAGE_NAME.y < project.minY", () => {
+repeatUntil("IMAGE_NAME.y < minY", () => {
   IMAGE_NAME.y -= SPEED;
 }, () => {
-  project.stopAll();  
+  stopAll();  
 });
 ```  
 
   - Do this constantly forever: 
 
 ```javascript
-project.forever(() => { 
-  CIRCLE_NAME.radius = CIRCLE_NAME.distanceTo(project.mouseX, project.mouseY);
+forever(() => { 
+  CIRCLE_NAME.radius = CIRCLE_NAME.distanceTo(mouseX, mouseY);
 });
 ```
   
@@ -218,9 +216,9 @@ project.forever(() => {
 
 ```javascript
 var timer = 20;
-var timerText = project.addText({x: 0, y: project.maxY - 20, size: 20, color: "white"});
-project.every("1", "second", () => {
-  if (timer === 0){ project.stopAll(); }
+var timerText = addText({x: 0, y: maxY - 20, size: 20, color: "white"});
+every("1", "second", () => {
+  if (timer === 0){ stopAll(); }
   timer--;
   timerText.text = "Timer: " + timer;
 });
@@ -229,7 +227,7 @@ project.every("1", "second", () => {
   - Do this when a condition (in "quotes") is true. This is a short-hand for a forever-if statement.
 
 ```javascript
-project.when('project.keysDown.includes("LEFT")', () => {
+when('keysDown.includes("LEFT")', () => {
     rectangle.x -= 5; 
 });
 ```
@@ -237,7 +235,7 @@ project.when('project.keysDown.includes("LEFT")', () => {
   - Do this after one second: 
 
 ```javascript
-project.after(1, "second", () => {...});
+after(1, "second", () => {...});
 ```
 
 ## Woof Objects (Images, Text, Rectangles, and Circles)
@@ -245,10 +243,10 @@ project.after(1, "second", () => {...});
 When creating a new Image, Text, Rectangle or Circle, you may use the following parameters:
 
 ```javascript
-  var IMAGE_NAME = project.addImage({x: 0, y: 0, angle: 0, rotationStyle: "ROTATE", showing: true});
-  var TEXT_NAME = project.addText({x: 0, y: 0, angle: 0, rotationStyle: "ROTATE", showing: true});
-  var CIRCLE_NAME = project.addCircle({x: 0, y: 0, angle: 0, rotationStyle: "ROTATE", showing: true});
-  var RECTANGLE_NAME = project.addRectangle({x: 0, y: 0, angle: 0, rotationStyle: "ROTATE", showing: true});
+  var IMAGE_NAME = addImage({x: 0, y: 0, angle: 0, rotationStyle: "ROTATE", showing: true});
+  var TEXT_NAME = addText({x: 0, y: 0, angle: 0, rotationStyle: "ROTATE", showing: true});
+  var CIRCLE_NAME = addCircle({x: 0, y: 0, angle: 0, rotationStyle: "ROTATE", showing: true});
+  var RECTANGLE_NAME = addRectangle({x: 0, y: 0, angle: 0, rotationStyle: "ROTATE", showing: true});
 ```
 
 ### Detecting
@@ -270,7 +268,7 @@ When creating a new Image, Text, Rectangle or Circle, you may use the following 
   - Set the X position: `NAME.x = 200;`
   - Change the Y position: `NAME.y += 10;`
   - Set the angle: `NAME.angle = 30;`
-  - Set the angle using direction: `NAME.angle = Woof.LEFT;` 
+  - Set the angle using direction: `NAME.angle = LEFT;` 
   - Turn left: `NAME.turnLeft(10);`
   - Turn right: `NAME.turnRight(10);`
   - Don't rotate the sprites costume when the angle changes: `NAME.setRotationStyle("NO ROTATE");`
@@ -280,7 +278,7 @@ When creating a new Image, Text, Rectangle or Circle, you may use the following 
   - Send to the back layer: `NAME.sendToBack();`
   - Send to the front layer: `NAME.sendToFront();`
   - Point towards another thing: `NAME.pointTowards(OTHER_NAME)`
-  - Point towards an X,Y : `NAME.pointTowards(project.mouseX, project.mouseY)`
+  - Point towards an X,Y : `NAME.pointTowards(mouseX, mouseY)`
   - Delete: `NAME.delete();`
   - Draw a line behind a sprite: `NAME.penDown = true;`
   - Stop drawing a line behind a sprite: `NAME.penDown = false;`
@@ -292,7 +290,7 @@ When creating a new Image, Text, Rectangle or Circle, you may use the following 
 In addition to the default parameters (`x`, `y`, `angle`, `rotationStyle`, and `showing`), you may use these parameters to create a new image: 
 
 ```javascript 
-var IMAGE_NAME = project.addImage({url: "http://www.loveyourdog.com/image3.gif", imageWidth: 30, imageHeight: 30});
+var IMAGE_NAME = addImage({url: "http://www.loveyourdog.com/image3.gif", imageWidth: 30, imageHeight: 30});
 ```
   - Add another image: `IMAGE_NAME.addImageURL("http://www.urdu-english.com/images/lessons/beginner/shapes/shapes-pics/rectangle.png");`
   - Change the image: `IMAGE_NAME.image = 0;`
@@ -303,7 +301,7 @@ var IMAGE_NAME = project.addImage({url: "http://www.loveyourdog.com/image3.gif",
 In addition to the default parameters (`x`, `y`, `angle`, `rotationStyle`, and `showing`), you may use these parameters to create a new circle:
 
 ```javascript
-var CIRCLE_NAME = project.addCircle({radius: 10, color: "black"});
+var CIRCLE_NAME = addCircle({radius: 10, color: "black"});
 ```
   - Change the radius: `CIRCLE_NAME.radius = 15;`
   - Change the color: `CIRCLE_NAME.color = "blue";`
@@ -313,7 +311,7 @@ var CIRCLE_NAME = project.addCircle({radius: 10, color: "black"});
 In addition to the default parameters (`x`, `y`, `angle`, `rotationStyle`, and `showing`), you may use these parameters to create a new rectangle: 
 
 ```javascript
-var RECTANGLE_NAME = project.addRectangle({rectangleHeight: 10, rectangleWidth: 20, color: "pink"});
+var RECTANGLE_NAME = addRectangle({rectangleHeight: 10, rectangleWidth: 20, color: "pink"});
 ```
   - Change the width: `RECTANGLE_NAME.rectangleWidth = 20;`
   - Change the height: `RECTANGLE_NAME.rectangleHeight = 45;`
@@ -325,7 +323,7 @@ var RECTANGLE_NAME = project.addRectangle({rectangleHeight: 10, rectangleWidth: 
 In addition to the default parameters (`angle`, `rotationStyle`, and `showing`), you may use these parameters to create a new line between (`x`,`y`) and (`x1`, `y1`): 
 
 ```javascript
-var LINE_NAME = project.addLine({x: -100, y: 100, x1: 10, y1: 20, color: "pink", lineWidth: 10});
+var LINE_NAME = addLine({x: -100, y: 100, x1: 10, y1: 20, color: "pink", lineWidth: 10});
 ```
   - Change the x startpoint: `LINE_NAME.x = -100;`
   - Change the y startpoint: `LINE_NAME.y = 100;`
@@ -339,7 +337,7 @@ var LINE_NAME = project.addLine({x: -100, y: 100, x1: 10, y1: 20, color: "pink",
 In addition to the default parameters (`x`, `y`, `angle`, `rotationStyle`, and `showing`), you may use these parameters to create new text: 
 
 ```javascript 
-var TEXT_NAME = project.addText({text: "Text", size: 12, color: "black", fontFamily: "arial", textAlign: "center"});
+var TEXT_NAME = addText({text: "Text", size: 12, color: "black", fontFamily: "arial", textAlign: "center"});
 ```
   - Set the text value: `TEXT_NAME.text = "Sample Text";`
   - Set the font size: `TEXT_NAME.size = 20;`
@@ -353,11 +351,11 @@ var TEXT_NAME = project.addText({text: "Text", size: 12, color: "black", fontFam
 If you want to make many objects that look and act very similar to each other, it's pretty straight-forward:
 
 ```javascript
-project.every(4, "second", () => {
-  var CLONE_NAME = project.addCircle ({radius: 10, color: "pink", x: project.randomX(), y: project.randomY()});
-  project.forever(() => { 
+every(4, "second", () => {
+  var CLONE_NAME = addCircle ({radius: 10, color: "pink", x: randomX(), y: randomY()});
+  forever(() => { 
     CLONE_NAME.x++; 
-    if (CLONE_NAME.x > project.maxX) {
+    if (CLONE_NAME.x > maxX) {
       CLONE_NAME.delete();
     }
   });
@@ -369,30 +367,30 @@ project.every(4, "second", () => {
 1) Get a random integer between any two numbers
 
 ```javascript
-var number = Woof.randomInt(10, 20);
+var number = randomInt(10, 20);
 ```
 2) Repeat something 10 times
 
 ```javascript
-Woof.repeat(10, (time) => {
+repeat(10, (time) => {
   console.log(`I'm going to repeat this ${10-time} more times!`)
 });
 ```
-3) Get a random integer between any two numbers: `Woof.randomInt(10, 20);`
+3) Get a random integer between any two numbers: `randomInt(10, 20);`
 
-4) Get the current hour: `Woof.hour();`
+4) Get the current hour: `hour();`
 
-5) Get the current hour in military time: `Woof.hourMilitary();`
+5) Get the current hour in military time: `hourMilitary();`
 
-6) Get the current minute: `Woof.minute();`
+6) Get the current minute: `minute();`
 
-7) Get the current second: `Woof.second();`
+7) Get the current second: `second();`
 
-8) Get the current day of the month (1-31): `Woof.dayOfMonth();`
+8) Get the current day of the month (1-31): `dayOfMonth();`
 
-9) Get the current day of the week (Monday-Sunday): `Woof.dayOfWeek();`
+9) Get the current day of the week (Monday-Sunday): `dayOfWeek();`
 
-10) Random color: `Woof.randomColor()`
+10) Random color: `randomColor()`
 
 
 ## Cloud Data via Firebase
@@ -401,16 +399,16 @@ Cloud data can be used to create high scores, logins, and multiplayer games.
 
 1) Login to [Firebase](https://firebase.google.com/) with your Google account.
 
-2) Create a new project.
+2) Create a new 
 
 3) Make reading and writing to your database possible via the Database rules tab.
 
 4) Whitelist your project's domain via the Auth sign-in tab.
 
-5) Copy the Firebase config into your `Woof.Project`:
+5) Copy the Firebase config into your `Project`:
 
 ```javascript
-project.firebaseConfig({
+firebaseConfig({
     apiKey: "AIzaSyAWa4XzsdE5haWBWq4fTef2Ko1dpbsE4qM",
     authDomain: "sample-a81f9.firebaseapp.com",
     databaseURL: "https://sample-a81f9.firebaseio.com",
@@ -421,15 +419,15 @@ project.firebaseConfig({
 6) Set some data:
 
 ```javascript
-project.setCloud("high_score", 100);
-project.setCloud("player1", {x: project.mouseX, y: project.mouseY});
+setCloud("high_score", 100);
+setCloud("player1", {x: mouseX, y: mouseY});
 ```
 
 7) Get some data:
 
 ```javascript
-project.getCloud("high_score", 0) // returns 100, with a default of 0
-project.setCloud("player1", {x: 0, y: 0}) // returns  {x: 14, y: 104}, with a default of {x: 0, y: 0}
+getCloud("high_score", 0) // returns 100, with a default of 0
+setCloud("player1", {x: 0, y: 0}) // returns  {x: 14, y: 104}, with a default of {x: 0, y: 0}
 ```
 
 ## [Learnable Programming](http://worrydream.com/LearnableProgramming/)
