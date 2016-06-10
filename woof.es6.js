@@ -673,7 +673,7 @@ Woof.Line = function(project, {lineWidth = 1, x1 = 10, y1 = 10, color = "black"}
   this.lineRender = () => {
     this.project._context.beginPath();
     this.project._context.moveTo(0, 0);
-    this.project._context.lineTo(this.x1 + this.x, this.y1 + this.y);
+    this.project._context.lineTo(this.x1 - this.x, -this.y1 + this.y);
     this.project._context.strokeStyle = color;
     this.project._context.lineWidth = lineWidth;
     this.project._context.stroke();
