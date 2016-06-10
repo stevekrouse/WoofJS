@@ -14,17 +14,17 @@ You can either <a href="https://jsbin.com/lekovu/edit?js,output" target="_blank"
 
 1) Put the Woof library between the `<head>` tags.
 ```html
-<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/6b1615bad6b59a23313ad7a72e9c8bd3659b3fa4/woof.js"></script>
+<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/51fae9a1f0d96c09afda7dfc83245bd23e8f4b0c/woof.js"></script>
 ```
 2) Throw in some JavaScript, and tell Woof to fetch it.
 ```javascript
 var project = new Woof.Project({fullScreen: true, debug: ["project.keysDown", "project.mouseX", "project.mouseY", "timer"]}); 
 
 // Set the backdrop URL (preferably of similar dimensions to your canvas)
-project.setBackdropURL("http://pic.1fotonin.com//data/wallpapers/24/WDF_715771.jpg");
+project.setBackdropURL("http://i.imgur.com/lyyFGm4.jpg");
 
 // Add an image via a url
-var dawg = project.addImage({url: "http://t11.deviantart.net/e9EiWxrehU301T_fNZMt01PyBSA=/300x200/filters:fixed_height(100,100):origin()/pre11/c3dc/th/pre/f/2008/295/c/3/c3f0e39599272ba0b3bcdbcdda81ace2.png", x: 0, y: 0, imageHeight: 100, imageWidth: 135});
+var dawg = project.addImage({url: "http://i.imgur.com/SMJjVCL.png", x: 0, y: 0, imageHeight: 100, imageWidth: 135});
 
 // Make it move with the arrow keys by checking which keys are down
 project.forever(() => {
@@ -43,11 +43,10 @@ project.forever(() => {
 });
 
 var timer = 20;  // make the timer start at 20
-var timerText = project.addText({x: 0, y: project.maxY - 20, size: 20, color: "white"}); // add text that diplays the timer
+var timerText = project.addText({x: 0, y: project.maxY - 20, size: 20, color: "white", dynamicText: "'Time Left: ' + timer"}); // add text that diplays the timer (dynamicText updates automatically)
 project.every("1", "second", () => {
   if (timer === 0){ project.stopAll(); } // stop everything when the timer reaches 0
   timer--;   // make the timer go down every second
-  timerText.text = "Timer: " + timer;   // change the text to refer to the timer's new value every second
 });
 ```
 
@@ -339,9 +338,10 @@ var LINE_NAME = project.addLine({x: -100, y: 100, x1: 10, y1: 20, color: "pink",
 In addition to the default parameters (`x`, `y`, `angle`, `rotationStyle`, and `showing`), you may use these parameters to create new text: 
 
 ```javascript 
-var TEXT_NAME = project.addText({text: "Text", size: 12, color: "black", fontFamily: "arial", textAlign: "center"});
+var TEXT_NAME = project.addText({text: "Text", dynamicText: "'Score: ' + score", size: 12, color: "black", fontFamily: "arial", textAlign: "center"});
 ```
-  - Set the text value: `TEXT_NAME.text = "Sample Text";`
+  - Set the text value to an unchanging value: `TEXT_NAME.text = "Sample Text";`
+  - Set the text value to an changing string expression: `TEXT_NAME.dynamicText = "'Variable Name: ' + variableName";`
   - Set the font size: `TEXT_NAME.size = 20;`
   - Set the font color: `TEXT_NAME.color = "white";`
   - Set the font color to a hex value: `TEXT_NAME.color = "#32CD32";`
