@@ -278,7 +278,6 @@ When creating a new Image, Text, Rectangle or Circle, you may use the following 
   - Move in the direction of the angle: `NAME.move(10);`
   - Send to the back layer: `NAME.sendToBack();`
   - Send to the front layer: `NAME.sendToFront();`
-  - Point towards another thing: `NAME.pointTowards(OTHER_NAME)`
   - Point towards an X,Y : `NAME.pointTowards(project.mouseX, project.mouseY)`
   - Delete: `NAME.delete();`
   - Draw a line behind a sprite: `NAME.penDown = true;`
