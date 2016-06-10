@@ -583,13 +583,14 @@ Woof.Sprite = function(project, {x = 0, y = 0, angle = 0, rotationStyle = "ROTAT
   };
 };
 
-Woof.Text = function(project, {text = "Text", size = 12, color = "black", fontFamily = "arial", textAlign = "center"} = {}) {
+Woof.Text = function(project, {text = "Text", dynamicText = undefined, size = 12, color = "black", fontFamily = "arial", textAlign = "center"} = {}) {
   Woof.Sprite.call(this, project, arguments[1]);
   this.text = text;
   this.size = size;
   this.color = color;
   this.fontFamily = fontFamily;
   this.textAlign = textAlign;
+  this.dynamicText = dynamicText;
   
   this.width = () => {
     var width;
@@ -621,7 +622,9 @@ Woof.Text = function(project, {text = "Text", size = 12, color = "black", fontFa
   
   this.textRender = () => {
     this._applyInContext(() => {
-      this.project._context.fillText(this.text, 0, 0);
+      var text;
+      try { text = this.dynamicText ? eval(this.dynamicText) : this.text; } catch (e) { console.error("Error with dynamicText: '" + this.dynamicText + "'"); throw e; }
+      this.project._context.fillText(text, 0, 0);
     });
   };
 };
