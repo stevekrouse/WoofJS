@@ -396,6 +396,7 @@ Woof.Sprite = function(project, {x = 0, y = 0, angle = 0, rotationStyle = "ROTAT
   this.penDown = false;
   this.penColor = penColor;
   this.penWidth = penWidth;
+  this.deleted = false;
   
   this.pen = [];
   this.trackPen = () => {
@@ -497,6 +498,9 @@ Woof.Sprite = function(project, {x = 0, y = 0, angle = 0, rotationStyle = "ROTAT
   };
   
   this.touching = sprite => {
+    if (this.deleted || !this.showing) { return false; }
+    if (sprite.deleted || !sprite.showing) { return false; }
+    
     var r1 = this.bounds();
     var r2 = sprite.bounds();
     if (!this.showing || !sprite.showing) { return false; }
@@ -507,6 +511,8 @@ Woof.Sprite = function(project, {x = 0, y = 0, angle = 0, rotationStyle = "ROTAT
   };
   
   this.over = (x, y) => {
+    if (this.deleted || !this.showing) { return false; }
+    
     var r1 = this.bounds();
     var belowTop = y <= r1.top
     var aboveBottom = y >= r1.bottom;
@@ -516,10 +522,14 @@ Woof.Sprite = function(project, {x = 0, y = 0, angle = 0, rotationStyle = "ROTAT
   };
   
   this.mouseOver = function() {
+    if (this.deleted || !this.showing) { return false; }
+    
     return this.over(this.project.mouseX, this.project.mouseY);
   };
   
   this.mouseDown = () => {
+    if (this.deleted || !this.showing) { return false; }
+    
     return this.mouseOver() && project.mouseDown;
   };
   
@@ -564,6 +574,8 @@ Woof.Sprite = function(project, {x = 0, y = 0, angle = 0, rotationStyle = "ROTAT
   this.project._canvas.addEventListener("mousedown", this._onClickHandler);
   
   this.delete = () => {
+    this.showing = false;
+    this.deleted = true;
     if (this.project.sprites.includes(this)){
       this.project.sprites.splice(this.project.sprites.indexOf(this), 1);
       this.project._canvas.removeEventListener("mousedown", this._onClickHandler);
