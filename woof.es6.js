@@ -350,28 +350,15 @@ Woof.Project = function({canvasId = undefined, fullScreen = false, height = 500,
   };
   
   this._renderPen = () => {
-    this._context.save();
     this.sprites.forEach((sprite) => {
-      for (var i = 0; i < sprite.pen.length; i++){
-        var last = i == 0 ? false : sprite.pen[i-1];
-        var current = sprite.pen[i];
-        if (sprite.pen[i] == false){
-          //do nothing
-        } else if (last === false && current !== false){
-           this._context.beginPath();
-           this._context.moveTo(...this.translateToCanvas(current.x, current.y));
-        } else if (current !== false) {
-          this._context.lineTo(...this.translateToCanvas(current.x, current.y));
-          this._context.lineCap = "round";
-          this._context.strokeStyle = current.color;
-          this._context.lineWidth = current.width;
-          this._context.stroke();
-        }
-      }
+      this._context.putImageData(sprite.penContext.getImageData(0, 0, this.width, this.height), 0, 0);
     });
-    
-    this._context.restore();
   };
+  this.clearPen = () => {
+    this.sprites.forEach((sprite) => {
+      sprite.clearPen();
+    });
+  }
   
   this._render = () => {
     if (this.stopped) return;
@@ -398,20 +385,34 @@ Woof.Sprite = function(project, {x = 0, y = 0, angle = 0, rotationStyle = "ROTAT
   this.penWidth = penWidth;
   this.deleted = false;
   
-  this.pen = [];
+  this.penCanvas = document.createElement('canvas');
+  [this.penCanvas.width, this.penCanvas.height] = [this.project.width, this.project.height]
+  this.penContext = this.penCanvas.getContext('2d');
+  [this.lastX, this.lastY] = [this.x, this.y];
   this.trackPen = () => {
-    var last = this.pen.length == 0 ? false : this.pen[this.pen.length - 1];
     if (this.penDown) {
-      if(last === false || !(last.x == this.x && last.y == this.y)) {
-        this.pen.push({x: this.x, y: this.y, color: this.penColor, width: this.penWidth});
-      } 
-    } else if (!this.penDown && last !== false) {
-      this.pen.push(false);
+      if(this.lastX != this.x || this.lastY != this.y) {
+        this.penContext.save();
+        this.penContext.beginPath();
+        this.penContext.moveTo(...this.project.translateToCanvas(this.lastX, this.lastY));
+        this.penContext.lineTo(...this.project.translateToCanvas(this.x, this.y));
+        this.penContext.lineCap = "round";
+        this.penContext.strokeStyle = this.penColor;
+        this.penContext.lineWidth = this.penWidth;
+        this.penContext.stroke();
+        this.penContext.restore();
+      }
     }
+    [this.lastX, this.lastY] = [this.x, this.y];
+  };
+  setInterval(this.trackPen, 0);
+  this.clearPen = () => {
+    this.penCanvas = document.createElement('canvas');
+    [this.penCanvas.width, this.penCanvas.height] = [this.project.width, this.project.height]
+    this.penContext = this.penCanvas.getContext('2d');
   };
   
   this._render = function() {
-    this.trackPen();
     if (this.showing) {
       this.project._context.save();
       this.project._context.translate(this.canvasX(), this.canvasY());
