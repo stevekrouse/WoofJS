@@ -784,9 +784,7 @@ Woof.Firebase = function(config){
 };
 
 Woof.extend = function(a, b){
-  console.log(b)
     for(var key in b) {
-      console.log(key);
       a[key] = b[key];
     }
 }
