@@ -14,7 +14,7 @@ You can either <a href="https://jsbin.com/lekovu/edit?js,output" target="_blank"
 
 1) Put the Woof library between the `<head>` tags.
 ```html
-<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/51fae9a1f0d96c09afda7dfc83245bd23e8f4b0c/woof.js"></script>
+<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/eca78bee88d30411d6b433fe155f4df6ff99140a/woof.js"></script>
 ```
 2) Throw in some JavaScript, and tell Woof to fetch it.
 ```javascript
@@ -64,12 +64,6 @@ var project = new Woof.Project({fullScreen: true, debug: ["project.keysDown", "p
 
 ```javascript
 var project = new Woof.Project({height: 500, width: 350});
-```
-
-  - Create a project with a pre-existing `<canvas id="project">` element by id:
-
-```javascript 
-var project = new Woof.Project({id: "project"});
 ```
 
 ### Setting the Backdrop
@@ -284,6 +278,7 @@ When creating a new Image, Text, Rectangle or Circle, you may use the following 
   - Stop drawing a line behind a sprite: `NAME.penDown = false;`
   - Set pen color: `NAME.penColor = "blue";`
   - Set pen width: `NAME.penWidth = 10;`
+  - Clear all of the pen paths on the screen: `project.clearPen();`
 
 
 ### Image

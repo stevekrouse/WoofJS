@@ -103,7 +103,7 @@ Woof.LEFT = 180;
 Woof.UP = 90;
 Woof.DOWN = 270;
 
-Woof.Project = function({canvasId = undefined, fullScreen = false, height = 500, width = 350, debug = []} = {}) {
+Woof.Project = function({fullScreen = false, height = 500, width = 350, debug = []} = {}) {
   this.sprites = [];
   this.backdrop = undefined;
   this.debug = debug;
@@ -115,25 +115,41 @@ Woof.Project = function({canvasId = undefined, fullScreen = false, height = 500,
     document.body.style.padding = 0;
   } 
   
-  if (canvasId) {
-    try {
-      this._canvas = document.getElementById(canvasId);
-    } catch (e){
-      console.error(e);
-      throw Error("Could not find a canvas on the page with id " + canvasId);
-    }
-  } else {
-    this._canvas = document.createElement("canvas");
-    this._canvas.id = "project";
-    this._canvas.width = width;
-    this._canvas.height = height;
-    this._canvas.style.display = "block";
-    document.body.appendChild(this._canvas);
-  }
-  this._context = this._canvas.getContext("2d");
+  var canvasHTML = "<div id='project'>";
+  canvasHTML += '<canvas id="sprites"></canvas>'
+  canvasHTML += '<canvas id="pen"></canvas>'
+  canvasHTML += '<canvas id="backdrop"></canvas>'
+  canvasHTML += "</div>"
+  document.body.innerHTML += canvasHTML;
+  
+  this._mainDiv = document.getElementById("project");
+  this._mainDiv.style.position = "relative";
+  
+  this._spriteCanvas = document.getElementById("sprites");
+  this._spriteCanvas.width = width;
+  this._spriteCanvas.height = height;
+  this._spriteCanvas.style.zIndex = 3;
+  this._spriteCanvas.style.position = "absolute";
+  
+  this._penCanvas = document.getElementById("pen");
+  this._penCanvas.width = width;
+  this._penCanvas.height = height;
+  this._penCanvas.style.zIndex = 2;
+  this._penCanvas.style.position = "absolute";
+  
+  this._backdropCanvas = document.getElementById("backdrop");
+  this._backdropCanvas.width = width;
+  this._backdropCanvas.height = height;
+  this._backdropCanvas.style.zIndex = 1;
+  this._backdropCanvas.style.position = "absolute";
+  
+  this._spriteContext = this._spriteCanvas.getContext("2d");
+  this._penContext = this._penCanvas.getContext("2d");
+  this._backdropContext = this._backdropCanvas.getContext("2d");
+  
   this.setCanvasSize = () => {
-    this.height = this._canvas.height;
-    this.width = this._canvas.width;
+    this.height = this._spriteCanvas.height;
+    this.width = this._spriteCanvas.width;
     this.minX = -this.width / 2;
     this.maxX = this.width / 2;
     this.minY = -this.height / 2;
@@ -142,8 +158,18 @@ Woof.Project = function({canvasId = undefined, fullScreen = false, height = 500,
   this.setCanvasSize();
   if (fullScreen) {
     window.addEventListener("resize", () => {
-      this._canvas.width = window.innerWidth;
-      this._canvas.height = window.innerHeight;
+      this._spriteCanvas.width = window.innerWidth;
+      this._spriteCanvas.height = window.innerHeight;
+      
+      var penData = this._penContext.getImageData(0, 0, window.innerWidth, window.innerHeight);
+      this._penCanvas.width = window.innerWidth;
+      this._penCanvas.height = window.innerHeight;
+      this._penContext.putImageData(penData, 0, 0);
+      
+      this._backdropCanvas.width = window.innerWidth;
+      this._backdropCanvas.height = window.innerHeight;
+      this._renderBackdrop();
+      
       this.setCanvasSize();
     });
   }
@@ -186,12 +212,26 @@ Woof.Project = function({canvasId = undefined, fullScreen = false, height = 500,
     return sprite;
   };
   
-  this.setBackdropURL = function(url){    
-    var backdrop = new Image();
-    backdrop.src = url;
-    this.backdrop = backdrop;
+  this._renderBackdrop = () => {
+    this._backdropContext.clearRect(0, 0, this.width, this.height);
+    if (this.backdrop instanceof Image) {
+      this._backdropContext.drawImage(this.backdrop, 0, 0);
+    } else if (typeof this.backdrop == "string"){
+      this._backdropContext.save();
+      this._backdropContext.fillStyle=this.backdrop;
+      this._backdropContext.fillRect(0, 0, this.width, this.height);
+      this._backdropContext.restore();
+    }
   };
   
+  this.setBackdropURL = function(url){    
+    var backdrop = new Image();
+    backdrop.crossOrigin = "Anonymous";
+    backdrop.src = url;
+    this.backdrop = backdrop;
+    this.backdrop.onload = this._renderBackdrop;
+  };
+
   this.setBackdropColor = function(color){    
     this.backdrop = color;
   };
@@ -208,44 +248,44 @@ Woof.Project = function({canvasId = undefined, fullScreen = false, height = 500,
     
     this._everys.forEach(clearInterval);
     this._afters.forEach(clearInterval);
-    this._canvas.removeEventListener("mousedown", this._onClickHandler);
+    this._spriteCanvas.removeEventListener("mousedown", this._onClickHandler);
     
     this.sprites.forEach(sprite => sprite.delete());
   };
   
   this.translateToCenter = (x, y) => {
-    return [(x - this.maxX) - this._canvas.offsetLeft, (this.maxY - y) + this._canvas.offsetTop];
+    return [(x - this.maxX) - this._spriteCanvas.offsetLeft, (this.maxY - y) + this._spriteCanvas.offsetTop];
   };
   this.translateToCanvas = (x, y) => {
-    return [(x + this.maxX) - this._canvas.offsetLeft, (this.maxY - y) + this._canvas.offsetTop];
+    return [(x + this.maxX) - this._spriteCanvas.offsetLeft, (this.maxY - y) + this._spriteCanvas.offsetTop];
   };
   
   this.mouseDown = false;
   this.mouseX = 0;
   this.mouseY = 0;
-  this._canvas.addEventListener("mousedown", (event) => {
+  this._spriteCanvas.addEventListener("mousedown", (event) => {
     this.mouseDown = true;
     [this.mouseX, this.mouseY] = this.translateToCenter(event.clientX, event.clientY);
   });
-  this._canvas.addEventListener("mouseup", (event) => {
+  this._spriteCanvas.addEventListener("mouseup", (event) => {
     this.mouseDown = false;
     [this.mouseX, this.mouseY] = this.translateToCenter(event.clientX, event.clientY);
   });
-  this._canvas.addEventListener("touchstart", (event) => {
+  this._spriteCanvas.addEventListener("touchstart", (event) => {
     this.mouseDown = true;
     [this.mouseX, this.mouseY] = this.translateToCenter(event.clientX, event.clientY);
   });
-  this._canvas.addEventListener("touchend", (event) => {
+  this._spriteCanvas.addEventListener("touchend", (event) => {
     // for some reason touchend events are firing too quickly
     // and are not getting picked up in 40 ms every-if's
     // so this setTimeout slows things down just enouch so
     // touch events mirror mouse events
     setTimeout(() => {this.mouseDown = false;}, 0);
   });
-  this._canvas.addEventListener("mousemove", (event) => { 
+  this._spriteCanvas.addEventListener("mousemove", (event) => { 
     [this.mouseX, this.mouseY] = this.translateToCenter(event.clientX, event.clientY);
   });
-  this._canvas.addEventListener("touchmove", event => {
+  this._spriteCanvas.addEventListener("touchmove", event => {
     [this.mouseX, this.mouseY] = this.translateToCenter(event.targetTouches[0].clientX, event.targetTouches[0].clientY);
     event.preventDefault();
   });
@@ -313,7 +353,7 @@ Woof.Project = function({canvasId = undefined, fullScreen = false, height = 500,
     var [mouseX, mouseY] = this.translateToCenter(event.clientX, event.clientY);
     this._onClicks.forEach((func) => {func(mouseX, mouseY)});
   };
-  this._canvas.addEventListener("mousedown", this._onClickHandler);
+  this._spriteCanvas.addEventListener("mousedown", this._onClickHandler);
 
   this.debugText = [];
   for (var i = 0; i < this.debug.length; i++){
@@ -332,41 +372,21 @@ Woof.Project = function({canvasId = undefined, fullScreen = false, height = 500,
     }
   };
   
-  this._renderBackdrop = () => {
-    if (this.backdrop instanceof Image) {
-      this._context.drawImage(this.backdrop, 0, 0);
-    } else if (typeof this.backdrop == "string"){
-      this._context.save();
-      this._context.fillStyle=this.backdrop;
-      this._context.fillRect(0, 0, this.width, this.height);
-      this._context.restore();
-    }
-  };
-  
   this._renderSprites = () => {
     this.sprites.forEach((sprite) => {
       sprite._render(this);
     });
   };
   
-  this._renderPen = () => {
-    this.sprites.forEach((sprite) => {
-      this._context.putImageData(sprite.penContext.getImageData(0, 0, this.width, this.height), 0, 0);
-    });
-  };
   this.clearPen = () => {
-    this.sprites.forEach((sprite) => {
-      sprite.clearPen();
-    });
+    this._penContext.clearRect(0, 0, this.width, this.height);
   }
   
   this._render = () => {
     if (this.stopped) return;
     this.renderInterval = window.requestAnimationFrame(this._render);
     this._runRepeats();
-    this._context.clearRect(0, 0, this.width, this.height);
-    this._renderBackdrop();
-    this._renderPen();
+    this._spriteContext.clearRect(0, 0, this.width, this.height);
     this._renderSprites();
     this._renderDebug();
   };
@@ -385,22 +405,19 @@ Woof.Sprite = function(project, {x = 0, y = 0, angle = 0, rotationStyle = "ROTAT
   this.penWidth = penWidth;
   this.deleted = false;
   
-  this.penCanvas = document.createElement('canvas');
-  [this.penCanvas.width, this.penCanvas.height] = [this.project.width, this.project.height]
-  this.penContext = this.penCanvas.getContext('2d');
   [this.lastX, this.lastY] = [this.x, this.y];
   this.trackPen = () => {
     if (this.penDown) {
       if(this.lastX != this.x || this.lastY != this.y) {
-        this.penContext.save();
-        this.penContext.beginPath();
-        this.penContext.moveTo(...this.project.translateToCanvas(this.lastX, this.lastY));
-        this.penContext.lineTo(...this.project.translateToCanvas(this.x, this.y));
-        this.penContext.lineCap = "round";
-        this.penContext.strokeStyle = this.penColor;
-        this.penContext.lineWidth = this.penWidth;
-        this.penContext.stroke();
-        this.penContext.restore();
+        this.project._penContext.save();
+        this.project._penContext.beginPath();
+        this.project._penContext.moveTo(...this.project.translateToCanvas(this.lastX, this.lastY));
+        this.project._penContext.lineTo(...this.project.translateToCanvas(this.x, this.y));
+        this.project._penContext.lineCap = "round";
+        this.project._penContext.strokeStyle = this.penColor;
+        this.project._penContext.lineWidth = this.penWidth;
+        this.project._penContext.stroke();
+        this.project._penContext.restore();
       }
     }
     [this.lastX, this.lastY] = [this.x, this.y];
@@ -414,16 +431,16 @@ Woof.Sprite = function(project, {x = 0, y = 0, angle = 0, rotationStyle = "ROTAT
   
   this._render = function() {
     if (this.showing) {
-      this.project._context.save();
-      this.project._context.translate(this.canvasX(), this.canvasY());
+      this.project._spriteContext.save();
+      this.project._spriteContext.translate(this.canvasX(), this.canvasY());
       if (this.rotationStyle == "ROTATE") {
-        this.project._context.rotate(-this.radians());
+        this.project._spriteContext.rotate(-this.radians());
       } else if (this.rotationStyle == "NO ROTATE"){
           // no rotate
       } else if (this.rotationStyle == "ROTATE LEFT RIGHT"){
         if (this.angle%360 >= 90 && this.angle%360 < 270){
-          this.project._context.translate(this.width, 0);
-          this.project._context.scale(-1, 1);
+          this.project._spriteContext.translate(this.width, 0);
+          this.project._spriteContext.scale(-1, 1);
         } else if (this.angle%360 >=0 && this.angle%360 < 90 || this.angle%360 <= 360 && this.angle%360 >=270){
           // no rotate
         }
@@ -440,7 +457,7 @@ Woof.Sprite = function(project, {x = 0, y = 0, angle = 0, rotationStyle = "ROTAT
       } else if (this instanceof Woof.Line) {
         this.lineRender();
       }
-      this.project._context.restore();
+      this.project._spriteContext.restore();
     }
   };
   
@@ -572,14 +589,14 @@ Woof.Sprite = function(project, {x = 0, y = 0, angle = 0, rotationStyle = "ROTAT
       this._onClicks.forEach((func) => {func(mouseX, mouseY)});
     }
   };
-  this.project._canvas.addEventListener("mousedown", this._onClickHandler);
+  this.project._spriteCanvas.addEventListener("mousedown", this._onClickHandler);
   
   this.delete = () => {
     this.showing = false;
     this.deleted = true;
     if (this.project.sprites.includes(this)){
       this.project.sprites.splice(this.project.sprites.indexOf(this), 1);
-      this.project._canvas.removeEventListener("mousedown", this._onClickHandler);
+      this.project._spriteCanvas.removeEventListener("mousedown", this._onClickHandler);
     }
   };
 };
@@ -596,7 +613,7 @@ Woof.Text = function(project, {text = "Text", dynamicText = undefined, size = 12
   this.width = () => {
     var width;
     this._applyInContext(() => {
-      width = this.project._context.measureText(this.text).width;
+      width = this.project._spriteContext.measureText(this.text).width;
     });
     return width;
   };
@@ -604,28 +621,28 @@ Woof.Text = function(project, {text = "Text", dynamicText = undefined, size = 12
   this.height = () => {
     var height;
     this._applyInContext(() => {
-      height = this.project._context.measureText("M").width;
+      height = this.project._spriteContext.measureText("M").width;
     });
     return height;
   };
   
   this._applyInContext = (func) => {
-    this.project._context.save();
+    this.project._spriteContext.save();
     
-    this.project._context.font = this.size + "px " + this.fontFamily;
-    this.project._context.fillStyle = this.color;
-    this.project._context.textAlign = this.textAlign;
+    this.project._spriteContext.font = this.size + "px " + this.fontFamily;
+    this.project._spriteContext.fillStyle = this.color;
+    this.project._spriteContext.textAlign = this.textAlign;
     
     func();
     
-    this.project._context.restore();
+    this.project._spriteContext.restore();
   };
   
   this.textRender = () => {
     this._applyInContext(() => {
       var text;
       try { text = this.dynamicText ? eval(this.dynamicText) : this.text; } catch (e) { console.error("Error with dynamicText: '" + this.dynamicText + "'"); throw e; }
-      this.project._context.fillText(text, 0, 0);
+      this.project._spriteContext.fillText(text, 0, 0);
     });
   };
 };
@@ -644,10 +661,10 @@ Woof.Circle = function(project, {radius = 10, color = "black"} = {}) {
   };
   
   this.circleRender = () => {
-    this.project._context.beginPath();
-    this.project._context.arc(0, 0, this.radius, 0, 2*Math.PI);
-    this.project._context.fillStyle=this.color;
-    this.project._context.fill();
+    this.project._spriteContext.beginPath();
+    this.project._spriteContext.arc(0, 0, this.radius, 0, 2*Math.PI);
+    this.project._spriteContext.fillStyle=this.color;
+    this.project._spriteContext.fill();
   };
 };
 
@@ -666,8 +683,8 @@ Woof.Rectangle = function(project, {rectangleHeight = 10, rectangleWidth = 10, c
   };
   
   this.rectangleRender = () => {
-    this.project._context.fillStyle=this.color;
-    this.project._context.fillRect(-this.width() / 2, -this.height() / 2, this.width(), this.height());
+    this.project._spriteContext.fillStyle=this.color;
+    this.project._spriteContext.fillRect(-this.width() / 2, -this.height() / 2, this.width(), this.height());
   };
 };
 
@@ -687,12 +704,12 @@ Woof.Line = function(project, {lineWidth = 1, x1 = 10, y1 = 10, color = "black"}
   };
   
   this.lineRender = () => {
-    this.project._context.beginPath();
-    this.project._context.moveTo(0, 0);
-    this.project._context.lineTo(this.x1 - this.x, -this.y1 + this.y);
-    this.project._context.strokeStyle = color;
-    this.project._context.lineWidth = lineWidth;
-    this.project._context.stroke();
+    this.project._spriteContext.beginPath();
+    this.project._spriteContext.moveTo(0, 0);
+    this.project._spriteContext.lineTo(this.x1 - this.x, -this.y1 + this.y);
+    this.project._spriteContext.strokeStyle = color;
+    this.project._spriteContext.lineWidth = lineWidth;
+    this.project._spriteContext.stroke();
   };
 };
 
@@ -720,7 +737,7 @@ Woof.Image = function(project, {url = "http://www.loveyourdog.com/image3.gif", i
   };
 
   this.imageRender = () => {
-    this.project._context.drawImage(this.image, -this.width() / 2, -this.height() / 2, this.width(), this.height());
+    this.project._spriteContext.drawImage(this.image, -this.width() / 2, -this.height() / 2, this.width(), this.height());
   };
 };
 
@@ -797,4 +814,10 @@ Woof.Firebase = function(config){
   this.getCloud = (key, defaultVal) => {
     return this.data[key] || defaultVal;
   };
+};
+
+Woof.virtualCanvas = function(width, height) {
+  canvas = document.createElement('canvas');
+  [canvas.width, canvas.height] = [width, height];
+  return [canvas, canvas.getContext('2d')];
 };
