@@ -14,7 +14,7 @@ You can either <a href="https://jsbin.com/lekovu/edit?js,output" target="_blank"
 
 1) Put the Woof library between the `<head>` tags.
 ```html
-<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/94f58acbd254a9f867826ef5ed7607e2341b7f59/js"></script>
+<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/94f58acbd254a9f867826ef5ed7607e2341b7f59/js" global="true"></script>
 ```
 2) Throw in some JavaScript, and tell Woof to fetch it.
 ```javascript
@@ -47,28 +47,6 @@ every("1", "second", () => {
   timer--;   // make the timer go down every second
   timerText.text = "Timer: " + timer;   // change the text to refer to the timer's new value every second
 });
-```
-
-## Project
-
-### Creating a Project
-
-  - **Reccomended**: Create a full-screen project: 
-
-```javascript
-var project = new Project({fullScreen: true, debug: ["keysDown", "mouseX", "mouseY"]});
-```
-
-  - Create a project with a fixed height and width:
-
-```javascript
-var project = new Project({height: 500, width: 350});
-```
-
-  - Create a project with a pre-existing `<canvas id="project">` element by id:
-
-```javascript 
-var project = new Project({id: "project"});
 ```
 
 ### Setting the Backdrop
@@ -119,7 +97,7 @@ To stop your whole project and freeze everything on the screen:
 stopAll();
 ```
 
-### Project Control Flow
+### Control Flow
 
 There are two types of commands in JavaScript:
 
@@ -258,12 +236,11 @@ When creating a new Image, Text, Rectangle or Circle, you may use the following 
   - Get the height: `NAME.height()`
   - Touching another thing?: `if (NAME.touching(OTHER_NAME)) { ... }`
   - Mouse over?: `if (NAME.mouseOver()) { ... }`
-  - Do something on click: `NAME.onClick((mouseX, mouseY) => { ... });`
   - Clicking and holding?: `if (NAME.mouseDown()) { ... }`
   - Get the distance between two things: `NAME.distanceTo(OTHER_NAME);`
   - Get the distance to an X,Y: `NAME.distanceTo(X, Y);`
 
-### Changing
+### Motion
 
   - Set the X position: `NAME.x = 200;`
   - Change the Y position: `NAME.y += 10;`
@@ -273,17 +250,34 @@ When creating a new Image, Text, Rectangle or Circle, you may use the following 
   - Turn right: `NAME.turnRight(10);`
   - Don't rotate the sprites costume when the angle changes: `NAME.setRotationStyle("NO ROTATE");`
   - Rotate left to right when it points in a direction and moves `NAME.setRotationStyle("ROTATE LEFT RIGHT");`
-  - Hide: `NAME.showing = false;`
   - Move in the direction of the angle: `NAME.move(10);`
-  - Send to the back layer: `NAME.sendToBack();`
-  - Send to the front layer: `NAME.sendToFront();`
   - Point towards another thing: `NAME.pointTowards(OTHER_NAME)`
   - Point towards an X,Y : `NAME.pointTowards(mouseX, mouseY)`
-  - Delete: `NAME.delete();`
+
+### Looks
+
+  - Hide: `NAME.showing = false;`
+  - Show: `NAME.showing = true;`
+  - Send to the back layer: `NAME.sendToBack();`
+  - Send to the front layer: `NAME.sendToFront();`
+
+  
+### Pen 
+
   - Draw a line behind a sprite: `NAME.penDown = true;`
   - Stop drawing a line behind a sprite: `NAME.penDown = false;`
   - Set pen color: `NAME.penColor = "blue";`
   - Set pen width: `NAME.penWidth = 10;`
+
+
+### Control
+
+  - Delete: `NAME.delete();`
+  
+
+### Events 
+
+  - Do something on click: `NAME.onClick((mouseX, mouseY) => { ... });`
 
 
 ### Image
