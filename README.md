@@ -14,10 +14,14 @@ You can either <a href="https://jsbin.com/lekovu/edit?js,output" target="_blank"
 
 1) Put Woof between the `<head>` tags.
 ```html
-<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/8ed80780a02b5323123b9425594c11fb21ef01c0/js" global="true"></script>
+<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/7af50acc04fa596e6a3497966624d789ae1b27e5/js" global="true"></script>
 ```
 2) Throw in some JavaScript, and tell Woof to fetch it.
 ```javascript
+// tell us the mouse coordinates
+addDebug("mouseX");
+addDebug("mouseY");
+
 // Set the backdrop URL (preferably of similar dimensions to your canvas)
 setBackdropURL("http://i.imgur.com/lyyFGm4.jpg");
 
@@ -80,6 +84,12 @@ setBackdropColor("blue");
   - Random Y value on the screen: `randomY()`
   - Width of the screen: `width`
   - Height of the screen: `height`
+
+
+### Debugging
+ 
+  - Adding an expression to the bottom-left corner of the screen: `addDebug("mouseX");`
+  - Setting the color of the debug expressions: `debugColor = "white";`
 
   
 ### Responding to Events
