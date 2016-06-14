@@ -1,7 +1,7 @@
 // saving Image because we will later overwrite Image with Woof.Image on the window
 window.BrowserImage = Image;
 
-function Woof({global = false, canvasId = undefined, fullScreen = false, height = 500, width = 350, debug = []} = {}) {
+function Woof({global = false, canvasId = undefined, fullScreen = false, height = 500, width = 350} = {}) {
   if(window.global) throw new Error("You must turn off global mode in the Woof script tag if you want to create your own Woof object.")
   this.global = global;
   var thisContext = this.global ? window : this;
@@ -9,8 +9,9 @@ function Woof({global = false, canvasId = undefined, fullScreen = false, height 
   thisContext.global = global;
   thisContext.sprites = [];
   thisContext.backdrop = undefined;
-  thisContext.debug = debug;
+  thisContext.debug = [];
   thisContext.stopped = true;
+  this.debugColor = "black";
   
   if (fullScreen) {
     width = window.innerWidth;
@@ -286,12 +287,15 @@ function Woof({global = false, canvasId = undefined, fullScreen = false, height 
   thisContext.after = (time, units, func) => {
     thisContext._afters.push(setTimeout(func, Woof.prototype.unitsToMiliseconds(time, units)));
   };
-
-  thisContext.debugText = [];
-  for (var i = 0; i < thisContext.debug.length; i++){
+  
+  thisContext.addDebug = (str) => {
+    thisContext.debug.push(str);
     var sprite = new Woof.prototype.Text(thisContext, {textAlign: "left"});
     thisContext.debugText.push(sprite);
   }
+
+  thisContext.debugText = [];
+  thisContext.debug.forEach(thisContext.addDebug);
   
   thisContext._renderDebug = () => {
     for (var i = 0; i < thisContext.debug.length; i++) {
@@ -301,6 +305,7 @@ function Woof({global = false, canvasId = undefined, fullScreen = false, height 
       [thisContext.debugText[i].x, thisContext.debugText[i].y] = [thisContext.minX + 5, thisContext.minY + (12 * (i+1))];
       thisContext.debugText[i].text = `${expr}: ${value}`;
       thisContext.debugText[i]._render(thisContext);
+      thisContext.debugText[i].color = thisContext.debugColor;
     }
   };
   
@@ -856,5 +861,5 @@ Woof.prototype.extend = function(a, b){
 };
 
 if (JSON.parse(document.currentScript.getAttribute('global'))) { 
-  Woof.prototype.extend(window, new Woof({global: true, fullScreen: true, debug: ["mouseX", "mouseY"]})); 
+  Woof.prototype.extend(window, new Woof({global: true, fullScreen: true, debug: ["mouseX", "mouseY"]}));
 }
