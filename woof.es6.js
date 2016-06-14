@@ -1,325 +1,265 @@
-var Woof = {};
+// saving Image because we will later overwrite Image with Woof.Image on the window
+window.BrowserImage = Image;
 
-Woof.keyCodeToString = keyCode => {
-  if (keyCode == 38) {
-    return "UP";
-  }
-  else if (keyCode == 37){
-    return "LEFT";
-  }
-  else if (keyCode == 39){
-    return "RIGHT";
-  }
-  else if (keyCode == 40){
-    return "DOWN";
-  }
-  else {
-    return String.fromCharCode(keyCode);
-  }
-};
+function Woof({global = false, canvasId = undefined, fullScreen = false, height = 500, width = 350, debug = []} = {}) {
+  if(window.global) throw new Error("You must turn off global mode in the Woof script tag if you want to create your own Woof object.")
+  this.global = global;
+  var thisContext = this.global ? window : this;
 
-Woof.unitsToMiliseconds = (time, units) => {
-  if (units == "milliseconds" || units == "millisecond"){
-    return time;
-  } else if (units == "miliseconds" || units == "milisecond"){
-    return time;
-  } else if (units == "seconds" || units == "second"){
-    return time * 1000;
-  } else if (units == "minutes" || units == "minute"){
-    return time * 1000 * 60;
-  } else {
-    throw Error("Unrecognized Time");
-  }
-};
-
-Woof.randomInt = (min, max) => {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-};
-
-Woof.repeat = (times, func) => {
-  for (var i = 0; i < times; i++){
-    func(i+1);
-  }
-};
-
-Woof.dayOfMonth = () =>{
-  var date = new Date();
-  return date.getDate();
-};
-
-Woof.dayOfWeek = () => {
-  var date = new Date();
-  var day = date.getDay();
-  if (day === 0){
-    return "Sunday";
-  }
-  else if (day == 1){
-    return "Monday";
-  }
-  else if (day == 2){
-    return "Tuesday";
-  }
-  else if (day == 3){
-    return "Wednesday";
-  }
-  else if (day == 4){
-    return "Thursday";
-  }
-  else if (day == 5){
-    return "Friday";
-  }
-  else if (day == 6){
-    return "Saturday";
-  }
-};
-
-Woof.hourMilitary =  () => {
-  var date = new Date();
-  return date.getHours();
-};
-
-Woof.hour = () => {
-  var date = new Date();
-  var hour = date.getHours();
-  return hour <= 12 ? hour : hour - 12;
-};
-
-Woof.minute =  () => {
-  var date = new Date();
-  return date.getMinutes();
-};
-
-Woof.second = () => {
-  var date = new Date();
-  return date.getSeconds();
-};
-
-Woof.randomColor = function(){
-  return "rgb(" + Woof.randomInt(0, 255) + ", " + Woof.randomInt(0, 255) + ", " + Woof.randomInt(0, 255)+ ")";
-}
-
-Woof.RIGHT = 0;
-Woof.LEFT = 180;
-Woof.UP = 90;
-Woof.DOWN = 270;
-
-Woof.Project = function({fullScreen = false, height = 500, width = 350, debug = []} = {}) {
-  this.sprites = [];
-  this.backdrop = undefined;
-  this.debug = debug;
-  this.stopped = false;
+  thisContext.global = global;
+  thisContext.sprites = [];
+  thisContext.backdrop = undefined;
+  thisContext.debug = debug;
+  thisContext.stopped = true;
+  
   if (fullScreen) {
     width = window.innerWidth;
     height = window.innerHeight;
-    document.body.style.margin = 0;
-    document.body.style.padding = 0;
+    window.addEventListener("load", () => {
+      document.body.style.margin = 0;
+      document.body.style.padding = 0; 
+    });
   } 
   
-  var canvasHTML = "<div id='project'>";
-  canvasHTML += '<canvas id="sprites"></canvas>'
-  canvasHTML += '<canvas id="pen"></canvas>'
-  canvasHTML += '<canvas id="backdrop"></canvas>'
-  canvasHTML += "</div>"
-  document.body.innerHTML += canvasHTML;
-  
-  this._mainDiv = document.getElementById("project");
-  this._mainDiv.style.position = "relative";
-  
-  this._spriteCanvas = document.getElementById("sprites");
-  this._spriteCanvas.width = width;
-  this._spriteCanvas.height = height;
-  this._spriteCanvas.style.zIndex = 3;
-  this._spriteCanvas.style.position = "absolute";
-  
-  this._penCanvas = document.getElementById("pen");
-  this._penCanvas.width = width;
-  this._penCanvas.height = height;
-  this._penCanvas.style.zIndex = 2;
-  this._penCanvas.style.position = "absolute";
-  
-  this._backdropCanvas = document.getElementById("backdrop");
-  this._backdropCanvas.width = width;
-  this._backdropCanvas.height = height;
-  this._backdropCanvas.style.zIndex = 1;
-  this._backdropCanvas.style.position = "absolute";
-  
-  this._spriteContext = this._spriteCanvas.getContext("2d");
-  this._penContext = this._penCanvas.getContext("2d");
-  this._backdropContext = this._backdropCanvas.getContext("2d");
-  
-  this.setCanvasSize = () => {
-    this.height = this._spriteCanvas.height;
-    this.width = this._spriteCanvas.width;
-    this.minX = -this.width / 2;
-    this.maxX = this.width / 2;
-    this.minY = -this.height / 2;
-    this.maxY = this.height / 2;
+  thisContext._readys = [];
+  thisContext.ready = (func) => {
+    if (thisContext.stopped) {
+      thisContext._readys.push(func);
+    } else {
+      func();
+    }
+  }
+  thisContext._runReadys = () => {
+    thisContext.stopped = false;
+    thisContext._readys.forEach(func => { func() });
+    thisContext._readys = [];
   };
-  this.setCanvasSize();
+  
+  window.addEventListener("load", () => {
+    thisContext._mainDiv = document.createElement("div");
+    document.body.appendChild(thisContext._mainDiv);
+    thisContext._mainDiv.id = "project";
+    thisContext._mainDiv.style.position = "relative";
+    
+    thisContext._spriteCanvas = document.createElement("canvas");
+    thisContext._mainDiv.appendChild(thisContext._spriteCanvas);
+    thisContext._spriteCanvas.id = "sprites";
+    thisContext._spriteCanvas.width = width;
+    thisContext._spriteCanvas.height = height;
+    thisContext._spriteCanvas.style.zIndex = 3;
+    thisContext._spriteCanvas.style.position = "absolute";
+    
+    
+    thisContext._penCanvas = document.createElement("canvas");
+    thisContext._mainDiv.appendChild(thisContext._penCanvas);
+    thisContext._penCanvas.id = "pen";
+    thisContext._penCanvas.width = width;
+    thisContext._penCanvas.height = height;
+    thisContext._penCanvas.style.zIndex = 2;
+    thisContext._penCanvas.style.position = "absolute";
+    
+    thisContext._backdropCanvas = document.createElement("canvas");
+    thisContext._mainDiv.appendChild(thisContext._backdropCanvas);
+    thisContext._backdropCanvas.id = "backdrop";
+    thisContext._backdropCanvas.width = width;
+    thisContext._backdropCanvas.height = height;
+    thisContext._backdropCanvas.style.zIndex = 1;
+    thisContext._backdropCanvas.style.position = "absolute";
+  
+    thisContext._spriteContext = thisContext._spriteCanvas.getContext("2d");
+    thisContext._penContext = thisContext._penCanvas.getContext("2d");
+    thisContext._backdropContext = thisContext._backdropCanvas.getContext("2d");
+    
+    thisContext._runReadys();
+  });
+  
+  thisContext.setCanvasSize = () => {
+    if (thisContext._spriteCanvas) {
+      thisContext.height = thisContext._spriteCanvas.height;
+      thisContext.width = thisContext._spriteCanvas.width;
+    } else {
+      thisContext.height = height;
+      thisContext.width = width;
+    }
+    thisContext.minX = -thisContext.width / 2;
+    thisContext.maxX = thisContext.width / 2;
+    thisContext.minY = -thisContext.height / 2;
+    thisContext.maxY = thisContext.height / 2;
+  };
+  thisContext.setCanvasSize();
+  
   if (fullScreen) {
     window.addEventListener("resize", () => {
-      this._spriteCanvas.width = window.innerWidth;
-      this._spriteCanvas.height = window.innerHeight;
+      thisContext._spriteCanvas.width = window.innerWidth;
+      thisContext._spriteCanvas.height = window.innerHeight;
       
-      var penData = this._penContext.getImageData(0, 0, window.innerWidth, window.innerHeight);
-      this._penCanvas.width = window.innerWidth;
-      this._penCanvas.height = window.innerHeight;
-      this._penContext.putImageData(penData, 0, 0);
+      var penData = thisContext._penContext.getImageData(0, 0, window.innerWidth, window.innerHeight);
+      thisContext._penCanvas.width = window.innerWidth;
+      thisContext._penCanvas.height = window.innerHeight;
+      thisContext._penContext.putImageData(penData, 0, 0);
       
-      this._backdropCanvas.width = window.innerWidth;
-      this._backdropCanvas.height = window.innerHeight;
-      this._renderBackdrop();
+      thisContext._backdropCanvas.width = window.innerWidth;
+      thisContext._backdropCanvas.height = window.innerHeight;
+      thisContext._renderBackdrop();
       
-      this.setCanvasSize();
+      thisContext.setCanvasSize();
     });
   }
   
-  this.randomX = () => {
-    return Woof.randomInt(this.minX, this.maxX);
+  thisContext.randomX = () => {
+    return Woof.prototype.randomInt(thisContext.minX, thisContext.maxX);
   };
   
-  this.randomY = () => {
-    return Woof.randomInt(this.minY, this.maxY);
+  thisContext.randomY = () => {
+    return Woof.prototype.randomInt(thisContext.minY, thisContext.maxY);
   };
   
-  this.addText = options => {
-    var sprite = new Woof.Text(this, options);
-    this.sprites.push(sprite);
+  thisContext.addText = options => {
+    var sprite = new Woof.prototype.Text(thisContext, options);
+    thisContext.sprites.push(sprite);
     return sprite;
   };
   
-  this.addCircle = options => {
-    var sprite = new Woof.Circle(this, options);
-    this.sprites.push(sprite);
+  thisContext.addCircle = options => {
+    var sprite = new Woof.prototype.Circle(thisContext, options);
+    thisContext.sprites.push(sprite);
     return sprite;
   };
   
-  this.addRectangle = options => {
-    var sprite = new Woof.Rectangle(this, options);
-    this.sprites.push(sprite);
+  thisContext.addRectangle = options => {
+    var sprite = new Woof.prototype.Rectangle(thisContext, options);
+    thisContext.sprites.push(sprite);
     return sprite;
   };
   
-  this.addLine = options => {
-    var sprite = new Woof.Line(this, options);
-    this.sprites.push(sprite);
+  thisContext.addLine = options => {
+    var sprite = new Woof.prototype.Line(thisContext, options);
+    thisContext.sprites.push(sprite);
     return sprite;
   };
   
-  this.addImage = options => {
-    var sprite = new Woof.Image(this, options);
-    this.sprites.push(sprite);
+  thisContext.addImage = options => {
+    var sprite = new Woof.prototype.Image(thisContext, options);
+    thisContext.sprites.push(sprite);
     return sprite;
   };
   
-  this._renderBackdrop = () => {
-    this._backdropContext.clearRect(0, 0, this.width, this.height);
-    if (this.backdrop instanceof Image) {
-      this._backdropContext.drawImage(this.backdrop, 0, 0);
-    } else if (typeof this.backdrop == "string"){
-      this._backdropContext.save();
-      this._backdropContext.fillStyle=this.backdrop;
-      this._backdropContext.fillRect(0, 0, this.width, this.height);
-      this._backdropContext.restore();
+  thisContext._renderBackdrop = () => {
+    thisContext._backdropContext.clearRect(0, 0, thisContext.width, thisContext.height);
+    if (thisContext.backdrop instanceof BrowserImage) {
+      thisContext._backdropContext.drawImage(thisContext.backdrop, 0, 0);
+    } else if (typeof thisContext.backdrop == "string"){
+      thisContext._backdropContext.save();
+      thisContext._backdropContext.fillStyle=thisContext.backdrop;
+      thisContext._backdropContext.fillRect(0, 0, thisContext.width, thisContext.height);
+      thisContext._backdropContext.restore();
     }
   };
   
-  this.setBackdropURL = function(url){    
-    var backdrop = new Image();
-    backdrop.crossOrigin = "Anonymous";
+  thisContext.setBackdropURL = function(url){    
+    var backdrop = new BrowserImage();
     backdrop.src = url;
-    this.backdrop = backdrop;
-    this.backdrop.onload = this._renderBackdrop;
+    thisContext.backdrop = backdrop;
+    thisContext.backdrop.onload = function() { thisContext.ready(thisContext._renderBackdrop); };
   };
 
-  this.setBackdropColor = function(color){    
-    this.backdrop = color;
+  thisContext.setBackdropColor = function(color){    
+    thisContext.backdrop = color;
   };
   
-  this.firebaseConfig = config => {
-    this.firebase = new Woof.Firebase(config);
-    this.getCloud = this.firebase.getCloud;
-    this.setCloud = this.firebase.setCloud;
+  thisContext.firebaseConfig = config => {
+    thisContext.firebase = new Woof.prototype.Firebase(config);
+    thisContext.getCloud = thisContext.firebase.getCloud;
+    thisContext.setCloud = thisContext.firebase.setCloud;
   };
   
-  this.stopAll = () => {
-    this._render();
-    this.stopped = true;
+  thisContext.stopAll = () => {
+    thisContext._render();
+    thisContext.stopped = true;
     
-    this._everys.forEach(clearInterval);
-    this._afters.forEach(clearInterval);
-    this._spriteCanvas.removeEventListener("mousedown", this._onClickHandler);
+    thisContext._everys.forEach(clearInterval);
+    thisContext._afters.forEach(clearInterval);
+    thisContext._spriteCanvas.removeEventListener("mousedown", thisContext._onClickHandler);
     
-    this.sprites.forEach(sprite => sprite.delete());
+    thisContext.sprites.forEach(sprite => sprite.delete());
   };
   
-  this.translateToCenter = (x, y) => {
-    return [(x - this.maxX) - this._spriteCanvas.offsetLeft, (this.maxY - y) + this._spriteCanvas.offsetTop];
+  thisContext.translateToCenter = (x, y) => {
+    return [(x - thisContext.maxX) - thisContext._spriteCanvas.offsetLeft, (thisContext.maxY - y) + thisContext._spriteCanvas.offsetTop];
   };
-  this.translateToCanvas = (x, y) => {
-    return [(x + this.maxX) - this._spriteCanvas.offsetLeft, (this.maxY - y) + this._spriteCanvas.offsetTop];
+  thisContext.translateToCanvas = (x, y) => {
+    return [(x + thisContext.maxX) - thisContext._spriteCanvas.offsetLeft, (thisContext.maxY - y) + thisContext._spriteCanvas.offsetTop];
   };
   
-  this.mouseDown = false;
-  this.mouseX = 0;
-  this.mouseY = 0;
-  this._spriteCanvas.addEventListener("mousedown", (event) => {
-    this.mouseDown = true;
-    [this.mouseX, this.mouseY] = this.translateToCenter(event.clientX, event.clientY);
-  });
-  this._spriteCanvas.addEventListener("mouseup", (event) => {
-    this.mouseDown = false;
-    [this.mouseX, this.mouseY] = this.translateToCenter(event.clientX, event.clientY);
-  });
-  this._spriteCanvas.addEventListener("touchstart", (event) => {
-    this.mouseDown = true;
-    [this.mouseX, this.mouseY] = this.translateToCenter(event.clientX, event.clientY);
-  });
-  this._spriteCanvas.addEventListener("touchend", (event) => {
-    // for some reason touchend events are firing too quickly
-    // and are not getting picked up in 40 ms every-if's
-    // so this setTimeout slows things down just enouch so
-    // touch events mirror mouse events
-    setTimeout(() => {this.mouseDown = false;}, 0);
-  });
-  this._spriteCanvas.addEventListener("mousemove", (event) => { 
-    [this.mouseX, this.mouseY] = this.translateToCenter(event.clientX, event.clientY);
-  });
-  this._spriteCanvas.addEventListener("touchmove", event => {
-    [this.mouseX, this.mouseY] = this.translateToCenter(event.targetTouches[0].clientX, event.targetTouches[0].clientY);
-    event.preventDefault();
-  });
-  
-  this.keysDown = [];
-  document.body.addEventListener("keydown", event => {
-    var key = Woof.keyCodeToString(event.keyCode);
-    if (!this.keysDown.includes(key)){
-     this.keysDown.push(key); 
-    }
-  });
-  document.body.addEventListener("keyup", event => {
-    var key = Woof.keyCodeToString(event.keyCode);
-    if (this.keysDown.includes(key)){
-      this.keysDown.splice(this.keysDown.indexOf(key), 1);
-    }
-  });
+  thisContext.ready(() => {
+    thisContext.mouseDown = false;
+    thisContext.mouseX = 0;
+    thisContext.mouseY = 0;
+    thisContext._spriteCanvas.addEventListener("mousedown", (event) => {
+      thisContext.mouseDown = true;
+      [thisContext.mouseX, thisContext.mouseY] = thisContext.translateToCenter(event.clientX, event.clientY);
+    });
+    thisContext._spriteCanvas.addEventListener("mouseup", (event) => {
+      thisContext.mouseDown = false;
+      [thisContext.mouseX, thisContext.mouseY] = thisContext.translateToCenter(event.clientX, event.clientY);
+    });
+    thisContext._spriteCanvas.addEventListener("touchstart", (event) => {
+      thisContext.mouseDown = true;
+      [thisContext.mouseX, thisContext.mouseY] = thisContext.translateToCenter(event.clientX, event.clientY);
+    });
+    thisContext._spriteCanvas.addEventListener("touchend", (event) => {
+      // for some reason touchend events are firing too quickly
+      // and are not getting picked up in 40 ms every-if's
+      // so thisContext setTimeout slows things down just enouch so
+      // touch events mirror mouse events
+      setTimeout(() => {thisContext.mouseDown = false;}, 0);
+    });
+    thisContext._spriteCanvas.addEventListener("mousemove", (event) => { 
+      [thisContext.mouseX, thisContext.mouseY] = thisContext.translateToCenter(event.clientX, event.clientY);
+    });
+    thisContext._spriteCanvas.addEventListener("touchmove", event => {
+      [thisContext.mouseX, thisContext.mouseY] = thisContext.translateToCenter(event.targetTouches[0].clientX, event.targetTouches[0].clientY);
+      event.preventDefault();
+    });
+    
+    thisContext.keysDown = [];
+    document.body.addEventListener("keydown", event => {
+      var key = Woof.prototype.keyCodeToString(event.keyCode);
+      if (!thisContext.keysDown.includes(key)){
+       thisContext.keysDown.push(key); 
+      }
+    });
+    document.body.addEventListener("keyup", event => {
+      var key = Woof.prototype.keyCodeToString(event.keyCode);
+      if (thisContext.keysDown.includes(key)){
+        thisContext.keysDown.splice(thisContext.keysDown.indexOf(key), 1);
+      }
+    });
+    thisContext._onClicks = [];
+    thisContext.onClick = func => { thisContext._onClicks.push(func); };
+    thisContext._onClickHandler = event => {
+      var [mouseX, mouseY] = thisContext.translateToCenter(event.clientX, event.clientY);
+      thisContext._onClicks.forEach((func) => {func(mouseX, mouseY)});
+    };
+    thisContext._spriteCanvas.addEventListener("mousedown", this._onClickHandler);
+  })
 
-  this._everys = [];
-  this.every = (time, units, func) => {
+  thisContext._everys = [];
+  thisContext.every = (time, units, func) => {
     func();
-    this._everys.push(setInterval(func, Woof.unitsToMiliseconds(time, units)));
+    thisContext._everys.push(setInterval(func, Woof.prototype.unitsToMiliseconds(time, units)));
   };
-  this.forever = (func) => {
-    this.repeatUntil("false", func);
+  thisContext.forever = (func) => {
+    thisContext.repeatUntil("false", func);
   };
   
-  this.when = (condition, func) => {
-    this.forever(() => {
+  thisContext.when = (condition, func) => {
+    thisContext.forever(() => {
       var cond;
       try {
         cond = eval(condition);
       } catch (e) {
-        console.error("Bad condition in Woof.Project#when: " + condition);
+        console.error("Bad condition in when: " + condition);
         throw e;
       }
       if (cond) {
@@ -328,73 +268,65 @@ Woof.Project = function({fullScreen = false, height = 500, width = 350, debug = 
     });
   };
   
-  this._repeats = [];
-  this.repeat = (times, func, after) => {
-    this._repeats.push(new Woof.Repeat(times, func, after));
+  thisContext._repeats = [];
+  thisContext.repeat = (times, func, after) => {
+    thisContext._repeats.push(new Woof.prototype.Repeat(times, func, after));
   };
-  this.repeatUntil = (condition, func, after) => {
-    this._repeats.push(new Woof.RepeatUntil(condition, func, after));
+  thisContext.repeatUntil = (condition, func, after) => {
+    thisContext._repeats.push(new Woof.prototype.RepeatUntil(condition, func, after));
   };
-  this._runRepeats = () => {
-    this._repeats.forEach(repeat => {
+  thisContext._runRepeats = () => {
+    thisContext._repeats.forEach(repeat => {
       repeat.next();
     });
-    this._repeats = this._repeats.filter(repeat => {return !repeat.done});
+    thisContext._repeats = thisContext._repeats.filter(repeat => {return !repeat.done});
   };
   
-  this._afters = [];
-  this.after = (time, units, func) => {
-    this._afters.push(setTimeout(func, Woof.unitsToMiliseconds(time, units)));
+  thisContext._afters = [];
+  thisContext.after = (time, units, func) => {
+    thisContext._afters.push(setTimeout(func, Woof.prototype.unitsToMiliseconds(time, units)));
   };
-  
-  this._onClicks = [];
-  this.onClick = func => { this._onClicks.push(func); };
-  this._onClickHandler = event => {
-    var [mouseX, mouseY] = this.translateToCenter(event.clientX, event.clientY);
-    this._onClicks.forEach((func) => {func(mouseX, mouseY)});
-  };
-  this._spriteCanvas.addEventListener("mousedown", this._onClickHandler);
 
-  this.debugText = [];
-  for (var i = 0; i < this.debug.length; i++){
-    var sprite = new Woof.Text(this, {textAlign: "left"});
-    this.debugText.push(sprite);
+  thisContext.debugText = [];
+  for (var i = 0; i < thisContext.debug.length; i++){
+    var sprite = new Woof.prototype.Text(thisContext, {textAlign: "left"});
+    thisContext.debugText.push(sprite);
   }
   
-  this._renderDebug = () => {
-    for (var i = 0; i < this.debug.length; i++) {
-      var expr = this.debug[i];
+  thisContext._renderDebug = () => {
+    for (var i = 0; i < thisContext.debug.length; i++) {
+      var expr = thisContext.debug[i];
       var value;
       try { value = eval(expr); } catch(e) { value = e; }
-      [this.debugText[i].x, this.debugText[i].y] = [this.minX + 5, this.minY + (12 * (i+1))];
-      this.debugText[i].text = `${expr}: ${value}`;
-      this.debugText[i]._render(this);
+      [thisContext.debugText[i].x, thisContext.debugText[i].y] = [thisContext.minX + 5, thisContext.minY + (12 * (i+1))];
+      thisContext.debugText[i].text = `${expr}: ${value}`;
+      thisContext.debugText[i]._render(thisContext);
     }
   };
   
-  this._renderSprites = () => {
-    this.sprites.forEach((sprite) => {
-      sprite._render(this);
+  thisContext._renderSprites = () => {
+    thisContext.sprites.forEach((sprite) => {
+      sprite._render(thisContext);
     });
   };
   
-  this.clearPen = () => {
-    this._penContext.clearRect(0, 0, this.width, this.height);
+  thisContext.clearPen = () => {
+    thisContext._penContext.clearRect(0, 0, thisContext.width, thisContext.height);
   }
   
-  this._render = () => {
-    if (this.stopped) return;
-    this.renderInterval = window.requestAnimationFrame(this._render);
-    this._runRepeats();
-    this._spriteContext.clearRect(0, 0, this.width, this.height);
-    this._renderSprites();
-    this._renderDebug();
+  thisContext._render = () => {
+    thisContext.renderInterval = window.requestAnimationFrame(thisContext._render);
+    if (thisContext.stopped) return;
+    thisContext._runRepeats();
+    thisContext._spriteContext.clearRect(0, 0, thisContext.width, thisContext.height);
+    thisContext._renderSprites();
+    thisContext._renderDebug();
   };
-  this._render();
+  thisContext._render();
 };
 
-Woof.Sprite = function(project, {x = 0, y = 0, angle = 0, rotationStyle = "ROTATE", showing = true, penColor = "black", penWidth = 1} = {}) {
-  this.project = project;
+Woof.prototype.Sprite = function(project, {x = 0, y = 0, angle = 0, rotationStyle = "ROTATE", showing = true, penColor = "black", penWidth = 1} = {}) {
+  this.project = project.global ? window : project;
   this.x = x;
   this.y = y;
   this.angle = angle;
@@ -423,11 +355,6 @@ Woof.Sprite = function(project, {x = 0, y = 0, angle = 0, rotationStyle = "ROTAT
     [this.lastX, this.lastY] = [this.x, this.y];
   };
   setInterval(this.trackPen, 0);
-  this.clearPen = () => {
-    this.penCanvas = document.createElement('canvas');
-    [this.penCanvas.width, this.penCanvas.height] = [this.project.width, this.project.height]
-    this.penContext = this.penCanvas.getContext('2d');
-  };
   
   this._render = function() {
     if (this.showing) {
@@ -446,15 +373,15 @@ Woof.Sprite = function(project, {x = 0, y = 0, angle = 0, rotationStyle = "ROTAT
         }
       }
       
-      if (this instanceof Woof.Image) {
+      if (this instanceof Woof.prototype.Image) {
         this.imageRender();
-      } else if (this instanceof Woof.Text) {
+      } else if (this instanceof Woof.prototype.Text) {
         this.textRender();
-      } else if (this instanceof Woof.Circle) {
+      } else if (this instanceof Woof.prototype.Circle) {
         this.circleRender();
-      } else if (this instanceof Woof.Rectangle) {
+      } else if (this instanceof Woof.prototype.Rectangle) {
         this.rectangleRender();
-      } else if (this instanceof Woof.Line) {
+      } else if (this instanceof Woof.prototype.Line) {
         this.lineRender();
       }
       this.project._spriteContext.restore();
@@ -589,7 +516,9 @@ Woof.Sprite = function(project, {x = 0, y = 0, angle = 0, rotationStyle = "ROTAT
       this._onClicks.forEach((func) => {func(mouseX, mouseY)});
     }
   };
-  this.project._spriteCanvas.addEventListener("mousedown", this._onClickHandler);
+  this.project.ready(() => {
+    this.project._spriteCanvas.addEventListener("mousedown", this._onClickHandler);
+  });
   
   this.delete = () => {
     this.showing = false;
@@ -601,8 +530,8 @@ Woof.Sprite = function(project, {x = 0, y = 0, angle = 0, rotationStyle = "ROTAT
   };
 };
 
-Woof.Text = function(project, {text = "Text", dynamicText = undefined, size = 12, color = "black", fontFamily = "arial", textAlign = "center"} = {}) {
-  Woof.Sprite.call(this, project, arguments[1]);
+Woof.prototype.Text = function(project, {text = "Text",  dynamicText = undefined, size = 12, color = "black", fontFamily = "arial", textAlign = "center"} = {}) {
+  Woof.prototype.Sprite.call(this, project, arguments[1]);
   this.text = text;
   this.size = size;
   this.color = color;
@@ -647,8 +576,8 @@ Woof.Text = function(project, {text = "Text", dynamicText = undefined, size = 12
   };
 };
 
-Woof.Circle = function(project, {radius = 10, color = "black"} = {}) {
-  Woof.Sprite.call(this, project, arguments[1]);
+Woof.prototype.Circle = function(project, {radius = 10, color = "black"} = {}) {
+  Woof.prototype.Sprite.call(this, project, arguments[1]);
   this.radius = radius;
   this.color = color;
   
@@ -668,8 +597,8 @@ Woof.Circle = function(project, {radius = 10, color = "black"} = {}) {
   };
 };
 
-Woof.Rectangle = function(project, {rectangleHeight = 10, rectangleWidth = 10, color = "black"} = {}) {
-  Woof.Sprite.call(this, project, arguments[1]);
+Woof.prototype.Rectangle = function(project, {rectangleHeight = 10, rectangleWidth = 10, color = "black"} = {}) {
+  Woof.prototype.Sprite.call(this, project, arguments[1]);
   this.rectangleHeight = rectangleHeight;
   this.rectangleWidth = rectangleWidth;
   this.color = color;
@@ -688,8 +617,8 @@ Woof.Rectangle = function(project, {rectangleHeight = 10, rectangleWidth = 10, c
   };
 };
 
-Woof.Line = function(project, {lineWidth = 1, x1 = 10, y1 = 10, color = "black"} = {}) {
-  Woof.Sprite.call(this, project, arguments[1]);
+Woof.prototype.Line = function(project, {lineWidth = 1, x1 = 10, y1 = 10, color = "black"} = {}) {
+  Woof.prototype.Sprite.call(this, project, arguments[1]);
   this.x1 = x1;
   this.y1 = y1;
   this.color = color;
@@ -713,13 +642,13 @@ Woof.Line = function(project, {lineWidth = 1, x1 = 10, y1 = 10, color = "black"}
   };
 };
 
-Woof.Image = function(project, {url = "http://www.loveyourdog.com/image3.gif", imageHeight, imageWidth} = {}) {
-  Woof.Sprite.call(this, project, arguments[1]);
+Woof.prototype.Image = function(project, {url = "http://www.loveyourdog.com/image3.gif", imageHeight, imageWidth} = {}) {
+  Woof.prototype.Sprite.call(this, project, arguments[1]);
   this.imageHeight = imageHeight;
   this.imageWidth = imageWidth;
   
   this.setImageURL = function(url){    
-    this.image = new Image();
+    this.image = new window.BrowserImage();
     this.image.src = url;
   };
   this.setImageURL(url);
@@ -741,7 +670,7 @@ Woof.Image = function(project, {url = "http://www.loveyourdog.com/image3.gif", i
   };
 };
 
-Woof.Repeat = function(times, func, after) {
+Woof.prototype.Repeat = function(times, func, after) {
   this.func = func;
   this.times = times;
   this.done = false;
@@ -761,7 +690,7 @@ Woof.Repeat = function(times, func, after) {
   };
 };
 
-Woof.RepeatUntil = function(condition, func, after){
+Woof.prototype.RepeatUntil = function(condition, func, after){
   if (typeof condition !== "string") { throw Error("You must give repeatUntil a string condition in quotes. You gave it: " + condition); }
   this.func = func;
   this.condition = condition;
@@ -789,7 +718,7 @@ Woof.RepeatUntil = function(condition, func, after){
   };
 };
 
-Woof.Firebase = function(config){
+Woof.prototype.Firebase = function(config){
   this.data = {};
   
   this.loadFirebaseLibrary = callback => {
@@ -816,8 +745,116 @@ Woof.Firebase = function(config){
   };
 };
 
-Woof.virtualCanvas = function(width, height) {
-  canvas = document.createElement('canvas');
-  [canvas.width, canvas.height] = [width, height];
-  return [canvas, canvas.getContext('2d')];
+Woof.prototype.keyCodeToString = keyCode => {
+  if (keyCode == 38) {
+    return "UP";
+  }
+  else if (keyCode == 37){
+    return "LEFT";
+  }
+  else if (keyCode == 39){
+    return "RIGHT";
+  }
+  else if (keyCode == 40){
+    return "DOWN";
+  }
+  else {
+    return String.fromCharCode(keyCode);
+  }
 };
+
+Woof.prototype.unitsToMiliseconds = (time, units) => {
+  if (units == "milliseconds" || units == "millisecond"){
+    return time;
+  } else if (units == "miliseconds" || units == "milisecond"){
+    return time;
+  } else if (units == "seconds" || units == "second"){
+    return time * 1000;
+  } else if (units == "minutes" || units == "minute"){
+    return time * 1000 * 60;
+  } else {
+    throw Error("Unrecognized Time");
+  }
+};
+
+Woof.prototype.randomInt = (min, max) => {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+};
+
+Woof.prototype.repeat = (times, func) => {
+  for (var i = 0; i < times; i++){
+    func(i+1);
+  }
+};
+
+Woof.prototype.dayOfMonth = () =>{
+  var date = new Date();
+  return date.getDate();
+};
+
+Woof.prototype.dayOfWeek = () => {
+  var date = new Date();
+  var day = date.getDay();
+  if (day === 0){
+    return "Sunday";
+  }
+  else if (day == 1){
+    return "Monday";
+  }
+  else if (day == 2){
+    return "Tuesday";
+  }
+  else if (day == 3){
+    return "Wednesday";
+  }
+  else if (day == 4){
+    return "Thursday";
+  }
+  else if (day == 5){
+    return "Friday";
+  }
+  else if (day == 6){
+    return "Saturday";
+  }
+};
+
+Woof.prototype.hourMilitary =  () => {
+  var date = new Date();
+  return date.getHours();
+};
+
+Woof.prototype.hour = () => {
+  var date = new Date();
+  var hour = date.getHours();
+  return hour <= 12 ? hour : hour - 12;
+};
+
+Woof.prototype.minute =  () => {
+  var date = new Date();
+  return date.getMinutes();
+};
+
+Woof.prototype.second = () => {
+  var date = new Date();
+  return date.getSeconds();
+};
+
+Woof.prototype.randomColor = function(){
+  return "rgb(" + Woof.randomInt(0, 255) + ", " + Woof.randomInt(0, 255) + ", " + Woof.randomInt(0, 255)+ ")";
+}
+
+Woof.prototype.RIGHT = 0;
+Woof.prototype.LEFT = 180;
+Woof.prototype.UP = 90;
+Woof.prototype.DOWN = 270;
+
+
+Woof.prototype.extend = function(a, b){
+    for(var key in b) {
+      a[key] = b[key];
+    }
+};
+
+if (JSON.parse(document.currentScript.getAttribute('global'))) { 
+  Woof.prototype.extend(window, new Woof({global: true, fullScreen: true, debug: ["mouseX", "mouseY"]})); 
+}
