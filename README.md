@@ -1,6 +1,6 @@
 # WoofJS - *JavaScript Unleashed*
 
-WoofJS is a JavaScript library for making web and mobile games and animations.
+WoofJS is a JavaScript framework for making web and mobile games and animations.
 
 It was originally inspired by Scratch and can help ease the trasition to JavaScript.
 
@@ -12,9 +12,9 @@ WoofJS is developed with :heart: by [The Coding Space](http://thecodingspace.com
 
 You can either <a href="https://jsbin.com/lekovu/edit?js,output" target="_blank">clone this JSBin</a> or follow the steps below to setup your first WoofJS 
 
-1) Put the Woof library between the `<head>` tags.
+1) Put Woof between the `<head>` tags.
 ```html
-<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/94f58acbd254a9f867826ef5ed7607e2341b7f59/js" global="true"></script>
+<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/8ed80780a02b5323123b9425594c11fb21ef01c0/js" global="true"></script>
 ```
 2) Throw in some JavaScript, and tell Woof to fetch it.
 ```javascript
@@ -50,14 +50,14 @@ every("1", "second", () => {
 
 ### Setting the Backdrop
 
-  - Set/change the backdrop to an image URL: 
+  - Set the backdrop to an image URL: 
   
 
 ```javascript
 setBackdropURL("http://example.com/img.jpg");
 ```
 
-  - Set/change the backdrop to an color: 
+  - Set the backdrop to a color: 
 
 ```javascript
 setBackdropColor("blue");
