@@ -1,3 +1,4 @@
+// saving Image because we will later overwrite Image with Woof.Image on the window
 window.BrowserImage = Image;
 
 function Woof({ global = false, canvasId = undefined, fullScreen = false, height = 500, width = 350, debug = [] } = {}) {
@@ -9,7 +10,8 @@ function Woof({ global = false, canvasId = undefined, fullScreen = false, height
   thisContext.sprites = [];
   thisContext.backdrop = undefined;
   thisContext.debug = debug;
-  thisContext.stopped = false;
+  thisContext.stopped = true;
+
   if (fullScreen) {
     width = window.innerWidth;
     height = window.innerHeight;
@@ -19,37 +21,88 @@ function Woof({ global = false, canvasId = undefined, fullScreen = false, height
     });
   }
 
-  if (canvasId) {
-    try {
-      thisContext._canvas = document.getElementById(canvasId);
-    } catch (e) {
-      console.error(e);
-      throw Error("Could not find a canvas on the page with id " + canvasId);
+  thisContext._readys = [];
+  thisContext.ready = func => {
+    if (thisContext.stopped) {
+      thisContext._readys.push(func);
+    } else {
+      func();
     }
-  } else {
-    thisContext._canvas = document.createElement("canvas");
-    thisContext._canvas.id = "project";
-    thisContext._canvas.width = width;
-    thisContext._canvas.height = height;
-    thisContext._canvas.style.display = "block";
-    window.addEventListener("load", () => {
-      document.body.appendChild(thisContext._canvas);
+  };
+  thisContext._runReadys = () => {
+    thisContext.stopped = false;
+    thisContext._readys.forEach(func => {
+      func();
     });
-  }
-  thisContext._context = thisContext._canvas.getContext("2d");
+    thisContext._readys = [];
+  };
+
+  window.addEventListener("load", () => {
+    thisContext._mainDiv = document.createElement("div");
+    document.body.appendChild(thisContext._mainDiv);
+    thisContext._mainDiv.id = "project";
+    thisContext._mainDiv.style.position = "relative";
+
+    thisContext._spriteCanvas = document.createElement("canvas");
+    thisContext._mainDiv.appendChild(thisContext._spriteCanvas);
+    thisContext._spriteCanvas.id = "sprites";
+    thisContext._spriteCanvas.width = width;
+    thisContext._spriteCanvas.height = height;
+    thisContext._spriteCanvas.style.zIndex = 3;
+    thisContext._spriteCanvas.style.position = "absolute";
+
+    thisContext._penCanvas = document.createElement("canvas");
+    thisContext._mainDiv.appendChild(thisContext._penCanvas);
+    thisContext._penCanvas.id = "pen";
+    thisContext._penCanvas.width = width;
+    thisContext._penCanvas.height = height;
+    thisContext._penCanvas.style.zIndex = 2;
+    thisContext._penCanvas.style.position = "absolute";
+
+    thisContext._backdropCanvas = document.createElement("canvas");
+    thisContext._mainDiv.appendChild(thisContext._backdropCanvas);
+    thisContext._backdropCanvas.id = "backdrop";
+    thisContext._backdropCanvas.width = width;
+    thisContext._backdropCanvas.height = height;
+    thisContext._backdropCanvas.style.zIndex = 1;
+    thisContext._backdropCanvas.style.position = "absolute";
+
+    thisContext._spriteContext = thisContext._spriteCanvas.getContext("2d");
+    thisContext._penContext = thisContext._penCanvas.getContext("2d");
+    thisContext._backdropContext = thisContext._backdropCanvas.getContext("2d");
+
+    thisContext._runReadys();
+  });
+
   thisContext.setCanvasSize = () => {
-    thisContext.height = thisContext._canvas.height;
-    thisContext.width = thisContext._canvas.width;
+    if (thisContext._spriteCanvas) {
+      thisContext.height = thisContext._spriteCanvas.height;
+      thisContext.width = thisContext._spriteCanvas.width;
+    } else {
+      thisContext.height = height;
+      thisContext.width = width;
+    }
     thisContext.minX = -thisContext.width / 2;
     thisContext.maxX = thisContext.width / 2;
     thisContext.minY = -thisContext.height / 2;
     thisContext.maxY = thisContext.height / 2;
   };
   thisContext.setCanvasSize();
+
   if (fullScreen) {
     window.addEventListener("resize", () => {
-      thisContext._canvas.width = window.innerWidth;
-      thisContext._canvas.height = window.innerHeight;
+      thisContext._spriteCanvas.width = window.innerWidth;
+      thisContext._spriteCanvas.height = window.innerHeight;
+
+      var penData = thisContext._penContext.getImageData(0, 0, window.innerWidth, window.innerHeight);
+      thisContext._penCanvas.width = window.innerWidth;
+      thisContext._penCanvas.height = window.innerHeight;
+      thisContext._penContext.putImageData(penData, 0, 0);
+
+      thisContext._backdropCanvas.width = window.innerWidth;
+      thisContext._backdropCanvas.height = window.innerHeight;
+      thisContext._renderBackdrop();
+
       thisContext.setCanvasSize();
     });
   }
@@ -92,10 +145,25 @@ function Woof({ global = false, canvasId = undefined, fullScreen = false, height
     return sprite;
   };
 
+  thisContext._renderBackdrop = () => {
+    thisContext._backdropContext.clearRect(0, 0, thisContext.width, thisContext.height);
+    if (thisContext.backdrop instanceof BrowserImage) {
+      thisContext._backdropContext.drawImage(thisContext.backdrop, 0, 0);
+    } else if (typeof thisContext.backdrop == "string") {
+      thisContext._backdropContext.save();
+      thisContext._backdropContext.fillStyle = thisContext.backdrop;
+      thisContext._backdropContext.fillRect(0, 0, thisContext.width, thisContext.height);
+      thisContext._backdropContext.restore();
+    }
+  };
+
   thisContext.setBackdropURL = function (url) {
     var backdrop = new BrowserImage();
     backdrop.src = url;
     thisContext.backdrop = backdrop;
+    thisContext.backdrop.onload = function () {
+      thisContext.ready(thisContext._renderBackdrop);
+    };
   };
 
   thisContext.setBackdropColor = function (color) {
@@ -114,52 +182,52 @@ function Woof({ global = false, canvasId = undefined, fullScreen = false, height
 
     thisContext._everys.forEach(clearInterval);
     thisContext._afters.forEach(clearInterval);
-    thisContext._canvas.removeEventListener("mousedown", thisContext._onClickHandler);
+    thisContext._spriteCanvas.removeEventListener("mousedown", thisContext._onClickHandler);
 
     thisContext.sprites.forEach(sprite => sprite.delete());
   };
 
   thisContext.translateToCenter = (x, y) => {
-    return [x - thisContext.maxX - thisContext._canvas.offsetLeft, thisContext.maxY - y + thisContext._canvas.offsetTop];
+    return [x - thisContext.maxX - thisContext._spriteCanvas.offsetLeft, thisContext.maxY - y + thisContext._spriteCanvas.offsetTop];
   };
   thisContext.translateToCanvas = (x, y) => {
-    return [x + thisContext.maxX - thisContext._canvas.offsetLeft, thisContext.maxY - y + thisContext._canvas.offsetTop];
+    return [x + thisContext.maxX - thisContext._spriteCanvas.offsetLeft, thisContext.maxY - y + thisContext._spriteCanvas.offsetTop];
   };
 
-  thisContext.mouseDown = false;
-  thisContext.mouseX = 0;
-  thisContext.mouseY = 0;
-  thisContext._canvas.addEventListener("mousedown", event => {
-    thisContext.mouseDown = true;
-    [thisContext.mouseX, thisContext.mouseY] = thisContext.translateToCenter(event.clientX, event.clientY);
-  });
-  thisContext._canvas.addEventListener("mouseup", event => {
+  thisContext.ready(() => {
     thisContext.mouseDown = false;
-    [thisContext.mouseX, thisContext.mouseY] = thisContext.translateToCenter(event.clientX, event.clientY);
-  });
-  thisContext._canvas.addEventListener("touchstart", event => {
-    thisContext.mouseDown = true;
-    [thisContext.mouseX, thisContext.mouseY] = thisContext.translateToCenter(event.clientX, event.clientY);
-  });
-  thisContext._canvas.addEventListener("touchend", event => {
-    // for some reason touchend events are firing too quickly
-    // and are not getting picked up in 40 ms every-if's
-    // so thisContext setTimeout slows things down just enouch so
-    // touch events mirror mouse events
-    setTimeout(() => {
+    thisContext.mouseX = 0;
+    thisContext.mouseY = 0;
+    thisContext._spriteCanvas.addEventListener("mousedown", event => {
+      thisContext.mouseDown = true;
+      [thisContext.mouseX, thisContext.mouseY] = thisContext.translateToCenter(event.clientX, event.clientY);
+    });
+    thisContext._spriteCanvas.addEventListener("mouseup", event => {
       thisContext.mouseDown = false;
-    }, 0);
-  });
-  thisContext._canvas.addEventListener("mousemove", event => {
-    [thisContext.mouseX, thisContext.mouseY] = thisContext.translateToCenter(event.clientX, event.clientY);
-  });
-  thisContext._canvas.addEventListener("touchmove", event => {
-    [thisContext.mouseX, thisContext.mouseY] = thisContext.translateToCenter(event.targetTouches[0].clientX, event.targetTouches[0].clientY);
-    event.preventDefault();
-  });
+      [thisContext.mouseX, thisContext.mouseY] = thisContext.translateToCenter(event.clientX, event.clientY);
+    });
+    thisContext._spriteCanvas.addEventListener("touchstart", event => {
+      thisContext.mouseDown = true;
+      [thisContext.mouseX, thisContext.mouseY] = thisContext.translateToCenter(event.clientX, event.clientY);
+    });
+    thisContext._spriteCanvas.addEventListener("touchend", event => {
+      // for some reason touchend events are firing too quickly
+      // and are not getting picked up in 40 ms every-if's
+      // so thisContext setTimeout slows things down just enouch so
+      // touch events mirror mouse events
+      setTimeout(() => {
+        thisContext.mouseDown = false;
+      }, 0);
+    });
+    thisContext._spriteCanvas.addEventListener("mousemove", event => {
+      [thisContext.mouseX, thisContext.mouseY] = thisContext.translateToCenter(event.clientX, event.clientY);
+    });
+    thisContext._spriteCanvas.addEventListener("touchmove", event => {
+      [thisContext.mouseX, thisContext.mouseY] = thisContext.translateToCenter(event.targetTouches[0].clientX, event.targetTouches[0].clientY);
+      event.preventDefault();
+    });
 
-  thisContext.keysDown = [];
-  window.addEventListener("load", () => {
+    thisContext.keysDown = [];
     document.body.addEventListener("keydown", event => {
       var key = Woof.prototype.keyCodeToString(event.keyCode);
       if (!thisContext.keysDown.includes(key)) {
@@ -172,6 +240,17 @@ function Woof({ global = false, canvasId = undefined, fullScreen = false, height
         thisContext.keysDown.splice(thisContext.keysDown.indexOf(key), 1);
       }
     });
+    thisContext._onClicks = [];
+    thisContext.onClick = func => {
+      thisContext._onClicks.push(func);
+    };
+    thisContext._onClickHandler = event => {
+      var [mouseX, mouseY] = thisContext.translateToCenter(event.clientX, event.clientY);
+      thisContext._onClicks.forEach(func => {
+        func(mouseX, mouseY);
+      });
+    };
+    thisContext._spriteCanvas.addEventListener("mousedown", this._onClickHandler);
   });
 
   thisContext._everys = [];
@@ -219,18 +298,6 @@ function Woof({ global = false, canvasId = undefined, fullScreen = false, height
     thisContext._afters.push(setTimeout(func, Woof.prototype.unitsToMiliseconds(time, units)));
   };
 
-  thisContext._onClicks = [];
-  thisContext.onClick = func => {
-    thisContext._onClicks.push(func);
-  };
-  thisContext._onClickHandler = event => {
-    var [mouseX, mouseY] = thisContext.translateToCenter(event.clientX, event.clientY);
-    thisContext._onClicks.forEach(func => {
-      func(mouseX, mouseY);
-    });
-  };
-  thisContext._canvas.addEventListener("mousedown", thisContext._onClickHandler);
-
   thisContext.debugText = [];
   for (var i = 0; i < thisContext.debug.length; i++) {
     var sprite = new Woof.prototype.Text(thisContext, { textAlign: "left" });
@@ -252,54 +319,21 @@ function Woof({ global = false, canvasId = undefined, fullScreen = false, height
     }
   };
 
-  thisContext._renderBackdrop = () => {
-    if (thisContext.backdrop instanceof BrowserImage) {
-      thisContext._context.drawImage(thisContext.backdrop, 0, 0);
-    } else if (typeof thisContext.backdrop == "string") {
-      thisContext._context.save();
-      thisContext._context.fillStyle = thisContext.backdrop;
-      thisContext._context.fillRect(0, 0, thisContext.width, thisContext.height);
-      thisContext._context.restore();
-    }
-  };
-
   thisContext._renderSprites = () => {
     thisContext.sprites.forEach(sprite => {
       sprite._render(thisContext);
     });
   };
 
-  thisContext._renderPen = () => {
-    thisContext._context.save();
-    thisContext.sprites.forEach(sprite => {
-      for (var i = 0; i < sprite.pen.length; i++) {
-        var last = i == 0 ? false : sprite.pen[i - 1];
-        var current = sprite.pen[i];
-        if (sprite.pen[i] == false) {
-          //do nothing
-        } else if (last === false && current !== false) {
-            thisContext._context.beginPath();
-            thisContext._context.moveTo(...thisContext.translateToCanvas(current.x, current.y));
-          } else if (current !== false) {
-            thisContext._context.lineTo(...thisContext.translateToCanvas(current.x, current.y));
-            thisContext._context.lineCap = "round";
-            thisContext._context.strokeStyle = current.color;
-            thisContext._context.lineWidth = current.width;
-            thisContext._context.stroke();
-          }
-      }
-    });
-
-    thisContext._context.restore();
+  thisContext.clearPen = () => {
+    thisContext._penContext.clearRect(0, 0, thisContext.width, thisContext.height);
   };
 
   thisContext._render = () => {
-    if (thisContext.stopped) return;
     thisContext.renderInterval = window.requestAnimationFrame(thisContext._render);
+    if (thisContext.stopped) return;
     thisContext._runRepeats();
-    thisContext._context.clearRect(0, 0, thisContext.width, thisContext.height);
-    thisContext._renderBackdrop();
-    thisContext._renderPen();
+    thisContext._spriteContext.clearRect(0, 0, thisContext.width, thisContext.height);
     thisContext._renderSprites();
     thisContext._renderDebug();
   };
@@ -316,32 +350,39 @@ Woof.prototype.Sprite = function (project, { x = 0, y = 0, angle = 0, rotationSt
   this.penDown = false;
   this.penColor = penColor;
   this.penWidth = penWidth;
+  this.deleted = false;
 
-  this.pen = [];
+  [this.lastX, this.lastY] = [this.x, this.y];
   this.trackPen = () => {
-    var last = this.pen.length == 0 ? false : this.pen[this.pen.length - 1];
     if (this.penDown) {
-      if (last === false || !(last.x == this.x && last.y == this.y)) {
-        this.pen.push({ x: this.x, y: this.y, color: this.penColor, width: this.penWidth });
+      if (this.lastX != this.x || this.lastY != this.y) {
+        this.project._penContext.save();
+        this.project._penContext.beginPath();
+        this.project._penContext.moveTo(...this.project.translateToCanvas(this.lastX, this.lastY));
+        this.project._penContext.lineTo(...this.project.translateToCanvas(this.x, this.y));
+        this.project._penContext.lineCap = "round";
+        this.project._penContext.strokeStyle = this.penColor;
+        this.project._penContext.lineWidth = this.penWidth;
+        this.project._penContext.stroke();
+        this.project._penContext.restore();
       }
-    } else if (!this.penDown && last !== false) {
-      this.pen.push(false);
     }
+    [this.lastX, this.lastY] = [this.x, this.y];
   };
+  setInterval(this.trackPen, 0);
 
   this._render = function () {
-    this.trackPen();
     if (this.showing) {
-      this.project._context.save();
-      this.project._context.translate(this.canvasX(), this.canvasY());
+      this.project._spriteContext.save();
+      this.project._spriteContext.translate(this.canvasX(), this.canvasY());
       if (this.rotationStyle == "ROTATE") {
-        this.project._context.rotate(-this.radians());
+        this.project._spriteContext.rotate(-this.radians());
       } else if (this.rotationStyle == "NO ROTATE") {
         // no rotate
       } else if (this.rotationStyle == "ROTATE LEFT RIGHT") {
           if (this.angle % 360 >= 90 && this.angle % 360 < 270) {
-            this.project._context.translate(this.width, 0);
-            this.project._context.scale(-1, 1);
+            this.project._spriteContext.translate(this.width, 0);
+            this.project._spriteContext.scale(-1, 1);
           } else if (this.angle % 360 >= 0 && this.angle % 360 < 90 || this.angle % 360 <= 360 && this.angle % 360 >= 270) {
             // no rotate
           }
@@ -358,7 +399,7 @@ Woof.prototype.Sprite = function (project, { x = 0, y = 0, angle = 0, rotationSt
       } else if (this instanceof Woof.prototype.Line) {
         this.lineRender();
       }
-      this.project._context.restore();
+      this.project._spriteContext.restore();
     }
   };
 
@@ -417,6 +458,13 @@ Woof.prototype.Sprite = function (project, { x = 0, y = 0, angle = 0, rotationSt
   };
 
   this.touching = sprite => {
+    if (this.deleted || !this.showing) {
+      return false;
+    }
+    if (sprite.deleted || !sprite.showing) {
+      return false;
+    }
+
     var r1 = this.bounds();
     var r2 = sprite.bounds();
     if (!this.showing || !sprite.showing) {
@@ -426,6 +474,10 @@ Woof.prototype.Sprite = function (project, { x = 0, y = 0, angle = 0, rotationSt
   };
 
   this.over = (x, y) => {
+    if (this.deleted || !this.showing) {
+      return false;
+    }
+
     var r1 = this.bounds();
     var belowTop = y <= r1.top;
     var aboveBottom = y >= r1.bottom;
@@ -435,10 +487,18 @@ Woof.prototype.Sprite = function (project, { x = 0, y = 0, angle = 0, rotationSt
   };
 
   this.mouseOver = function () {
+    if (this.deleted || !this.showing) {
+      return false;
+    }
+
     return this.over(this.project.mouseX, this.project.mouseY);
   };
 
   this.mouseDown = () => {
+    if (this.deleted || !this.showing) {
+      return false;
+    }
+
     return this.mouseOver() && project.mouseDown;
   };
 
@@ -484,28 +544,33 @@ Woof.prototype.Sprite = function (project, { x = 0, y = 0, angle = 0, rotationSt
       });
     }
   };
-  this.project._canvas.addEventListener("mousedown", this._onClickHandler);
+  this.project.ready(() => {
+    this.project._spriteCanvas.addEventListener("mousedown", this._onClickHandler);
+  });
 
   this.delete = () => {
+    this.showing = false;
+    this.deleted = true;
     if (this.project.sprites.includes(this)) {
       this.project.sprites.splice(this.project.sprites.indexOf(this), 1);
-      this.project._canvas.removeEventListener("mousedown", this._onClickHandler);
+      this.project._spriteCanvas.removeEventListener("mousedown", this._onClickHandler);
     }
   };
 };
 
-Woof.prototype.Text = function (project, { text = "Text", size = 12, color = "black", fontFamily = "arial", textAlign = "center" } = {}) {
+Woof.prototype.Text = function (project, { text = "Text", dynamicText = undefined, size = 12, color = "black", fontFamily = "arial", textAlign = "center" } = {}) {
   Woof.prototype.Sprite.call(this, project, arguments[1]);
   this.text = text;
   this.size = size;
   this.color = color;
   this.fontFamily = fontFamily;
   this.textAlign = textAlign;
+  this.dynamicText = dynamicText;
 
   this.width = () => {
     var width;
     this._applyInContext(() => {
-      width = this.project._context.measureText(this.text).width;
+      width = this.project._spriteContext.measureText(this.text).width;
     });
     return width;
   };
@@ -513,26 +578,32 @@ Woof.prototype.Text = function (project, { text = "Text", size = 12, color = "bl
   this.height = () => {
     var height;
     this._applyInContext(() => {
-      height = this.project._context.measureText("M").width;
+      height = this.project._spriteContext.measureText("M").width;
     });
     return height;
   };
 
   this._applyInContext = func => {
-    this.project._context.save();
+    this.project._spriteContext.save();
 
-    this.project._context.font = this.size + "px " + this.fontFamily;
-    this.project._context.fillStyle = this.color;
-    this.project._context.textAlign = this.textAlign;
+    this.project._spriteContext.font = this.size + "px " + this.fontFamily;
+    this.project._spriteContext.fillStyle = this.color;
+    this.project._spriteContext.textAlign = this.textAlign;
 
     func();
 
-    this.project._context.restore();
+    this.project._spriteContext.restore();
   };
 
   this.textRender = () => {
     this._applyInContext(() => {
-      this.project._context.fillText(this.text, 0, 0);
+      var text;
+      try {
+        text = this.dynamicText ? eval(this.dynamicText) : this.text;
+      } catch (e) {
+        console.error("Error with dynamicText: '" + this.dynamicText + "'");throw e;
+      }
+      this.project._spriteContext.fillText(text, 0, 0);
     });
   };
 };
@@ -551,10 +622,10 @@ Woof.prototype.Circle = function (project, { radius = 10, color = "black" } = {}
   };
 
   this.circleRender = () => {
-    this.project._context.beginPath();
-    this.project._context.arc(0, 0, this.radius, 0, 2 * Math.PI);
-    this.project._context.fillStyle = this.color;
-    this.project._context.fill();
+    this.project._spriteContext.beginPath();
+    this.project._spriteContext.arc(0, 0, this.radius, 0, 2 * Math.PI);
+    this.project._spriteContext.fillStyle = this.color;
+    this.project._spriteContext.fill();
   };
 };
 
@@ -573,8 +644,8 @@ Woof.prototype.Rectangle = function (project, { rectangleHeight = 10, rectangleW
   };
 
   this.rectangleRender = () => {
-    this.project._context.fillStyle = this.color;
-    this.project._context.fillRect(-this.width() / 2, -this.height() / 2, this.width(), this.height());
+    this.project._spriteContext.fillStyle = this.color;
+    this.project._spriteContext.fillRect(-this.width() / 2, -this.height() / 2, this.width(), this.height());
   };
 };
 
@@ -594,12 +665,12 @@ Woof.prototype.Line = function (project, { lineWidth = 1, x1 = 10, y1 = 10, colo
   };
 
   this.lineRender = () => {
-    this.project._context.beginPath();
-    this.project._context.moveTo(0, 0);
-    this.project._context.lineTo(this.x1 + this.x, this.y1 + this.y);
-    this.project._context.strokeStyle = color;
-    this.project._context.lineWidth = lineWidth;
-    this.project._context.stroke();
+    this.project._spriteContext.beginPath();
+    this.project._spriteContext.moveTo(0, 0);
+    this.project._spriteContext.lineTo(this.x1 - this.x, -this.y1 + this.y);
+    this.project._spriteContext.strokeStyle = color;
+    this.project._spriteContext.lineWidth = lineWidth;
+    this.project._spriteContext.stroke();
   };
 };
 
@@ -627,7 +698,7 @@ Woof.prototype.Image = function (project, { url = "http://www.loveyourdog.com/im
   };
 
   this.imageRender = () => {
-    this.project._context.drawImage(this.image, -this.width() / 2, -this.height() / 2, this.width(), this.height());
+    this.project._spriteContext.drawImage(this.image, -this.width() / 2, -this.height() / 2, this.width(), this.height());
   };
 };
 

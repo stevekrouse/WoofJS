@@ -19,10 +19,10 @@ You can either <a href="https://jsbin.com/lekovu/edit?js,output" target="_blank"
 2) Throw in some JavaScript, and tell Woof to fetch it.
 ```javascript
 // Set the backdrop URL (preferably of similar dimensions to your canvas)
-setBackdropURL("http://pic.1fotonin.com//data/wallpapers/24/WDF_715771.jpg");
+setBackdropURL("http://i.imgur.com/lyyFGm4.jpg");
 
 // Add an image via a url
-var dawg = addImage({url: "http://t11.deviantart.net/e9EiWxrehU301T_fNZMt01PyBSA=/300x200/filters:fixed_height(100,100):origin()/pre11/c3dc/th/pre/f/2008/295/c/3/c3f0e39599272ba0b3bcdbcdda81ace2.png", x: 0, y: 0, imageHeight: 100, imageWidth: 135});
+var dawg = addImage({url: "http://i.imgur.com/SMJjVCL.png", x: 0, y: 0, imageHeight: 100, imageWidth: 135});
 
 // Make it move with the arrow keys by checking which keys are down
 forever(() => {
@@ -41,11 +41,10 @@ forever(() => {
 });
 
 var timer = 20;  // make the timer start at 20
-var timerText = addText({x: 0, y: maxY - 20, size: 20, color: "white"}); // add text that diplays the timer
+var timerText = project.addText({x: 0, y: project.maxY - 20, size: 20, color: "white", dynamicText: "'Time Left: ' + timer"}); // add text that diplays the timer (dynamicText updates automatically)
 every("1", "second", () => {
-  if (timer === 0){ stopAll(); } // stop everything when the timer reaches 0
+  if (timer === 0){ project.stopAll(); } // stop everything when the timer reaches 0
   timer--;   // make the timer go down every second
-  timerText.text = "Timer: " + timer;   // change the text to refer to the timer's new value every second
 });
 ```
 
@@ -251,7 +250,6 @@ When creating a new Image, Text, Rectangle or Circle, you may use the following 
   - Don't rotate the sprites costume when the angle changes: `NAME.setRotationStyle("NO ROTATE");`
   - Rotate left to right when it points in a direction and moves `NAME.setRotationStyle("ROTATE LEFT RIGHT");`
   - Move in the direction of the angle: `NAME.move(10);`
-  - Point towards another thing: `NAME.pointTowards(OTHER_NAME)`
   - Point towards an X,Y : `NAME.pointTowards(mouseX, mouseY)`
 
 ### Looks
@@ -268,6 +266,7 @@ When creating a new Image, Text, Rectangle or Circle, you may use the following 
   - Stop drawing a line behind a sprite: `NAME.penDown = false;`
   - Set pen color: `NAME.penColor = "blue";`
   - Set pen width: `NAME.penWidth = 10;`
+  - Clear all of the pen paths on the screen: `project.clearPen();`
 
 
 ### Control
@@ -331,9 +330,10 @@ var LINE_NAME = addLine({x: -100, y: 100, x1: 10, y1: 20, color: "pink", lineWid
 In addition to the default parameters (`x`, `y`, `angle`, `rotationStyle`, and `showing`), you may use these parameters to create new text: 
 
 ```javascript 
-var TEXT_NAME = addText({text: "Text", size: 12, color: "black", fontFamily: "arial", textAlign: "center"});
+var TEXT_NAME = addText({text: "Text", dynamicText: "'Score: ' + score", size: 12, color: "black", fontFamily: "arial", textAlign: "center"});
 ```
-  - Set the text value: `TEXT_NAME.text = "Sample Text";`
+  - Set the text value to an unchanging value: `TEXT_NAME.text = "Sample Text";`
+  - Set the text value to an changing string expression: `TEXT_NAME.dynamicText = "'Variable Name: ' + variableName";`
   - Set the font size: `TEXT_NAME.size = 20;`
   - Set the font color: `TEXT_NAME.color = "white";`
   - Set the font color to a hex value: `TEXT_NAME.color = "#32CD32";`
