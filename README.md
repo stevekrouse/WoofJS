@@ -80,8 +80,8 @@ setBackdropColor("blue");
   - Left edge of the screen: `minX`
   - Top edge of the screen: `maxY`
   - Bottom edge of the screen: `minY`
-  - Random X value on the screen: `randomX()`
-  - Random Y value on the screen: `randomY()`
+  - Random X value on the screen between `minX` and `maxX`: `randomX()`
+  - Random Y value on the screen between `minY` and `max: `randomY()`
   - Width of the screen: `width`
   - Height of the screen: `height`
 
@@ -104,125 +104,6 @@ To stop your whole project and freeze everything on the screen:
 
 ```javascript
 stopAll();
-```
-
-### Control Flow
-
-There are two types of commands in JavaScript:
-
-1) **Synchronous**: "Do this immediately and move on when it's done."
-
-*Synchronous example in real life*: Open heart surgery. When a doctor begins open heart surery on a patient, she stays in the operating room with the patient until the surgery is done and the patient is stitched back up. She doesn't start open surgery with one patient and then move on to another room where she begins operating on a second patient before the first operation is done. She starts and finishing one operation before starting a second.
-
-2) **Asynchronous**: "Start this immediately, but don't wait till it's done. Move on to the next command immediately after you start this command (which might be before this command is done)."
-
-*Asynchronous example in real life*: Ordering food or drinks. First, let's imagine what a synchronous resturant would look like. A waiter would come to your table, take 1 person's order, rush it back to the kitchen, wait for the kitchen to finish with that person's order, and then bring it back to that person. Finally once this first order is taken care of, the waiter would ask the 2nd person at the table for their order. Of course this would be ridiculous. It makes much more sense for a resturant to process its customers' orders asynchronously. That is, after a waiter takes one person's order, he is free to take another person's order before finishing the first order. This allows the resturant to do multiple things at once, which is ultimately faster for some types of tasks.
-
-Most commands are synchronous. For example, if-statements, setting or changing variables, and calling most Woof methods like `rectangle.move(10)` are all synchronous commands.
-
-`forever` is an example of an asynchronous command. Think about it: if `forever` told the computer to wait until it was done, it would never move on to the next line.
-
-`repeat`, `repeatUntil`, `every`, `after` are also asynchronous.
-
-Asynchronous commands become quite confusing when you something happen after an asynchronous command is *finished*. If you want something after the 10th time you `repeat` it, you can't just put it on the line below the `repeat`. Why? Because the line below `repeat` happens immediately after the asynchronously command *starts*, not after it finishes. 
-
-So how do we tell the computer to do something after an asynchronous command is *finished*? This is different for each language, but for Woof's `repeat` and `repeatUntil`, add a function as an extra parameter to those commands that specifies what should happen after the asynchonous command is *finished*. This is called a "callback" because that function is "called back" and run *after* the main part of the command is done.
-
-Also, be sure not to nest async commands within each other's main body. For example if you want to make an image move in a square for forever, you can't just put four nested repeats inside a forever. Instead you have to use recursion and tell your repeat code to start-over only after the 4th repeat is finished finished. (If you put a repeat in a forever, it'll  keep starting new repeats for forever really quickly. It's like repeatedly asking a waiter for seconds before your first course has arrived.)
-
-
-  - Repeat 10 times: 
-
-```javascript
-repeat(10, () => { 
-  NAME.x++;
-});
-```
-
-  - Do something after done repeating:
-
-```javascript
-repeat(10, () => { 
-  NAME.x++;
-}, () => {
-  NAME.color = "blue";
-});
-```
-
-  - Chaining repeats:
-
-```javascript
-repeat(100, () => {
-  NAME.angle = RIGHT;
-  NAME.move(1);
-}, () => { 
-  repeat(100, () => {
-    NAME.angle = UP;
-    NAME.move(1);
-  }, () => { 
-    repeat(100, () => {
-      NAME.angle = LEFT;
-      NAME.move(1);
-    }, () => { 
-      repeat(100, () => {
-        NAME.angle = DOWN;
-        NAME.move(1);
-      });
-    });
-  });
-});
-```
-
-  - Repeat constantly until (you have to put the condition in "quotes"): 
-
-```javascript
-repeatUntil("IMAGE_NAME.y < minY", () => {
-  IMAGE_NAME.y -= SPEED;
-});
-```
-
-  - Do seomthing after a `repeatUntil`:
-
-```javascript
-repeatUntil("IMAGE_NAME.y < minY", () => {
-  IMAGE_NAME.y -= SPEED;
-}, () => {
-  stopAll();  
-});
-```  
-
-  - Do this constantly forever: 
-
-```javascript
-forever(() => { 
-  CIRCLE_NAME.radius = CIRCLE_NAME.distanceTo(mouseX, mouseY);
-});
-```
-  
-  - Do this every second: 
-
-```javascript
-var timer = 20;
-var timerText = addText({x: 0, y: maxY - 20, size: 20, color: "white"});
-every("1", "second", () => {
-  if (timer === 0){ stopAll(); }
-  timer--;
-  timerText.text = "Timer: " + timer;
-});
-```
-
-  - Do this when a condition (in "quotes") is true. This is a short-hand for a forever-if statement.
-
-```javascript
-when('keysDown.includes("LEFT")', () => {
-    rectangle.x -= 5; 
-});
-```
-  
-  - Do this after one second: 
-
-```javascript
-after(1, "second", () => {...});
 ```
 
 ## Woof Objects (Images, Text, Rectangles, and Circles)
@@ -365,6 +246,125 @@ every(4, "second", () => {
     }
   });
 });
+```
+
+### Control Flow
+
+There are two types of commands in JavaScript:
+
+1) **Synchronous**: "Do this immediately and move on when it's done."
+
+*Synchronous example in real life*: Open heart surgery. When a doctor begins open heart surery on a patient, she stays in the operating room with the patient until the surgery is done and the patient is stitched back up. She doesn't start open surgery with one patient and then move on to another room where she begins operating on a second patient before the first operation is done. She starts and finishing one operation before starting a second.
+
+2) **Asynchronous**: "Start this immediately, but don't wait till it's done. Move on to the next command immediately after you start this command (which might be before this command is done)."
+
+*Asynchronous example in real life*: Ordering food or drinks. First, let's imagine what a synchronous resturant would look like. A waiter would come to your table, take 1 person's order, rush it back to the kitchen, wait for the kitchen to finish with that person's order, and then bring it back to that person. Finally once this first order is taken care of, the waiter would ask the 2nd person at the table for their order. Of course this would be ridiculous. It makes much more sense for a resturant to process its customers' orders asynchronously. That is, after a waiter takes one person's order, he is free to take another person's order before finishing the first order. This allows the resturant to do multiple things at once, which is ultimately faster for some types of tasks.
+
+Most commands are synchronous. For example, if-statements, setting or changing variables, and calling most Woof methods like `rectangle.move(10)` are all synchronous commands.
+
+`forever` is an example of an asynchronous command. Think about it: if `forever` told the computer to wait until it was done, it would never move on to the next line.
+
+`repeat`, `repeatUntil`, `every`, `after` are also asynchronous.
+
+Asynchronous commands become quite confusing when you something happen after an asynchronous command is *finished*. If you want something after the 10th time you `repeat` it, you can't just put it on the line below the `repeat`. Why? Because the line below `repeat` happens immediately after the asynchronously command *starts*, not after it finishes. 
+
+So how do we tell the computer to do something after an asynchronous command is *finished*? This is different for each language, but for Woof's `repeat` and `repeatUntil`, add a function as an extra parameter to those commands that specifies what should happen after the asynchonous command is *finished*. This is called a "callback" because that function is "called back" and run *after* the main part of the command is done.
+
+Also, be sure not to nest async commands within each other's main body. For example if you want to make an image move in a square for forever, you can't just put four nested repeats inside a forever. Instead you have to use recursion and tell your repeat code to start-over only after the 4th repeat is finished finished. (If you put a repeat in a forever, it'll  keep starting new repeats for forever really quickly. It's like repeatedly asking a waiter for seconds before your first course has arrived.)
+
+
+  - Repeat 10 times: 
+
+```javascript
+repeat(10, () => { 
+  NAME.x++;
+});
+```
+
+  - Do something after done repeating:
+
+```javascript
+repeat(10, () => { 
+  NAME.x++;
+}, () => {
+  NAME.color = "blue";
+});
+```
+
+  - Chaining repeats:
+
+```javascript
+repeat(100, () => {
+  NAME.angle = RIGHT;
+  NAME.move(1);
+}, () => { 
+  repeat(100, () => {
+    NAME.angle = UP;
+    NAME.move(1);
+  }, () => { 
+    repeat(100, () => {
+      NAME.angle = LEFT;
+      NAME.move(1);
+    }, () => { 
+      repeat(100, () => {
+        NAME.angle = DOWN;
+        NAME.move(1);
+      });
+    });
+  });
+});
+```
+
+  - Repeat constantly until (you have to put the condition in "quotes"): 
+
+```javascript
+repeatUntil("IMAGE_NAME.y < minY", () => {
+  IMAGE_NAME.y -= SPEED;
+});
+```
+
+  - Do seomthing after a `repeatUntil`:
+
+```javascript
+repeatUntil("IMAGE_NAME.y < minY", () => {
+  IMAGE_NAME.y -= SPEED;
+}, () => {
+  stopAll();  
+});
+```  
+
+  - Do this constantly forever: 
+
+```javascript
+forever(() => { 
+  CIRCLE_NAME.radius = CIRCLE_NAME.distanceTo(mouseX, mouseY);
+});
+```
+  
+  - Do this every second: 
+
+```javascript
+var timer = 20;
+var timerText = addText({x: 0, y: maxY - 20, size: 20, color: "white"});
+every("1", "second", () => {
+  if (timer === 0){ stopAll(); }
+  timer--;
+  timerText.text = "Timer: " + timer;
+});
+```
+
+  - Do this when a condition (in "quotes") is true. This is a short-hand for a forever-if statement.
+
+```javascript
+when('keysDown.includes("LEFT")', () => {
+    rectangle.x -= 5; 
+});
+```
+  
+  - Do this after one second: 
+
+```javascript
+after(1, "second", () => {...});
 ```
 
 ## Helper Functions
