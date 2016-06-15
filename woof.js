@@ -169,6 +169,7 @@ function Woof({ global = false, canvasId = undefined, fullScreen = false, height
 
   thisContext.setBackdropColor = function (color) {
     thisContext.backdrop = color;
+    thisContext._renderBackdrop();
   };
 
   thisContext.firebaseConfig = config => {
@@ -195,10 +196,15 @@ function Woof({ global = false, canvasId = undefined, fullScreen = false, height
     return [x + thisContext.maxX - thisContext._spriteCanvas.offsetLeft, thisContext.maxY - y + thisContext._spriteCanvas.offsetTop];
   };
 
+  thisContext.mouseDown = false;
+  thisContext.mouseX = 0;
+  thisContext.mouseY = 0;
+  thisContext.keysDown = [];
+  thisContext._onClicks = [];
+  thisContext.onClick = func => {
+    thisContext._onClicks.push(func);
+  };
   thisContext.ready(() => {
-    thisContext.mouseDown = false;
-    thisContext.mouseX = 0;
-    thisContext.mouseY = 0;
     thisContext._spriteCanvas.addEventListener("mousedown", event => {
       thisContext.mouseDown = true;
       [thisContext.mouseX, thisContext.mouseY] = thisContext.translateToCenter(event.clientX, event.clientY);
@@ -228,7 +234,6 @@ function Woof({ global = false, canvasId = undefined, fullScreen = false, height
       event.preventDefault();
     });
 
-    thisContext.keysDown = [];
     document.body.addEventListener("keydown", event => {
       var key = Woof.prototype.keyCodeToString(event.keyCode);
       if (!thisContext.keysDown.includes(key)) {
@@ -241,10 +246,6 @@ function Woof({ global = false, canvasId = undefined, fullScreen = false, height
         thisContext.keysDown.splice(thisContext.keysDown.indexOf(key), 1);
       }
     });
-    thisContext._onClicks = [];
-    thisContext.onClick = func => {
-      thisContext._onClicks.push(func);
-    };
     thisContext._onClickHandler = event => {
       var [mouseX, mouseY] = thisContext.translateToCenter(event.clientX, event.clientY);
       thisContext._onClicks.forEach(func => {
