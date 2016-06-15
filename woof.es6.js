@@ -196,6 +196,10 @@ function Woof({global = false, canvasId = undefined, fullScreen = false, height 
   thisContext.mouseDown = false;
   thisContext.mouseX = 0;
   thisContext.mouseY = 0;
+  thisContext.pMouseX = 0;
+  thisContext.pMouseY = 0;
+  thisContext.mouseXSpeed = 0;
+  thisContext.mouseYSpeed = 0;
   thisContext.keysDown = [];
   thisContext._onClicks = [];
   thisContext.onClick = func => { thisContext._onClicks.push(func); };
@@ -220,10 +224,16 @@ function Woof({global = false, canvasId = undefined, fullScreen = false, height 
       setTimeout(() => {thisContext.mouseDown = false;}, 0);
     });
     thisContext._spriteCanvas.addEventListener("mousemove", (event) => { 
+      [thisContext.pMouseX, thisContext.pMouseY] = [thisContext.mouseX, thisContext.mouseY];
       [thisContext.mouseX, thisContext.mouseY] = thisContext.translateToCenter(event.clientX, event.clientY);
+      thisContext.mouseXSpeed = thisContext.mouseX - thisContext.pMouseX;
+      thisContext.mouseYSpeed = thisContext.mouseY - thisContext.pMouseY;
     });
     thisContext._spriteCanvas.addEventListener("touchmove", event => {
+      [thisContext.pMouseX, thisContext.pMouseY] = [thisContext.mouseX, thisContext.mouseY];
       [thisContext.mouseX, thisContext.mouseY] = thisContext.translateToCenter(event.targetTouches[0].clientX, event.targetTouches[0].clientY);
+      thisContext.mouseXSpeed = thisContext.mouseX - thisContext.pMouseX;
+      thisContext.mouseYSpeed = thisContext.mouseY - thisContext.pMouseY;
       event.preventDefault();
     });
     

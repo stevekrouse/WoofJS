@@ -71,6 +71,10 @@ setBackdropColor("blue");
   
   - Mouse X: `mouseX`
   - Mouse Y: `mouseY`
+  - Previous mouse X: `pMouseX`
+  - Previous mouse Y: `pMouseY`
+  - Mouse X speed: `mouseXSpeed`
+  - Mouse Y speed: `mouseYSpeed`
   - Mouse down?: `mouseDown`
   - List of keys currently pressed: `keysDown`
   - Is 'A' pressed?: `keysDown.includes('A')`
@@ -449,7 +453,7 @@ Despite its many [noted](http://worrydream.com/LearnableProgramming/) flaws, Pro
 
 ## Showing off
 
-  - Making a page of draggable elements takes Pixi.js [80 lines](http://www.goodboydigital.com/pixijs/examples/8/), while using WoofJS it only takes [20 lines](https://jsbin.com/fuheki/edit?js,output).
+  - Making a page of draggable elements takes Pixi.js [80 lines](http://www.goodboydigital.com/pixijs/examples/8/), while using WoofJS it only takes [20 lines](https://jsbin.com/nepupal/edit?js,output).
   - Making a bunch of crazy bouncing images takes Pixi.js [254 lines](http://www.goodboydigital.com/pixijs/bunnymark/), but only takes WoofJS [32 lines](http://output.jsbin.com/nuhoben).
   - Making pong using JQuery and Underscore.js takes [146 lines](https://jenniferdewalt.com/pong.html), while it takes WoofJS [under 60 lines](http://output.jsbin.com/keborur) (and our version has more elements PLUS it works on mobile!).
   - Making this analog clock takes [125 lines](https://jenniferdewalt.com/analog_clock.html) of JavaScript, but only [40 lines](http://output.jsbin.com/yaciqe) using WoofJS.
