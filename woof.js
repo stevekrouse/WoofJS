@@ -252,7 +252,7 @@ function Woof({ global = false, canvasId = undefined, fullScreen = false, height
         func(mouseX, mouseY);
       });
     };
-    thisContext._spriteCanvas.addEventListener("mousedown", this._onClickHandler);
+    thisContext._spriteCanvas.addEventListener("mousedown", thisContext._onClickHandler);
   });
 
   thisContext._everys = [];

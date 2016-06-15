@@ -243,7 +243,7 @@ function Woof({global = false, canvasId = undefined, fullScreen = false, height 
       var [mouseX, mouseY] = thisContext.translateToCenter(event.clientX, event.clientY);
       thisContext._onClicks.forEach((func) => {func(mouseX, mouseY)});
     };
-    thisContext._spriteCanvas.addEventListener("mousedown", this._onClickHandler);
+    thisContext._spriteCanvas.addEventListener("mousedown", thisContext._onClickHandler);
   })
 
   thisContext._everys = [];
