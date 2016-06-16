@@ -231,16 +231,10 @@ function Woof({ global = false, canvasId = undefined, fullScreen = false, height
       }, 0);
     });
     thisContext._spriteCanvas.addEventListener("mousemove", event => {
-      [thisContext.pMouseX, thisContext.pMouseY] = [thisContext.mouseX, thisContext.mouseY];
       [thisContext.mouseX, thisContext.mouseY] = thisContext.translateToCenter(event.clientX, event.clientY);
-      thisContext.mouseXSpeed = thisContext.mouseX - thisContext.pMouseX;
-      thisContext.mouseYSpeed = thisContext.mouseY - thisContext.pMouseY;
     });
     thisContext._spriteCanvas.addEventListener("touchmove", event => {
-      [thisContext.pMouseX, thisContext.pMouseY] = [thisContext.mouseX, thisContext.mouseY];
       [thisContext.mouseX, thisContext.mouseY] = thisContext.translateToCenter(event.targetTouches[0].clientX, event.targetTouches[0].clientY);
-      thisContext.mouseXSpeed = thisContext.mouseX - thisContext.pMouseX;
-      thisContext.mouseYSpeed = thisContext.mouseY - thisContext.pMouseY;
       event.preventDefault();
     });
 
@@ -336,6 +330,7 @@ function Woof({ global = false, canvasId = undefined, fullScreen = false, height
   };
 
   thisContext._renderSprites = () => {
+    thisContext._spriteContext.clearRect(0, 0, thisContext.width, thisContext.height);
     thisContext.sprites.forEach(sprite => {
       sprite._render(thisContext);
     });
@@ -345,11 +340,17 @@ function Woof({ global = false, canvasId = undefined, fullScreen = false, height
     thisContext._penContext.clearRect(0, 0, thisContext.width, thisContext.height);
   };
 
+  thisContext._calculateMouseSpeed = () => {
+    thisContext.mouseXSpeed = thisContext.mouseX - thisContext.pMouseX;
+    thisContext.mouseYSpeed = thisContext.mouseY - thisContext.pMouseY;
+    [thisContext.pMouseX, thisContext.pMouseY] = [thisContext.mouseX, thisContext.mouseY];
+  };
+
   thisContext._render = () => {
     thisContext.renderInterval = window.requestAnimationFrame(thisContext._render);
     if (thisContext.stopped) return;
     thisContext._runRepeats();
-    thisContext._spriteContext.clearRect(0, 0, thisContext.width, thisContext.height);
+    thisContext._calculateMouseSpeed();
     thisContext._renderSprites();
     thisContext._renderDebug();
   };
