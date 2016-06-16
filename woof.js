@@ -324,7 +324,7 @@ function Woof({ global = false, canvasId = undefined, fullScreen = false, height
       }
       [thisContext.debugText[i].x, thisContext.debugText[i].y] = [thisContext.minX + 5, thisContext.minY + 12 * (i + 1)];
       thisContext.debugText[i].text = `${ expr }: ${ value }`;
-      thisContext.debugText[i]._render(thisContext);
+      thisContext.debugText[i]._render(thisContext._spriteContext);
       thisContext.debugText[i].color = thisContext.debugColor;
     }
   };
@@ -332,7 +332,7 @@ function Woof({ global = false, canvasId = undefined, fullScreen = false, height
   thisContext._renderSprites = () => {
     thisContext._spriteContext.clearRect(0, 0, thisContext.width, thisContext.height);
     thisContext.sprites.forEach(sprite => {
-      sprite._render(thisContext);
+      sprite._render(thisContext._spriteContext);
     });
   };
 
@@ -388,35 +388,35 @@ Woof.prototype.Sprite = function (project, { x = 0, y = 0, angle = 0, rotationSt
   };
   setInterval(this.trackPen, 0);
 
-  this._render = function () {
-    if (this.showing) {
-      this.project._spriteContext.save();
-      this.project._spriteContext.translate(this.canvasX(), this.canvasY());
+  this._render = function (context) {
+    if (this.showing && !this.deleted) {
+      context.save();
+      context.translate(this.canvasX(), this.canvasY());
       if (this.rotationStyle == "ROTATE") {
-        this.project._spriteContext.rotate(-this.radians());
+        context.rotate(-this.radians());
       } else if (this.rotationStyle == "NO ROTATE") {
         // no rotate
       } else if (this.rotationStyle == "ROTATE LEFT RIGHT") {
           if (this.angle % 360 >= 90 && this.angle % 360 < 270) {
-            this.project._spriteContext.translate(this.width, 0);
-            this.project._spriteContext.scale(-1, 1);
+            context.translate(this.width, 0);
+            context.scale(-1, 1);
           } else if (this.angle % 360 >= 0 && this.angle % 360 < 90 || this.angle % 360 <= 360 && this.angle % 360 >= 270) {
             // no rotate
           }
         }
 
       if (this instanceof Woof.prototype.Image) {
-        this.imageRender();
+        this.imageRender(context);
       } else if (this instanceof Woof.prototype.Text) {
-        this.textRender();
+        this.textRender(context);
       } else if (this instanceof Woof.prototype.Circle) {
-        this.circleRender();
+        this.circleRender(context);
       } else if (this instanceof Woof.prototype.Rectangle) {
-        this.rectangleRender();
+        this.rectangleRender(context);
       } else if (this instanceof Woof.prototype.Line) {
-        this.lineRender();
+        this.lineRender(context);
       }
-      this.project._spriteContext.restore();
+      context.restore();
     }
   };
 
@@ -474,6 +474,9 @@ Woof.prototype.Sprite = function (project, { x = 0, y = 0, angle = 0, rotationSt
     return { left: left, right: right, top: top, bottom: bottom };
   };
 
+  this.collisionCanvas = document.createElement('canvas');
+  this.collisionContext = this.collisionCanvas.getContext('2d');
+
   this.touching = sprite => {
     if (this.deleted || !this.showing) {
       return false;
@@ -484,10 +487,40 @@ Woof.prototype.Sprite = function (project, { x = 0, y = 0, angle = 0, rotationSt
 
     var r1 = this.bounds();
     var r2 = sprite.bounds();
-    if (!this.showing || !sprite.showing) {
+    if (r2.left > r1.right || r2.right < r1.left || r2.top < r1.bottom || r2.bottom > r1.top) {
       return false;
     }
-    return !(r2.left > r1.right || r2.right < r1.left || r2.top < r1.bottom || r2.bottom > r1.top);
+
+    var left = Math.min(r1.left, r2.left);
+    var top = Math.max(r1.top, r2.top);
+    var right = Math.max(r1.right, r2.right);
+    var bottom = Math.min(r1.bottom, r2.bottom);
+
+    this.collisionCanvas.width = this.project.width;
+    this.collisionCanvas.height = this.project.height;
+
+    this._render(this.collisionContext);
+    this.collisionContext.globalCompositeOperation = 'source-in';
+    sprite._render(this.collisionContext);
+    var [canvasLeft, canvasTop] = this.project.translateToCanvas(left, top);
+
+    try {
+      var data = this.collisionContext.getImageData(canvasLeft, canvasTop, right - left, top - bottom).data;
+    } catch (e) {
+      if (e instanceof DOMException) {
+        console.warn("You have an image at an untrusted URL. Consider uploading to Imgur and using https.");
+        // bounds are overlapping and we can't get canvas data, so return true
+        return true;
+      }
+    }
+
+    var length = (right - left) * (top - bottom) * 4;
+    for (var j = 0; j < length; j += 4) {
+      if (data[j + 3]) {
+        return true;
+      }
+    }
+    return false;
   };
 
   this.over = (x, y) => {
@@ -612,7 +645,7 @@ Woof.prototype.Text = function (project, { text = "Text", dynamicText = undefine
     this.project._spriteContext.restore();
   };
 
-  this.textRender = () => {
+  this.textRender = context => {
     this._applyInContext(() => {
       var text;
       try {
@@ -620,7 +653,7 @@ Woof.prototype.Text = function (project, { text = "Text", dynamicText = undefine
       } catch (e) {
         console.error("Error with dynamicText: '" + this.dynamicText + "'");throw e;
       }
-      this.project._spriteContext.fillText(text, 0, 0);
+      context.fillText(text, 0, 0);
     });
   };
 };
@@ -638,11 +671,11 @@ Woof.prototype.Circle = function (project, { radius = 10, color = "black" } = {}
     return 2 * this.radius;
   };
 
-  this.circleRender = () => {
-    this.project._spriteContext.beginPath();
-    this.project._spriteContext.arc(0, 0, this.radius, 0, 2 * Math.PI);
-    this.project._spriteContext.fillStyle = this.color;
-    this.project._spriteContext.fill();
+  this.circleRender = context => {
+    context.beginPath();
+    context.arc(0, 0, this.radius, 0, 2 * Math.PI);
+    context.fillStyle = this.color;
+    context.fill();
   };
 };
 
@@ -660,9 +693,9 @@ Woof.prototype.Rectangle = function (project, { rectangleHeight = 10, rectangleW
     return this.rectangleHeight;
   };
 
-  this.rectangleRender = () => {
-    this.project._spriteContext.fillStyle = this.color;
-    this.project._spriteContext.fillRect(-this.width() / 2, -this.height() / 2, this.width(), this.height());
+  this.rectangleRender = context => {
+    context.fillStyle = this.color;
+    context.fillRect(-this.width() / 2, -this.height() / 2, this.width(), this.height());
   };
 };
 
@@ -681,13 +714,13 @@ Woof.prototype.Line = function (project, { lineWidth = 1, x1 = 10, y1 = 10, colo
     return Math.sqrt(Math.pow(this.x - this.x1, 2) + Math.pow(this.y - this.y1, 2));
   };
 
-  this.lineRender = () => {
-    this.project._spriteContext.beginPath();
-    this.project._spriteContext.moveTo(0, 0);
-    this.project._spriteContext.lineTo(this.x1 - this.x, -this.y1 + this.y);
-    this.project._spriteContext.strokeStyle = color;
-    this.project._spriteContext.lineWidth = lineWidth;
-    this.project._spriteContext.stroke();
+  this.lineRender = context => {
+    context.beginPath();
+    context.moveTo(0, 0);
+    context.lineTo(this.x1 - this.x, -this.y1 + this.y);
+    context.strokeStyle = color;
+    context.lineWidth = lineWidth;
+    context.stroke();
   };
 };
 
@@ -698,7 +731,13 @@ Woof.prototype.Image = function (project, { url = "http://www.loveyourdog.com/im
 
   this.setImageURL = function (url) {
     this.image = new window.BrowserImage();
+    this.image.crossOrigin = "Anonymous";
     this.image.src = url;
+    this.image.addEventListener('error', e => {
+      e.preventDefault();
+      this.image = new window.BrowserImage();
+      this.image.src = url;
+    });
   };
   this.setImageURL(url);
 
@@ -714,8 +753,8 @@ Woof.prototype.Image = function (project, { url = "http://www.loveyourdog.com/im
     return this.images[this.image];
   };
 
-  this.imageRender = () => {
-    this.project._spriteContext.drawImage(this.image, -this.width() / 2, -this.height() / 2, this.width(), this.height());
+  this.imageRender = context => {
+    context.drawImage(this.image, -this.width() / 2, -this.height() / 2, this.width(), this.height());
   };
 };
 
