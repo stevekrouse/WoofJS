@@ -166,7 +166,7 @@ function Woof({global = false, canvasId = undefined, fullScreen = false, height 
 
   thisContext.setBackdropColor = function(color){    
     thisContext.backdrop = color;
-    thisContext._renderBackdrop();
+    thisContext.ready(thisContext._renderBackdrop);
   };
   
   thisContext.firebaseConfig = config => {
