@@ -1,7 +1,9 @@
 // saving Image because we will later overwrite Image with Woof.Image on the window
 window.BrowserImage = Image;
 
-function Woof({ global = false, canvasId = undefined, fullScreen = false, height = 500, width = 350 } = {}) {
+function Woof() {
+  let { global = false, canvasId = undefined, fullScreen = false, height = 500, width = 350 } = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
   if (window.global) throw new Error("You must turn off global mode in the Woof script tag if you want to create your own Woof object.");
   this.global = global;
   var thisContext = this.global ? window : this;
@@ -169,7 +171,7 @@ function Woof({ global = false, canvasId = undefined, fullScreen = false, height
 
   thisContext.setBackdropColor = function (color) {
     thisContext.backdrop = color;
-    thisContext._renderBackdrop();
+    thisContext.ready(thisContext._renderBackdrop);
   };
 
   thisContext.firebaseConfig = config => {
@@ -357,7 +359,9 @@ function Woof({ global = false, canvasId = undefined, fullScreen = false, height
   thisContext._render();
 };
 
-Woof.prototype.Sprite = function (project, { x = 0, y = 0, angle = 0, rotationStyle = "ROTATE", showing = true, penColor = "black", penWidth = 1 } = {}) {
+Woof.prototype.Sprite = function (project) {
+  let { x = 0, y = 0, angle = 0, rotationStyle = "ROTATE", showing = true, penColor = "black", penWidth = 1 } = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
   this.project = project.global ? window : project;
   this.x = x;
   this.y = y;
@@ -608,7 +612,9 @@ Woof.prototype.Sprite = function (project, { x = 0, y = 0, angle = 0, rotationSt
   };
 };
 
-Woof.prototype.Text = function (project, { text = "Text", dynamicText = undefined, size = 12, color = "black", fontFamily = "arial", textAlign = "center" } = {}) {
+Woof.prototype.Text = function (project) {
+  let { text = "Text", dynamicText = undefined, size = 12, color = "black", fontFamily = "arial", textAlign = "center" } = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
   Woof.prototype.Sprite.call(this, project, arguments[1]);
   this.text = text;
   this.size = size;
@@ -658,7 +664,9 @@ Woof.prototype.Text = function (project, { text = "Text", dynamicText = undefine
   };
 };
 
-Woof.prototype.Circle = function (project, { radius = 10, color = "black" } = {}) {
+Woof.prototype.Circle = function (project) {
+  let { radius = 10, color = "black" } = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
   Woof.prototype.Sprite.call(this, project, arguments[1]);
   this.radius = radius;
   this.color = color;
@@ -679,7 +687,9 @@ Woof.prototype.Circle = function (project, { radius = 10, color = "black" } = {}
   };
 };
 
-Woof.prototype.Rectangle = function (project, { rectangleHeight = 10, rectangleWidth = 10, color = "black" } = {}) {
+Woof.prototype.Rectangle = function (project) {
+  let { rectangleHeight = 10, rectangleWidth = 10, color = "black" } = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
   Woof.prototype.Sprite.call(this, project, arguments[1]);
   this.rectangleHeight = rectangleHeight;
   this.rectangleWidth = rectangleWidth;
@@ -699,7 +709,9 @@ Woof.prototype.Rectangle = function (project, { rectangleHeight = 10, rectangleW
   };
 };
 
-Woof.prototype.Line = function (project, { lineWidth = 1, x1 = 10, y1 = 10, color = "black" } = {}) {
+Woof.prototype.Line = function (project) {
+  let { lineWidth = 1, x1 = 10, y1 = 10, color = "black" } = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
   Woof.prototype.Sprite.call(this, project, arguments[1]);
   this.x1 = x1;
   this.y1 = y1;
@@ -724,7 +736,9 @@ Woof.prototype.Line = function (project, { lineWidth = 1, x1 = 10, y1 = 10, colo
   };
 };
 
-Woof.prototype.Image = function (project, { url = "http://www.loveyourdog.com/image3.gif", imageHeight, imageWidth } = {}) {
+Woof.prototype.Image = function (project) {
+  let { url = "http://www.loveyourdog.com/image3.gif", imageHeight, imageWidth } = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
   Woof.prototype.Sprite.call(this, project, arguments[1]);
   this.imageHeight = imageHeight;
   this.imageWidth = imageWidth;
