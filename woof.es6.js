@@ -214,7 +214,7 @@ function Woof({global = false, canvasId = undefined, fullScreen = false, height 
     });
     thisContext._spriteCanvas.addEventListener("touchstart", (event) => {
       thisContext.mouseDown = true;
-      [thisContext.mouseX, thisContext.mouseY] = thisContext.translateToCenter(event.clientX, event.clientY);
+      [thisContext.mouseX, thisContext.mouseY] = thisContext.translateToCenter(event.targetTouches[0].clientX, event.targetTouches[0].clientY);
     });
     thisContext._spriteCanvas.addEventListener("touchend", (event) => {
       // for some reason touchend events are firing too quickly

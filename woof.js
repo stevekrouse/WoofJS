@@ -253,7 +253,7 @@ function Woof() {
     thisContext._spriteCanvas.addEventListener("touchstart", function (event) {
       thisContext.mouseDown = true;
 
-      var _thisContext$translat5 = thisContext.translateToCenter(event.clientX, event.clientY);
+      var _thisContext$translat5 = thisContext.translateToCenter(event.targetTouches[0].clientX, event.targetTouches[0].clientY);
 
       var _thisContext$translat6 = _slicedToArray(_thisContext$translat5, 2);
 
