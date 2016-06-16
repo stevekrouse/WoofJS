@@ -1,8 +1,25 @@
+"use strict";
+
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
 // saving Image because we will later overwrite Image with Woof.Image on the window
 window.BrowserImage = Image;
 
 function Woof() {
-  var { global = false, canvasId = undefined, fullScreen = false, height = 500, width = 350 } = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+  var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
+  var _ref$global = _ref.global;
+  var global = _ref$global === undefined ? false : _ref$global;
+  var _ref$canvasId = _ref.canvasId;
+  var canvasId = _ref$canvasId === undefined ? undefined : _ref$canvasId;
+  var _ref$fullScreen = _ref.fullScreen;
+  var fullScreen = _ref$fullScreen === undefined ? false : _ref$fullScreen;
+  var _ref$height = _ref.height;
+  var height = _ref$height === undefined ? 500 : _ref$height;
+  var _ref$width = _ref.width;
+  var width = _ref$width === undefined ? 350 : _ref$width;
 
   if (window.global) throw new Error("You must turn off global mode in the Woof script tag if you want to create your own Woof object.");
   this.global = global;
@@ -18,29 +35,29 @@ function Woof() {
   if (fullScreen) {
     width = window.innerWidth;
     height = window.innerHeight;
-    window.addEventListener("load", () => {
+    window.addEventListener("load", function () {
       document.body.style.margin = 0;
       document.body.style.padding = 0;
     });
   }
 
   thisContext._readys = [];
-  thisContext.ready = func => {
+  thisContext.ready = function (func) {
     if (thisContext.stopped) {
       thisContext._readys.push(func);
     } else {
       func();
     }
   };
-  thisContext._runReadys = () => {
+  thisContext._runReadys = function () {
     thisContext.stopped = false;
-    thisContext._readys.forEach(func => {
+    thisContext._readys.forEach(function (func) {
       func();
     });
     thisContext._readys = [];
   };
 
-  window.addEventListener("load", () => {
+  window.addEventListener("load", function () {
     thisContext._mainDiv = document.createElement("div");
     document.body.appendChild(thisContext._mainDiv);
     thisContext._mainDiv.id = "project";
@@ -77,7 +94,7 @@ function Woof() {
     thisContext._runReadys();
   });
 
-  thisContext.setCanvasSize = () => {
+  thisContext.setCanvasSize = function () {
     if (thisContext._spriteCanvas) {
       thisContext.height = thisContext._spriteCanvas.height;
       thisContext.width = thisContext._spriteCanvas.width;
@@ -93,7 +110,7 @@ function Woof() {
   thisContext.setCanvasSize();
 
   if (fullScreen) {
-    window.addEventListener("resize", () => {
+    window.addEventListener("resize", function () {
       thisContext._spriteCanvas.width = window.innerWidth;
       thisContext._spriteCanvas.height = window.innerHeight;
 
@@ -110,45 +127,45 @@ function Woof() {
     });
   }
 
-  thisContext.randomX = () => {
+  thisContext.randomX = function () {
     return Woof.prototype.randomInt(thisContext.minX, thisContext.maxX);
   };
 
-  thisContext.randomY = () => {
+  thisContext.randomY = function () {
     return Woof.prototype.randomInt(thisContext.minY, thisContext.maxY);
   };
 
-  thisContext.addText = options => {
+  thisContext.addText = function (options) {
     var sprite = new Woof.prototype.Text(thisContext, options);
     thisContext.sprites.push(sprite);
     return sprite;
   };
 
-  thisContext.addCircle = options => {
+  thisContext.addCircle = function (options) {
     var sprite = new Woof.prototype.Circle(thisContext, options);
     thisContext.sprites.push(sprite);
     return sprite;
   };
 
-  thisContext.addRectangle = options => {
+  thisContext.addRectangle = function (options) {
     var sprite = new Woof.prototype.Rectangle(thisContext, options);
     thisContext.sprites.push(sprite);
     return sprite;
   };
 
-  thisContext.addLine = options => {
+  thisContext.addLine = function (options) {
     var sprite = new Woof.prototype.Line(thisContext, options);
     thisContext.sprites.push(sprite);
     return sprite;
   };
 
-  thisContext.addImage = options => {
+  thisContext.addImage = function (options) {
     var sprite = new Woof.prototype.Image(thisContext, options);
     thisContext.sprites.push(sprite);
     return sprite;
   };
 
-  thisContext._renderBackdrop = () => {
+  thisContext._renderBackdrop = function () {
     thisContext._backdropContext.clearRect(0, 0, thisContext.width, thisContext.height);
     if (thisContext.backdrop instanceof BrowserImage) {
       thisContext._backdropContext.drawImage(thisContext.backdrop, 0, 0);
@@ -174,13 +191,13 @@ function Woof() {
     thisContext.ready(thisContext._renderBackdrop);
   };
 
-  thisContext.firebaseConfig = config => {
+  thisContext.firebaseConfig = function (config) {
     thisContext.firebase = new Woof.prototype.Firebase(config);
     thisContext.getCloud = thisContext.firebase.getCloud;
     thisContext.setCloud = thisContext.firebase.setCloud;
   };
 
-  thisContext.stopAll = () => {
+  thisContext.stopAll = function () {
     thisContext._render();
     thisContext.stopped = true;
 
@@ -188,13 +205,15 @@ function Woof() {
     thisContext._afters.forEach(clearInterval);
     thisContext._spriteCanvas.removeEventListener("mousedown", thisContext._onClickHandler);
 
-    thisContext.sprites.forEach(sprite => sprite.delete());
+    thisContext.sprites.forEach(function (sprite) {
+      return sprite.delete();
+    });
   };
 
-  thisContext.translateToCenter = (x, y) => {
+  thisContext.translateToCenter = function (x, y) {
     return [x - thisContext.maxX - thisContext._spriteCanvas.offsetLeft, thisContext.maxY - y + thisContext._spriteCanvas.offsetTop];
   };
-  thisContext.translateToCanvas = (x, y) => {
+  thisContext.translateToCanvas = function (x, y) {
     return [x + thisContext.maxX - thisContext._spriteCanvas.offsetLeft, thisContext.maxY - y + thisContext._spriteCanvas.offsetTop];
   };
 
@@ -207,54 +226,89 @@ function Woof() {
   thisContext.mouseYSpeed = 0;
   thisContext.keysDown = [];
   thisContext._onClicks = [];
-  thisContext.onClick = func => {
+  thisContext.onClick = function (func) {
     thisContext._onClicks.push(func);
   };
-  thisContext.ready(() => {
-    thisContext._spriteCanvas.addEventListener("mousedown", event => {
+  thisContext.ready(function () {
+    thisContext._spriteCanvas.addEventListener("mousedown", function (event) {
       thisContext.mouseDown = true;
-      [thisContext.mouseX, thisContext.mouseY] = thisContext.translateToCenter(event.clientX, event.clientY);
+
+      var _thisContext$translat = thisContext.translateToCenter(event.clientX, event.clientY);
+
+      var _thisContext$translat2 = _slicedToArray(_thisContext$translat, 2);
+
+      thisContext.mouseX = _thisContext$translat2[0];
+      thisContext.mouseY = _thisContext$translat2[1];
     });
-    thisContext._spriteCanvas.addEventListener("mouseup", event => {
+    thisContext._spriteCanvas.addEventListener("mouseup", function (event) {
       thisContext.mouseDown = false;
-      [thisContext.mouseX, thisContext.mouseY] = thisContext.translateToCenter(event.clientX, event.clientY);
+
+      var _thisContext$translat3 = thisContext.translateToCenter(event.clientX, event.clientY);
+
+      var _thisContext$translat4 = _slicedToArray(_thisContext$translat3, 2);
+
+      thisContext.mouseX = _thisContext$translat4[0];
+      thisContext.mouseY = _thisContext$translat4[1];
     });
-    thisContext._spriteCanvas.addEventListener("touchstart", event => {
+    thisContext._spriteCanvas.addEventListener("touchstart", function (event) {
       thisContext.mouseDown = true;
-      [thisContext.mouseX, thisContext.mouseY] = thisContext.translateToCenter(event.clientX, event.clientY);
+
+      var _thisContext$translat5 = thisContext.translateToCenter(event.clientX, event.clientY);
+
+      var _thisContext$translat6 = _slicedToArray(_thisContext$translat5, 2);
+
+      thisContext.mouseX = _thisContext$translat6[0];
+      thisContext.mouseY = _thisContext$translat6[1];
     });
-    thisContext._spriteCanvas.addEventListener("touchend", event => {
+    thisContext._spriteCanvas.addEventListener("touchend", function (event) {
       // for some reason touchend events are firing too quickly
       // and are not getting picked up in 40 ms every-if's
       // so thisContext setTimeout slows things down just enouch so
       // touch events mirror mouse events
-      setTimeout(() => {
+      setTimeout(function () {
         thisContext.mouseDown = false;
       }, 0);
     });
-    thisContext._spriteCanvas.addEventListener("mousemove", event => {
-      [thisContext.mouseX, thisContext.mouseY] = thisContext.translateToCenter(event.clientX, event.clientY);
+    thisContext._spriteCanvas.addEventListener("mousemove", function (event) {
+      var _thisContext$translat7 = thisContext.translateToCenter(event.clientX, event.clientY);
+
+      var _thisContext$translat8 = _slicedToArray(_thisContext$translat7, 2);
+
+      thisContext.mouseX = _thisContext$translat8[0];
+      thisContext.mouseY = _thisContext$translat8[1];
     });
-    thisContext._spriteCanvas.addEventListener("touchmove", event => {
-      [thisContext.mouseX, thisContext.mouseY] = thisContext.translateToCenter(event.targetTouches[0].clientX, event.targetTouches[0].clientY);
+    thisContext._spriteCanvas.addEventListener("touchmove", function (event) {
+      var _thisContext$translat9 = thisContext.translateToCenter(event.targetTouches[0].clientX, event.targetTouches[0].clientY);
+
+      var _thisContext$translat10 = _slicedToArray(_thisContext$translat9, 2);
+
+      thisContext.mouseX = _thisContext$translat10[0];
+      thisContext.mouseY = _thisContext$translat10[1];
+
       event.preventDefault();
     });
 
-    document.body.addEventListener("keydown", event => {
+    document.body.addEventListener("keydown", function (event) {
       var key = Woof.prototype.keyCodeToString(event.keyCode);
       if (!thisContext.keysDown.includes(key)) {
         thisContext.keysDown.push(key);
       }
     });
-    document.body.addEventListener("keyup", event => {
+    document.body.addEventListener("keyup", function (event) {
       var key = Woof.prototype.keyCodeToString(event.keyCode);
       if (thisContext.keysDown.includes(key)) {
         thisContext.keysDown.splice(thisContext.keysDown.indexOf(key), 1);
       }
     });
-    thisContext._onClickHandler = event => {
-      var [mouseX, mouseY] = thisContext.translateToCenter(event.clientX, event.clientY);
-      thisContext._onClicks.forEach(func => {
+    thisContext._onClickHandler = function (event) {
+      var _thisContext$translat11 = thisContext.translateToCenter(event.clientX, event.clientY);
+
+      var _thisContext$translat12 = _slicedToArray(_thisContext$translat11, 2);
+
+      var mouseX = _thisContext$translat12[0];
+      var mouseY = _thisContext$translat12[1];
+
+      thisContext._onClicks.forEach(function (func) {
         func(mouseX, mouseY);
       });
     };
@@ -262,16 +316,16 @@ function Woof() {
   });
 
   thisContext._everys = [];
-  thisContext.every = (time, units, func) => {
+  thisContext.every = function (time, units, func) {
     func();
     thisContext._everys.push(setInterval(func, Woof.prototype.unitsToMiliseconds(time, units)));
   };
-  thisContext.forever = func => {
+  thisContext.forever = function (func) {
     thisContext.repeatUntil("false", func);
   };
 
-  thisContext.when = (condition, func) => {
-    thisContext.forever(() => {
+  thisContext.when = function (condition, func) {
+    thisContext.forever(function () {
       var cond;
       try {
         cond = eval(condition);
@@ -286,27 +340,27 @@ function Woof() {
   };
 
   thisContext._repeats = [];
-  thisContext.repeat = (times, func, after) => {
+  thisContext.repeat = function (times, func, after) {
     thisContext._repeats.push(new Woof.prototype.Repeat(times, func, after));
   };
-  thisContext.repeatUntil = (condition, func, after) => {
+  thisContext.repeatUntil = function (condition, func, after) {
     thisContext._repeats.push(new Woof.prototype.RepeatUntil(condition, func, after));
   };
-  thisContext._runRepeats = () => {
-    thisContext._repeats.forEach(repeat => {
+  thisContext._runRepeats = function () {
+    thisContext._repeats.forEach(function (repeat) {
       repeat.next();
     });
-    thisContext._repeats = thisContext._repeats.filter(repeat => {
+    thisContext._repeats = thisContext._repeats.filter(function (repeat) {
       return !repeat.done;
     });
   };
 
   thisContext._afters = [];
-  thisContext.after = (time, units, func) => {
+  thisContext.after = function (time, units, func) {
     thisContext._afters.push(setTimeout(func, Woof.prototype.unitsToMiliseconds(time, units)));
   };
 
-  thisContext.addDebug = str => {
+  thisContext.addDebug = function (str) {
     thisContext.debug.push(str);
     var sprite = new Woof.prototype.Text(thisContext, { textAlign: "left" });
     thisContext.debugText.push(sprite);
@@ -315,7 +369,7 @@ function Woof() {
   thisContext.debugText = [];
   thisContext.debug.forEach(thisContext.addDebug);
 
-  thisContext._renderDebug = () => {
+  thisContext._renderDebug = function () {
     for (var i = 0; i < thisContext.debug.length; i++) {
       var expr = thisContext.debug[i];
       var value;
@@ -324,31 +378,36 @@ function Woof() {
       } catch (e) {
         value = e;
       }
-      [thisContext.debugText[i].x, thisContext.debugText[i].y] = [thisContext.minX + 5, thisContext.minY + 12 * (i + 1)];
-      thisContext.debugText[i].text = `${ expr }: ${ value }`;
+      var _ref2 = [thisContext.minX + 5, thisContext.minY + 12 * (i + 1)];
+      thisContext.debugText[i].x = _ref2[0];
+      thisContext.debugText[i].y = _ref2[1];
+
+      thisContext.debugText[i].text = expr + ": " + value;
       thisContext.debugText[i]._render(thisContext._spriteContext);
       thisContext.debugText[i].color = thisContext.debugColor;
     }
   };
 
-  thisContext._renderSprites = () => {
+  thisContext._renderSprites = function () {
     thisContext._spriteContext.clearRect(0, 0, thisContext.width, thisContext.height);
-    thisContext.sprites.forEach(sprite => {
+    thisContext.sprites.forEach(function (sprite) {
       sprite._render(thisContext._spriteContext);
     });
   };
 
-  thisContext.clearPen = () => {
+  thisContext.clearPen = function () {
     thisContext._penContext.clearRect(0, 0, thisContext.width, thisContext.height);
   };
 
-  thisContext._calculateMouseSpeed = () => {
+  thisContext._calculateMouseSpeed = function () {
     thisContext.mouseXSpeed = thisContext.mouseX - thisContext.pMouseX;
     thisContext.mouseYSpeed = thisContext.mouseY - thisContext.pMouseY;
-    [thisContext.pMouseX, thisContext.pMouseY] = [thisContext.mouseX, thisContext.mouseY];
+    var _ref3 = [thisContext.mouseX, thisContext.mouseY];
+    thisContext.pMouseX = _ref3[0];
+    thisContext.pMouseY = _ref3[1];
   };
 
-  thisContext._render = () => {
+  thisContext._render = function () {
     thisContext.renderInterval = window.requestAnimationFrame(thisContext._render);
     if (thisContext.stopped) return;
     thisContext._runRepeats();
@@ -360,7 +419,24 @@ function Woof() {
 };
 
 Woof.prototype.Sprite = function (project) {
-  var { x = 0, y = 0, angle = 0, rotationStyle = "ROTATE", showing = true, penColor = "black", penWidth = 1 } = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+  var _this = this;
+
+  var _ref4 = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
+  var _ref4$x = _ref4.x;
+  var x = _ref4$x === undefined ? 0 : _ref4$x;
+  var _ref4$y = _ref4.y;
+  var y = _ref4$y === undefined ? 0 : _ref4$y;
+  var _ref4$angle = _ref4.angle;
+  var angle = _ref4$angle === undefined ? 0 : _ref4$angle;
+  var _ref4$rotationStyle = _ref4.rotationStyle;
+  var rotationStyle = _ref4$rotationStyle === undefined ? "ROTATE" : _ref4$rotationStyle;
+  var _ref4$showing = _ref4.showing;
+  var showing = _ref4$showing === undefined ? true : _ref4$showing;
+  var _ref4$penColor = _ref4.penColor;
+  var penColor = _ref4$penColor === undefined ? "black" : _ref4$penColor;
+  var _ref4$penWidth = _ref4.penWidth;
+  var penWidth = _ref4$penWidth === undefined ? 1 : _ref4$penWidth;
 
   this.project = project.global ? window : project;
   this.x = x;
@@ -373,22 +449,29 @@ Woof.prototype.Sprite = function (project) {
   this.penWidth = penWidth;
   this.deleted = false;
 
-  [this.lastX, this.lastY] = [this.x, this.y];
-  this.trackPen = () => {
-    if (this.penDown) {
-      if (this.lastX != this.x || this.lastY != this.y) {
-        this.project._penContext.save();
-        this.project._penContext.beginPath();
-        this.project._penContext.moveTo(...this.project.translateToCanvas(this.lastX, this.lastY));
-        this.project._penContext.lineTo(...this.project.translateToCanvas(this.x, this.y));
-        this.project._penContext.lineCap = "round";
-        this.project._penContext.strokeStyle = this.penColor;
-        this.project._penContext.lineWidth = this.penWidth;
-        this.project._penContext.stroke();
-        this.project._penContext.restore();
+  var _ref5 = [this.x, this.y];
+  this.lastX = _ref5[0];
+  this.lastY = _ref5[1];
+
+  this.trackPen = function () {
+    if (_this.penDown) {
+      if (_this.lastX != _this.x || _this.lastY != _this.y) {
+        var _project$_penContext, _project$_penContext2;
+
+        _this.project._penContext.save();
+        _this.project._penContext.beginPath();
+        (_project$_penContext = _this.project._penContext).moveTo.apply(_project$_penContext, _toConsumableArray(_this.project.translateToCanvas(_this.lastX, _this.lastY)));
+        (_project$_penContext2 = _this.project._penContext).lineTo.apply(_project$_penContext2, _toConsumableArray(_this.project.translateToCanvas(_this.x, _this.y)));
+        _this.project._penContext.lineCap = "round";
+        _this.project._penContext.strokeStyle = _this.penColor;
+        _this.project._penContext.lineWidth = _this.penWidth;
+        _this.project._penContext.stroke();
+        _this.project._penContext.restore();
       }
     }
-    [this.lastX, this.lastY] = [this.x, this.y];
+    var _ref6 = [_this.x, _this.y];
+    _this.lastX = _ref6[0];
+    _this.lastY = _ref6[1];
   };
   setInterval(this.trackPen, 0);
 
@@ -442,54 +525,54 @@ Woof.prototype.Sprite = function (project) {
     this.y += steps * Math.sin(this.radians());
   };
 
-  this.setRotationStyle = style => {
+  this.setRotationStyle = function (style) {
     if (style == "ROTATE") {
-      this.rotationStyle = "ROTATE";
+      _this.rotationStyle = "ROTATE";
     } else if (style == "NO ROTATE") {
-      this.rotationStyle = "NO ROTATE";
+      _this.rotationStyle = "NO ROTATE";
     } else if (style == "ROTATE LEFT RIGHT") {
-      this.rotationStyle = "ROTATE LEFT RIGHT";
+      _this.rotationStyle = "ROTATE LEFT RIGHT";
     } else {
       throw Error("Unrecognized rotation style: " + style);
     }
   };
 
-  this.radians = () => {
-    return this.angle * Math.PI / 180;
+  this.radians = function () {
+    return _this.angle * Math.PI / 180;
   };
 
-  this.canvasX = () => {
-    return this.x + this.project.maxX;
+  this.canvasX = function () {
+    return _this.x + _this.project.maxX;
   };
 
-  this.canvasY = () => {
-    return this.project.maxY - this.y;
+  this.canvasY = function () {
+    return _this.project.maxY - _this.y;
   };
 
-  this.bounds = () => {
+  this.bounds = function () {
     // TODO account for rotation
-    var halfWidth = this.width() / 2;
-    var halfHeight = this.height() / 2;
+    var halfWidth = _this.width() / 2;
+    var halfHeight = _this.height() / 2;
 
-    var left = this.x - halfWidth;
-    var right = this.x + halfWidth;
-    var bottom = this.y - halfHeight;
-    var top = this.y + halfHeight;
+    var left = _this.x - halfWidth;
+    var right = _this.x + halfWidth;
+    var bottom = _this.y - halfHeight;
+    var top = _this.y + halfHeight;
     return { left: left, right: right, top: top, bottom: bottom };
   };
 
   this.collisionCanvas = document.createElement('canvas');
   this.collisionContext = this.collisionCanvas.getContext('2d');
 
-  this.touching = sprite => {
-    if (this.deleted || !this.showing) {
+  this.touching = function (sprite) {
+    if (_this.deleted || !_this.showing) {
       return false;
     }
     if (sprite.deleted || !sprite.showing) {
       return false;
     }
 
-    var r1 = this.bounds();
+    var r1 = _this.bounds();
     var r2 = sprite.bounds();
     if (r2.left > r1.right || r2.right < r1.left || r2.top < r1.bottom || r2.bottom > r1.top) {
       return false;
@@ -500,16 +583,23 @@ Woof.prototype.Sprite = function (project) {
     var right = Math.max(r1.right, r2.right);
     var bottom = Math.min(r1.bottom, r2.bottom);
 
-    this.collisionCanvas.width = this.project.width;
-    this.collisionCanvas.height = this.project.height;
+    _this.collisionCanvas.width = _this.project.width;
+    _this.collisionCanvas.height = _this.project.height;
 
-    this._render(this.collisionContext);
-    this.collisionContext.globalCompositeOperation = 'source-in';
-    sprite._render(this.collisionContext);
-    var [canvasLeft, canvasTop] = this.project.translateToCanvas(left, top);
+    _this._render(_this.collisionContext);
+    _this.collisionContext.globalCompositeOperation = 'source-in';
+    sprite._render(_this.collisionContext);
+
+    var _project$translateToC = _this.project.translateToCanvas(left, top);
+
+    var _project$translateToC2 = _slicedToArray(_project$translateToC, 2);
+
+    var canvasLeft = _project$translateToC2[0];
+    var canvasTop = _project$translateToC2[1];
+
 
     try {
-      var data = this.collisionContext.getImageData(canvasLeft, canvasTop, right - left, top - bottom).data;
+      var data = _this.collisionContext.getImageData(canvasLeft, canvasTop, right - left, top - bottom).data;
     } catch (e) {
       if (e instanceof DOMException) {
         console.warn("You have an image at an untrusted URL. Consider uploading to Imgur and using https.");
@@ -527,12 +617,12 @@ Woof.prototype.Sprite = function (project) {
     return false;
   };
 
-  this.over = (x, y) => {
-    if (this.deleted || !this.showing) {
+  this.over = function (x, y) {
+    if (_this.deleted || !_this.showing) {
       return false;
     }
 
-    var r1 = this.bounds();
+    var r1 = _this.bounds();
     var belowTop = y <= r1.top;
     var aboveBottom = y >= r1.bottom;
     var rightLeft = x >= r1.left;
@@ -548,72 +638,93 @@ Woof.prototype.Sprite = function (project) {
     return this.over(this.project.mouseX, this.project.mouseY);
   };
 
-  this.mouseDown = () => {
-    if (this.deleted || !this.showing) {
+  this.mouseDown = function () {
+    if (_this.deleted || !_this.showing) {
       return false;
     }
 
-    return this.mouseOver() && project.mouseDown;
+    return _this.mouseOver() && project.mouseDown;
   };
 
-  this.turnLeft = degrees => {
-    this.angle += degrees;
+  this.turnLeft = function (degrees) {
+    _this.angle += degrees;
   };
 
-  this.turnRight = degrees => {
-    this.angle -= degrees;
+  this.turnRight = function (degrees) {
+    _this.angle -= degrees;
   };
 
-  this.sendToBack = () => {
-    var sprites = this.project.sprites;
-    sprites.splice(0, 0, sprites.splice(sprites.indexOf(this), 1)[0]);
+  this.sendToBack = function () {
+    var sprites = _this.project.sprites;
+    sprites.splice(0, 0, sprites.splice(sprites.indexOf(_this), 1)[0]);
   };
 
-  this.sendToFront = () => {
-    var sprites = this.project.sprites;
-    sprites.splice(sprites.length, 0, sprites.splice(sprites.indexOf(this), 1)[0]);
+  this.sendToFront = function () {
+    var sprites = _this.project.sprites;
+    sprites.splice(sprites.length, 0, sprites.splice(sprites.indexOf(_this), 1)[0]);
   };
 
-  this.pointTowards = (x2, y2) => {
-    this.angle = Math.atan2(y2 - this.y, x2 - this.x) * 180 / Math.PI;
+  this.pointTowards = function (x2, y2) {
+    _this.angle = Math.atan2(y2 - _this.y, x2 - _this.x) * 180 / Math.PI;
   };
 
-  this.height = () => {
+  this.height = function () {
     throw Error("Implemented in subclass");
   };
 
-  this.width = () => {
+  this.width = function () {
     throw Error("Implemented in subclass");
   };
 
   this._onClicks = [];
-  this.onClick = func => {
-    this._onClicks.push(func);
+  this.onClick = function (func) {
+    _this._onClicks.push(func);
   };
-  this._onClickHandler = event => {
-    var [mouseX, mouseY] = this.project.translateToCenter(event.clientX, event.clientY);
-    if (this.showing && this.over(mouseX, mouseY)) {
-      this._onClicks.forEach(func => {
+  this._onClickHandler = function (event) {
+    var _project$translateToC3 = _this.project.translateToCenter(event.clientX, event.clientY);
+
+    var _project$translateToC4 = _slicedToArray(_project$translateToC3, 2);
+
+    var mouseX = _project$translateToC4[0];
+    var mouseY = _project$translateToC4[1];
+
+    if (_this.showing && _this.over(mouseX, mouseY)) {
+      _this._onClicks.forEach(function (func) {
         func(mouseX, mouseY);
       });
     }
   };
-  this.project.ready(() => {
-    this.project._spriteCanvas.addEventListener("mousedown", this._onClickHandler);
+  this.project.ready(function () {
+    _this.project._spriteCanvas.addEventListener("mousedown", _this._onClickHandler);
   });
 
-  this.delete = () => {
-    this.showing = false;
-    this.deleted = true;
-    if (this.project.sprites.includes(this)) {
-      this.project.sprites.splice(this.project.sprites.indexOf(this), 1);
-      this.project._spriteCanvas.removeEventListener("mousedown", this._onClickHandler);
+  this.delete = function () {
+    _this.showing = false;
+    _this.deleted = true;
+    if (_this.project.sprites.includes(_this)) {
+      _this.project.sprites.splice(_this.project.sprites.indexOf(_this), 1);
+      _this.project._spriteCanvas.removeEventListener("mousedown", _this._onClickHandler);
     }
   };
 };
 
 Woof.prototype.Text = function (project) {
-  var { text = "Text", dynamicText = undefined, size = 12, color = "black", fontFamily = "arial", textAlign = "center" } = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+  var _this2 = this;
+
+  var _ref7 = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
+  var _ref7$text = _ref7.text;
+  var text = _ref7$text === undefined ? "Text" : _ref7$text;
+  var _ref7$dynamicText = _ref7.dynamicText;
+  var dynamicText = _ref7$dynamicText === undefined ? undefined : _ref7$dynamicText;
+  var _ref7$size = _ref7.size;
+  var size = _ref7$size === undefined ? 12 : _ref7$size;
+  var _ref7$color = _ref7.color;
+  var color = _ref7$color === undefined ? "black" : _ref7$color;
+  var _ref7$fontFamily = _ref7.fontFamily;
+  var fontFamily = _ref7$fontFamily === undefined ? "arial" : _ref7$fontFamily;
+  var _ref7$textAlign = _ref7.textAlign;
+  var textAlign = _ref7$textAlign === undefined ? "center" : _ref7$textAlign;
 
   Woof.prototype.Sprite.call(this, project, arguments[1]);
   this.text = text;
@@ -623,41 +734,41 @@ Woof.prototype.Text = function (project) {
   this.textAlign = textAlign;
   this.dynamicText = dynamicText;
 
-  this.width = () => {
+  this.width = function () {
     var width;
-    this._applyInContext(() => {
-      width = this.project._spriteContext.measureText(this.text).width;
+    _this2._applyInContext(function () {
+      width = _this2.project._spriteContext.measureText(_this2.text).width;
     });
     return width;
   };
 
-  this.height = () => {
+  this.height = function () {
     var height;
-    this._applyInContext(() => {
-      height = this.project._spriteContext.measureText("M").width;
+    _this2._applyInContext(function () {
+      height = _this2.project._spriteContext.measureText("M").width;
     });
     return height;
   };
 
-  this._applyInContext = func => {
-    this.project._spriteContext.save();
+  this._applyInContext = function (func) {
+    _this2.project._spriteContext.save();
 
-    this.project._spriteContext.font = this.size + "px " + this.fontFamily;
-    this.project._spriteContext.fillStyle = this.color;
-    this.project._spriteContext.textAlign = this.textAlign;
+    _this2.project._spriteContext.font = _this2.size + "px " + _this2.fontFamily;
+    _this2.project._spriteContext.fillStyle = _this2.color;
+    _this2.project._spriteContext.textAlign = _this2.textAlign;
 
     func();
 
-    this.project._spriteContext.restore();
+    _this2.project._spriteContext.restore();
   };
 
-  this.textRender = context => {
-    this._applyInContext(() => {
+  this.textRender = function (context) {
+    _this2._applyInContext(function () {
       var text;
       try {
-        text = this.dynamicText ? eval(this.dynamicText) : this.text;
+        text = _this2.dynamicText ? eval(_this2.dynamicText) : _this2.text;
       } catch (e) {
-        console.error("Error with dynamicText: '" + this.dynamicText + "'");throw e;
+        console.error("Error with dynamicText: '" + _this2.dynamicText + "'");throw e;
       }
       context.fillText(text, 0, 0);
     });
@@ -665,52 +776,79 @@ Woof.prototype.Text = function (project) {
 };
 
 Woof.prototype.Circle = function (project) {
-  var { radius = 10, color = "black" } = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+  var _this3 = this;
+
+  var _ref8 = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
+  var _ref8$radius = _ref8.radius;
+  var radius = _ref8$radius === undefined ? 10 : _ref8$radius;
+  var _ref8$color = _ref8.color;
+  var color = _ref8$color === undefined ? "black" : _ref8$color;
 
   Woof.prototype.Sprite.call(this, project, arguments[1]);
   this.radius = radius;
   this.color = color;
 
-  this.width = () => {
-    return 2 * this.radius;
+  this.width = function () {
+    return 2 * _this3.radius;
   };
 
-  this.height = () => {
-    return 2 * this.radius;
+  this.height = function () {
+    return 2 * _this3.radius;
   };
 
-  this.circleRender = context => {
+  this.circleRender = function (context) {
     context.beginPath();
-    context.arc(0, 0, this.radius, 0, 2 * Math.PI);
-    context.fillStyle = this.color;
+    context.arc(0, 0, _this3.radius, 0, 2 * Math.PI);
+    context.fillStyle = _this3.color;
     context.fill();
   };
 };
 
 Woof.prototype.Rectangle = function (project) {
-  var { rectangleHeight = 10, rectangleWidth = 10, color = "black" } = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+  var _this4 = this;
+
+  var _ref9 = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
+  var _ref9$rectangleHeight = _ref9.rectangleHeight;
+  var rectangleHeight = _ref9$rectangleHeight === undefined ? 10 : _ref9$rectangleHeight;
+  var _ref9$rectangleWidth = _ref9.rectangleWidth;
+  var rectangleWidth = _ref9$rectangleWidth === undefined ? 10 : _ref9$rectangleWidth;
+  var _ref9$color = _ref9.color;
+  var color = _ref9$color === undefined ? "black" : _ref9$color;
 
   Woof.prototype.Sprite.call(this, project, arguments[1]);
   this.rectangleHeight = rectangleHeight;
   this.rectangleWidth = rectangleWidth;
   this.color = color;
 
-  this.width = () => {
-    return this.rectangleWidth;
+  this.width = function () {
+    return _this4.rectangleWidth;
   };
 
-  this.height = () => {
-    return this.rectangleHeight;
+  this.height = function () {
+    return _this4.rectangleHeight;
   };
 
-  this.rectangleRender = context => {
-    context.fillStyle = this.color;
-    context.fillRect(-this.width() / 2, -this.height() / 2, this.width(), this.height());
+  this.rectangleRender = function (context) {
+    context.fillStyle = _this4.color;
+    context.fillRect(-_this4.width() / 2, -_this4.height() / 2, _this4.width(), _this4.height());
   };
 };
 
 Woof.prototype.Line = function (project) {
-  var { lineWidth = 1, x1 = 10, y1 = 10, color = "black" } = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+  var _this5 = this;
+
+  var _ref10 = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
+  var _ref10$lineWidth = _ref10.lineWidth;
+  var lineWidth = _ref10$lineWidth === undefined ? 1 : _ref10$lineWidth;
+  var _ref10$x = _ref10.x1;
+  var x1 = _ref10$x === undefined ? 10 : _ref10$x;
+  var _ref10$y = _ref10.y1;
+  var y1 = _ref10$y === undefined ? 10 : _ref10$y;
+  var _ref10$color = _ref10.color;
+  var color = _ref10$color === undefined ? "black" : _ref10$color;
 
   Woof.prototype.Sprite.call(this, project, arguments[1]);
   this.x1 = x1;
@@ -718,18 +856,18 @@ Woof.prototype.Line = function (project) {
   this.color = color;
   this.lineWidth = lineWidth;
 
-  this.width = () => {
-    return this.lineWidth;
+  this.width = function () {
+    return _this5.lineWidth;
   };
 
-  this.height = () => {
-    return Math.sqrt(Math.pow(this.x - this.x1, 2) + Math.pow(this.y - this.y1, 2));
+  this.height = function () {
+    return Math.sqrt(Math.pow(_this5.x - _this5.x1, 2) + Math.pow(_this5.y - _this5.y1, 2));
   };
 
-  this.lineRender = context => {
+  this.lineRender = function (context) {
     context.beginPath();
     context.moveTo(0, 0);
-    context.lineTo(this.x1 - this.x, -this.y1 + this.y);
+    context.lineTo(_this5.x1 - _this5.x, -_this5.y1 + _this5.y);
     context.strokeStyle = color;
     context.lineWidth = lineWidth;
     context.stroke();
@@ -737,64 +875,77 @@ Woof.prototype.Line = function (project) {
 };
 
 Woof.prototype.Image = function (project) {
-  var { url = "http://www.loveyourdog.com/image3.gif", imageHeight, imageWidth } = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+  var _this7 = this;
+
+  var _ref11 = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
+  var _ref11$url = _ref11.url;
+  var url = _ref11$url === undefined ? "http://www.loveyourdog.com/image3.gif" : _ref11$url;
+  var imageHeight = _ref11.imageHeight;
+  var imageWidth = _ref11.imageWidth;
 
   Woof.prototype.Sprite.call(this, project, arguments[1]);
   this.imageHeight = imageHeight;
   this.imageWidth = imageWidth;
 
   this.setImageURL = function (url) {
+    var _this6 = this;
+
     this.image = new window.BrowserImage();
     this.image.crossOrigin = "Anonymous";
     this.image.src = url;
-    this.image.addEventListener('error', e => {
+    this.image.addEventListener('error', function (e) {
       e.preventDefault();
-      this.image = new window.BrowserImage();
-      this.image.src = url;
+      _this6.image = new window.BrowserImage();
+      _this6.image.src = url;
     });
   };
   this.setImageURL(url);
 
-  this.width = () => {
-    return this.imageWidth || this.image.width;
+  this.width = function () {
+    return _this7.imageWidth || _this7.image.width;
   };
 
-  this.height = () => {
-    return this.imageHeight || this.image.height;
+  this.height = function () {
+    return _this7.imageHeight || _this7.image.height;
   };
 
-  this.currentImage = () => {
-    return this.images[this.image];
+  this.currentImage = function () {
+    return _this7.images[_this7.image];
   };
 
-  this.imageRender = context => {
-    context.drawImage(this.image, -this.width() / 2, -this.height() / 2, this.width(), this.height());
+  this.imageRender = function (context) {
+    context.drawImage(_this7.image, -_this7.width() / 2, -_this7.height() / 2, _this7.width(), _this7.height());
   };
 };
 
 Woof.prototype.Repeat = function (times, func, after) {
+  var _this8 = this;
+
   this.func = func;
   this.times = times;
   this.done = false;
 
-  this.next = () => {
-    if (this.done) {
+  this.next = function () {
+    if (_this8.done) {
       return;
     }
-    if (this.times <= 0) {
-      this.done = true;
+    if (_this8.times <= 0) {
+      _this8.done = true;
       if (after) {
         after();
       }
       return;
     } else {
-      this.func();
-      this.times--;
+      _this8.func();
+      _this8.times--;
     }
   };
 };
 
 Woof.prototype.RepeatUntil = function (condition, func, after) {
+  var _this9 = this;
+
   if (typeof condition !== "string") {
     throw Error("You must give repeatUntil a string condition in quotes. You gave it: " + condition);
   }
@@ -802,34 +953,36 @@ Woof.prototype.RepeatUntil = function (condition, func, after) {
   this.condition = condition;
   this.done = false;
 
-  this.next = () => {
-    if (this.done) {
+  this.next = function () {
+    if (_this9.done) {
       return;
     }
     var cond;
     try {
-      cond = eval(this.condition);
+      cond = eval(_this9.condition);
     } catch (e) {
       console.error("Error in Repeat Until");
       throw e;
     }
 
     if (cond) {
-      this.done = true;
+      _this9.done = true;
       if (after) {
         after();
       }
       return;
     } else {
-      this.func();
+      _this9.func();
     }
   };
 };
 
 Woof.prototype.Firebase = function (config) {
+  var _this10 = this;
+
   this.data = {};
 
-  this.loadFirebaseLibrary = callback => {
+  this.loadFirebaseLibrary = function (callback) {
     var lib = document.createElement("script");
     lib.type = "text/javascript";
     lib.src = "https://www.gstatic.com/firebasejs/live/3.0/firebase.js";
@@ -837,23 +990,23 @@ Woof.prototype.Firebase = function (config) {
     document.body.appendChild(lib);
   };
 
-  this.loadFirebaseLibrary(() => {
+  this.loadFirebaseLibrary(function () {
     firebase.initializeApp(config);
-    firebase.database().ref().on('value', snapshot => {
-      this.data = snapshot.val() || {};
+    firebase.database().ref().on('value', function (snapshot) {
+      _this10.data = snapshot.val() || {};
     });
   });
 
-  this.setCloud = (key, val) => {
+  this.setCloud = function (key, val) {
     firebase.database().ref().child("/" + key).set(val);
   };
 
-  this.getCloud = (key, defaultVal) => {
-    return this.data[key] || defaultVal;
+  this.getCloud = function (key, defaultVal) {
+    return _this10.data[key] || defaultVal;
   };
 };
 
-Woof.prototype.keyCodeToString = keyCode => {
+Woof.prototype.keyCodeToString = function (keyCode) {
   if (keyCode == 38) {
     return "UP";
   } else if (keyCode == 37) {
@@ -867,7 +1020,7 @@ Woof.prototype.keyCodeToString = keyCode => {
   }
 };
 
-Woof.prototype.unitsToMiliseconds = (time, units) => {
+Woof.prototype.unitsToMiliseconds = function (time, units) {
   if (units == "milliseconds" || units == "millisecond") {
     return time;
   } else if (units == "miliseconds" || units == "milisecond") {
@@ -881,22 +1034,22 @@ Woof.prototype.unitsToMiliseconds = (time, units) => {
   }
 };
 
-Woof.prototype.randomInt = (min, max) => {
+Woof.prototype.randomInt = function (min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-Woof.prototype.repeat = (times, func) => {
+Woof.prototype.repeat = function (times, func) {
   for (var i = 0; i < times; i++) {
     func(i + 1);
   }
 };
 
-Woof.prototype.dayOfMonth = () => {
+Woof.prototype.dayOfMonth = function () {
   var date = new Date();
   return date.getDate();
 };
 
-Woof.prototype.dayOfWeek = () => {
+Woof.prototype.dayOfWeek = function () {
   var date = new Date();
   var day = date.getDay();
   if (day === 0) {
@@ -916,23 +1069,23 @@ Woof.prototype.dayOfWeek = () => {
   }
 };
 
-Woof.prototype.hourMilitary = () => {
+Woof.prototype.hourMilitary = function () {
   var date = new Date();
   return date.getHours();
 };
 
-Woof.prototype.hour = () => {
+Woof.prototype.hour = function () {
   var date = new Date();
   var hour = date.getHours();
   return hour <= 12 ? hour : hour - 12;
 };
 
-Woof.prototype.minute = () => {
+Woof.prototype.minute = function () {
   var date = new Date();
   return date.getMinutes();
 };
 
-Woof.prototype.second = () => {
+Woof.prototype.second = function () {
   var date = new Date();
   return date.getSeconds();
 };
