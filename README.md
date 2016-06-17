@@ -14,13 +14,13 @@ Alternatively, you can:
 
 1) Put Woof between the `<head>` tags.
 ```html
-<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/e211c56a1b99132bffe8e7eba3dbade5415e1ec4/woof.js" global="true"></script>
+<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/ee08f88864e751c2d7c1ad1530d7d39712c840cb/woof.js" global="true"></script>
 ```
 2) Throw in some JavaScript, and tell Woof to fetch it.
 ```javascript
 // add the mouse coordinates to the screen
-addDebug("mouseX");
-addDebug("mouseY");
+addDebug("mouseX", () => mouseX);
+addDebug("mouseY", () => mouseY);
 
 // Set the backdrop URL (preferably of similar dimensions to your canvas)
 setBackdropURL("http://i.imgur.com/lyyFGm4.jpg");
@@ -45,7 +45,7 @@ forever(() => {
 });
 
 var timer = 20;  // make the timer start at 20
-var timerText = project.addText({x: 0, y: project.maxY - 20, size: 20, color: "white", dynamicText: "'Time Left: ' + timer"}); // add text that diplays the timer (dynamicText updates automatically)
+var timerText = project.addText({x: 0, y: project.maxY - 20, size: 20, color: "white", text: () => `Time Left: ${timer}`}); // add text that diplays the timer, updating automatically
 every(1, "second", () => {
   if (timer === 0){ project.stopAll(); } // stop everything when the timer reaches 0
   timer--;   // make the timer go down every second
@@ -228,7 +228,7 @@ In addition to the default parameters (`x`, `y`, `angle`, `rotationStyle`, and `
 var TEXT_NAME = addText({text: "Text", dynamicText: "'mouseX: ' + mouseX", size: 12, color: "black", fontFamily: "arial", textAlign: "center"});
 ```
   - Set the text value to an unchanging value: `TEXT_NAME.text = "Sample Text";`
-  - Set the text value to an changing string expression: `TEXT_NAME.dynamicText = "'Variable Name: ' + variableName";`
+  - Set the text value to an changing functional expression: `TEXT_NAME.dynamicText = () => ``Variable Name: + ${variableName};```
   - Set the font size: `TEXT_NAME.size = 20;`
   - Set the font color: `TEXT_NAME.color = "white";`
   - Set the font color to a hex value: `TEXT_NAME.color = "#32CD32";`
@@ -360,10 +360,10 @@ repeat(100, () => {
 });
 ```
 
-  - Repeat constantly until (you have to put the condition in "quotes"): 
+  - Repeat constantly until (you have to put the condition in a function): 
 
 ```javascript
-repeatUntil("IMAGE_NAME.y < minY", () => {
+repeatUntil(() => IMAGE_NAME.y < minY, () => {
   IMAGE_NAME.y -= SPEED;
 });
 ```
@@ -371,7 +371,7 @@ repeatUntil("IMAGE_NAME.y < minY", () => {
   - Do seomthing after a `repeatUntil`:
 
 ```javascript
-repeatUntil("IMAGE_NAME.y < minY", () => {
+repeatUntil(() => IMAGE_NAME.y < minY, () => {
   IMAGE_NAME.y -= SPEED;
 }, () => {
   stopAll();  
@@ -389,19 +389,18 @@ forever(() => {
   - Do this every second: 
 
 ```javascript
-var timer = 20;
-var timerText = addText({x: 0, y: maxY - 20, size: 20, color: "white"});
-every("1", "second", () => {
-  if (timer === 0){ stopAll(); }
-  timer--;
-  timerText.text = "Timer: " + timer;
+var timer = 20;  // make the timer start at 20
+var timerText = project.addText({x: 0, y: project.maxY - 20, size: 20, color: "white", text: () => `Time Left: ${timer}`}); // add text that diplays the timer, updating automatically
+every(1, "second", () => {
+  if (timer === 0){ project.stopAll(); } // stop everything when the timer reaches 0
+  timer--;   // make the timer go down every second
 });
 ```
 
-  - Do this when a condition (in "quotes") is true. This is a short-hand for a forever-if statement.
+  - Do this when a condition (in a function) is true. This is a short-hand for a forever-if statement.
 
 ```javascript
-when('keysDown.includes("LEFT")', () => {
+when(() => keysDown.includes("LEFT"), () => {
     rectangle.x -= 5; 
 });
 ```
