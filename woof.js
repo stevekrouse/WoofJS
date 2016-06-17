@@ -367,6 +367,9 @@ function Woof() {
 
   thisContext.debugText = [];
   thisContext.addDebug = function (display, func) {
+    if (typeof func != 'function') {
+      throw Error("The second argument to addDebug must be a function");
+    }
     var text = thisContext.addText({ x: thisContext.minX + 5, y: thisContext.minY + 12 * (thisContext.debugText.length + 1), color: thisContext.debugColor, text: function text() {
         return display + ": " + JSON.stringify(func());
       }, textAlign: "left" });

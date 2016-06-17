@@ -14,16 +14,14 @@ Alternatively, you can:
 
 1) Put Woof between the `<head>` tags.
 ```html
-<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/ee08f88864e751c2d7c1ad1530d7d39712c840cb/woof.js" global="true"></script>
+<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/352dca2b4bad4f760f025e9ad8ab6bf51fb7694e/woof.js" global="true"></script>
 ```
 2) Throw in some JavaScript, and tell Woof to fetch it.
 ```javascript
-// add the mouse coordinates to the screen
 addDebug("mouseX", () => mouseX);
 addDebug("mouseY", () => mouseY);
 
-// Set the backdrop URL (preferably of similar dimensions to your canvas)
-setBackdropURL("http://i.imgur.com/lyyFGm4.jpg");
+setBackdropURL("https://i.imgur.com/lyyFGm4.jpg");
 
 // Add an image via a url
 var dawg = addImage({url: "http://i.imgur.com/SMJjVCL.png", x: 0, y: 0, imageHeight: 100, imageWidth: 135});
@@ -45,9 +43,9 @@ forever(() => {
 });
 
 var timer = 20;  // make the timer start at 20
-var timerText = project.addText({x: 0, y: project.maxY - 20, size: 20, color: "white", text: () => `Time Left: ${timer}`}); // add text that diplays the timer, updating automatically
+var timerText = addText({x: 0, y: maxY - 20, size: 20, color: "white", text: () => `Time Left: ${timer}`}); // add text that diplays the timer (dynamicText updates automatically)
 every(1, "second", () => {
-  if (timer === 0){ project.stopAll(); } // stop everything when the timer reaches 0
+  if (timer === 0){ stopAll(); } // stop everything when the timer reaches 0
   timer--;   // make the timer go down every second
 });
 ```

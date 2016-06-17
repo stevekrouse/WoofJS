@@ -298,6 +298,7 @@ function Woof({global = false, canvasId = undefined, fullScreen = false, height 
   
   thisContext.debugText = [];
   thisContext.addDebug = (display, func) => {
+    if (typeof func != 'function') { throw Error("The second argument to addDebug must be a function"); }
     var text = thisContext.addText({x: thisContext.minX + 5, y: thisContext.minY + (12 * (thisContext.debugText.length+1)), color: thisContext.debugColor, text: () => display + ": " + JSON.stringify(func()), textAlign: "left"});
     thisContext.debugText.push(text);
   }
