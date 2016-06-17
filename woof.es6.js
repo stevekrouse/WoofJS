@@ -107,6 +107,10 @@ function Woof({global = false, canvasId = undefined, fullScreen = false, height 
     });
   }
   
+  thisContext.bounds = () => {
+    return {left: thisContext.minX, right: thisContext.maxX, bottom: thisContext.minYm, top: thisContext.maxY}
+  };
+  
   thisContext.randomX = () => {
     return Woof.prototype.randomInt(thisContext.minX, thisContext.maxX);
   };
@@ -374,7 +378,8 @@ Woof.prototype.Sprite = function(project, {x = 0, y = 0, angle = 0, rotationStyl
   setInterval(this.trackPen, 0);
   
   this._render = function(context) {
-    if (this.showing && !this.deleted) {
+    if (this.showing && !this.deleted && this.overlap(this.project.bounds())) {
+      console.log("render")
       context.save();
       context.translate(this.canvasX(), this.canvasY());
       if (this.rotationStyle == "ROTATE") {
@@ -468,7 +473,7 @@ Woof.prototype.Sprite = function(project, {x = 0, y = 0, angle = 0, rotationStyl
     
     var r1 = this.bounds();
     var r2 = sprite.bounds();
-    if (r2.left > r1.right || r2.right < r1.left || r2.top < r1.bottom || r2.bottom > r1.top) { return false; }
+    if (!this.overlap(r2)) { return false; }
     
     var left = Math.min(r1.left, r2.left);
     var top = Math.max(r1.top, r2.top);
@@ -502,6 +507,11 @@ Woof.prototype.Sprite = function(project, {x = 0, y = 0, angle = 0, rotationStyl
     return false;
     
   };
+  
+  this.overlap = ({left, right, top, bottom}) => {
+    var r1 = this.bounds();
+    return !(left > r1.right || right < r1.left || top < r1.bottom || bottom > r1.top);
+  }
   
   this.over = (x, y) => {
     if (this.deleted || !this.showing) { return false; }
