@@ -14,11 +14,11 @@ Alternatively, you can:
 
 1) Put Woof between the `<head>` tags.
 ```html
-<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/e914cf84f1dbcb562ba804c5ff2076905ef63a04/woof.js" global="true"></script>
+<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/e211c56a1b99132bffe8e7eba3dbade5415e1ec4/woof.js" global="true"></script>
 ```
 2) Throw in some JavaScript, and tell Woof to fetch it.
 ```javascript
-// tell us the mouse coordinates
+// add the mouse coordinates to the screen
 addDebug("mouseX");
 addDebug("mouseY");
 
