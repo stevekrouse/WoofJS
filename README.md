@@ -6,15 +6,15 @@ It was originally inspired by Scratch and can help ease the trasition to JavaScr
 
 WoofJS is developed with :heart: by [The Coding Space](http://thecodingspace.com).
 
-<b>Notice</b>: *This is new software and is under rapid development, so expect things to break and be frequently changed. We expect our first stable release will come out by the end of Summer 2016. Until our first stable release, this software <b>only runs on desktop Chrome</b>, at which point we will support all modern desktop and mobile browsers.*
-
 ## Getting Started
 
-You can either <a href="https://jsbin.com/lekovu/edit?js,output" target="_blank">clone this JSBin</a> or follow the steps below to setup your first WoofJS 
+We reccomend you clone this JSBin to get started: [https://jsbin.com/lekovu/edit?js,output](https://jsbin.com/lekovu/edit?js,output)
+
+Alternatively, you can:
 
 1) Put Woof between the `<head>` tags.
 ```html
-<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/ce795d2e7f94e71f978ee0d8150263b57de962d1/woof.js" global="true"></script>
+<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/e914cf84f1dbcb562ba804c5ff2076905ef63a04/woof.js" global="true"></script>
 ```
 2) Throw in some JavaScript, and tell Woof to fetch it.
 ```javascript
@@ -46,7 +46,7 @@ forever(() => {
 
 var timer = 20;  // make the timer start at 20
 var timerText = project.addText({x: 0, y: project.maxY - 20, size: 20, color: "white", dynamicText: "'Time Left: ' + timer"}); // add text that diplays the timer (dynamicText updates automatically)
-every("1", "second", () => {
+every(1, "second", () => {
   if (timer === 0){ project.stopAll(); } // stop everything when the timer reaches 0
   timer--;   // make the timer go down every second
 });
@@ -54,7 +54,7 @@ every("1", "second", () => {
 
 ### Setting the Backdrop
 
-  - Set the backdrop to an image URL: 
+  - Set the backdrop to an image URL (we strongly reccomend using imgur and https for all images): 
   
 
 ```javascript
@@ -181,8 +181,7 @@ In addition to the default parameters (`x`, `y`, `angle`, `rotationStyle`, and `
 ```javascript 
 var IMAGE_NAME = addImage({url: "http://www.loveyourdog.com/image3.gif", imageWidth: 30, imageHeight: 30});
 ```
-  - Add another image: `IMAGE_NAME.addImageURL("http://www.urdu-english.com/images/lessons/beginner/shapes/shapes-pics/rectangle.png");`
-  - Change the image: `IMAGE_NAME.image = 0;`
+  - Change the image (we strongly reccomend using imgur and https for all images): `IMAGE_NAME.setImageURL("http://www.urdu-english.com/images/lessons/beginner/shapes/shapes-pics/rectangle.png");`
   - Set the width: `IMAGE_NAME.imageWidth = 10;`
   - Set the height `IMAGE_NAME.imageHeight = 20;`
 
@@ -226,7 +225,7 @@ var LINE_NAME = addLine({x: -100, y: 100, x1: 10, y1: 20, color: "pink", lineWid
 In addition to the default parameters (`x`, `y`, `angle`, `rotationStyle`, and `showing`), you may use these parameters to create new text: 
 
 ```javascript 
-var TEXT_NAME = addText({text: "Text", dynamicText: "'Score: ' + score", size: 12, color: "black", fontFamily: "arial", textAlign: "center"});
+var TEXT_NAME = addText({text: "Text", dynamicText: "'mouseX: ' + mouseX", size: 12, color: "black", fontFamily: "arial", textAlign: "center"});
 ```
   - Set the text value to an unchanging value: `TEXT_NAME.text = "Sample Text";`
   - Set the text value to an changing string expression: `TEXT_NAME.dynamicText = "'Variable Name: ' + variableName";`
@@ -238,19 +237,61 @@ var TEXT_NAME = addText({text: "Text", dynamicText: "'Score: ' + score", size: 1
 
 ### Clones
 
-If you want to make many objects that look and act very similar to each other, it's pretty straight-forward:
+If you want to make many objects that look and act very similar to each other:
 
 ```javascript
-every(4, "second", () => {
-  var CLONE_NAME = addCircle ({radius: 10, color: "pink", x: randomX(), y: randomY()});
-  forever(() => { 
-    CLONE_NAME.x++; 
-    if (CLONE_NAME.x > maxX) {
-      CLONE_NAME.delete();
+// create a list to store all of the clones
+var clones = [];
+every(4, "seconds", () => {
+  // create a clone every 4 seconds
+  var clone = addCircle ({radius: 10, color: "pink", x: randomX(), y: randomY()});
+  // add each clone to the list
+  clones.push(clone);
+});
+
+forever(() => { 
+  // forever, for each clone in clones
+  clones.forEach(clone => {
+    // move it to the right
+    clone.x++; 
+    // delete it if it goes off the screen
+    if (clone.x > maxX) {
+      clone.delete(); 
     }
-  });
+  })
 });
 ```
+
+## Helper Functions
+
+1) Get a random integer between any two numbers
+
+```javascript
+var number = randomInt(10, 20);
+```
+2) Repeat something 10 times
+
+```javascript
+repeat(10, (time) => {
+  console.log(`I'm going to repeat this ${10-time} more times!`)
+});
+```
+3) Get a random integer between any two numbers: `randomInt(10, 20);`
+
+4) Get the current hour: `hour();`
+
+5) Get the current hour in military time: `hourMilitary();`
+
+6) Get the current minute: `minute();`
+
+7) Get the current second: `second();`
+
+8) Get the current day of the month (1-31): `dayOfMonth();`
+
+9) Get the current day of the week (Monday-Sunday): `dayOfWeek();`
+
+10) Random color: `randomColor()`
+
 
 ### Control Flow
 
@@ -371,38 +412,7 @@ when('keysDown.includes("LEFT")', () => {
 after(1, "second", () => {...});
 ```
 
-## Helper Functions
-
-1) Get a random integer between any two numbers
-
-```javascript
-var number = randomInt(10, 20);
-```
-2) Repeat something 10 times
-
-```javascript
-repeat(10, (time) => {
-  console.log(`I'm going to repeat this ${10-time} more times!`)
-});
-```
-3) Get a random integer between any two numbers: `randomInt(10, 20);`
-
-4) Get the current hour: `hour();`
-
-5) Get the current hour in military time: `hourMilitary();`
-
-6) Get the current minute: `minute();`
-
-7) Get the current second: `second();`
-
-8) Get the current day of the month (1-31): `dayOfMonth();`
-
-9) Get the current day of the week (Monday-Sunday): `dayOfWeek();`
-
-10) Random color: `randomColor()`
-
-
-## Cloud Data via Firebase
+## Cloud Data via Firebase (in development)
 
 Cloud data can be used to create high scores, logins, and multiplayer games.
 
@@ -454,7 +464,7 @@ Despite its many [noted](http://worrydream.com/LearnableProgramming/) flaws, Pro
 ## Showing off
 
   - Making a page of draggable elements takes Pixi.js [80 lines](http://www.goodboydigital.com/pixijs/examples/8/), while using WoofJS it only takes [20 lines](https://jsbin.com/nepupal/edit?js,output).
-  - Making a bunch of crazy bouncing images takes Pixi.js [254 lines](http://www.goodboydigital.com/pixijs/bunnymark/), but only takes WoofJS [32 lines](http://output.jsbin.com/nuhoben).
+  - Making a bunch of crazy bouncing images takes Pixi.js [254 lines](http://www.goodboydigital.com/pixijs/bunnymark/), but only takes WoofJS [32 lines](https://jsbin.com/xivetuf/edit?js,output).
   - Making pong using JQuery and Underscore.js takes [146 lines](https://jenniferdewalt.com/pong.html), while it takes WoofJS [under 60 lines](http://output.jsbin.com/keborur) (and our version has more elements PLUS it works on mobile!).
   - Making this analog clock takes [125 lines](https://jenniferdewalt.com/analog_clock.html) of JavaScript, but only [40 lines](http://output.jsbin.com/yaciqe) using WoofJS.
-  - Recreating the insanely viral game [Flappy Birds](http://output.jsbin.com/rarexo) takes under 70 lines using WoofJS.
+  - Recreating the viral game [Flappy Bird](http://output.jsbin.com/rarexo) takes under 70 lines using WoofJS.

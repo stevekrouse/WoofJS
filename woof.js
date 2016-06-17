@@ -481,7 +481,6 @@ Woof.prototype.Sprite = function (project) {
 
   this._render = function (context) {
     if (this.showing && !this.deleted && this.overlap(this.project.bounds())) {
-      console.log("render");
       context.save();
       context.translate(this.canvasX(), this.canvasY());
       if (this.rotationStyle == "ROTATE") {
