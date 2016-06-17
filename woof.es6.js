@@ -725,10 +725,6 @@ Woof.prototype.Image = function(project, {url = "http://www.loveyourdog.com/imag
     return this.imageHeight || this.image.height;
   };
   
-  this.currentImage = () => {
-    return this.images[this.image];
-  };
-
   this.imageRender = (context) => {
     context.drawImage(this.image, -this.width() / 2, -this.height() / 2, this.width(), this.height());
   };
@@ -843,12 +839,6 @@ Woof.prototype.unitsToMiliseconds = (time, units) => {
 
 Woof.prototype.randomInt = (min, max) => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
-};
-
-Woof.prototype.repeat = (times, func) => {
-  for (var i = 0; i < times; i++){
-    func(i+1);
-  }
 };
 
 Woof.prototype.dayOfMonth = () =>{

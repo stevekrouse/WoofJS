@@ -925,10 +925,6 @@ Woof.prototype.Image = function (project) {
     return _this7.imageHeight || _this7.image.height;
   };
 
-  this.currentImage = function () {
-    return _this7.images[_this7.image];
-  };
-
   this.imageRender = function (context) {
     context.drawImage(_this7.image, -_this7.width() / 2, -_this7.height() / 2, _this7.width(), _this7.height());
   };
@@ -1051,12 +1047,6 @@ Woof.prototype.unitsToMiliseconds = function (time, units) {
 
 Woof.prototype.randomInt = function (min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
-};
-
-Woof.prototype.repeat = function (times, func) {
-  for (var i = 0; i < times; i++) {
-    func(i + 1);
-  }
 };
 
 Woof.prototype.dayOfMonth = function () {
