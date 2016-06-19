@@ -28,7 +28,6 @@ function Woof() {
   thisContext.global = global;
   thisContext.sprites = [];
   thisContext.backdrop = undefined;
-  thisContext.debug = [];
   thisContext.stopped = true;
   this.debugColor = "black";
 
@@ -325,14 +324,16 @@ function Woof() {
     thisContext._everys.push(setInterval(func, Woof.prototype.unitsToMiliseconds(time, units)));
   };
   thisContext.forever = function (func) {
-    thisContext.repeatUntil("false", func);
+    thisContext.repeatUntil(function () {
+      return false;
+    }, func);
   };
 
   thisContext.when = function (condition, func) {
     thisContext.forever(function () {
       var cond;
       try {
-        cond = eval(condition);
+        cond = condition();
       } catch (e) {
         console.error("Bad condition in when: " + condition);
         throw e;
@@ -364,32 +365,20 @@ function Woof() {
     thisContext._afters.push(setTimeout(func, Woof.prototype.unitsToMiliseconds(time, units)));
   };
 
-  thisContext.addDebug = function (str) {
-    thisContext.debug.push(str);
-    var sprite = new Woof.prototype.Text(thisContext, { textAlign: "left" });
-    thisContext.debugText.push(sprite);
-  };
-
   thisContext.debugText = [];
-  thisContext.debug.forEach(thisContext.addDebug);
-
-  thisContext._renderDebug = function () {
-    for (var i = 0; i < thisContext.debug.length; i++) {
-      var expr = thisContext.debug[i];
-      var value;
-      try {
-        value = eval(expr);
-      } catch (e) {
-        value = e;
-      }
-      var _ref2 = [thisContext.minX + 5, thisContext.minY + 12 * (i + 1)];
-      thisContext.debugText[i].x = _ref2[0];
-      thisContext.debugText[i].y = _ref2[1];
-
-      thisContext.debugText[i].text = expr + ": " + value;
-      thisContext.debugText[i]._render(thisContext._spriteContext);
-      thisContext.debugText[i].color = thisContext.debugColor;
+  thisContext.addDebug = function (display, func) {
+    if (typeof func != 'function') {
+      throw Error("The second argument to addDebug must be a function");
     }
+    var text = thisContext.addText({ x: thisContext.minX + 5, y: thisContext.minY + 12 * (thisContext.debugText.length + 1), color: thisContext.debugColor, text: function text() {
+        return display + ": " + JSON.stringify(func());
+      }, textAlign: "left" });
+    thisContext.debugText.push(text);
+  };
+  thisContext._renderDebug = function () {
+    thisContext.debugText.forEach(function (text) {
+      return text.sendToFront();
+    });
   };
 
   thisContext._renderSprites = function () {
@@ -406,9 +395,9 @@ function Woof() {
   thisContext._calculateMouseSpeed = function () {
     thisContext.mouseXSpeed = thisContext.mouseX - thisContext.pMouseX;
     thisContext.mouseYSpeed = thisContext.mouseY - thisContext.pMouseY;
-    var _ref3 = [thisContext.mouseX, thisContext.mouseY];
-    thisContext.pMouseX = _ref3[0];
-    thisContext.pMouseY = _ref3[1];
+    var _ref2 = [thisContext.mouseX, thisContext.mouseY];
+    thisContext.pMouseX = _ref2[0];
+    thisContext.pMouseY = _ref2[1];
   };
 
   thisContext._render = function () {
@@ -425,22 +414,22 @@ function Woof() {
 Woof.prototype.Sprite = function (project) {
   var _this = this;
 
-  var _ref4 = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+  var _ref3 = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
-  var _ref4$x = _ref4.x;
-  var x = _ref4$x === undefined ? 0 : _ref4$x;
-  var _ref4$y = _ref4.y;
-  var y = _ref4$y === undefined ? 0 : _ref4$y;
-  var _ref4$angle = _ref4.angle;
-  var angle = _ref4$angle === undefined ? 0 : _ref4$angle;
-  var _ref4$rotationStyle = _ref4.rotationStyle;
-  var rotationStyle = _ref4$rotationStyle === undefined ? "ROTATE" : _ref4$rotationStyle;
-  var _ref4$showing = _ref4.showing;
-  var showing = _ref4$showing === undefined ? true : _ref4$showing;
-  var _ref4$penColor = _ref4.penColor;
-  var penColor = _ref4$penColor === undefined ? "black" : _ref4$penColor;
-  var _ref4$penWidth = _ref4.penWidth;
-  var penWidth = _ref4$penWidth === undefined ? 1 : _ref4$penWidth;
+  var _ref3$x = _ref3.x;
+  var x = _ref3$x === undefined ? 0 : _ref3$x;
+  var _ref3$y = _ref3.y;
+  var y = _ref3$y === undefined ? 0 : _ref3$y;
+  var _ref3$angle = _ref3.angle;
+  var angle = _ref3$angle === undefined ? 0 : _ref3$angle;
+  var _ref3$rotationStyle = _ref3.rotationStyle;
+  var rotationStyle = _ref3$rotationStyle === undefined ? "ROTATE" : _ref3$rotationStyle;
+  var _ref3$showing = _ref3.showing;
+  var showing = _ref3$showing === undefined ? true : _ref3$showing;
+  var _ref3$penColor = _ref3.penColor;
+  var penColor = _ref3$penColor === undefined ? "black" : _ref3$penColor;
+  var _ref3$penWidth = _ref3.penWidth;
+  var penWidth = _ref3$penWidth === undefined ? 1 : _ref3$penWidth;
 
   this.project = project.global ? window : project;
   this.x = x;
@@ -453,9 +442,13 @@ Woof.prototype.Sprite = function (project) {
   this.penWidth = penWidth;
   this.deleted = false;
 
-  var _ref5 = [this.x, this.y];
-  this.lastX = _ref5[0];
-  this.lastY = _ref5[1];
+  this.toJSON = function () {
+    return { x: _this.x, y: _this.y, angle: _this.angle, rotationStyle: _this.rotationStyle, showing: _this.showing, penDown: _this.penDown, penColor: _this.penColor, penWidth: _this.penWidth, deleted: _this.deleted };
+  };
+
+  var _ref4 = [this.x, this.y];
+  this.lastX = _ref4[0];
+  this.lastY = _ref4[1];
 
   this.trackPen = function () {
     if (_this.penDown) {
@@ -473,9 +466,9 @@ Woof.prototype.Sprite = function (project) {
         _this.project._penContext.restore();
       }
     }
-    var _ref6 = [_this.x, _this.y];
-    _this.lastX = _ref6[0];
-    _this.lastY = _ref6[1];
+    var _ref5 = [_this.x, _this.y];
+    _this.lastX = _ref5[0];
+    _this.lastY = _ref5[1];
   };
   setInterval(this.trackPen, 0);
 
@@ -621,11 +614,11 @@ Woof.prototype.Sprite = function (project) {
     return false;
   };
 
-  this.overlap = function (_ref7) {
-    var left = _ref7.left;
-    var right = _ref7.right;
-    var top = _ref7.top;
-    var bottom = _ref7.bottom;
+  this.overlap = function (_ref6) {
+    var left = _ref6.left;
+    var right = _ref6.right;
+    var top = _ref6.top;
+    var bottom = _ref6.bottom;
 
     var r1 = _this.bounds();
     return !(left > r1.right || right < r1.left || top < r1.bottom || bottom > r1.top);
@@ -725,20 +718,18 @@ Woof.prototype.Sprite = function (project) {
 Woof.prototype.Text = function (project) {
   var _this2 = this;
 
-  var _ref8 = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+  var _ref7 = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
-  var _ref8$text = _ref8.text;
-  var text = _ref8$text === undefined ? "Text" : _ref8$text;
-  var _ref8$dynamicText = _ref8.dynamicText;
-  var dynamicText = _ref8$dynamicText === undefined ? undefined : _ref8$dynamicText;
-  var _ref8$size = _ref8.size;
-  var size = _ref8$size === undefined ? 12 : _ref8$size;
-  var _ref8$color = _ref8.color;
-  var color = _ref8$color === undefined ? "black" : _ref8$color;
-  var _ref8$fontFamily = _ref8.fontFamily;
-  var fontFamily = _ref8$fontFamily === undefined ? "arial" : _ref8$fontFamily;
-  var _ref8$textAlign = _ref8.textAlign;
-  var textAlign = _ref8$textAlign === undefined ? "center" : _ref8$textAlign;
+  var _ref7$text = _ref7.text;
+  var text = _ref7$text === undefined ? "Text" : _ref7$text;
+  var _ref7$size = _ref7.size;
+  var size = _ref7$size === undefined ? 12 : _ref7$size;
+  var _ref7$color = _ref7.color;
+  var color = _ref7$color === undefined ? "black" : _ref7$color;
+  var _ref7$fontFamily = _ref7.fontFamily;
+  var fontFamily = _ref7$fontFamily === undefined ? "arial" : _ref7$fontFamily;
+  var _ref7$textAlign = _ref7.textAlign;
+  var textAlign = _ref7$textAlign === undefined ? "center" : _ref7$textAlign;
 
   Woof.prototype.Sprite.call(this, project, arguments[1]);
   this.text = text;
@@ -746,7 +737,6 @@ Woof.prototype.Text = function (project) {
   this.color = color;
   this.fontFamily = fontFamily;
   this.textAlign = textAlign;
-  this.dynamicText = dynamicText;
 
   this.width = function () {
     var width;
@@ -779,10 +769,14 @@ Woof.prototype.Text = function (project) {
   this.textRender = function (context) {
     _this2._applyInContext(function () {
       var text;
-      try {
-        text = _this2.dynamicText ? eval(_this2.dynamicText) : _this2.text;
-      } catch (e) {
-        console.error("Error with dynamicText: '" + _this2.dynamicText + "'");throw e;
+      if (typeof _this2.text == "function") {
+        try {
+          text = _this2.text();
+        } catch (e) {
+          console.error("Error with text function: '" + _this2.text + "'");throw e;
+        }
+      } else {
+        text = _this2.text;
       }
       context.fillText(text, 0, 0);
     });
@@ -792,12 +786,12 @@ Woof.prototype.Text = function (project) {
 Woof.prototype.Circle = function (project) {
   var _this3 = this;
 
-  var _ref9 = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+  var _ref8 = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
-  var _ref9$radius = _ref9.radius;
-  var radius = _ref9$radius === undefined ? 10 : _ref9$radius;
-  var _ref9$color = _ref9.color;
-  var color = _ref9$color === undefined ? "black" : _ref9$color;
+  var _ref8$radius = _ref8.radius;
+  var radius = _ref8$radius === undefined ? 10 : _ref8$radius;
+  var _ref8$color = _ref8.color;
+  var color = _ref8$color === undefined ? "black" : _ref8$color;
 
   Woof.prototype.Sprite.call(this, project, arguments[1]);
   this.radius = radius;
@@ -822,14 +816,14 @@ Woof.prototype.Circle = function (project) {
 Woof.prototype.Rectangle = function (project) {
   var _this4 = this;
 
-  var _ref10 = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+  var _ref9 = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
-  var _ref10$rectangleHeigh = _ref10.rectangleHeight;
-  var rectangleHeight = _ref10$rectangleHeigh === undefined ? 10 : _ref10$rectangleHeigh;
-  var _ref10$rectangleWidth = _ref10.rectangleWidth;
-  var rectangleWidth = _ref10$rectangleWidth === undefined ? 10 : _ref10$rectangleWidth;
-  var _ref10$color = _ref10.color;
-  var color = _ref10$color === undefined ? "black" : _ref10$color;
+  var _ref9$rectangleHeight = _ref9.rectangleHeight;
+  var rectangleHeight = _ref9$rectangleHeight === undefined ? 10 : _ref9$rectangleHeight;
+  var _ref9$rectangleWidth = _ref9.rectangleWidth;
+  var rectangleWidth = _ref9$rectangleWidth === undefined ? 10 : _ref9$rectangleWidth;
+  var _ref9$color = _ref9.color;
+  var color = _ref9$color === undefined ? "black" : _ref9$color;
 
   Woof.prototype.Sprite.call(this, project, arguments[1]);
   this.rectangleHeight = rectangleHeight;
@@ -853,16 +847,16 @@ Woof.prototype.Rectangle = function (project) {
 Woof.prototype.Line = function (project) {
   var _this5 = this;
 
-  var _ref11 = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+  var _ref10 = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
-  var _ref11$lineWidth = _ref11.lineWidth;
-  var lineWidth = _ref11$lineWidth === undefined ? 1 : _ref11$lineWidth;
-  var _ref11$x = _ref11.x1;
-  var x1 = _ref11$x === undefined ? 10 : _ref11$x;
-  var _ref11$y = _ref11.y1;
-  var y1 = _ref11$y === undefined ? 10 : _ref11$y;
-  var _ref11$color = _ref11.color;
-  var color = _ref11$color === undefined ? "black" : _ref11$color;
+  var _ref10$lineWidth = _ref10.lineWidth;
+  var lineWidth = _ref10$lineWidth === undefined ? 1 : _ref10$lineWidth;
+  var _ref10$x = _ref10.x1;
+  var x1 = _ref10$x === undefined ? 10 : _ref10$x;
+  var _ref10$y = _ref10.y1;
+  var y1 = _ref10$y === undefined ? 10 : _ref10$y;
+  var _ref10$color = _ref10.color;
+  var color = _ref10$color === undefined ? "black" : _ref10$color;
 
   Woof.prototype.Sprite.call(this, project, arguments[1]);
   this.x1 = x1;
@@ -891,12 +885,12 @@ Woof.prototype.Line = function (project) {
 Woof.prototype.Image = function (project) {
   var _this7 = this;
 
-  var _ref12 = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+  var _ref11 = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
-  var _ref12$url = _ref12.url;
-  var url = _ref12$url === undefined ? "http://www.loveyourdog.com/image3.gif" : _ref12$url;
-  var imageHeight = _ref12.imageHeight;
-  var imageWidth = _ref12.imageWidth;
+  var _ref11$url = _ref11.url;
+  var url = _ref11$url === undefined ? "http://www.loveyourdog.com/image3.gif" : _ref11$url;
+  var imageHeight = _ref11.imageHeight;
+  var imageWidth = _ref11.imageWidth;
 
   Woof.prototype.Sprite.call(this, project, arguments[1]);
   this.imageHeight = imageHeight;
@@ -956,9 +950,7 @@ Woof.prototype.Repeat = function (times, func, after) {
 Woof.prototype.RepeatUntil = function (condition, func, after) {
   var _this9 = this;
 
-  if (typeof condition !== "string") {
-    throw Error("You must give repeatUntil a string condition in quotes. You gave it: " + condition);
-  }
+  // TODO if (typeof condition !== "string") { throw Error("You must give repeatUntil a string condition in quotes. You gave it: " + condition); }
   this.func = func;
   this.condition = condition;
   this.done = false;
@@ -969,9 +961,9 @@ Woof.prototype.RepeatUntil = function (condition, func, after) {
     }
     var cond;
     try {
-      cond = eval(_this9.condition);
+      cond = _this9.condition();
     } catch (e) {
-      console.error("Error in Repeat Until");
+      console.error("Error in Repeat Until condition");
       throw e;
     }
 
@@ -1107,8 +1099,9 @@ Woof.prototype.extend = function (a, b) {
   for (var key in b) {
     a[key] = b[key];
   }
+  return a;
 };
 
 if (JSON.parse(document.currentScript.getAttribute('global'))) {
-  Woof.prototype.extend(window, new Woof({ global: true, fullScreen: true, debug: ["mouseX", "mouseY"] }));
+  Woof.prototype.extend(window, new Woof({ global: true, fullScreen: true }));
 }
