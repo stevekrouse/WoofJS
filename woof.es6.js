@@ -10,9 +10,10 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
   thisContext.sprites = [];
   thisContext.backdrop = undefined;
   thisContext.stopped = true;
-  this.debugColor = "black";
+  thisContext.debugColor = "black";
+  thisContext.fullScreen = fullScreen;
   
-  if (fullScreen) {
+  if (thisContext.fullScreen) {
     width = window.innerWidth;
     height = window.innerHeight;
     window.addEventListener("load", () => {
@@ -73,7 +74,15 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
     thisContext._runReadys();
   });
   
-  thisContext.setCanvasSize = (width, height) => {
+  thisContext.setBackdropSize = (width, height) => {
+    if (thisContext.fullScreen) {
+      throw Error("You cannot manually set the backdrop size in full-screen mode. You can full-screen mode off with: fullScreen = false.")
+    } else {
+     thisContext._setCanvasSize(width, height); 
+    }
+  }
+  
+  thisContext._setCanvasSize = (width, height) => {
     thisContext.height = height;
     thisContext.width = width;
     thisContext.minX = -thisContext.width / 2;
@@ -95,12 +104,12 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
       thisContext._renderBackdrop();
     })
   };
-  thisContext.setCanvasSize(height, width);
-  if (fullScreen) {
-    window.addEventListener("resize", () => {
-      thisContext.setCanvasSize(window.innerWidth,  window.innerHeight);
-    });
-  }
+  thisContext._setCanvasSize(width, height);
+  window.addEventListener("resize", () => {
+    if (thisContext.fullScreen) {
+      thisContext._setCanvasSize(window.innerWidth,  window.innerHeight);
+    }
+  });
   
   thisContext.bounds = () => {
     return {left: thisContext.minX, right: thisContext.maxX, bottom: thisContext.minYm, top: thisContext.maxY}

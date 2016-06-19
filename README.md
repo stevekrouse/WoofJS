@@ -14,7 +14,7 @@ Alternatively, you can:
 
 1) Put Woof between the `<head>` tags.
 ```html
-<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/352dca2b4bad4f760f025e9ad8ab6bf51fb7694e/woof.js" global="true"></script>
+<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/9610c395c7f8910efa4fffd37ac640fa0a5ef01a/woof.js" global="true"></script>
 ```
 2) Throw in some JavaScript, and tell Woof to fetch it.
 ```javascript
@@ -63,6 +63,15 @@ setBackdropURL("http://example.com/img.jpg");
 
 ```javascript
 setBackdropColor("blue");
+```
+
+  - Set the backdrop size:
+
+```javascript
+fullScreen = false;
+var width = 300;
+var height = 400;
+setBackdropSize(width, height);
 ```
   
 ### Sensing
