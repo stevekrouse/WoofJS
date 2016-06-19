@@ -269,6 +269,129 @@ forever(() => {
 });
 ```
 
+## Variables
+
+Like in Scratch, there are 4 ways to interact with variables in JavaScript:
+
+1. Creating a variable, and giving it a name:
+
+```javascript
+var sampleVariable;
+```
+2. Setting the variable to a value:
+
+```javascript
+sampleVariable = 1;
+```
+3. Changing the variable:
+
+```javascript
+sampleVariable = sampleVariable + 1;
+```
+4. Using the variable as a value:
+
+```javascript
+if (sampleVariable > 1) {
+  doSomething();
+}
+```
+
+We can also combine step 1, defining the variable, and 2, setting the variable, like so:
+
+```javascript
+var sampleVariable = 1;
+```
+
+We can also shorten step 3, changing the variable:
+
+```javascript
+sampleVariable += 1;
+```
+
+Or if we only want to add 1 to our variable, we could shorten it even further:
+
+```javascript
+sampleVariable++;
+```
+
+In JavaScipt, *any* value can be assigned to a variable, including a number, string, list, object, or funciton.
+
+## Arrays (Lists)
+
+Like in Scratch, there are a few basic ways to interact with an array:
+
+1. Creating a array, and giving it a name:
+
+```javascript
+var sampleArray = [];
+```
+2. Adding things to the array:
+
+```javascript
+sampleArray.push(1);
+```
+3. Remove the first two items from an array:
+
+```javascript
+sampleArray = ['a', 'b', 'c', 'd']
+sampleArray.splice(0, 2)
+```
+4. Check if an item is in an array:
+
+```javascript
+sampleArray.includes('a')
+```
+4. Check if an item is in an array:
+
+```javascript
+sampleArray.includes('a')
+```
+5. Print each thing in an array:
+
+```javascript
+sampleArray.forEach(thing => console.log(thing))
+```
+6. Check if a condition holds for at least one thing in an array:
+
+```javascript
+if (sampleArray.some(thing => thing.over(mouseX, mouseY))) {
+  doSomething();
+}
+```
+7. Check if a condition holds for at every thing in an array:
+
+```javascript
+if (sampleArray.every(thing => thing.touching(sprite1))) {
+  doSomething();
+}
+```
+
+
+## Functions (custom blocks)
+
+You can create a function with a name:
+
+```javascript
+var namedFunction = (input1, input2) => { 
+  // do stuff here with input1 and input2
+}
+```
+
+You can run a function by putting parenthesis next to its name:
+
+```javascript
+namedFunction(1, 2)
+```
+
+But you can also create a function without a name, which is called an anonymous function:
+
+```javascript
+forever(() => {
+  sprite.x++;
+})
+```
+
+
 ## Helper Functions
 
 1) Get a random integer between any two numbers
