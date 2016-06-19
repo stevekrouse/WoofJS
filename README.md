@@ -14,16 +14,14 @@ Alternatively, you can:
 
 1) Put Woof between the `<head>` tags.
 ```html
-<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/e211c56a1b99132bffe8e7eba3dbade5415e1ec4/woof.js" global="true"></script>
+<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/352dca2b4bad4f760f025e9ad8ab6bf51fb7694e/woof.js" global="true"></script>
 ```
 2) Throw in some JavaScript, and tell Woof to fetch it.
 ```javascript
-// add the mouse coordinates to the screen
-addDebug("mouseX");
-addDebug("mouseY");
+addDebug("mouseX", () => mouseX);
+addDebug("mouseY", () => mouseY);
 
-// Set the backdrop URL (preferably of similar dimensions to your canvas)
-setBackdropURL("http://i.imgur.com/lyyFGm4.jpg");
+setBackdropURL("https://i.imgur.com/lyyFGm4.jpg");
 
 // Add an image via a url
 var dawg = addImage({url: "http://i.imgur.com/SMJjVCL.png", x: 0, y: 0, imageHeight: 100, imageWidth: 135});
@@ -45,9 +43,9 @@ forever(() => {
 });
 
 var timer = 20;  // make the timer start at 20
-var timerText = project.addText({x: 0, y: project.maxY - 20, size: 20, color: "white", dynamicText: "'Time Left: ' + timer"}); // add text that diplays the timer (dynamicText updates automatically)
+var timerText = addText({x: 0, y: maxY - 20, size: 20, color: "white", text: () => `Time Left: ${timer}`}); // add text that diplays the timer (dynamicText updates automatically)
 every(1, "second", () => {
-  if (timer === 0){ project.stopAll(); } // stop everything when the timer reaches 0
+  if (timer === 0){ stopAll(); } // stop everything when the timer reaches 0
   timer--;   // make the timer go down every second
 });
 ```
@@ -85,7 +83,7 @@ setBackdropColor("blue");
   - Top edge of the screen: `maxY`
   - Bottom edge of the screen: `minY`
   - Random X value on the screen between `minX` and `maxX`: `randomX()`
-  - Random Y value on the screen between `minY` and `max: `randomY()`
+  - Random Y value on the screen between `minY` and `maxY`: `randomY()`
   - Width of the screen: `width`
   - Height of the screen: `height`
 
@@ -228,7 +226,7 @@ In addition to the default parameters (`x`, `y`, `angle`, `rotationStyle`, and `
 var TEXT_NAME = addText({text: "Text", dynamicText: "'mouseX: ' + mouseX", size: 12, color: "black", fontFamily: "arial", textAlign: "center"});
 ```
   - Set the text value to an unchanging value: `TEXT_NAME.text = "Sample Text";`
-  - Set the text value to an changing string expression: `TEXT_NAME.dynamicText = "'Variable Name: ' + variableName";`
+  - Set the text value to an changing functional expression: `TEXT_NAME.dynamicText = () => ``Variable Name: + ${variableName};```
   - Set the font size: `TEXT_NAME.size = 20;`
   - Set the font color: `TEXT_NAME.color = "white";`
   - Set the font color to a hex value: `TEXT_NAME.color = "#32CD32";`
@@ -269,13 +267,9 @@ forever(() => {
 ```javascript
 var number = randomInt(10, 20);
 ```
-2) Repeat something 10 times
 
-```javascript
-repeat(10, (time) => {
-  console.log(`I'm going to repeat this ${10-time} more times!`)
-});
-```
+2) Random color: `randomColor()`
+
 3) Get a random integer between any two numbers: `randomInt(10, 20);`
 
 4) Get the current hour: `hour();`
@@ -290,7 +284,6 @@ repeat(10, (time) => {
 
 9) Get the current day of the week (Monday-Sunday): `dayOfWeek();`
 
-10) Random color: `randomColor()`
 
 
 ### Control Flow
@@ -299,11 +292,11 @@ There are two types of commands in JavaScript:
 
 1) **Synchronous**: "Do this immediately and move on when it's done."
 
-*Synchronous example in real life*: Open heart surgery. When a doctor begins open heart surery on a patient, she stays in the operating room with the patient until the surgery is done and the patient is stitched back up. She doesn't start open surgery with one patient and then move on to another room where she begins operating on a second patient before the first operation is done. She starts and finishing one operation before starting a second.
+*Synchronous example in real life*: Open heart surgery. When a doctor begins open heart surery on a patient, she stays in the operating room with the patient until the surgery is done and the patient is stitched back up. She doesn't start open surgery with one patient and then move on to another operating room where she begins operating on a second patient before the first operation is done. She starts and finishes one operation before starting a second.
 
-2) **Asynchronous**: "Start this immediately, but don't wait till it's done. Move on to the next command immediately after you start this command (which might be before this command is done)."
+2) **Asynchronous**: "Start this immediately, but don't wait till it's done. Move on to the next command immediately after you start this command."
 
-*Asynchronous example in real life*: Ordering food or drinks. First, let's imagine what a synchronous resturant would look like. A waiter would come to your table, take 1 person's order, rush it back to the kitchen, wait for the kitchen to finish with that person's order, and then bring it back to that person. Finally once this first order is taken care of, the waiter would ask the 2nd person at the table for their order. Of course this would be ridiculous. It makes much more sense for a resturant to process its customers' orders asynchronously. That is, after a waiter takes one person's order, he is free to take another person's order before finishing the first order. This allows the resturant to do multiple things at once, which is ultimately faster for some types of tasks.
+*Asynchronous example in real life*: Ordering food or drinks. First, let's imagine what a synchronous resturant would look like. A waiter would come to your table, take 1 person's order, rush it back to the kitchen, wait for the kitchen to finish with that person's order, and then bring it back to that person. Finally once this first order is taken care of, the waiter would ask the second person at the table for their order. Of course this would be ridiculous. It makes much more sense for a resturant to process its customers' orders asynchronously. That is, after a waiter takes one person's order, he is free to take another person's order before finishing the first order. This allows the resturant to do multiple things at once, which is ultimately faster for some types of tasks, particularly those that take a lot of time to process.
 
 Most commands are synchronous. For example, if-statements, setting or changing variables, and calling most Woof methods like `rectangle.move(10)` are all synchronous commands.
 
@@ -360,10 +353,10 @@ repeat(100, () => {
 });
 ```
 
-  - Repeat constantly until (you have to put the condition in "quotes"): 
+  - Repeat constantly until (you have to put the condition in a function): 
 
 ```javascript
-repeatUntil("IMAGE_NAME.y < minY", () => {
+repeatUntil(() => IMAGE_NAME.y < minY, () => {
   IMAGE_NAME.y -= SPEED;
 });
 ```
@@ -371,7 +364,7 @@ repeatUntil("IMAGE_NAME.y < minY", () => {
   - Do seomthing after a `repeatUntil`:
 
 ```javascript
-repeatUntil("IMAGE_NAME.y < minY", () => {
+repeatUntil(() => IMAGE_NAME.y < minY, () => {
   IMAGE_NAME.y -= SPEED;
 }, () => {
   stopAll();  
@@ -389,19 +382,18 @@ forever(() => {
   - Do this every second: 
 
 ```javascript
-var timer = 20;
-var timerText = addText({x: 0, y: maxY - 20, size: 20, color: "white"});
-every("1", "second", () => {
-  if (timer === 0){ stopAll(); }
-  timer--;
-  timerText.text = "Timer: " + timer;
+var timer = 20;  // make the timer start at 20
+var timerText = project.addText({x: 0, y: project.maxY - 20, size: 20, color: "white", text: () => `Time Left: ${timer}`}); // add text that diplays the timer, updating automatically
+every(1, "second", () => {
+  if (timer === 0){ project.stopAll(); } // stop everything when the timer reaches 0
+  timer--;   // make the timer go down every second
 });
 ```
 
-  - Do this when a condition (in "quotes") is true. This is a short-hand for a forever-if statement.
+  - Do this when a condition (in a function) is true. This is a short-hand for a forever-if statement.
 
 ```javascript
-when('keysDown.includes("LEFT")', () => {
+when(() => keysDown.includes("LEFT"), () => {
     rectangle.x -= 5; 
 });
 ```
@@ -459,7 +451,7 @@ Despite its many [noted](http://worrydream.com/LearnableProgramming/) flaws, Pro
   - **hidden state** - In Woof, there's no hidden view-layer state. If you make one circle red, only that circle is red.
   - **non-modular** - In Woof, because all view-layer state is encapulated into objects, it allows you to easily build modular and functional code without worrying about side effects.
   - **poor decomposition** - In Woof, you can have infinitely many objects listen to infinitely many events. You don't have to funnel all of your code through the same top-level events that forces you to build tangled code.
-  - **lack of identity / metaphor** - Woof steals Scratch's and Smalltalk's everything-is-an-object-that-you-can-see-on-the-screen metaphor. It also takes the pen, angles, turning and moving athropomorphic metaphors from LOGO.
+  - **lack of identity / metaphor** - Woof steals Scratch's and Smalltalk's everything-is-an-object-that-you-can-see-on-the-screen-immediately metaphor. It also steals LOGO's pen, angles, turning and moving athropomorphic metaphors.
 
 ## Showing off
 

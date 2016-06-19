@@ -9,7 +9,6 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
   thisContext.global = global;
   thisContext.sprites = [];
   thisContext.backdrop = undefined;
-  thisContext.debug = [];
   thisContext.stopped = true;
   this.debugColor = "black";
   
@@ -256,14 +255,14 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
     thisContext._everys.push(setInterval(func, Woof.prototype.unitsToMiliseconds(time, units)));
   };
   thisContext.forever = (func) => {
-    thisContext.repeatUntil("false", func);
+    thisContext.repeatUntil(() => false, func);
   };
   
   thisContext.when = (condition, func) => {
     thisContext.forever(() => {
       var cond;
       try {
-        cond = eval(condition);
+        cond = condition();
       } catch (e) {
         console.error("Bad condition in when: " + condition);
         throw e;
@@ -293,25 +292,14 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
     thisContext._afters.push(setTimeout(func, Woof.prototype.unitsToMiliseconds(time, units)));
   };
   
-  thisContext.addDebug = (str) => {
-    thisContext.debug.push(str);
-    var sprite = new Woof.prototype.Text(thisContext, {textAlign: "left"});
-    thisContext.debugText.push(sprite);
-  }
-
   thisContext.debugText = [];
-  thisContext.debug.forEach(thisContext.addDebug);
-  
+  thisContext.addDebug = (display, func) => {
+    if (typeof func != 'function') { throw Error("The second argument to addDebug must be a function"); }
+    var text = thisContext.addText({x: thisContext.minX + 5, y: thisContext.minY + (12 * (thisContext.debugText.length+1)), color: thisContext.debugColor, text: () => display + ": " + JSON.stringify(func()), textAlign: "left"});
+    thisContext.debugText.push(text);
+  }
   thisContext._renderDebug = () => {
-    for (var i = 0; i < thisContext.debug.length; i++) {
-      var expr = thisContext.debug[i];
-      var value;
-      try { value = eval(expr); } catch(e) { value = e; }
-      [thisContext.debugText[i].x, thisContext.debugText[i].y] = [thisContext.minX + 5, thisContext.minY + (12 * (i+1))];
-      thisContext.debugText[i].text = `${expr}: ${value}`;
-      thisContext.debugText[i]._render(thisContext._spriteContext);
-      thisContext.debugText[i].color = thisContext.debugColor;
-    }
+    thisContext.debugText.forEach(text => text.sendToFront());
   };
   
   thisContext._renderSprites = () => {
@@ -353,6 +341,10 @@ Woof.prototype.Sprite = function(project, {x = 0, y = 0, angle = 0, rotationStyl
   this.penColor = penColor;
   this.penWidth = penWidth;
   this.deleted = false;
+  
+  this.toJSON = () => {
+    return {x: this.x, y: this.y, angle: this.angle, rotationStyle: this.rotationStyle, showing: this.showing, penDown: this.penDown, penColor: this.penColor, penWidth: this.penWidth, deleted: this.deleted};
+  };
   
   [this.lastX, this.lastY] = [this.x, this.y];
   this.trackPen = () => {
@@ -583,14 +575,13 @@ Woof.prototype.Sprite = function(project, {x = 0, y = 0, angle = 0, rotationStyl
   };
 };
 
-Woof.prototype.Text = function(project, {text = "Text",  dynamicText = undefined, size = 12, color = "black", fontFamily = "arial", textAlign = "center"} = {}) {
+Woof.prototype.Text = function(project, {text = "Text", size = 12, color = "black", fontFamily = "arial", textAlign = "center"} = {}) {
   Woof.prototype.Sprite.call(this, project, arguments[1]);
   this.text = text;
   this.size = size;
   this.color = color;
   this.fontFamily = fontFamily;
   this.textAlign = textAlign;
-  this.dynamicText = dynamicText;
   
   this.width = () => {
     var width;
@@ -623,7 +614,11 @@ Woof.prototype.Text = function(project, {text = "Text",  dynamicText = undefined
   this.textRender = (context) => {
     this._applyInContext(() => {
       var text;
-      try { text = this.dynamicText ? eval(this.dynamicText) : this.text; } catch (e) { console.error("Error with dynamicText: '" + this.dynamicText + "'"); throw e; }
+      if (typeof(this.text) == "function"){
+        try { text = this.text(); } catch (e) { console.error("Error with text function: '" + this.text + "'"); throw e; }
+      } else {
+        text = this.text;
+      }
       context.fillText(text, 0, 0);
     });
   };
@@ -746,7 +741,7 @@ Woof.prototype.Repeat = function(times, func, after) {
 };
 
 Woof.prototype.RepeatUntil = function(condition, func, after){
-  if (typeof condition !== "string") { throw Error("You must give repeatUntil a string condition in quotes. You gave it: " + condition); }
+  // TODO if (typeof condition !== "string") { throw Error("You must give repeatUntil a string condition in quotes. You gave it: " + condition); }
   this.func = func;
   this.condition = condition;
   this.done = false;
@@ -757,9 +752,9 @@ Woof.prototype.RepeatUntil = function(condition, func, after){
     }
     var cond;
     try {
-      cond = eval(this.condition);
+      cond = this.condition();
     } catch (e) {
-      console.error("Error in Repeat Until");
+      console.error("Error in Repeat Until condition");
       throw e;
     }
     
@@ -897,13 +892,13 @@ Woof.prototype.LEFT = 180;
 Woof.prototype.UP = 90;
 Woof.prototype.DOWN = 270;
 
-
 Woof.prototype.extend = function(a, b){
-    for(var key in b) {
-      a[key] = b[key];
-    }
+  for(var key in b) {
+    a[key] = b[key];
+  }
+  return a;
 };
 
 if (JSON.parse(document.currentScript.getAttribute('global'))) { 
-  Woof.prototype.extend(window, new Woof({global: true, fullScreen: true, debug: ["mouseX", "mouseY"]}));
+  Woof.prototype.extend(window, new Woof({global: true, fullScreen: true}));
 }
