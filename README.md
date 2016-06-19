@@ -83,7 +83,7 @@ setBackdropColor("blue");
   - Top edge of the screen: `maxY`
   - Bottom edge of the screen: `minY`
   - Random X value on the screen between `minX` and `maxX`: `randomX()`
-  - Random Y value on the screen between `minY` and `max: `randomY()`
+  - Random Y value on the screen between `minY` and `maxY`: `randomY()`
   - Width of the screen: `width`
   - Height of the screen: `height`
 
@@ -267,13 +267,9 @@ forever(() => {
 ```javascript
 var number = randomInt(10, 20);
 ```
-2) Repeat something 10 times
 
-```javascript
-repeat(10, (time) => {
-  console.log(`I'm going to repeat this ${10-time} more times!`)
-});
-```
+2) Random color: `randomColor()`
+
 3) Get a random integer between any two numbers: `randomInt(10, 20);`
 
 4) Get the current hour: `hour();`
@@ -288,7 +284,6 @@ repeat(10, (time) => {
 
 9) Get the current day of the week (Monday-Sunday): `dayOfWeek();`
 
-10) Random color: `randomColor()`
 
 
 ### Control Flow
@@ -297,11 +292,11 @@ There are two types of commands in JavaScript:
 
 1) **Synchronous**: "Do this immediately and move on when it's done."
 
-*Synchronous example in real life*: Open heart surgery. When a doctor begins open heart surery on a patient, she stays in the operating room with the patient until the surgery is done and the patient is stitched back up. She doesn't start open surgery with one patient and then move on to another room where she begins operating on a second patient before the first operation is done. She starts and finishing one operation before starting a second.
+*Synchronous example in real life*: Open heart surgery. When a doctor begins open heart surery on a patient, she stays in the operating room with the patient until the surgery is done and the patient is stitched back up. She doesn't start open surgery with one patient and then move on to another operating room where she begins operating on a second patient before the first operation is done. She starts and finishes one operation before starting a second.
 
-2) **Asynchronous**: "Start this immediately, but don't wait till it's done. Move on to the next command immediately after you start this command (which might be before this command is done)."
+2) **Asynchronous**: "Start this immediately, but don't wait till it's done. Move on to the next command immediately after you start this command."
 
-*Asynchronous example in real life*: Ordering food or drinks. First, let's imagine what a synchronous resturant would look like. A waiter would come to your table, take 1 person's order, rush it back to the kitchen, wait for the kitchen to finish with that person's order, and then bring it back to that person. Finally once this first order is taken care of, the waiter would ask the 2nd person at the table for their order. Of course this would be ridiculous. It makes much more sense for a resturant to process its customers' orders asynchronously. That is, after a waiter takes one person's order, he is free to take another person's order before finishing the first order. This allows the resturant to do multiple things at once, which is ultimately faster for some types of tasks.
+*Asynchronous example in real life*: Ordering food or drinks. First, let's imagine what a synchronous resturant would look like. A waiter would come to your table, take 1 person's order, rush it back to the kitchen, wait for the kitchen to finish with that person's order, and then bring it back to that person. Finally once this first order is taken care of, the waiter would ask the second person at the table for their order. Of course this would be ridiculous. It makes much more sense for a resturant to process its customers' orders asynchronously. That is, after a waiter takes one person's order, he is free to take another person's order before finishing the first order. This allows the resturant to do multiple things at once, which is ultimately faster for some types of tasks, particularly those that take a lot of time to process.
 
 Most commands are synchronous. For example, if-statements, setting or changing variables, and calling most Woof methods like `rectangle.move(10)` are all synchronous commands.
 
@@ -456,7 +451,7 @@ Despite its many [noted](http://worrydream.com/LearnableProgramming/) flaws, Pro
   - **hidden state** - In Woof, there's no hidden view-layer state. If you make one circle red, only that circle is red.
   - **non-modular** - In Woof, because all view-layer state is encapulated into objects, it allows you to easily build modular and functional code without worrying about side effects.
   - **poor decomposition** - In Woof, you can have infinitely many objects listen to infinitely many events. You don't have to funnel all of your code through the same top-level events that forces you to build tangled code.
-  - **lack of identity / metaphor** - Woof steals Scratch's and Smalltalk's everything-is-an-object-that-you-can-see-on-the-screen metaphor. It also takes the pen, angles, turning and moving athropomorphic metaphors from LOGO.
+  - **lack of identity / metaphor** - Woof steals Scratch's and Smalltalk's everything-is-an-object-that-you-can-see-on-the-screen-immediately metaphor. It also steals LOGO's pen, angles, turning and moving athropomorphic metaphors.
 
 ## Showing off
 
