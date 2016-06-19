@@ -12,8 +12,6 @@ function Woof() {
 
   var _ref$global = _ref.global;
   var global = _ref$global === undefined ? false : _ref$global;
-  var _ref$canvasId = _ref.canvasId;
-  var canvasId = _ref$canvasId === undefined ? undefined : _ref$canvasId;
   var _ref$fullScreen = _ref.fullScreen;
   var fullScreen = _ref$fullScreen === undefined ? false : _ref$fullScreen;
   var _ref$height = _ref.height;
@@ -94,36 +92,32 @@ function Woof() {
     thisContext._runReadys();
   });
 
-  thisContext.setCanvasSize = function () {
-    if (thisContext._spriteCanvas) {
-      thisContext.height = thisContext._spriteCanvas.height;
-      thisContext.width = thisContext._spriteCanvas.width;
-    } else {
-      thisContext.height = height;
-      thisContext.width = width;
-    }
+  thisContext.setCanvasSize = function (width, height) {
+    thisContext.height = height;
+    thisContext.width = width;
     thisContext.minX = -thisContext.width / 2;
     thisContext.maxX = thisContext.width / 2;
     thisContext.minY = -thisContext.height / 2;
     thisContext.maxY = thisContext.height / 2;
-  };
-  thisContext.setCanvasSize();
 
-  if (fullScreen) {
-    window.addEventListener("resize", function () {
-      thisContext._spriteCanvas.width = window.innerWidth;
-      thisContext._spriteCanvas.height = window.innerHeight;
+    thisContext.ready(function () {
+      thisContext._spriteCanvas.width = thisContext.width;
+      thisContext._spriteCanvas.height = thisContext.height;
 
-      var penData = thisContext._penContext.getImageData(0, 0, window.innerWidth, window.innerHeight);
-      thisContext._penCanvas.width = window.innerWidth;
-      thisContext._penCanvas.height = window.innerHeight;
+      var penData = thisContext._penContext.getImageData(0, 0, width, height);
+      thisContext._penCanvas.width = thisContext.width;
+      thisContext._penCanvas.height = thisContext.height;
       thisContext._penContext.putImageData(penData, 0, 0);
 
-      thisContext._backdropCanvas.width = window.innerWidth;
-      thisContext._backdropCanvas.height = window.innerHeight;
+      thisContext._backdropCanvas.width = thisContext.width;
+      thisContext._backdropCanvas.height = thisContext.height;
       thisContext._renderBackdrop();
-
-      thisContext.setCanvasSize();
+    });
+  };
+  thisContext.setCanvasSize(height, width);
+  if (fullScreen) {
+    window.addEventListener("resize", function () {
+      thisContext.setCanvasSize(window.innerWidth, window.innerHeight);
     });
   }
 
