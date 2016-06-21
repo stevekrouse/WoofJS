@@ -204,8 +204,11 @@ function Woof() {
   };
 
   thisContext.stopAll = function () {
-    thisContext._render();
+    if (thisContext.stopped) {
+      return;
+    }
     thisContext.stopped = true;
+    thisContext._render();
 
     thisContext._everys.forEach(clearInterval);
     thisContext._afters.forEach(clearInterval);

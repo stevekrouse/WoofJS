@@ -184,8 +184,9 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
   };
   
   thisContext.stopAll = () => {
-    thisContext._render();
+    if (thisContext.stopped) { return }
     thisContext.stopped = true;
+    thisContext._render();
     
     thisContext._everys.forEach(clearInterval);
     thisContext._afters.forEach(clearInterval);
