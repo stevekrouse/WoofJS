@@ -119,7 +119,7 @@ function Woof() {
 
       thisContext._backdropCanvas.width = thisContext.width;
       thisContext._backdropCanvas.height = thisContext.height;
-      thisContext._renderBackdrop();
+      setTimeout(thisContext._renderBackdrop);
     });
   };
   thisContext._setCanvasSize(width, height);
