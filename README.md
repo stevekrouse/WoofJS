@@ -14,7 +14,7 @@ Alternatively, you can:
 
 1) Put Woof between the `<head>` tags.
 ```html
-<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/8975497e0c9ac47b56db02dd22676d32531b6c57/woof.js" global="true"></script>
+<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/a1c50b136d9556a8e1b1ca01184ee5b6691ab526/woof.js" global="true"></script>
 ```
 2) Throw in some JavaScript, and tell Woof to fetch it.
 ```javascript
@@ -45,7 +45,7 @@ forever(() => {
 var timer = 20;  // make the timer start at 20
 var timerText = addText({x: 0, y: maxY - 20, size: 20, color: "white", text: () => `Time Left: ${timer}`}); // add text that diplays the timer (dynamicText updates automatically)
 every(1, "second", () => {
-  if (timer === 0){ stopAll(); } // stop everything when the timer reaches 0
+  if (timer === 0){ freeze(); } // freeze the screen when the timer reaches 0
   timer--;   // make the timer go down every second
 });
 ```
@@ -110,11 +110,17 @@ setBackdropSize(width, height);
   
 ### Stopping Everything
 
-To stop your whole project and freeze everything on the screen:
+To freeze everything on the screen:
 
 
 ```javascript
-stopAll();
+freeze();
+```
+
+To defrost the screen and let things move again:
+
+```javascript
+defrost();
 ```
 
 ## Woof Objects (Images, Text, Rectangles, and Circles)
@@ -169,7 +175,7 @@ When creating a new Image, Text, Rectangle or Circle, you may use the following 
   - Stop drawing a line behind a sprite: `NAME.penDown = false;`
   - Set pen color: `NAME.penColor = "blue";`
   - Set pen width: `NAME.penWidth = 10;`
-  - Clear all of the pen paths on the screen: `project.clearPen();`
+  - Clear all of the pen paths on the screen: `clearPen();`
 
 
 ### Control
@@ -499,7 +505,7 @@ repeatUntil(() => IMAGE_NAME.y < minY, () => {
 repeatUntil(() => IMAGE_NAME.y < minY, () => {
   IMAGE_NAME.y -= SPEED;
 }, () => {
-  stopAll();  
+  freeze();  
 });
 ```  
 
@@ -515,9 +521,9 @@ forever(() => {
 
 ```javascript
 var timer = 20;  // make the timer start at 20
-var timerText = project.addText({x: 0, y: project.maxY - 20, size: 20, color: "white", text: () => `Time Left: ${timer}`}); // add text that diplays the timer, updating automatically
+var timerText = addText({x: 0, y: maxY - 20, size: 20, color: "white", text: () => `Time Left: ${timer}`}); // add text that diplays the timer, updating automatically
 every(1, "second", () => {
-  if (timer === 0){ project.stopAll(); } // stop everything when the timer reaches 0
+  if (timer === 0){ freeze(); } // freeze the screen when the timer reaches 0
   timer--;   // make the timer go down every second
 });
 ```
