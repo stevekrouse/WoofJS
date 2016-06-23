@@ -207,8 +207,9 @@ function Woof() {
     if (thisContext.stopped) {
       return;
     }
-    thisContext._render();
-    thisContext.stopped = true;
+    thisContext.after(0, "seconds", function () {
+      return thisContext.stopped = true;
+    });
   };
   thisContext.defrost = function () {
     thisContext.stopped = false;
