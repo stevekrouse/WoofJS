@@ -183,16 +183,16 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
     thisContext.setCloud = thisContext.firebase.setCloud;
   };
   
-  thisContext.freeze = () => {
-    if (thisContext.stopped) { return }
-    thisContext._render();
-    thisContext.stopped = true;
-  };
-  thisContext.defrost = () => {
-    if (!thisContext.stopped) { return }
-    thisContext.stopped = false;
-    thisContext._render();
-  };
+  // thisContext.freeze = () => {
+  //   if (thisContext.stopped) { return }
+  //   thisContext._render();
+  //   thisContext.stopped = true;
+  // };
+  // thisContext.defrost = () => {
+  //   if (!thisContext.stopped) { return }
+  //   thisContext.stopped = false;
+  //   thisContext._render();
+  // };
   
   thisContext.translateToCenter = (x, y) => {
     return [(x - thisContext.maxX) - thisContext._spriteCanvas.offsetLeft, (thisContext.maxY - y) + thisContext._spriteCanvas.offsetTop];
@@ -331,8 +331,8 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
   thisContext._render = () => {
     thisContext._runRepeats();
     thisContext._calculateMouseSpeed();
-    if (thisContext.stopped) { return; }
     thisContext.renderInterval = window.requestAnimationFrame(thisContext._render);
+    if (thisContext.stopped) { return; }
     thisContext._renderSprites();
     thisContext._renderDebug();
   };

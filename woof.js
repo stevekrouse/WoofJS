@@ -203,20 +203,16 @@ function Woof() {
     thisContext.setCloud = thisContext.firebase.setCloud;
   };
 
-  thisContext.freeze = function () {
-    if (thisContext.stopped) {
-      return;
-    }
-    thisContext._render();
-    thisContext.stopped = true;
-  };
-  thisContext.defrost = function () {
-    if (!thisContext.stopped) {
-      return;
-    }
-    thisContext.stopped = false;
-    thisContext._render();
-  };
+  // thisContext.freeze = () => {
+  //   if (thisContext.stopped) { return }
+  //   thisContext._render();
+  //   thisContext.stopped = true;
+  // };
+  // thisContext.defrost = () => {
+  //   if (!thisContext.stopped) { return }
+  //   thisContext.stopped = false;
+  //   thisContext._render();
+  // };
 
   thisContext.translateToCenter = function (x, y) {
     return [x - thisContext.maxX - thisContext._spriteCanvas.offsetLeft, thisContext.maxY - y + thisContext._spriteCanvas.offsetTop];
@@ -408,10 +404,10 @@ function Woof() {
   thisContext._render = function () {
     thisContext._runRepeats();
     thisContext._calculateMouseSpeed();
+    thisContext.renderInterval = window.requestAnimationFrame(thisContext._render);
     if (thisContext.stopped) {
       return;
     }
-    thisContext.renderInterval = window.requestAnimationFrame(thisContext._render);
     thisContext._renderSprites();
     thisContext._renderDebug();
   };
