@@ -474,7 +474,7 @@ Woof.prototype.Sprite = function (project) {
     _this.lastX = _ref5[0];
     _this.lastY = _ref5[1];
   };
-  setInterval(this.trackPen, 0);
+  this.project.forever(this.trackPen);
 
   this._render = function (context) {
     if (this.showing && !this.deleted && this.overlap(this.project.bounds())) {
@@ -565,7 +565,7 @@ Woof.prototype.Sprite = function (project) {
   this.collisionCanvas = document.createElement('canvas');
   this.collisionContext = this.collisionCanvas.getContext('2d');
 
-  this.touching = function (sprite) {
+  this.touching = function (sprite, precise) {
     if (_this.deleted || !_this.showing) {
       return false;
     }
@@ -577,6 +577,10 @@ Woof.prototype.Sprite = function (project) {
     var r2 = sprite.bounds();
     if (!_this.overlap(r2)) {
       return false;
+    }
+
+    if (!precise) {
+      return true;
     }
 
     var left = Math.min(r1.left, r2.left);

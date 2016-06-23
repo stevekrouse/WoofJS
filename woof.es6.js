@@ -369,7 +369,7 @@ Woof.prototype.Sprite = function(project, {x = 0, y = 0, angle = 0, rotationStyl
     }
     [this.lastX, this.lastY] = [this.x, this.y];
   };
-  setInterval(this.trackPen, 0);
+  this.project.forever(this.trackPen);
   
   this._render = function(context) {
     if (this.showing && !this.deleted && this.overlap(this.project.bounds())) {
@@ -460,7 +460,7 @@ Woof.prototype.Sprite = function(project, {x = 0, y = 0, angle = 0, rotationStyl
   this.collisionCanvas = document.createElement('canvas');
   this.collisionContext = this.collisionCanvas.getContext('2d');
 
-  this.touching = sprite => {
+  this.touching = (sprite, precise) => {
     if (this.deleted || !this.showing) { return false; }
     if (sprite.deleted || !sprite.showing) { return false; }
     
@@ -468,6 +468,8 @@ Woof.prototype.Sprite = function(project, {x = 0, y = 0, angle = 0, rotationStyl
     var r2 = sprite.bounds();
     if (!this.overlap(r2)) { return false; }
     
+    if (!precise) { return true; }
+
     var left = Math.min(r1.left, r2.left);
     var top = Math.max(r1.top, r2.top);
     var right = Math.max(r1.right, r2.right);
