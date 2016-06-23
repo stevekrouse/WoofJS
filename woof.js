@@ -406,12 +406,12 @@ function Woof() {
   };
 
   thisContext._render = function () {
+    thisContext._runRepeats();
+    thisContext._calculateMouseSpeed();
     if (thisContext.stopped) {
       return;
     }
     thisContext.renderInterval = window.requestAnimationFrame(thisContext._render);
-    thisContext._runRepeats();
-    thisContext._calculateMouseSpeed();
     thisContext._renderSprites();
     thisContext._renderDebug();
   };

@@ -329,10 +329,10 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
   };
   
   thisContext._render = () => {
-    if (thisContext.stopped) { return; }
-    thisContext.renderInterval = window.requestAnimationFrame(thisContext._render);
     thisContext._runRepeats();
     thisContext._calculateMouseSpeed();
+    if (thisContext.stopped) { return; }
+    thisContext.renderInterval = window.requestAnimationFrame(thisContext._render);
     thisContext._renderSprites();
     thisContext._renderDebug();
   };
