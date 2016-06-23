@@ -203,20 +203,19 @@ function Woof() {
     thisContext.setCloud = thisContext.firebase.setCloud;
   };
 
-  thisContext.stopAll = function () {
+  thisContext.freeze = function () {
     if (thisContext.stopped) {
       return;
     }
-    thisContext.stopped = true;
     thisContext._render();
-
-    thisContext._everys.forEach(clearInterval);
-    thisContext._afters.forEach(clearInterval);
-    thisContext._spriteCanvas.removeEventListener("mousedown", thisContext._onClickHandler);
-
-    thisContext.sprites.forEach(function (sprite) {
-      return sprite.delete();
-    });
+    thisContext.stopped = true;
+  };
+  thisContext.defrost = function () {
+    if (!thisContext.stopped) {
+      return;
+    }
+    thisContext.stopped = false;
+    thisContext._render();
   };
 
   thisContext.translateToCenter = function (x, y) {
@@ -407,14 +406,16 @@ function Woof() {
   };
 
   thisContext._render = function () {
+    if (thisContext.stopped) {
+      return;
+    }
     thisContext.renderInterval = window.requestAnimationFrame(thisContext._render);
-    if (thisContext.stopped) return;
     thisContext._runRepeats();
     thisContext._calculateMouseSpeed();
     thisContext._renderSprites();
     thisContext._renderDebug();
   };
-  thisContext._render();
+  thisContext.ready(thisContext._render);
 };
 
 Woof.prototype.Sprite = function (project) {

@@ -183,16 +183,15 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
     thisContext.setCloud = thisContext.firebase.setCloud;
   };
   
-  thisContext.stopAll = () => {
+  thisContext.freeze = () => {
     if (thisContext.stopped) { return }
-    thisContext.stopped = true;
     thisContext._render();
-    
-    thisContext._everys.forEach(clearInterval);
-    thisContext._afters.forEach(clearInterval);
-    thisContext._spriteCanvas.removeEventListener("mousedown", thisContext._onClickHandler);
-    
-    thisContext.sprites.forEach(sprite => sprite.delete());
+    thisContext.stopped = true;
+  };
+  thisContext.defrost = () => {
+    if (!thisContext.stopped) { return }
+    thisContext.stopped = false;
+    thisContext._render();
   };
   
   thisContext.translateToCenter = (x, y) => {
@@ -330,14 +329,14 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
   };
   
   thisContext._render = () => {
+    if (thisContext.stopped) { return; }
     thisContext.renderInterval = window.requestAnimationFrame(thisContext._render);
-    if (thisContext.stopped) return;
     thisContext._runRepeats();
     thisContext._calculateMouseSpeed();
     thisContext._renderSprites();
     thisContext._renderDebug();
   };
-  thisContext._render();
+  thisContext.ready(thisContext._render);
 };
 
 Woof.prototype.Sprite = function(project, {x = 0, y = 0, angle = 0, rotationStyle = "ROTATE", showing = true, penColor = "black", penWidth = 1} = {}) {
