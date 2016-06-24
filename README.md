@@ -14,7 +14,7 @@ Alternatively, you can:
 
 1) Put Woof between the `<head>` tags.
 ```html
-<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/44ed61607097fada663628eb518fc930cac15c35/woof.js" global="true"></script>
+<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/7cb4b5ed7876a8c4b395a09c9d30c6350fc4f751/woof.js"></script>
 ```
 2) Throw in some JavaScript, and tell Woof to fetch it.
 ```javascript
@@ -541,6 +541,12 @@ when(() => keysDown.includes("LEFT"), () => {
 ```javascript
 after(1, "second", () => {...});
 ```
+
+## Global Mode
+
+By default, when you include the Woof script in your code, we default to making a full-screen project and polluting your global namespace with Woof's methods. We find not having to type "Woof." over and over again makes a huge difference for beginnger programmers.
+
+However, if you'd like to turn off this mode, simple add `global="false"` in your script tag.
 
 ## Cloud Data via Firebase (in development)
 
