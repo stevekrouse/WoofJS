@@ -907,6 +907,6 @@ Woof.prototype.extend = function(a, b){
   return a;
 };
 
-if (JSON.parse(document.currentScript.getAttribute('global'))) { 
+if (JSON.parse(document.currentScript.getAttribute('global')) !== false) { 
   Woof.prototype.extend(window, new Woof({global: true, fullScreen: true}));
 }
