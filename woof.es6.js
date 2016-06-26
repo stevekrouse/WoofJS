@@ -698,7 +698,7 @@ Woof.prototype.Line = function(project, {lineWidth = 1, x1 = 10, y1 = 10, color 
   };
 };
 
-Woof.prototype.Image = function(project, {url = "http://www.loveyourdog.com/image3.gif", imageHeight, imageWidth} = {}) {
+Woof.prototype.Image = function(project, {url = "https://www.loveyourdog.com/image3.gif", imageHeight, imageWidth} = {}) {
   Woof.prototype.Sprite.call(this, project, arguments[1]);
   this.imageHeight = imageHeight;
   this.imageWidth = imageWidth;

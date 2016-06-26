@@ -891,12 +891,12 @@ Woof.prototype.Line = function (project) {
 };
 
 Woof.prototype.Image = function (project) {
-  var _this7 = this;
+  var _this6 = this;
 
   var _ref11 = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
   var _ref11$url = _ref11.url;
-  var url = _ref11$url === undefined ? "http://www.loveyourdog.com/image3.gif" : _ref11$url;
+  var url = _ref11$url === undefined ? "https://www.loveyourdog.com/image3.gif" : _ref11$url;
   var imageHeight = _ref11.imageHeight;
   var imageWidth = _ref11.imageWidth;
 
@@ -905,58 +905,56 @@ Woof.prototype.Image = function (project) {
   this.imageWidth = imageWidth;
 
   this.setImageURL = function (url) {
-    var _this6 = this;
-
     this.image = new window.BrowserImage();
-    this.image.crossOrigin = "Anonymous";
+    // this.image.crossOrigin = "Anonymous"
     this.image.src = url;
-    this.image.addEventListener('error', function (e) {
-      e.preventDefault();
-      _this6.image = new window.BrowserImage();
-      _this6.image.src = url;
-    });
+    // this.image.addEventListener('error', e => {
+    //     e.preventDefault();
+    //     this.image = new window.BrowserImage();
+    //     this.image.src = url;
+    // });
   };
   this.setImageURL(url);
 
   this.width = function () {
-    return _this7.imageWidth || _this7.image.width;
+    return _this6.imageWidth || _this6.image.width;
   };
 
   this.height = function () {
-    return _this7.imageHeight || _this7.image.height;
+    return _this6.imageHeight || _this6.image.height;
   };
 
   this.imageRender = function (context) {
-    context.drawImage(_this7.image, -_this7.width() / 2, -_this7.height() / 2, _this7.width(), _this7.height());
+    context.drawImage(_this6.image, -_this6.width() / 2, -_this6.height() / 2, _this6.width(), _this6.height());
   };
 };
 
 Woof.prototype.Repeat = function (times, func, after) {
-  var _this8 = this;
+  var _this7 = this;
 
   this.func = func;
   this.times = times;
   this.done = false;
 
   this.next = function () {
-    if (_this8.done) {
+    if (_this7.done) {
       return;
     }
-    if (_this8.times <= 0) {
-      _this8.done = true;
+    if (_this7.times <= 0) {
+      _this7.done = true;
       if (after) {
         after();
       }
       return;
     } else {
-      _this8.func();
-      _this8.times--;
+      _this7.func();
+      _this7.times--;
     }
   };
 };
 
 Woof.prototype.RepeatUntil = function (condition, func, after) {
-  var _this9 = this;
+  var _this8 = this;
 
   // TODO if (typeof condition !== "string") { throw Error("You must give repeatUntil a string condition in quotes. You gave it: " + condition); }
   this.func = func;
@@ -964,31 +962,31 @@ Woof.prototype.RepeatUntil = function (condition, func, after) {
   this.done = false;
 
   this.next = function () {
-    if (_this9.done) {
+    if (_this8.done) {
       return;
     }
     var cond;
     try {
-      cond = _this9.condition();
+      cond = _this8.condition();
     } catch (e) {
       console.error("Error in Repeat Until condition");
       throw e;
     }
 
     if (cond) {
-      _this9.done = true;
+      _this8.done = true;
       if (after) {
         after();
       }
       return;
     } else {
-      _this9.func();
+      _this8.func();
     }
   };
 };
 
 Woof.prototype.Firebase = function (config) {
-  var _this10 = this;
+  var _this9 = this;
 
   this.data = {};
 
@@ -1003,7 +1001,7 @@ Woof.prototype.Firebase = function (config) {
   this.loadFirebaseLibrary(function () {
     firebase.initializeApp(config);
     firebase.database().ref().on('value', function (snapshot) {
-      _this10.data = snapshot.val() || {};
+      _this9.data = snapshot.val() || {};
     });
   });
 
@@ -1012,7 +1010,7 @@ Woof.prototype.Firebase = function (config) {
   };
 
   this.getCloud = function (key, defaultVal) {
-    return _this10.data[key] || defaultVal;
+    return _this9.data[key] || defaultVal;
   };
 };
 
