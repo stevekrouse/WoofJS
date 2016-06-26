@@ -14,7 +14,7 @@ Alternatively, you can:
 
 1) Put Woof between the `<head>` tags.
 ```html
-<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/7cb4b5ed7876a8c4b395a09c9d30c6350fc4f751/woof.js"></script>
+<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/f2bda7bf9a45ff7911370f804147d3a91b1bd701/woof.js"></script>
 ```
 2) Throw in some JavaScript, and tell Woof to fetch it.
 ```javascript
