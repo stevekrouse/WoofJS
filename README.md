@@ -18,8 +18,8 @@ Alternatively, you can:
 ```
 2) Throw in some JavaScript, and tell Woof to fetch it.
 ```javascript
-addDebug("mouseX", () => mouseX);
-addDebug("mouseY", () => mouseY);
+new Text({text: () => "mouseX: " + mouseX, x: minX + 10, y: minY + 12, textAlign: "left"});
+new Text({text: () => "mouseY: " + mouseY, x: minX + 10, y: minY + 24, textAlign: "left"});
 
 setBackdropURL("https://i.imgur.com/lyyFGm4.jpg");
 
@@ -95,12 +95,6 @@ setBackdropSize(width, height);
   - Random Y value on the screen between `minY` and `maxY`: `randomY()`
   - Width of the screen: `width`
   - Height of the screen: `height`
-
-
-### Debugging
- 
-  - Adding an expression to the bottom-left corner of the screen: `addDebug("mouseX");`
-  - Setting the color of the debug expressions: `debugColor = "white";`
 
   
 ### Responding to Events
