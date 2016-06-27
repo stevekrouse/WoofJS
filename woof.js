@@ -394,8 +394,28 @@ Woof.prototype.Sprite = function () {
   }
   this.project.sprites.push(this);
 
-  this.x = x;
-  this.y = y;
+  Object.defineProperty(this, 'x', {
+    get: function get() {
+      return this.privateX;
+    },
+    set: function set(value) {
+      this.privateX = value;
+      ready(this.trackPen);
+    }
+  });
+
+  Object.defineProperty(this, 'y', {
+    get: function get() {
+      return this.privateY;
+    },
+    set: function set(value) {
+      this.privateY = value;
+      ready(this.trackPen);
+    }
+  });
+
+  this.privateX = x;
+  this.privateY = y;
   this.angle = angle;
   this.rotationStyle = rotationStyle;
   this.showing = showing;
@@ -432,7 +452,6 @@ Woof.prototype.Sprite = function () {
     _this.lastX = _ref5[0];
     _this.lastY = _ref5[1];
   };
-  this.project.forever(this.trackPen);
 
   this._render = function (context) {
     if (this.showing && !this.deleted && this.overlap(this.project.bounds())) {
@@ -480,8 +499,9 @@ Woof.prototype.Sprite = function () {
   };
 
   this.move = function (steps) {
-    this.x += steps * Math.cos(this.radians());
-    this.y += steps * Math.sin(this.radians());
+    this.privateX += steps * Math.cos(this.radians());
+    this.privateY += steps * Math.sin(this.radians());
+    ready(this.trackPen);
   };
 
   this.setRotationStyle = function (style) {

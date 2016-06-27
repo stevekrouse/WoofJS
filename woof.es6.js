@@ -300,8 +300,28 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
   }
   this.project.sprites.push(this);
   
-  this.x = x;
-  this.y = y;
+  Object.defineProperty(this, 'x', {
+    get: function() {
+      return this.privateX;
+    },
+    set: function(value) {
+      this.privateX = value;
+      ready(this.trackPen);
+    }
+  });
+  
+  Object.defineProperty(this, 'y', {
+    get: function() {
+      return this.privateY;
+    },
+    set: function(value) {
+      this.privateY = value;
+      ready(this.trackPen);
+    }
+  });
+  
+  this.privateX = x;
+  this.privateY = y;
   this.angle = angle;
   this.rotationStyle = rotationStyle;
   this.showing = showing;
@@ -331,8 +351,7 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
     }
     [this.lastX, this.lastY] = [this.x, this.y];
   };
-  this.project.forever(this.trackPen);
-  
+
   this._render = function(context) {
     if (this.showing && !this.deleted && this.overlap(this.project.bounds())) {
       context.save();
@@ -379,8 +398,9 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
   };
   
   this.move = function(steps){
-    this.x += steps * Math.cos(this.radians());
-    this.y += steps * Math.sin(this.radians());
+    this.privateX += steps * Math.cos(this.radians());
+    this.privateY += steps * Math.sin(this.radians());
+    ready(this.trackPen);
   };
   
   this.setRotationStyle = style => {
@@ -614,6 +634,7 @@ Woof.prototype.Circle = function({project = undefined, radius = 10, color = "bla
     context.fill();
   };
 };
+
 
 Woof.prototype.Rectangle = function({project = undefined, rectangleHeight = 10, rectangleWidth = 10, color = "black"} = {}) {
   Woof.prototype.Sprite.call(this, arguments[0]);
