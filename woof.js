@@ -27,7 +27,6 @@ function Woof() {
   thisContext.sprites = [];
   thisContext.backdrop = undefined;
   thisContext.stopped = true;
-  thisContext.debugColor = "black";
   thisContext.fullScreen = fullScreen;
 
   if (thisContext.fullScreen) {
@@ -331,22 +330,6 @@ function Woof() {
     thisContext._afters.push(setTimeout(func, Woof.prototype.unitsToMiliseconds(time, units)));
   };
 
-  thisContext.debugText = [];
-  thisContext.addDebug = function (display, func) {
-    if (typeof func != 'function') {
-      throw Error("The second argument to addDebug must be a function");
-    }
-    var text = new Woof.prototype.Text({ project: thisContext, x: thisContext.minX + 5, y: thisContext.minY + 12 * (thisContext.debugText.length + 1), color: thisContext.debugColor, text: function text() {
-        return display + ": " + JSON.stringify(func());
-      }, textAlign: "left" });
-    thisContext.debugText.push(text);
-  };
-  thisContext._renderDebug = function () {
-    thisContext.debugText.forEach(function (text) {
-      return text.sendToFront();
-    });
-  };
-
   thisContext._renderSprites = function () {
     thisContext._spriteContext.clearRect(0, 0, thisContext.width, thisContext.height);
     thisContext.sprites.forEach(function (sprite) {
@@ -374,7 +357,6 @@ function Woof() {
       return;
     }
     thisContext._renderSprites();
-    thisContext._renderDebug();
   };
   thisContext.ready(thisContext._render);
 };

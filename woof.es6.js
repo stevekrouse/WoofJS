@@ -10,7 +10,6 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
   thisContext.sprites = [];
   thisContext.backdrop = undefined;
   thisContext.stopped = true;
-  thisContext.debugColor = "black";
   thisContext.fullScreen = fullScreen;
   
   if (thisContext.fullScreen) {
@@ -262,16 +261,6 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
     thisContext._afters.push(setTimeout(func, Woof.prototype.unitsToMiliseconds(time, units)));
   };
   
-  thisContext.debugText = [];
-  thisContext.addDebug = (display, func) => {
-    if (typeof func != 'function') { throw Error("The second argument to addDebug must be a function"); }
-    var text = new Woof.prototype.Text({project: thisContext, x: thisContext.minX + 5, y: thisContext.minY + (12 * (thisContext.debugText.length+1)), color: thisContext.debugColor, text: () => display + ": " + JSON.stringify(func()), textAlign: "left"});
-    thisContext.debugText.push(text);
-  }
-  thisContext._renderDebug = () => {
-    thisContext.debugText.forEach(text => text.sendToFront());
-  };
-  
   thisContext._renderSprites = () => {
     thisContext._spriteContext.clearRect(0, 0, thisContext.width, thisContext.height);
     thisContext.sprites.forEach((sprite) => {
@@ -295,7 +284,6 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
     thisContext.renderInterval = window.requestAnimationFrame(thisContext._render);
     if (thisContext.stopped) { return; }
     thisContext._renderSprites();
-    thisContext._renderDebug();
   };
   thisContext.ready(thisContext._render);
 };
