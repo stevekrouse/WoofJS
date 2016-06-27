@@ -548,42 +548,6 @@ By default, when you include the Woof script in your code, we default to making 
 
 However, if you'd like to turn off this mode, simple add `global="false"` in your script tag.
 
-## Cloud Data via Firebase (in development)
-
-Cloud data can be used to create high scores, logins, and multiplayer games.
-
-1) Login to [Firebase](https://firebase.google.com/) with your Google account.
-
-2) Create a new 
-
-3) Make reading and writing to your database possible via the Database rules tab.
-
-4) Whitelist your project's domain via the Auth sign-in tab.
-
-5) Copy the Firebase config into your `Project`:
-
-```javascript
-cloudDataConfig({
-    apiKey: "AIzaSyAWa4XzsdE5haWBWq4fTef2Ko1dpbsE4qM",
-    authDomain: "sample-a81f9.firebaseapp.com",
-    databaseURL: "https://sample-a81f9.firebaseio.com",
-    storageBucket: "",
-});
-```
-
-6) Set some data:
-
-```javascript
-setCloud("high_score", 100);
-setCloud("player1", {x: mouseX, y: mouseY});
-```
-
-7) Get some data:
-
-```javascript
-getCloud("high_score", 0) // returns 100, with a default of 0
-setCloud("player1", {x: 0, y: 0}) // returns  {x: 14, y: 104}, with a default of {x: 0, y: 0}
-```
 
 ## [Learnable Programming](http://worrydream.com/LearnableProgramming/)
 

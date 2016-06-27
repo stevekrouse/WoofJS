@@ -197,13 +197,6 @@ function Woof() {
     thisContext.ready(thisContext._renderBackdrop);
   };
 
-  thisContext.cloudDataConfig = function (config) {
-    thisContext.cloudData = new Woof.prototype.CloudData(config);
-    thisContext.getCloud = thisContext.cloudData.getCloud;
-    thisContext.setCloud = thisContext.cloudData.setCloud;
-    thisContext.addToList = thisContext.cloudData.addToList;
-  };
-
   thisContext.freeze = function () {
     if (thisContext.stopped) {
       return;
@@ -983,39 +976,6 @@ Woof.prototype.RepeatUntil = function (condition, func, after) {
     } else {
       _this8.func();
     }
-  };
-};
-
-Woof.prototype.CloudData = function (config) {
-  var _this9 = this;
-
-  this.data = {};
-
-  this.loadFirebaseLibrary = function (callback) {
-    var lib = document.createElement("script");
-    lib.type = "text/javascript";
-    lib.src = "https://www.gstatic.com/firebasejs/live/3.0/firebase.js";
-    lib.onload = callback;
-    document.body.appendChild(lib);
-  };
-
-  this.loadFirebaseLibrary(function () {
-    firebase.initializeApp(config);
-    firebase.database().ref().on('value', function (snapshot) {
-      _this9.data = snapshot.val() || {};
-    });
-  });
-
-  this.addToList = function (key, val) {
-    return firebase.database().ref().child("/" + key).push(val).key;
-  };
-
-  this.setCloud = function (key, val) {
-    firebase.database().ref().child("/" + key).set(val);
-  };
-
-  this.getCloud = function (key, defaultVal) {
-    return _this9.data[key] || defaultVal;
   };
 };
 
