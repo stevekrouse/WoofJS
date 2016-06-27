@@ -123,36 +123,6 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
     return Woof.prototype.random(thisContext.minY, thisContext.maxY);
   };
   
-  thisContext.addText = options => {
-    var sprite = new Woof.prototype.Text(thisContext, options);
-    thisContext.sprites.push(sprite);
-    return sprite;
-  };
-  
-  thisContext.addCircle = options => {
-    var sprite = new Woof.prototype.Circle(thisContext, options);
-    thisContext.sprites.push(sprite);
-    return sprite;
-  };
-  
-  thisContext.addRectangle = options => {
-    var sprite = new Woof.prototype.Rectangle(thisContext, options);
-    thisContext.sprites.push(sprite);
-    return sprite;
-  };
-  
-  thisContext.addLine = options => {
-    var sprite = new Woof.prototype.Line(thisContext, options);
-    thisContext.sprites.push(sprite);
-    return sprite;
-  };
-  
-  thisContext.addImage = options => {
-    var sprite = new Woof.prototype.Image(thisContext, options);
-    thisContext.sprites.push(sprite);
-    return sprite;
-  };
-  
   thisContext._renderBackdrop = () => {
     thisContext._backdropContext.clearRect(0, 0, thisContext.width, thisContext.height);
     if (thisContext.backdrop instanceof BrowserImage) {
@@ -295,7 +265,7 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
   thisContext.debugText = [];
   thisContext.addDebug = (display, func) => {
     if (typeof func != 'function') { throw Error("The second argument to addDebug must be a function"); }
-    var text = thisContext.addText({x: thisContext.minX + 5, y: thisContext.minY + (12 * (thisContext.debugText.length+1)), color: thisContext.debugColor, text: () => display + ": " + JSON.stringify(func()), textAlign: "left"});
+    var text = new Woof.prototype.Text({project: thisContext, x: thisContext.minX + 5, y: thisContext.minY + (12 * (thisContext.debugText.length+1)), color: thisContext.debugColor, text: () => display + ": " + JSON.stringify(func()), textAlign: "left"});
     thisContext.debugText.push(text);
   }
   thisContext._renderDebug = () => {
@@ -330,8 +300,18 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
   thisContext.ready(thisContext._render);
 };
 
-Woof.prototype.Sprite = function(project, {x = 0, y = 0, angle = 0, rotationStyle = "ROTATE", showing = true, penColor = "black", penWidth = 1} = {}) {
-  this.project = project.global ? window : project;
+Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, rotationStyle = "ROTATE", showing = true, penColor = "black", penWidth = 1} = {}) {
+  if (!project) {
+    if (global) {
+      this.project = window;
+    } else {
+      throw new Error("When not in global mode, you must supply {project: project} to a new Woof Object.")
+    }
+  } else {
+    this.project = project.global ? window : project;  
+  }
+  this.project.sprites.push(this);
+  
   this.x = x;
   this.y = y;
   this.angle = angle;
@@ -577,7 +557,7 @@ Woof.prototype.Sprite = function(project, {x = 0, y = 0, angle = 0, rotationStyl
   };
 };
 
-Woof.prototype.Text = function(project, {text = "Text", size = 12, color = "black", fontFamily = "arial", textAlign = "center"} = {}) {
+Woof.prototype.Text = function({project = undefined, text = "Text", size = 12, color = "black", fontFamily = "arial", textAlign = "center"} = {}) {
   Woof.prototype.Sprite.call(this, project, arguments[1]);
   this.text = text;
   this.size = size;
@@ -626,7 +606,7 @@ Woof.prototype.Text = function(project, {text = "Text", size = 12, color = "blac
   };
 };
 
-Woof.prototype.Circle = function(project, {radius = 10, color = "black"} = {}) {
+Woof.prototype.Circle = function({project = undefined, radius = 10, color = "black"} = {}) {
   Woof.prototype.Sprite.call(this, project, arguments[1]);
   this.radius = radius;
   this.color = color;
@@ -647,7 +627,7 @@ Woof.prototype.Circle = function(project, {radius = 10, color = "black"} = {}) {
   };
 };
 
-Woof.prototype.Rectangle = function(project, {rectangleHeight = 10, rectangleWidth = 10, color = "black"} = {}) {
+Woof.prototype.Rectangle = function({project = undefined, rectangleHeight = 10, rectangleWidth = 10, color = "black"} = {}) {
   Woof.prototype.Sprite.call(this, project, arguments[1]);
   this.rectangleHeight = rectangleHeight;
   this.rectangleWidth = rectangleWidth;
@@ -667,7 +647,7 @@ Woof.prototype.Rectangle = function(project, {rectangleHeight = 10, rectangleWid
   };
 };
 
-Woof.prototype.Line = function(project, {lineWidth = 1, x1 = 10, y1 = 10, color = "black"} = {}) {
+Woof.prototype.Line = function({project = undefined, lineWidth = 1, x1 = 10, y1 = 10, color = "black"} = {}) {
   Woof.prototype.Sprite.call(this, project, arguments[1]);
   this.x1 = x1;
   this.y1 = y1;
@@ -692,7 +672,7 @@ Woof.prototype.Line = function(project, {lineWidth = 1, x1 = 10, y1 = 10, color 
   };
 };
 
-Woof.prototype.Image = function(project, {url = "https://www.loveyourdog.com/image3.gif", imageHeight, imageWidth} = {}) {
+Woof.prototype.Image = function({project = undefined, url = "https://www.loveyourdog.com/image3.gif", imageHeight, imageWidth} = {}) {
   Woof.prototype.Sprite.call(this, project, arguments[1]);
   this.imageHeight = imageHeight;
   this.imageWidth = imageWidth;
@@ -701,7 +681,7 @@ Woof.prototype.Image = function(project, {url = "https://www.loveyourdog.com/ima
     this.image = new window.BrowserImage();
     // this.image.crossOrigin = "Anonymous"
     this.image.src = url;
-    // this.image.addEventListener('error', e => {
+    // this.image.`EventListener('error', e => {
     //     e.preventDefault(); 
     //     this.image = new window.BrowserImage();
     //     this.image.src = url;

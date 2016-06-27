@@ -141,36 +141,6 @@ function Woof() {
     return Woof.prototype.random(thisContext.minY, thisContext.maxY);
   };
 
-  thisContext.addText = function (options) {
-    var sprite = new Woof.prototype.Text(thisContext, options);
-    thisContext.sprites.push(sprite);
-    return sprite;
-  };
-
-  thisContext.addCircle = function (options) {
-    var sprite = new Woof.prototype.Circle(thisContext, options);
-    thisContext.sprites.push(sprite);
-    return sprite;
-  };
-
-  thisContext.addRectangle = function (options) {
-    var sprite = new Woof.prototype.Rectangle(thisContext, options);
-    thisContext.sprites.push(sprite);
-    return sprite;
-  };
-
-  thisContext.addLine = function (options) {
-    var sprite = new Woof.prototype.Line(thisContext, options);
-    thisContext.sprites.push(sprite);
-    return sprite;
-  };
-
-  thisContext.addImage = function (options) {
-    var sprite = new Woof.prototype.Image(thisContext, options);
-    thisContext.sprites.push(sprite);
-    return sprite;
-  };
-
   thisContext._renderBackdrop = function () {
     thisContext._backdropContext.clearRect(0, 0, thisContext.width, thisContext.height);
     if (thisContext.backdrop instanceof BrowserImage) {
@@ -366,7 +336,7 @@ function Woof() {
     if (typeof func != 'function') {
       throw Error("The second argument to addDebug must be a function");
     }
-    var text = thisContext.addText({ x: thisContext.minX + 5, y: thisContext.minY + 12 * (thisContext.debugText.length + 1), color: thisContext.debugColor, text: function text() {
+    var text = new Woof.prototype.Text({ project: thisContext, x: thisContext.minX + 5, y: thisContext.minY + 12 * (thisContext.debugText.length + 1), color: thisContext.debugColor, text: function text() {
         return display + ": " + JSON.stringify(func());
       }, textAlign: "left" });
     thisContext.debugText.push(text);
@@ -409,11 +379,13 @@ function Woof() {
   thisContext.ready(thisContext._render);
 };
 
-Woof.prototype.Sprite = function (project) {
+Woof.prototype.Sprite = function () {
   var _this = this;
 
-  var _ref3 = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+  var _ref3 = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
+  var _ref3$project = _ref3.project;
+  var project = _ref3$project === undefined ? undefined : _ref3$project;
   var _ref3$x = _ref3.x;
   var x = _ref3$x === undefined ? 0 : _ref3$x;
   var _ref3$y = _ref3.y;
@@ -429,7 +401,17 @@ Woof.prototype.Sprite = function (project) {
   var _ref3$penWidth = _ref3.penWidth;
   var penWidth = _ref3$penWidth === undefined ? 1 : _ref3$penWidth;
 
-  this.project = project.global ? window : project;
+  if (!project) {
+    if (global) {
+      this.project = window;
+    } else {
+      throw new Error("When not in global mode, you must supply {project: project} to a new Woof Object.");
+    }
+  } else {
+    this.project = project.global ? window : project;
+  }
+  this.project.sprites.push(this);
+
   this.x = x;
   this.y = y;
   this.angle = angle;
@@ -717,11 +699,13 @@ Woof.prototype.Sprite = function (project) {
   };
 };
 
-Woof.prototype.Text = function (project) {
+Woof.prototype.Text = function () {
   var _this2 = this;
 
-  var _ref7 = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+  var _ref7 = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
+  var _ref7$project = _ref7.project;
+  var project = _ref7$project === undefined ? undefined : _ref7$project;
   var _ref7$text = _ref7.text;
   var text = _ref7$text === undefined ? "Text" : _ref7$text;
   var _ref7$size = _ref7.size;
@@ -785,11 +769,13 @@ Woof.prototype.Text = function (project) {
   };
 };
 
-Woof.prototype.Circle = function (project) {
+Woof.prototype.Circle = function () {
   var _this3 = this;
 
-  var _ref8 = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+  var _ref8 = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
+  var _ref8$project = _ref8.project;
+  var project = _ref8$project === undefined ? undefined : _ref8$project;
   var _ref8$radius = _ref8.radius;
   var radius = _ref8$radius === undefined ? 10 : _ref8$radius;
   var _ref8$color = _ref8.color;
@@ -815,11 +801,13 @@ Woof.prototype.Circle = function (project) {
   };
 };
 
-Woof.prototype.Rectangle = function (project) {
+Woof.prototype.Rectangle = function () {
   var _this4 = this;
 
-  var _ref9 = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+  var _ref9 = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
+  var _ref9$project = _ref9.project;
+  var project = _ref9$project === undefined ? undefined : _ref9$project;
   var _ref9$rectangleHeight = _ref9.rectangleHeight;
   var rectangleHeight = _ref9$rectangleHeight === undefined ? 10 : _ref9$rectangleHeight;
   var _ref9$rectangleWidth = _ref9.rectangleWidth;
@@ -846,11 +834,13 @@ Woof.prototype.Rectangle = function (project) {
   };
 };
 
-Woof.prototype.Line = function (project) {
+Woof.prototype.Line = function () {
   var _this5 = this;
 
-  var _ref10 = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+  var _ref10 = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
+  var _ref10$project = _ref10.project;
+  var project = _ref10$project === undefined ? undefined : _ref10$project;
   var _ref10$lineWidth = _ref10.lineWidth;
   var lineWidth = _ref10$lineWidth === undefined ? 1 : _ref10$lineWidth;
   var _ref10$x = _ref10.x1;
@@ -884,11 +874,13 @@ Woof.prototype.Line = function (project) {
   };
 };
 
-Woof.prototype.Image = function (project) {
+Woof.prototype.Image = function () {
   var _this6 = this;
 
-  var _ref11 = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+  var _ref11 = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
+  var _ref11$project = _ref11.project;
+  var project = _ref11$project === undefined ? undefined : _ref11$project;
   var _ref11$url = _ref11.url;
   var url = _ref11$url === undefined ? "https://www.loveyourdog.com/image3.gif" : _ref11$url;
   var imageHeight = _ref11.imageHeight;
@@ -902,7 +894,7 @@ Woof.prototype.Image = function (project) {
     this.image = new window.BrowserImage();
     // this.image.crossOrigin = "Anonymous"
     this.image.src = url;
-    // this.image.addEventListener('error', e => {
+    // this.image.`EventListener('error', e => {
     //     e.preventDefault();
     //     this.image = new window.BrowserImage();
     //     this.image.src = url;
