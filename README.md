@@ -8,7 +8,7 @@ We reccomend you clone this JSBin to get started: [https://jsbin.com/lekovu/edit
 
 Alternatively, you can put Woof between the `<head>` tags.
 ```html
-<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/c0652fbe88df979f62cd5960b2ae770274b03c7a/woof.js"></script>
+<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/21ec67e3592012375ebc4d11094937d11b461067/woof.js"></script>
 ```
 
 ## Creating Sprites
