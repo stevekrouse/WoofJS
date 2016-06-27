@@ -717,7 +717,7 @@ Woof.prototype.Text = function () {
   var _ref7$textAlign = _ref7.textAlign;
   var textAlign = _ref7$textAlign === undefined ? "center" : _ref7$textAlign;
 
-  Woof.prototype.Sprite.call(this, project, arguments[0]);
+  Woof.prototype.Sprite.call(this, arguments[0]);
   this.text = text;
   this.size = size;
   this.color = color;
@@ -781,7 +781,7 @@ Woof.prototype.Circle = function () {
   var _ref8$color = _ref8.color;
   var color = _ref8$color === undefined ? "black" : _ref8$color;
 
-  Woof.prototype.Sprite.call(this, project, arguments[0]);
+  Woof.prototype.Sprite.call(this, arguments[0]);
   this.radius = radius;
   this.color = color;
 
@@ -815,7 +815,7 @@ Woof.prototype.Rectangle = function () {
   var _ref9$color = _ref9.color;
   var color = _ref9$color === undefined ? "black" : _ref9$color;
 
-  Woof.prototype.Sprite.call(this, project, arguments[0]);
+  Woof.prototype.Sprite.call(this, arguments[0]);
   this.rectangleHeight = rectangleHeight;
   this.rectangleWidth = rectangleWidth;
   this.color = color;
@@ -850,7 +850,7 @@ Woof.prototype.Line = function () {
   var _ref10$color = _ref10.color;
   var color = _ref10$color === undefined ? "black" : _ref10$color;
 
-  Woof.prototype.Sprite.call(this, project, arguments[0]);
+  Woof.prototype.Sprite.call(this, arguments[0]);
   this.x1 = x1;
   this.y1 = y1;
   this.color = color;
@@ -886,7 +886,7 @@ Woof.prototype.Image = function () {
   var imageHeight = _ref11.imageHeight;
   var imageWidth = _ref11.imageWidth;
 
-  Woof.prototype.Sprite.call(this, project, arguments[0]);
+  Woof.prototype.Sprite.call(this, arguments[0]);
   this.imageHeight = imageHeight;
   this.imageWidth = imageWidth;
 

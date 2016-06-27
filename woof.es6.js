@@ -558,7 +558,7 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
 };
 
 Woof.prototype.Text = function({project = undefined, text = "Text", size = 12, color = "black", fontFamily = "arial", textAlign = "center"} = {}) {
-  Woof.prototype.Sprite.call(this, project, arguments[0]);
+  Woof.prototype.Sprite.call(this, arguments[0]);
   this.text = text;
   this.size = size;
   this.color = color;
@@ -607,7 +607,7 @@ Woof.prototype.Text = function({project = undefined, text = "Text", size = 12, c
 };
 
 Woof.prototype.Circle = function({project = undefined, radius = 10, color = "black"} = {}) {
-  Woof.prototype.Sprite.call(this, project, arguments[0]);
+  Woof.prototype.Sprite.call(this, arguments[0]);
   this.radius = radius;
   this.color = color;
   
@@ -628,7 +628,7 @@ Woof.prototype.Circle = function({project = undefined, radius = 10, color = "bla
 };
 
 Woof.prototype.Rectangle = function({project = undefined, rectangleHeight = 10, rectangleWidth = 10, color = "black"} = {}) {
-  Woof.prototype.Sprite.call(this, project, arguments[0]);
+  Woof.prototype.Sprite.call(this, arguments[0]);
   this.rectangleHeight = rectangleHeight;
   this.rectangleWidth = rectangleWidth;
   this.color = color;
@@ -648,7 +648,7 @@ Woof.prototype.Rectangle = function({project = undefined, rectangleHeight = 10, 
 };
 
 Woof.prototype.Line = function({project = undefined, lineWidth = 1, x1 = 10, y1 = 10, color = "black"} = {}) {
-  Woof.prototype.Sprite.call(this, project, arguments[0]);
+  Woof.prototype.Sprite.call(this, arguments[0]);
   this.x1 = x1;
   this.y1 = y1;
   this.color = color;
@@ -673,7 +673,7 @@ Woof.prototype.Line = function({project = undefined, lineWidth = 1, x1 = 10, y1 
 };
 
 Woof.prototype.Image = function({project = undefined, url = "https://www.loveyourdog.com/image3.gif", imageHeight, imageWidth} = {}) {
-  Woof.prototype.Sprite.call(this, project, arguments[0]);
+  Woof.prototype.Sprite.call(this, arguments[0]);
   this.imageHeight = imageHeight;
   this.imageWidth = imageWidth;
   
