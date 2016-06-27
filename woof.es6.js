@@ -872,6 +872,34 @@ Woof.prototype.LEFT = 180;
 Woof.prototype.UP = 90;
 Woof.prototype.DOWN = 270;
 
+Number.prototype.between = function(a, b) {
+  var min = Math.min.apply(Math, [a, b]),
+    max = Math.max.apply(Math, [a, b]);
+  return this > min && this < max;
+};
+
+Array.prototype.remove = function(item) {
+  for(var i = this.length; i--;) {
+    if(this[i] === item) {
+      this.splice(i, 1);
+    }
+  }
+}
+
+function throttle (callback, limit) {
+  var wait = false;                   
+  return function () {
+    var context = this, args = arguments;
+    if (!wait) {                   
+      callback.apply(context, args);          
+      wait = true;               
+      setTimeout(function () {   
+        wait = false;          
+      }, limit);
+    }
+  }
+}
+
 Woof.prototype.extend = function(a, b){
   for(var key in b) {
     a[key] = b[key];

@@ -371,6 +371,11 @@ if (sampleArray.every(thing => thing.touching(sprite1))) {
   doSomething();
 }
 ```
+8. Remove something from an array:
+
+```javascript
+sampleArray.remove(sprite1)
+```
 
 
 ## Functions (custom blocks)
@@ -420,6 +425,11 @@ var number = random(10, 20);
 
 8) Get the current day of the week (Monday-Sunday): `dayOfWeek();`
 
+9) Only allow a function to be called once every X miliseconds:
+
+```javascript
+onClick(throttle(() => score++, 1000))  // after a click, you won't be able to click for 1 second
+```
 
 ### Control Flow
 
