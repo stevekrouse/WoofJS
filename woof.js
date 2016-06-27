@@ -208,7 +208,7 @@ function Woof() {
       thisContext.mouseX = _thisContext$translat2[0];
       thisContext.mouseY = _thisContext$translat2[1];
     });
-    thisContext._spriteCanvas.addEventListener("mouseup", function (event) {
+    window.addEventListener("mouseup", function (event) {
       thisContext.mouseDown = false;
 
       var _thisContext$translat3 = thisContext.translateToCenter(event.clientX, event.clientY);

@@ -176,7 +176,7 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
       thisContext.mouseDown = true;
       [thisContext.mouseX, thisContext.mouseY] = thisContext.translateToCenter(event.clientX, event.clientY);
     });
-    thisContext._spriteCanvas.addEventListener("mouseup", (event) => {
+    window.addEventListener("mouseup", (event) => {
       thisContext.mouseDown = false;
       [thisContext.mouseX, thisContext.mouseY] = thisContext.translateToCenter(event.clientX, event.clientY);
     });
