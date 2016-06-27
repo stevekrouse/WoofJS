@@ -403,25 +403,22 @@ forever(() => {
 1) Get a random integer between any two numbers
 
 ```javascript
-var number = randomInt(10, 20);
+var number = random(10, 20);
 ```
 
 2) Random color: `randomColor()`
 
-3) Get a random integer between any two numbers: `randomInt(10, 20);`
+3) Get the current hour: `hour();`
 
-4) Get the current hour: `hour();`
+4) Get the current hour in military time: `hourMilitary();`
 
-5) Get the current hour in military time: `hourMilitary();`
+5) Get the current minute: `minute();`
 
-6) Get the current minute: `minute();`
+6) Get the current second: `second();`
 
-7) Get the current second: `second();`
+7) Get the current day of the month (1-31): `dayOfMonth();`
 
-8) Get the current day of the month (1-31): `dayOfMonth();`
-
-9) Get the current day of the week (Monday-Sunday): `dayOfWeek();`
-
+8) Get the current day of the week (Monday-Sunday): `dayOfWeek();`
 
 
 ### Control Flow

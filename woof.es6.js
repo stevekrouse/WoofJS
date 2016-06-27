@@ -116,11 +116,11 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
   };
   
   thisContext.randomX = () => {
-    return Woof.prototype.randomInt(thisContext.minX, thisContext.maxX);
+    return Woof.prototype.random(thisContext.minX, thisContext.maxX);
   };
   
   thisContext.randomY = () => {
-    return Woof.prototype.randomInt(thisContext.minY, thisContext.maxY);
+    return Woof.prototype.random(thisContext.minY, thisContext.maxY);
   };
   
   thisContext.addText = options => {
@@ -802,8 +802,13 @@ Woof.prototype.unitsToMiliseconds = (time, units) => {
   }
 };
 
-Woof.prototype.randomInt = (min, max) => {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
+Woof.prototype.random = (min, max) => {
+  var rand = Math.random() * (max - min) + min;
+  if (Number.isInteger(min) && Number.isInteger(max)) {
+    return Math.round(rand);
+  } else {
+    return rand;
+  }
 };
 
 Woof.prototype.dayOfMonth = () =>{
@@ -859,7 +864,7 @@ Woof.prototype.second = () => {
 };
 
 Woof.prototype.randomColor = function(){
-  return "rgb(" + Woof.randomInt(0, 255) + ", " + Woof.randomInt(0, 255) + ", " + Woof.randomInt(0, 255)+ ")";
+  return "rgb(" + Woof.prototype.random(0, 255) + ", " + Woof.prototype.random(0, 255) + ", " + Woof.prototype.random(0, 255)+ ")";
 }
 
 Woof.prototype.RIGHT = 0;
