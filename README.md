@@ -11,77 +11,38 @@ Alternatively, you can put Woof between the `<head>` tags.
 <script src="https://cdn.rawgit.com/stevekrouse/WoofJS/c0652fbe88df979f62cd5960b2ae770274b03c7a/woof.js"></script>
 ```
 
-## Sprites
-
-When creating a new Image, Text, Rectangle or Circle sprite, you may use the following parameters:
+## Creating Sprites
 
 ```javascript
-  var IMAGE_NAME = new Image({x: 0, y: 0, angle: 0, rotationStyle: "ROTATE", showing: true});
-  var TEXT_NAME = new Text({x: 0, y: 0, angle: 0, rotationStyle: "ROTATE", showing: true});
-  var CIRCLE_NAME = new Circle({x: 0, y: 0, angle: 0, rotationStyle: "ROTATE", showing: true});
-  var RECTANGLE_NAME = new Rectangle({x: 0, y: 0, angle: 0, rotationStyle: "ROTATE", showing: true});
+var IMAGE_NAME = new Image();
+var TEXT_NAME = new Text();
+var CIRCLE_NAME = new Circle();
+var RECTANGLE_NAME = new Rectangle();
+var LINE_NAME = new Line();
 ```
 
+### Sprite Options
 
-### Image
-In addition to the default parameters (`x`, `y`, `angle`, `rotationStyle`, and `showing`), you may use these parameters to create a new image: 
+Every sprite can be created using the following options:
 
-```javascript 
+```javascript
+var IMAGE_NAME = new Image({x: 100, y: 20, angle: UP, rotationStyle: "ROTATE", showing: true});
+var TEXT_NAME = new Text({x: 50, y: -100, angle: DOWN, rotationStyle: "NO ROTATE", showing: true});
+var CIRCLE_NAME = new Circle({x: 0, y: 0, angle: 90, rotationStyle: "ROTATE LEFT RIGHT", showing: false});
+var RECTANGLE_NAME = new Rectangle({x: 62, y: 12, angle: 0, rotationStyle: "ROTATE", showing: false});
+```
+
+### Specific Options
+
+Each sprite has its own specific options:
+
+```javascript
 var IMAGE_NAME = new Image({url: "https://i.imgur.com/SMJjVCL.png", imageWidth: 30, imageHeight: 30});
-```
-  - Change the image (we strongly reccomend using imgur and https for all images): `IMAGE_NAME.setImageURL("http://www.urdu-english.com/images/lessons/beginner/shapes/shapes-pics/rectangle.png");`
-  - Set the width: `IMAGE_NAME.imageWidth = 10;`
-  - Set the height `IMAGE_NAME.imageHeight = 20;`
-
-### Circle
-In addition to the default parameters (`x`, `y`, `angle`, `rotationStyle`, and `showing`), you may use these parameters to create a new circle:
-
-```javascript
-var CIRCLE_NAME = new Circle({radius: 10, color: "black"});
-```
-  - Change the radius: `CIRCLE_NAME.radius = 15;`
-  - Change the color: `CIRCLE_NAME.color = "blue";`
-
-### Rectangle
-
-In addition to the default parameters (`x`, `y`, `angle`, `rotationStyle`, and `showing`), you may use these parameters to create a new rectangle: 
-
-```javascript
+var TEXT_NAME = new Text({text: "Hello world!", size: 12, color: "rgb(100, 50, 240)", fontFamily: "arial", textAlign: "left"});
+var CIRCLE_NAME = new Circle({radius: 10, color: "#ffffff"});
 var RECTANGLE_NAME = new Rectangle({rectangleHeight: 10, rectangleWidth: 20, color: "pink"});
-```
-  - Change the width: `RECTANGLE_NAME.rectangleWidth = 20;`
-  - Change the height: `RECTANGLE_NAME.rectangleHeight = 45;`
-  - Change the color: `RECTANGLE_NAME.color = "purple";`
-  
-
-### Line
-
-In addition to the default parameters (`angle`, `rotationStyle`, and `showing`), you may use these parameters to create a new line between (`x`,`y`) and (`x1`, `y1`): 
-
-```javascript
 var LINE_NAME = new Line({x: -100, y: 100, x1: 10, y1: 20, color: "pink", lineWidth: 10});
 ```
-  - Change the x startpoint: `LINE_NAME.x = -100;`
-  - Change the y startpoint: `LINE_NAME.y = 100;`
-  - Change the x endpoint: `LINE_NAME.x1 = 10;`
-  - Change the y endpoint: `LINE_NAME.y1 = 20;`
-  - Change the width: `LINE_NAME.lineWidth = 5;`
-  - Change the color: `LINE_NAME.color = "purple";`
-
-### Text
-
-In addition to the default parameters (`x`, `y`, `angle`, `rotationStyle`, and `showing`), you may use these parameters to create new text: 
-
-```javascript 
-var TEXT_NAME = new Text({text: "Hello world!", size: 12, color: "black", fontFamily: "arial", textAlign: "center"});
-```
-  - Set the text value to an unchanging value: `TEXT_NAME.text = "Sample Text";`
-  - Set the text value to an changing functional expression: `TEXT_NAME.text = () => "Variable Name: " + variableName;`
-  - Set the font size: `TEXT_NAME.size = 20;`
-  - Set the font color: `TEXT_NAME.color = "white";`
-  - Set the font color to a hex value: `TEXT_NAME.color = "#32CD32";`
-  - Set the font family: `TEXT_NAME.fontFamily = "arial";`
-
 
 ## <img height="45px" img src ="http://i.imgur.com/8AtJrAa.png"/> Motion
 
@@ -136,14 +97,34 @@ NAME.angle = DOWN;
 
 ![set size](http://i.imgur.com/dxOrPmu.png)
 
-
 ```javascript
 IMAGE_NAME.imageHeight = ...; IMAGE_NAME.imageWidth = ...;
 
 RECTANGLE_NAME.rectangleHeight = ...; RECTANGLE_NAME.rectangleWidth = ...;
 
 CIRCLE_NAME.radius = ...;
+
+LINE_NAME.x1 = ...;
+LINE_NAME.y1 = ...;
+LINE_NAME.lineWidth = ...;
+
+TEXT_NAME.size = 20;
 ```
+
+Change the color:
+
+```javascript
+RECTANGLE_NAME.color = "purple";
+TEXT_NAME.color = "rgb(10, 150, 30)";
+LINE_NAME.color = "#ff20ff";
+CIRCLE_NAME.color = "green";
+```
+
+Set the text value to an unchanging value: `TEXT_NAME.text = "Sample Text";`
+
+Set the text value to an changing functional expression: `TEXT_NAME.text = () => "Variable Name: " + variableName;`
+
+Set the text font family: `TEXT_NAME.fontFamily = "arial";`
 
 Set the backdrop to an image URL:
 
