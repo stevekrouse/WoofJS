@@ -197,10 +197,11 @@ function Woof() {
     thisContext.ready(thisContext._renderBackdrop);
   };
 
-  thisContext.firebaseConfig = function (config) {
-    thisContext.firebase = new Woof.prototype.Firebase(config);
-    thisContext.getCloud = thisContext.firebase.getCloud;
-    thisContext.setCloud = thisContext.firebase.setCloud;
+  thisContext.cloudDataConfig = function (config) {
+    thisContext.cloudData = new Woof.prototype.CloudData(config);
+    thisContext.getCloud = thisContext.cloudData.getCloud;
+    thisContext.setCloud = thisContext.cloudData.setCloud;
+    thisContext.addToList = thisContext.cloudData.addToList;
   };
 
   thisContext.freeze = function () {
@@ -479,14 +480,14 @@ Woof.prototype.Sprite = function (project) {
   this._render = function (context) {
     if (this.showing && !this.deleted && this.overlap(this.project.bounds())) {
       context.save();
-      context.translate(this.canvasX(), this.canvasY());
+      context.translate(Math.round(this.canvasX()), Math.round(this.canvasY()));
       if (this.rotationStyle == "ROTATE") {
-        context.rotate(-this.radians());
+        context.rotate(Math.round(-this.radians()));
       } else if (this.rotationStyle == "NO ROTATE") {
         // no rotate
       } else if (this.rotationStyle == "ROTATE LEFT RIGHT") {
           if (this.angle % 360 >= 90 && this.angle % 360 < 270) {
-            context.translate(this.width, 0);
+            context.translate(Math.round(this.width), 0);
             context.scale(-1, 1);
           } else if (this.angle % 360 >= 0 && this.angle % 360 < 90 || this.angle % 360 <= 360 && this.angle % 360 >= 270) {
             // no rotate
@@ -985,7 +986,7 @@ Woof.prototype.RepeatUntil = function (condition, func, after) {
   };
 };
 
-Woof.prototype.Firebase = function (config) {
+Woof.prototype.CloudData = function (config) {
   var _this9 = this;
 
   this.data = {};
@@ -1004,6 +1005,10 @@ Woof.prototype.Firebase = function (config) {
       _this9.data = snapshot.val() || {};
     });
   });
+
+  this.addToList = function (key, val) {
+    return firebase.database().ref().child("/" + key).push(val).key;
+  };
 
   this.setCloud = function (key, val) {
     firebase.database().ref().child("/" + key).set(val);

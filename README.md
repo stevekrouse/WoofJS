@@ -192,7 +192,7 @@ When creating a new Image, Text, Rectangle or Circle, you may use the following 
 In addition to the default parameters (`x`, `y`, `angle`, `rotationStyle`, and `showing`), you may use these parameters to create a new image: 
 
 ```javascript 
-var IMAGE_NAME = addImage({url: "http://www.loveyourdog.com/image3.gif", imageWidth: 30, imageHeight: 30});
+var IMAGE_NAME = addImage({url: "https://i.imgur.com/SMJjVCL.png", imageWidth: 30, imageHeight: 30});
 ```
   - Change the image (we strongly reccomend using imgur and https for all images): `IMAGE_NAME.setImageURL("http://www.urdu-english.com/images/lessons/beginner/shapes/shapes-pics/rectangle.png");`
   - Set the width: `IMAGE_NAME.imageWidth = 10;`
@@ -563,7 +563,7 @@ Cloud data can be used to create high scores, logins, and multiplayer games.
 5) Copy the Firebase config into your `Project`:
 
 ```javascript
-firebaseConfig({
+cloudDataConfig({
     apiKey: "AIzaSyAWa4XzsdE5haWBWq4fTef2Ko1dpbsE4qM",
     authDomain: "sample-a81f9.firebaseapp.com",
     databaseURL: "https://sample-a81f9.firebaseio.com",

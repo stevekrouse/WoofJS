@@ -177,10 +177,11 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
     thisContext.ready(thisContext._renderBackdrop);
   };
   
-  thisContext.firebaseConfig = config => {
-    thisContext.firebase = new Woof.prototype.Firebase(config);
-    thisContext.getCloud = thisContext.firebase.getCloud;
-    thisContext.setCloud = thisContext.firebase.setCloud;
+  thisContext.cloudDataConfig = config => {
+    thisContext.cloudData = new Woof.prototype.CloudData(config);
+    thisContext.getCloud = thisContext.cloudData.getCloud;
+    thisContext.setCloud = thisContext.cloudData.setCloud;
+    thisContext.addToList = thisContext.cloudData.addToList;
   };
   
   thisContext.freeze = () => {
@@ -374,14 +375,14 @@ Woof.prototype.Sprite = function(project, {x = 0, y = 0, angle = 0, rotationStyl
   this._render = function(context) {
     if (this.showing && !this.deleted && this.overlap(this.project.bounds())) {
       context.save();
-      context.translate(this.canvasX(), this.canvasY());
+      context.translate(Math.round(this.canvasX()), Math.round(this.canvasY()));
       if (this.rotationStyle == "ROTATE") {
-        context.rotate(-this.radians());
+        context.rotate(Math.round(-this.radians()));
       } else if (this.rotationStyle == "NO ROTATE"){
           // no rotate
       } else if (this.rotationStyle == "ROTATE LEFT RIGHT"){
         if (this.angle%360 >= 90 && this.angle%360 < 270){
-          context.translate(this.width, 0);
+          context.translate(Math.round(this.width), 0);
           context.scale(-1, 1);
         } else if (this.angle%360 >=0 && this.angle%360 < 90 || this.angle%360 <= 360 && this.angle%360 >=270){
           // no rotate
@@ -776,7 +777,7 @@ Woof.prototype.RepeatUntil = function(condition, func, after){
   };
 };
 
-Woof.prototype.Firebase = function(config){
+Woof.prototype.CloudData = function(config){
   this.data = {};
   
   this.loadFirebaseLibrary = callback => {
@@ -793,6 +794,10 @@ Woof.prototype.Firebase = function(config){
       this.data = snapshot.val() || {};
     });
   });
+  
+  this.addToList = (key, val) => {
+    return firebase.database().ref().child("/" + key).push(val).key;
+  };
   
   this.setCloud = (key, val) => {
     firebase.database().ref().child("/" + key).set(val);
