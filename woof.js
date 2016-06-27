@@ -1051,6 +1051,16 @@ Woof.prototype.minute = function () {
   return date.getMinutes();
 };
 
+Woof.prototype.year = function () {
+  var date = new Date();
+  return date.getFullYear();
+};
+
+Woof.prototype.months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+Woof.prototype.month = function () {
+  return Woof.prototype.months[new Date().getMonth()];
+};
+
 Woof.prototype.second = function () {
   var date = new Date();
   return date.getSeconds();

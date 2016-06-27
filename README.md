@@ -206,7 +206,7 @@ if(sampleArray.every(thing => thing.touching(...))) {
 
 ## <img height="45px" img src="http://i.imgur.com/NAhXXuW.png"/> Events
 
-TODO on backdrop click = 
+![onclick](http://i.imgur.com/XuPircO.png)
 
 ```javascript
 onClick(() => {
@@ -214,7 +214,7 @@ onClick(() => {
 });
 ```
 
-TODO on sprite click = 
+![onclick](http://i.imgur.com/z15mnPj.png)  
 
 ```javascript
 NAME.onClick(() => {
@@ -296,17 +296,25 @@ onClick(throttle(() => score++, 1000))  // after a click, you won't be able to c
 
 ![touching NAME](http://i.imgur.com/s26w6pc.png) `NAME.touching(OTHER_NAME)) {...};`
 
+**NOTE: touching detects the rectangular boundary of a sprite, so if you have an image with a large transparent border, you will need to trim your image to make touching accurate.**
+
 ![distance to mouse pointer](http://i.imgur.com/cIY3SYy.png) `NAME.distanceTo(mouseX, mouseY);`
 
 ![distance to other thing](http://i.imgur.com/y6sXGTK.png) `NAME.distanceTo(OTHER_NAME);`
 
 ![If pressing ...](http://i.imgur.com/bZnzRKH.png) `keysDown.includes(' ');`
 
-TODO Is 'A' pressed?: `keysDown.includes('A')`
+![If pressing ...](http://i.imgur.com/TDClulO.png) `keysDown.includes('A')`
 
-TODO Is the up key pressed?: `keysDown.includes('UP')`
+![](http://i.imgur.com/UauTNwu.png) `keysDown.includes('UP')`
 
-TODO other special keys
+![](http://i.imgur.com/vMzkUWM.png) `keysDown.includes('DOWN')`
+
+![](http://i.imgur.com/THTvSLh.png) `keysDown.includes('RIGHT')`
+
+![](http://i.imgur.com/oNEfLoB.png) `keysDown.includes('LEFT')`
+
+![If pressing ...](http://i.imgur.com/CoXW12B.png) `keysDown.length > 0`
 
 ![mouse x](http://i.imgur.com/JcKLf1r.png) `mouseX`
 
@@ -350,15 +358,31 @@ Height of the screen: `height`
 
 Distance of thing to a point: `NAME.distanceTo(X, Y);`
 
+![](http://i.imgur.com/1kOHRyz.png) `hour();`
+
+Hour in military time: `hourMilitary();`
+
+![](http://i.imgur.com/7in6ifA.png) `minute();`
+
+![](http://i.imgur.com/hWI9CTr.png) `second();`
+
+![](http://i.imgur.com/WhsQf1m.png) `dayOfMonth();`
+
+![](http://i.imgur.com/gL5xkbe.png) `dayOfWeek();`
+
+![](http://i.imgur.com/w5cJ5at.png) `month();`
+
+![](http://i.imgur.com/isWxU8C.png) `year();`
+
 ## <img height="45px" img src="http://i.imgur.com/851mEzr.png"/> OPERATORS
 
-Addition ![](http://i.imgur.com/nsDkCkt.png) `(...) + (...)`
+![](http://i.imgur.com/nsDkCkt.png) `... + ...`
 
-Subtraction ![](http://i.imgur.com/XSAATIP.png) `(...) - (...)`
+![](http://i.imgur.com/XSAATIP.png) `... - ...`
 
-Multiplication ![](http://i.imgur.com/ujnGpE6.png) `(...) * (...)`
+![](http://i.imgur.com/ujnGpE6.png) `... * ...`
 
-Division ![](http://i.imgur.com/B0BGkCJ.png) `(...) / (...)`
+![](http://i.imgur.com/B0BGkCJ.png) `... / ...`
 
 ![pick random number](http://i.imgur.com/fAHuDwy.png) `random(..., ...);`
 
@@ -368,33 +392,32 @@ Division ![](http://i.imgur.com/B0BGkCJ.png) `(...) / (...)`
 
 ![](http://i.imgur.com/7f8FRbZ.png) `... == ...`
 
-Less Than or Equal To = `... <= ...`
+Less Than or Equal To: `... <= ...`
 
-Greater Than or Equal To = `... >= ...`
+Greater Than or Equal To: `... >= ...`
 
-And ![and](http://i.imgur.com/UYhM5tp.png) `... && ...`
+Not Equals: `... != ...`
 
-Or ![or](http://i.imgur.com/PT3Iln0.png) `... || ...`
+![and](http://i.imgur.com/UYhM5tp.png) `... && ...`
 
-Not ![not](http://i.imgur.com/2Y4XeP8.png) `... != ...`
+![or](http://i.imgur.com/PT3Iln0.png) `... || ...`
+
+![](http://i.imgur.com/VqgL2io.png) `"hello" + "world"`
+
+![](http://i.imgur.com/hIRi6xQ.png) `"world".substring(0,1)`
+
+![](http://i.imgur.com/qsTRaCx.png) `"world.length`
+
+![](http://i.imgur.com/NFoY9l8.png) `... % ...`
+
+![](http://i.imgur.com/tkvyjRT.png) `Math.round(...)`
 
 Random color: `randomColor()`
 
-TODO Get the current hour: `hour();`
-
-TODO Get the current hour in military time: `hourMilitary();`
-
-TODO Get the current minute: `minute();`
-
-TODO Get the current second: `second();`
-
-TODO Get the current day of the month (1-31): `dayOfMonth();`
-
-TODO Get the current day of the week (Monday-Sunday): `dayOfWeek();`
-
 ## <img height="45px" img src="http://i.imgur.com/bRcYPen.png"/> More Blocks
 
-TODO no add extension ![Make Block](http://i.imgur.com/XCrGoqr.png)
+![Make Block](http://i.imgur.com/AZlRb6h.png)
+
 You can create a function with a name:
 
 ```javascript
