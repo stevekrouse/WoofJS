@@ -506,7 +506,7 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
   this.collisionContext = this.collisionCanvas.getContext('2d');
 
   this.touching = (sprite, precise) => {
-    if (!(sprite instanceof Woof.prototype.Sprite)) { throw new TypeError("touching(sprite) requires one sprite input."); }
+    if (!(typeof sprite == "object")) { throw new TypeError("touching(sprite) requires one sprite input."); }
       
     if (this.deleted || !this.showing) { return false; }
     if (sprite.deleted || !sprite.showing) { return false; }
