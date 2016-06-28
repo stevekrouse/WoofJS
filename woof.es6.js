@@ -148,7 +148,7 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
   };
 
   thisContext.setBackdropColor = function(color){
-    if (typeof url != "string") { throw new TypeError("setBackdropColor() takes one string input."); }
+    if (typeof color != "string") { throw new TypeError("setBackdropColor() takes one string input."); }
     thisContext.backdrop = color;
     thisContext.ready(thisContext._renderBackdrop);
   };

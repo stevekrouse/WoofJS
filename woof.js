@@ -178,7 +178,7 @@ function Woof() {
   };
 
   thisContext.setBackdropColor = function (color) {
-    if (typeof url != "string") {
+    if (typeof color != "string") {
       throw new TypeError("setBackdropColor() takes one string input.");
     }
     thisContext.backdrop = color;
