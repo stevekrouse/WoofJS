@@ -16,11 +16,11 @@ Alternatively, you can put Woof between the `<head>` tags.
 ## Creating Sprites
 
 ```javascript
-var IMAGE_NAME = new Image();
-var TEXT_NAME = new Text();
-var CIRCLE_NAME = new Circle();
-var RECTANGLE_NAME = new Rectangle();
-var LINE_NAME = new Line();
+var IMAGE_NAME = new Image({});
+var TEXT_NAME = new Text({});
+var CIRCLE_NAME = new Circle({});
+var RECTANGLE_NAME = new Rectangle({});
+var LINE_NAME = new Line({});
 ```
 
 ### Sprite Options
@@ -40,10 +40,10 @@ var LINE_NAME = new Rectangle({x: maxX, y: maxY, angle: 0, rotationStyle: "ROTAT
 Each sprite has its own specific options:
 
 ```javascript
-var IMAGE_NAME = new Image({url: "https://i.imgur.com/SMJjVCL.png", imageWidth: 30, imageHeight: 30});
+var IMAGE_NAME = new Image({url: "https://i.imgur.com/SMJjVCL.png",width: 30, height: 30});
 var TEXT_NAME = new Text({text: "Hello world!", size: 12, color: "rgb(100, 50, 240)", fontFamily: "arial", textAlign: "left"});
 var CIRCLE_NAME = new Circle({radius: 10, color: "#ffffff"});
-var RECTANGLE_NAME = new Rectangle({rectangleHeight: 10, rectangleWidth: 20, color: "pink"});
+var RECTANGLE_NAME = new Rectangle({width: 20, height: 55, color: "pink"});
 var LINE_NAME = new Line({x: -100, y: 100, x1: 10, y1: 20, color: "pink", lineWidth: 10});
 ```
 
@@ -101,9 +101,9 @@ NAME.angle = DOWN;
 ![set size](http://i.imgur.com/dxOrPmu.png)
 
 ```javascript
-IMAGE_NAME.imageHeight = ...; IMAGE_NAME.imageWidth = ...;
+IMAGE_NAME.height = ...; IMAGE_NAME.width = ...;
 
-RECTANGLE_NAME.rectangleHeight = ...; RECTANGLE_NAME.rectangleWidth = ...;
+RECTANGLE_NAME.height = ...; RECTANGLE_NAME.width = ...;
 
 CIRCLE_NAME.radius = ...;
 

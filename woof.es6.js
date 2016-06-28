@@ -23,6 +23,8 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
   
   thisContext._readys = [];
   thisContext.ready = (func) => {
+    if (typeof func != "function") { throw new TypeError("ready(function) requires one function input."); }
+    
     if (thisContext.stopped) {
       thisContext._readys.push(func);
     } else {
@@ -74,6 +76,7 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
   });
   
   thisContext.setBackdropSize = (width, height) => {
+    if (typeof width != "number" || typeof height != "number") { throw new TypeError("setBackdropSize(width, height) requires two number inputs."); }
     if (thisContext.fullScreen) {
       throw Error("You cannot manually set the backdrop size in full-screen mode. You can full-screen mode off with: fullScreen = false.")
     } else {
@@ -114,11 +117,13 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
     return {left: thisContext.minX, right: thisContext.maxX, bottom: thisContext.minYm, top: thisContext.maxY}
   };
   
-  thisContext.randomX = () => {
+  thisContext.randomX = function() {
+    if (arguments.length > 0) { throw new TypeError("randomX() requires no inputs."); }
     return Woof.prototype.random(thisContext.minX, thisContext.maxX);
   };
   
-  thisContext.randomY = () => {
+  thisContext.randomY = function() {
+    if (arguments.length > 0) { throw new TypeError("randomY() requires no inputs."); }
     return Woof.prototype.random(thisContext.minY, thisContext.maxY);
   };
   
@@ -134,23 +139,27 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
     }
   };
   
-  thisContext.setBackdropURL = function(url){    
+  thisContext.setBackdropURL = function(url){
+    if (typeof url != "string") { throw new TypeError("setBackDropUrl(url) requires one string input."); }
     var backdrop = new BrowserImage();
     backdrop.src = url;
     thisContext.backdrop = backdrop;
     thisContext.backdrop.onload = function() { thisContext.ready(thisContext._renderBackdrop); };
   };
 
-  thisContext.setBackdropColor = function(color){    
+  thisContext.setBackdropColor = function(color){
+    if (typeof url != "string") { throw new TypeError("setBackdropColor() takes one string input."); }
     thisContext.backdrop = color;
     thisContext.ready(thisContext._renderBackdrop);
   };
   
-  thisContext.freeze = () => {
+  thisContext.freeze = function() {
+    if (arguments.length > 0) { throw new TypeError("freeze() requires no inputs."); }
     if (thisContext.stopped) { return }
     thisContext.after(0, "seconds", () => thisContext.stopped = true);
   };
-  thisContext.defrost = () => {
+  thisContext.defrost = function() {
+    if (arguments.length > 0) { throw new TypeError("defrost() requires no inputs."); }
     thisContext.stopped = false;
   };
   
@@ -234,31 +243,47 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
   })
   
   thisContext._onMouseDowns = [];
-  thisContext.onMouseDown = func => { thisContext._onMouseDowns.push(func); };
+  thisContext.onMouseDown = func => {
+    if (typeof func != "function") { throw new TypeError("onMouseDown(function) requires one function input."); }
+    thisContext._onMouseDowns.push(func); 
+  };
   thisContext._onMouseUps = [];
-  thisContext.onMouseUp = func => { thisContext._onMouseUps.push(func); };
+  thisContext.onMouseUp = func => {
+    if (typeof func != "function") { throw new TypeError("onMouseUp(function) requires one function input."); }
+    thisContext._onMouseUps.push(func); 
+  };
   
   thisContext._onKeyDowns = [];
-  thisContext.onKeyDown = func => { thisContext._onKeyDowns.push(func); };
+  thisContext.onKeyDown = func => {
+    if (typeof func != "function") { throw new TypeError("onKeyDown(function) requires one function input."); }
+    thisContext._onKeyDowns.push(func); 
+  };
   thisContext._onKeyUps = [];
-  thisContext.onKeyUp = func => { thisContext._onKeyUps.push(func); };
+  thisContext.onKeyUp = func => {
+    if (typeof func != "function") { throw new TypeError("onKeyUp(function) requires one function input."); }
+    thisContext._onKeyUps.push(func); 
+  };
 
   thisContext._everys = [];
   thisContext.every = (time, units, func) => {
+    var milis = Woof.prototype.unitsToMiliseconds(time, units);
+    if (typeof func != "function" || typeof time != "number") { throw new TypeError("every(time, units, function) requires a number, unit and function input."); }
     func();
-    thisContext._everys.push(setInterval(func, Woof.prototype.unitsToMiliseconds(time, units)));
+    thisContext._everys.push(setInterval(func, milis));
   };
   thisContext.forever = (func) => {
+    if (typeof func != "function") { throw new TypeError("forever(function) requires one function input."); }
     thisContext.repeatUntil(() => false, func);
   };
   
   thisContext.when = (condition, func) => {
+    if (typeof func != "function" || typeof condition != "function") { throw new TypeError("when(conditionFunction, function) requires two function inputs."); }
     thisContext.forever(() => {
       var cond;
       try {
         cond = condition();
       } catch (e) {
-        console.error("Bad condition in when: " + condition);
+        console.error("Bad condition in when(conditionFunction, function): " + condition);
         throw e;
       }
       if (cond) {
@@ -269,9 +294,11 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
   
   thisContext._repeats = [];
   thisContext.repeat = (times, func, after) => {
+    if (typeof func != "function" || typeof times != "number" || (after !== undefined && typeof after != "function")) { throw new TypeError("repeat(times, function, afterFunction) requires a number and a function, and optionally accepts an extra function."); }
     thisContext._repeats.push(new Woof.prototype.Repeat(times, func, after));
   };
   thisContext.repeatUntil = (condition, func, after) => {
+    if (typeof func != "function" || typeof condition != "function" || (after !== undefined && typeof after != "function")) { throw new TypeError("repeatUntil(conditionFunction, function, afterFunction) requires two functions, and optionally accepts an extra function."); }
     thisContext._repeats.push(new Woof.prototype.RepeatUntil(condition, func, after));
   };
   thisContext._runRepeats = () => {
@@ -283,7 +310,9 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
   
   thisContext._afters = [];
   thisContext.after = (time, units, func) => {
-    thisContext._afters.push(setTimeout(func, Woof.prototype.unitsToMiliseconds(time, units)));
+    var milis = Woof.prototype.unitsToMiliseconds(time, units);
+    if (typeof func != "function" || typeof time != "number") { throw new TypeError("after(time, units, function) requires a number, unit and function input."); }
+    thisContext._afters.push(setTimeout(func, milis));
   };
   
   thisContext._renderSprites = () => {
@@ -293,7 +322,8 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
     });
   };
   
-  thisContext.clearPen = () => {
+  thisContext.clearPen = function() {
+    if (arguments.length > 0) { throw new TypeError("clearPen() requires no inputs."); }
     thisContext._penContext.clearRect(0, 0, thisContext.width, thisContext.height);
   }
   
@@ -318,7 +348,7 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
     if (global) {
       this.project = window;
     } else {
-      throw new Error("When not in global mode, you must supply {project: project} to a new Woof Object.")
+      throw new TypeError("When not in global mode, you must supply your {project: project} to each Sprite.")
     }
   } else {
     this.project = project.global ? window : project;  
@@ -330,6 +360,7 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
       return this.privateX;
     },
     set: function(value) {
+      if (typeof value != "number") { throw new TypeError("sprite.x can only be set to a number."); }
       this.privateX = value;
       ready(this.trackPen);
     }
@@ -340,6 +371,7 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
       return this.privateY;
     },
     set: function(value) {
+      if (typeof value != "number") { throw new TypeError("sprite.y can only be set to a number."); }
       this.privateY = value;
       ready(this.trackPen);
     }
@@ -382,7 +414,7 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
       context.save();
       context.translate(Math.round(this.canvasX()), Math.round(this.canvasY()));
       if (this.rotationStyle == "ROTATE") {
-        context.rotate(Math.round(-this.radians()));
+        context.rotate(-this.radians());
       } else if (this.rotationStyle == "NO ROTATE"){
           // no rotate
       } else if (this.rotationStyle == "ROTATE LEFT RIGHT"){
@@ -410,22 +442,28 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
   };
   
   this.distanceTo = function distanceTo(xGiven, yGiven){
-    if (arguments.length === 1){
-      var x = this.x - xGiven.x;
-      var y = this.y - xGiven.y;
-      return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
-    }
-    if (arguments.length === 2) {
+    if (arguments.length === 1) {
+      if (xGiven instanceof Woof.prototype.Sprite){
+        var x = this.x - xGiven.x;
+        var y = this.y - xGiven.y;
+        return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
+      } else {
+        throw new TypeError("distanceTo(sprite) requires one sprite input.")
+      } 
+    } else if (typeof xGiven != "number" || typeof yGiven != "number") {
+      throw new TypeError("distanceTo(x,y) requires two number inputs."); 
+    } else {
       var x = this.x - xGiven;
       var y = this.y - yGiven;
       return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
     }
   };
   
-  this.move = function(steps){
+  this.move = function(steps =1){
+    if (typeof steps != "number") { throw new TypeError("move(steps) requires one number input."); }
     this.privateX += steps * Math.cos(this.radians());
     this.privateY += steps * Math.sin(this.radians());
-    ready(this.trackPen);
+    this.project.ready(this.trackPen);
   };
   
   this.setRotationStyle = style => {
@@ -436,7 +474,7 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
     } else if (style == "ROTATE LEFT RIGHT") {
       this.rotationStyle = "ROTATE LEFT RIGHT";
     } else {
-      throw Error("Unrecognized rotation style: " + style);
+      throw TypeError("Unrecognized rotation style: " + style);
     }
   };
   
@@ -454,8 +492,8 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
   
   this.bounds = () => {
     // TODO account for rotation
-    var halfWidth = (this.width() / 2);
-    var halfHeight = (this.height() / 2);
+    var halfWidth = (this.width / 2);
+    var halfHeight = (this.height / 2);
     
     var left = this.x - halfWidth;
     var right = this.x + halfWidth;
@@ -468,6 +506,8 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
   this.collisionContext = this.collisionCanvas.getContext('2d');
 
   this.touching = (sprite, precise) => {
+    if (!(sprite instanceof Woof.prototype.Sprite)) { throw new TypeError("touching(sprite) requires one sprite input."); }
+      
     if (this.deleted || !this.showing) { return false; }
     if (sprite.deleted || !sprite.showing) { return false; }
     
@@ -516,6 +556,7 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
   }
   
   this.over = (x, y) => {
+    if (typeof x != "number" || typeof y != "number") { throw new TypeError("over(x, y) requires two number inputs."); }
     if (this.deleted || !this.showing) { return false; }
     
     var r1 = this.bounds();
@@ -526,50 +567,61 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
     return belowTop && aboveBottom && rightLeft && leftRight;
   };
   
-  this.mouseOver = function() {
-    if (this.deleted || !this.showing) { return false; }
-    
-    return this.over(this.project.mouseX, this.project.mouseY);
-  };
+  Object.defineProperty(this, 'mouseOver', {
+    get: function() {
+      if (this.deleted || !this.showing) { return false; }
+      return this.over(this.project.mouseX, this.project.mouseY);
+    }
+  });
   
-  this.mouseDown = () => {
-    if (this.deleted || !this.showing) { return false; }
-    
-    return this.mouseOver() && project.mouseDown;
-  };
+  Object.defineProperty(this, 'mouseDown', {
+    get: function() {
+      if (this.deleted || !this.showing) { return false; }
+      return this.mouseOver && this.project.mouseDown;
+    }
+  });
   
-  this.turnLeft = (degrees) => {
+  this.turnLeft = (degrees = 1) => {
+    if (typeof degrees != "number") { throw new TypeError("turnLeft(degrees) requires one number input."); }
     this.angle += degrees;
   };
   
-  this.turnRight = (degrees) => {
+  this.turnRight = (degrees = 1) => {
+    if (typeof degrees != "number") { throw new TypeError("turnRight(degrees) requires one number input."); }
     this.angle -= degrees;
   };
   
-  this.sendToBack = () => {
+  this.sendToBack = function() {
+    if (arguments.length > 0) { throw new TypeError("sendToBack() requires no inputs."); }
     var sprites = this.project.sprites;
     sprites.splice(0, 0, sprites.splice(sprites.indexOf(this), 1)[0]);
   };
   
-  this.sendToFront = () => {
+  this.sendToFront = function() {
+    if (arguments.length > 0) { throw new TypeError("sendToFront() requires no inputs."); }
     var sprites = this.project.sprites;
     sprites.splice(sprites.length, 0, sprites.splice(sprites.indexOf(this), 1)[0]);
   };
   
-  this.pointTowards = (x2,y2) => {
-    this.angle = Math.atan2(y2 - this.y, x2 - this.x) * 180 / Math.PI;
-  };
-  
-  this.height = () => {
-    throw Error("Implemented in subclass");
-  };
-  
-  this.width = () => {
-    throw Error("Implemented in subclass");
+  this.pointTowards = function(x2,y2) {
+    if (arguments.length === 1) {
+      if (x2 instanceof Woof.prototype.Sprite){
+        this.angle = Math.atan2(x2.y - this.y, x2.x - this.x) * 180 / Math.PI;
+      } else {
+        throw new TypeError("pointTowards(sprite) requires one sprite input.")
+      } 
+    } else if (typeof x2 != "number" || typeof y2 != "number") {
+      throw new TypeError("pointTowards(x, y) requires two number inputs."); 
+    } else {
+      this.angle = Math.atan2(y2 - this.y, x2 - this.x) * 180 / Math.PI;
+    }
   };
   
   this._onMouseDowns = [];
-  this.onMouseDown = func => { this._onMouseDowns.push(func); };
+  this.onMouseDown = func => {
+    if (typeof func != "function") { throw new TypeError("onMouseDown(function) requires one function input."); }
+    this._onMouseDowns.push(func); 
+  };
   this._onMouseDownHandler = event => {
     var [mouseX, mouseY] = this.project.translateToCenter(event.clientX, event.clientY);
     if (this.showing && this.over(mouseX, mouseY)){
@@ -577,7 +629,10 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
     }
   };
   this._onMouseUps = [];
-  this.onMouseUp = func => { this._onMouseUps.push(func); };
+  this.onMouseUp = func => {
+    if (typeof func != "function") { throw new TypeError("onMouseUp(function) requires one function input."); }
+    this._onMouseUps.push(func); 
+  };
   this._onMouseUpHandler = event => {
     var [mouseX, mouseY] = this.project.translateToCenter(event.clientX, event.clientY);
     if (this.showing && this.over(mouseX, mouseY)){
@@ -589,7 +644,9 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
     this.project._spriteCanvas.addEventListener("mouseup", this._onMouseUpHandler);
   });
   
-  this.delete = () => {
+  this.delete = function() {
+    if (arguments.length > 0) { throw new TypeError("delete() requires no inputs."); }
+    if (this.deleted) { return; }
     this.showing = false;
     this.deleted = true;
     if (this.project.sprites.includes(this)){
@@ -607,21 +664,31 @@ Woof.prototype.Text = function({project = undefined, text = "Text", size = 12, c
   this.fontFamily = fontFamily;
   this.textAlign = textAlign;
   
-  this.width = () => {
-    var width;
-    this._applyInContext(() => {
-      width = this.project._spriteContext.measureText(this.text).width;
-    });
-    return width;
-  };
+  Object.defineProperty(this, 'width', {
+    get: function() {
+      var width;
+      this._applyInContext(() => {
+        width = this.project._spriteContext.measureText(this.text).width;
+      });
+      return width;
+    },
+    set: function(value) {
+      throw new TypeError("You cannot modify the width of Text. You can only change its size.");
+    }
+  });
   
-  this.height = () => {
-    var height;
-    this._applyInContext(() => {
-      height = this.project._spriteContext.measureText("M").width;
-    });
-    return height;
-  };
+  Object.defineProperty(this, 'height', {
+    get: function() {
+      var height;
+      this._applyInContext(() => {
+        height = this.project._spriteContext.measureText("M").width;
+      });
+      return height;
+    },
+    set: function(value) {
+      throw new TypeError("You cannot modify the height of Text. You can only change its size.");
+    }
+  });
   
   this._applyInContext = (func) => {
     this.project._spriteContext.save();
@@ -639,7 +706,7 @@ Woof.prototype.Text = function({project = undefined, text = "Text", size = 12, c
     this._applyInContext(() => {
       var text;
       if (typeof(this.text) == "function"){
-        try { text = this.text(); } catch (e) { console.error("Error with text function: '" + this.text + "'"); throw e; }
+        try { text = this.text(); } catch (e) { console.error("Error with text function: " + e.message); }
       } else {
         text = this.text;
       }
@@ -653,13 +720,23 @@ Woof.prototype.Circle = function({project = undefined, radius = 10, color = "bla
   this.radius = radius;
   this.color = color;
   
-  this.width = () => {
-    return 2 * this.radius;
-  };
+  Object.defineProperty(this, 'width', {
+    get: function() {
+      return 2 * this.radius;
+    },
+    set: function(value) {
+      throw new TypeError("You cannot modify the width of Circle. You can only change its radius.");
+    }
+  });
   
-  this.height = () => {
-    return 2 * this.radius;
-  };
+  Object.defineProperty(this, 'height', {
+    get: function() {
+      return 2 * this.radius;
+    },
+    set: function(value) {
+      throw new TypeError("You cannot modify the height of Circle. You can only change its radius.");
+    }
+  });  
   
   this.circleRender = (context) => {
     context.beginPath();
@@ -670,23 +747,35 @@ Woof.prototype.Circle = function({project = undefined, radius = 10, color = "bla
 };
 
 
-Woof.prototype.Rectangle = function({project = undefined, rectangleHeight = 10, rectangleWidth = 10, color = "black"} = {}) {
+Woof.prototype.Rectangle = function({project = undefined, height = 10, width = 10, color = "black"} = {}) {
   Woof.prototype.Sprite.call(this, arguments[0]);
-  this.rectangleHeight = rectangleHeight;
-  this.rectangleWidth = rectangleWidth;
+  this.rectangleHeight = height;
+  this.rectangleWidth = width;
   this.color = color;
   
-  this.width = () => {
-    return this.rectangleWidth;
-  };
+  Object.defineProperty(this, 'width', {
+    get: function() {
+      return this.rectangleWidth;
+    },
+    set: function(value) {
+      if (typeof value != "number") { throw new TypeError("rectangle.width can only be set to a number."); }
+      this.rectangleWidth = value;
+    }
+  });
   
-  this.height = () => {
-    return this.rectangleHeight;
-  };
+  Object.defineProperty(this, 'height', {
+    get: function() {
+      return this.rectangleHeight;
+    },
+    set: function(value) {
+      if (typeof value != "number") { throw new TypeError("rectangle.height can only be set to a number."); }
+      this.rectangleHeight = value;
+    }
+  });  
   
   this.rectangleRender = (context) => {
     context.fillStyle=this.color;
-    context.fillRect(-this.width() / 2, -this.height() / 2, this.width(), this.height());
+    context.fillRect(-this.width / 2, -this.height / 2, this.width, this.height);
   };
 };
 
@@ -715,10 +804,10 @@ Woof.prototype.Line = function({project = undefined, lineWidth = 1, x1 = 10, y1 
   };
 };
 
-Woof.prototype.Image = function({project = undefined, url = "https://www.loveyourdog.com/image3.gif", imageHeight, imageWidth} = {}) {
+Woof.prototype.Image = function({project = undefined, url = "https://www.loveyourdog.com/image3.gif", height, width} = {}) {
   Woof.prototype.Sprite.call(this, arguments[0]);
-  this.imageHeight = imageHeight;
-  this.imageWidth = imageWidth;
+  this.imageHeight = height;
+  this.imageWidth = width;
   
   this.setImageURL = function(url){    
     this.image = new window.BrowserImage();
@@ -732,16 +821,28 @@ Woof.prototype.Image = function({project = undefined, url = "https://www.loveyou
   };
   this.setImageURL(url);
 
-  this.width = () => {
-    return this.imageWidth || this.image.width;
-  };
-
-  this.height = () => {
-    return this.imageHeight || this.image.height;
-  };
+    Object.defineProperty(this, 'width', {
+    get: function() {
+      return this.imageWidth || this.image.width;
+    },
+    set: function(value) {
+      if (typeof value != "number") { throw new TypeError("image.width can only be set to a number."); }
+      this.imageWidth = value;
+    }
+  });
+  
+  Object.defineProperty(this, 'height', {
+    get: function() {
+      return this.imageHeight || this.image.height;
+    },
+    set: function(value) {
+      if (typeof value != "number") { throw new TypeError("image.width can only be set to a number."); }
+      this.imageHeight = value;
+    }
+  }); 
   
   this.imageRender = (context) => {
-    context.drawImage(this.image, -this.width() / 2, -this.height() / 2, this.width(), this.height());
+    context.drawImage(this.image, -this.width / 2, -this.height / 2, this.width, this.height);
   };
 };
 
@@ -793,7 +894,7 @@ Woof.prototype.RepeatUntil = function(condition, func, after){
   };
 };
 
-Woof.prototype.keyCodeToString = keyCode => {
+Woof.prototype.keyCodeToString = function(keyCode) {
   if (keyCode == 38) {
     return "UP";
   }
@@ -868,7 +969,7 @@ Woof.prototype.keyCodeToString = keyCode => {
   }
 };
 
-Woof.prototype.unitsToMiliseconds = (time, units) => {
+Woof.prototype.unitsToMiliseconds = function(time, units) {
   if (units == "milliseconds" || units == "millisecond"){
     return time;
   } else if (units == "miliseconds" || units == "milisecond"){
@@ -878,11 +979,16 @@ Woof.prototype.unitsToMiliseconds = (time, units) => {
   } else if (units == "minutes" || units == "minute"){
     return time * 1000 * 60;
   } else {
-    throw Error("Unrecognized Time");
+    throw TypeError("Unrecognized Time");
   }
 };
 
-Woof.prototype.random = (min, max) => {
+Woof.prototype.random = function(a, b) {
+  if (typeof a != "number" || typeof b != "number") { throw new TypeError("random(a, b) requires two number inputs."); }
+  
+  var min = Math.min.apply(Math, [a, b]),
+    max = Math.max.apply(Math, [a, b]);
+  
   var rand = Math.random() * (max - min) + min;
   if (Number.isInteger(min) && Number.isInteger(max)) {
     return Math.round(rand);
@@ -891,12 +997,14 @@ Woof.prototype.random = (min, max) => {
   }
 };
 
-Woof.prototype.dayOfMonth = () =>{
+Woof.prototype.dayOfMonth = function(){
+  if (arguments.length > 0) { throw new TypeError("dayOfMonth() requires no inputs."); }
   var date = new Date();
   return date.getDate();
 };
 
-Woof.prototype.dayOfWeek = () => {
+Woof.prototype.dayOfWeek = function() {
+  if (arguments.length > 0) { throw new TypeError("dayOfWeek() requires no inputs."); }
   var date = new Date();
   var day = date.getDay();
   if (day === 0){
@@ -922,38 +1030,45 @@ Woof.prototype.dayOfWeek = () => {
   }
 };
 
-Woof.prototype.hourMilitary =  () => {
+Woof.prototype.hourMilitary =  function() {
+  if (arguments.length > 0) { throw new TypeError("hourMilitary() requires no inputs."); }
   var date = new Date();
   return date.getHours();
 };
 
-Woof.prototype.hour = () => {
+Woof.prototype.hour = function() {
+  if (arguments.length > 0) { throw new TypeError("hour() requires no inputs."); }
   var date = new Date();
   var hour = date.getHours();
   return hour <= 12 ? hour : hour - 12;
 };
 
-Woof.prototype.minute =  () => {
+Woof.prototype.minute =  function() {
+  if (arguments.length > 0) { throw new TypeError("minute() requires no inputs."); }
   var date = new Date();
   return date.getMinutes();
 };
 
-Woof.prototype.year =  () => {
+Woof.prototype.year =  function() {
+  if (arguments.length > 0) { throw new TypeError("year() requires no inputs."); }
   var date = new Date();
   return date.getFullYear();
 };
 
 Woof.prototype.months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October",  "November",  "December"];
-Woof.prototype.month =  () => {
+Woof.prototype.month =  function() {
+  if (arguments.length > 0) { throw new TypeError("month() requires no inputs."); }
   return Woof.prototype.months[new Date().getMonth()];
 };
 
-Woof.prototype.second = () => {
+Woof.prototype.second = function() {
+  if (arguments.length > 0) { throw new TypeError("second() requires no inputs."); }
   var date = new Date();
   return date.getSeconds();
 };
 
-Woof.prototype.randomColor = function(){
+Woof.prototype.randomColor = function() {
+  if (arguments.length > 0) { throw new TypeError("randomColor() requires no inputs."); }
   return "rgb(" + Woof.prototype.random(0, 255) + ", " + Woof.prototype.random(0, 255) + ", " + Woof.prototype.random(0, 255)+ ")";
 }
 
@@ -963,6 +1078,7 @@ Woof.prototype.UP = 90;
 Woof.prototype.DOWN = 270;
 
 Number.prototype.between = function(a, b) {
+  if (typeof a != "number" || typeof b != "number") { throw new TypeError("between(a, b) requires two number inputs."); }
   var min = Math.min.apply(Math, [a, b]),
     max = Math.max.apply(Math, [a, b]);
   return this > min && this < max;
@@ -977,6 +1093,7 @@ Array.prototype.remove = function(item) {
 }
 
 function throttle (callback, limit) {
+  if (typeof callback != "function" || typeof limit != "number") { throw new TypeError("throttle(function, limit) requires one function input and one number."); }
   var wait = false;                   
   return function () {
     var context = this, args = arguments;
