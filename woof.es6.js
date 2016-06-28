@@ -169,8 +169,6 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
   thisContext.mouseXSpeed = 0;
   thisContext.mouseYSpeed = 0;
   thisContext.keysDown = [];
-  thisContext._onClicks = [];
-  thisContext.onClick = func => { thisContext._onClicks.push(func); };
   thisContext.ready(() => {
     thisContext._spriteCanvas.addEventListener("mousedown", (event) => {
       thisContext.mouseDown = true;
@@ -211,12 +209,39 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
         thisContext.keysDown.splice(thisContext.keysDown.indexOf(key), 1);
       }
     });
-    thisContext._onClickHandler = event => {
+    thisContext._onMouseDownHandler = event => {
       var [mouseX, mouseY] = thisContext.translateToCenter(event.clientX, event.clientY);
-      thisContext._onClicks.forEach((func) => {func(mouseX, mouseY)});
+      thisContext._onMouseDowns.forEach((func) => {func(mouseX, mouseY)});
     };
-    thisContext._spriteCanvas.addEventListener("mousedown", thisContext._onClickHandler);
+    thisContext._spriteCanvas.addEventListener("mousedown", thisContext._onMouseDownHandler);
+    thisContext._onMouseUpHandler = event => {
+      var [mouseX, mouseY] = thisContext.translateToCenter(event.clientX, event.clientY);
+      thisContext._onMouseUps.forEach((func) => {func(mouseX, mouseY)});
+    };
+    thisContext._spriteCanvas.addEventListener("mouseup", thisContext._onMouseUpHandler);
+  
+    thisContext._onKeyDownHandler = event => {
+      var key = Woof.prototype.keyCodeToString(event.keyCode);
+      thisContext._onKeyDowns.forEach((func) => {func(key)});
+    };
+    document.body.addEventListener("keydown", thisContext._onKeyDownHandler);
+    thisContext._onKeyUpHandler = event => {
+      var key = Woof.prototype.keyCodeToString(event.keyCode);
+      thisContext._onKeyUps.forEach((func) => {func(key)});
+    };
+    document.body.addEventListener("keyup", thisContext._onKeyUpHandler);
+    
   })
+  
+  thisContext._onMouseDowns = [];
+  thisContext.onMouseDown = func => { thisContext._onMouseDowns.push(func); };
+  thisContext._onMouseUps = [];
+  thisContext.onMouseUp = func => { thisContext._onMouseUps.push(func); };
+  
+  thisContext._onKeyDowns = [];
+  thisContext.onKeyDown = func => { thisContext._onKeyDowns.push(func); };
+  thisContext._onKeyUps = [];
+  thisContext.onKeyUp = func => { thisContext._onKeyUps.push(func); };
 
   thisContext._everys = [];
   thisContext.every = (time, units, func) => {
@@ -543,16 +568,25 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
     throw Error("Implemented in subclass");
   };
   
-  this._onClicks = [];
-  this.onClick = func => { this._onClicks.push(func); };
-  this._onClickHandler = event => {
+  this._onMouseDowns = [];
+  this.onMouseDown = func => { this._onMouseDowns.push(func); };
+  this._onMouseDownHandler = event => {
     var [mouseX, mouseY] = this.project.translateToCenter(event.clientX, event.clientY);
     if (this.showing && this.over(mouseX, mouseY)){
-      this._onClicks.forEach((func) => {func(mouseX, mouseY)});
+      this._onMouseDowns.forEach((func) => {func(mouseX, mouseY)});
+    }
+  };
+  this._onMouseUps = [];
+  this.onMouseUp = func => { this._onMouseUps.push(func); };
+  this._onMouseUpHandler = event => {
+    var [mouseX, mouseY] = this.project.translateToCenter(event.clientX, event.clientY);
+    if (this.showing && this.over(mouseX, mouseY)){
+      this._onMouseUps.forEach((func) => {func(mouseX, mouseY)});
     }
   };
   this.project.ready(() => {
-    this.project._spriteCanvas.addEventListener("mousedown", this._onClickHandler);
+    this.project._spriteCanvas.addEventListener("mousedown", this._onMouseDownHandler);
+    this.project._spriteCanvas.addEventListener("mouseup", this._onMouseUpHandler);
   });
   
   this.delete = () => {
@@ -771,6 +805,63 @@ Woof.prototype.keyCodeToString = keyCode => {
   }
   else if (keyCode == 40){
     return "DOWN";
+  }
+  else if (keyCode == 9){
+    return "TAB";
+  }
+  else if (keyCode == 13){
+    return "ENTER";
+  }
+  else if (keyCode == 16){
+    return "SHIFT";
+  }
+  else if (keyCode == 17){
+    return "CTRL";
+  }
+  else if (keyCode == 18){
+    return "ALT";
+  }
+  else if (keyCode == 27){
+    return "ESCAPE";
+  }
+  else if (keyCode == 32){
+    return "SPACE";
+  }
+  else if (keyCode == 192){
+    return "`";
+  }
+  else if (keyCode == 186){
+    return ";";
+  }
+  else if (keyCode == 222){
+    return "'";
+  }
+  else if (keyCode == 189){
+    return "-";
+  }
+  else if (keyCode == 187){
+    return "=";
+  }
+  else if (keyCode == 219){
+    return "[";
+  }
+  else if (keyCode == 220){
+    return "\\";
+  }
+  else if (keyCode == 191){
+    return "/";
+  }
+  else if (keyCode == 190){
+    return ".";
+  }
+  else if (keyCode == 191){
+    return "/";
+  }
+  else if (keyCode == 188){
+    return ",";
+  }
+  else if (keyCode == 20){
+    return "CAPS LOCK";
   }
   else {
     return String.fromCharCode(keyCode);

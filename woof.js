@@ -193,10 +193,6 @@ function Woof() {
   thisContext.mouseXSpeed = 0;
   thisContext.mouseYSpeed = 0;
   thisContext.keysDown = [];
-  thisContext._onClicks = [];
-  thisContext.onClick = function (func) {
-    thisContext._onClicks.push(func);
-  };
   thisContext.ready(function () {
     thisContext._spriteCanvas.addEventListener("mousedown", function (event) {
       thisContext.mouseDown = true;
@@ -268,7 +264,7 @@ function Woof() {
         thisContext.keysDown.splice(thisContext.keysDown.indexOf(key), 1);
       }
     });
-    thisContext._onClickHandler = function (event) {
+    thisContext._onMouseDownHandler = function (event) {
       var _thisContext$translat11 = thisContext.translateToCenter(event.clientX, event.clientY);
 
       var _thisContext$translat12 = _slicedToArray(_thisContext$translat11, 2);
@@ -276,12 +272,58 @@ function Woof() {
       var mouseX = _thisContext$translat12[0];
       var mouseY = _thisContext$translat12[1];
 
-      thisContext._onClicks.forEach(function (func) {
+      thisContext._onMouseDowns.forEach(function (func) {
         func(mouseX, mouseY);
       });
     };
-    thisContext._spriteCanvas.addEventListener("mousedown", thisContext._onClickHandler);
+    thisContext._spriteCanvas.addEventListener("mousedown", thisContext._onMouseDownHandler);
+    thisContext._onMouseUpHandler = function (event) {
+      var _thisContext$translat13 = thisContext.translateToCenter(event.clientX, event.clientY);
+
+      var _thisContext$translat14 = _slicedToArray(_thisContext$translat13, 2);
+
+      var mouseX = _thisContext$translat14[0];
+      var mouseY = _thisContext$translat14[1];
+
+      thisContext._onMouseUps.forEach(function (func) {
+        func(mouseX, mouseY);
+      });
+    };
+    thisContext._spriteCanvas.addEventListener("mouseup", thisContext._onMouseUpHandler);
+
+    thisContext._onKeyDownHandler = function (event) {
+      var key = Woof.prototype.keyCodeToString(event.keyCode);
+      thisContext._onKeyDowns.forEach(function (func) {
+        func(key);
+      });
+    };
+    document.body.addEventListener("keydown", thisContext._onKeyDownHandler);
+    thisContext._onKeyUpHandler = function (event) {
+      var key = Woof.prototype.keyCodeToString(event.keyCode);
+      thisContext._onKeyUps.forEach(function (func) {
+        func(key);
+      });
+    };
+    document.body.addEventListener("keyup", thisContext._onKeyUpHandler);
   });
+
+  thisContext._onMouseDowns = [];
+  thisContext.onMouseDown = function (func) {
+    thisContext._onMouseDowns.push(func);
+  };
+  thisContext._onMouseUps = [];
+  thisContext.onMouseUp = function (func) {
+    thisContext._onMouseUps.push(func);
+  };
+
+  thisContext._onKeyDowns = [];
+  thisContext.onKeyDown = function (func) {
+    thisContext._onKeyDowns.push(func);
+  };
+  thisContext._onKeyUps = [];
+  thisContext.onKeyUp = function (func) {
+    thisContext._onKeyUps.push(func);
+  };
 
   thisContext._everys = [];
   thisContext.every = function (time, units, func) {
@@ -669,11 +711,11 @@ Woof.prototype.Sprite = function () {
     throw Error("Implemented in subclass");
   };
 
-  this._onClicks = [];
-  this.onClick = function (func) {
-    _this._onClicks.push(func);
+  this._onMouseDowns = [];
+  this.onMouseDown = function (func) {
+    _this._onMouseDowns.push(func);
   };
-  this._onClickHandler = function (event) {
+  this._onMouseDownHandler = function (event) {
     var _project$translateToC3 = _this.project.translateToCenter(event.clientX, event.clientY);
 
     var _project$translateToC4 = _slicedToArray(_project$translateToC3, 2);
@@ -682,13 +724,32 @@ Woof.prototype.Sprite = function () {
     var mouseY = _project$translateToC4[1];
 
     if (_this.showing && _this.over(mouseX, mouseY)) {
-      _this._onClicks.forEach(function (func) {
+      _this._onMouseDowns.forEach(function (func) {
+        func(mouseX, mouseY);
+      });
+    }
+  };
+  this._onMouseUps = [];
+  this.onMouseUp = function (func) {
+    _this._onMouseUps.push(func);
+  };
+  this._onMouseUpHandler = function (event) {
+    var _project$translateToC5 = _this.project.translateToCenter(event.clientX, event.clientY);
+
+    var _project$translateToC6 = _slicedToArray(_project$translateToC5, 2);
+
+    var mouseX = _project$translateToC6[0];
+    var mouseY = _project$translateToC6[1];
+
+    if (_this.showing && _this.over(mouseX, mouseY)) {
+      _this._onMouseUps.forEach(function (func) {
         func(mouseX, mouseY);
       });
     }
   };
   this.project.ready(function () {
-    _this.project._spriteCanvas.addEventListener("mousedown", _this._onClickHandler);
+    _this.project._spriteCanvas.addEventListener("mousedown", _this._onMouseDownHandler);
+    _this.project._spriteCanvas.addEventListener("mouseup", _this._onMouseUpHandler);
   });
 
   this.delete = function () {
@@ -982,6 +1043,44 @@ Woof.prototype.keyCodeToString = function (keyCode) {
     return "RIGHT";
   } else if (keyCode == 40) {
     return "DOWN";
+  } else if (keyCode == 9) {
+    return "TAB";
+  } else if (keyCode == 13) {
+    return "ENTER";
+  } else if (keyCode == 16) {
+    return "SHIFT";
+  } else if (keyCode == 17) {
+    return "CTRL";
+  } else if (keyCode == 18) {
+    return "ALT";
+  } else if (keyCode == 27) {
+    return "ESCAPE";
+  } else if (keyCode == 32) {
+    return "SPACE";
+  } else if (keyCode == 192) {
+    return "`";
+  } else if (keyCode == 186) {
+    return ";";
+  } else if (keyCode == 222) {
+    return "'";
+  } else if (keyCode == 189) {
+    return "-";
+  } else if (keyCode == 187) {
+    return "=";
+  } else if (keyCode == 219) {
+    return "[";
+  } else if (keyCode == 220) {
+    return "\\";
+  } else if (keyCode == 191) {
+    return "/";
+  } else if (keyCode == 190) {
+    return ".";
+  } else if (keyCode == 191) {
+    return "/";
+  } else if (keyCode == 188) {
+    return ",";
+  } else if (keyCode == 20) {
+    return "CAPS LOCK";
   } else {
     return String.fromCharCode(keyCode);
   }

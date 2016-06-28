@@ -2,6 +2,8 @@
 
 WoofJS is a JavaScript framework for making games developed with :heart: by [The Coding Space](http://thecodingspace.com).
 
+If you're new to JavaScript, [you may want to read this](https://github.com/getify/You-Dont-Know-JS/blob/master/up%20&%20going/ch1.md).
+
 ## Getting Started
 
 We reccomend you clone this JSBin to get started: [https://jsbin.com/lekovu/edit?js,output](https://jsbin.com/lekovu/edit?js,output)
@@ -206,10 +208,29 @@ if(sampleArray.every(thing => thing.touching(...))) {
 
 ## <img height="45px" img src="http://i.imgur.com/NAhXXuW.png"/> Events
 
+
+![on flag click](http://i.imgur.com/1TFhnMR.png)
+
+```javascript
+ready(() => {
+  ...
+});
+```
+
+**Note: Using `ready()` is reccomended but not always required.**
+
 ![onclick](http://i.imgur.com/XuPircO.png)
 
 ```javascript
-onClick(() => {
+onMouseDown(() => {
+  ...
+});
+```
+
+On mouse up:
+
+```javascript
+onMouseUp(() => {
   ...
 });
 ```
@@ -217,8 +238,74 @@ onClick(() => {
 ![onclick](http://i.imgur.com/z15mnPj.png)  
 
 ```javascript
-NAME.onClick(() => {
+NAME.onMouseDown(() => {
   ...
+});
+```
+
+On mouse up:
+
+```javascript
+NAME.onMouseUp(() => {
+  ...
+});
+```
+
+![If pressing ...](http://i.imgur.com/CoXW12B.png) 
+
+```javascript
+onKeyDown(() => {
+  ...
+});
+```
+
+![If pressing ...](http://i.imgur.com/TDClulO.png)
+
+```javascript
+onKeyDown(key => {
+ if (key == 'A') {
+   ...
+ }
+});
+```
+
+![](http://i.imgur.com/UauTNwu.png) 
+
+```javascript
+onKeyDown(key => {
+ if (key == 'UP') {
+   ...
+ }
+});
+```
+
+![](http://i.imgur.com/vMzkUWM.png)
+
+```javascript
+onKeyDown(key => {
+ if (key == 'DOWN') {
+   ...
+ }
+});
+```
+
+![](http://i.imgur.com/THTvSLh.png)
+
+```javascript
+onKeyDown(key => {
+ if (key == 'RIGHT') {
+   ...
+ }
+});
+```
+
+![](http://i.imgur.com/oNEfLoB.png) 
+
+```javascript
+onKeyDown(key => {
+ if (key == 'LEFT') {
+   ...
+ }
 });
 ```
 
@@ -227,7 +314,7 @@ NAME.onClick(() => {
 ![forever](http://i.imgur.com/gZOjLDM.png) 
 
 ```javascript
-forever (() > { 
+forever (() => { 
   ...
 });
 ```
@@ -302,19 +389,7 @@ onClick(throttle(() => score++, 1000))  // after a click, you won't be able to c
 
 ![distance to other thing](http://i.imgur.com/y6sXGTK.png) `NAME.distanceTo(OTHER_NAME);`
 
-![If pressing ...](http://i.imgur.com/bZnzRKH.png) `keysDown.includes(' ');`
-
-![If pressing ...](http://i.imgur.com/TDClulO.png) `keysDown.includes('A')`
-
-![](http://i.imgur.com/UauTNwu.png) `keysDown.includes('UP')`
-
-![](http://i.imgur.com/vMzkUWM.png) `keysDown.includes('DOWN')`
-
-![](http://i.imgur.com/THTvSLh.png) `keysDown.includes('RIGHT')`
-
-![](http://i.imgur.com/oNEfLoB.png) `keysDown.includes('LEFT')`
-
-![If pressing ...](http://i.imgur.com/CoXW12B.png) `keysDown.length > 0`
+![If pressing ...](http://i.imgur.com/bZnzRKH.png) `keysDown.includes('SPACE');`
 
 ![mouse x](http://i.imgur.com/JcKLf1r.png) `mouseX`
 
@@ -336,7 +411,7 @@ List of keys currently pressed: `keysDown`
 
 Is 'A' pressed?: `keysDown.includes('A')`
 
-Is the space key pressed?: `keysDown.includes(' ')`
+Is the space key pressed?: `keysDown.includes('SPACE')`
 
 Is the up key pressed?: `keysDown.includes('UP')`
 
@@ -397,6 +472,8 @@ Less Than or Equal To: `... <= ...`
 Greater Than or Equal To: `... >= ...`
 
 Not Equals: `... != ...`
+
+Between Two Numbers : `NAME.x.between(minX, maxX)`
 
 ![and](http://i.imgur.com/UYhM5tp.png) `... && ...`
 
