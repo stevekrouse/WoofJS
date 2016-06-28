@@ -6,12 +6,26 @@ If you're new to JavaScript, [you may want to read this](https://github.com/geti
 
 ## Getting Started
 
-We reccomend you clone this JSBin to get started: [https://jsbin.com/lekovu/edit?js,output](https://jsbin.com/lekovu/edit?js,output)
+We reccomend you File>clone this JSBin to get started: [https://jsbin.com/lekovu/edit?js,output](https://jsbin.com/lekovu/edit?js,output)
 
 Alternatively, you can put Woof between the `<head>` tags.
 ```html
 <script src="https://cdn.rawgit.com/stevekrouse/WoofJS/21436fbaf177e927780d766e64c79c236bf6c79d/woof.js"></script>
 ```
+
+## [Demo](https://jsbin.com/ciwame/edit?js,console,output)
+
+```javascript
+var circle = new Circle({})
+forever(() => {
+  circle.radius = circle.distanceTo(mouseX, mouseY)
+})
+circle.onMouseDown(() => {
+  circle.color = randomColor()
+})
+```
+
+If you want more demos, check out our "Showing off" section at the bottom of the README.
 
 ## Creating Sprites
 
