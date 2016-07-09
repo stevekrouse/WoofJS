@@ -1,6 +1,6 @@
 # WoofJS - *JavaScript Unleashed*
 
-WoofJS is a JavaScript framework for making games developed with :heart: by [The Coding Space](http://thecodingspace.com).
+WoofJS is a JavaScript framework for making games by [The Coding Space](http://thecodingspace.com).
 
 If you're new to JavaScript, [you may want to read this](https://github.com/getify/You-Dont-Know-JS/blob/master/up%20&%20going/ch1.md).
 
@@ -25,11 +25,10 @@ circle.onMouseDown(() => {
 })
 ```
 
-If you want more demos, check out our "Showing off" section at the bottom of the README.
-
 ## Creating Sprites
 
-To create a new sprite, start by typing one of the following lines. Be sure to change the SPRITE_NAME to a name of your choice:
+To create a new sprite, start by typing one of the following lines:
+
 
 ```javascript
 var IMAGE_NAME = new Image({});
@@ -38,6 +37,8 @@ var CIRCLE_NAME = new Circle({});
 var RECTANGLE_NAME = new Rectangle({});
 var LINE_NAME = new Line({});
 ```
+
+*Pro tip: Be sure to change the SPRITE_NAME to a name of your choice!*
 
 ### Sprite Options
 
