@@ -8,9 +8,10 @@ If you're new to JavaScript, [you may want to get acquainted with its basic synt
 
 We reccomend you File>Clone this JSBin to get started: [https://jsbin.com/lekovu/edit?js,output](https://jsbin.com/lekovu/edit?js,output)
 
-Alternatively, you can put Woof between your HTML `` tags.
-```html
+Alternatively, you can put Woof between your HTML `<head>` tags.
 
+```html
+<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/14cf402c5c2738431532a8ae752c94fbc96fa0b1/woof.js"></script>
 ```
 
 ## [Demo](https://jsbin.com/ciwame/edit?js,console,output)
