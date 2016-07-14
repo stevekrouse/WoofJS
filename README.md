@@ -115,7 +115,7 @@ NAME.angle = 47.7;
 
 ![don't rotate](http://i.imgur.com/C37qd9h.png) `NAME.setRotationStyle(“NO ROTATE”)`
 
-## http://i.imgur.com/XWrvYQp.png"/> LOOKS
+## <img src="http://i.imgur.com/XWrvYQp.png"/> LOOKS
 
 ![show](http://i.imgur.com/e6P95R0.png) `NAME.showing = true;`
 
@@ -186,7 +186,7 @@ var height = 400;
 setBackdropSize(width, height);
 ```
 
-## http://i.imgur.com/uPpqpym.png"/> PEN
+## <img src="http://i.imgur.com/uPpqpym.png"/> PEN
 
 ![clear](http://i.imgur.com/bAcm6jH.png) `clearPen();`
 
@@ -202,7 +202,7 @@ setBackdropSize(width, height);
 
 ![set pen size](http://i.imgur.com/OzY5ZjU.png) `NAME.penWidth = 4;`
 
-## http://i.imgur.com/cF2TnrD.png"/> DATA
+## <img src="http://i.imgur.com/cF2TnrD.png"/> DATA
 
 ![making a variable](http://i.imgur.com/eicY57I.png) `var sampleVariable;`
 
@@ -276,7 +276,7 @@ if(needle) {
 }
 ```
 
-## http://i.imgur.com/NAhXXuW.png"/> Events
+## <img src="http://i.imgur.com/NAhXXuW.png"/> Events
 
 *Warning: The shape of events in Scratch prevent you from putting an event inside other blocks. Although JavaScript doesn't prevent you from putting events inside other blocks, you should avoid it. For example, don't place an `onMouseDown` event inside a `forever` block.*
 
@@ -356,7 +356,7 @@ onKeyDown(key => {
 });
 ```
 
-## http://i.imgur.com/Tz78euG.png"/> Sensing
+## <img src="http://i.imgur.com/Tz78euG.png"/> Sensing
 
 ![touching mouse](http://i.imgur.com/QTpWOxV.png) `NAME.mouseOver() `
 
@@ -445,7 +445,7 @@ Hour in military time: `hourMilitary();`
 
 ![](http://i.imgur.com/isWxU8C.png) `year();`
 
-## http://i.imgur.com/851mEzr.png"/> OPERATORS
+## <img src="http://i.imgur.com/851mEzr.png"/> OPERATORS
 
 ![](http://i.imgur.com/nsDkCkt.png) `... + ...`
 
@@ -503,7 +503,7 @@ Between Two Numbers : `NAME.x.between(minX, maxX)`
 
 ![](http://i.imgur.com/tkvyjRT.png) `Math.round(...)`
 
-## http://i.imgur.com/bRcYPen.png"/> More Blocks
+## <img src="http://i.imgur.com/bRcYPen.png"/> More Blocks
 
 ![Make Block](http://i.imgur.com/AZlRb6h.png)
 
@@ -535,7 +535,7 @@ forever(() => {
 })
 ```
 
-## http://i.imgur.com/lZKvsP5.png"/> Control
+## <img src="http://i.imgur.com/lZKvsP5.png"/> Control
 
 
 ![wait](http://i.imgur.com/r6wYX8c.png)
