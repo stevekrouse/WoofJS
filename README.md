@@ -65,7 +65,7 @@ var RECTANGLE_NAME = new Rectangle({width: 20, height: 55, color: "pink"});
 var LINE_NAME = new Line({x: -100, y: 100, x1: 10, y1: 20, color: "pink", lineWidth: 10});
 ```
 
-## http://i.imgur.com/8AtJrAa.png"/> Motion
+## <img src="http://i.imgur.com/8AtJrAa.png"/> Motion
 
 ![move 10 steps](http://i.imgur.com/MwoSN7w.png) `NAME.move(10);`
 
