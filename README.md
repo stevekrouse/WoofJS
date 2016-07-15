@@ -358,7 +358,7 @@ onKeyDown(key => {
 
 ## <img src="http://i.imgur.com/Tz78euG.png"/> Sensing
 
-![touching mouse](http://i.imgur.com/QTpWOxV.png) `NAME.mouseOver() `
+![touching mouse](http://i.imgur.com/QTpWOxV.png) `NAME.mouseOver`
 
 ![touching edge](http://i.imgur.com/yEXInKi.png)
 
