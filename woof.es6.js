@@ -130,7 +130,7 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
   thisContext._renderBackdrop = () => {
     thisContext._backdropContext.clearRect(0, 0, thisContext.width, thisContext.height);
     if (thisContext.backdrop instanceof BrowserImage) {
-      thisContext._backdropContext.drawImage(thisContext.backdrop, 0, 0);
+      thisContext._backdropContext.drawImage(thisContext.backdrop, 0, 0, thisContext.width, thisContext.height);
     } else if (typeof thisContext.backdrop == "string"){
       thisContext._backdropContext.save();
       thisContext._backdropContext.fillStyle=thisContext.backdrop;
