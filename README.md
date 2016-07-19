@@ -633,7 +633,7 @@ Reverse freeze or stop all: `defrost();`
 var clones = [];
 every(4, "seconds", () => {
   // create a clone every 4 seconds
-  var clone = addCircle ({radius: 10, color: "pink", x:
+  var clone = new Circle({radius: 10, color: "pink", x:
 randomX(), y: randomY()});
   // add each clone to the list
   clones.push(clone);
