@@ -659,7 +659,7 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
 Woof.prototype.Text = function({project = undefined, text = "Text", size = 12, color = "black", fontFamily = "arial", textAlign = "center"} = {}) {
   Woof.prototype.Sprite.call(this, arguments[0]);
   this.text = text;
-  this.size = size;
+  this.size = Math.abs(size);
   this.color = color;
   this.fontFamily = fontFamily;
   this.textAlign = textAlign;
@@ -717,7 +717,7 @@ Woof.prototype.Text = function({project = undefined, text = "Text", size = 12, c
 
 Woof.prototype.Circle = function({project = undefined, radius = 10, color = "black"} = {}) {
   Woof.prototype.Sprite.call(this, arguments[0]);
-  this.radius = radius;
+  this.radius = Math.abs(radius);
   this.color = color;
   
   Object.defineProperty(this, 'width', {
@@ -749,8 +749,8 @@ Woof.prototype.Circle = function({project = undefined, radius = 10, color = "bla
 
 Woof.prototype.Rectangle = function({project = undefined, height = 10, width = 10, color = "black"} = {}) {
   Woof.prototype.Sprite.call(this, arguments[0]);
-  this.rectangleHeight = height;
-  this.rectangleWidth = width;
+  this.rectangleHeight = Math.abs(height);
+  this.rectangleWidth = Math.abs(width);
   this.color = color;
   
   Object.defineProperty(this, 'width', {
@@ -784,7 +784,7 @@ Woof.prototype.Line = function({project = undefined, lineWidth = 1, x1 = 10, y1 
   this.x1 = x1;
   this.y1 = y1;
   this.color = color;
-  this.lineWidth = lineWidth;
+  this.lineWidth = Math.abs(lineWidth);
   
   this.width = () => {
     return this.lineWidth;
@@ -806,8 +806,8 @@ Woof.prototype.Line = function({project = undefined, lineWidth = 1, x1 = 10, y1 
 
 Woof.prototype.Image = function({project = undefined, url = "https://www.loveyourdog.com/image3.gif", height, width} = {}) {
   Woof.prototype.Sprite.call(this, arguments[0]);
-  this.imageHeight = height;
-  this.imageWidth = width;
+  this.imageHeight = Math.abs(height);
+  this.imageWidth = Math.abs(width);
   
   this.setImageURL = function(url){    
     this.image = new window.BrowserImage();
