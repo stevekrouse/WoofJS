@@ -50,7 +50,7 @@ var IMAGE_NAME = new Image({x: 100, y: 20, angle: UP, rotationStyle: "ROTATE", s
 var TEXT_NAME = new Text({x: 50, y: -100, angle: DOWN, rotationStyle: "NO ROTATE", showing: true});
 var CIRCLE_NAME = new Circle({x: 0, y: 0, angle: 90, rotationStyle: "ROTATE LEFT RIGHT", showing: false});
 var RECTANGLE_NAME = new Rectangle({x: 62, y: 12, angle: 0, rotationStyle: "ROTATE", showing: false});
-var LINE_NAME = new Rectangle({x: maxX, y: maxY, angle: 0, rotationStyle: "ROTATE", showing: false});
+var LINE_NAME = new Line({x: maxX, y: maxY, angle: 0, rotationStyle: "ROTATE", showing: false});
 ```
 
 ### Specific Options
@@ -633,7 +633,7 @@ Reverse freeze or stop all: `defrost();`
 var clones = [];
 every(4, "seconds", () => {
   // create a clone every 4 seconds
-  var clone = addCircle ({radius: 10, color: "pink", x:
+  var clone = new Circle({radius: 10, color: "pink", x:
 randomX(), y: randomY()});
   // add each clone to the list
   clones.push(clone);
