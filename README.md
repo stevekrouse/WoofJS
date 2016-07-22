@@ -11,7 +11,7 @@ We reccomend you File>Clone this JSBin to get started: [https://jsbin.com/lekovu
 Alternatively, you can put Woof between your HTML `<head>` tags.
 
 ```html
-<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/dc0d2c74c173a49d8d5e7282b544392bfed8c307/woof.js"></script>
+<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/c2a769aafec87ccce1e35c92b6a9ea6dadcece53/woof.js"></script>
 ```
 
 ## [Demo](https://jsbin.com/ciwame/edit?js,console,output)
@@ -232,7 +232,7 @@ var sampleVariable = ...;
 
 ![](http://i.imgur.com/jXty6LT.png) `sampleArray[1]`
 
-![removing things from array](http://i.imgur.com/jap7qfR.png) `sampleArray.splice(startIndex, endIndex);`
+![removing things from array](http://i.imgur.com/jap7qfR.png) `sampleArray.remove(thing);`
 
 ![checking if thing is in array](http://i.imgur.com/IbZHFpm.png) `sampleArray.includes('...');`
 
