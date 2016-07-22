@@ -899,7 +899,7 @@ Woof.prototype.Text = function () {
 
   Woof.prototype.Sprite.call(this, arguments[0]);
   this.text = text;
-  this.size = size;
+  this.size = Math.abs(size);
   this.color = color;
   this.fontFamily = fontFamily;
   this.textAlign = textAlign;
@@ -976,7 +976,7 @@ Woof.prototype.Circle = function () {
   var color = _ref8$color === undefined ? "black" : _ref8$color;
 
   Woof.prototype.Sprite.call(this, arguments[0]);
-  this.radius = radius;
+  this.radius = Math.abs(radius);
   this.color = color;
 
   Object.defineProperty(this, 'width', {
@@ -1020,8 +1020,8 @@ Woof.prototype.Rectangle = function () {
   var color = _ref9$color === undefined ? "black" : _ref9$color;
 
   Woof.prototype.Sprite.call(this, arguments[0]);
-  this.rectangleHeight = height;
-  this.rectangleWidth = width;
+  this.rectangleHeight = Math.abs(height);
+  this.rectangleWidth = Math.abs(width);
   this.color = color;
 
   Object.defineProperty(this, 'width', {
@@ -1074,7 +1074,7 @@ Woof.prototype.Line = function () {
   this.x1 = x1;
   this.y1 = y1;
   this.color = color;
-  this.lineWidth = lineWidth;
+  this.lineWidth = Math.abs(lineWidth);
 
   this.width = function () {
     return _this7.lineWidth;
@@ -1107,8 +1107,8 @@ Woof.prototype.Image = function () {
   var width = _ref11.width;
 
   Woof.prototype.Sprite.call(this, arguments[0]);
-  this.imageHeight = height;
-  this.imageWidth = width;
+  this.imageHeight = Math.abs(height);
+  this.imageWidth = Math.abs(width);
 
   this.setImageURL = function (url) {
     this.image = new window.BrowserImage();
