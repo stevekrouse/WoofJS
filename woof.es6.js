@@ -218,6 +218,12 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
         thisContext.keysDown.splice(thisContext.keysDown.indexOf(key), 1);
       }
     });
+    
+    thisContext._onMouseMoveHandler = event => {
+      var [mouseX, mouseY] = thisContext.translateToCenter(event.clientX, event.clientY);
+      thisContext._onMouseMoves.forEach((func) => {func(mouseX, mouseY)});
+    };
+    thisContext._spriteCanvas.addEventListener("mousemove", thisContext._onMouseMoveHandler);
     thisContext._onMouseDownHandler = event => {
       var [mouseX, mouseY] = thisContext.translateToCenter(event.clientX, event.clientY);
       thisContext._onMouseDowns.forEach((func) => {func(mouseX, mouseY)});
@@ -241,7 +247,11 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
     document.body.addEventListener("keyup", thisContext._onKeyUpHandler);
     
   })
-  
+  thisContext._onMouseMoves = [];
+  thisContext.onMouseMove = func => {
+    if (typeof func != "function") { throw new TypeError("onMouseMove(function) requires one function input."); }
+    thisContext._onMouseMoves.push(func); 
+  };
   thisContext._onMouseDowns = [];
   thisContext.onMouseDown = func => {
     if (typeof func != "function") { throw new TypeError("onMouseDown(function) requires one function input."); }

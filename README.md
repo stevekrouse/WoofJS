@@ -308,6 +308,14 @@ onMouseUp(() => {
 });
 ```
 
+On mouse move:
+
+```javascript
+onMouseMove(() => {
+  ...
+});
+```
+
 ---
 
 ![onclick](http://i.imgur.com/z15mnPj.png)

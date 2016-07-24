@@ -291,7 +291,8 @@ function Woof() {
         thisContext.keysDown.splice(thisContext.keysDown.indexOf(key), 1);
       }
     });
-    thisContext._onMouseDownHandler = function (event) {
+
+    thisContext._onMouseMoveHandler = function (event) {
       var _thisContext$translat11 = thisContext.translateToCenter(event.clientX, event.clientY);
 
       var _thisContext$translat12 = _slicedToArray(_thisContext$translat11, 2);
@@ -299,18 +300,31 @@ function Woof() {
       var mouseX = _thisContext$translat12[0];
       var mouseY = _thisContext$translat12[1];
 
-      thisContext._onMouseDowns.forEach(function (func) {
+      thisContext._onMouseMoves.forEach(function (func) {
         func(mouseX, mouseY);
       });
     };
-    thisContext._spriteCanvas.addEventListener("mousedown", thisContext._onMouseDownHandler);
-    thisContext._onMouseUpHandler = function (event) {
+    thisContext._spriteCanvas.addEventListener("mousemove", thisContext._onMouseMoveHandler);
+    thisContext._onMouseDownHandler = function (event) {
       var _thisContext$translat13 = thisContext.translateToCenter(event.clientX, event.clientY);
 
       var _thisContext$translat14 = _slicedToArray(_thisContext$translat13, 2);
 
       var mouseX = _thisContext$translat14[0];
       var mouseY = _thisContext$translat14[1];
+
+      thisContext._onMouseDowns.forEach(function (func) {
+        func(mouseX, mouseY);
+      });
+    };
+    thisContext._spriteCanvas.addEventListener("mousedown", thisContext._onMouseDownHandler);
+    thisContext._onMouseUpHandler = function (event) {
+      var _thisContext$translat15 = thisContext.translateToCenter(event.clientX, event.clientY);
+
+      var _thisContext$translat16 = _slicedToArray(_thisContext$translat15, 2);
+
+      var mouseX = _thisContext$translat16[0];
+      var mouseY = _thisContext$translat16[1];
 
       thisContext._onMouseUps.forEach(function (func) {
         func(mouseX, mouseY);
@@ -333,7 +347,13 @@ function Woof() {
     };
     document.body.addEventListener("keyup", thisContext._onKeyUpHandler);
   });
-
+  thisContext._onMouseMoves = [];
+  thisContext.onMouseMove = function (func) {
+    if (typeof func != "function") {
+      throw new TypeError("onMouseMove(function) requires one function input.");
+    }
+    thisContext._onMouseMoves.push(func);
+  };
   thisContext._onMouseDowns = [];
   thisContext.onMouseDown = function (func) {
     if (typeof func != "function") {
