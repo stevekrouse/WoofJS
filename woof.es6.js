@@ -382,18 +382,18 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
   this.angle = angle;
   this.rotationStyle = rotationStyle;
   this.showing = showing;
-  this.penDown = penDown;
+  this._penDown = penDown;
   this.penColor = penColor;
   this.penWidth = penWidth;
   this.deleted = false;
   
   this.toJSON = () => {
-    return {x: this.x, y: this.y, angle: this.angle, rotationStyle: this.rotationStyle, showing: this.showing, penDown: this.penDown, penColor: this.penColor, penWidth: this.penWidth, deleted: this.deleted};
+    return {x: this.x, y: this.y, angle: this.angle, rotationStyle: this.rotationStyle, showing: this.showing, penDown: this._penDown, penColor: this.penColor, penWidth: this.penWidth, deleted: this.deleted};
   };
   
   [this.lastX, this.lastY] = [this.x, this.y];
   this.trackPen = () => {
-    if (this.penDown) {
+    if (this._penDown) {
       if(this.lastX != this.x || this.lastY != this.y) {
         this.project._penContext.save();
         this.project._penContext.beginPath();
@@ -602,6 +602,19 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
     var sprites = this.project.sprites;
     sprites.splice(sprites.length, 0, sprites.splice(sprites.indexOf(this), 1)[0]);
   };
+  
+  Object.defineProperty(this, 'penDown', {
+    get: () => {
+      return () => { this._penDown = true; };
+    },
+    set: (value) => {
+      this._penDown = value;
+    }
+  });
+  this.penUp = () => { this._penDown = false; }
+
+  this.show = () => { this.showing = true; }
+  this.hide = () => { this.showing = false; }
   
   this.pointTowards = function(x2,y2) {
     if (arguments.length === 1) {
