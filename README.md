@@ -543,6 +543,25 @@ forever(() => {
 })
 ```
 
+## <img src="http://i.imgur.com/NFykqPj.png"/> Sound
+
+![Play a sound](http://i.imgur.com/L8znmOb.png)
+
+```javascript
+var bruce = new Audio('http://mhoerner.dyndns.org/mp3/Bruce%20Springsteen/Born%20To%20Run/05%20Born%20To%20Run.mp3')
+bruce.play()
+```
+
+![Pause a sound](http://i.imgur.com/X9kk6yW.png) `bruce.pause()`
+
+To get the URL of an mp3, Google search:
+
+```
+intitle:index.of?mp3 NAME-OF-SONG
+```
+
+![sound search](http://i.imgur.com/t9XKOpn.png)
+
 ## <img src="http://i.imgur.com/lZKvsP5.png"/> Control
 
 
