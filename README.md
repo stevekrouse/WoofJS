@@ -11,7 +11,7 @@ We reccomend you File>Clone this JSBin to get started: [https://jsbin.com/lekovu
 Alternatively, you can put Woof between your HTML `<head>` tags.
 
 ```html
-<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/67c5becefae34077a01c25bf6e27d24a639f74af/woof.js"></script>
+<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/f62682d2f1b40fb204894b217f00d3f91f79e2e9/woof.js"></script>
 ```
 
 ## [Demo](https://jsbin.com/ciwame/edit?js,console,output)
