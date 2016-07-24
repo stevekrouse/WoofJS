@@ -11,7 +11,7 @@ We reccomend you File>Clone this JSBin to get started: [https://jsbin.com/lekovu
 Alternatively, you can put Woof between your HTML `<head>` tags.
 
 ```html
-<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/c2a769aafec87ccce1e35c92b6a9ea6dadcece53/woof.js"></script>
+<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/67c5becefae34077a01c25bf6e27d24a639f74af/woof.js"></script>
 ```
 
 ## [Demo](https://jsbin.com/ciwame/edit?js,console,output)
@@ -117,9 +117,9 @@ NAME.angle = 47.7;
 
 ## <img src="http://i.imgur.com/XWrvYQp.png"/> LOOKS
 
-![show](http://i.imgur.com/e6P95R0.png) `NAME.showing = true;`
+![show](http://i.imgur.com/e6P95R0.png) `NAME.show();`
 
-![hide](http://i.imgur.com/23UatF5.png) `NAME.showing = false;`
+![hide](http://i.imgur.com/23UatF5.png) `NAME.hide();`
 
 ---
 
@@ -190,9 +190,9 @@ setBackdropSize(width, height);
 
 ![clear](http://i.imgur.com/bAcm6jH.png) `clearPen();`
 
-![pen down](http://i.imgur.com/TWenWap.png) `NAME.penDown = true;`
+![pen down](http://i.imgur.com/TWenWap.png) `NAME.penDown();`
 
-![pen up](http://i.imgur.com/5H7ijBw.png) `NAME.penDown = false;`
+![pen up](http://i.imgur.com/5H7ijBw.png) `NAME.penUp();`
 
 ![set pen color](http://i.imgur.com/PLtKVcv.png) `NAME.penColor = “blue”;`
 
