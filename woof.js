@@ -486,6 +486,8 @@ Woof.prototype.Sprite = function () {
   var penColor = _ref3$penColor === undefined ? "black" : _ref3$penColor;
   var _ref3$penWidth = _ref3.penWidth;
   var penWidth = _ref3$penWidth === undefined ? 1 : _ref3$penWidth;
+  var _ref3$penDown = _ref3.penDown;
+  var penDown = _ref3$penDown === undefined ? false : _ref3$penDown;
 
   if (!project) {
     if (global) {
@@ -529,7 +531,7 @@ Woof.prototype.Sprite = function () {
   this.angle = angle;
   this.rotationStyle = rotationStyle;
   this.showing = showing;
-  this.penDown = false;
+  this.penDown = penDown;
   this.penColor = penColor;
   this.penWidth = penWidth;
   this.deleted = false;

@@ -343,7 +343,7 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
   thisContext.ready(thisContext._render);
 };
 
-Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, rotationStyle = "ROTATE", showing = true, penColor = "black", penWidth = 1} = {}) {
+Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, rotationStyle = "ROTATE", showing = true, penColor = "black", penWidth = 1, penDown = false} = {}) {
   if (!project) {
     if (global) {
       this.project = window;
@@ -382,7 +382,7 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
   this.angle = angle;
   this.rotationStyle = rotationStyle;
   this.showing = showing;
-  this.penDown = false;
+  this.penDown = penDown;
   this.penColor = penColor;
   this.penWidth = penWidth;
   this.deleted = false;
