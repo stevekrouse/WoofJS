@@ -22,37 +22,37 @@ Next, read through this Woof [demo of a dog that moves around the screen via the
 
 ```javascript
 // add the X and Y positions of the mouse to the screen
-new Text({text: () => "mouseX: " + mouseX, x: minX + 10, y: minY + 12, textAlign: "left"});
-new Text({text: () => "mouseY: " + mouseY, x: minX + 10, y: minY + 24, textAlign: "left"});
+new Text({text: () => "mouseX: " + mouseX, x: minX + 10, y: minY + 12, textAlign: "left"})
+new Text({text: () => "mouseY: " + mouseY, x: minX + 10, y: minY + 24, textAlign: "left"})
 
 // set the background image
-setBackdropURL("https://i.imgur.com/lyyFGm4.jpg");
+setBackdropURL("https://i.imgur.com/lyyFGm4.jpg")
 
 // Add an image via a url
-var dawg = new Image({url: "http://i.imgur.com/SMJjVCL.png", x: 0, y: 0, height: 100, width: 135});
+var dawg = new Image({url: "http://i.imgur.com/SMJjVCL.png", x: 0, y: 0, height: 100, width: 135})
 
 // Make it move with the arrow keys by checking which keys are down
 forever(() => {
   if (keysDown.includes("LEFT")){
-    dawg.x -= 5;                // move left by 5
+    dawg.x -= 5                // move left by 5
   }
   if (keysDown.includes("RIGHT")){
-    dawg.x +=5; 
+    dawg.x +=5 
   }
   if (keysDown.includes("UP")){
-    dawg.y += 5; 
+    dawg.y += 5 
   }
   if (keysDown.includes("DOWN")){
-    dawg.y -= 5; 
+    dawg.y -= 5 
   }
-});
+})
 
-var timer = 20;                 // make the timer start at 20
-var timerText = new Text({x: 0, y: maxY - 20, size: 20, color: "white", text: () => "Time Left: " + timer}); // add text that diplays the timer (dynamicText updates automatically)
+var timer = 20                 // make the timer start at 20
+var timerText = new Text({x: 0, y: maxY - 20, size: 20, color: "white", text: () => "Time Left: " + timer}) // add text that diplays the timer (dynamicText updates automatically)
 every(1, "second", () => {
-  if (timer === 0){ freeze(); } // freeze the screen when the timer reaches 0
-  timer--;                      // make the timer go down every second
-});
+  if (timer === 0){ freeze() } // freeze the screen when the timer reaches 0
+  timer--                      // make the timer go down every second
+})
 ```
 
 ## [Click Here to Create a New Project](https://jsbin.com/lizuzuz/edit?js,output)
@@ -69,11 +69,11 @@ To create a new sprite, start by typing one of the following lines:
 
 
 ```javascript
-var IMAGE_NAME = new Image({});
-var TEXT_NAME = new Text({});
-var CIRCLE_NAME = new Circle({});
-var RECTANGLE_NAME = new Rectangle({});
-var LINE_NAME = new Line({});
+var IMAGE_NAME = new Image({})
+var TEXT_NAME = new Text({})
+var CIRCLE_NAME = new Circle({})
+var RECTANGLE_NAME = new Rectangle({})
+var LINE_NAME = new Line({})
 ```
 
 *Pro tip: Be sure to change the `SPRITE_NAME` to a name of your choice!*
@@ -83,11 +83,11 @@ var LINE_NAME = new Line({});
 You may add any of the following options to any of your sprites:
 
 ```javascript
-var IMAGE_NAME = new Image({x: 100, y: 20, angle: UP, rotationStyle: "ROTATE", showing: true});
-var TEXT_NAME = new Text({x: 50, y: -100, angle: DOWN, rotationStyle: "NO ROTATE", showing: true});
-var CIRCLE_NAME = new Circle({x: 0, y: 0, angle: 90, rotationStyle: "ROTATE LEFT RIGHT", showing: false});
-var RECTANGLE_NAME = new Rectangle({x: 62, y: 12, angle: 0, rotationStyle: "ROTATE", showing: false});
-var LINE_NAME = new Line({x: maxX, y: maxY, angle: 0, rotationStyle: "ROTATE", showing: false});
+var IMAGE_NAME = new Image({x: 100, y: 20, angle: UP, rotationStyle: "ROTATE", showing: true})
+var TEXT_NAME = new Text({x: 50, y: -100, angle: DOWN, rotationStyle: "NO ROTATE", showing: true})
+var CIRCLE_NAME = new Circle({x: 0, y: 0, angle: 90, rotationStyle: "ROTATE LEFT RIGHT", showing: false})
+var RECTANGLE_NAME = new Rectangle({x: 62, y: 12, angle: 0, rotationStyle: "ROTATE", showing: false})
+var LINE_NAME = new Line({x: maxX, y: maxY, angle: 0, rotationStyle: "ROTATE", showing: false})
 ```
 
 ### Specific Options
@@ -95,54 +95,54 @@ var LINE_NAME = new Line({x: maxX, y: maxY, angle: 0, rotationStyle: "ROTATE", s
 Each sprite has its own specific options. For example, `Image` has `url`, `Circle` has `radius`, and text has `fontFamily`:
 
 ```javascript
-var IMAGE_NAME = new Image({url: "https://i.imgur.com/SMJjVCL.png/?1",width: 30, height: 30});
-var TEXT_NAME = new Text({text: "Hello world!", size: 12, color: "rgb(100, 50, 240)", fontFamily: "arial", textAlign: "left"});
-var CIRCLE_NAME = new Circle({radius: 10, color: "#ffffff"});
-var RECTANGLE_NAME = new Rectangle({width: 20, height: 55, color: "pink"});
-var LINE_NAME = new Line({x: -100, y: 100, x1: 10, y1: 20, color: "pink", lineWidth: 10});
+var IMAGE_NAME = new Image({url: "https://i.imgur.com/SMJjVCL.png/?1",width: 30, height: 30})
+var TEXT_NAME = new Text({text: "Hello world!", size: 12, color: "rgb(100, 50, 240)", fontFamily: "arial", textAlign: "left"})
+var CIRCLE_NAME = new Circle({radius: 10, color: "#ffffff"})
+var RECTANGLE_NAME = new Rectangle({width: 20, height: 55, color: "pink"})
+var LINE_NAME = new Line({x: -100, y: 100, x1: 10, y1: 20, color: "pink", lineWidth: 10})
 ```
 
 ## <img src="http://i.imgur.com/8AtJrAa.png"/> Motion
 
-![move 10 steps](http://i.imgur.com/MwoSN7w.png) `NAME.move(10);`
+![move 10 steps](http://i.imgur.com/MwoSN7w.png) `NAME.move(10)`
 
-![turn right](http://i.imgur.com/9Vk3QcG.png) `NAME.turnRight(15);`
+![turn right](http://i.imgur.com/9Vk3QcG.png) `NAME.turnRight(15)`
 
-![turn left](http://i.imgur.com/Mj8jC77.png) `NAME.turnLeft(15);`
+![turn left](http://i.imgur.com/Mj8jC77.png) `NAME.turnLeft(15)`
 
 -----
 
 ![point in direction](http://i.imgur.com/ISLFDID.png)
 
 ```javascript
-NAME.angle = LEFT;
-NAME.angle = RIGHT;
-NAME.angle = UP;
-NAME.angle = DOWN;
-NAME.angle = 47.7;
+NAME.angle = LEFT
+NAME.angle = RIGHT
+NAME.angle = UP
+NAME.angle = DOWN
+NAME.angle = 47.7
 ```
 
-![point towards mouse](http://i.imgur.com/XxlWh5Y.png) `NAME.pointTowards(mouseX, mouseY);`
+![point towards mouse](http://i.imgur.com/XxlWh5Y.png) `NAME.pointTowards(mouseX, mouseY)`
 
-![point towards (sprite)](http://i.imgur.com/eQsdxvR.png) `NAME.pointTowards(NAME.x, NAME.Y);`
-
----
-
-![go to x, y](http://i.imgur.com/Fm23VH2.png) `NAME.x = ...;` `NAME.y = ...;`
-
-![go to mouse pointer](http://i.imgur.com/YMAFBEY.png) `NAME.x = mouseX;` `NAME.y = mouseY;`
-
-![go to sprite](http://i.imgur.com/BBZisqR.png) `NAME.x = otherNAME.x;` `NAME.y = otherNAME.y;`
+![point towards (sprite)](http://i.imgur.com/eQsdxvR.png) `NAME.pointTowards(NAME.x, NAME.Y)`
 
 ---
 
-![change x by](http://i.imgur.com/YD4fLDE.png) `NAME.x += ...;`
+![go to x, y](http://i.imgur.com/Fm23VH2.png) `NAME.x = ...` `NAME.y = ...`
 
-![change y by](http://i.imgur.com/H39ry0g.png) `NAME.y += ...;`
+![go to mouse pointer](http://i.imgur.com/YMAFBEY.png) `NAME.x = mouseX` `NAME.y = mouseY`
 
-![set x to](http://i.imgur.com/9FPGyxO.png) `NAME.x = ...;`
+![go to sprite](http://i.imgur.com/BBZisqR.png) `NAME.x = otherNAME.x` `NAME.y = otherNAME.y`
 
-![set y to](http://i.imgur.com/BtAGQFz.png) `NAME.y = ...;`
+---
+
+![change x by](http://i.imgur.com/YD4fLDE.png) `NAME.x += ...`
+
+![change y by](http://i.imgur.com/H39ry0g.png) `NAME.y += ...`
+
+![set x to](http://i.imgur.com/9FPGyxO.png) `NAME.x = ...`
+
+![set y to](http://i.imgur.com/BtAGQFz.png) `NAME.y = ...`
 
 ---
 
@@ -154,9 +154,9 @@ NAME.angle = 47.7;
 
 ## <img src="http://i.imgur.com/XWrvYQp.png"/> LOOKS
 
-![show](http://i.imgur.com/e6P95R0.png) `NAME.show();`
+![show](http://i.imgur.com/e6P95R0.png) `NAME.show()`
 
-![hide](http://i.imgur.com/23UatF5.png) `NAME.hide();`
+![hide](http://i.imgur.com/23UatF5.png) `NAME.hide()`
 
 ---
 
@@ -167,10 +167,10 @@ NAME.angle = 47.7;
 Change the color for rectangles, text, lines and circles:
 
 ```javascript
-RECTANGLE_NAME.color = "purple";
-TEXT_NAME.color = "rgb(10, 150, 30)";
-LINE_NAME.color = "#ff20ff";
-CIRCLE_NAME.color = "green";
+RECTANGLE_NAME.color = "purple"
+TEXT_NAME.color = "rgb(10, 150, 30)"
+LINE_NAME.color = "#ff20ff"
+CIRCLE_NAME.color = "green"
 ```
 ---
 
@@ -180,23 +180,23 @@ You set the size in different ways for each type of sprite:
 
 
 ```javascript
-IMAGE_NAME.height = ...; IMAGE_NAME.width = ...;
+IMAGE_NAME.height = ... IMAGE_NAME.width = ...
 
-RECTANGLE_NAME.height = ...; RECTANGLE_NAME.width = ...;
+RECTANGLE_NAME.height = ... RECTANGLE_NAME.width = ...
 
-CIRCLE_NAME.radius = ...;
+CIRCLE_NAME.radius = ...
 
-LINE_NAME.x1 = ...;
-LINE_NAME.y1 = ...;
-LINE_NAME.lineWidth = ...;
+LINE_NAME.x1 = ...
+LINE_NAME.y1 = ...
+LINE_NAME.lineWidth = ...
 
-TEXT_NAME.size = 20;
+TEXT_NAME.size = 20
 ```
 ---
 
-![send to back layer](http://i.imgur.com/XpglvJP.png) `NAME.sendToBack();`
+![send to back layer](http://i.imgur.com/XpglvJP.png) `NAME.sendToBack()`
 
-![go to front layer](http://i.imgur.com/KumpqgS.png) `NAME.sendToFront();`
+![go to front layer](http://i.imgur.com/KumpqgS.png) `NAME.sendToFront()`
 
 ---
 
@@ -205,63 +205,63 @@ TEXT_NAME.size = 20;
 Set the backdrop to an image URL:
 
 ```javascript
-setBackdropURL("http://example.com/img.jpg");
+setBackdropURL("http://example.com/img.jpg")
 ```
 
 Set the backdrop to a color:
 
 ```javascript
-setBackdropColor("blue");
+setBackdropColor("blue")
 ```
 
 Set the backdrop size:
 
 ```javascript
-fullScreen = false;
-var width = 300;
-var height = 400;
-setBackdropSize(width, height);
+fullScreen = false
+var width = 300
+var height = 400
+setBackdropSize(width, height)
 ```
 
 ## <img src="http://i.imgur.com/uPpqpym.png"/> PEN
 
-![clear](http://i.imgur.com/bAcm6jH.png) `clearPen();`
+![clear](http://i.imgur.com/bAcm6jH.png) `clearPen()`
 
-![pen down](http://i.imgur.com/TWenWap.png) `NAME.penDown();`
+![pen down](http://i.imgur.com/TWenWap.png) `NAME.penDown()`
 
-![pen up](http://i.imgur.com/5H7ijBw.png) `NAME.penUp();`
+![pen up](http://i.imgur.com/5H7ijBw.png) `NAME.penUp()`
 
-![set pen color](http://i.imgur.com/PLtKVcv.png) `NAME.penColor = “blue”;`
+![set pen color](http://i.imgur.com/PLtKVcv.png) `NAME.penColor = “blue”`
 
-![set pen color](http://i.imgur.com/PLtKVcv.png) `NAME.penColor = “#ff20ff”;`
+![set pen color](http://i.imgur.com/PLtKVcv.png) `NAME.penColor = “#ff20ff”`
 
-![set pen color](http://i.imgur.com/PLtKVcv.png) `NAME.penColor = “rgb(10, 100, 20)”;`
+![set pen color](http://i.imgur.com/PLtKVcv.png) `NAME.penColor = “rgb(10, 100, 20)”`
 
-![set pen size](http://i.imgur.com/OzY5ZjU.png) `NAME.penWidth = 4;`
+![set pen size](http://i.imgur.com/OzY5ZjU.png) `NAME.penWidth = 4`
 
 ## <img src="http://i.imgur.com/cF2TnrD.png"/> DATA
 
-![making a variable](http://i.imgur.com/eicY57I.png) `var sampleVariable;`
+![making a variable](http://i.imgur.com/eicY57I.png) `var sampleVariable`
 
-![setting variable to value](http://i.imgur.com/HYATXXL.png) `sampleVariable = ...;`
+![setting variable to value](http://i.imgur.com/HYATXXL.png) `sampleVariable = ...`
 
 You can combine creating/naming a variable with setting it:
 
 ```javascript
-var sampleVariable = ...;
+var sampleVariable = ...
 ```
 
 ![changing variable](http://i.imgur.com/pKNFyMw.png) `sampleVariable += ...`
 
-![showing a variable](http://i.imgur.com/DG26IcN.png) `new Text({text: () => "variableName: " + variableName});`
+![showing a variable](http://i.imgur.com/DG26IcN.png) `new Text({text: () => "variableName: " + variableName})`
 
 ("Showing a variable" works by giving a Text Sprite a function instead of a "string in quotes" as its `text` attribute. The Text Sprite constantly reevaluates the function which keeps the value on the screen in sync with the value of the variable.)
 
 ---
 
-![making an array](http://i.imgur.com/sfSmoDT.png) `var sampleArray = [];`
+![making an array](http://i.imgur.com/sfSmoDT.png) `var sampleArray = []`
 
-![adding thing to array](http://i.imgur.com/0K0nQD3.png) `sampleArray.push(...);`
+![adding thing to array](http://i.imgur.com/0K0nQD3.png) `sampleArray.push(...)`
 
 (You can add *anything* to an array in JavaScript, including numbers, strings, but even Sprites, functions, and other arrays.)
 
@@ -269,18 +269,18 @@ var sampleVariable = ...;
 
 ![](http://i.imgur.com/jXty6LT.png) `sampleArray[1]`
 
-![removing things from array](http://i.imgur.com/jap7qfR.png) `sampleArray.remove(thing);`
+![removing things from array](http://i.imgur.com/jap7qfR.png) `sampleArray.remove(thing)`
 
-![checking if thing is in array](http://i.imgur.com/IbZHFpm.png) `sampleArray.includes('...');`
+![checking if thing is in array](http://i.imgur.com/IbZHFpm.png) `sampleArray.includes('...')`
 
-![show array](http://i.imgur.com/YIG9stl.png) `new Text({text: () => "listName: " + listName});`
+![show array](http://i.imgur.com/YIG9stl.png) `new Text({text: () => "listName: " + listName})`
 
 Do something for each thing in an array:
 
 ```javascript
 sampleArray.forEach(thing => {
   console.log(thing)
-});
+})
 ```
 ---
 
@@ -307,9 +307,9 @@ if(sampleArray.every(thing => thing.touching(...))) {
 Find something in an array:
 
 ```javascript
-var needle = sampleArray.find(thing => thing.touching(...));
+var needle = sampleArray.find(thing => thing.touching(...))
 if(needle) {
-  console.log(needle);
+  console.log(needle)
 }
 ```
 
@@ -322,7 +322,7 @@ if(needle) {
 ```javascript
 ready(() => {
   ...
-});
+})
 ```
 
 **Note: Unlike in Scratch, using `ready()` is reccomended but not always required.**
@@ -334,7 +334,7 @@ ready(() => {
 ```javascript
 onMouseDown(() => {
   ...
-});
+})
 ```
 
 On mouse up:
@@ -342,7 +342,7 @@ On mouse up:
 ```javascript
 onMouseUp(() => {
   ...
-});
+})
 ```
 
 On mouse move:
@@ -350,7 +350,7 @@ On mouse move:
 ```javascript
 onMouseMove(() => {
   ...
-});
+})
 ```
 
 ---
@@ -360,7 +360,7 @@ onMouseMove(() => {
 ```javascript
 NAME.onMouseDown(() => {
   ...
-});
+})
 ```
 
 On mouse up:
@@ -368,7 +368,7 @@ On mouse up:
 ```javascript
 NAME.onMouseUp(() => {
   ...
-});
+})
 ```
 
 ---
@@ -378,7 +378,7 @@ NAME.onMouseUp(() => {
 ```javascript
 onKeyDown(() => {
   ...
-});
+})
 ```
 
 ![If pressing ...](http://i.imgur.com/TDClulO.png)
@@ -388,7 +388,7 @@ onKeyDown(key => {
  if (key == 'A') {
    ...
  }
-});
+})
 ```
 
 ![](http://i.imgur.com/UauTNwu.png)
@@ -398,7 +398,7 @@ onKeyDown(key => {
  if (key == 'UP') {
    ...
  }
-});
+})
 ```
 
 ## <img src="http://i.imgur.com/Tz78euG.png"/> Sensing
@@ -422,13 +422,13 @@ NAME.y < minY
 
 ---
 
-![distance to mouse pointer](http://i.imgur.com/cIY3SYy.png) `NAME.distanceTo(mouseX, mouseY);`
+![distance to mouse pointer](http://i.imgur.com/cIY3SYy.png) `NAME.distanceTo(mouseX, mouseY)`
 
-![distance to other thing](http://i.imgur.com/y6sXGTK.png) `NAME.distanceTo(OTHER_NAME);`
+![distance to other thing](http://i.imgur.com/y6sXGTK.png) `NAME.distanceTo(OTHER_NAME)`
 
 ---
 
-![If pressing ...](http://i.imgur.com/bZnzRKH.png) `keysDown.includes('SPACE');`
+![If pressing ...](http://i.imgur.com/bZnzRKH.png) `keysDown.includes('SPACE')`
 
 List of keys currently pressed: `keysDown`
 
@@ -474,21 +474,21 @@ Height of the screen: `height`
 
 ---
 
-![](http://i.imgur.com/1kOHRyz.png) `hour();`
+![](http://i.imgur.com/1kOHRyz.png) `hour()`
 
-Hour in military time: `hourMilitary();`
+Hour in military time: `hourMilitary()`
 
-![](http://i.imgur.com/7in6ifA.png) `minute();`
+![](http://i.imgur.com/7in6ifA.png) `minute()`
 
-![](http://i.imgur.com/hWI9CTr.png) `second();`
+![](http://i.imgur.com/hWI9CTr.png) `second()`
 
-![](http://i.imgur.com/WhsQf1m.png) `dayOfMonth();`
+![](http://i.imgur.com/WhsQf1m.png) `dayOfMonth()`
 
-![](http://i.imgur.com/gL5xkbe.png) `dayOfWeek();`
+![](http://i.imgur.com/gL5xkbe.png) `dayOfWeek()`
 
-![](http://i.imgur.com/w5cJ5at.png) `month();`
+![](http://i.imgur.com/w5cJ5at.png) `month()`
 
-![](http://i.imgur.com/isWxU8C.png) `year();`
+![](http://i.imgur.com/isWxU8C.png) `year()`
 
 ## <img src="http://i.imgur.com/851mEzr.png"/> OPERATORS
 
@@ -502,7 +502,7 @@ Hour in military time: `hourMilitary();`
 
 ---
 
-![pick random number](http://i.imgur.com/fAHuDwy.png) `random(..., ...);`
+![pick random number](http://i.imgur.com/fAHuDwy.png) `random(..., ...)`
 
 Random X value on the screen between `minX` and `maxX`: `randomX()`
 
@@ -576,7 +576,7 @@ But you can also create a function without a name, which is called an anonymous 
 
 ```javascript
 forever(() => {
-  sprite.x++;
+  sprite.x++
 })
 ```
 
@@ -607,7 +607,7 @@ intitle:index.of?mp3 NAME-OF-SONG
 There is no wait block in JavaScript. Instead, you can use `after()`:
 
 ```javascript
-after(..., "seconds", () => {...});
+after(..., "seconds", () => {...})
 ```
 
 However, `after()` is a poor substitute for Scratch's wait block and you may find some programs very difficult to write without wait. Please accept my apologies on behalf of the designers of JavaScript. 
@@ -617,7 +617,7 @@ If you want to wait at regular intervals, use `every()`:
 ```javascript
 every(..., "seconds", () => {
   ...
-});
+})
 ```
 ---
 
@@ -626,7 +626,7 @@ every(..., "seconds", () => {
 ```javascript
 repeat(10, () => {
   ...
-});
+})
 ```
 
 ![forever](http://i.imgur.com/gZOjLDM.png)
@@ -634,7 +634,7 @@ repeat(10, () => {
 ```javascript
 forever (() => {
   ...
-});
+})
 ```
 --- 
 
@@ -662,7 +662,7 @@ if (...) {
 ```javascript
 repeatUntil(() => ..., () => {
   ...
-});
+})
 ```
 ---
 
@@ -673,7 +673,7 @@ There is no wait-until in JavaScript. You can simulate a wait-until block by spe
 ```javascript
 repeatUntil(() => ..., () => {}, () => {
   ...
-});
+})
 ```
 
 ![](http://i.imgur.com/OXlpK9J.png)
@@ -683,40 +683,40 @@ repeatUntil(() => ..., () => {}, () => {
 ```javascript
 when(() => ..., () => {
   ...
-});
+})
 ```
 
-![stop(all)](http://i.imgur.com/SWSxdVm.png) `freeze();`
+![stop(all)](http://i.imgur.com/SWSxdVm.png) `freeze()`
 
-Reverse freeze or stop all: `defrost();`
+Reverse freeze or stop all: `defrost()`
 
 ![cloning](http://i.imgur.com/gNzTpS0.png)
 
 ```javascript
 // create a list to store all of the clones
-var clones = [];
+var clones = []
 every(4, "seconds", () => {
   // create a clone every 4 seconds
   var clone = new Circle({radius: 10, color: "pink", x:
-randomX(), y: randomY()});
+randomX(), y: randomY()})
   // add each clone to the list
-  clones.push(clone);
-});
+  clones.push(clone)
+})
 
 forever(() => {
   // forever, for each clone in clones
   clones.forEach(clone => {
     // move it to the right
-    clone.x++;
+    clone.x++
     // delete it if it goes off the screen
     if (clone.x > maxX) {
-      clone.delete();
+      clone.delete()
     }
   })
-});
+})
 ```
 
-Delete an object: `NAME.delete();`
+Delete an object: `NAME.delete()`
 
 Only allow something to happen once every X miliseconds:
 
@@ -752,34 +752,34 @@ Change color to blue after moving to the right 10 times:
 
 ```javascript
 repeat(10, () => {
-  NAME.x++;
+  NAME.x++
 }, () => {
-  NAME.color = "blue";
-});
+  NAME.color = "blue"
+})
 ```
 
 Chaining repeats to slowly draw a square:
 
 ```javascript
 repeat(100, () => {
-  NAME.angle = RIGHT;
-  NAME.move(1);
+  NAME.angle = RIGHT
+  NAME.move(1)
 }, () => {
   repeat(100, () => {
-    NAME.angle = UP;
-    NAME.move(1);
+    NAME.angle = UP
+    NAME.move(1)
   }, () => {
     repeat(100, () => {
-      NAME.angle = LEFT;
-      NAME.move(1);
+      NAME.angle = LEFT
+      NAME.move(1)
     }, () => {
       repeat(100, () => {
-        NAME.angle = DOWN;
-        NAME.move(1);
-      });
-    });
-  });
-});
+        NAME.angle = DOWN
+        NAME.move(1)
+      })
+    })
+  })
+})
 ```
 
 ## Global Mode
@@ -789,7 +789,7 @@ When you include the Woof script in your code, it defaults to creating a full-sc
 However, if you'd like to turn off this mode, simply add `global="false"` in your script tag and create your project manually:
 
 ```javascript
-var project = new Woof({global: false, width: 300, height: 400});
+var project = new Woof({global: false, width: 300, height: 400})
 
 var IMAGE_NAME = new Woof.Image({project: project, url: "https://i.imgur.com/SMJjVCL.png?1"})
 ```
