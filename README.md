@@ -1,30 +1,67 @@
 # WoofJS - *JavaScript Unleashed*
 
-WoofJS is a JavaScript framework for creating games by [The Coding Space](http://thecodingspace.com).
+## What is JS?
 
-If you're new to JavaScript, [you may want to get acquainted with its basic syntax and paradigm](https://github.com/getify/You-Dont-Know-JS/blob/master/up%20&%20going/ch1.md).
+JS stands for Javascript. It's is one of the three programming languages that are used to build on the web. 
 
-## Getting Started
+Javascript code is used to create interactive effects, like making things move, change color, and make sounds.
 
-We reccomend you File>Clone this JSBin to get started: [https://jsbin.com/lekovu/edit?js,output](https://jsbin.com/lekovu/edit?js,output)
+## What is Woof?
 
-Alternatively, you can put Woof between your HTML `<head>` tags.
+Woof is a JavaScript framework for creating games by [The Coding Space](http://thecodingspace.com).
 
-```html
-<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/f62682d2f1b40fb204894b217f00d3f91f79e2e9/woof.js"></script>
-```
+Since Woof is rooted in Javascript, it allows users to create much more than what is possible in Scratch. This means bigger, more complicated, and more fun games!
 
-## [Demo](https://jsbin.com/ciwame/edit?js,console,output)
+## Type-Along
+
+Get started with Woof by [opening this link and typing along.](http://jsbin.com/puyipa/edit?js,output)
+
+## Read-Along
+
+Next, read through this Woof [demo of a dog that moves around the screen via the arrow keys.](https://jsbin.com/lekovu/edit?js,output)
 
 ```javascript
-var circle = new Circle({})
+// add the X and Y positions of the mouse to the screen
+new Text({text: () => "mouseX: " + mouseX, x: minX + 10, y: minY + 12, textAlign: "left"});
+new Text({text: () => "mouseY: " + mouseY, x: minX + 10, y: minY + 24, textAlign: "left"});
+
+// set the background image
+setBackdropURL("https://i.imgur.com/lyyFGm4.jpg");
+
+// Add an image via a url
+var dawg = new Image({url: "http://i.imgur.com/SMJjVCL.png", x: 0, y: 0, height: 100, width: 135});
+
+// Make it move with the arrow keys by checking which keys are down
 forever(() => {
-  circle.radius = circle.distanceTo(mouseX, mouseY)
-})
-circle.onMouseDown(() => {
-  circle.color = randomColor()
-})
+  if (keysDown.includes("LEFT")){
+    dawg.x -= 5;                // move left by 5
+  }
+  if (keysDown.includes("RIGHT")){
+    dawg.x +=5; 
+  }
+  if (keysDown.includes("UP")){
+    dawg.y += 5; 
+  }
+  if (keysDown.includes("DOWN")){
+    dawg.y -= 5; 
+  }
+});
+
+var timer = 20;                 // make the timer start at 20
+var timerText = new Text({x: 0, y: maxY - 20, size: 20, color: "white", text: () => "Time Left: " + timer}); // add text that diplays the timer (dynamicText updates automatically)
+every(1, "second", () => {
+  if (timer === 0){ freeze(); } // freeze the screen when the timer reaches 0
+  timer--;                      // make the timer go down every second
+});
 ```
+
+## [Click Here to Create a New Project](https://jsbin.com/lizuzuz/edit?js,output)
+
+# WoofJS Documentation
+
+## Ctl-F
+
+When you're trying to find a JavaScript command, use Ctl-F or Command-F to search for keywords.
 
 ## Creating Sprites
 
@@ -760,5 +797,3 @@ var IMAGE_NAME = new Woof.Image({project: project, url: "https://i.imgur.com/SMJ
 ## [Making JavaScript Learnable](https://medium.com/@stevekrouse/woof-d9adf2110fc6)
 
 WoofJS was created to be the next step after block-based coding in Scratch. For more details, you can [read our announcement post](https://medium.com/@stevekrouse/woof-d9adf2110fc6).
-
-
