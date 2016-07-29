@@ -453,7 +453,7 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
   
   this.distanceTo = function distanceTo(xGiven, yGiven){
     if (arguments.length === 1) {
-      if (xGiven instanceof Woof.prototype.Sprite){
+      if (typeof xGiven == "object"){
         var x = this.x - xGiven.x;
         var y = this.y - xGiven.y;
         return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
@@ -628,7 +628,7 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
   
   this.pointTowards = function(x2,y2) {
     if (arguments.length === 1) {
-      if (x2 instanceof Woof.prototype.Sprite){
+      if (typeof x2 == "object"){
         this.angle = Math.atan2(x2.y - this.y, x2.x - this.x) * 180 / Math.PI;
       } else {
         throw new TypeError("pointTowards(sprite) requires one sprite input.")
