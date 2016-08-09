@@ -243,7 +243,7 @@ setBackdropSize(width, height)
 
 ![making a variable](http://i.imgur.com/eicY57I.png) `var sampleVariable`
 
-![setting variable to value](http://i.imgur.com/HYATXXL.png) `sampleVariable = ...`
+![setting variable to value](http://i.imgur.com/HYATXXL.png) `sampleVariable = 0`
 
 You can combine creating/naming a variable with setting it:
 
@@ -253,7 +253,7 @@ var sampleVariable = ...
 
 ![changing variable](http://i.imgur.com/pKNFyMw.png) `sampleVariable += ...`
 
-![showing a variable](http://i.imgur.com/DG26IcN.png) `new Text({text: () => "variableName: " + variableName})`
+![showing a variable](http://i.imgur.com/DG26IcN.png) `new Text({text: () => "sampleVariable: " + sampleVariable})`
 
 ("Showing a variable" works by giving a Text Sprite a function instead of a "string in quotes" as its `text` attribute. The Text Sprite constantly reevaluates the function which keeps the value on the screen in sync with the value of the variable.)
 
