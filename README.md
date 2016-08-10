@@ -1,4 +1,4 @@
-# WoofJS - *JavaScript Unleashed*
+# WoofJS
 
 Woof is a JavaScript framework for creating games by [The Coding Space](http://thecodingspace.com).
 
