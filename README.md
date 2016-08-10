@@ -2,31 +2,11 @@
 
 Woof is a JavaScript framework for creating games by [The Coding Space](http://thecodingspace.com).
 
-Get started with Woof by [opening this link and typing along.](http://jsbin.com/puyipa/edit?js,output)
+Get started learning Woof by [opening this link and typing along.](http://jsbin.com/puyipa/edit?js,output)
 
 Next, read through this Woof [demo of a dog that moves around the screen via the arrow keys.](https://jsbin.com/lekovu/edit?js,output)
 
-## [Click Here to Create a New Project](https://jsbin.com/lizuzuz/edit?js,output)
-
-## Creating Sprites
-
-You may add any of the following options to any of your sprites:
-
-```javascript
-var IMAGE_NAME = new Image({x: 100, y: 20, angle: UP, rotationStyle: "ROTATE", showing: true})
-```
-
-### Specific Options
-
-Each sprite has its own specific options. For example, `Image` has `url`, `Circle` has `radius`, and text has `fontFamily`:
-
-```javascript
-var IMAGE_NAME = new Image({url: "https://i.imgur.com/SMJjVCL.png/?1",width: 30, height: 30})
-var TEXT_NAME = new Text({text: "Hello world!", size: 12, color: "rgb(100, 50, 240)", fontFamily: "arial", textAlign: "left"})
-var CIRCLE_NAME = new Circle({radius: 10, color: "#ffffff"})
-var RECTANGLE_NAME = new Rectangle({width: 20, height: 55, color: "pink"})
-var LINE_NAME = new Line({x: -100, y: 100, x1: 10, y1: 20, color: "pink", lineWidth: 10})
-```
+[Click Here to Create a New Project](https://jsbin.com/lizuzuz/edit?js,output)
 
 ## <img src="http://i.imgur.com/8AtJrAa.png"/> Motion
 
@@ -706,6 +686,44 @@ repeat(100, () => {
     })
   })
 })
+```
+
+## Creating Sprites
+
+To create a new sprite, start by typing one of the following lines:
+
+```javascript
+var IMAGE_NAME = new Image({})
+var TEXT_NAME = new Text({})
+var CIRCLE_NAME = new Circle({})
+var RECTANGLE_NAME = new Rectangle({})
+var LINE_NAME = new Line({})
+```
+
+*Pro tip: Be sure to change the `SPRITE_NAME` to a name of your choice!*
+
+### Sprite Options
+
+You may add any of the following options to any of your sprites:
+
+```javascript
+var IMAGE_NAME = new Image({x: 100, y: 20, angle: UP, rotationStyle: "ROTATE", showing: true})
+var TEXT_NAME = new Text({x: 50, y: -100, angle: DOWN, rotationStyle: "NO ROTATE", showing: true})
+var CIRCLE_NAME = new Circle({x: 0, y: 0, angle: 90, rotationStyle: "ROTATE LEFT RIGHT", showing: false})
+var RECTANGLE_NAME = new Rectangle({x: 62, y: 12, angle: 0, rotationStyle: "ROTATE", showing: false})
+var LINE_NAME = new Line({x: maxX, y: maxY, angle: 0, rotationStyle: "ROTATE", showing: false})
+```
+
+### Specific Options
+
+Each sprite has its own specific options. For example, `Image` has `url`, `Circle` has `radius`, and text has `fontFamily`:
+
+```javascript
+var IMAGE_NAME = new Image({url: "https://i.imgur.com/SMJjVCL.png/?1",width: 30, height: 30})
+var TEXT_NAME = new Text({text: "Hello world!", size: 12, color: "rgb(100, 50, 240)", fontFamily: "arial", textAlign: "left"})
+var CIRCLE_NAME = new Circle({radius: 10, color: "#ffffff"})
+var RECTANGLE_NAME = new Rectangle({width: 20, height: 55, color: "pink"})
+var LINE_NAME = new Line({x: -100, y: 100, x1: 10, y1: 20, color: "pink", lineWidth: 10})
 ```
 
 ## Global Mode
