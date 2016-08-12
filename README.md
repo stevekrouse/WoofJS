@@ -8,17 +8,17 @@ Next, read through this Woof [demo of a dog that moves around the screen via the
 
 [Click Here to Create a New Project](https://jsbin.com/lizuzuz/edit?js,output)
 
-## <img src="http://i.imgur.com/8AtJrAa.png"/> Motion
+## <img src="https://i.imgur.com/8AtJrAa.png"/> Motion
 
-![move 10 steps](http://i.imgur.com/MwoSN7w.png) `NAME.move(10)`
+![move 10 steps](https://i.imgur.com/MwoSN7w.png) `NAME.move(10)`
 
-![turn right](http://i.imgur.com/9Vk3QcG.png) `NAME.turnRight(15)`
+![turn right](https://i.imgur.com/9Vk3QcG.png) `NAME.turnRight(15)`
 
-![turn left](http://i.imgur.com/Mj8jC77.png) `NAME.turnLeft(15)`
+![turn left](https://i.imgur.com/Mj8jC77.png) `NAME.turnLeft(15)`
 
 -----
 
-![point in direction](http://i.imgur.com/ISLFDID.png)
+![point in direction](https://i.imgur.com/ISLFDID.png)
 
 ```javascript
 NAME.angle = LEFT
@@ -28,45 +28,45 @@ NAME.angle = DOWN
 NAME.angle = 47.7
 ```
 
-![point towards mouse](http://i.imgur.com/XxlWh5Y.png) `NAME.pointTowards(mouseX, mouseY)`
+![point towards mouse](https://i.imgur.com/XxlWh5Y.png) `NAME.pointTowards(mouseX, mouseY)`
 
-![point towards (sprite)](http://i.imgur.com/eQsdxvR.png) `NAME.pointTowards(NAME.x, NAME.Y)`
-
----
-
-![go to x, y](http://i.imgur.com/Fm23VH2.png) `NAME.x = ...` `NAME.y = ...`
-
-![go to mouse pointer](http://i.imgur.com/YMAFBEY.png) `NAME.x = mouseX` `NAME.y = mouseY`
-
-![go to sprite](http://i.imgur.com/BBZisqR.png) `NAME.x = otherNAME.x` `NAME.y = otherNAME.y`
+![point towards (sprite)](https://i.imgur.com/eQsdxvR.png) `NAME.pointTowards(NAME.x, NAME.Y)`
 
 ---
 
-![change x by](http://i.imgur.com/YD4fLDE.png) `NAME.x += ...`
+![go to x, y](https://i.imgur.com/Fm23VH2.png) `NAME.x = ...` `NAME.y = ...`
 
-![change y by](http://i.imgur.com/H39ry0g.png) `NAME.y += ...`
+![go to mouse pointer](https://i.imgur.com/YMAFBEY.png) `NAME.x = mouseX` `NAME.y = mouseY`
 
-![set x to](http://i.imgur.com/9FPGyxO.png) `NAME.x = ...`
-
-![set y to](http://i.imgur.com/BtAGQFz.png) `NAME.y = ...`
+![go to sprite](https://i.imgur.com/BBZisqR.png) `NAME.x = otherNAME.x` `NAME.y = otherNAME.y`
 
 ---
 
-![set rotation left-right](http://i.imgur.com/LWlXtDL.png) `NAME.setRotationStyle(“ROTATE LEFT RIGHT”)`
+![change x by](https://i.imgur.com/YD4fLDE.png) `NAME.x += ...`
 
-![all around](http://i.imgur.com/KUsAXXl.png) `NAME.setRotationStyle(“ROTATE”)`
+![change y by](https://i.imgur.com/H39ry0g.png) `NAME.y += ...`
 
-![don't rotate](http://i.imgur.com/C37qd9h.png) `NAME.setRotationStyle(“NO ROTATE”)`
+![set x to](https://i.imgur.com/9FPGyxO.png) `NAME.x = ...`
 
-## <img src="http://i.imgur.com/XWrvYQp.png"/> LOOKS
-
-![show](http://i.imgur.com/e6P95R0.png) `NAME.show()`
-
-![hide](http://i.imgur.com/23UatF5.png) `NAME.hide()`
+![set y to](https://i.imgur.com/BtAGQFz.png) `NAME.y = ...`
 
 ---
 
-![change image](http://i.imgur.com/Q0xS7Ff.png) `IMAGE_NAME.setImageURL('...')`
+![set rotation left-right](https://i.imgur.com/LWlXtDL.png) `NAME.setRotationStyle(“ROTATE LEFT RIGHT”)`
+
+![all around](https://i.imgur.com/KUsAXXl.png) `NAME.setRotationStyle(“ROTATE”)`
+
+![don't rotate](https://i.imgur.com/C37qd9h.png) `NAME.setRotationStyle(“NO ROTATE”)`
+
+## <img src="https://i.imgur.com/XWrvYQp.png"/> LOOKS
+
+![show](https://i.imgur.com/e6P95R0.png) `NAME.show()`
+
+![hide](https://i.imgur.com/23UatF5.png) `NAME.hide()`
+
+---
+
+![change image](https://i.imgur.com/Q0xS7Ff.png) `IMAGE_NAME.setImageURL('...')`
 
 *You can only `setImageURL()` for Images.*
 
@@ -80,7 +80,7 @@ CIRCLE_NAME.color = "green"
 ```
 ---
 
-![set size](http://i.imgur.com/dxOrPmu.png)
+![set size](https://i.imgur.com/dxOrPmu.png)
 
 You set the size in different ways for each type of sprite:
 
@@ -100,18 +100,18 @@ TEXT_NAME.size = 20
 ```
 ---
 
-![send to back layer](http://i.imgur.com/XpglvJP.png) `NAME.sendToBack()`
+![send to back layer](https://i.imgur.com/XpglvJP.png) `NAME.sendToBack()`
 
-![go to front layer](http://i.imgur.com/KumpqgS.png) `NAME.sendToFront()`
+![go to front layer](https://i.imgur.com/KumpqgS.png) `NAME.sendToFront()`
 
 ---
 
-![change image](http://i.imgur.com/zaj0pl0.png)
+![change image](https://i.imgur.com/zaj0pl0.png)
 
 Set the backdrop to an image URL:
 
 ```javascript
-setBackdropURL("http://example.com/img.jpg")
+setBackdropURL("https://i.imgur.com/RkP7fcR.jpg")
 ```
 
 Set the backdrop to a color:
@@ -129,27 +129,27 @@ var height = 400
 setBackdropSize(width, height)
 ```
 
-## <img src="http://i.imgur.com/uPpqpym.png"/> PEN
+## <img src="https://i.imgur.com/uPpqpym.png"/> PEN
 
-![clear](http://i.imgur.com/bAcm6jH.png) `clearPen()`
+![clear](https://i.imgur.com/bAcm6jH.png) `clearPen()`
 
-![pen down](http://i.imgur.com/TWenWap.png) `NAME.penDown()`
+![pen down](https://i.imgur.com/TWenWap.png) `NAME.penDown()`
 
-![pen up](http://i.imgur.com/5H7ijBw.png) `NAME.penUp()`
+![pen up](https://i.imgur.com/5H7ijBw.png) `NAME.penUp()`
 
-![set pen color](http://i.imgur.com/PLtKVcv.png) `NAME.penColor = “blue”`
+![set pen color](https://i.imgur.com/PLtKVcv.png) `NAME.penColor = “blue”`
 
-![set pen color](http://i.imgur.com/PLtKVcv.png) `NAME.penColor = “#ff20ff”`
+![set pen color](https://i.imgur.com/PLtKVcv.png) `NAME.penColor = “#ff20ff”`
 
-![set pen color](http://i.imgur.com/PLtKVcv.png) `NAME.penColor = “rgb(10, 100, 20)”`
+![set pen color](https://i.imgur.com/PLtKVcv.png) `NAME.penColor = “rgb(10, 100, 20)”`
 
-![set pen size](http://i.imgur.com/OzY5ZjU.png) `NAME.penWidth = 4`
+![set pen size](https://i.imgur.com/OzY5ZjU.png) `NAME.penWidth = 4`
 
-## <img src="http://i.imgur.com/cF2TnrD.png"/> DATA
+## <img src="https://i.imgur.com/cF2TnrD.png"/> DATA
 
-![making a variable](http://i.imgur.com/eicY57I.png) `var sampleVariable`
+![making a variable](https://i.imgur.com/eicY57I.png) `var sampleVariable`
 
-![setting variable to value](http://i.imgur.com/HYATXXL.png) `sampleVariable = 0`
+![setting variable to value](https://i.imgur.com/HYATXXL.png) `sampleVariable = 0`
 
 You can combine creating/naming a variable with setting it:
 
@@ -157,29 +157,29 @@ You can combine creating/naming a variable with setting it:
 var sampleVariable = ...
 ```
 
-![changing variable](http://i.imgur.com/pKNFyMw.png) `sampleVariable += ...`
+![changing variable](https://i.imgur.com/pKNFyMw.png) `sampleVariable += ...`
 
-![showing a variable](http://i.imgur.com/DG26IcN.png) `new Text({text: () => "sampleVariable: " + sampleVariable})`
+![showing a variable](https://i.imgur.com/DG26IcN.png) `new Text({text: () => "sampleVariable: " + sampleVariable})`
 
 ("Showing a variable" works by giving a Text Sprite a function instead of a "string in quotes" as its `text` attribute. The Text Sprite constantly reevaluates the function which keeps the value on the screen in sync with the value of the variable.)
 
 ---
 
-![making an array](http://i.imgur.com/sfSmoDT.png) `var sampleArray = []`
+![making an array](https://i.imgur.com/sfSmoDT.png) `var sampleArray = []`
 
-![adding thing to array](http://i.imgur.com/0K0nQD3.png) `sampleArray.push(...)`
+![adding thing to array](https://i.imgur.com/0K0nQD3.png) `sampleArray.push(...)`
 
 (You can add *anything* to an array in JavaScript, including numbers, strings, but even Sprites, functions, and other arrays.)
 
-![length](http://i.imgur.com/QgTdyxe.png) `sampleArray.length`
+![length](https://i.imgur.com/QgTdyxe.png) `sampleArray.length`
 
-![](http://i.imgur.com/jXty6LT.png) `sampleArray[1]`
+![](https://i.imgur.com/jXty6LT.png) `sampleArray[1]`
 
-![removing things from array](http://i.imgur.com/jap7qfR.png) `sampleArray.remove(thing)`
+![removing things from array](https://i.imgur.com/jap7qfR.png) `sampleArray.remove(thing)`
 
-![checking if thing is in array](http://i.imgur.com/IbZHFpm.png) `sampleArray.includes('...')`
+![checking if thing is in array](https://i.imgur.com/IbZHFpm.png) `sampleArray.includes('...')`
 
-![show array](http://i.imgur.com/YIG9stl.png) `new Text({text: () => "listName: " + listName})`
+![show array](https://i.imgur.com/YIG9stl.png) `new Text({text: () => "listName: " + listName})`
 
 Do something for each thing in an array:
 
@@ -219,11 +219,11 @@ if(needle) {
 }
 ```
 
-## <img src="http://i.imgur.com/NAhXXuW.png"/> Events
+## <img src="https://i.imgur.com/NAhXXuW.png"/> Events
 
 *Warning: The shape of events in Scratch prevent you from putting an event inside other blocks. Although JavaScript doesn't prevent you from putting events inside other blocks, you should avoid it. For example, don't place an `onMouseDown` event inside a `forever` block.*
 
-![on flag click](http://i.imgur.com/1TFhnMR.png)
+![on flag click](https://i.imgur.com/1TFhnMR.png)
 
 ```javascript
 ready(() => {
@@ -235,7 +235,7 @@ ready(() => {
 
 ---
 
-![onclick](http://i.imgur.com/XuPircO.png)
+![onclick](https://i.imgur.com/XuPircO.png)
 
 ```javascript
 onMouseDown(() => {
@@ -261,7 +261,7 @@ onMouseMove(() => {
 
 ---
 
-![onclick](http://i.imgur.com/z15mnPj.png)
+![onclick](https://i.imgur.com/z15mnPj.png)
 
 ```javascript
 NAME.onMouseDown(() => {
@@ -279,7 +279,7 @@ NAME.onMouseUp(() => {
 
 ---
 
-![If pressing ...](http://i.imgur.com/CoXW12B.png)
+![If pressing ...](https://i.imgur.com/CoXW12B.png)
 
 ```javascript
 onKeyDown(() => {
@@ -287,7 +287,7 @@ onKeyDown(() => {
 })
 ```
 
-![If pressing ...](http://i.imgur.com/TDClulO.png)
+![If pressing ...](https://i.imgur.com/TDClulO.png)
 
 ```javascript
 onKeyDown(key => {
@@ -297,7 +297,7 @@ onKeyDown(key => {
 })
 ```
 
-![](http://i.imgur.com/UauTNwu.png)
+![](https://i.imgur.com/UauTNwu.png)
 
 ```javascript
 onKeyDown(key => {
@@ -307,11 +307,11 @@ onKeyDown(key => {
 })
 ```
 
-## <img src="http://i.imgur.com/Tz78euG.png"/> Sensing
+## <img src="https://i.imgur.com/Tz78euG.png"/> Sensing
 
-![touching mouse](http://i.imgur.com/QTpWOxV.png) `NAME.mouseOver`
+![touching mouse](https://i.imgur.com/QTpWOxV.png) `NAME.mouseOver`
 
-![touching edge](http://i.imgur.com/yEXInKi.png)
+![touching edge](https://i.imgur.com/yEXInKi.png)
 
 If you want to see if the center of your sprite is outside of a boundary, here are some expressions that could be helpful:
 
@@ -322,33 +322,33 @@ NAME.y > maxY
 NAME.y < minY
 ```
 
-![touching NAME](http://i.imgur.com/s26w6pc.png) `NAME.touching(OTHER_NAME)`
+![touching NAME](https://i.imgur.com/s26w6pc.png) `NAME.touching(OTHER_NAME)`
 
 **NOTE: touching detects the rectangular boundary of a sprite, so if you have an image with a large transparent border, you will need to trim your image to make touching accurate.**
 
 ---
 
-![distance to mouse pointer](http://i.imgur.com/cIY3SYy.png) `NAME.distanceTo(mouseX, mouseY)`
+![distance to mouse pointer](https://i.imgur.com/cIY3SYy.png) `NAME.distanceTo(mouseX, mouseY)`
 
-![distance to other thing](http://i.imgur.com/y6sXGTK.png) `NAME.distanceTo(OTHER_NAME)`
+![distance to other thing](https://i.imgur.com/y6sXGTK.png) `NAME.distanceTo(OTHER_NAME)`
 
 ---
 
-![If pressing ...](http://i.imgur.com/bZnzRKH.png) `keysDown.includes('SPACE')`
+![If pressing ...](https://i.imgur.com/bZnzRKH.png) `keysDown.includes('SPACE')`
 
 List of keys currently pressed: `keysDown`
 
 ---
 
-![mouse x](http://i.imgur.com/JcKLf1r.png) `mouseX`
+![mouse x](https://i.imgur.com/JcKLf1r.png) `mouseX`
 
-![mouse y](http://i.imgur.com/j8CFqUt.png) `mouseY`
+![mouse y](https://i.imgur.com/j8CFqUt.png) `mouseY`
 
 ---
 
-![x position of...](http://i.imgur.com/afLdt8K.png) `NAME.x`
+![x position of...](https://i.imgur.com/afLdt8K.png) `NAME.x`
 
-![y position of...](http://i.imgur.com/B7vDhj2.png) `NAME.y`
+![y position of...](https://i.imgur.com/B7vDhj2.png) `NAME.y`
 
 ---
 
@@ -380,35 +380,35 @@ Height of the screen: `height`
 
 ---
 
-![](http://i.imgur.com/1kOHRyz.png) `hour()`
+![](https://i.imgur.com/1kOHRyz.png) `hour()`
 
 Hour in military time: `hourMilitary()`
 
-![](http://i.imgur.com/7in6ifA.png) `minute()`
+![](https://i.imgur.com/7in6ifA.png) `minute()`
 
-![](http://i.imgur.com/hWI9CTr.png) `second()`
+![](https://i.imgur.com/hWI9CTr.png) `second()`
 
-![](http://i.imgur.com/WhsQf1m.png) `dayOfMonth()`
+![](https://i.imgur.com/WhsQf1m.png) `dayOfMonth()`
 
-![](http://i.imgur.com/gL5xkbe.png) `dayOfWeek()`
+![](https://i.imgur.com/gL5xkbe.png) `dayOfWeek()`
 
-![](http://i.imgur.com/w5cJ5at.png) `month()`
+![](https://i.imgur.com/w5cJ5at.png) `month()`
 
-![](http://i.imgur.com/isWxU8C.png) `year()`
+![](https://i.imgur.com/isWxU8C.png) `year()`
 
-## <img src="http://i.imgur.com/851mEzr.png"/> OPERATORS
+## <img src="https://i.imgur.com/851mEzr.png"/> OPERATORS
 
-![](http://i.imgur.com/nsDkCkt.png) `... + ...`
+![](https://i.imgur.com/nsDkCkt.png) `... + ...`
 
-![](http://i.imgur.com/XSAATIP.png) `... - ...`
+![](https://i.imgur.com/XSAATIP.png) `... - ...`
 
-![](http://i.imgur.com/ujnGpE6.png) `... * ...`
+![](https://i.imgur.com/ujnGpE6.png) `... * ...`
 
-![](http://i.imgur.com/B0BGkCJ.png) `... / ...`
+![](https://i.imgur.com/B0BGkCJ.png) `... / ...`
 
 ---
 
-![pick random number](http://i.imgur.com/fAHuDwy.png) `random(..., ...)`
+![pick random number](https://i.imgur.com/fAHuDwy.png) `random(..., ...)`
 
 Random X value on the screen between `minX` and `maxX`: `randomX()`
 
@@ -418,11 +418,11 @@ Random color: `randomColor()`
 
 ---
 
-![](http://i.imgur.com/2hqoHfh.png) `... < ...`
+![](https://i.imgur.com/2hqoHfh.png) `... < ...`
 
-![](http://i.imgur.com/qX7dmwt.png) `... > ...`
+![](https://i.imgur.com/qX7dmwt.png) `... > ...`
 
-![](http://i.imgur.com/7f8FRbZ.png) `... == ...`
+![](https://i.imgur.com/7f8FRbZ.png) `... == ...`
 
 Less Than or Equal To: `... <= ...`
 
@@ -434,29 +434,29 @@ Between Two Numbers : `NAME.x.between(minX, maxX)`
 
 ---
 
-![and](http://i.imgur.com/UYhM5tp.png) `... && ...`
+![and](https://i.imgur.com/UYhM5tp.png) `... && ...`
 
-![or](http://i.imgur.com/PT3Iln0.png) `... || ...`
+![or](https://i.imgur.com/PT3Iln0.png) `... || ...`
 
-![not](http://i.imgur.com/fHrS9ZK.png) `!(...)`
-
----
-
-![](http://i.imgur.com/VqgL2io.png) `"hello" + "world"`
-
-![](http://i.imgur.com/hIRi6xQ.png) `"world".substring(0,1)`
-
-![](http://i.imgur.com/qsTRaCx.png) `"world.length`
+![not](https://i.imgur.com/fHrS9ZK.png) `!(...)`
 
 ---
 
-![](http://i.imgur.com/NFoY9l8.png) `... % ...`
+![](https://i.imgur.com/VqgL2io.png) `"hello" + "world"`
 
-![](http://i.imgur.com/tkvyjRT.png) `Math.round(...)`
+![](https://i.imgur.com/hIRi6xQ.png) `"world".substring(0,1)`
 
-## <img src="http://i.imgur.com/bRcYPen.png"/> More Blocks
+![](https://i.imgur.com/qsTRaCx.png) `"world.length`
 
-![Make Block](http://i.imgur.com/AZlRb6h.png)
+---
+
+![](https://i.imgur.com/NFoY9l8.png) `... % ...`
+
+![](https://i.imgur.com/tkvyjRT.png) `Math.round(...)`
+
+## <img src="https://i.imgur.com/bRcYPen.png"/> More Blocks
+
+![Make Block](https://i.imgur.com/AZlRb6h.png)
 
 You can create a function with a name:
 
@@ -486,16 +486,16 @@ forever(() => {
 })
 ```
 
-## <img src="http://i.imgur.com/NFykqPj.png"/> Sound
+## <img src="https://i.imgur.com/NFykqPj.png"/> Sound
 
-![Play a sound](http://i.imgur.com/L8znmOb.png)
+![Play a sound](https://i.imgur.com/L8znmOb.png)
 
 ```javascript
 var bruce = new Audio('http://mhoerner.dyndns.org/mp3/Bruce%20Springsteen/Born%20To%20Run/05%20Born%20To%20Run.mp3')
 bruce.play()
 ```
 
-![Pause a sound](http://i.imgur.com/X9kk6yW.png) `bruce.pause()`
+![Pause a sound](https://i.imgur.com/X9kk6yW.png) `bruce.pause()`
 
 To get the URL of an mp3, Google search:
 
@@ -503,12 +503,12 @@ To get the URL of an mp3, Google search:
 intitle:index.of?mp3 NAME-OF-SONG
 ```
 
-![sound search](http://i.imgur.com/t9XKOpn.png)
+![sound search](https://i.imgur.com/t9XKOpn.png)
 
-## <img src="http://i.imgur.com/lZKvsP5.png"/> Control
+## <img src="https://i.imgur.com/lZKvsP5.png"/> Control
 
 
-![wait](http://i.imgur.com/r6wYX8c.png)
+![wait](https://i.imgur.com/r6wYX8c.png)
 
 There is no wait block in JavaScript. Instead, you can use `after()`:
 
@@ -527,7 +527,7 @@ every(..., "seconds", () => {
 ```
 ---
 
-![repeat](http://i.imgur.com/jwe13bm.png)
+![repeat](https://i.imgur.com/jwe13bm.png)
 
 ```javascript
 repeat(10, () => {
@@ -535,7 +535,7 @@ repeat(10, () => {
 })
 ```
 
-![forever](http://i.imgur.com/gZOjLDM.png)
+![forever](https://i.imgur.com/gZOjLDM.png)
 
 ```javascript
 forever (() => {
@@ -544,7 +544,7 @@ forever (() => {
 ```
 --- 
 
-![if... then...](http://i.imgur.com/u5rKA36.png)
+![if... then...](https://i.imgur.com/u5rKA36.png)
 
 ```javascript
 if (...) {
@@ -552,7 +552,7 @@ if (...) {
 }
 ```
 
-![if.. then... else...](http://i.imgur.com/RYOpSaq.png)
+![if.. then... else...](https://i.imgur.com/RYOpSaq.png)
 
 ```javascript
 if (...) {
@@ -563,7 +563,7 @@ if (...) {
 ```
 --- 
 
-![](http://i.imgur.com/aQ9iJNw.png)
+![](https://i.imgur.com/aQ9iJNw.png)
 
 ```javascript
 repeatUntil(() => ..., () => {
@@ -572,7 +572,7 @@ repeatUntil(() => ..., () => {
 ```
 ---
 
-![](http://i.imgur.com/neWaran.png)
+![](https://i.imgur.com/neWaran.png)
 
 There is no wait-until in JavaScript. You can simulate a wait-until block by specifying a third function to a `repeatUntil`. Refer to the "Control Flow" section below for more details.
 
@@ -582,7 +582,7 @@ repeatUntil(() => ..., () => {}, () => {
 })
 ```
 
-![](http://i.imgur.com/OXlpK9J.png)
+![](https://i.imgur.com/OXlpK9J.png)
 
 `when()` is a short-hand for a `forever`-`if` statement.
 
@@ -592,11 +592,11 @@ when(() => ..., () => {
 })
 ```
 
-![stop(all)](http://i.imgur.com/SWSxdVm.png) `freeze()`
+![stop(all)](https://i.imgur.com/SWSxdVm.png) `freeze()`
 
 Reverse freeze or stop all: `defrost()`
 
-![cloning](http://i.imgur.com/gNzTpS0.png)
+![cloning](https://i.imgur.com/gNzTpS0.png)
 
 ```javascript
 // create a list to store all of the clones
