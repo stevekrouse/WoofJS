@@ -235,6 +235,8 @@ ready(() => {
 
 ---
 
+Stage Clicked:
+
 ![onclick](https://i.imgur.com/XuPircO.png)
 
 ```javascript
@@ -261,6 +263,8 @@ onMouseMove(() => {
 
 ---
 
+Sprite Click:
+
 ![onclick](https://i.imgur.com/z15mnPj.png)
 
 ```javascript
@@ -278,6 +282,8 @@ NAME.onMouseUp(() => {
 ```
 
 ---
+
+Key Pressed:
 
 ![If pressing ...](https://i.imgur.com/CoXW12B.png)
 
