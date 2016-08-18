@@ -30,7 +30,7 @@ NAME.angle = 47.7
 
 ![point towards mouse](https://i.imgur.com/XxlWh5Y.png) `NAME.pointTowards(mouseX, mouseY)`
 
-![point towards (sprite)](https://i.imgur.com/eQsdxvR.png) `NAME.pointTowards(NAME.x, NAME.Y)`
+![point towards (sprite)](https://i.imgur.com/eQsdxvR.png) `NAME.pointTowards(otherNAME.x, otherNAME.Y)`
 
 ---
 
