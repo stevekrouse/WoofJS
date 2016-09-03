@@ -12,6 +12,33 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
   thisContext.stopped = true;
   thisContext.fullScreen = fullScreen;
   
+  thisContext._cameraX = 0;
+  thisContext._cameraY = 0;
+  Object.defineProperty(thisContext, 'cameraX', {
+    get: function() {
+      return thisContext._cameraX;
+    },
+    set: function(value) {
+      thisContext.maxX = value + this.width / 2;
+      thisContext.minX = value - this.width / 2;
+      thisContext.mouseX += (value - thisContext._cameraX)
+      thisContext._cameraX = value;
+    }
+  });
+  Object.defineProperty(thisContext, 'cameraY', {
+    get: function() {
+      return thisContext._cameraY;
+    },
+    set: function(value) {
+      thisContext.maxY = value + this.height / 2;
+      thisContext.minY = value - this.height / 2;
+      thisContext.mouseY += (value - thisContext._cameraY)
+      thisContext._cameraY = value;
+    }
+  });
+  
+
+  
   if (thisContext.fullScreen) {
     width = window.innerWidth;
     height = window.innerHeight;
@@ -87,6 +114,7 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
   thisContext._setCanvasSize = (width, height) => {
     thisContext.height = height;
     thisContext.width = width;
+    // TODO
     thisContext.minX = -thisContext.width / 2;
     thisContext.maxX = thisContext.width / 2;
     thisContext.minY = -thisContext.height / 2;
@@ -164,7 +192,7 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
   };
   
   thisContext.translateToCenter = (x, y) => {
-    return [(x - thisContext.maxX) - thisContext._spriteCanvas.offsetLeft, (thisContext.maxY - y) + thisContext._spriteCanvas.offsetTop];
+    return [(x - (thisContext.width / 2) + thisContext.cameraX) - thisContext._spriteCanvas.offsetLeft, (((thisContext.height / 2) - y) + thisContext.cameraY) + thisContext._spriteCanvas.offsetTop];
   };
   thisContext.translateToCanvas = (x, y) => {
     return [(x + thisContext.maxX) - thisContext._spriteCanvas.offsetLeft, (thisContext.maxY - y) + thisContext._spriteCanvas.offsetTop];
@@ -493,11 +521,11 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
   };
   
   this.canvasX = () => {
-    return this.x + this.project.maxX;
+    return (this.x - this.project.cameraX) + (this.project.width / 2) ;
   };
   
   this.canvasY = () => {
-    return this.project.maxY - this.y;
+    return (this.project.height / 2) - (this.y - this.project.cameraY);
   };
   
   this.bounds = () => {
@@ -844,7 +872,7 @@ Woof.prototype.Image = function({project = undefined, url = "https://www.loveyou
   };
   this.setImageURL(url);
 
-    Object.defineProperty(this, 'width', {
+  Object.defineProperty(this, 'width', {
     get: function() {
       return this.imageWidth || this.image.width;
     },

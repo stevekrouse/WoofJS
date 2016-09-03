@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 
@@ -30,6 +30,31 @@ function Woof() {
   thisContext.backdrop = undefined;
   thisContext.stopped = true;
   thisContext.fullScreen = fullScreen;
+
+  thisContext._cameraX = 0;
+  thisContext._cameraY = 0;
+  Object.defineProperty(thisContext, 'cameraX', {
+    get: function get() {
+      return thisContext._cameraX;
+    },
+    set: function set(value) {
+      thisContext.maxX = value + this.width / 2;
+      thisContext.minX = value - this.width / 2;
+      thisContext.mouseX += value - thisContext._cameraX;
+      thisContext._cameraX = value;
+    }
+  });
+  Object.defineProperty(thisContext, 'cameraY', {
+    get: function get() {
+      return thisContext._cameraY;
+    },
+    set: function set(value) {
+      thisContext.maxY = value + this.height / 2;
+      thisContext.minY = value - this.height / 2;
+      thisContext.mouseY += value - thisContext._cameraY;
+      thisContext._cameraY = value;
+    }
+  });
 
   if (thisContext.fullScreen) {
     width = window.innerWidth;
@@ -111,6 +136,7 @@ function Woof() {
   thisContext._setCanvasSize = function (width, height) {
     thisContext.height = height;
     thisContext.width = width;
+    // TODO
     thisContext.minX = -thisContext.width / 2;
     thisContext.maxX = thisContext.width / 2;
     thisContext.minY = -thisContext.height / 2;
@@ -206,7 +232,7 @@ function Woof() {
   };
 
   thisContext.translateToCenter = function (x, y) {
-    return [x - thisContext.maxX - thisContext._spriteCanvas.offsetLeft, thisContext.maxY - y + thisContext._spriteCanvas.offsetTop];
+    return [x - thisContext.width / 2 + thisContext.cameraX - thisContext._spriteCanvas.offsetLeft, thisContext.height / 2 - y + thisContext.cameraY + thisContext._spriteCanvas.offsetTop];
   };
   thisContext.translateToCanvas = function (x, y) {
     return [x + thisContext.maxX - thisContext._spriteCanvas.offsetLeft, thisContext.maxY - y + thisContext._spriteCanvas.offsetTop];
@@ -619,7 +645,7 @@ Woof.prototype.Sprite = function () {
 
   this.distanceTo = function distanceTo(xGiven, yGiven) {
     if (arguments.length === 1) {
-      if ((typeof xGiven === "undefined" ? "undefined" : _typeof(xGiven)) == "object") {
+      if ((typeof xGiven === 'undefined' ? 'undefined' : _typeof(xGiven)) == "object") {
         var x = this.x - xGiven.x;
         var y = this.y - xGiven.y;
         return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
@@ -663,11 +689,11 @@ Woof.prototype.Sprite = function () {
   };
 
   this.canvasX = function () {
-    return _this.x + _this.project.maxX;
+    return _this.x - _this.project.cameraX + _this.project.width / 2;
   };
 
   this.canvasY = function () {
-    return _this.project.maxY - _this.y;
+    return _this.project.height / 2 - (_this.y - _this.project.cameraY);
   };
 
   this.bounds = function () {
@@ -686,7 +712,7 @@ Woof.prototype.Sprite = function () {
   this.collisionContext = this.collisionCanvas.getContext('2d');
 
   this.touching = function (sprite, precise) {
-    if (!((typeof sprite === "undefined" ? "undefined" : _typeof(sprite)) == "object")) {
+    if (!((typeof sprite === 'undefined' ? 'undefined' : _typeof(sprite)) == "object")) {
       throw new TypeError("touching(sprite) requires one sprite input.");
     }
 
@@ -847,7 +873,7 @@ Woof.prototype.Sprite = function () {
 
   this.pointTowards = function (x2, y2) {
     if (arguments.length === 1) {
-      if ((typeof x2 === "undefined" ? "undefined" : _typeof(x2)) == "object") {
+      if ((typeof x2 === 'undefined' ? 'undefined' : _typeof(x2)) == "object") {
         this.angle = Math.atan2(x2.y - this.y, x2.x - this.x) * 180 / Math.PI;
       } else {
         throw new TypeError("pointTowards(sprite) requires one sprite input.");
