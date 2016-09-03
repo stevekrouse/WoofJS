@@ -114,11 +114,10 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
   thisContext._setCanvasSize = (width, height) => {
     thisContext.height = height;
     thisContext.width = width;
-    // TODO
-    thisContext.minX = -thisContext.width / 2;
-    thisContext.maxX = thisContext.width / 2;
-    thisContext.minY = -thisContext.height / 2;
-    thisContext.maxY = thisContext.height / 2;
+    thisContext.minX = thisContext.cameraX - thisContext.width / 2;
+    thisContext.maxX = thisContext.cameraX + thisContext.width / 2;
+    thisContext.minY = thisContext.cameraY - thisContext.height / 2;
+    thisContext.maxY = thisContext.cameraY + thisContext.height / 2;
     
     thisContext.ready(() => {
       thisContext._spriteCanvas.width = thisContext.width;
