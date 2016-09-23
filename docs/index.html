@@ -62,6 +62,9 @@
     #powered {
         font-size: 10px;
     }
+    h1, h4 {
+      text-align: center;
+    }
     #container {
       width:100%;
       display:flex;
@@ -76,18 +79,89 @@
       /* Standard */
       height: calc(99% - 40px);
     }
+    #instructions {
+      -webkit-user-select: none;
+      -khtml-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      -o-user-select: none;
+      user-select: none;
+    }
+    .step {
+      margin-left: 5px;
+      margin-right: 10px;
+      margin-top: 20px;
+      margin-bottom: 20px;
+      padding: 5px;
+      background-color: lightblue;
+    }
   </style>
 </head>
 <body style="height:100%">
     <div id="navbar" style="">
         <span id="title"><a target="blank" href="https://github.com/stevekrouse/WoofJS">WoofJS</a> <span id="powered">powered by</span> <a target="blank" href="http://www.thecodingspace.com/"><img style="width:30px; height 30px;" src="./logo-1.png"></img></a></span>
         <a target="blank" href="https://github.com/stevekrouse/WoofJS"><img style="height: 150px; position: absolute; top: 40px; right: 0; border: 0;" src="./learn-more.png"></a>
-        <!--<button onclick="TODO">Save</button>-->
     </div>
 
     <div id="container" >
-        <div id="docs" style="overflow-y: scroll; overflow-x: hidden; height:100%; width: 33%; padding-left: 10px;">
+        <div id="instructions" style="overflow-y: scroll; overflow-x: hidden; height:100%; width: 33%; padding-left: 10px;">
+             <div class="step">
+               <h4>Step 1 - Set the backdrop to a color</h4>
+  <pre><span style="background-color:lightgreen">setBackdropColor("lightblue")</span></pre>
+            </div>
+             
+            <div class="step">
+              <h4>Step 2 - Create a circle</h4>
+<pre>setBackdropColor("lightblue")
+<span style="background-color:lightgreen">new Circle({})</span></pre>
+            </div>
             
+            <div class="step">
+              <h4>Step 3 - Make your circle bigger</h4>
+<pre>setBackdropColor("lightblue")
+new Circle({<span style="background-color:lightgreen">radius: 20</span>))</pre>
+            </div>
+            
+            <div class="step">
+              <h4>Step 4 - Change your circle's color</h4>
+<pre>setBackdropColor("lightblue")
+new Circle({color: 20<span style="background-color:lightgreen">, color: "hotpink"</span>))</pre>
+            </div>
+          
+            <div class="step">
+              <h4>Step 5 - Give your circle a name</h4>
+<pre>setBackdropColor("lightblue")
+<span style="background-color:lightgreen">var stevensBall = </span>new Circle({color: 20, color: "hotpink"))</pre>
+            </div>
+            
+            <div class="step">
+              <h4>Step 6 - Make your circle move</h4>
+<pre>setBackdropColor("lightblue")
+var stevensBall = new Circle({color: 20, color: "hotpink"))
+<span style="background-color:lightgreen">stevensBall.move(1)</span></pre>
+            </div>
+            
+            <div class="step">
+              <h4>Step 7 - Make your circle move more</h4>
+<pre>setBackdropColor("lightblue")
+var stevensBall =new Circle({color: 20, color: "hotpink"))
+<span style="background-color:lightgreen">forever(() => {</span>
+<span style="background-color:lightgreen">  </span>stevensBall.move(1)
+<span style="background-color:lightgreen">})</span></pre>
+            </div>
+          
+            <div class="step">
+              <h4>Step 8 - Make your circle follor your mouse</h4>
+<pre>setBackdropColor("lightblue")
+var stevensBall = new Circle({color: 20, color: "hotpink"))
+stevensBall.angle = DOWN
+forever(() => {
+<span style="background-color:lightgreen">  stevensBall.pointTowards(mouseX, mouseY)</span>
+  stevensBall.move(1)
+})</pre>
+            </div>
+          
+            <a href="https://github.com/stevekrouse/WoofJS"><button>Learn More WoofJS!</button></a>
         </div>
         
         <div id="code" style="height:100%; width: 40%;">
@@ -99,71 +173,10 @@
     </div>
     
   <script>
-    // TODO storage
-    // if ('BlocklyStorage' in window && window.location.hash.length > 1) {
-    //   BlocklyStorage.retrieveXml(window.location.hash.substring(1));
-    // }
-    
-   var typeALong = "// The Woof Type-Along\n" +
-"// Things in ALL CAPS are for you to fill in\n" +
-"\n" +
-"// This line and all lines beginning with // are comments\n" +
-"setBackdropURL('https://i.imgur.com/RkP7fcR.jpg')\n" +
-"\n" +
-"// 1) Type \"new Circle({})\" below this line\n" +
-"//    Tip - Don't start the line with //\n" +
-"\n" +
-"\n" +
-"// 2) Why don't we make it bigger with:\n" +
-"//      new Circle({radius: NUMBER-HERE})\n" +
-"//    Tip - Do this within the same Circle from above\n" +
-"\n" +
-"// 3) Great! Now, let's change the color:\n" +
-"//      new Circle({radius: 10, color: \"COLOR-HERE\"})\n" +
-"//    Tip - Make sure to put your color name in \"quotes\"\n" +
-"\n" +
-"// 4) Now let's store the circle in a variable:\n" +
-"//      var CIRCLE-NAME = new Circle({...})\n" +
-"//    Tip - Make sure to do this ALL on the same line." +
-
-"\n" +
-"// 5) Make the circle move using its variable name\n" +
-"//    Below this line type:\n" +
-"//      CIRCLE-NAME.move(NUMBER-OF-PIXELS-HERE)\n" +
-"\n" +
-"\n" +
-"\n" +
-"// 6) Did you see it move? Let's make it move some more.\n" +
-"//    Below this line type the following THREE lines.\n" +
-"//    Cut CIRCLE-NAME.move() and paste where it says:\n" +
-"//      forever(() => {\n" +
-"//        PASTE-CODE-HERE\n" +  
-"//      })\n" +
-"\n" +
-"\n" +
-"\n" +
-"// 7) Let's make the circle stay in bounds\n" +
-"//    Add this if-statement INSIDE the forever:\n" +
-"//      if (CIRCLE-NAME.x > maxX) {\n" +
-"//        CIRCLE-NAME.angle = LEFT\n" +
-"//      }\n\n\n" +
-"// 8) Add another if to make it stay on the screen.\n\n" +
-"\n" +
-"// 9) To keep working, paste your code to JSBin\n"+
-"//    Clone the following URL to get started:\n"+
-"//    https://jsbin.com/lizuzuz/edit?js,output\n";
-	
-	$.get("https://cdn.rawgit.com/stevekrouse/WoofJS/dea9d1c059daa9650b7d5488c1d77197761d9386/README.md", function(text){
-	    text = text.substring(435, text.length)
-	    var converter = new showdown.Converter();
-        var html      = converter.makeHtml(text);
-        document.getElementById('docs').innerHTML = html;
-	})
-	
 	var changed = false;
     var editor = CodeMirror(document.getElementById('code'), {
         mode:  "javascript",
-        value: typeALong,
+        value: "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n",
         lineNumbers: true,
         theme: "eclipse",
         keyMap: "sublime",
@@ -186,15 +199,6 @@
       debouncedRunCode()
     });
     runCode();
-    editor.setCursor(8, 0)
-    window.onbeforeunload = function(e) {
-      if (changed) {
-        var dialogText = 'Make sure to copy and paste your work somewhere safe.';
-        e.returnValue = dialogText;
-        return dialogText; 
-      }
-    };
-    
     
     function runCode() {
       console.log('run')
