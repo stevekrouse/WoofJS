@@ -100,8 +100,64 @@
     </div>
 
     <div id="container" >
-        <div id="docs" style="height:100%; width: 33%; padding-left: 5px;">
-            <iframe src="./docs/index.html" id="scratch" style="height:100%; width:100%"></iframe>
+        <div id="instructions" style="overflow-y: scroll; overflow-x: hidden; height:100%; width: 33%; padding-left: 10px;">
+             <div class="step">
+               <h4>Step 1 - Set the backdrop to a color</h4>
+  <pre><span style="background-color:lightgreen">setBackdropColor("lightblue")</span></pre>
+            </div>
+             
+            <div class="step">
+              <h4>Step 2 - Create a circle</h4>
+<pre>setBackdropColor("lightblue")
+<span style="background-color:lightgreen">new Circle({})</span></pre>
+            </div>
+            
+            <div class="step">
+              <h4>Step 3 - Make your circle bigger</h4>
+<pre>setBackdropColor("lightblue")
+new Circle({<span style="background-color:lightgreen">radius: 20</span>})</pre>
+            </div>
+            
+            <div class="step">
+              <h4>Step 4 - Change your circle's color</h4>
+<pre>setBackdropColor("lightblue")
+new Circle({radius: 20<span style="background-color:lightgreen">, color: "hotpink"</span>})</pre>
+            </div>
+          
+            <div class="step">
+              <h4>Step 5 - Give your circle a name</h4>
+<pre>setBackdropColor("lightblue")
+<span style="background-color:lightgreen">var stevensBall = </span>new Circle({radius: 20, color: "hotpink"})</pre>
+            </div>
+            
+            <div class="step">
+              <h4>Step 6 - Make your circle move</h4>
+<pre>setBackdropColor("lightblue")
+var stevensBall = new Circle({radius: 20, color: "hotpink"})
+<span style="background-color:lightgreen">stevensBall.move(1)</span></pre>
+            </div>
+            
+            <div class="step">
+              <h4>Step 7 - Make your circle move more</h4>
+<pre>setBackdropColor("lightblue")
+var stevensBall =new Circle({radius: 20, color: "hotpink"})
+<span style="background-color:lightgreen">forever(() => {</span>
+<span style="background-color:lightgreen">  </span>stevensBall.move(1)
+<span style="background-color:lightgreen">})</span></pre>
+            </div>
+          
+            <div class="step">
+              <h4>Step 8 - Make your circle follow your mouse</h4>
+<pre>setBackdropColor("lightblue")
+var stevensBall = new Circle({radius: 20, color: "hotpink"})
+stevensBall.angle = DOWN
+forever(() => {
+<span style="background-color:lightgreen">  stevensBall.pointTowards(mouseX, mouseY)</span>
+  stevensBall.move(1)
+})</pre>
+            </div>
+          
+            <a href="https://github.com/stevekrouse/WoofJS"><button style="margin: auto; display: flex" class="btn btn-lg btn-success">Learn More WoofJS!</button></a>
         </div>
         
         <div id="code" style="height:100%; width: 40%;">
@@ -116,7 +172,7 @@
 	var changed = false;
     var editor = CodeMirror(document.getElementById('code'), {
         mode:  "javascript",
-        value: "setBackdropURL('http://i.imgur.com/q6Bqraw.jpg')\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n",
+        value: "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n",
         lineNumbers: true,
         theme: "eclipse",
         keyMap: "sublime",
