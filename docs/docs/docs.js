@@ -509,6 +509,7 @@ $('#Start').click(function() {
     $('#Tutorial').toggle('fast');
        $('#Start').toggle('fast');
        $('#Jsbin').toggle('fast');
+       $('#Github').toggle('fast');
 
 });
 
@@ -517,6 +518,7 @@ $('#Tutorial').click(function() {
        $('#typelist').toggle('fast');
        $('#Start').toggle('fast');
        $('#Jsbin').toggle('fast');
+       $('#Github').toggle('fast');
 
 });
 
