@@ -23,8 +23,7 @@
   <link rel="stylesheet" href="./codemirror/lint.css">
   <script src="./codemirror/jshint.min.js"></script>
   <script src="./codemirror/lint.js"></script>
-  <script src=" https://cdn.rawgit.com/stevekrouse/cloud-data/16d0efb3d779f1fea5d7772caffaf3e3702e76ea/cloud-data.js"></script>
-
+  <script src="https://www.gstatic.com/firebasejs/3.4.0/firebase.js"></script>
 
   <style>
     body {
@@ -118,13 +117,14 @@
     var changed = false;
     $('#save').addClass("btn-success")
     
-    var database = new CloudData({     
+    var config = {
       apiKey: "AIzaSyBYHv7dCiD0bWiHRlcp4VIZCIqzoMnB4yY",
       authDomain: "woofjs-d1b27.firebaseapp.com",
       databaseURL: "https://woofjs-d1b27.firebaseio.com",
       storageBucket: "woofjs-d1b27.appspot.com",
-      messagingSenderId: "397293370524"    
-    });
+      messagingSenderId: "397293370524"
+    };
+    firebase.initializeApp(config);
     
     var getID = function() {
       return window.location.hash.substring(1, window.location.hash.length);
@@ -146,29 +146,25 @@
       $('#save').removeClass("btn-success")
     }
     
-    var runOnce = true
-    database.onChange(function(){
-      if (runOnce) {
-        runOnce = false
-        var code = getCode(getID())
-        if (code){
-          editor.setValue(code)
-          makeClean()
-        }
+    firebase.database().ref('/code/' + getID()).once('value').then(function(snapshot) {
+      if (snapshot.val()){
+        editor.setValue(snapshot.val())
+        makeClean()
       }
-    })
+    });
     
     var save = function(){
       var name = window.prompt("Choose a name for your project", "Don't forget me!");
-      if (getCode(name)){
-        alert("That project name has already been taken. Try another one.")
-      }
-      else {
-        database.set("code/" + name, editor.getValue())
-        makeClean()
-        window.location.hash = name
-        return true;
-      }
+      firebase.database().ref('/code/' + name).once('value').then(function(snapshot) {
+        if (snapshot.val()){
+           alert("That project name has already been taken. Try another one.")
+        } else {
+          firebase.database().ref().child("/code/" + name).set(editor.getValue());
+          makeClean()
+          window.location.hash = name
+          return true
+        }
+      });
     };
   
     var editor = CodeMirror(document.getElementById('code'), {
