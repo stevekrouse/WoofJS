@@ -337,5 +337,6 @@ h4 {
 
 #typelist pre { background-color: #F3F3F3;
 padding:10px;
-
+ font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+ font-size:80%;
 }
