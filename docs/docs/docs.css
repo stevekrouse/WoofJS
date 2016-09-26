@@ -206,15 +206,15 @@ pre[class*="language-"] {
 }
 
 button {
-    width: 45%;
-    height: 13%;
+    width: 23%;
+    height: 12%;
     border-radius: 5px;
     border: none;
     color: #fff;
     font-family: "Open Sans";
     font-size: 100%;
     box-shadow: none;
-    margin: 1.5%
+    margin: .5%
 }
 
 button:focus {
@@ -341,4 +341,12 @@ h4 {
 padding:10px;
  font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
  font-size:80%;
+}
+
+@media all and (max-width: 900px) {
+    button {
+       margin:1.5% ;
+       width: 45%;
+    height: 13%;
+    }
 }
