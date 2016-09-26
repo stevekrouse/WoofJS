@@ -202,7 +202,7 @@ pre[class*="language-"] {
 
 .all {
     flex-basis: auto;
-    margin: 1.5%;
+    /*margin: .5%;*/
 }
 
 button {
@@ -212,9 +212,9 @@ button {
     border: none;
     color: #fff;
     font-family: "Open Sans";
-    font-size: 120%;
+    font-size: 100%;
     box-shadow: none;
-    margin: 5px;
+    margin: 1%
 }
 
 button:focus {
