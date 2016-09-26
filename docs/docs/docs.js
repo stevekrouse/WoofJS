@@ -490,6 +490,7 @@ $('#Start').click(function() {
     $('#Jsbin').toggle('fast');
     $('#Tutorial').toggle('fast');
     $('#Projects').toggle('fast');
+     $('#Github').toggle('fast');
     $('.container1').toggle('fast');
     $('.container2').toggle('fast');
     $('.container3').toggle('fast');
@@ -522,6 +523,12 @@ $('#Tutorial').click(function() {
 $('#Jsbin').click(function() {
      
   window.open('https://jsbin.com/lizuzuz/edit?js,output')
+
+});
+
+$('#Github').click(function() {
+     
+  window.open('http://www.thecodingspace.com/setting-up-jsbin.html')
 
 });
 
