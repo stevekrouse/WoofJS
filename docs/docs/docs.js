@@ -487,6 +487,9 @@ $('#Sprite').click(function() {
 $('#Start').click(function() {
     $('#startlist').toggle('fast');
     $("#Sprite").toggle('fast');
+    $('#Jsbin').toggle('fast');
+    $('#Tutorial').toggle('fast');
+    $('#Projects').toggle('fast');
     $('.container1').toggle('fast');
     $('.container2').toggle('fast');
     $('.container3').toggle('fast');
@@ -497,7 +500,31 @@ $('#Start').click(function() {
         $('#typelist').hide();
         $('#startlist').hide();
     }
+}); 
+      
+    
+    $('#Projects').click(function() {
+    $('#projects2').toggle('fast');
+    $('#Tutorial').toggle('fast');
+       $('#Start').toggle('fast');
+       $('#Jsbin').toggle('fast');
+
 });
+
+$('#Tutorial').click(function() {
+    $('#Projects').toggle('fast');
+       $('#typelist').toggle('fast');
+       $('#Start').toggle('fast');
+       $('#Jsbin').toggle('fast');
+
+});
+
+$('#Jsbin').click(function() {
+     
+  window.open('https://jsbin.com/lizuzuz/edit?js,output')
+
+});
+
 //TYPE ANIMATION
 $('#Type').click(function() {
     $('#typelist').toggle('fast');

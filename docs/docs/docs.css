@@ -192,6 +192,14 @@ pre[class*="language-"] {
     flex-direction: row;
 }
 
+/*#projects2 {*/
+/*    display: flex;*/
+/*    flex-flow: wrap;*/
+/*    flex-wrap: wrap;*/
+/*    align-content: center;*/
+/*    flex-direction: row;*/
+/*}*/
+
 .all {
     flex-basis: auto;
     margin: 10px;
@@ -259,6 +267,11 @@ button:hover {
 
 #Start {background-color: #E04D4D}
 
+#Tutorial {background-color: #79F485}
+
+#Projects {background-color: #57D8BA}
+
+#Jsbin {background-color: #9791E5}
 #motionlist, #startlist, #eventlist,#lookslist,#controllist,#soundlist,#sensinglist,#penlist,#operationslist, #datalist, #blockslist, #spritelist, #typelist{
     font-family: "Open Sans";
     font-size: 100%;
@@ -291,3 +304,8 @@ pre {min-width:90%;
 }
 
 /*#all {width:100%;}*/
+
+#Tutorial, #Projects, #Jsbin {height:10%;
+    width:80%;
+    border-radius:10px;
+}
