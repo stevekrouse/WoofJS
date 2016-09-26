@@ -267,11 +267,11 @@ button:hover {
 
 #Start {background-color: #E04D4D}
 
-#Tutorial {background-color: #79F485}
+#Tutorial {background-color: #5AA7DC}
 
-#Projects {background-color: #57D8BA}
+#Projects {background-color: #4A7CCE}
 
-#Jsbin {background-color: #9791E5}
+#Jsbin {background-color: #7775D3}
 #motionlist, #startlist, #eventlist,#lookslist,#controllist,#soundlist,#sensinglist,#penlist,#operationslist, #datalist, #blockslist, #spritelist, #typelist{
     font-family: "Open Sans";
     font-size: 100%;
@@ -308,4 +308,34 @@ pre {min-width:90%;
 #Tutorial, #Projects, #Jsbin {height:10%;
     width:80%;
     border-radius:10px;
+}
+
+/* Woof Tutorial CSS */
+
+h4 {
+      text-align: center;
+}
+#instructions {
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+}
+.step {
+  margin-left: 10px;
+  margin-right: 15px;
+  margin-top: 25px;
+  margin-bottom: 25px;
+  padding: 15px;
+  background-color: white;
+  border:1px solid gray;
+  border-radius:5px;
+  
+}
+
+#typelist pre { background-color: #F3F3F3;
+padding:10px;
+
 }
