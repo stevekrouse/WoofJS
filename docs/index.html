@@ -97,7 +97,8 @@
 <body style="height:100%">
     <div id="navbar" style="">
         <span id="title"><a target="blank" href="https://github.com/stevekrouse/WoofJS">WoofJS</a> <span id="powered">powered by</span> <a target="blank" href="http://www.thecodingspace.com/"><img style="width:30px; height 30px;" src="./logo-1.png"></img></a></span>
-        <button id="save" class="btn btn-medium" onclick="save()">Save</button>
+        <button id="save" class="btn btn-medium btn-success" onclick="save()">Saved</button>
+        <a target="_blank" id="popoutlink"><img id="popout" style="margin: 10px" src="./popout.png"></a>
     </div>
 
     <div id="container" >
@@ -115,8 +116,7 @@
     
   <script>
     var changed = false;
-    $('#save').addClass("btn-success")
-    
+
     var config = {
       apiKey: "AIzaSyBYHv7dCiD0bWiHRlcp4VIZCIqzoMnB4yY",
       authDomain: "woofjs-d1b27.firebaseapp.com",
@@ -131,24 +131,30 @@
     }
 
     var makeClean = function() {
+      $('#popout').show()
+      $('#save').html("Saved")
       $('#save').addClass("btn-success")
       $('#save').removeClass("btn-warning")
+      $('#popoutlink').attr("href", "./full/#" + getID())
       changed = false
     }
     
     var makeDirty = function() {
+      $('#popout').hide()
+      $('#save').html("Save")
       changed = true;
       $('#save').addClass("btn-warning")
       $('#save').removeClass("btn-success")
     }
     
-    firebase.database().ref('/code/' + getID()).once('value').then(function(snapshot) {
-      if (snapshot.val()){
-        editor.setValue(snapshot.val())
-        makeClean()
-      }
-    });
-    
+    if (getID() != ''){
+      firebase.database().ref('/code/' + getID()).once('value').then(function(snapshot) {
+        if (snapshot.val()){
+          editor.setValue(snapshot.val())
+          makeClean()
+        }
+      });
+    }
     var save = function(){
       var name = window.prompt("Choose a name for your project", "Don't forget me!");
       firebase.database().ref('/code/' + name).once('value').then(function(snapshot) {
@@ -156,8 +162,8 @@
            alert("That project name has already been taken. Try another one.")
         } else {
           firebase.database().ref().child("/code/" + name).set(editor.getValue());
-          makeClean()
           window.location.hash = name
+          makeClean()
           return true
         }
       });
