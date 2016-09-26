@@ -16,6 +16,7 @@
   
   firebase.database().ref('/code/' + getID()).once('value').then(function(snapshot) {
     if (snapshot.val()){
+      document.title = getID()
       eval(snapshot.val())
     } else {
       alert("There's no project called '" + getID() + "'. Sorry :(")
