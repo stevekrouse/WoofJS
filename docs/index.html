@@ -23,6 +23,7 @@
   <link rel="stylesheet" href="./codemirror/lint.css">
   <script src="./codemirror/jshint.min.js"></script>
   <script src="./codemirror/lint.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/3.4.0/firebase.js"></script>
 
   <style>
     body {
@@ -96,6 +97,7 @@
 <body style="height:100%">
     <div id="navbar" style="">
         <span id="title"><a target="blank" href="https://github.com/stevekrouse/WoofJS">WoofJS</a> <span id="powered">powered by</span> <a target="blank" href="http://www.thecodingspace.com/"><img style="width:30px; height 30px;" src="./logo-1.png"></img></a></span>
+        <button id="save" class="btn btn-medium" onclick="save()">Save</button>
     </div>
 
     <div id="container" >
@@ -112,7 +114,59 @@
     </div>
     
   <script>
-	var changed = false;
+    var changed = false;
+    $('#save').addClass("btn-success")
+    
+    var config = {
+      apiKey: "AIzaSyBYHv7dCiD0bWiHRlcp4VIZCIqzoMnB4yY",
+      authDomain: "woofjs-d1b27.firebaseapp.com",
+      databaseURL: "https://woofjs-d1b27.firebaseio.com",
+      storageBucket: "woofjs-d1b27.appspot.com",
+      messagingSenderId: "397293370524"
+    };
+    firebase.initializeApp(config);
+    
+    var getID = function() {
+      return window.location.hash.substring(1, window.location.hash.length);
+    }
+    
+    var getCode = function(id) {
+      return database.get("code", {})[id];
+    }
+    
+    var makeClean = function() {
+      $('#save').addClass("btn-success")
+      $('#save').removeClass("btn-warning")
+      changed = false
+    }
+    
+    var makeDirty = function() {
+      changed = true;
+      $('#save').addClass("btn-warning")
+      $('#save').removeClass("btn-success")
+    }
+    
+    firebase.database().ref('/code/' + getID()).once('value').then(function(snapshot) {
+      if (snapshot.val()){
+        editor.setValue(snapshot.val())
+        makeClean()
+      }
+    });
+    
+    var save = function(){
+      var name = window.prompt("Choose a name for your project", "Don't forget me!");
+      firebase.database().ref('/code/' + name).once('value').then(function(snapshot) {
+        if (snapshot.val()){
+           alert("That project name has already been taken. Try another one.")
+        } else {
+          firebase.database().ref().child("/code/" + name).set(editor.getValue());
+          makeClean()
+          window.location.hash = name
+          return true
+        }
+      });
+    };
+  
     var editor = CodeMirror(document.getElementById('code'), {
         mode:  "javascript",
         value: "setBackdropURL('http://i.imgur.com/q6Bqraw.jpg')\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n",
@@ -134,13 +188,20 @@
         },
     });
     editor.on("change", function(){
-      changed = true;
+      makeDirty()
       debouncedRunCode()
     });
     runCode();
     
+    window.onbeforeunload = function(e) {		
+       if (changed) {		
+         var dialogText = 'Make sure to copy and paste your work somewhere safe.';		
+         e.returnValue = dialogText;		
+         return dialogText; 		
+       }		
+    };
+    
     function runCode() {
-      console.log('run')
         var iframe = document.getElementById('preview');
         
         iframe.src = "";
@@ -173,7 +234,7 @@
     	};
     };
     var debouncedRunCode = debounce(runCode, 1000, false)
-    
+
   </script>
   <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
