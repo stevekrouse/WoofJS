@@ -46,8 +46,7 @@
 after(..., "seconds", () =&gt; {...})
 </code></pre><br>
         However, after() is a poor substitute for Scratch's wait block and you
-        may find some programs very difficult to write without wait. Please
-        accept my apologies on behalf of the designers of JavaScript. If you
+        may find some programs very difficult to write without wait. <br>If you
         want to wait at regular intervals, use every():
         <pre><code class=
         "language-javascript"> every(..., "seconds", () =&gt; {
@@ -70,7 +69,9 @@ after(..., "seconds", () =&gt; {...})
 
 if (...) {
   ...
-}</code></pre><img src=
+}</code></pre><br>
+
+<img src=
 "https://camo.githubusercontent.com/a5d25f79126301f83c5a60bbbe8b3cadccfb3040/68747470733a2f2f692e696d6775722e636f6d2f52594f705361712e706e67"><br>
 
         <pre><code class="language-javascript">
@@ -97,7 +98,9 @@ repeatUntil(() =&gt; ..., () =&gt; {
         <pre><code class="language-javascript"> 
 repeatUntil(() =&gt; ..., () =&gt; {}, () =&gt; {
   ...
-})</code></pre><img src=
+})</code></pre><br>
+
+<img src=
 "https://camo.githubusercontent.com/2590c6a1ba48006d4d7f9d7266ef17552207bcf4/68747470733a2f2f692e696d6775722e636f6d2f4f586c704b394a2e706e67">
 when() is a short-hand for a forever-if statement.
         <pre><code class="language-javascript">
@@ -106,7 +109,9 @@ when(() =&gt; ..., () =&gt; {
 })</code></pre><br>
         <img src=
         "https://camo.githubusercontent.com/6cab1f5a4b9e33f28118b96e961df7d05669e766/68747470733a2f2f692e696d6775722e636f6d2f5357537864566d2e706e67">
-        <pre><code class="language-javascript"> freeze()</code></pre>Reverse
+        <pre><code class="language-javascript"> freeze()</code></pre><br>
+        
+        Reverse
         freeze or stop all: defrost()<br>
         <img src=
         "https://camo.githubusercontent.com/1e2c7890c61277558aa9543eafd890bf35677c40/68747470733a2f2f692e696d6775722e636f6d2f674e7a547053302e706e67">
@@ -132,14 +137,19 @@ forever(() =&gt; {
       clone.delete()
     }
   })
-})</code></pre>Delete an object:
-        <pre><code class="language-javascript">NAME.delete()</code></pre>Only
+})</code></pre><br>
+
+Delete an object:
+        <pre><code class="language-javascript">NAME.delete()</code></pre><br>
+        
+        
+        Only
         allow something to happen once every X miliseconds:
         <pre><code class="language-javascript">
 onMouseDown(throttle(() =&gt; score++, 1000)) // after a mousedown, you won't be able to trigger this event again for 1000 milliseconds </code></pre><br>
 
-        <b>Control Flow</b><br>
-        There are two types of commands in JavaScript:<br>
+        <h2><b>Control Flow</b><br></h2>
+        There are two types of commands in JavaScript:<br><br>
         1) <b>Synchronous:</b> "Do this immediately and move on when it's
         done." Synchronous example in real life: Open heart surgery. When a
         doctor begins open heart surgery on a patient, she stays in the
@@ -151,7 +161,7 @@ onMouseDown(throttle(() =&gt; score++, 1000)) // after a mousedown, you won't be
         2) <b>Asynchronous:</b> "Start this immediately, but don't wait till
         it's done. Move on to the next command immediately after you start this
         command." Asynchronous example in real life: Ordering food or drinks.
-        First, let's imagine what a synchronous restaurant would look like. A
+        <br>First, let's imagine what a synchronous restaurant would look like. A
         waiter would come to your table, take 1 person's order, rush it back to
         the kitchen, wait for the kitchen to finish with that person's order,
         and then bring it back to that person. Only once this first order is
@@ -163,14 +173,14 @@ onMouseDown(throttle(() =&gt; score++, 1000)) // after a mousedown, you won't be
         to completion. This allows the restaurant to do multiple things at
         once, which is ultimately faster because some tasks, like chopping
         vegetables while you wait for a pot of water to heat, make more sense
-        in parallel than sequence. Most commands in programming are
+        in parallel than sequence. <br> commands in programming are
         synchronous. For example, if-statements, setting or changing variables,
         and calling most Woof methods like rectangle.move(10) are all
         synchronous commands. forever is an example of an asynchronous command.
         Think about it: if forever told the computer to wait until it was done
         before moving on, the computer would never move on to the next line.
         repeat, repeatUntil, every, after are also asynchronous commands.
-        Asynchronous commands become quite confusing when you want something to
+        <br>Asynchronous commands become quite confusing when you want something to
         happen after an asynchronous command is finished. If you want something
         after the 10th time you repeat it, you can't just put it on the line
         below the close of the repeat block. Why? Because the line below repeat
@@ -182,7 +192,7 @@ onMouseDown(throttle(() =&gt; score++, 1000)) // after a mousedown, you won't be
         some perverse reason, you wanted the waiter to wait until after you
         received your food to refill your water? That is, how do we tell the
         computer to do something after an asynchronous command is finished?
-        This is different for each programming language, but for WoofJS, repeat
+        <br>This is different for each programming language, but for WoofJS, repeat
         and repeatUntil, optionally accept a function as an extra parameter to
         specify what should happen after the asynchonous command is finished.
         This is called a "callback" because that function is "called back" and
@@ -196,14 +206,16 @@ onMouseDown(throttle(() =&gt; score++, 1000)) // after a mousedown, you won't be
         arrived. The waiter and kitchen will spend so much time processing
         these thousands of orders, it'll likely cause the restaurant to crash!
         Instead, in Woof, you have to use recursion and tell your repeat code
-        to start-over only after the 4th repeat is finished finished. Change
+        to start-over only after the 4th repeat is finished finished. 
+        
+        <br>Change
         color to blue after moving to the right 10 times:
         <pre><code class="language-javascript">
 repeat(10, () =&gt; {
   NAME.x++
 }, () =&gt; {
   NAME.color = "blue"
-})</code></pre>Chaining repeats to slowly draw a square:
+})</code></pre><br>Chaining repeats to slowly draw a square:
         <pre><code class="language-javascript">
 repeat(100, () =&gt; {
   NAME.angle = RIGHT
@@ -232,7 +244,7 @@ var bruce = new Audio('http://mhoerner.dyndns.org/mp3/Bruce%20Springsteen/Born%2
 bruce.play()</code></pre><br>
     <img src=
     "https://camo.githubusercontent.com/55d829ef2b78a7fdd249aec787c74002da455bab/68747470733a2f2f692e696d6775722e636f6d2f58396b6b3679572e706e67">
-    <pre><code class="language-javascript">bruce.pause()</code></pre>To get the
+    <pre><code class="language-javascript">bruce.pause()</code></pre><br>To get the
     URL of an mp3, Google search:
     <pre><code class=
     "language-javascript">intitle:index.of?mp3 NAME-OF-SONG</code></pre><img src="https://camo.githubusercontent.com/e2839ff2cc575d4a57071e8b028f66ecdec041df/68747470733a2f2f692e696d6775722e636f6d2f7439584b4f706e2e706e67"></div><!--SPRITE LIST-->
@@ -475,16 +487,18 @@ TEXT_NAME.size = 20</code></pre><br>
         <pre><code class="language-javascript">setBackdropColor("blue")</code>
 </pre><br>
         Set the backdrop size:
-        <pre>fullScreen = false
+        <pre>><code class="language-javascript">fullScreen = false
 var width = 300
 var height = 400
-setBackdropSize(width, height)</pre>
+setBackdropSize(width, height)</code></pre>
     </div><!--SENSING LIST-->
     <div id="sensinglist" style="display:none">
         <img src=
         "https://camo.githubusercontent.com/3f92a02af3280e440ef68156c2f91d7038572576/68747470733a2f2f692e696d6775722e636f6d2f515470574f78562e706e67">
         <pre> <code class=
-        "language-javascript">NAME.mouseOver</code></pre><img src=
+        "language-javascript">NAME.mouseOver</code></pre><br>
+        
+        <img src=
         "https://camo.githubusercontent.com/751b1000a17de64ef5cf6195d727055c800c89d4/68747470733a2f2f692e696d6775722e636f6d2f794558496e4b692e706e67"><br>
 
         If you want to see if the center of your sprite is outside of a
@@ -493,16 +507,22 @@ setBackdropSize(width, height)</pre>
 NAME.x &gt; maxX
 NAME.x &lt; minX
 NAME.y &gt; maxY
-NAME.y &lt; minY </code></pre><img src=
+NAME.y &lt; minY </code></pre><br>
+
+<img src=
 "https://camo.githubusercontent.com/3120c71799ce1b38aa526787e7c88c7c7cdb0083/68747470733a2f2f692e696d6775722e636f6d2f733236773670632e706e67">
         <pre>  <code class=
         "language-javascript">NAME.touching(OTHER_NAME)</code></pre><br>
         <em>NOTE: touching detects the rectangular boundary of a sprite, so if
         you have an image with a large transparent border, you will need to
-        trim your image to make touching accurate.</em> <img src=
+        trim your image to make touching accurate.</em> <br>
+        
+        <img src=
         "https://camo.githubusercontent.com/f8efe1c56c5c96495b07e157d6b19a05496964c7/68747470733a2f2f692e696d6775722e636f6d2f634959335359792e706e67">
         <pre><code class=
-        "language-javascript">NAME.distanceTo(mouseX, mouseY)</code></pre><img src="https://camo.githubusercontent.com/9209e13ccc8767f489e6f84febb99a7fb8315c55/68747470733a2f2f692e696d6775722e636f6d2f7936735847544b2e706e67">
+        "language-javascript">NAME.distanceTo(mouseX, mouseY)</code></pre><br>
+        
+        <img src="https://camo.githubusercontent.com/9209e13ccc8767f489e6f84febb99a7fb8315c55/68747470733a2f2f692e696d6775722e636f6d2f7936735847544b2e706e67">
         <pre><code class=
         "language-javascript"> NAME.distanceTo(OTHER_NAME)</code></pre><br>
         <img src=
@@ -510,13 +530,21 @@ NAME.y &lt; minY </code></pre><img src=
         <pre> <code class=
         "language-javascript">keysDown.includes('SPACE')</code></pre><br>
         List of keys currently pressed:
-        <pre><code class="language-javascript"> keysDown</code></pre><img src=
+        <pre><code class="language-javascript"> keysDown</code></pre><br>
+        
+        <img src=
         "https://camo.githubusercontent.com/026db00d4fbb8d1780c2e0ee7c3bf067a70d8aa7/68747470733a2f2f692e696d6775722e636f6d2f4a634b4c6631722e706e67">
-        <pre><code class="language-javascript"> mouseX</code></pre><img src=
+        <pre><code class="language-javascript"> mouseX</code></pre><br>
+        
+        <img src=
         "https://camo.githubusercontent.com/04648d984c98f85c0f715956126129eb483c095d/68747470733a2f2f692e696d6775722e636f6d2f6a3843467155742e706e67">
-        <pre> <code class="language-javascript">mouseY</code></pre><img src=
+        <pre> <code class="language-javascript">mouseY</code></pre><br>
+        
+        <img src=
         "https://camo.githubusercontent.com/b3077f9e556eeac6920ba83946f5d63dfd6d27a6/68747470733a2f2f692e696d6775722e636f6d2f61664c6474384b2e706e67">
-        <pre><code class="language-javascript"> NAME.x </code></pre><img src=
+        <pre><code class="language-javascript"> NAME.x </code></pre><br>
+        
+        <img src=
         "https://camo.githubusercontent.com/f31de9cb001c38cee4a7d978afe8829b1ed3beef/68747470733a2f2f692e696d6775722e636f6d2f42377644686a322e706e67">
         <pre> <code class="language-javascript">NAME.y </code></pre><br>
         Previous mouse X:
@@ -538,24 +566,38 @@ NAME.y &lt; minY </code></pre><img src=
         Width of the screen:
         <pre> <code class="language-javascript">width </code></pre><br>
         Height of the screen:
-        <pre><code class="language-javascript">height</code></pre><img src=
+        <pre><code class="language-javascript">height</code></pre><br>
+        
+        <img src=
         "https://camo.githubusercontent.com/e500cf62e775e2fd8b09246b5f5ce2e5ef6b1b51/68747470733a2f2f692e696d6775722e636f6d2f316b4f4852797a2e706e67">
         <pre><code class="language-javascript"> hour() </code></pre><br>
         Hour in military time:
         <pre> <code class=
-        "language-javascript">hourMilitary()</code></pre><img src=
+        "language-javascript">hourMilitary()</code></pre><br>
+        
+        <img src=
         "https://camo.githubusercontent.com/52d5b0b2e315e331db5eadf3686715f1dc0adab6/68747470733a2f2f692e696d6775722e636f6d2f37696e366966412e706e67">
-        <pre><code class="language-javascript"> minute() </code></pre><img src=
+        <pre><code class="language-javascript"> minute() </code></pre><br>
+        
+        <img src=
         "https://camo.githubusercontent.com/7cfe22f798bf0fd899a86c65bf2f7067c8f4feac/68747470733a2f2f692e696d6775722e636f6d2f685749394354722e706e67">
-        <pre> <code class="language-javascript">second()</code></pre><img src=
+        <pre> <code class="language-javascript">second()</code></pre><br>
+        
+        <img src=
         "https://camo.githubusercontent.com/5ddc15be2c9bfdede0415f95b655322fdc943aaf/68747470733a2f2f692e696d6775722e636f6d2f5768735166316d2e706e67">
         <pre> <code class=
-        "language-javascript">dayOfMonth() </code></pre><img src=
+        "language-javascript">dayOfMonth() </code></pre><br>
+        
+        <img src=
         "https://camo.githubusercontent.com/16d61650657f1c0ec0fb73795be67d2be3ec22f8/68747470733a2f2f692e696d6775722e636f6d2f674c35786b62652e706e67">
         <pre><code class=
-        "language-javascript"> dayOfWeek()</code></pre><img src=
+        "language-javascript"> dayOfWeek()</code></pre><br>
+        
+        <img src=
         "https://camo.githubusercontent.com/8ef10e2f065c5ded48e72d247d7815fc186ae65b/68747470733a2f2f692e696d6775722e636f6d2f7735634a3561742e706e67">
-        <pre><code class="language-javascript"> month()</code></pre><img src=
+        <pre><code class="language-javascript"> month()</code></pre><br>
+        
+        <img src=
         "https://camo.githubusercontent.com/f84f5c09b96443ca266ceec4310348e8bc0416bb/68747470733a2f2f692e696d6775722e636f6d2f697357785538432e706e67">
         <pre> <code class="language-javascript">year()</code></pre>
     </div><!--PEN LIST-->
@@ -563,11 +605,15 @@ NAME.y &lt; minY </code></pre><img src=
         <img src=
         "https://camo.githubusercontent.com/13be07d9c643d7fee400c796439cf151526d1b34/68747470733a2f2f692e696d6775722e636f6d2f6241636d366a482e706e67"><br>
 
-        <pre><code class="language-javascript">clearPen()</code></pre><img src=
+        <pre><code class="language-javascript">clearPen()</code></pre><br>
+        
+        <img src=
         "https://camo.githubusercontent.com/6e8942b28d04e8c9d72a806c15921d28ff7eacba/68747470733a2f2f692e696d6775722e636f6d2f5457656e5761702e706e67"><br>
 
         <pre><code class=
-        "language-javascript">NAME.penDown()</code></pre><img src=
+        "language-javascript">NAME.penDown()</code></pre><br>
+        
+        <img src=
         "https://camo.githubusercontent.com/676ef694c118a9cfed6f53dd547c07070655dd8f/68747470733a2f2f692e696d6775722e636f6d2f354837696a42772e706e67"><br>
 
         <pre><code class=
@@ -578,20 +624,30 @@ NAME.y &lt; minY </code></pre><img src=
 //or
 NAME.penColor = “#ff20ff”
 //or
- NAME.penColor = “rgb(10, 100, 20)”</code></pre><img src=
+ NAME.penColor = “rgb(10, 100, 20)”</code></pre><br>
+ 
+ <img src=
 "https://camo.githubusercontent.com/8302ffde2afa60545c659b9366f764a02b5e8b26/68747470733a2f2f692e696d6775722e636f6d2f4f7a59355a6a552e706e67">
         <pre><code class="language-javascript">NAME.penWidth = 4</code></pre>
     </div><!--OPERATIONS-->
     <div id="operationslist" style="display:none">
         <img src=
         "https://camo.githubusercontent.com/b75677901f9ccece190f4ca8dfb1185820ee3c19/68747470733a2f2f692e696d6775722e636f6d2f6e73446b436b742e706e67">
-        <pre><code class="language-javascript">... + ...</code></pre><img src=
+        <pre><code class="language-javascript">... + ...</code></pre><br>
+        
+        <img src=
         "https://camo.githubusercontent.com/ab943d5a55bbb7e4020a45e9584b477106899ae5/68747470733a2f2f692e696d6775722e636f6d2f585341415449502e706e67">
-        <pre><code class="language-javascript">... - </code>...</pre><img src=
+        <pre><code class="language-javascript">... - </code>...</pre><br>
+        
+        <img src=
         "https://camo.githubusercontent.com/c6008202759feef0a8f8620cf8d74fe2fd9bff1d/68747470733a2f2f692e696d6775722e636f6d2f756a6e477045362e706e67">
-        <pre><code class="language-javascript"> ... * ...</code></pre><img src=
+        <pre><code class="language-javascript"> ... * ...</code></pre><br>
+        
+        <img src=
         "https://camo.githubusercontent.com/df999eae7ad1d72d91ec62547a942549d26539c7/68747470733a2f2f692e696d6775722e636f6d2f423042476b434a2e706e67">
-        <pre><code class="language-javascript"> ... / ...</code></pre><img src=
+        <pre><code class="language-javascript"> ... / ...</code></pre><br>
+        
+        <img src=
         "https://camo.githubusercontent.com/4e1483560c7b606a2a73bfab39c537dbe4943bef/68747470733a2f2f692e696d6775722e636f6d2f664148754477792e706e67">
         <pre><code class=
         "language-javascript"> random(..., ...)</code></pre><br>
@@ -599,40 +655,62 @@ NAME.penColor = “#ff20ff”
         value on the screen between minY and maxY: randomY()<br>
         Random color:
         <pre><code class=
-        "language-javascript">randomColor()</code></pre><img src=
+        "language-javascript">randomColor()</code></pre><br>
+        
+        <img src=
         "https://camo.githubusercontent.com/1208ce19f9e0189ba56ddeb61151bbfafc02dabb/68747470733a2f2f692e696d6775722e636f6d2f3268716f4866682e706e67">
         <pre> <code class=
-        "language-javascript">... &lt; ...</code></pre><img src=
+        "language-javascript">... &lt; ...</code></pre><br>
+        
+        <img src=
         "https://camo.githubusercontent.com/bfecb39ed692884912b1cec3e6fec5f76e0f0bef/68747470733a2f2f692e696d6775722e636f6d2f715837646d77742e706e67">
         <pre><code class=
-        "language-javascript"> ... &gt; ...</code></pre><img src=
+        "language-javascript"> ... &gt; ...</code></pre><br>
+        
+        <img src=
         "https://camo.githubusercontent.com/0f1e1bfbf4fc12b032c9907fd8106bf61814ea99/68747470733a2f2f692e696d6775722e636f6d2f3766384652625a2e706e67">
         <pre><code class="language-javascript"> ... == ...</code></pre><br>
         Less Than or Equal To:
         <pre><code class="language-javascript"> ... </code>&lt;= ... </pre><br>
         Greater Than or Equal To: ... &gt;= ...<br>
         Not Equals:
-        <pre> <code class="language-javascript">... != ...</code></pre>Between
+        <pre> <code class="language-javascript">... != ...</code></pre><br>
+        
+        Between
         Two Numbers :
         <pre> <code class=
-        "language-javascript">NAME.x.between(minX, maxX)</code></pre><img src=
+        "language-javascript">NAME.x.between(minX, maxX)</code></pre><br>
+        
+        <img src=
         "https://camo.githubusercontent.com/12ac498b99480c38334c805af5692b26b34fad1a/68747470733a2f2f692e696d6775722e636f6d2f5559684d3574702e706e67">
         <pre> <code class=
-        "language-javascript"> ... && ... </code></pre><img src=
+        "language-javascript"> ... && ... </code></pre><br>
+        
+        <img src=
         "https://camo.githubusercontent.com/a7f0d5de01e65599dc502435bf323127ebabf683/68747470733a2f2f692e696d6775722e636f6d2f505433496c6e302e706e67">
         <pre> <code class=
-        "language-javascript">... || ... </code></pre><img src=
+        "language-javascript">... || ... </code></pre><br>
+        
+        <img src=
         "https://camo.githubusercontent.com/baf96692a9e3b735eaf46d5443506904efb89969/68747470733a2f2f692e696d6775722e636f6d2f66487253395a4b2e706e67">
-        <pre> <code class="language-javascript">!(...)</code></pre><img src=
+        <pre> <code class="language-javascript">!(...)</code></pre><br>
+        
+        <img src=
         "https://camo.githubusercontent.com/95b9b6253b417804f1b7c7fc2c6f97dfdc240a69/68747470733a2f2f692e696d6775722e636f6d2f5671674c32696f2e706e67">
         <pre>  <code class=
-        "language-javascript">"hello" + "world"</code></pre><img src=
+        "language-javascript">"hello" + "world"</code></pre><br>
+        
+        <img src=
         "https://camo.githubusercontent.com/2d56c951eb67dadc36e342311a55522510941614/68747470733a2f2f692e696d6775722e636f6d2f684952693678512e706e67">
         <pre> <code class=
-        "language-javascript"> "world".substring(0,1)</code></pre><img src=
+        "language-javascript"> "world".substring(0,1)</code></pre><br>
+        
+        <img src=
         "https://camo.githubusercontent.com/e02fe39b382374789ab069310dc48d214677f027/68747470733a2f2f692e696d6775722e636f6d2f717354526143782e706e67">
         <pre><code class=
-        "language-javascript"> "world".length</code> </pre><img src=
+        "language-javascript"> "world".length</code> </pre><br>
+        
+        <img src=
         "https://camo.githubusercontent.com/6f05053731f0676000a62f369747730d66289a8a/68747470733a2f2f692e696d6775722e636f6d2f4e466f59396c382e706e67">
         <pre><code class=
         "language-javascript"> ... % ...</code> </pre><img src="https://camo.githubusercontent.com/15ed1ca0501ab9f47b2e6b9c3786dfa9198ddb8f/68747470733a2f2f692e696d6775722e636f6d2f746b76796a52542e706e67">
@@ -642,16 +720,22 @@ NAME.penColor = “#ff20ff”
         <img src=
         "https://camo.githubusercontent.com/62cbfccc29bba3b8a79a07c3f7f3f67654a62cb7/68747470733a2f2f692e696d6775722e636f6d2f656963593537492e706e67">
         <pre> <code class=
-        "language-javascript">var sampleVariable</code></pre><img src=
+        "language-javascript">var sampleVariable</code></pre><br>
+        
+        <img src=
         "https://camo.githubusercontent.com/633c19a66bfb0957bfae9c640f783d73cc4f9e7f/68747470733a2f2f692e696d6775722e636f6d2f4859415458584c2e706e67">
         <pre> <code class=
         "language-javascript">sampleVariable = 0</code></pre><br>
         You can combine creating/naming a variable with setting it:
         <pre><code class=
-        "language-javascript">var sampleVariable = ...</code></pre><img src=
+        "language-javascript">var sampleVariable = ...</code></pre><br>
+        
+        <img src=
         "https://camo.githubusercontent.com/229227f8d003da0879d673a472a2af2d8f6d79bd/68747470733a2f2f692e696d6775722e636f6d2f704b4e46794d772e706e67">
         <pre><code class=
-        "language-javascript">sampleVariable += ...</code></pre><img src=
+        "language-javascript">sampleVariable += ...</code></pre><br>
+        
+        <img src=
         "https://camo.githubusercontent.com/8ec8b704f5b37c7fbeb4da244901104565315318/68747470733a2f2f692e696d6775722e636f6d2f4447323649634e2e706e67">
         <pre> <code class=
         "language-javascript">new Text({text: () =&gt; "sampleVariable: " + sampleVariable})</code></pre><br>
@@ -659,10 +743,14 @@ NAME.penColor = “#ff20ff”
         ("Showing a variable" works by giving a Text Sprite a function instead
         of a "string in quotes" as its text attribute. The Text Sprite
         constantly reevaluates the function which keeps the value on the screen
-        in sync with the value of the variable.) <img src=
+        in sync with the value of the variable.) <br>
+        
+        <img src=
         "https://camo.githubusercontent.com/b89b548cf86d5dc1048ffd3403f52a7049ec2522/68747470733a2f2f692e696d6775722e636f6d2f7366536d6f44542e706e67">
         <pre> <code class=
-        "language-javascript">var sampleArray = []</code></pre><img src=
+        "language-javascript">var sampleArray = []</code></pre><br>
+        
+        <img src=
         "https://camo.githubusercontent.com/ad949a7bce2b3e61323253102a17f23f71fe9b46/68747470733a2f2f692e696d6775722e636f6d2f304b306e5144332e706e67">
         <pre><code class=
         "language-javascript">sampleArray.push(...)</code></pre><br>
@@ -670,21 +758,29 @@ NAME.penColor = “#ff20ff”
         strings, but even Sprites, functions, and other arrays.) <img src=
         "https://camo.githubusercontent.com/f058f6644f9c9f010bbcc78f95385ecd1ebb38a5/68747470733a2f2f692e696d6775722e636f6d2f516754647978652e706e67">
         <pre> <code class=
-        "language-javascript">sampleArray.length</code></pre><img src=
+        "language-javascript">sampleArray.length</code></pre><br>
+        
+        <img src=
         "https://camo.githubusercontent.com/52144d3cff48861b372c529a5a71b741257aeef5/68747470733a2f2f692e696d6775722e636f6d2f6a587479364c542e706e67">
         <pre> <code class=
-        "language-javascript">sampleArray[1]</code></pre><img src=
+        "language-javascript">sampleArray[1]</code></pre><br>
+        
+        <img src=
         "https://camo.githubusercontent.com/a527e7a527bc6eb5a1533dd437acaebb3c41423e/68747470733a2f2f692e696d6775722e636f6d2f6a6170377166522e706e67">
         <pre><code class=
-        "language-javascript">sampleArray.remove(thing)</code></pre><img src=
+        "language-javascript">sampleArray.remove(thing)</code></pre><br>
+        
+        <img src=
         "https://camo.githubusercontent.com/c2d54a29e184e768a339463cc868aeb56ca285d5/68747470733a2f2f692e696d6775722e636f6d2f49625a4846706d2e706e67">
         <pre><code class=
-        "language-javascript">sampleArray.includes('...')</code></pre><img src=
+        "language-javascript">sampleArray.includes('...')</code></pre><br>
+        
+        <img src=
         "https://camo.githubusercontent.com/cdac3d80dd39a92fe83fd2c6a0e1445f425bbf01/68747470733a2f2f692e696d6775722e636f6d2f5949473973746c2e706e67">
         <pre><code class=
         "language-javascript">new Text({text: () =&gt; "listName: " + listName})</code></pre><br>
 
-        Do something for each thing in an array:<br>
+        Do something for each thing in an array:
         <pre><code class=
         "language-javascript">sampleArray.forEach(thing =&gt; {
   console.log(thing)
