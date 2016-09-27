@@ -33,25 +33,26 @@
         "More">More Blocks</button>
     </div><!--CONTROL LIST-->
     <div id="controllist" style="display:none">
-        <img src=
-        "https://camo.githubusercontent.com/6c4bf166474472549e77f83c14e5a058602d1592/68747470733a2f2f692e696d6775722e636f6d2f723677595838632e706e67"><br>
+        <img src= "https://camo.githubusercontent.com/6c4bf166474472549e77f83c14e5a058602d1592/68747470733a2f2f692e696d6775722e636f6d2f723677595838632e706e67"><br>
 
         There is no wait block in JavaScript. Instead, you can use after():
-        <pre><code class="language-javascript"> 
-after(..., "seconds", () =&gt; {...})
+        <pre><code class="language-javascript"> after(..., "seconds", () =&gt; {...})
 </code></pre><br>
         However, after() is a poor substitute for Scratch's wait block and you
         may find some programs very difficult to write without wait. <br>If you
-        want to wait at regular intervals, use every():
+        want to wait at regular intervals, use every():<br>
         <pre><code class=
         "language-javascript"> every(..., "seconds", () =&gt; {
   ...
-})</code></pre><img src=
+})</code></pre>
+<br><img src=
 "https://camo.githubusercontent.com/16d1e62606bd74942f656383dd09212d2e72e6c4/68747470733a2f2f692e696d6775722e636f6d2f6a77653133626d2e706e67"><br>
 
-        <pre><code class="language-javascript"> repeat(10, () =&gt; {
+       <pre><code class="language-javascript"> repeat(10, () =&gt; {
   ...
-})</code></pre><img src=
+})</code></pre>
+
+ <br><img src=
 "https://camo.githubusercontent.com/983f1de894d6053a72b7f343f0c53ca5bfedd9a6/68747470733a2f2f692e696d6775722e636f6d2f675a4f6a4c444d2e706e67"><br>
 
         <pre><code class="language-javascript"> forever (() =&gt; {
@@ -60,18 +61,14 @@ after(..., "seconds", () =&gt; {...})
         <img src=
         "https://camo.githubusercontent.com/a480fbea5d3f2cb8563350470e243d8b8eb5a46a/68747470733a2f2f692e696d6775722e636f6d2f7535724b4133362e706e67">
         <br>
-        <pre><code class="language-javascript"> 
-
-if (...) {
+        <pre><code class="language-javascript"> if (...) {
   ...
 }</code></pre><br>
 
 <img src=
 "https://camo.githubusercontent.com/a5d25f79126301f83c5a60bbbe8b3cadccfb3040/68747470733a2f2f692e696d6775722e636f6d2f52594f705361712e706e67"><br>
 
-        <pre><code class="language-javascript">
-
-if (...) {
+        <pre><code class="language-javascript">if (...) {
   ...
 } else {
   ...
@@ -79,8 +76,7 @@ if (...) {
         <img src=
         "https://camo.githubusercontent.com/d06a1bb0fec72d888c37b87d35eee05918bf8206/68747470733a2f2f692e696d6775722e636f6d2f615139694a4e772e706e67">
         <br>
-        <pre><code class="language-javascript">
-repeatUntil(() =&gt; ..., () =&gt; {
+        <pre><code class="language-javascript">repeatUntil(() =&gt; ..., () =&gt; {
   ...
 })</code>
 </pre><br>
@@ -90,16 +86,14 @@ repeatUntil(() =&gt; ..., () =&gt; {
         <img src=
         "https://camo.githubusercontent.com/d06a1bb0fec72d888c37b87d35eee05918bf8206/68747470733a2f2f692e696d6775722e636f6d2f615139694a4e772e706e67">
         <br>
-        <pre><code class="language-javascript"> 
-repeatUntil(() =&gt; ..., () =&gt; {}, () =&gt; {
+        <pre><code class="language-javascript"> repeatUntil(() =&gt; ..., () =&gt; {}, () =&gt; {
   ...
 })</code></pre><br>
 
 <img src=
 "https://camo.githubusercontent.com/2590c6a1ba48006d4d7f9d7266ef17552207bcf4/68747470733a2f2f692e696d6775722e636f6d2f4f586c704b394a2e706e67">
 when() is a short-hand for a forever-if statement.
-        <pre><code class="language-javascript">
-when(() =&gt; ..., () =&gt; {
+        <pre><code class="language-javascript">when(() =&gt; ..., () =&gt; {
   ...
 })</code></pre><br>
         <img src=
@@ -110,9 +104,7 @@ when(() =&gt; ..., () =&gt; {
         freeze or stop all: defrost()<br>
         <img src=
         "https://camo.githubusercontent.com/1e2c7890c61277558aa9543eafd890bf35677c40/68747470733a2f2f692e696d6775722e636f6d2f674e7a547053302e706e67">
-        <pre><code class="language-javascript">
-
-// create a list to store all of the clones
+        <pre><code class="language-javascript">// create a list to store all of the clones
 var clones = []
 every(4, "seconds", () =&gt; {
   // create a clone every 4 seconds
@@ -140,8 +132,7 @@ Delete an object:
         
         Only
         allow something to happen once every X miliseconds:
-        <pre><code class="language-javascript">
-onMouseDown(throttle(() =&gt; score++, 1000)) // after a mousedown, you won't be able to trigger this event again for 1000 milliseconds </code></pre><br>
+        <pre><code class="language-javascript">onMouseDown(throttle(() =&gt; score++, 1000)) // after a mousedown, you won't be able to trigger this event again for 1000 milliseconds </code></pre><br>
 
         <h2><b>Control Flow</b><br></h2>
         There are two types of commands in JavaScript:<br><br>
@@ -156,6 +147,7 @@ onMouseDown(throttle(() =&gt; score++, 1000)) // after a mousedown, you won't be
         2) <b>Asynchronous:</b> "Start this immediately, but don't wait till
         it's done. Move on to the next command immediately after you start this
         command." Asynchronous example in real life: Ordering food or drinks.
+        <br>
         <br>First, let's imagine what a synchronous restaurant would look like. A
         waiter would come to your table, take 1 person's order, rush it back to
         the kitchen, wait for the kitchen to finish with that person's order,
@@ -168,14 +160,14 @@ onMouseDown(throttle(() =&gt; score++, 1000)) // after a mousedown, you won't be
         to completion. This allows the restaurant to do multiple things at
         once, which is ultimately faster because some tasks, like chopping
         vegetables while you wait for a pot of water to heat, make more sense
-        in parallel than sequence. <br> commands in programming are
+        in parallel than sequence. <br><br>Commands in programming are
         synchronous. For example, if-statements, setting or changing variables,
         and calling most Woof methods like rectangle.move(10) are all
         synchronous commands. forever is an example of an asynchronous command.
         Think about it: if forever told the computer to wait until it was done
         before moving on, the computer would never move on to the next line.
         repeat, repeatUntil, every, after are also asynchronous commands.
-        <br>Asynchronous commands become quite confusing when you want something to
+        <br><br>Asynchronous commands become quite confusing when you want something to
         happen after an asynchronous command is finished. If you want something
         after the 10th time you repeat it, you can't just put it on the line
         below the close of the repeat block. Why? Because the line below repeat
@@ -203,16 +195,14 @@ onMouseDown(throttle(() =&gt; score++, 1000)) // after a mousedown, you won't be
         Instead, in Woof, you have to use recursion and tell your repeat code
         to start-over only after the 4th repeat is finished finished. 
         
-        <br>Change
+        <br><br>Change
         color to blue after moving to the right 10 times:
-        <pre><code class="language-javascript">
-repeat(10, () =&gt; {
+        <pre><code class="language-javascript">repeat(10, () =&gt; {
   NAME.x++
 }, () =&gt; {
   NAME.color = "blue"
 })</code></pre><br>Chaining repeats to slowly draw a square:
-        <pre><code class="language-javascript">
-repeat(100, () =&gt; {
+        <pre><code class="language-javascript">repeat(100, () =&gt; {
   NAME.angle = RIGHT
   NAME.move(1)
 }, () =&gt; {
@@ -234,8 +224,7 @@ repeat(100, () =&gt; {
     </div><!--SOUND LIST -->
     <div id="soundlist" style="display:none"><img src=
     "https://camo.githubusercontent.com/7382d0c9ce03703a275cdf1a53f0d8be7b7993e1/68747470733a2f2f692e696d6775722e636f6d2f4c387a6e6d4f622e706e67">
-    <pre><code class="language-javascript">
-var bruce = new Audio('http://mhoerner.dyndns.org/mp3/Bruce%20Springsteen/Born%20To%20Run/05%20Born%20To%20Run.mp3')
+    <pre><code class="language-javascript">var bruce = new Audio('http://mhoerner.dyndns.org/mp3/Bruce%20Springsteen/Born%20To%20Run/05%20Born%20To%20Run.mp3')
 bruce.play()</code></pre><br>
     <img src=
     "https://camo.githubusercontent.com/55d829ef2b78a7fdd249aec787c74002da455bab/68747470733a2f2f692e696d6775722e636f6d2f58396b6b3679572e706e67">
@@ -299,12 +288,12 @@ bruce.play()</code></pre><br>
         "language-javascript">NAME.turnLeft(15)</code></pre><br>
         <img src=
         "https://camo.githubusercontent.com/429666ecb11b3851c99c4a194cfd2164bf7d5906/68747470733a2f2f692e696d6775722e636f6d2f49534c464449442e706e67">
-        <pre> <code class="language-javascript">NAME.angle = LEFT</code></pre>
-        <pre><code class="language-javascript">
-NAME.angle = RIGHT
-<br>NAME.angle = UP
-<br>NAME.angle = DOWN
-      <br>NAME.angle = 47.7<br> </code></pre><img src=
+        <pre><code class="language-javascript">NAME.angle = LEFT  
+NAME.angle = RIGHT 
+NAME.angle = UP 
+NAME.angle = DOWN 
+NAME.angle = 47.7</code></pre>
+    <br><img src=
 "https://camo.githubusercontent.com/326ff8674f46cbf516618553dfb1b979268fc2e5/68747470733a2f2f692e696d6775722e636f6d2f58786c576835592e706e67">
         <pre><code class=
         "language-javascript">NAME.pointTowards(mouseX, mouseY)</code></pre><br>
@@ -364,8 +353,7 @@ NAME.angle = RIGHT
         <br>
         <img src=
         "https://camo.githubusercontent.com/a60b2dd83e40c2219e1e69ec782908519ae54c62/68747470733a2f2f692e696d6775722e636f6d2f315446686e4d522e706e67">
-        <pre><code class="language-javascript">
-ready(() =&gt; {
+        <pre><code class="language-javascript">ready(() =&gt; {
   ...
 })</code></pre><br>
         <br>
@@ -375,8 +363,7 @@ ready(() =&gt; {
         <img src=
         "https://camo.githubusercontent.com/fc78eefb942d4f5023032ac714b970b9b4116cc5/68747470733a2f2f692e696d6775722e636f6d2f5875506972634f2e706e67">
         <br>
-        <pre><code class="language-javascript">
-onMouseDown(() =&gt; {
+        <pre><code class="language-javascript">onMouseDown(() =&gt; {
   ...
 })</code></pre><br>
         On mouse up:<br>
@@ -498,8 +485,7 @@ setBackdropSize(width, height)</code></pre>
 
         If you want to see if the center of your sprite is outside of a
         boundary, here are some expressions that could be helpful:<br>
-        <pre><code class="language-javascript">
-NAME.x &gt; maxX
+        <pre><code class="language-javascript">NAME.x &gt; maxX
 NAME.x &lt; minX
 NAME.y &gt; maxY
 NAME.y &lt; minY </code></pre><br>
@@ -807,15 +793,12 @@ if(needle) {
   // do stuff here with input1 and input2
 } </code></pre><br>
         You can run a function by putting parentheses next to its name:
-        <pre><code class="language-javascript"> 
-namedFunction(1, 2)</code></pre><br>
+        <pre><code class="language-javascript"> namedFunction(1, 2)</code></pre><br>
         You need to do this even if the function takes no parameters:
-        <pre><code class="language-javascript"> 
-namedFunctionWithoutParameters()</code></pre><br>
+        <pre><code class="language-javascript"> namedFunctionWithoutParameters()</code></pre><br>
         But you can also create a function without a name, which is called an
         anonymous function:
-        <pre><code class="language-javascript"> 
-forever(() =&gt; {
+        <pre><code class="language-javascript"> forever(() =&gt; {
   sprite.x++
 })</code></pre>
     </div><!--GET STARTED LIST-->
