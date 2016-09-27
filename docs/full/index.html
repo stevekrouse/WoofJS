@@ -1,0 +1,25 @@
+<script src="https://www.gstatic.com/firebasejs/3.4.0/firebase.js"></script>
+<script type="text/javascript" src="https://cdn.rawgit.com/stevekrouse/WoofJS/40b6f7dda7d89daa9c1252ce2b655cdc0fdd0a4f/woof.js"></script>
+<script>
+  var config = {
+    apiKey: "AIzaSyBYHv7dCiD0bWiHRlcp4VIZCIqzoMnB4yY",
+    authDomain: "woofjs-d1b27.firebaseapp.com",
+    databaseURL: "https://woofjs-d1b27.firebaseio.com",
+    storageBucket: "woofjs-d1b27.appspot.com",
+    messagingSenderId: "397293370524"
+  };
+  
+  firebase.initializeApp(config);
+  var getID = function() {
+      return window.location.hash.substring(1, window.location.hash.length);
+  }
+  
+  firebase.database().ref('/code/' + getID()).once('value').then(function(snapshot) {
+    if (snapshot.val()){
+      document.title = getID()
+      eval(snapshot.val())
+    } else {
+      alert("There's no project called '" + getID() + "'. Sorry :(")
+    }
+  });
+</script>
