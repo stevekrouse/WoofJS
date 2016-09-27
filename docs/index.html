@@ -16,6 +16,7 @@
   <script type="text/javascript" src="./codemirror/search.js"></script>
   <script type="text/javascript" src="./codemirror/searchcursor.js"></script>
   <script type="text/javascript" src="./codemirror/show-hint.js"></script>
+  <script type="text/javascript" src="./codemirror/comment.js"></script>
   <script type="text/javascript" src="./codemirror/sublime.js"></script>
   <link rel="stylesheet" href="./codemirror/dialog.css">
   <link rel="stylesheet" href="./codemirror/show-hint.css">
@@ -157,16 +158,18 @@
     }
     var save = function(){
       var name = window.prompt("Choose a name for your project", "Don't forget me!");
-      firebase.database().ref('/code/' + name).once('value').then(function(snapshot) {
-        if (snapshot.val()){
-           alert("That project name has already been taken. Try another one.")
-        } else {
-          firebase.database().ref().child("/code/" + name).set(editor.getValue());
-          window.location.hash = name
-          makeClean()
-          return true
-        }
-      });
+      if (name){
+        firebase.database().ref('/code/' + name).once('value').then(function(snapshot) {
+          if (snapshot.val()){
+             alert("That project name has already been taken. Try another one.")
+          } else {
+            firebase.database().ref().child("/code/" + name).set(editor.getValue());
+            window.location.hash = name
+            makeClean()
+            return true
+          }
+        });
+      }
     };
   
     var editor = CodeMirror(document.getElementById('code'), {
@@ -189,6 +192,17 @@
           }
         },
     });
+    
+    onkeydown = function(e){
+      if(e.ctrlKey && e.key == '/'){
+        e.preventDefault();
+      }
+      if(e.ctrlKey && e.keyCode == 'S'.charCodeAt(0)){
+        e.preventDefault();
+        save();
+      }
+    }
+
     editor.on("change", function(){
       makeDirty()
       debouncedRunCode()
