@@ -147,7 +147,9 @@
       $('#save').removeClass("btn-success")
     }
     
+    var editorVal = "setBackdropURL('http://i.imgur.com/q6Bqraw.jpg')\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
     if (getID() != ''){
+      editorVal = ""
       firebase.database().ref('/code/' + getID()).once('value').then(function(snapshot) {
         if (snapshot.val()){
           editor.setValue(snapshot.val())
@@ -171,7 +173,7 @@
   
     var editor = CodeMirror(document.getElementById('code'), {
         mode:  "javascript",
-        value: "setBackdropURL('http://i.imgur.com/q6Bqraw.jpg')\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n",
+        value: editorVal,
         lineNumbers: true,
         theme: "eclipse",
         keyMap: "sublime",
