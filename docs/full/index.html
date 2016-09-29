@@ -11,6 +11,10 @@
   
   firebase.initializeApp(config);
   
+  window.onhashchange = function() {
+    window.location.reload()
+  }
+  
   var getID = function() {
       return window.location.hash.substring(1, window.location.hash.length);
   }

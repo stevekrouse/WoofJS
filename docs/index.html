@@ -196,6 +196,10 @@
       });
     }
     
+    window.onhashchange = function() {
+      window.location.reload()
+    }
+    
     // TODO secure firebase
     // !root.child('code').child($code).exists()
     
