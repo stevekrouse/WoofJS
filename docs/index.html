@@ -3,6 +3,17 @@
 <head>
   <meta charset="utf-8">
   <title>WoofJS</title>
+
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="/resources/demos/style.css">
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script>
+  $( function() {
+    $( "input" ).checkboxradio();
+  } );
+  </script>
+
   <script type="text/javascript" src="https://cdn.rawgit.com/showdownjs/showdown/984942e239c9bda522b9c5544aba72647983b3f1/dist/showdown.min.js"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.js"></script>
   <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -25,6 +36,10 @@
   <script src="./codemirror/jshint.min.js"></script>
   <script src="./codemirror/lint.js"></script>
   <script src="https://www.gstatic.com/firebasejs/3.4.0/firebase.js"></script>
+
+  
+    
+     
 
   <style>
     body {
@@ -54,7 +69,7 @@
       justify-content: center;
       background-color: #344D97; 
       color:white; 
-      height:40px; 
+      height:55px; 
       width:100%; 
     }
     #powered {
@@ -97,23 +112,97 @@
 </head>
 <body style="height:100%">
     <div id="navbar" style="">
-        <span id="title"><a target="blank" href="https://github.com/stevekrouse/WoofJS">WoofJS</a> <span id="powered">powered by</span> <a target="blank" href="http://www.thecodingspace.com/"><img style="width:30px; height 30px;" src="./logo-1.png"></img></a></span>
-        <button id="save" class="btn btn-medium btn-success" onclick="save()">Saved</button>
+     <fieldset>
+      
+    <container style="width:50px;  border-radius:2px; color: white; padding: 12px">
+         <input type="checkbox" id ="block-check" ><label for="block-check">Blocks</label>
+           <span class="ui"></span>
+         </container> 
+ <container style="width:50px;  border-radius:2px; color:white;  padding:12px">
+         <input type="checkbox" id ="code-check" ><label for="code-check">Code</label>
+         <span class="ui"></span>
+    </container>
+       <container style="width:50px; border-radius:2px; color:white; padding: 12px">  
+            <input type="checkbox" id ="output-check"><label for="output-check">Output</label>
+            <span class="ui"></span>
+       </container>
+           </fieldset>
+       <container class ="nav navbar-nav navbar-right"><button id="save" class="btn btn-medium btn-success" onclick="save()" class="nav navbar-nav navbar-right">Saved</button>
         <a target="_blank" id="popoutlink"><img id="popout" style="margin: 10px" src="./popout.png"></a>
+        </container> 
     </div>
+ 
+    <div id="container">
+    
+        <div id="docs"  style="height:100%; width: 33%;  padding-left: 5px;">
+         
+            <iframe src="./docs/index.html" id="scratch" style="height:100%; width:100%">  </iframe> 
+        </div>
+      
+        
+        <div id="code" style="height:100%; width: 40%; ">
+        </div>
+      
+        
+        <div id="output" style=" height:100%; width:36%; resize: none;">
+            <iframe scrolling="no" id="preview" style="height:100%; width:100%; "></iframe>
+        </div>
+    </div>
+     
+     
 
-    <div id="container" >
-        <div id="docs" style="height:100%; width: 33%; padding-left: 5px;">
-            <iframe src="./docs/index.html" id="scratch" style="height:100%; width:100%"></iframe>
-        </div>
-        
-        <div id="code" style="height:100%; width: 40%;">
-        </div>
-        
-        <div id="output" style=" height:100%; width:36%">
-            <iframe scrolling="no" id="preview" style="height:100%; width:100%"></iframe>
-        </div>
-    </div>
+  <script>
+
+  $("#block-check").prop("checked", true);
+  $("#code-check").prop("checked", true);
+  $("#output-check").prop("checked", true);
+
+  
+  $('#block-check').click(function(){
+    if ($(this).is(':not(:checked)')){
+      $('#docs').toggle('fast');
+    }
+    else {
+    $('#docs').toggle('fast');
+  }
+}); 
+
+$('#block-button').click(function() {
+  $('#docs').toggle('fast'); 
+});
+
+$('#code-check').click(function(){
+    if ($(this).is(':not(:checked)')) {
+      $('#code').toggle('fast');
+    }
+    else {
+    $('#code').toggle('fast');
+  }
+}); 
+
+$('#code-button').click(function() {
+  $('#code').toggle('fast');
+});
+
+
+$('#output-check').click(function(){
+    if ($(this).is(':not(:checked)')){
+      $('#output').toggle('fast');
+    }
+  else {
+    $('#output').toggle('fast');
+  }
+  
+}); 
+
+$('#output-button').click(function() {
+  $('#output').toggle('fast');
+});
+
+
+
+</script>
+
     
   <script>
     var changed = false;
