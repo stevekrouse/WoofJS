@@ -1,0 +1,67 @@
+<style>
+  a {
+    font-size: 20px;
+
+  }
+  body {
+    padding-left: 30%;
+    padding-right: 30%
+  }
+</style>
+<script src="https://www.gstatic.com/firebasejs/3.4.0/firebase.js"></script>
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<script>
+  var config = {
+    apiKey: "AIzaSyBYHv7dCiD0bWiHRlcp4VIZCIqzoMnB4yY",
+    authDomain: "woofjs-d1b27.firebaseapp.com",
+    databaseURL: "https://woofjs-d1b27.firebaseio.com",
+    storageBucket: "woofjs-d1b27.appspot.com",
+    messagingSenderId: "397293370524"
+  };
+  
+  firebase.initializeApp(config);
+  
+  var getUID = function() {
+      return window.location.hash.substring(1, window.location.hash.length);
+  }
+  
+  
+  // TODO later, query for code with versions
+  
+  firebase.database().ref('/user/' + getUID() + "/displayName").once('value', function(snap) {
+    if (snap.val()){
+      document.getElementById("title").innerHTML = snap.val() 
+      document.title = snap.val()
+    } else {
+      document.title = "Projects"
+    }
+  });
+  
+  function elem(key, item){
+    var ret = '<a href="#" class="list-group-item list-group-item-action">' + key
+    ret +=      '<span class="pull-right">'
+    ret +=        '<button style="margin-right: 5px" class="btn btn-info" onclick="window.open(\'../#' + key + '\', \'_blank\')">Code</button>'
+    ret +=        '<button class="btn btn-primary" onclick="window.open(\'../full/#' + key + '\', \'_blank\')">Full Screen</button>'
+    ret +=      '</span>'
+    ret +=    '</a>'
+    console.debug(ret)
+    return ret
+  }
+  
+  firebase.database().ref('/code/').orderByChild("--uid").equalTo(getUID()).once('value').then(function(snapshot) {
+    if (snapshot.val()){
+      for (var key in snapshot.val()){
+        var item = snapshot.val()[key]
+        document.getElementById("list").innerHTML += elem(key, item)
+      }
+    } else {
+      alert("There's no user by that ID. Sorry :(")
+    }
+  });
+</script>
+<title>Projects</title>
+<body>
+  <h1 id="title"></h1>
+  <ul id="list" class="list-group">
+  </ul>
+</body>

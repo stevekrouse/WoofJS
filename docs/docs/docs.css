@@ -211,7 +211,7 @@ button {
     border-radius: 5px;
     border: none;
     color: #fff;
-    font-family: "Open Sans";
+    font-family: "Open Sans", sans-serif;
     font-size: 100%;
     box-shadow: none;
     margin: .5%
