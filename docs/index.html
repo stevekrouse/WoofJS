@@ -3,9 +3,14 @@
 <head>
   <meta charset="utf-8">
   <title>WoofJS</title>
+  <script src="https://www.gstatic.com/firebasejs/3.4.0/firebase.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/ui/live/0.5/firebase-ui-auth.js"></script>
+  <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/live/0.5/firebase-ui-auth.css" />
+  
   <script type="text/javascript" src="https://cdn.rawgit.com/showdownjs/showdown/984942e239c9bda522b9c5544aba72647983b3f1/dist/showdown.min.js"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.js"></script>
   <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <link rel="stylesheet" href="./codemirror/codemirror.css">
   <script type="text/javascript" src="./codemirror/codemirror.js"></script>
   <script type="text/javascript" src="./codemirror/javascript.js"></script>
@@ -24,7 +29,6 @@
   <link rel="stylesheet" href="./codemirror/lint.css">
   <script src="./codemirror/jshint.min.js"></script>
   <script src="./codemirror/lint.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/3.4.0/firebase.js"></script>
 
   <style>
     body {
@@ -97,9 +101,18 @@
 </head>
 <body style="height:100%">
     <div id="navbar" style="">
-        <span id="title"><a target="blank" href="https://github.com/stevekrouse/WoofJS">WoofJS</a> <span id="powered">powered by</span> <a target="blank" href="http://www.thecodingspace.com/"><img style="width:30px; height 30px;" src="./logo-1.png"></img></a></span>
-        <button id="save" class="btn btn-medium btn-success" onclick="save()">Saved</button>
-        <a target="_blank" id="popoutlink"><img id="popout" style="margin: 10px" src="./popout.png"></a>
+      <button style="margin-left: 5px" class="btn btn-medium btn-info" type="button" id="login" onclick="window.open('./login.html', 'Sign In', 'width=500,height=500')">Login</button>
+      <div style="margin-left: 5px" id="logggedin" class="hide dropdown">
+        <button class="btn btn-medium btn-info dropdown-toggle" type="button" id="loggedin-name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"></button>
+        <ul class="dropdown-menu" aria-labelledby="loggedin-name">
+          <li><a target="_blank" id="login-projects">My Projects</a></li>
+          <li onclick="firebase.auth().signOut()"><a>Logout</a></li>
+        </ul>
+      </div>
+      <span id="title"><a target="blank" href="https://github.com/stevekrouse/WoofJS">WoofJS</a> <span id="powered">powered by</span> <a target="blank" href="http://www.thecodingspace.com/"><img style="width:30px; height 30px;" src="./logo-1.png"></img></a></span>
+      <a style="margin-right: 5px" class="btn btn-medium btn-default" href="./">New Project</a>
+      <button id="save" class="btn btn-medium btn-success" onclick="save()">Saved</button>
+      <a target="_blank" id="popoutlink"><img id="popout" style="margin: 10px" src="./popout.png"></a>
     </div>
 
     <div id="container" >
@@ -117,7 +130,8 @@
     
   <script>
     var changed = false;
-
+    var myCode = false
+    
     var config = {
       apiKey: "AIzaSyBYHv7dCiD0bWiHRlcp4VIZCIqzoMnB4yY",
       authDomain: "woofjs-d1b27.firebaseapp.com",
@@ -126,6 +140,28 @@
       messagingSenderId: "397293370524"
     };
     firebase.initializeApp(config);
+    
+    function handleLogin(userName, uid) {
+      $('#loggedin-name').html(userName + ' <span class="caret"></span>')
+      $('#login-projects').attr("href", "./user#" + uid )
+      $('#logggedin').removeClass("hide")
+      $('#login').addClass('hide')
+    }
+    
+    function handleLogout() {
+      $('#logggedin').addClass("hide")
+      $('#login').removeClass("hide")
+      myCode = false
+    }
+    
+    firebase.auth().onAuthStateChanged(function(user) {
+      if (user){
+        handleLogin(user.displayName, user.uid)
+        firebase.database().ref("/user/" + user.uid + "/displayName").set(user.displayName)
+      } else {
+        handleLogout()
+      }
+    });
     
     var getID = function() {
       return window.location.hash.substring(1, window.location.hash.length);
@@ -150,25 +186,52 @@
     
     var editorVal = "setBackdropURL('http://i.imgur.com/q6Bqraw.jpg')\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
     if (getID() != ''){
-      editorVal = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
-      firebase.database().ref('/code/' + getID()).once('value').then(function(snapshot) {
+      editorVal = "// Loading...\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
+      firebase.database().ref('/code/' + getID()).limitToLast(1).once('value').then(function(snapshot) {
         if (snapshot.val()){
-          editor.setValue(snapshot.val())
+          myCode = firebase.auth().currentUser && snapshot.val()[Object.keys(snapshot.val())[0]].uid == firebase.auth().currentUser.uid
+          editor.setValue(snapshot.val()[Object.keys(snapshot.val())[0]].code)
           makeClean()
         }
       });
     }
+    
+    // TODO secure firebase
+    // !root.child('code').child($code).exists()
+    
     var save = function(){
-      var name = window.prompt("Choose a name for your project", "Don't forget me!");
+      if (!changed) { return }
+      
+      var name
+      if (myCode) {
+        name = getID()
+      } else {
+        name = window.prompt("Choose a name for your project", "Don't forget me!");
+      }
       if (name){
-        firebase.database().ref('/code/' + name).once('value').then(function(snapshot) {
+        firebase.database().ref('/code/' + name).limitToLast(1).once('value').then(function(snapshot) {
           if (snapshot.val()){
-             alert("That project name has already been taken. Try another one.")
+            if (firebase.auth().currentUser && snapshot.val()[Object.keys(snapshot.val())[0]].uid == firebase.auth().currentUser.uid) {
+                firebase.database().ref().child("/code/" + name).push({
+                  code: editor.getValue(), 
+                  time: firebase.database.ServerValue.TIMESTAMP, 
+                  uid: firebase.auth().currentUser && firebase.auth().currentUser.uid
+                });
+                window.location.hash = name
+                makeClean()
+            } else {
+              alert("That project name has already been taken. Try another one.")
+            }
           } else {
-            firebase.database().ref().child("/code/" + name).set(editor.getValue());
+            firebase.database().ref().child("/code/" + name).push({
+              code: editor.getValue(), 
+              time: firebase.database.ServerValue.TIMESTAMP, 
+              uid: firebase.auth().currentUser && firebase.auth().currentUser.uid
+            });
+            firebase.database().ref().child("/code/" + name + "/--uid").set(firebase.auth().currentUser && firebase.auth().currentUser.uid)
             window.location.hash = name
+            myCode = firebase.auth().currentUser
             makeClean()
-            return true
           }
         });
       }

@@ -10,14 +10,15 @@
   };
   
   firebase.initializeApp(config);
+  
   var getID = function() {
       return window.location.hash.substring(1, window.location.hash.length);
   }
   
-  firebase.database().ref('/code/' + getID()).once('value').then(function(snapshot) {
+  firebase.database().ref('/code/' + getID()).limitToLast(1).once('value').then(function(snapshot) {
     if (snapshot.val()){
       document.title = getID()
-      eval(snapshot.val())
+      eval(snapshot.val()[Object.keys(snapshot.val())[0]].code)
     } else {
       alert("There's no project called '" + getID() + "'. Sorry :(")
     }
