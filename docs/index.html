@@ -147,18 +147,19 @@
  
     <div id="container" style="diplay:flex; ">
     
-        <div id="docs"  style="flex: 1.2 1 33% ;height:100%; padding-left: 5px;">
+        <div id="docs"  style="width:33%;height:100%; padding-left: 5px;">
+          <!--flex: 1.2 1 33% -->
          
             <iframe src="./docs/index.html" id="scratch" style="height:100%; width:100%">  </iframe> 
         </div>
       
         
-        <div id="code" style="flex: 1 1 33%; height:100%; ">
+        <div id="code" style="width:33% height:100%; ">
         </div>
       
         
-        <div id="output" style="flex: 1.4 1 33%; height:90%; resize: none;">
-            <iframe scrolling="no" id="preview" style="height:90%; width:100%; "></iframe>
+        <div id="output" style="width:40%; height:100%; resize: none;">
+            <iframe scrolling="no" id="preview" style="height:100%; width:100%; "></iframe>
         </div>
     </div>
   <script>
@@ -171,14 +172,17 @@
   $('#block-check').click(function(){
     if ($(this).is(':not(:checked)')){
       $('#docs').toggle('fast');
+     
     }
+    
     else {
     $('#docs').toggle('fast');
+    // $("docs").css("max-width", "33%");
   }
 }); 
 
 $('#block-button').click(function() {
-  $('#docs').toggle('fast'); 
+  $('#docs').slidePanel('slow'); 
 });
 
 $('#code-check').click(function(){
@@ -191,8 +195,9 @@ $('#code-check').click(function(){
 }); 
 
 $('#code-button').click(function() {
-  $('#code').toggle('fast');
+  $('#code').slidePanel('slow'); 
 });
+
 
 
 $('#output-check').click(function(){
@@ -202,7 +207,6 @@ $('#output-check').click(function(){
   else {
     $('#output').toggle('fast');
   }
-  
 }); 
 
 $('#output-button').click(function() {
