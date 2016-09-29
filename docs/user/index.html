@@ -4,8 +4,8 @@
 
   }
   body {
-    padding-left: 50px;
-    padding-right: 50px;
+    padding-left: 30%;
+    padding-right: 30%
   }
 </style>
 <script src="https://www.gstatic.com/firebasejs/3.4.0/firebase.js"></script>
@@ -32,23 +32,36 @@
     if (snap.val()){
       document.getElementById("title").innerHTML = snap.val() 
       document.title = snap.val()
+    } else {
+      document.title = "Projects"
     }
   });
+  
+  function elem(key, item){
+    var ret = '<a href="#" class="list-group-item list-group-item-action">' + key
+    ret +=      '<span class="pull-right">'
+    ret +=        '<button style="margin-right: 5px" class="btn btn-info" onclick="window.open(\'../#' + key + '\', \'_blank\')">Code</button>'
+    ret +=        '<button class="btn btn-primary" onclick="window.open(\'../full/#' + key + '\', \'_blank\')">Full Screen</button>'
+    ret +=      '</span>'
+    ret +=    '</a>'
+    console.debug(ret)
+    return ret
+  }
   
   firebase.database().ref('/code/').orderByChild("--uid").equalTo(getUID()).once('value').then(function(snapshot) {
     if (snapshot.val()){
       for (var key in snapshot.val()){
         var item = snapshot.val()[key]
-        document.getElementById("list").innerHTML += ("<a class=\"list-group-item list-group-item-action\" target=\"_blank\" href=\"../full/#" + key + "\">" + key +"</a>")
+        document.getElementById("list").innerHTML += elem(key, item)
       }
     } else {
-      alert("There's no project called '" + getID() + "'. Sorry :(")
+      alert("There's no user by that ID. Sorry :(")
     }
   });
 </script>
 <title>Projects</title>
 <body>
-  <h1 id="title">Projects</h1>
-  <ul width="100%" id="list" class="list-group">
+  <h1 id="title"></h1>
+  <ul id="list" class="list-group">
   </ul>
 </body>
