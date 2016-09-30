@@ -4,7 +4,6 @@
   <meta charset="utf-8">
   <title>WoofJS</title>
   <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-  <link rel="stylesheet" href="/resources/demos/style.css">
   <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
   <script src="https://www.gstatic.com/firebasejs/3.4.0/firebase.js"></script>
@@ -32,6 +31,7 @@
   <link rel="stylesheet" href="./codemirror/lint.css">
   <script src="./codemirror/jshint.min.js"></script>
   <script src="./codemirror/lint.js"></script>
+  <script data-presets="es2017" src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.14.0/babel.min.js"></script>
   <style>
     body {
       background-color: #fff;
@@ -76,13 +76,13 @@
       flex-direction:row;
       
       /* Firefox */
-      height: -moz-calc(99% - 40px);
+      height: -moz-calc(99% - 55px);
       /* WebKit */
-      height: -webkit-calc(99% - 40px);
+      height: -webkit-calc(99% - 55px);
       /* Opera */
-      height: -o-calc(99% - 40px);
+      height: -o-calc(99% - 55px);
       /* Standard */
-      height: calc(99% - 40px);
+      height: calc(99% - 55px);
     }
     #instructions {
       -webkit-user-select: none;
@@ -140,24 +140,19 @@
      </fieldset>
       <!--<span id="powered">powered by</span> <a target="blank" href="http://www.thecodingspace.com/"><img style="width:30px; height 30px;" src="./logo-1.png"></img></a>-->
       </span>
-      <a style="margin-right: 5px" class="btn btn-medium btn-default" href="./">New Project</a>
-      <button id="save" class="btn btn-medium btn-success" onclick="save()">Saved</button>
-      <a target="_blank" id="popoutlink"><img id="popout" style="margin: 10px" src="./popout.png"></a>
+      <a id="new-project" style="margin-right: 5px" class="btn btn-medium btn-default hide" href="./">New Project</a>
+      <button id="save" style="margin-right: 5px" class="btn btn-medium btn-default" onclick="save()">Save</button>
+      <a target="_blank" id="popoutlink"><img class="hide" id="popout" style="margin: 10px" src="./popout.png"></a>
     </div>
  
     <div id="container" style="diplay:flex; ">
-    
         <div id="docs"  style="height:100%; padding-left: 5px; flex: 1.2 1 33%">
-     
-         
             <iframe src="./docs/index.html" id="scratch" style="height:100%; width:100%; flex: 1.2 1 33%">  </iframe> 
         </div>
-      
         
         <div id="code" style="width:33%; height:100%; flex: 1.2 1 33%; word-wrap: break-word; ">
         </div>
       
-        
         <div id="output" style="height:100%; resize: none; flex: 1.2 1 33%;">
             <iframe scrolling="no" id="preview" style="height:100%; width:100%; "></iframe>
         </div>
@@ -222,6 +217,7 @@ $('#output-button').click(function() {
     var changed = false;
     var myCode = false
     
+    
     var config = {
       apiKey: "AIzaSyBYHv7dCiD0bWiHRlcp4VIZCIqzoMnB4yY",
       authDomain: "woofjs-d1b27.firebaseapp.com",
@@ -256,22 +252,26 @@ $('#output-button').click(function() {
     var getID = function() {
       return window.location.hash.substring(1, window.location.hash.length);
     }
+    var currentID = getID()
 
     var makeClean = function() {
-      $('#popout').show()
+      $('#popout').removeClass("hide")
       $('#save').html("Saved")
       $('#save').addClass("btn-success")
       $('#save').removeClass("btn-warning")
       $('#popoutlink').attr("href", "./full/#" + getID())
+      if (myCode) { $('#new-project').removeClass("hide") }
       changed = false
+      currentID = getID()
     }
     
     var makeDirty = function() {
-      $('#popout').hide()
+      $('#popout').addClass("hide")
       $('#save').html("Save")
       changed = true;
       $('#save').addClass("btn-warning")
       $('#save').removeClass("btn-success")
+      $('#new-project').addClass("hide")
     }
     
     var editorVal = "setBackdropURL('http://i.imgur.com/q6Bqraw.jpg')\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
@@ -287,7 +287,9 @@ $('#output-button').click(function() {
     }
     
     window.onhashchange = function() {
-      window.location.reload()
+      if (getID() != currentID) {
+        window.location.reload()
+      }
     }
     
     // TODO secure firebase
@@ -390,7 +392,7 @@ $('#output-button').click(function() {
                 var evt = document.createEvent('Event');  
                 evt.initEvent('load', false, false);  
                 iframe.contentWindow.dispatchEvent(evt);
-                iframe.contentWindow.eval(editor.getValue());
+                iframe.contentWindow.eval(Babel.transform(editor.getValue(), { presets: ['es2017'] }).code);
             }
         }, 10)
     }

@@ -1,4 +1,5 @@
 <script src="https://www.gstatic.com/firebasejs/3.4.0/firebase.js"></script>
+<script data-presets="es2017" src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.14.0/babel.min.js"></script>
 <script type="text/javascript" src="https://cdn.rawgit.com/stevekrouse/WoofJS/40b6f7dda7d89daa9c1252ce2b655cdc0fdd0a4f/woof.js"></script>
 <script>
   var config = {
@@ -22,7 +23,7 @@
   firebase.database().ref('/code/' + getID()).limitToLast(1).once('value').then(function(snapshot) {
     if (snapshot.val()){
       document.title = getID()
-      eval(snapshot.val()[Object.keys(snapshot.val())[0]].code)
+      eval(Babel.transform(snapshot.val()[Object.keys(snapshot.val())[0]].code, { presets: ['es2017'] }).code)
     } else {
       alert("There's no project called '" + getID() + "'. Sorry :(")
     }

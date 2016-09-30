@@ -50,6 +50,7 @@
   
   firebase.database().ref('/code/').orderByChild("--uid").equalTo(getUID()).once('value').then(function(snapshot) {
     if (snapshot.val()){
+      // TODO sort snapshots by most recent change and put timestamp on it for last touched
       for (var key in snapshot.val()){
         var item = snapshot.val()[key]
         document.getElementById("list").innerHTML += elem(key, item)
