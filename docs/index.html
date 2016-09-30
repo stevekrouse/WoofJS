@@ -147,18 +147,18 @@
  
     <div id="container" style="diplay:flex; ">
     
-        <div id="docs"  style="width:33%;height:100%; padding-left: 5px;">
-          <!--flex: 1.2 1 33% -->
+        <div id="docs"  style="height:100%; padding-left: 5px; flex: 1.2 1 33%">
+     
          
-            <iframe src="./docs/index.html" id="scratch" style="height:100%; width:100%">  </iframe> 
+            <iframe src="./docs/index.html" id="scratch" style="height:100%; width:100%; flex: 1.2 1 33%">  </iframe> 
         </div>
       
         
-        <div id="code" style="width:33% height:100%; ">
+        <div id="code" style="width:33%; height:100%; flex: 1.2 1 33%; word-wrap: break-word; ">
         </div>
       
         
-        <div id="output" style="width:40%; height:100%; resize: none;">
+        <div id="output" style="height:100%; resize: none; flex: 1.2 1 33%;">
             <iframe scrolling="no" id="preview" style="height:100%; width:100%; "></iframe>
         </div>
     </div>
@@ -274,7 +274,7 @@ $('#output-button').click(function() {
       $('#save').removeClass("btn-success")
     }
     
-    var editorVal = "setBackdropURL('http://i.imgur.com/q6Bqraw.jpg')\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
+    var editorVal = "setBackdropURL('http://i.imgur.com/q6Bqraw.jpg')\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
     if (getID() != ''){
       editorVal = "// Loading...\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
       firebase.database().ref('/code/' + getID()).limitToLast(1).once('value').then(function(snapshot) {
