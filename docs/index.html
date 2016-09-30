@@ -4,7 +4,6 @@
   <meta charset="utf-8">
   <title>WoofJS</title>
   <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-  <link rel="stylesheet" href="/resources/demos/style.css">
   <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
   <script src="https://www.gstatic.com/firebasejs/3.4.0/firebase.js"></script>
@@ -76,13 +75,13 @@
       flex-direction:row;
       
       /* Firefox */
-      height: -moz-calc(99% - 40px);
+      height: -moz-calc(99% - 55px);
       /* WebKit */
-      height: -webkit-calc(99% - 40px);
+      height: -webkit-calc(99% - 55px);
       /* Opera */
-      height: -o-calc(99% - 40px);
+      height: -o-calc(99% - 55px);
       /* Standard */
-      height: calc(99% - 40px);
+      height: calc(99% - 55px);
     }
     #instructions {
       -webkit-user-select: none;
@@ -146,18 +145,13 @@
     </div>
  
     <div id="container" style="diplay:flex; ">
-    
         <div id="docs"  style="height:100%; padding-left: 5px; flex: 1.2 1 33%">
-     
-         
             <iframe src="./docs/index.html" id="scratch" style="height:100%; width:100%; flex: 1.2 1 33%">  </iframe> 
         </div>
-      
         
         <div id="code" style="width:33%; height:100%; flex: 1.2 1 33%; word-wrap: break-word; ">
         </div>
       
-        
         <div id="output" style="height:100%; resize: none; flex: 1.2 1 33%;">
             <iframe scrolling="no" id="preview" style="height:100%; width:100%; "></iframe>
         </div>
