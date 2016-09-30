@@ -308,47 +308,47 @@ bruce.play()</code></pre><br>
 </code></pre><br>
         
     </div>
-          <div id="spritelist" style="display:none">
-        To create a new sprite, start by typing one of the following lines:
-        <pre><code class="language-javascript">var IMAGE_NAME = new Image({})
-var TEXT_NAME = new Text({})
-var CIRCLE_NAME = new Circle({})
-var RECTANGLE_NAME = new Rectangle({})
-var LINE_NAME = new Line({})</code></pre><br>
-        Pro tip: Be sure to change the SPRITE_NAME to a name of your
-        choice!<br>
-        <br>
-        <b>Sprite Options</b><br>
-        You may add any of the following options to any of your sprites:
-        <pre><code class=
-        "language-javascript">var IMAGE_NAME = new Image({x: 100, y: 20, angle: UP, rotationStyle: "ROTATE", showing: true})
-var TEXT_NAME = new Text({x: 50, y: -100, angle: DOWN, rotationStyle: "NO ROTATE", showing: true})
-var CIRCLE_NAME = new Circle({x: 0, y: 0, angle: 90, rotationStyle: "ROTATE LEFT RIGHT", showing: false})
-var RECTANGLE_NAME = new Rectangle({x: 62, y: 12, angle: 0, rotationStyle: "ROTATE", showing: false})
-var LINE_NAME = new Line({x: maxX, y: maxY, angle: 0, rotationStyle: "ROTATE", showing: false})</code></pre><br>
+<!--          <div id="spritelist" style="display:none">-->
+<!--        To create a new sprite, start by typing one of the following lines:-->
+<!--        <pre><code class="language-javascript">var IMAGE_NAME = new Image({})-->
+<!--var TEXT_NAME = new Text({})-->
+<!--var CIRCLE_NAME = new Circle({})-->
+<!--var RECTANGLE_NAME = new Rectangle({})-->
+<!--var LINE_NAME = new Line({})</code></pre><br>-->
+<!--        Pro tip: Be sure to change the SPRITE_NAME to a name of your-->
+<!--        choice!<br>-->
+<!--        <br>-->
+<!--        <b>Sprite Options</b><br>-->
+<!--        You may add any of the following options to any of your sprites:-->
+<!--        <pre><code class=-->
+<!--        "language-javascript">var IMAGE_NAME = new Image({x: 100, y: 20, angle: UP, rotationStyle: "ROTATE", showing: true})-->
+<!--var TEXT_NAME = new Text({x: 50, y: -100, angle: DOWN, rotationStyle: "NO ROTATE", showing: true})-->
+<!--var CIRCLE_NAME = new Circle({x: 0, y: 0, angle: 90, rotationStyle: "ROTATE LEFT RIGHT", showing: false})-->
+<!--var RECTANGLE_NAME = new Rectangle({x: 62, y: 12, angle: 0, rotationStyle: "ROTATE", showing: false})-->
+<!--var LINE_NAME = new Line({x: maxX, y: maxY, angle: 0, rotationStyle: "ROTATE", showing: false})</code></pre><br>-->
 
-        <b>Specific Options</b><br>
-        Each sprite has its own specific options. For example, Image has url,
-        Circle has radius, and text has fontFamily:
-        <pre><code class=
-        "language-javascript">var IMAGE_NAME = new Image({url: "https://i.imgur.com/SMJjVCL.png/?1",width: 30, height: 30})
-var TEXT_NAME = new Text({text: "Hello world!", size: 12, color: "rgb(100, 50, 240)", fontFamily: "arial", textAlign: "left"})
-var CIRCLE_NAME = new Circle({radius: 10, color: "#ffffff"})
-var RECTANGLE_NAME = new Rectangle({width: 20, height: 55, color: "pink"})
-var LINE_NAME = new Line({x: -100, y: 100, x1: 10, y1: 20, color: "pink", lineWidth: 10})</code></pre><b><br>
+<!--        <b>Specific Options</b><br>-->
+<!--        Each sprite has its own specific options. For example, Image has url,-->
+<!--        Circle has radius, and text has fontFamily:-->
+<!--        <pre><code class=-->
+<!--        "language-javascript">var IMAGE_NAME = new Image({url: "https://i.imgur.com/SMJjVCL.png/?1",width: 30, height: 30})-->
+<!--var TEXT_NAME = new Text({text: "Hello world!", size: 12, color: "rgb(100, 50, 240)", fontFamily: "arial", textAlign: "left"})-->
+<!--var CIRCLE_NAME = new Circle({radius: 10, color: "#ffffff"})-->
+<!--var RECTANGLE_NAME = new Rectangle({width: 20, height: 55, color: "pink"})-->
+<!--var LINE_NAME = new Line({x: -100, y: 100, x1: 10, y1: 20, color: "pink", lineWidth: 10})</code></pre><b><br>-->
 
-        Global Mode</b><br>
-        When you include the Woof script in your code, it defaults to creating
-        a full-screen project and polluting your global namespace with Woof's
-        methods. We find not having to type "Woof." over and over again makes a
-        huge difference for beginner programmers, especially those new to
-        typing.<br>
-        However, if you'd like to turn off this mode, simply add global="false"
-        in your script tag and create your project manually:
-        <pre><code class=
-        "language-javascript">var project = new Woof({global: false, width: 300, height: 400})
-var IMAGE_NAME = new Woof.Image({project: project, url: "https://i.imgur.com/SMJjVCL.png?1"})</code></pre>
-    </div>
+<!--        Global Mode</b><br>-->
+<!--        When you include the Woof script in your code, it defaults to creating-->
+<!--        a full-screen project and polluting your global namespace with Woof's-->
+<!--        methods. We find not having to type "Woof." over and over again makes a-->
+<!--        huge difference for beginner programmers, especially those new to-->
+<!--        typing.<br>-->
+<!--        However, if you'd like to turn off this mode, simply add global="false"-->
+<!--        in your script tag and create your project manually:-->
+<!--        <pre><code class=-->
+<!--        "language-javascript">var project = new Woof({global: false, width: 300, height: 400})-->
+<!--var IMAGE_NAME = new Woof.Image({project: project, url: "https://i.imgur.com/SMJjVCL.png?1"})</code></pre>-->
+<!--    </div>-->
     <!--MOTION LIST-->
     <div id="motionlist" style="display:none">
         <img src=
