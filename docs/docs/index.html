@@ -887,7 +887,12 @@ NAME.penColor = "rgb(10, 100, 20)"</code></pre><br>
         <img src=
         "https://camo.githubusercontent.com/8ec8b704f5b37c7fbeb4da244901104565315318/68747470733a2f2f692e696d6775722e636f6d2f4447323649634e2e706e67">
         <pre><code class=
-        "language-javascript">new Text({text: () =&gt; "VARIABLE_NAME: " + VARIABLE_NAME})</code></pre><br>
+        "language-javascript">new Text({
+  text: () =&gt; "VARIABLE_NAME: " + VARIABLE_NAME,
+  x: 0,
+  y: 0,
+  size: 30
+})</code></pre><br>
 
         ("Showing a variable" works by giving a Text Sprite a function instead
         of a "string in quotes" as its text attribute. The Text Sprite
