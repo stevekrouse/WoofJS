@@ -237,77 +237,140 @@ bruce.play()</code></pre><br>
     <div></div>
 <button id="Image" style="display:none">Image</button>
     <div id="imagelist" style="display:none">
-       
+               Example: <pre><code class=
+        "language-javascript">var IMAGE_NAME = new Image({url: "https://i.imgur.com/SMJjVCL.png/?1" , width: 30, height: 30, x: 100, y: 20})</code></pre>  
+
         <h3>Create a New Image</h3>
         <pre><code class=
         "language-javascript">var IMAGE_NAME = new Image({})</code></pre><br>
         <h3><b>Set Image URL</b></h3>
         <pre><code class=
-        "language-javascript">var IMAGE_NAME = new Image({url: "https://i.imgur.com/SMJjVCL.png/?1", width: 30, height: 30})  </code></pre>
+        "language-javascript">url: "https://i.imgur.com/SMJjVCL.png/?1" </code></pre>
         <a target ="_blank" href= "http://postimage.org"> <button id="postimage" >Upload my Own Image</button> </a><br><br>
-   
+           <h3>Set Width and Height</h3>
+        <pre><code class=
+        "language-javascript">width: 30, height: 30</code></pre><br>
+        
      <h3>Set Location</h3>
         <pre><code class=
-        "language-javascript">var IMAGE_NAME = new Image({x: 100, y: 20, angle: UP, rotationStyle: "ROTATE", showing: true})</code></pre><br>
+        "language-javascript">x: 100, y: 20</code></pre><br>
     </div>
        <button id="Text" style="display:none">Text</button>
     <div id="textlist" style="display:none">
+        Example:<pre><code class=
+        "language-javascript">var TEXT_NAME = new Text({text: "Hello world!", size: 12, color: "rgb(100, 50, 240)", fontFamily: "arial", textAlign: "left"}) </code></pre><br>
+        
         <h3>Create New Text</h3>
         <pre><code class=
         "language-javascript">var TEXT_NAME = new Text({})</code></pre><br>
-        <h3>Set Location</h3>
+        <h3>Set Content</h3>
         <pre><code class=
-        "language-javascript">var TEXT_NAME = new Text({x: 50, y: -100, angle: DOWN, rotationStyle: "NO ROTATE", showing: true})</code></pre><br>
-        <h3><b>Set Text Content, Font, Alignment, and Color</b></h3>
+        "language-javascript">text: "Hello world!"</code></pre><br>
+        
+         <h3>Set Location</h3>
         <pre><code class=
-        "language-javascript">var TEXT_NAME = new Text({text: "Hello world!", size: 12, color: "rgb(100, 50, 240)", fontFamily: "arial", textAlign: "left"}) </code></pre><br>
+        "language-javascript">x: 50, y: -100</code></pre><br>
+        
+        <h3>Set Color</h3>
+        <pre><code class=
+        "language-javascript">color: "rgb(100, 50, 240)"</code></pre><br>
+        
+        <h3>Set Font</h3>
+        <pre><code class=
+        "language-javascript">fontFamily: "arial"</code></pre><br>
+        
+          <h3>Set Font Size</h3>
+        <pre><code class=
+        "language-javascript">size: 12</code></pre><br>
+        
+        <h3>Set Text Alignment</h3>
+        <pre><code class=
+        "language-javascript">textAlign: "center"</code></pre><br>
+        
+       
     </div>
         <button id="Circle" style="display:none">Circle</button>
          <div id="circlelist" style="display:none">
+             
+             Example:
+               <pre><code class=
+        "language-javascript">var CIRCLE_NAME = new Circle({radius: 10, color: "#ffffff", x:0, y:0})
+</code></pre><br>
             
         <h3>Create a Circle</h3>
         <pre><code class=
         "language-javascript">var CIRCLE_NAME = new Circle({})</code></pre><br>
+        
         <h3><b>Set Location</b></h3>
         <pre><code class=
-        "language-javascript">var CIRCLE_NAME = new Circle({x: 0, y: 0, angle: 90, rotationStyle: "ROTATE LEFT RIGHT"})
+        "language-javascript">x: 0, y: 0
 </code></pre><br>
 
- <h3><b>Set Color and Size</b></h3>
+
+        <h3><b>Set Size</b></h3>
         <pre><code class=
-        "language-javascript">var CIRCLE_NAME = new Circle({radius: 10, color: "#ffffff"})
+        "language-javascript">radius: 10
+</code></pre><br>
+
+        <h3><b>Set Color</b></h3>
+        <pre><code class=
+        "language-javascript">color: "#ffffff"
 </code></pre><br>
 
       
     </div>
         <button id="Rectangle" style="display:none">Rectangle</button>
         <div id="rectanglelist" style="display:none"> 
+        Example: 
+                <pre><code class=
+        "language-javascript">var RECTANGLE_NAME = new Rectangle({width: 20, height: 55, color: "pink"})
+</code></pre><br>
         <h3>Create a Rectangle</h3>
         <pre><code class=
         "language-javascript">var RECTANGLE_NAME = new Rectangle({})
 </code></pre><br>
         <h3>Set Location</h3>
         <pre><code class=
-        "language-javascript">var RECTANGLE_NAME = new Rectangle({x: 62, y: 12, angle: 0, rotationStyle: "ROTATE"})</code></pre><br>
-        <h3><b>Set Color and Size</b></h3> 
+        "language-javascript">x: 62, y: 12</code></pre><br>
+        
+         <h3>Set Width and Height</h3>
         <pre><code class=
-        "language-javascript">var RECTANGLE_NAME = new Rectangle({width: 20, height: 55, color: "pink"})
-</code></pre><br>
+        "language-javascript">width: 20, height: 55</code></pre><br>
+        
+        <h3>Set Color</h3>
+        <pre><code class=
+        "language-javascript">color: "pink"</code></pre><br>
+       
         
     </div>
         <button id="Line" style="display:none">Line</button> 
          <div id="linelist" style="display:none">
+             
+             Example: 
+              <pre><code class=
+        "language-javascript">var LINE_NAME = new Line({color: "pink", lineWidth: 10, x: -100, y: 100, x1: 10, y1: 20, })
+</code></pre><br>
         <h3>Create a line</h3>
         <pre><code class=
         "language-javascript">var LINE_NAME = new Line({})
 </code></pre><br>
-        <h3>Set Width and Length</h3>
+
+        <h3>Set Location</h3>
         <pre><code class=
-        "language-javascript">var LINE_NAME = new Line({ x: maxX, y: maxY, angle: 0, rotationStyle: "ROTATE"})</code></pre><br>
-        <h3><b>Set color, width, and angle</b></h3>
+        "language-javascript">x: maxX, y: maxY</code></pre><br>
+        
+        <h3>Set Color</h3>
         <pre><code class=
-        "language-javascript">var LINE_NAME = new Line({color: "pink", lineWidth: 10, x: -100, y: 100, x1: 10, y1: 20, })
-</code></pre><br>
+        "language-javascript">color: "pink"</code></pre><br>
+        
+        <h3>Set Line Width</h3>
+        <pre><code class=
+        "language-javascript">lineWidth: 10</code></pre><br>
+        
+         <h3>Set Line Direction</h3>
+        <pre><code class=
+        "language-javascript">x1: 10, y1: 20</code></pre><br>
+    
         
     </div>
     </div>
