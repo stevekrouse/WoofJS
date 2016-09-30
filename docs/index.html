@@ -118,6 +118,7 @@
       <div style="margin-left: 5px" id="logggedin" class="hide dropdown">
         <button class="btn btn-medium btn-info dropdown-toggle" type="button" id="loggedin-name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"></button>
         <ul class="dropdown-menu" aria-labelledby="loggedin-name">
+          <li><a href="./">New Project</a></li>
           <li><a target="_blank" id="login-projects">My Projects</a></li>
           <li onclick="firebase.auth().signOut()"><a>Logout</a></li>
         </ul>
@@ -140,7 +141,6 @@
      </fieldset>
       <!--<span id="powered">powered by</span> <a target="blank" href="http://www.thecodingspace.com/"><img style="width:30px; height 30px;" src="./logo-1.png"></img></a>-->
       </span>
-      <a id="new-project" style="margin-right: 5px" class="btn btn-medium btn-default hide" href="./">New Project</a>
       <button id="save" style="margin-right: 5px" class="btn btn-medium btn-default" onclick="save()">Save</button>
       <a target="_blank" id="popoutlink"><img class="hide" id="popout" style="margin: 10px" src="./popout.png"></a>
     </div>
@@ -265,7 +265,6 @@ $('#output-button').click(function() {
       $('#save').addClass("btn-success")
       $('#save').removeClass("btn-warning")
       $('#popoutlink').attr("href", "./full/#" + getID())
-      if (myCode) { $('#new-project').removeClass("hide") }
       changed = false
       currentID = getID()
     }
@@ -276,7 +275,6 @@ $('#output-button').click(function() {
       changed = true;
       $('#save').addClass("btn-warning")
       $('#save').removeClass("btn-success")
-      $('#new-project').addClass("hide")
     }
     
     var editorVal = "setBackdropURL('http://i.imgur.com/q6Bqraw.jpg')\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
