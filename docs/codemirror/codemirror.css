@@ -464,7 +464,7 @@ button:hover {
 
 /* on checked */
 [type="checkbox"]:checked + label:before {
-  background:#74D066; 
+  background:#31b0d5; 
 }
 [type="checkbox"]:checked + label:after {
   background: white;

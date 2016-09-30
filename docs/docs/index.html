@@ -231,8 +231,84 @@ bruce.play()</code></pre><br>
     <pre><code class="language-javascript">bruce.pause()</code></pre><br>To get the
     URL of an mp3, Google search:
     <pre><code class=
-    "language-javascript">intitle:index.of?mp3 NAME-OF-SONG</code></pre><img src="https://camo.githubusercontent.com/e2839ff2cc575d4a57071e8b028f66ecdec041df/68747470733a2f2f692e696d6775722e636f6d2f7439584b4f706e2e706e67"></div><!--SPRITE LIST-->
-    <div id="spritelist" style="display:none">
+    "language-javascript">intitle:index.of?mp3 NAME-OF-SONG</code></pre><img src="https://camo.githubusercontent.com/e2839ff2cc575d4a57071e8b028f66ecdec041df/68747470733a2f2f692e696d6775722e636f6d2f7439584b4f706e2e706e67"></div>
+    <!--SPRITE LIST-->
+<button id="Image" style="display:none">Image</button>
+    <div id="imagelist" style="display:none">
+       
+        <h3>Create a New Image</h3>
+        <pre><code class=
+        "language-javascript">var IMAGE_NAME = new Image({})</code></pre><br>
+        <h3><b>Set Image URL</b></h3>
+        <pre><code class=
+        "language-javascript">var IMAGE_NAME = new Image({url: "https://i.imgur.com/SMJjVCL.png/?1", width: 30, height: 30})  </code></pre>
+        <a target ="_blank" href= "http://postimage.org"> <button id="postimage" >Upload my Own Image</button> </a><br><br>
+   
+     <h3>Set Location</h3>
+        <pre><code class=
+        "language-javascript">var IMAGE_NAME = new Image({x: 100, y: 20, angle: UP, rotationStyle: "ROTATE", showing: true})</code></pre><br>
+    </div>
+       <button id="Text" style="display:none">Text</button>
+    <div id="textlist" style="display:none">
+        <h3>Create New Text</h3>
+        <pre><code class=
+        "language-javascript">var TEXT_NAME = new Text({})</code></pre><br>
+        <h3>Set Location</h3>
+        <pre><code class=
+        "language-javascript">var TEXT_NAME = new Text({x: 50, y: -100, angle: DOWN, rotationStyle: "NO ROTATE", showing: true})</code></pre><br>
+        <h3><b>Set Text Content, Font, Alignment, and Color</b></h3>
+        <pre><code class=
+        "language-javascript">var TEXT_NAME = new Text({text: "Hello world!", size: 12, color: "rgb(100, 50, 240)", fontFamily: "arial", textAlign: "left"}) </code></pre><br>
+    </div>
+        <button id="Circle" style="display:none">Circle</button>
+         <div id="circlelist" style="display:none">
+            
+        <h3>Create a Circle</h3>
+        <pre><code class=
+        "language-javascript">var CIRCLE_NAME = new Circle({})</code></pre><br>
+        <h3><b>Set Location</b></h3>
+        <pre><code class=
+        "language-javascript">var CIRCLE_NAME = new Circle({x: 0, y: 0, angle: 90, rotationStyle: "ROTATE LEFT RIGHT"})
+</code></pre><br>
+
+ <h3><b>Set Color and Size</b></h3>
+        <pre><code class=
+        "language-javascript">var CIRCLE_NAME = new Circle({radius: 10, color: "#ffffff"})
+</code></pre><br>
+
+      
+    </div>
+        <button id="Rectangle" style="display:none">Rectangle</button>
+        <div id="rectanglelist" style="display:none">
+        <h3>Create a Rectangle</h3>
+        <pre><code class=
+        "language-javascript">var RECTANGLE_NAME = new Rectangle({})
+</code></pre><br>
+        <h3>Set Location</h3>
+        <pre><code class=
+        "language-javascript">var RECTANGLE_NAME = new Rectangle({x: 62, y: 12, angle: 0, rotationStyle: "ROTATE"})</code></pre><br>
+        <h3><b>Set Color and Size</b></h3> 
+        <pre><code class=
+        "language-javascript">var RECTANGLE_NAME = new Rectangle({width: 20, height: 55, color: "pink"})
+</code></pre><br>
+        
+    </div>
+        <button id="Line" style="display:none">Line</button> 
+         <div id="linelist" style="display:none">
+        <h3>Create a line</h3>
+        <pre><code class=
+        "language-javascript">var LINE_NAME = new Line({})
+</code></pre><br>
+        <h3>Set Width and Length</h3>
+        <pre><code class=
+        "language-javascript">var LINE_NAME = new Line({ x: maxX, y: maxY, angle: 0, rotationStyle: "ROTATE"})</code></pre><br>
+        <h3><b>Set color, width, and angle</b></h3>
+        <pre><code class=
+        "language-javascript">var LINE_NAME = new Line({color: "pink", lineWidth: 10, x: -100, y: 100, x1: 10, y1: 20, })
+</code></pre><br>
+        
+    </div>
+          <div id="spritelist" style="display:none">
         To create a new sprite, start by typing one of the following lines:
         <pre><code class="language-javascript">var IMAGE_NAME = new Image({})
 var TEXT_NAME = new Text({})
@@ -272,7 +348,8 @@ var LINE_NAME = new Line({x: -100, y: 100, x1: 10, y1: 20, color: "pink", lineWi
         <pre><code class=
         "language-javascript">var project = new Woof({global: false, width: 300, height: 400})
 var IMAGE_NAME = new Woof.Image({project: project, url: "https://i.imgur.com/SMJjVCL.png?1"})</code></pre>
-    </div><!--MOTION LIST-->
+    </div>
+    <!--MOTION LIST-->
     <div id="motionlist" style="display:none">
         <img src=
         "https://camo.githubusercontent.com/87823848ce3593c265c5e982f62c84c9778ebdb4/68747470733a2f2f692e696d6775722e636f6d2f4d776f534e37772e706e67">

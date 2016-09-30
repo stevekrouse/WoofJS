@@ -274,7 +274,10 @@ button:hover {
 #Projects {background-color: #4A7CCE}
 
 #Jsbin {background-color: #534B95}
-#motionlist, #startlist, #eventlist,#lookslist,#controllist,#soundlist,#sensinglist,#penlist,#operationslist, #datalist, #blockslist, #spritelist, #typelist{
+#motionlist, #startlist, #eventlist,#lookslist,#controllist,
+#soundlist,#sensinglist,#penlist,#operationslist, #datalist, 
+#blockslist, #spritelist, #typelist,
+#imagelist, #textlist, #circlelist, #rectanglelist, #linelist{
     font-family: "Open Sans", "Lato", Arial;
     font-size: 100%;
     line-height: 1.5;
@@ -350,3 +353,29 @@ padding:10px;
     height: 13%;
     }
 }
+
+
+#Image {background-color: #49A6DF;
+  
+}
+#Text {background-color: #4875D1;
+}
+#Circle {background-color: #AD5FC2;
+    
+}
+#Rectangle {background-color: #7775D3;
+     
+}
+#Line{background-color:#5A4097;
+   
+}
+
+#Image, #Text, #Circle, #Rectangle, #Line {  height:10%;
+    width:33%;
+    border-radius:10px;}
+    
+    #postimage{
+        background-color: #7775D3;
+        height:10%;
+    width:80%;
+    border-radius:10px;}

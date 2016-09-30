@@ -473,16 +473,7 @@ $('#More').click(function() {
     $('.container0').toggle('fast');
     $('.container4').toggle('fast');
 });
-//SPRITE ANIMATION
-$('#Sprite').click(function() {
-    $('#spritelist').toggle('fast');
-    $("#Start").toggle('fast');
-    $('.container1').toggle('fast');
-    $('.container2').toggle('fast');
-    $('.container3').toggle('fast');
-    $('.container4').toggle('fast');
-    $('.container5').toggle('fast');
-});
+
 //START ANIMATION
 $('#Start').click(function() {
     $('#startlist').toggle('fast');
@@ -539,3 +530,129 @@ $('#Type').click(function() {
     $('#typelist').toggle('fast');
     $('#startlist').hide();
 });
+
+
+
+
+
+//SPRITE ANIMATION
+$('#Sprite').click(function() {
+    // $('#spritelist').toggle('fast');
+    $("#Start").toggle('fast');
+    $("#Image").toggle('fast');
+    $("#Text").toggle('fast');
+    $("#Circle").toggle('fast');
+    $("#Rectangle").toggle('fast');
+    $("#Line").toggle('fast');
+    $('.container1').toggle('fast');
+    $('.container2').toggle('fast');
+    $('.container3').toggle('fast');
+    $('.container4').toggle('fast');
+    $('.container5').toggle('fast');
+    if ($('#imagelist').is(':visible') && $(this).text() ==
+        'Creating Sprites') {
+        $('#imagelist').toggle('fast');
+        $("#Image").toggle('fast');
+    $("#Text").toggle('fast');
+    $("#Circle").toggle('fast');
+    $("#Rectangle").toggle('fast');
+    $("#Line").toggle('fast');
+    }
+    
+       if ($('#textlist').is(':visible') && $(this).text() ==
+        'Creating Sprites') {
+        $('#textlist').toggle('fast');
+        $("#Image").toggle('fast');
+    $("#Text").toggle('fast');
+    $("#Circle").toggle('fast');
+    $("#Rectangle").toggle('fast');
+    $("#Line").toggle('fast');
+    }
+    
+    if ($('#circlelist').is(':visible') && $(this).text() ==
+        'Creating Sprites') {
+        $('#circlelist').toggle('fast');
+        $("#Image").toggle('fast');
+    $("#Text").toggle('fast');
+    $("#Circle").toggle('fast');
+    $("#Rectangle").toggle('fast');
+    $("#Line").toggle('fast');
+    }
+    
+       if ($('#rectanglelist').is(':visible') && $(this).text() ==
+        'Creating Sprites') {
+        $('#rectanglelist').toggle('fast');
+        $("#Image").toggle('fast');
+    $("#Text").toggle('fast');
+    $("#Circle").toggle('fast');
+    $("#Rectangle").toggle('fast');
+    $("#Line").toggle('fast');
+    }
+    
+       if ($('#linelist').is(':visible') && $(this).text() ==
+        'Creating Sprites') {
+        $('#linelist').toggle('fast');
+        $("#Image").toggle('fast');
+    $("#Text").toggle('fast');
+    $("#Circle").toggle('fast');
+    $("#Rectangle").toggle('fast');
+    $("#Line").toggle('fast');
+    }
+    
+});
+
+// //IMAGE LIST ANIMATION
+$('#Image').click(function() {
+    $('#imagelist').toggle('fast'); 
+    $("#Image").toggle('fast');
+    $("#Text").toggle('fast');
+    $("#Circle").toggle('fast');
+    $("#Rectangle").toggle('fast');
+    $("#Line").toggle('fast');
+    
+}); 
+      
+    
+// //TEXT LIST ANIMATION
+$('#Text').click(function() {
+    $('#textlist').toggle('fast'); 
+    $("#Image").toggle('fast');
+    $("#Text").toggle('fast');
+    $("#Circle").toggle('fast');
+    $("#Rectangle").toggle('fast');
+    $("#Line").toggle('fast');
+    
+});     
+
+// //CIRCLE LIST ANIMATION
+$('#Circle').click(function() {
+    $('#circlelist').toggle('fast'); 
+    $("#Image").toggle('fast');
+    $("#Text").toggle('fast');
+    $("#Circle").toggle('fast');
+    $("#Rectangle").toggle('fast');
+    $("#Line").toggle('fast');
+    
+});     
+
+// //RECTANGLE LIST ANIMATION
+$('#Rectangle').click(function() {
+    $('#rectanglelist').toggle('fast'); 
+    $("#Image").toggle('fast');
+    $("#Text").toggle('fast');
+    $("#Circle").toggle('fast');
+    $("#Rectangle").toggle('fast');
+    $("#Line").toggle('fast');
+    
+});     
+
+// //LINE LIST ANIMATION
+$('#Line').click(function() {
+    $('#linelist').toggle('fast'); 
+    $("#Image").toggle('fast');
+    $("#Text").toggle('fast');
+    $("#Circle").toggle('fast');
+    $("#Rectangle").toggle('fast');
+    $("#Line").toggle('fast');
+    
+});     
