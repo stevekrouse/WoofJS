@@ -31,6 +31,7 @@
   <link rel="stylesheet" href="./codemirror/lint.css">
   <script src="./codemirror/jshint.min.js"></script>
   <script src="./codemirror/lint.js"></script>
+  <script data-presets="es2017" src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.14.0/babel.min.js"></script>
   <style>
     body {
       background-color: #fff;
@@ -391,7 +392,7 @@ $('#output-button').click(function() {
                 var evt = document.createEvent('Event');  
                 evt.initEvent('load', false, false);  
                 iframe.contentWindow.dispatchEvent(evt);
-                iframe.contentWindow.eval(editor.getValue());
+                iframe.contentWindow.eval(Babel.transform(editor.getValue(), { presets: ['es2017'] }).code);
             }
         }, 10)
     }
