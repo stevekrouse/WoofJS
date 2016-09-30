@@ -101,7 +101,7 @@
       background-color: lightblue;
     }
     
-    @media all and (max-width: 900px) {
+    @media all and (max-width: 650px) {
       #login {
         margin-right:5px;
       }
@@ -165,6 +165,7 @@
 
   
   $('#block-check').click(function(){
+    debouncedRunCode()
     if ($(this).is(':not(:checked)')){
       $('#docs').toggle('fast');
      
@@ -172,15 +173,16 @@
     
     else {
     $('#docs').toggle('fast');
-    // $("docs").css("max-width", "33%");
   }
 }); 
 
 $('#block-button').click(function() {
+  debouncedRunCode()
   $('#docs').slidePanel('slow'); 
 });
 
 $('#code-check').click(function(){
+  debouncedRunCode()
     if ($(this).is(':not(:checked)')) {
       $('#code').toggle('fast');
     }
@@ -190,12 +192,14 @@ $('#code-check').click(function(){
 }); 
 
 $('#code-button').click(function() {
+  debouncedRunCode()
   $('#code').slidePanel('slow'); 
 });
 
 
 
 $('#output-check').click(function(){
+  debouncedRunCode()
     if ($(this).is(':not(:checked)')){
       $('#output').toggle('fast');
     }
@@ -205,6 +209,7 @@ $('#output-check').click(function(){
 }); 
 
 $('#output-button').click(function() {
+  debouncedRunCode()
   $('#output').toggle('fast');
 });
 
