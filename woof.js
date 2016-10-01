@@ -219,7 +219,7 @@ function Woof() {
     if (thisContext.stopped) {
       return;
     }
-    thisContext.after(0, "seconds", function () {
+    thisContext.after(10, "miliseconds", function () {
       return thisContext.stopped = true;
     });
   };
