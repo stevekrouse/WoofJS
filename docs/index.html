@@ -110,6 +110,10 @@
         display: none;
       }
     }
+    
+    #pop {
+      cursor: pointer;
+    }
   </style>
 </head>
 <body style="height:100%">
@@ -143,8 +147,8 @@
       <!--<span id="powered">powered by</span> <a target="blank" href="http://www.thecodingspace.com/"><img style="width:30px; height 30px;" src="./logo-1.png"></img></a>-->
       </span>
       <span id="save">
-        <button style="margin-right: 5px" class="btn btn-medium btn-default" :class="{'btn-warning': changed, 'btn-success': !changed}" onclick="save()">Save</button>
-        <a :href="'./full/#' + getID()" target="_blank" id="popoutlink"><img v-show="!changed" id="popout" style="margin: 10px" src="./popout.png"></a>
+        <button style="margin-right: 5px" class="btn btn-medium" :class="styles" onclick="save()">Save</button>
+        <img onclick="popout()" id="pop" style="margin: 10px" src="./popout.png">
       </span>
     </div>
  
@@ -230,7 +234,14 @@ $('#output-button').click(function() {
     var saveApp = new Vue({
       el: '#save',
       data: {
-        changed: false
+        status: "NEW"
+      },
+      computed: {
+        styles : function() { return {
+          'btn-warning': this.status == 'DIRTY', 
+          'btn-success': this.status == 'SAVED',
+          'btn-default': this.status == "NEW"
+        } }
       },
       methods: {
         getID: getID
@@ -271,12 +282,20 @@ $('#output-button').click(function() {
     });
 
     var makeClean = function() {
-      saveApp.changed = false
+      saveApp.status = "SAVED"
       currentID = getID()
     }
     
     var makeDirty = function() {
-      saveApp.changed = true;
+      saveApp.status = "DIRTY"
+    }
+    
+    var popout = function() {
+      if (saveApp.status == "SAVED"){
+        window.open("./full" + saveApp.getID(), "_blank")
+      } else {
+        alert("You must save your project to open it in a new window.")
+      }
     }
     
     var editorVal = "setBackdropURL('http://i.imgur.com/q6Bqraw.jpg')\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
@@ -301,7 +320,7 @@ $('#output-button').click(function() {
     // !root.child('code').child($code).exists()
     
     var save = function(){
-      if (!saveApp.changed) { return }
+      if (saveApp.status == "SAVED") { return }
       
       var name
       if (myCode) {
