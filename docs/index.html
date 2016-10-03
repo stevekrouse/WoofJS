@@ -31,6 +31,7 @@
   <link rel="stylesheet" href="./codemirror/lint.css">
   <script src="./codemirror/jshint.min.js"></script>
   <script src="./codemirror/lint.js"></script>
+  <script src="https://unpkg.com/vue@2.0.1/dist/vue.js"></script>
   <script data-presets="es2017" src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.14.0/babel.min.js"></script>
   <style>
     body {
@@ -109,6 +110,10 @@
         display: none;
       }
     }
+    
+    #pop {
+      cursor: pointer;
+    }
   </style>
 </head>
 <body style="height:100%">
@@ -119,7 +124,7 @@
         <button class="btn btn-medium btn-info dropdown-toggle" type="button" id="loggedin-name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"></button>
         <ul class="dropdown-menu" aria-labelledby="loggedin-name">
           <li><a href="./">New Project</a></li>
-          <li><a target="_blank" id="login-projects">My Projects</a></li>
+          <li><a target="_blank" id="login-projeects">My Projects</a></li>
           <li onclick="firebase.auth().signOut()"><a>Logout</a></li>
         </ul>
       </div>
@@ -141,8 +146,10 @@
      </fieldset>
       <!--<span id="powered">powered by</span> <a target="blank" href="http://www.thecodingspace.com/"><img style="width:30px; height 30px;" src="./logo-1.png"></img></a>-->
       </span>
-      <button id="save" style="margin-right: 5px" class="btn btn-medium btn-default" onclick="save()">Save</button>
-      <a target="_blank" id="popoutlink"><img class="hide" id="popout" style="margin: 10px" src="./popout.png"></a>
+      <span id="save">
+        <button style="margin-right: 5px" class="btn btn-medium" :class="styles" onclick="save()">Save</button>
+        <img onclick="popout()" id="pop" style="margin: 10px" src="./popout.png">
+      </span>
     </div>
  
     <div id="container" style="diplay:flex; ">
@@ -219,7 +226,27 @@ $('#output-button').click(function() {
 
     
   <script>
-    var changed = false;
+    var getID = function() {
+      return window.location.hash.substring(1, window.location.hash.length);
+    }
+    var currentID = getID()
+    
+    var saveApp = new Vue({
+      el: '#save',
+      data: {
+        status: "NEW"
+      },
+      computed: {
+        styles : function() { return {
+          'btn-warning': this.status == 'DIRTY', 
+          'btn-success': this.status == 'SAVED',
+          'btn-default': this.status == "NEW"
+        } }
+      },
+      methods: {
+        getID: getID
+      }
+    })
     var myCode = false
     
     
@@ -253,28 +280,22 @@ $('#output-button').click(function() {
         handleLogout()
       }
     });
-    
-    var getID = function() {
-      return window.location.hash.substring(1, window.location.hash.length);
-    }
-    var currentID = getID()
 
     var makeClean = function() {
-      $('#popout').removeClass("hide")
-      $('#save').html("Saved")
-      $('#save').addClass("btn-success")
-      $('#save').removeClass("btn-warning")
-      $('#popoutlink').attr("href", "./full/#" + getID())
-      changed = false
+      saveApp.status = "SAVED"
       currentID = getID()
     }
     
     var makeDirty = function() {
-      $('#popout').addClass("hide")
-      $('#save').html("Save")
-      changed = true;
-      $('#save').addClass("btn-warning")
-      $('#save').removeClass("btn-success")
+      saveApp.status = "DIRTY"
+    }
+    
+    var popout = function() {
+      if (saveApp.status == "SAVED"){
+        window.open("./full" + saveApp.getID(), "_blank")
+      } else {
+        alert("You must save your project to open it in a new window.")
+      }
     }
     
     var editorVal = "setBackdropURL('http://i.imgur.com/q6Bqraw.jpg')\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
@@ -299,7 +320,7 @@ $('#output-button').click(function() {
     // !root.child('code').child($code).exists()
     
     var save = function(){
-      if (!changed) { return }
+      if (saveApp.status == "SAVED") { return }
       
       var name
       if (myCode) {
@@ -374,7 +395,7 @@ $('#output-button').click(function() {
     runCode();
     
     window.onbeforeunload = function(e) {		
-       if (changed) {		
+       if (saveApp.changed) {		
          var dialogText = 'Make sure to copy and paste your work somewhere safe.';		
          e.returnValue = dialogText;		
          return dialogText; 		
