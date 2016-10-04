@@ -148,7 +148,7 @@
       <!--<span id="powered">powered by</span> <a target="blank" href="http://www.thecodingspace.com/"><img style="width:30px; height 30px;" src="./logo-1.png"></img></a>-->
       </span>
       <span id="save">
-        <button style="margin-right: 5px" class="btn btn-medium" :class="styles" onclick="save()">Save</button>
+        <button style="display: none" :style="{display: 'inline-block'}" style="margin-right: 5px" class="btn btn-medium" :class="styles" onclick="save()">{{ status == "SAVED" ? 'Saved' : 'Save' }}</button>
         <img onclick="popout()" id="pop" style="margin: 10px" src="./popout.png">
       </span>
     </div>
