@@ -278,6 +278,7 @@ $('#output-button').click(function() {
       if (user){
         handleLogin(user.displayName, user.uid)
         firebase.database().ref("/user/" + user.uid + "/displayName").set(user.displayName)
+        firebase.database().ref("/user/" + user.uid + "/email").set(user.email)
       } else {
         handleLogout()
       }
