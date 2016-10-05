@@ -20,11 +20,10 @@
   };
   
   firebase.initializeApp(config);
-  
+
   var getUID = function() {
       return window.location.hash.substring(1, window.location.hash.length);
   }
-  
   
   // TODO later, query for code with versions
   
@@ -38,10 +37,10 @@
   });
   
   function elem(key, item){
-    var ret = '<a href="#" class="list-group-item list-group-item-action">' + key
+    var ret = '<a class="list-group-item list-group-item-action">' + key
     ret +=      '<span class="pull-right">'
-    ret +=        '<button style="margin-right: 5px" class="btn btn-info" onclick="window.open(\'../#' + key + '\', \'_blank\')">Code</button>'
-    ret +=        '<button class="btn btn-primary" onclick="window.open(\'../full/#' + key + '\', \'_blank\')">Full Screen</button>'
+    ret +=        '<button style="margin-right: 5px" class="btn btn-info" onclick="window.open(\'../#' + key.replace("'", "\\'") + '\', \'_blank\')">Code</button>'
+    ret +=        '<button class="btn btn-primary" onclick="window.open(\'../full/#' + key.replace("'", "\\'") + '\', \'_blank\')">Full Screen</button>'
     ret +=      '</span>'
     ret +=    '</a>'
     console.debug(ret)
@@ -56,7 +55,7 @@
         document.getElementById("list").innerHTML += elem(key, item)
       }
     } else {
-      alert("There's no user by that ID. Sorry :(")
+        document.getElementById("list").innerHTML += "<h3>If you save a project, it'll show up here.</h3>"
     }
   });
 </script>

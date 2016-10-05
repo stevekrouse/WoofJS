@@ -124,7 +124,7 @@
         <button class="btn btn-medium btn-info dropdown-toggle" type="button" id="loggedin-name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"></button>
         <ul class="dropdown-menu" aria-labelledby="loggedin-name">
           <li><a href="./">New Project</a></li>
-          <li><a target="_blank" id="login-projeects">My Projects</a></li>
+          <li><a target="_blank" id="login-projects">My Projects</a></li>
           <li onclick="firebase.auth().signOut()"><a>Logout</a></li>
         </ul>
       </div>
@@ -148,7 +148,7 @@
       <!--<span id="powered">powered by</span> <a target="blank" href="http://www.thecodingspace.com/"><img style="width:30px; height 30px;" src="./logo-1.png"></img></a>-->
       </span>
       <span id="save">
-        <button style="margin-right: 5px" class="btn btn-medium" :class="styles" onclick="save()">Save</button>
+        <button style="display: none" :style="{display: 'inline-block'}" style="margin-right: 5px" class="btn btn-medium" :class="styles" onclick="save()">{{ status == "SAVED" ? 'Saved' : 'Save' }}</button>
         <img onclick="popout()" id="pop" style="margin: 10px" src="./popout.png">
       </span>
     </div>
@@ -278,6 +278,7 @@ $('#output-button').click(function() {
       if (user){
         handleLogin(user.displayName, user.uid)
         firebase.database().ref("/user/" + user.uid + "/displayName").set(user.displayName)
+        firebase.database().ref("/user/" + user.uid + "/email").set(user.email)
       } else {
         handleLogout()
       }
@@ -294,7 +295,7 @@ $('#output-button').click(function() {
     
     var popout = function() {
       if (saveApp.status == "SAVED"){
-        window.open("./full" + saveApp.getID(), "_blank")
+        window.open("./full#" + saveApp.getID(), "_blank")
       } else {
         alert("You must save your project to open it in a new window.")
       }
@@ -324,13 +325,14 @@ $('#output-button').click(function() {
     var save = function(){
       if (saveApp.status == "SAVED") { return }
       
-      var name
       if (myCode) {
         name = getID()
       } else {
-        name = window.prompt("Choose a name for your project", "Don't forget me!");
+        name = window.prompt("Choose a name for your project", "My Woof Project") || '';
       }
-      if (name){
+      if (name.includes('.') || name.includes('/') || name.includes('$') || name.includes("#") || name.includes("[") || name.includes("]") || name.includes(" ")){
+        alert('You cannot include ".", "#", "$", "[", "]", or spaces in the name of your project. Try to save again.')
+      } else if (name) { 
         firebase.database().ref('/code/' + name).limitToLast(1).once('value').then(function(snapshot) {
           if (snapshot.val()){
             if (firebase.auth().currentUser && snapshot.val()[Object.keys(snapshot.val())[0]].uid == firebase.auth().currentUser.uid) {
