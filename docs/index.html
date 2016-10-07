@@ -32,7 +32,7 @@
   <script src="./codemirror/jshint.min.js"></script>
   <script src="./codemirror/lint.js"></script>
   <script src="https://unpkg.com/vue@2.0.1/dist/vue.js"></script>
-  <script data-presets="es2017" src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.14.0/babel.min.js"></script>
+  <script data-presets="es2015" src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.14.0/babel.min.js"></script>
   <style>
     body {
       background-color: #fff;
@@ -420,7 +420,7 @@ $('#output-button').click(function() {
                 var evt = document.createEvent('Event');  
                 evt.initEvent('load', false, false);  
                 iframe.contentWindow.dispatchEvent(evt);
-                iframe.contentWindow.eval(Babel.transform(editor.getValue(), { presets: ['es2017'] }).code);
+                iframe.contentWindow.eval(Babel.transform(editor.getValue(), { presets: ['es2015'] }).code);
             }
         }, 10)
     }
