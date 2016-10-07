@@ -144,18 +144,12 @@ pre {
     height: 85px;
     margin: 5px;
     width: 98%;
-}
-
-button {
-    width: 23%;
-    height: 12%;
     border-radius: 5px;
     border: none;
     color: #fff;
     font-family: "Open Sans", sans-serif;
     font-size: 100%;
     box-shadow: none;
-    margin: .5%
 }
 
 button.highlight:focus {
@@ -318,3 +312,15 @@ padding:10px;
         height:10%;
     width:80%;
     border-radius:10px;}
+    
+#searchclear {
+    position: absolute;
+    left: 75%;
+    top: 0;
+    bottom: 0;
+    height: 14px;
+    margin: auto;
+    font-size: 14px;
+    cursor: pointer;
+    color: rgba(255, 45, 45, 0.75);
+}

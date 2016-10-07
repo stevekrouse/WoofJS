@@ -4,19 +4,22 @@
     <script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
     <script src="https://unpkg.com/vue@2.0.1/dist/vue.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/2.5.0/fuse.min.js"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <title></title>
 </head>
 <body>
     <div id="body" :style="{display: 'flex'}" style="display: none; flex-direction: column; align-content: stretch; align-content: center; align-items: center;">
-        <input id="searchbar" placeholder="Search blocks..." v-model="search"></input>
+        <div class="btn-group">
+          <input id="searchbar" type="search" class="form-control" placeholder="Search blocks..." v-model="search"></input>
+          <span v-show="search != ''" @click="search = ''" id="searchclear" class="glyphicon glyphicon-remove-circle"></span>
+        </div>
+    
         <div :style="menuStyles" id="menus">
         <div>  
             <button v-show="!search && (open == undefined || open == 'start')" :class="{highlight: !search}" class="all" @click="toggle('start')" id="Start">Get Started</button>
             <div v-show="open == 'start' || ['tutorial', 'projects', 'github', 'jsbin'].includes(open)" id="startlist">
                 <button id="Tutorial" @click="toggle('tutorial')" class="highlight" v-show="open == 'start' || open == 'tutorial'">Woof Tutorial</button>
                 <button id="Projects" @click="toggle('projects')" class="highlight" v-show="open == 'start' || open == 'projects'">All Projects</button>
-                <!--<button id="Github" @click="toggle('github')" class="highlight" v-show="open == 'start'">Create a Github Account</button>-->
-                <!--<button id="Jsbin" class="highlight" v-show="open == 'start'">New Project in JSBIN</button> -->
                 <div id="projects2" v-show="open == 'projects'" style="display:none; margin:auto; text-align:center;">
                     <h2>Woof Projects</h2><a href=
                     "http://www.thecodingspace.com/bubble-popper.html" target=
