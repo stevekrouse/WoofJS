@@ -20,91 +20,90 @@
     
         <div :style="menuStyles" id="menus">
         <div>  
-            <button v-show="!search && (open == undefined || open == 'start')" :class="{highlight: !search}" class="all" @click="toggle('start')" id="Start">Get Started</button>
-            <div v-show="open == 'start' || ['tutorial', 'projects', 'github', 'jsbin'].includes(open)" id="startlist">
-                <button id="Tutorial" @click="toggle('tutorial')" class="highlight" v-show="open == 'start' || open == 'tutorial'">Woof Tutorial</button>
-                <button id="Projects" @click="toggle('projects')" class="highlight" v-show="open == 'start' || open == 'projects'">All Projects</button>
-                <div id="projects2" v-show="open == 'projects'" style="display:none; margin:auto; text-align:center;">
-                    <h2>Woof Projects</h2><a href=
-                    "http://www.thecodingspace.com/bubble-popper.html" target=
-                    "_blank"><img src=
-                    "http://s21.postimg.org/a94ghn353/Screen_Shot_2016_09_26_at_11_59_57_AM.png"></a><br>
-        
-                    <b>Bubble Popper</b><br>
-                    Difficulty: &#9733;<br>
-                    <br>
-                    <a href="http://www.thecodingspace.com/woof-apple-catcher.html"
-                    target="_blank"><img src=
-                    "http://s11.postimg.org/o657zx483/Screen_Shot_2016_09_26_at_12_00_58_PM.png">
-                    </a><br>
-                    <b>Apple Catcher</b><br>
-                    Difficulty: &#9733;<br>
-                    <br>
-                    <a href="http://www.thecodingspace.com/hungry-crab.html" target=
-                    "_blank"><img src=
-                    "http://s22.postimg.org/pzgwkazxt/Screen_Shot_2016_09_26_at_12_01_31_PM.png">
-                    </a><br>
-                    <b>Hungry Crab</b><br>
-                    Difficulty: &#9733;<br>
-                    <br>
-                    
-                    
-                    <a href="http://www.thecodingspace.com/squid-chase.html" target=
-                    "_blank"><img src=
-                    " https://s14.postimg.org/7a8eaurs1/Screen_Shot_2016_10_05_at_2_39_22_PM.png">
-                    </a><br>
-        
-                   <b>Squid Chase</b><br>
-                    Difficulty: &#9733;<br>
-                    <br> 
-                    <a href="http://www.thecodingspace.com/block-dodger.html" target=
-                    "_blank"><img src=
-                    "http://s9.postimg.org/n1c599erz/Screen_Shot_2016_09_26_at_12_05_21_PM.png">
-                    </a><br>
-                    <b>Obstacle Dodger</b><br>
-                    Difficulty: &#9733; &#9733;<br>
-                    <br>
-                    
-                      <a href="http://www.thecodingspace.com/star-catcher.html" target=
-                    "_blank"><img src=
-                    "https://s21.postimg.org/k6czzau93/Screen_Shot_2016_10_05_at_2_42_20_PM.png">
-                    </a><br>
-                    <b>Star Catcher</b><br>
-                    Difficulty: &#9733; &#9733;<br>
-                    <br>
-                    
-                    <a href="http://www.thecodingspace.com/flappy-bird-woof.html"
-                    target="_blank"><img src=
-                    "http://s17.postimg.org/r6kbghp67/Screen_Shot_2016_09_26_at_12_07_31_PM.png">
-                    </a><br>
-                    <b>Flappy Bird</b><br>
-                    Difficulty: &#9733; &#9733;<br>
-                    
-                      <a href="http://www.thecodingspace.com/candyland-escape.html"
-                    target="_blank"><img src=
-                    "https://s22.postimg.org/71iy580g1/Screen_Shot_2016_10_05_at_2_44_16_PM.png">
-                    </a><br>
-                    <b>Candyland Escape</b><br>
-                    Difficulty: &#9733; &#9733;<br>
-                    
-                    <br>
-                    <a href="http://www.thecodingspace.com/woof-boss-fight.html"
-                    target="_blank"><img src=
-                    "http://s21.postimg.org/jhenl7z7r/Screen_Shot_2016_09_26_at_12_08_44_PM.png">
-                    </a><br>
-                    <b>Boss Fight</b><br>
-                    Difficulty: &#9733; &#9733; &#9733;<br>
-                    <br>
-                    <a href="http://www.thecodingspace.com/woof-golf.html" target=
-                    "_blank"><img src=
-                    "http://s3.postimg.org/rfovpypib/Screen_Shot_2016_09_26_at_12_13_31_PM.png"
-                    style="width: 400px; height:300px"></a><br>
-                    <b>Woof Golf</b><br>
-                    Difficulty: &#9733; &#9733; &#9733;<br>
-                    <br>
+            <button v-show="!search && (open == undefined || open == 'projects')" :class="{highlight: !search}" class="all" @click="toggle('projects')" id="projects">Starter Projects</button>
+            <div v-show="open == 'projects'">
+                <div id="projects2" v-show="open == 'projects'" :style="{display: 'flex'}" style="width: 440px; flex-direction: row; flex-wrap: wrap; display:none; margin:auto; text-align:center;">
+                    <div @click="toggle('tutorial')" class="project-block">
+                        <a>
+                            <img class="project-image" src="https://s21.postimg.org/oo96sz22f/Screenshot_2016_10_07_at_5_21_21_PM.png">
+                            <div><b>Tutorial</b></div>
+                            <div>Difficulty: &#9733;</div>
+                        </a>
+                    </div>
+                    <div class="project-block">
+                        <a href="http://www.thecodingspace.com/bubble-popper.html" target="_blank">
+                            <img class="project-image" src="http://s21.postimg.org/a94ghn353/Screen_Shot_2016_09_26_at_11_59_57_AM.png">
+                            <div><b>Bubble Popper</b></div>
+                            <div>Difficulty: &#9733;</div>
+                        </a>
+                    </div>
+                    <div class="project-block">
+                        <a href="http://www.thecodingspace.com/woof-apple-catcher.html" target="_blank">
+                            <img class="project-image" src="http://s11.postimg.org/o657zx483/Screen_Shot_2016_09_26_at_12_00_58_PM.png">
+                            <div><b>Apple Catcher</b></div>
+                            <div>Difficulty: &#9733;</div>
+                        </a>
+                    </div>
+                    <div class="project-block">
+                        <a href="http://www.thecodingspace.com/hungry-crab.html" target="_blank">
+                            <img class="project-image" src="http://s22.postimg.org/pzgwkazxt/Screen_Shot_2016_09_26_at_12_01_31_PM.png">
+                            <div><b>Hungry Crab</b></div>
+                            <div>Difficulty: &#9733;</div>
+                        </a>
+                    </div>
+                    <div class="project-block">
+                        <a href="http://www.thecodingspace.com/squid-chase.html" target="_blank">
+                            <img class="project-image" src=" https://s14.postimg.org/7a8eaurs1/Screen_Shot_2016_10_05_at_2_39_22_PM.png">
+                            <div><b>Squid Chase</b></div>
+                            <div>Difficulty: &#9733;</div>
+                        </a>
+                    </div>
+                    <div class="project-block">
+                        <a href="http://www.thecodingspace.com/star-catcher.html" target="_blank">
+                            <img class="project-image" src="https://s21.postimg.org/k6czzau93/Screen_Shot_2016_10_05_at_2_42_20_PM.png">
+                            <div><b>Star Catcher</b></div>
+                            <div>Difficulty: &#9733;</div>
+                        </a>
+                    </div>
+                    <div class="project-block">
+                        <a href="http://www.thecodingspace.com/block-dodger.html" target="_blank">
+                            <img class="project-image" src="http://s9.postimg.org/n1c599erz/Screen_Shot_2016_09_26_at_12_05_21_PM.png">
+                            <div><b>Obstacle Dodger</b></div>
+                            <div>Difficulty: &#9733; &#9733;</div>
+                        </a>
+                    </div>
+                    <div class="project-block">
+                        <a href="http://www.thecodingspace.com/flappy-bird-woof.html" target="_blank">
+                            <img class="project-image" src="http://s17.postimg.org/r6kbghp67/Screen_Shot_2016_09_26_at_12_07_31_PM.png">
+                            <div><b>Flappy Bird</b></div>
+                            <div>Difficulty: &#9733; &#9733;</div>
+                        </a>
+                    </div>
+                    <div class="project-block">
+                        <a href="http://www.thecodingspace.com/candyland-escape.html" target="_blank">
+                            <img class="project-image" src="https://s22.postimg.org/71iy580g1/Screen_Shot_2016_10_05_at_2_44_16_PM.png">
+                            <div><b>Candyland Escape</b></div>
+                            <div>Difficulty: &#9733; &#9733;</div>
+                        </a>
+                    </div>
+                    <div class="project-block">
+                        <a href="http://www.thecodingspace.com/woof-boss-fight.html" target="_blank">
+                            <img class="project-image" src="http://s21.postimg.org/jhenl7z7r/Screen_Shot_2016_09_26_at_12_08_44_PM.png">
+                            <div><b>Boss Fight</b></div>
+                            <div>Difficulty: &#9733; &#9733; &#9733;</div>
+                        </a>
+                    </div>
+                    <div class="project-block">
+                        <a href="http://www.thecodingspace.com/woof-golf.html" target="_blank">
+                            <img class="project-image" src="http://s3.postimg.org/rfovpypib/Screen_Shot_2016_09_26_at_12_13_31_PM.png">
+                            <div><b>Woof Golf</b></div>
+                            <div>Difficulty: &#9733; &#9733; &#9733;</div>
+                        </a>
+                    </div>
                 </div>
             </div>
             <div v-show="open == 'tutorial'" id="typelist" style="display:none">
+                <button @click="toggle('tutorial')" class="all highlight">Menu</button>
                 <div id="container">
                     <div id="instructions" style="height:100%; min-width: 90%; padding-left: 5px;">
                 <div class="step">

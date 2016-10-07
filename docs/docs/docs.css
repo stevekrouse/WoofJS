@@ -203,13 +203,11 @@ button.highlight:hover {
     background-color: #5A4097;
 }
 
-#Start {background-color: #E04D4D}
+#Projects {background-color: #E04D4D}
 #Creating {background-color: #A3A3A3}
 #Github {background-color: #7775D3}
 
 #Tutorial {background-color: #5AA7DC}
-
-#Projects {background-color: #4A7CCE}
 
 #Jsbin {background-color: #534B95}
 .list {
@@ -245,11 +243,6 @@ pre {min-width:90%;
 }
 
 /*#all {width:100%;}*/
-
-#Tutorial, #Projects, #Jsbin, #Github {height:10%;
-    width:80%;
-    border-radius:10px;
-}
 
 /* Woof Tutorial CSS */
 
@@ -346,4 +339,19 @@ padding:10px;
     color: #fff;
     background-color: #563d7c;
     border-color: #563d7c;
+}
+
+.project-image {
+    width: 200px;
+    height: 170px;
+    border-radius: 10px;
+}
+
+.project-block {
+    margin: 10px;
+}
+
+.project-block > a:hover {
+    text-decoration: none;
+    cursor: pointer;
 }
