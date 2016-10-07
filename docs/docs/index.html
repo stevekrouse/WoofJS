@@ -1,11 +1,15 @@
 <html>
 <head>
+    <script src="https://cdn.rawgit.com/HubSpot/tether/5693ced3fd13efff97eb0cd2f9a0d4ad8fe0fc22/dist/js/tether.min.js"></script>
     <link href="./docs.css" rel="stylesheet" type="text/css">
     <script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
     <script src="https://unpkg.com/vue@2.0.1/dist/vue.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/2.5.0/fuse.min.js"></script>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <title></title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.5.12/clipboard.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    
+    <title>WoofJS Documentation</title>
 </head>
 <body>
     <div id="body" :style="{display: 'flex'}" style="display: none; flex-direction: column; align-content: stretch; align-content: center; align-items: center;">
@@ -165,13 +169,8 @@ forever(() =&gt; {
         <div style="max-width: 100%" v-for="(blocks, menu) in searched(menus)">
             <template v-if="menu != 'Creating Sprites'"> 
                 <button v-show="open == undefined || open == menu || search" :class="{highlight: !search}" class="all" :id="menu.split(' ')[0]" @click="toggle(menu)">{{ menu }}</button>
-                <div v-show="open == menu || search" class="list">
-                  <div class="list" v-for="block in blocks">
-                    <img v-if="block.url" :src="block.url">
-                    <div>{{ block.description }}</div> 
-                    <pre v-if="block.code"><code v-html="highlight(block.code)"></code></pre>
-                    <br>
-                  </div>
+                <div v-show="open == menu || search" class="list" v-for="block in blocks">
+                  <vue-block :block="block"></vue-block>
                 </div>
             </template>
             <template v-else>
@@ -181,10 +180,7 @@ forever(() =&gt; {
                   <button v-show="open == menu || open == submenu || search" :class="{highlight: !search}" class="all" :id="submenu.split(' ')[0]" @click="toggle(submenu)">{{ submenu }}</button>
                   <div v-show="open == submenu || search" class="list">
                   <div class="list" v-for="block2 in blocks2">
-                    <img v-if="block2.url" :src="block2.url">
-                    <div>{{ block2.description }}</div> 
-                    <pre v-if="block2.code"><code v-html="highlight(block2.code)"></code></pre>
-                    <br>
+                    <vue-block :block="block2"></vue-block>
                   </div>
                 </div>
                 </div>    
@@ -193,9 +189,28 @@ forever(() =&gt; {
         </div>
         </div>
         </div>
-        <script src="./docs.js">
+        <script src="./docs.js"></script>
+        <script id="block-template" type="text/x-template">
+            <div style='margin-bottom: 20px; margin-right: 10px' class="block">
+                <img v-if="block.url" :src="block.url">
+                <div>{{ block.description }}</div> 
+                <div v-if="block.code">
+                <div><span data-toggle="tooltip" title="Copied!" :data-clipboard-text="block.code" class="btn-clipboard">Copy</span></div> 
+                    <pre><code v-html="highlight(block.code)"></code></pre>
+                </div>
+            </div>
         </script>
         <script>
+        Vue.component('vue-block', {
+          template: "#block-template",
+          props: ["block"],
+          methods: {
+            highlight: function(code) {
+                return Prism.highlight(code,  Prism.languages.javascript);
+            }
+          }
+        })
+        
         var app = new Vue({
           el: '#body',
           data: {
@@ -484,12 +499,12 @@ forever(() =&gt; {
                             tags: "upload image post image imgur"
                         },
                         {
-                            descrption: "Set width and height:",
+                            description: "Set width and height:",
                             code: "width: 30, height: 30",
                             tags: "image width height size"
                         },
                         {
-                            descrption: "Set locationt:",
+                            description: "Set location:",
                             code: "x: 30, y: 30",
                             tags: "image location x y"
                         },
@@ -1042,9 +1057,6 @@ forever(() =&gt; {
               }
               return newMenus
             },
-            highlight: function(code) {
-                return Prism.highlight(code,  Prism.languages.javascript);
-            },
             toggle: function(menu) {
                 if (this.search != '') { return } 
                 if (this.open == menu){
@@ -1054,6 +1066,20 @@ forever(() =&gt; {
                 }
             }
           }
+        })
+         
+        var clipboard = new Clipboard('.btn-clipboard');
+        Vue.nextTick(function () {
+            $('[data-toggle="tooltip"]').tooltip({trigger: 'manual'}); 
+            clipboard.destroy()
+            clipboard = new Clipboard('.btn-clipboard');
+            clipboard.on('success', function(e) {
+                $(e.trigger).tooltip('show')
+                setTimeout(function() {
+                    $(e.trigger).tooltip('hide')
+                }, 1000)
+            });
+           
         })
         </script>
     </div>
