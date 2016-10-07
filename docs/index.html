@@ -399,7 +399,7 @@ $('#output-button').click(function() {
     runCode();
     
     window.onbeforeunload = function(e) {		
-       if (saveApp.changed) {		
+       if (saveApp.status == "DIRTY") {		
          var dialogText = 'Make sure to copy and paste your work somewhere safe.';		
          e.returnValue = dialogText;		
          return dialogText; 		
