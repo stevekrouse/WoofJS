@@ -23,7 +23,7 @@
   firebase.database().ref('/code/' + getID()).limitToLast(1).once('value').then(function(snapshot) {
     if (snapshot.val()){
       document.title = getID()
-      eval(Babel.transform(snapshot.val()[Object.keys(snapshot.val())[0]].code, { presets: ['es2017'] }).code)
+      eval(Babel.transform(snapshot.val()[Object.keys(snapshot.val())[0]].code, { presets: ['es2015'] }).code)
     } else {
       alert("There's no project called '" + getID() + "'. Sorry :(")
     }

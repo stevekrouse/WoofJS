@@ -1,102 +1,109 @@
 <html>
 <head>
+    <script src="https://cdn.rawgit.com/HubSpot/tether/5693ced3fd13efff97eb0cd2f9a0d4ad8fe0fc22/dist/js/tether.min.js"></script>
     <link href="./docs.css" rel="stylesheet" type="text/css">
     <script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
     <script src="https://unpkg.com/vue@2.0.1/dist/vue.js"></script>
-    <title></title>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/2.5.0/fuse.min.js"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.5.12/clipboard.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    
+    <title>WoofJS Documentation</title>
 </head>
 <body>
     <div id="body" :style="{display: 'flex'}" style="display: none; flex-direction: column; align-content: stretch; align-content: center; align-items: center;">
-        <input id="searchbar" placeholder="Search blocks..." v-model="search"></input>
+        <div class="btn-group">
+          <input id="searchbar" type="search" class="form-control" placeholder="Search blocks..." v-model="search"></input>
+          <span v-show="search != ''" @click="search = ''" id="searchclear" class="glyphicon glyphicon-remove-circle"></span>
+        </div>
+    
         <div :style="menuStyles" id="menus">
         <div>  
-            <button v-show="!search && (open == undefined || open == 'start')" :class="{highlight: !search}" class="all" @click="toggle('start')" id="Start">Get Started</button>
-            <div v-show="open == 'start' || ['tutorial', 'projects', 'github', 'jsbin'].includes(open)" id="startlist">
-                <button id="Tutorial" @click="toggle('tutorial')" class="highlight" v-show="open == 'start' || open == 'tutorial'">Woof Tutorial</button>
-                <button id="Projects" @click="toggle('projects')" class="highlight" v-show="open == 'start' || open == 'projects'">All Projects</button>
-                <!--<button id="Github" @click="toggle('github')" class="highlight" v-show="open == 'start'">Create a Github Account</button>-->
-                <!--<button id="Jsbin" class="highlight" v-show="open == 'start'">New Project in JSBIN</button> -->
-                <div id="projects2" v-show="open == 'projects'" style="display:none; margin:auto; text-align:center;">
-                    <h2>Woof Projects</h2><a href=
-                    "http://www.thecodingspace.com/bubble-popper.html" target=
-                    "_blank"><img src=
-                    "http://s21.postimg.org/a94ghn353/Screen_Shot_2016_09_26_at_11_59_57_AM.png"></a><br>
-        
-                    <b>Bubble Popper</b><br>
-                    Difficulty: &#9733;<br>
-                    <br>
-                    <a href="http://www.thecodingspace.com/woof-apple-catcher.html"
-                    target="_blank"><img src=
-                    "http://s11.postimg.org/o657zx483/Screen_Shot_2016_09_26_at_12_00_58_PM.png">
-                    </a><br>
-                    <b>Apple Catcher</b><br>
-                    Difficulty: &#9733;<br>
-                    <br>
-                    <a href="http://www.thecodingspace.com/hungry-crab.html" target=
-                    "_blank"><img src=
-                    "http://s22.postimg.org/pzgwkazxt/Screen_Shot_2016_09_26_at_12_01_31_PM.png">
-                    </a><br>
-                    <b>Hungry Crab</b><br>
-                    Difficulty: &#9733;<br>
-                    <br>
-                    
-                    
-                    <a href="http://www.thecodingspace.com/squid-chase.html" target=
-                    "_blank"><img src=
-                    " https://s14.postimg.org/7a8eaurs1/Screen_Shot_2016_10_05_at_2_39_22_PM.png">
-                    </a><br>
-        
-                   <b>Squid Chase</b><br>
-                    Difficulty: &#9733;<br>
-                    <br> 
-                    <a href="http://www.thecodingspace.com/block-dodger.html" target=
-                    "_blank"><img src=
-                    "http://s9.postimg.org/n1c599erz/Screen_Shot_2016_09_26_at_12_05_21_PM.png">
-                    </a><br>
-                    <b>Obstacle Dodger</b><br>
-                    Difficulty: &#9733; &#9733;<br>
-                    <br>
-                    
-                      <a href="http://www.thecodingspace.com/star-catcher.html" target=
-                    "_blank"><img src=
-                    "https://s21.postimg.org/k6czzau93/Screen_Shot_2016_10_05_at_2_42_20_PM.png">
-                    </a><br>
-                    <b>Star Catcher</b><br>
-                    Difficulty: &#9733; &#9733;<br>
-                    <br>
-                    
-                    <a href="http://www.thecodingspace.com/flappy-bird-woof.html"
-                    target="_blank"><img src=
-                    "http://s17.postimg.org/r6kbghp67/Screen_Shot_2016_09_26_at_12_07_31_PM.png">
-                    </a><br>
-                    <b>Flappy Bird</b><br>
-                    Difficulty: &#9733; &#9733;<br>
-                    
-                      <a href="http://www.thecodingspace.com/candyland-escape.html"
-                    target="_blank"><img src=
-                    "https://s22.postimg.org/71iy580g1/Screen_Shot_2016_10_05_at_2_44_16_PM.png">
-                    </a><br>
-                    <b>Candyland Escape</b><br>
-                    Difficulty: &#9733; &#9733;<br>
-                    
-                    <br>
-                    <a href="http://www.thecodingspace.com/woof-boss-fight.html"
-                    target="_blank"><img src=
-                    "http://s21.postimg.org/jhenl7z7r/Screen_Shot_2016_09_26_at_12_08_44_PM.png">
-                    </a><br>
-                    <b>Boss Fight</b><br>
-                    Difficulty: &#9733; &#9733; &#9733;<br>
-                    <br>
-                    <a href="http://www.thecodingspace.com/woof-golf.html" target=
-                    "_blank"><img src=
-                    "http://s3.postimg.org/rfovpypib/Screen_Shot_2016_09_26_at_12_13_31_PM.png"
-                    style="width: 400px; height:300px"></a><br>
-                    <b>Woof Golf</b><br>
-                    Difficulty: &#9733; &#9733; &#9733;<br>
-                    <br>
+            <button v-show="!search && (open == undefined || open == 'projects')" :class="{highlight: !search}" class="all" @click="toggle('projects')" id="projects">Starter Projects</button>
+            <div v-show="open == 'projects'">
+                <div id="projects2" v-show="open == 'projects'" :style="{display: 'flex'}" style="width: 440px; flex-direction: row; flex-wrap: wrap; display:none; margin:auto; text-align:center;">
+                    <div @click="toggle('tutorial')" class="project-block">
+                        <a>
+                            <img class="project-image" src="https://s21.postimg.org/oo96sz22f/Screenshot_2016_10_07_at_5_21_21_PM.png">
+                            <div><b>Tutorial</b></div>
+                            <div>Difficulty: &#9733;</div>
+                        </a>
+                    </div>
+                    <div class="project-block">
+                        <a href="http://www.thecodingspace.com/bubble-popper.html" target="_blank">
+                            <img class="project-image" src="http://s21.postimg.org/a94ghn353/Screen_Shot_2016_09_26_at_11_59_57_AM.png">
+                            <div><b>Bubble Popper</b></div>
+                            <div>Difficulty: &#9733;</div>
+                        </a>
+                    </div>
+                    <div class="project-block">
+                        <a href="http://www.thecodingspace.com/woof-apple-catcher.html" target="_blank">
+                            <img class="project-image" src="http://s11.postimg.org/o657zx483/Screen_Shot_2016_09_26_at_12_00_58_PM.png">
+                            <div><b>Apple Catcher</b></div>
+                            <div>Difficulty: &#9733;</div>
+                        </a>
+                    </div>
+                    <div class="project-block">
+                        <a href="http://www.thecodingspace.com/hungry-crab.html" target="_blank">
+                            <img class="project-image" src="http://s22.postimg.org/pzgwkazxt/Screen_Shot_2016_09_26_at_12_01_31_PM.png">
+                            <div><b>Hungry Crab</b></div>
+                            <div>Difficulty: &#9733;</div>
+                        </a>
+                    </div>
+                    <div class="project-block">
+                        <a href="http://www.thecodingspace.com/squid-chase.html" target="_blank">
+                            <img class="project-image" src=" https://s14.postimg.org/7a8eaurs1/Screen_Shot_2016_10_05_at_2_39_22_PM.png">
+                            <div><b>Squid Chase</b></div>
+                            <div>Difficulty: &#9733;</div>
+                        </a>
+                    </div>
+                    <div class="project-block">
+                        <a href="http://www.thecodingspace.com/star-catcher.html" target="_blank">
+                            <img class="project-image" src="https://s21.postimg.org/k6czzau93/Screen_Shot_2016_10_05_at_2_42_20_PM.png">
+                            <div><b>Star Catcher</b></div>
+                            <div>Difficulty: &#9733;</div>
+                        </a>
+                    </div>
+                    <div class="project-block">
+                        <a href="http://www.thecodingspace.com/block-dodger.html" target="_blank">
+                            <img class="project-image" src="http://s9.postimg.org/n1c599erz/Screen_Shot_2016_09_26_at_12_05_21_PM.png">
+                            <div><b>Obstacle Dodger</b></div>
+                            <div>Difficulty: &#9733; &#9733;</div>
+                        </a>
+                    </div>
+                    <div class="project-block">
+                        <a href="http://www.thecodingspace.com/flappy-bird-woof.html" target="_blank">
+                            <img class="project-image" src="http://s17.postimg.org/r6kbghp67/Screen_Shot_2016_09_26_at_12_07_31_PM.png">
+                            <div><b>Flappy Bird</b></div>
+                            <div>Difficulty: &#9733; &#9733;</div>
+                        </a>
+                    </div>
+                    <div class="project-block">
+                        <a href="http://www.thecodingspace.com/candyland-escape.html" target="_blank">
+                            <img class="project-image" src="https://s22.postimg.org/71iy580g1/Screen_Shot_2016_10_05_at_2_44_16_PM.png">
+                            <div><b>Candyland Escape</b></div>
+                            <div>Difficulty: &#9733; &#9733;</div>
+                        </a>
+                    </div>
+                    <div class="project-block">
+                        <a href="http://www.thecodingspace.com/woof-boss-fight.html" target="_blank">
+                            <img class="project-image" src="http://s21.postimg.org/jhenl7z7r/Screen_Shot_2016_09_26_at_12_08_44_PM.png">
+                            <div><b>Boss Fight</b></div>
+                            <div>Difficulty: &#9733; &#9733; &#9733;</div>
+                        </a>
+                    </div>
+                    <div class="project-block">
+                        <a href="http://www.thecodingspace.com/woof-golf.html" target="_blank">
+                            <img class="project-image" src="http://s3.postimg.org/rfovpypib/Screen_Shot_2016_09_26_at_12_13_31_PM.png">
+                            <div><b>Woof Golf</b></div>
+                            <div>Difficulty: &#9733; &#9733; &#9733;</div>
+                        </a>
+                    </div>
                 </div>
             </div>
             <div v-show="open == 'tutorial'" id="typelist" style="display:none">
+                <button @click="toggle('tutorial')" class="all highlight">Menu</button>
                 <div id="container">
                     <div id="instructions" style="height:100%; min-width: 90%; padding-left: 5px;">
                 <div class="step">
@@ -161,13 +168,8 @@ forever(() =&gt; {
         <div style="max-width: 100%" v-for="(blocks, menu) in searched(menus)">
             <template v-if="menu != 'Creating Sprites'"> 
                 <button v-show="open == undefined || open == menu || search" :class="{highlight: !search}" class="all" :id="menu.split(' ')[0]" @click="toggle(menu)">{{ menu }}</button>
-                <div v-show="open == menu || search" class="list">
-                  <div class="list" v-for="block in blocks">
-                    <img v-if="block.url" :src="block.url">
-                    <div>{{ block.description }}</div> 
-                    <pre v-if="block.code"><code v-html="highlight(block.code)"></code></pre>
-                    <br>
-                  </div>
+                <div v-show="open == menu || search" class="list" v-for="block in blocks">
+                  <vue-block :block="block"></vue-block>
                 </div>
             </template>
             <template v-else>
@@ -177,10 +179,7 @@ forever(() =&gt; {
                   <button v-show="open == menu || open == submenu || search" :class="{highlight: !search}" class="all" :id="submenu.split(' ')[0]" @click="toggle(submenu)">{{ submenu }}</button>
                   <div v-show="open == submenu || search" class="list">
                   <div class="list" v-for="block2 in blocks2">
-                    <img v-if="block2.url" :src="block2.url">
-                    <div>{{ block2.description }}</div> 
-                    <pre v-if="block2.code"><code v-html="highlight(block2.code)"></code></pre>
-                    <br>
+                    <vue-block :block="block2"></vue-block>
                   </div>
                 </div>
                 </div>    
@@ -189,9 +188,28 @@ forever(() =&gt; {
         </div>
         </div>
         </div>
-        <script src="./docs.js">
+        <script src="./docs.js"></script>
+        <script id="block-template" type="text/x-template">
+            <div style='margin-bottom: 20px; margin-right: 10px' class="block">
+                <img v-if="block.url" :src="block.url">
+                <div>{{ block.description }}</div> 
+                <div v-if="block.code">
+                <div><span data-toggle="tooltip" title="Copied!" :data-clipboard-text="block.code" class="btn-clipboard">Copy</span></div> 
+                    <pre><code v-html="highlight(block.code)"></code></pre>
+                </div>
+            </div>
         </script>
         <script>
+        Vue.component('vue-block', {
+          template: "#block-template",
+          props: ["block"],
+          methods: {
+            highlight: function(code) {
+                return Prism.highlight(code,  Prism.languages.javascript);
+            }
+          }
+        })
+        
         var app = new Vue({
           el: '#body',
           data: {
@@ -202,32 +220,32 @@ forever(() =&gt; {
                     {
                         url: "https://camo.githubusercontent.com/87823848ce3593c265c5e982f62c84c9778ebdb4/68747470733a2f2f692e696d6775722e636f6d2f4d776f534e37772e706e67",
                         code: "NAME.move(10)",
-                        tags: "move glide animate"
+                        tags: "move forward glide animate"
                     },
                     {
                         url: "https://camo.githubusercontent.com/3664de3827d340d21f9becc015fee45c53436339/68747470733a2f2f692e696d6775722e636f6d2f39566b335163472e706e67",
                         code: "NAME.turnRight(15)",
-                        tags: "angle direction"
+                        tags: "turn angle point direction orientation"
                     }, 
                     {
                         url: "https://camo.githubusercontent.com/194af2958ac6239fe2c4b78016cd10cb2434f27d/68747470733a2f2f692e696d6775722e636f6d2f4d6a386a4337372e706e67",
                         code: "NAME.turnLeft(15)",
-                        tags: "angle direction"
+                        tags: "turn angle point direction orientation"
                     } ,
                     {
                         url: "https://camo.githubusercontent.com/429666ecb11b3851c99c4a194cfd2164bf7d5906/68747470733a2f2f692e696d6775722e636f6d2f49534c464449442e706e67",
                         code: "NAME.angle = LEFT  \nNAME.angle = RIGHT \nNAME.angle = UP \nNAME.angle = DOWN \nNAME.angle = 47.7",
-                        tags: "angle turn direction"
+                        tags: "angle turn direction right left up down orientation"
                     },
                     {
                         url: "https://camo.githubusercontent.com/326ff8674f46cbf516618553dfb1b979268fc2e5/68747470733a2f2f692e696d6775722e636f6d2f58786c576835592e706e67",
                         code: "NAME.pointTowards(mouseX, mouseY)",
-                        tags: "turn point direction angle"
+                        tags: "turn point direction angle mouse"
                     }, 
                     {
                         url: "https://camo.githubusercontent.com/4302b406d9b7723f2a5293b713025538867b3c3e/68747470733a2f2f692e696d6775722e636f6d2f655173647876522e706e67",
                         code: "NAME.pointTowards(otherNAME.x, otherNAME.Y)",
-                        tags: "turn point direction angle"
+                        tags: "turn point direction angle sprite character"
                     },
                     {
                         url: "https://camo.githubusercontent.com/dff3b143a1d793e4ccee1f258d6767d3e9dff2a3/68747470733a2f2f692e696d6775722e636f6d2f466d32335648322e706e67",
@@ -237,7 +255,7 @@ forever(() =&gt; {
                     {
                         url: "https://camo.githubusercontent.com/9293a551f94cc9b08818be6496e42e52bbeccf23/68747470733a2f2f692e696d6775722e636f6d2f594d41464245592e706e67",
                         code: "NAME.x = mouseX\nNAME.y = mouseY",
-                        tags: "teleport location move to"
+                        tags: "teleport location move to mouse"
                     }, 
                     {
                         description: "Move to another sprite:",
@@ -245,91 +263,93 @@ forever(() =&gt; {
                         tags: "teleport location other move"
                     },
                     {
-                        url: "https://camo.githubusercontent.com/429666ecb11b3851c99c4a194cfd2164bf7d5906/68747470733a2f2f692e696d6775722e636f6d2f49534c464449442e706e67",
-                        code: "NAME.angle = LEFT  \nNAME.angle = RIGHT \nNAME.angle = UP \nNAME.angle = DOWN \nNAME.angle = 47.7",
-                        tags: "angle turn direction"
-                    },
-                    {
-                        url: "https://camo.githubusercontent.com/326ff8674f46cbf516618553dfb1b979268fc2e5/68747470733a2f2f692e696d6775722e636f6d2f58786c576835592e706e67",
-                        code: "NAME.pointTowards(mouseX, mouseY)",
-                        tags: "turn point direction angle"
-                    }, 
-                    {
-                        url: "https://camo.githubusercontent.com/4302b406d9b7723f2a5293b713025538867b3c3e/68747470733a2f2f692e696d6775722e636f6d2f655173647876522e706e67",
-                        code: "NAME.pointTowards(otherNAME.x, otherNAME.Y)",
-                        tags: "turn point direction angle"
-                    },
-                    {
                         url: "https://camo.githubusercontent.com/5e25d30ccd9c8076337d4c114320a76944e9837b/68747470733a2f2f692e696d6775722e636f6d2f594434664c44452e706e67",
-                        code: 'NAME.x += ...'
+                        code: 'NAME.x += ...',
+                        tags: "increase decrease change x move right left"
                     },
                     {
                         url: "https://camo.githubusercontent.com/6d4056b1ad69ffc7cb2c48995b74b19c4f2b67d3/68747470733a2f2f692e696d6775722e636f6d2f483339727930672e706e67",
-                        code: 'NAME.y += ...'
+                        code: 'NAME.y += ...',
+                        tags: "increase decrease change y move up down"
                     },
                     {
                         url: "https://camo.githubusercontent.com/4503d100beadfd558af1b71d6d9195c62416b0a3/68747470733a2f2f692e696d6775722e636f6d2f3946504779784f2e706e67",
-                        code: 'NAME.x = ...'
+                        code: 'NAME.x = ...',
+                        tags: "set x"
                     },
                     {
                         url: "https://camo.githubusercontent.com/ef596e9dc4c013ad7a96f0e9d4a5b7c8c53fa17e/68747470733a2f2f692e696d6775722e636f6d2f4274414751467a2e706e67",
-                        code: 'NAME.y = ...'
+                        code: 'NAME.y = ...',
+                        tags: "set y"
                     },
                     {
                         url: "https://camo.githubusercontent.com/8a998b32295fed48619ec7912efe284de7f5b09b/68747470733a2f2f692e696d6775722e636f6d2f4c576c5874444c2e706e67",
-                        code: 'NAME.setRotationStyle("ROTATE LEFT RIGHT")'
+                        code: 'NAME.setRotationStyle("ROTATE LEFT RIGHT")',
+                        tags: "rotation style no turn flip"
                     },
                     {
                         url: "https://camo.githubusercontent.com/0f4f6ba789e5ef69ee1aa002ff8034210f4080d8/68747470733a2f2f692e696d6775722e636f6d2f4b55734158586c2e706e67",
-                        code: 'NAME.setRotationStyle("ROTATE")'
+                        code: 'NAME.setRotationStyle("ROTATE")',
+                        tags: "rotation style no turn flip"
                     },
                     {
                         url: "https://camo.githubusercontent.com/a94341629a6105c82fb1114559e08a91cd42b973/68747470733a2f2f692e696d6775722e636f6d2f433337716439682e706e67",
-                        code: 'NAME.setRotationStyle("NO ROTATE")'
+                        code: 'NAME.setRotationStyle("NO ROTATE")',
+                        tags: "rotation style no turn flip"
                     }
                 ],
                 Looks: [
                     {
                         url: "https://camo.githubusercontent.com/586eb4942f6cc1896e2406cb8c130c304cdf4652/68747470733a2f2f692e696d6775722e636f6d2f653650393552302e706e67",
-                        code: "NAME.show()"
+                        code: "NAME.show()",
+                        tags: "show appear"
                     },
                     {
                         url: "https://camo.githubusercontent.com/eacbf9819631c92f2bd3476532e3c2f3a166025b/68747470733a2f2f692e696d6775722e636f6d2f323355617446352e706e67",
-                        code: "NAME.hide()"
+                        code: "NAME.hide()",
+                        tags: "hide disappear"
                     },
                     {
                         url: "https://camo.githubusercontent.com/d1952b534bd629d016e623e9d73097851965e27a/68747470733a2f2f692e696d6775722e636f6d2f513078533746662e706e67",
-                        code: "IMAGE_NAME.setImageURL('...')"
+                        code: "IMAGE_NAME.setImageURL('...')",
+                        tags: "costume image url picture"
                     },
                     {
                         description: "You can only setImageURL() for Images.\nChange the color for rectangles, text, lines and circles:",
-                        code: 'RECTANGLE_NAME.color = "purple"\nTEXT_NAME.color = "rgb(10, 150, 30)"\nLINE_NAME.color = "#ff20ff"\nCIRCLE_NAME.color = "green"'
+                        code: 'RECTANGLE_NAME.color = "purple"\nTEXT_NAME.color = "rgb(10, 150, 30)"\nLINE_NAME.color = "#ff20ff"\nCIRCLE_NAME.color = "green"',
+                        tags: "change color"
                     },
                     {
                         url: "https://camo.githubusercontent.com/3ee06de16e6f9698e7692b7d12a6d6a75d37173f/68747470733a2f2f692e696d6775722e636f6d2f64784f72506d752e706e67",
                         description: "You set the size in different ways for each type of sprite:",
-                        code: 'IMAGE_NAME.height = ... IMAGE_NAME.width = ...\n\nRECTANGLE_NAME.height = ... RECTANGLE_NAME.width = ...\n\nCIRCLE_NAME.radius = ...\n\nLINE_NAME.x1 = ...\nLINE_NAME.y1 = ...\nLINE_NAME.lineWidth = ...\n\nTEXT_NAME.size = 20"\n'
+                        code: 'IMAGE_NAME.height = ... IMAGE_NAME.width = ...\n\nRECTANGLE_NAME.height = ... RECTANGLE_NAME.width = ...\n\nCIRCLE_NAME.radius = ...\n\nLINE_NAME.x1 = ...\nLINE_NAME.y1 = ...\nLINE_NAME.lineWidth = ...\n\nTEXT_NAME.size = 20"\n',
+                        tags: "size width height radius"
                     },
                     {
                         url: "https://camo.githubusercontent.com/41a27c417c688e3cd733521cffc9ab04c32ea371/68747470733a2f2f692e696d6775722e636f6d2f5870676c764a502e706e67",
-                        code: "NAME.sendToBack()"
+                        code: "NAME.sendToBack()",
+                        tags: "layer back behind"
                     },
                     {
                         url: "https://camo.githubusercontent.com/6dae6357cb2ae7e568b6e6f43d959f551a68848b/68747470733a2f2f692e696d6775722e636f6d2f4b756d707167532e706e67",
-                        code: "NAME.sendToFront()"
+                        code: "NAME.sendToFront()",
+                        tags: "layer in front"
                     },
                     {
                         url: "https://camo.githubusercontent.com/3fef1dd0db3c7a2aca6722288178bed02151c0ac/68747470733a2f2f692e696d6775722e636f6d2f7a616a30706c302e706e67",
                         description: "Set the backdrop to an image URL:",
-                        code: 'setBackdropURL("https://i.imgur.com/RkP7fcR.jpg")'
+                        code: 'setBackdropURL("https://i.imgur.com/RkP7fcR.jpg")',
+                        tags: "background backdrop picture"
                     },
                     {
                         description: "Set the backdrop to a color:",
-                        code: 'setBackdropColor("blue")'
+                        code: 'setBackdropColor("blue")',
+                        tags: "backdrop background picture"
                     },
                     {
                         description: "Set the backdrop size:",
-                        code: "fullScreen = false\nvar width = 300\nvar height = 400\nsetBackdropSize(width, height)"
+                        code: "fullScreen = false\nvar width = 300\nvar height = 400\nsetBackdropSize(width, height)",
+                        tags: "screen"
                     }
                 ],
                 Sound: [
@@ -346,173 +366,212 @@ forever(() =&gt; {
                     {
                         url: "https://camo.githubusercontent.com/e2839ff2cc575d4a57071e8b028f66ecdec041df/68747470733a2f2f692e696d6775722e636f6d2f7439584b4f706e2e706e67",
                         code: "intitle:index.of?mp3 NAME-OF-SONG",
-                        description: "To get the URL of an mp3, Google search:"
+                        description: "To get the URL of an mp3, Google search:",
+                        tags: "mp3 sound file"
                     }
                 ],
                 Pen: [
                     {
                         url: "https://camo.githubusercontent.com/13be07d9c643d7fee400c796439cf151526d1b34/68747470733a2f2f692e696d6775722e636f6d2f6241636d366a482e706e67",
-                        code: 'clearPen()'
+                        code: 'clearPen()',
+                        tags: "pen clear"
                     },
                     {
                         url: "https://camo.githubusercontent.com/6e8942b28d04e8c9d72a806c15921d28ff7eacba/68747470733a2f2f692e696d6775722e636f6d2f5457656e5761702e706e67",
-                        code: 'NAME.penDown()'
+                        code: 'NAME.penDown()',
+                        tags: "pen down draw"
                     },
                     {
                         url: "https://camo.githubusercontent.com/676ef694c118a9cfed6f53dd547c07070655dd8f/68747470733a2f2f692e696d6775722e636f6d2f354837696a42772e706e67",
-                        code: 'NAME.penUp()'
+                        code: 'NAME.penUp()',
+                        tags: "pen up"
                     },
                     {
                         url: "https://camo.githubusercontent.com/6d5f61fad15820472f31da7e94a000a47c4473f6/68747470733a2f2f692e696d6775722e636f6d2f504c744b5663762e706e67",
-                        code: 'NAME.penColor = "blue"\nNAME.penColor = "#ff20ff"\nNAME.penColor = "rgb(10, 100, 20)"'
+                        code: 'NAME.penColor = "blue"\nNAME.penColor = "#ff20ff"\nNAME.penColor = "rgb(10, 100, 20)"',
+                        tags: "pen color"
                     },
                     {
                         url: "https://camo.githubusercontent.com/8302ffde2afa60545c659b9366f764a02b5e8b26/68747470733a2f2f692e696d6775722e636f6d2f4f7a59355a6a552e706e67",
-                        code: 'NAME.penWidth = 4'
+                        code: 'NAME.penWidth = 4',
+                        tags: "pen width size"
                     }
                 ],
                 Data: [
                     {
                         url: "https://camo.githubusercontent.com/62cbfccc29bba3b8a79a07c3f7f3f67654a62cb7/68747470733a2f2f692e696d6775722e636f6d2f656963593537492e706e67",
-                        code: "var VARIABLE_NAME"
+                        code: "var VARIABLE_NAME",
+                        tags: "variable"
                     },
                     {
                         url: "https://camo.githubusercontent.com/633c19a66bfb0957bfae9c640f783d73cc4f9e7f/68747470733a2f2f692e696d6775722e636f6d2f4859415458584c2e706e67",
-                        code: "VARIABLE_NAME = 0"
+                        code: "VARIABLE_NAME = 0",
+                        tags: "variable set"
                     },
                     {
                         description: "You can combine creating/naming a variable with setting it:",
-                        code: "var VARIABLE_NAME = ..."
+                        code: "var VARIABLE_NAME = ...",
+                        tags: "variable"
                     },
                     {
                         url: "https://camo.githubusercontent.com/229227f8d003da0879d673a472a2af2d8f6d79bd/68747470733a2f2f692e696d6775722e636f6d2f704b4e46794d772e706e67",
-                        code: "VARIABLE_NAME += ..."
+                        code: "VARIABLE_NAME += ...",
+                        tags: "increase change decrease"
                     },
                     {
                         url: "https://camo.githubusercontent.com/8ec8b704f5b37c7fbeb4da244901104565315318/68747470733a2f2f692e696d6775722e636f6d2f4447323649634e2e706e67",
                         code: 'new Text({\n  text: () => "VARIABLE_NAME: " + VARIABLE_NAME,\n  x: 0,\n  y: 0,\n  size: 30\n})',
-                        description: '"Showing a variable" works by giving a Text Sprite a function instead of a "string in quotes" as its text attribute. The Text Sprite constantly reevaluates the function which keeps the value on the screen in sync with the value of the variable.'
+                        description: '"Showing a variable" works by giving a Text Sprite a function instead of a "string in quotes" as its text attribute. The Text Sprite constantly reevaluates the function which keeps the value on the screen in sync with the value of the variable.',
+                        tags: "show variable text"
                     },
                     {
                         url: "https://camo.githubusercontent.com/b89b548cf86d5dc1048ffd3403f52a7049ec2522/68747470733a2f2f692e696d6775722e636f6d2f7366536d6f44542e706e67",
-                        code: "var ARRAY_NAME = []"
+                        code: "var ARRAY_NAME = []",
+                        tags: "array list"
                     },
                     {
                         url: "https://camo.githubusercontent.com/ad949a7bce2b3e61323253102a17f23f71fe9b46/68747470733a2f2f692e696d6775722e636f6d2f304b306e5144332e706e67",
                         code: "ARRAY_NAME.push(...)",
-                        description: "You can add anything to an array in JavaScript, including numbers, strings, but even Sprites, functions, and other arrays." 
+                        description: "You can add anything to an array in JavaScript, including numbers, strings, but even Sprites, functions, and other arrays." ,
+                        tags: "add array list"
                     },
                     {
                         url: "https://camo.githubusercontent.com/f058f6644f9c9f010bbcc78f95385ecd1ebb38a5/68747470733a2f2f692e696d6775722e636f6d2f516754647978652e706e67",
-                        code:"ARRAY_NAME.length"
+                        code:"ARRAY_NAME.length",
+                        tags: "array list length size"
                     },
                     {
                         url: "https://camo.githubusercontent.com/52144d3cff48861b372c529a5a71b741257aeef5/68747470733a2f2f692e696d6775722e636f6d2f6a587479364c542e706e67",
-                        code: "ARRAY_NAME[1]"
+                        code: "ARRAY_NAME[1]",
+                        tags: "array list get element"
                     },
                     {
                         url: "https://camo.githubusercontent.com/a527e7a527bc6eb5a1533dd437acaebb3c41423e/68747470733a2f2f692e696d6775722e636f6d2f6a6170377166522e706e67",
-                        code: "ARRAY_NAME.remove(thing)"
+                        code: "ARRAY_NAME.remove(thing)",
+                        tags: "array list remove delete",
+                        description: "Note: this only removes things from a list. It doesn't delete them from the screen (use NAME.delete() for that)."
                     },
                     {
                         url: "https://camo.githubusercontent.com/c2d54a29e184e768a339463cc868aeb56ca285d5/68747470733a2f2f692e696d6775722e636f6d2f49625a4846706d2e706e67",
-                        code: "ARRAY_NAME.includes(thing)"
+                        code: "ARRAY_NAME.includes(thing)",
+                        tags: "contains includes array list"
                     },
                     {
                         url: "https://camo.githubusercontent.com/cdac3d80dd39a92fe83fd2c6a0e1445f425bbf01/68747470733a2f2f692e696d6775722e636f6d2f5949473973746c2e706e67",
-                        code: 'new Text({text: () => "ARRAY_NAME: " + ARRAY_NAME})'
+                        code: 'new Text({text: () => "ARRAY_NAME: " + ARRAY_NAME})',
                     },
                     {
                         description: 'Do something for each thing in an array:',
-                        code:"ARRAY_NAME.forEach(thing => {\n  console.log(thing)\n})"
+                        code:"ARRAY_NAME.forEach(thing => {\n  console.log(thing)\n})",
+                        tags: "for each loop list array"
                     },
                     {
                         description: 'Check if a condition holds for at least one thing in an array:',
-                        code: "if (ARRAY_NAME.some(thing => thing.over(mouseX, mouseY))) {\n  ...\n}"
+                        code: "if (ARRAY_NAME.some(thing => thing.over(mouseX, mouseY))) {\n  ...\n}",
+                        tags: "reduce some any list array"
                     },
                     {
                         description: 'Check if a condition holds for everything in an array:',
-                        code: "if(ARRAY_NAME.every(thing => thing.touching(...))) {\n  ...\n}"
+                        code: "if(ARRAY_NAME.every(thing => thing.touching(...))) {\n  ...\n}",
+                        tags: "every list arry reduce"
                     },
                     {
                         description: "Find something in an array:",
-                        code: "var needle = ARRAY_NAME.find(thing => thing.touching(...))\nif(needle) {\n  console.log(needle)\n}"
+                        code: "var needle = ARRAY_NAME.find(thing => thing.touching(...))\nif(needle) {\n  console.log(needle)\n}",
+                        tags: "find search list array"
                     }
                 ],
                 "Creating Sprites": {
                     Image: [
                         {
                           description: "Create new image:",
-                          code: 'var IMAGE_NAME = new Image({\n  url: "https://i.imgur.com/SMJjVCL.png/?1" ,\n  width: 30, \n  height: 30, \n  x: 100, \n  y: 20\n})'
+                          code: 'var IMAGE_NAME = new Image({\n  url: "https://i.imgur.com/SMJjVCL.png/?1" ,\n  width: 30, \n  height: 30, \n  x: 100, \n  y: 20\n})',
+                          tags: "create make new image"
                         },
                         {
                             description: "Set Image URL:",
-                            code: 'url: "https://i.imgur.com/SMJjVCL.png/?1"'
+                            code: 'url: "https://i.imgur.com/SMJjVCL.png/?1"',
+                            tags: "image url"
                         },
                         {
                             description: "Use postimage.org to upload your own image",
+                            tags: "upload image post image imgur"
                         },
                         {
-                            descrption: "Set width and height:",
-                            code: "width: 30, height: 30"
+                            description: "Set width and height:",
+                            code: "width: 30, height: 30",
+                            tags: "image width height size"
                         },
                         {
-                            descrption: "Set locationt:",
-                            code: "x: 30, y: 30"
+                            description: "Set location:",
+                            code: "x: 30, y: 30",
+                            tags: "image location x y"
                         },
                     ],
                     Text: [
                         {
                           description: "Create new text:",
-                          code: 'var TEXT_NAME = new Text({\n  text: "Hello world!", \n  size: 12, \n  color: "rgb(100, 50, 240)", \n  fontFamily: "arial", \n  textAlign: "left"\n})'
+                          code: 'var TEXT_NAME = new Text({\n  text: "Hello world!", \n  size: 12, \n  color: "rgb(100, 50, 240)", \n  fontFamily: "arial", \n  textAlign: "left"\n})',
+                          tags: 'create make new text words string'
                         },
                         {
                             description: "Set location:",
-                            code: "x: 50, y: -100"
+                            code: "x: 50, y: -100",
+                            tags: "text words string location x y"
                         },
                         {
                             description: "Set color:",
-                            code: "color: rgb(100, 50, 240)"
+                            code: "color: rgb(100, 50, 240)",
+                            tags: "text font words string color"
                         },
                         {
                             description: "Set font:",
-                            code: "fontFamily: 'arial'"
+                            code: "fontFamily: 'arial'",
+                            tags: "text words string font family"
                         }, 
                         {
                             description: "Text alignment:",
-                            code: 'textAlign: "arial"'
+                            code: 'textAlign: "center"\ntextAlign: "left"\ntextAlign: "right"',
+                            tags: "text font words string alignment left center right"
                         },
                         {
                             description: "Font size",
-                            code: "size: 12"
+                            code: "size: 12",
+                            tags: "text font words string size"
                         }
                     ],
                     Circle: [
                         {
                             description: "Create new circle:",
-                            code: 'var CIRCLE_NAME = new Circle({\n  radius: 10, \n  color: "#ffffff", \n  x: 0, \n  y: 0\n})'
+                            code: 'var CIRCLE_NAME = new Circle({\n  radius: 10, \n  color: "#ffffff", \n  x: 0, \n  y: 0\n})',
+                            tags: "create make new circle"
                         },
                         {
                             description: "Set location:",
-                            code: "x: 50, y: -100"
+                            code: "x: 50, y: -100",
+                            tags: "circle location x y"
                         },
                         {
                             description: "Set color:",
-                            code: "color: rgb(100, 50, 240)"
+                            code: "color: rgb(100, 50, 240)",
+                            tags: "circle color"
                         },
                         {
                             description: "Set size:",
-                            code: "radius: 12"
+                            code: "radius: 12",
+                            tags: "circle size radius"
                         }
                     ],
                     Rectangle: [
                         {
                             description: "Create new rectangle:",
-                            code: 'var RECTANGLE_NAME = new Rectangle({\n  width: 20, \n  height: 55, \n  color: "pink"\n})'
+                            code: 'var RECTANGLE_NAME = new Rectangle({\n  width: 20, \n  height: 55, \n  color: "pink"\n})',
+                            tags: "create new rectangle"
                         },
                         {
                             description: "Set location:",
-                            code: "x: 50, y: -100"
+                            code: "x: 50, y: -100",
+                            tags: "rectangle location x y"
                         },
                         {
                             description: "Set color:",
@@ -553,161 +612,182 @@ forever(() =&gt; {
                     {
                         url: "https://camo.githubusercontent.com/a60b2dd83e40c2219e1e69ec782908519ae54c62/68747470733a2f2f692e696d6775722e636f6d2f315446686e4d522e706e67",
                         description: "Note: Unlike in Scratch, using ready() is reccomended but not always required.",
-                        code: "ready(() => {\n  ...\n})"
+                        code: "ready(() => {\n  ...\n})",
+                        tags: "on onclick when flag clicked page loaded start ready"
                     },
                     {
                         url: "https://camo.githubusercontent.com/fc78eefb942d4f5023032ac714b970b9b4116cc5/68747470733a2f2f692e696d6775722e636f6d2f5875506972634f2e706e67",
                         code: "onMouseDown(() => {\n  ...\n})", 
-                        tags: "click"
+                        tags: "on onclick when click mouse down"
                     }, 
                     {
                         description: "On mouse up",
-                        code: "onMouseUp(() => {\n  ...\n})"
+                        code: "onMouseUp(() => {\n  ...\n})",
+                        tags: "on when click mouse up"
                     },
                     {
                         description: "On mouse move",
-                        code: "onMouseMove(() => {\n  ...\n})"
+                        code: "onMouseMove(() => {\n  ...\n})",
+                        tags: "on when mouse move"
                     },
                     {
                         url: "https://camo.githubusercontent.com/285ca1c42b1a9f51ad3313f311a061d8cb49a562/68747470733a2f2f692e696d6775722e636f6d2f7a31356d6e506a2e706e67",
                         code: "NAME.onMouseDown(() => {\n  ...\n})", 
-                        tags: "click"
+                        tags: "on onclick when click mouse down"
                     }, 
                     {
                         description: "On mouse up",
-                        code: "NAME.onMouseUp(() => {\n  ...\n})"
+                        code: "NAME.onMouseUp(() => {\n  ...\n})",
+                        tags: "on when click mouse up"
                     },
                     {
                         url: "https://camo.githubusercontent.com/8debd2c8aabda1df7a497db60383136e2de7e93a/68747470733a2f2f692e696d6775722e636f6d2f436f58573132422e706e67",
-                        code: "onKeyDown(() => {\n  ...\n})"
+                        code: "onKeyDown(() => {\n  ...\n})",
+                        tags: "on when key press down any"
                     },
                     {
                         url: "https://camo.githubusercontent.com/be12d290e0c897774b865f7c39807691c200f80a/68747470733a2f2f692e696d6775722e636f6d2f5444436c756c4f2e706e67",
-                        code: "onKeyDown(key => {\n if (\nkey == 'A') {\n   ...\n  }\n})"
+                        code: "onKeyDown(key => {\n if (key == 'A') {\n   ...\n  }\n})",
+                        tags: "on when key press down"
                     },
                     {
                         url: "https://camo.githubusercontent.com/b3fdbb78553052996bb8180c80d46627f1631744/68747470733a2f2f692e696d6775722e636f6d2f556175544e77752e706e67",
-                        code: "onKeyDown(key => {\n if (\nkey == 'UP') {\n   ...\n  }\n})"
+                        code: "onKeyDown(key => {\n if (key == 'UP') {\n   ...\n  }\n})",
+                        tags: "on when key press down"
                     }
                 ],
                   Control: [
                     { 
                       url: "https://camo.githubusercontent.com/6c4bf166474472549e77f83c14e5a058602d1592/68747470733a2f2f692e696d6775722e636f6d2f723677595838632e706e67",
                       code: 'after(..., "seconds", () => {\n  ...\n})',
-                      description: 'There is no wait block in JavaScript. Instead, you can use after():'
+                      description: 'There is no wait block in JavaScript. Instead, you can use after():',
+                      tags: "wait after seconds"
                     },
                     { 
-                      url: undefined,
                       code: 'every(..., "seconds", () => {\n  ...\n})',
-                      description: 'If you want to wait at regular intervals, use every():'
+                      description: 'If you want to wait at regular intervals, use every():',
+                      tags: "wait every seconds"
                     },
                     { 
                       url: "https://camo.githubusercontent.com/16d1e62606bd74942f656383dd09212d2e72e6c4/68747470733a2f2f692e696d6775722e636f6d2f6a77653133626d2e706e67",
                       code: 'repeat(10, () => {\n  ...\n})',
-                      tags: 'repeat'
+                      tags: 'repeat times'
                     },
                     { 
                       url: "https://camo.githubusercontent.com/983f1de894d6053a72b7f343f0c53ca5bfedd9a6/68747470733a2f2f692e696d6775722e636f6d2f675a4f6a4c444d2e706e67",
                       code: 'forever(() => {\n  ...\n})',
-                      tags: 'forever'
+                      tags: 'forever loop repeat'
                     },
                     { 
                       url: "https://camo.githubusercontent.com/a480fbea5d3f2cb8563350470e243d8b8eb5a46a/68747470733a2f2f692e696d6775722e636f6d2f7535724b4133362e706e67",
                       code: 'if(...) {\n  ...\n}',
-                      tags: 'if when'
+                      tags: 'if when condition'
                     },
                     { 
                       url: "https://camo.githubusercontent.com/a5d25f79126301f83c5a60bbbe8b3cadccfb3040/68747470733a2f2f692e696d6775722e636f6d2f52594f705361712e706e67",
                       code: 'if(...) {\n  ...\n} else {\n  ... \n}',
-                      tags: 'if else when'
+                      tags: 'if else when condition'
                     },
                     { 
                       url: "https://camo.githubusercontent.com/d06a1bb0fec72d888c37b87d35eee05918bf8206/68747470733a2f2f692e696d6775722e636f6d2f615139694a4e772e706e67",
                       code: 'repeatUntil(() => ..., () => {\n  ...\n})',
-                      tags: 'repeat until repeatuntil'
+                      tags: 'repeat until'
                     },
                     { 
                       url: "https://camo.githubusercontent.com/d06a1bb0fec72d888c37b87d35eee05918bf8206/68747470733a2f2f692e696d6775722e636f6d2f615139694a4e772e706e67",
                       code: 'repeatUntil(() => ..., () => {}, () => {\n  ...\n})',
+                      tags: "wait until",
                       description: 'There is no wait-until in JavaScript. You can simulate a wait-until block by specifying a third function to a repeatUntil. Refer to the "Control Flow" section below for more details.'
                     },
                     { 
                       url: "https://camo.githubusercontent.com/2590c6a1ba48006d4d7f9d7266ef17552207bcf4/68747470733a2f2f692e696d6775722e636f6d2f4f586c704b394a2e706e67",
                       code: 'when(() => ..., () => {\n  ...\n})',
+                      tags: "forever if when",
                       description: 'when() is a short-hand for a forever-if statement:'
                     },
                     { 
                       url: "https://camo.githubusercontent.com/6cab1f5a4b9e33f28118b96e961df7d05669e766/68747470733a2f2f692e696d6775722e636f6d2f5357537864566d2e706e67",
                       code: 'freeze()',
                       description: 'Freeze the screen. You can reanimate the screen with defrost()',
-                      tags: 'freeze stop frost'
+                      tags: 'freeze stop all frost'
                     },
                     { 
                       description: 'Un-freezes the screen. Use this after you use freeze()',
                       code: 'defrost()',
-                      tags: 'freeze stop frost'
+                      tags: 'freeze stop start defrost'
                     },
                     { 
                       url: "https://camo.githubusercontent.com/1e2c7890c61277558aa9543eafd890bf35677c40/68747470733a2f2f692e696d6775722e636f6d2f674e7a547053302e706e67",
                       code: '// create a list to store all of the clones\nvar clones = []\nevery(4, "seconds", () => {\n  // create a clone every 4 seconds\n  var clone = new Circle({radius: 10, color: "pink", x:\nrandomX(), y: randomY()})\n  // add each clone to the list\n  clones.push(clone)\n})\n\nforever(() => {\n  // forever, for each clone in clones\n  clones.forEach(clone => {\n    // move it to the right\n    clone.x++\n    // delete it if it goes off the screen\n    if (clone.x > maxX) {\n      clone.delete()\n    }\n  })\n})',
-                      tags: 'clones'
+                      tags: 'clone copy'
                     },
                     { 
                       code: 'NAME.delete()',
                       description: "Delete an object:",
-                      tags: ' delete destroy clones'
+                      tags: ' delete remove destroy clones copy'
                     },
                     { 
                       code: '// after a mousedown, you won\'t be able to trigger this event again for 1000 milliseconds\nonMouseDown(throttle(() => score++, 1000))',
-                      description: 'Only allow something to happen once every X miliseconds:'
+                      description: 'Only allow something to happen once every X miliseconds:',
+                      tags: "debounce throttle"
                     }
                   ],
                 Sensing: [
                     {
                        url: "https://camo.githubusercontent.com/3f92a02af3280e440ef68156c2f91d7038572576/68747470733a2f2f692e696d6775722e636f6d2f515470574f78562e706e67",
-                       code: "NAME.mouseOver"
+                       code: "NAME.mouseOver",
+                       tags: "mouse over"
                     },
                     {
                         url: "https://camo.githubusercontent.com/751b1000a17de64ef5cf6195d727055c800c89d4/68747470733a2f2f692e696d6775722e636f6d2f794558496e4b692e706e67",
                         description: "If you want to see if the center of your sprite is outside of a boundary, here are some expressions that could be helpful:",
-                        code: "NAME.x > maxX\nNAME.x < minX\nNAME.y > maxY\nNAME.y < minY"
+                        code: "NAME.x > maxX\nNAME.x < minX\nNAME.y > maxY\nNAME.y < minY",
+                        tags: "boundary edge off outside"
                     },
                     {
                         description: "NOTE: touching detects the rectangular boundary of a sprite, so if you have an image with a large transparent border, you will need to trim your image to make touching accurate.",
                         url: "https://camo.githubusercontent.com/3120c71799ce1b38aa526787e7c88c7c7cdb0083/68747470733a2f2f692e696d6775722e636f6d2f733236773670632e706e67",
-                        code: "NAME.touching(OTHER_NAME)"
+                        code: "NAME.touching(OTHER_NAME)",
+                        tags: "touching intersecting overlap"
                     },
                     {
                         url: "https://camo.githubusercontent.com/f8efe1c56c5c96495b07e157d6b19a05496964c7/68747470733a2f2f692e696d6775722e636f6d2f634959335359792e706e67",
-                        code: "NAME.distanceTo(mouseX, mouseY)"
+                        code: "NAME.distanceTo(mouseX, mouseY)",
+                        tags: "distance"
                     },
                     {
                         url: "https://camo.githubusercontent.com/9209e13ccc8767f489e6f84febb99a7fb8315c55/68747470733a2f2f692e696d6775722e636f6d2f7936735847544b2e706e67",
-                        code: "NAME.distanceTo(OTHER_NAME)"
+                        code: "NAME.distanceTo(OTHER_NAME)",
+                        tags: "distance"
                     },
                     {
                         url: "https://camo.githubusercontent.com/a746f6d5b612bf9d71178579a02df5e8ca68d3bc/68747470733a2f2f692e696d6775722e636f6d2f625a6e7a524b482e706e67",
-                        code: "keysDown.includes('SPACE')"
+                        code: "keysDown.includes('SPACE')",
+                        tags: "key down pressed"
                     },
                     {
                         description: "List of keys currently pressed:",
-                        code: "keysDown"
+                        code: "keysDown",
                     },
                     {
                         url: "https://camo.githubusercontent.com/026db00d4fbb8d1780c2e0ee7c3bf067a70d8aa7/68747470733a2f2f692e696d6775722e636f6d2f4a634b4c6631722e706e67",
-                        code: "mouseX"
+                        code: "mouseX",
+                        tags: "mouse x position"
                     },
                     {
                         url: "https://camo.githubusercontent.com/04648d984c98f85c0f715956126129eb483c095d/68747470733a2f2f692e696d6775722e636f6d2f6a3843467155742e706e67",
-                        code: "mouseY"
+                        code: "mouseY",
+                        tags: "mouse Y position"
                     },
                     {
                         url: "https://camo.githubusercontent.com/b3077f9e556eeac6920ba83946f5d63dfd6d27a6/68747470733a2f2f692e696d6775722e636f6d2f61664c6474384b2e706e67",
-                        code: "NAME.x"
+                        code: "NAME.x",
+                        tags: "x position"
                     },
                     {
                         url: "https://camo.githubusercontent.com/f31de9cb001c38cee4a7d978afe8829b1ed3beef/68747470733a2f2f692e696d6775722e636f6d2f42377644686a322e706e67",
-                        code: "NAME.y"
+                        code: "NAME.y",
+                        tags: "y position"
                     },
                     {
                         description: "Previous mouse X:",
@@ -727,19 +807,23 @@ forever(() =&gt; {
                     },
                     {
                         description: "Right edge of the screen:",
-                        code: "maxX"
+                        code: "maxX",
+                        tags: "edge right screen"
                     },
                     {
                         description: "Left edge of the screen:",
-                        code: "minX "
+                        code: "minX",
+                        tags: "edge left screen"
                     },
                     {
                         description: "Top edge of the screen:",
-                        code: "maxY"
+                        code: "maxY",
+                        tags: "edge top screen"
                     },
                     {
                         description: "Bottom edge of the screen:",
-                        code: "minY"
+                        code: "minY",
+                        tags: "edge bottom screen"
                     },
                     {
                         description: "Width of the screen:",
@@ -785,23 +869,28 @@ forever(() =&gt; {
                 Operations: [
                     {
                         url: "https://camo.githubusercontent.com/b75677901f9ccece190f4ca8dfb1185820ee3c19/68747470733a2f2f692e696d6775722e636f6d2f6e73446b436b742e706e67",
-                        code: "... + ..."
+                        code: "... + ...",
+                        tags: "addition add"
                     },
                     {
                         url: "https://camo.githubusercontent.com/ab943d5a55bbb7e4020a45e9584b477106899ae5/68747470733a2f2f692e696d6775722e636f6d2f585341415449502e706e67",
-                        code: "... - ..."
+                        code: "... - ...",
+                        tags: "minus subtraction"
                     },
                     {
                         url: "https://camo.githubusercontent.com/c6008202759feef0a8f8620cf8d74fe2fd9bff1d/68747470733a2f2f692e696d6775722e636f6d2f756a6e477045362e706e67",
-                        code: "... * ..."
+                        code: "... * ...",
+                        tags: "times multiply multiplication"
                     },
                     {
                         url: "https://camo.githubusercontent.com/df999eae7ad1d72d91ec62547a942549d26539c7/68747470733a2f2f692e696d6775722e636f6d2f423042476b434a2e706e67",
-                        code: "... / ..."
+                        code: "... / ...",
+                        tags: "divide division"
                     },
                     {
                         url: "https://camo.githubusercontent.com/4e1483560c7b606a2a73bfab39c537dbe4943bef/68747470733a2f2f692e696d6775722e636f6d2f664148754477792e706e67",
-                        code: "random(..., ...)"
+                        code: "random(..., ...)",
+                        tags: "random"
                     },
                     {
                         description: "Random X value on the screen between minX and maxX:",
@@ -817,15 +906,18 @@ forever(() =&gt; {
                     },
                     {
                         url: "https://camo.githubusercontent.com/1208ce19f9e0189ba56ddeb61151bbfafc02dabb/68747470733a2f2f692e696d6775722e636f6d2f3268716f4866682e706e67",
-                        code: "... < ..."
+                        code: "... < ...",
+                        tags: "less than compare"
                     },
                     {
                         url: "https://camo.githubusercontent.com/bfecb39ed692884912b1cec3e6fec5f76e0f0bef/68747470733a2f2f692e696d6775722e636f6d2f715837646d77742e706e67",
-                        code: "... > ..."
+                        code: "... > ...",
+                        tags: "greater than compare"
                     },
                     {
                         url: "https://camo.githubusercontent.com/0f1e1bfbf4fc12b032c9907fd8106bf61814ea99/68747470733a2f2f692e696d6775722e636f6d2f3766384652625a2e706e67",
-                        code: "... == ..."
+                        code: "... == ...",
+                        tags: "equal to same as"
                     },
                     
                     {
@@ -846,23 +938,28 @@ forever(() =&gt; {
                     },
                     {
                         url: "https://camo.githubusercontent.com/12ac498b99480c38334c805af5692b26b34fad1a/68747470733a2f2f692e696d6775722e636f6d2f5559684d3574702e706e67",
-                        code: "... && ..."
+                        code: "... && ...",
+                        tags: "and"
                     },
                     {
                         url: "https://camo.githubusercontent.com/a7f0d5de01e65599dc502435bf323127ebabf683/68747470733a2f2f692e696d6775722e636f6d2f505433496c6e302e706e67",
-                        code: "... || ..."
+                        code: "... || ...",
+                        tags: "or"
                     },
                     {
                         url: "https://camo.githubusercontent.com/baf96692a9e3b735eaf46d5443506904efb89969/68747470733a2f2f692e696d6775722e636f6d2f66487253395a4b2e706e67",
-                        code: '!(...)'
+                        code: '!(...)',
+                        tags: "not"
                     },
                     {
                         url: "https://camo.githubusercontent.com/95b9b6253b417804f1b7c7fc2c6f97dfdc240a69/68747470733a2f2f692e696d6775722e636f6d2f5671674c32696f2e706e67",
-                        code: '"hello" + "world"'
+                        code: '"hello " + "world"',
+                        tags: "combine string add append join"
                     },
                     {
                         url: "https://camo.githubusercontent.com/2d56c951eb67dadc36e342311a55522510941614/68747470733a2f2f692e696d6775722e636f6d2f684952693678512e706e67",
-                        code: '"world".substring(0,1)'
+                        code: '"world".substring(0,1)',
+                        tags: "cut string"
                     },
                     {
                         url: "https://camo.githubusercontent.com/e02fe39b382374789ab069310dc48d214677f027/68747470733a2f2f692e696d6775722e636f6d2f717354526143782e706e67",
@@ -870,18 +967,21 @@ forever(() =&gt; {
                     },
                     {
                         url: "https://camo.githubusercontent.com/6f05053731f0676000a62f369747730d66289a8a/68747470733a2f2f692e696d6775722e636f6d2f4e466f59396c382e706e67",
-                        code: "... % ..."
+                        code: "... % ...",
+                        tags: "reminder modulus"
                     },
                     {
                         url: "https://camo.githubusercontent.com/15ed1ca0501ab9f47b2e6b9c3786dfa9198ddb8f/68747470733a2f2f692e696d6775722e636f6d2f746b76796a52542e706e67",
-                        code: "Math.round(...)"
+                        code: "Math.round(...)",
+                        tags: 'round'
                     }
                 ],
                 "More Blocks": [
                     {
                         url: "https://camo.githubusercontent.com/01be9a619eebc491c24bedda4030adfde895f214/68747470733a2f2f692e696d6775722e636f6d2f415a6c526236682e706e67",
                         description: "You can create a function with a name:",
-                        code: "var namedFunction = (input1, input2) => {\n// do stuff here with input1 and input2\n}"
+                        code: "var namedFunction = (input1, input2) => {\n// do stuff here with input1 and input2\n}",
+                        tags: "block function method input"
                     },
                     {
                         description: "You can run a function by putting parentheses next to its name:",
@@ -893,7 +993,8 @@ forever(() =&gt; {
                     },
                     {
                         description: "But you can also create a function without a name, which is called an anonymous function:",
-                        code: "forever(() => {\n  sprite.x++\n})"
+                        code: "forever(() => {\n  sprite.x++\n})",
+                        tags: "anonymous function"
                     }
                 ]
              }
@@ -917,6 +1018,26 @@ forever(() =&gt; {
               }
           },
           methods: {
+            searchMenu: function(menu) {
+                if (this.search == '') { return menu }
+                var options = {
+                    shouldSort: true,
+                    threshold: 0.3,
+                    maxPatternLength: 15,
+                  keys: [{
+                    name: 'tags',
+                    weight: 0.8
+                  }, {
+                    name: 'description',
+                    weight: 0.1
+                  }, {
+                    name: 'code',
+                    weight: 0.1
+                  }]
+                }
+                var fuse = new Fuse(menu, options)
+                return fuse.search(this.search)
+            },
             searched: function (menus) {
               var newMenus = {}
               for (var menu in menus){
@@ -927,16 +1048,13 @@ forever(() =&gt; {
                       }
                   } else {
                     var list = menus[menu]
-                    var newList = list.filter(function(block) { return new RegExp(this.search).test(block.code) || new RegExp(this.search).test(block.tags) || new RegExp(this.search).test(block.description) }.bind(this) )
+                    var newList = this.searchMenu(list)
                     if (newList.length > 0){
                       newMenus[menu] = newList
                     }
                   }
               }
               return newMenus
-            },
-            highlight: function(code) {
-                return Prism.highlight(code,  Prism.languages.javascript);
             },
             toggle: function(menu) {
                 if (this.search != '') { return } 
@@ -947,6 +1065,20 @@ forever(() =&gt; {
                 }
             }
           }
+        })
+         
+        var clipboard = new Clipboard('.btn-clipboard');
+        Vue.nextTick(function () {
+            $('[data-toggle="tooltip"]').tooltip({trigger: 'manual'}); 
+            clipboard.destroy()
+            clipboard = new Clipboard('.btn-clipboard');
+            clipboard.on('success', function(e) {
+                $(e.trigger).tooltip('show')
+                setTimeout(function() {
+                    $(e.trigger).tooltip('hide')
+                }, 1000)
+            });
+           
         })
         </script>
     </div>
