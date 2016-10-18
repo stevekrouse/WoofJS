@@ -18,6 +18,66 @@
     }
   });
 });</script>
+<script>
+   (function () {
+    var imageReveal, bind = function (fn, me) {
+            return function () {
+                return fn.apply(me, arguments);
+            };
+        };
+    imageReveal = function () {
+        function imageReveal(el) {
+            this.el = el;
+            this.moveSplit = bind(this.moveSplit, this);
+            this.calculateSplit = bind(this.calculateSplit, this);
+            this.resetReveal = bind(this.resetReveal, this);
+            this.startReveal = bind(this.startReveal, this);
+            this._bindEvents = bind(this._bindEvents, this);
+            this.overSlide = this.el.find('.js-over-slide');
+            this.overImage = this.el.find('.js-over-image');
+            this.divider = this.el.find('.js-divider');
+            console.log(this.el);
+            this._bindEvents();
+            this.resetReveal();
+        }
+        imageReveal.prototype._bindEvents = function () {
+            this.el.on('mouseenter', this.startReveal);
+            return this.el.on('mouseleave', this.resetReveal);
+        };
+        imageReveal.prototype.startReveal = function () {
+            console.log('start reveal');
+            return this.el.on('mousemove', this.calculateSplit);
+        };
+        imageReveal.prototype.resetReveal = function () {
+            var elMiddle;
+            console.log('reset');
+            this.el.off('mousemove', this.calculateSplit);
+            elMiddle = this.el.width() / 2;
+            return this.moveSplit(elMiddle);
+        };
+        imageReveal.prototype.calculateSplit = function (e) {
+            var elOffset;
+            elOffset = this.el.offset().left;
+            return this.moveSplit(e.pageX - elOffset);
+        };
+        imageReveal.prototype.moveSplit = function (offset) {
+            if (offset < 0) {
+                offset = 0;
+            }
+            console.log(offset);
+            this.overSlide.css('transform', 'translateX(' + offset + 'px)');
+            this.overImage.css('transform', 'translateX(-' + offset + 'px)');
+            return this.divider.css('transform', 'translateX(' + offset + 'px)');
+        };
+        return imageReveal;
+    }();
+    window.imageReveal = imageReveal;
+    $(function () {
+        return new imageReveal($('.js-image-reveal'));
+    });
+}.call(this));
+
+</script>
     <style>
         body {margin:auto;
         font-family: 'Avenir', 'Helvetica Neue', Helvetica, sans-serif;
@@ -129,11 +189,65 @@ a:hover {
  
  #testimonial > img{width:100%;}
  
- @media (max-width: 600px) {
-  h1 {font-size:200%;}
- h2 {font-size: 4em;}
+ @media (max-width: 400px) {
+  h1 {font-size:4em;} 
+ h2 {font-size: 2em;}
   
 }
+
+.top{font-size: 2.5em; padding-top:50px}
+
+
+
+/*.container2 {*/
+/*  max-width: 1000px;*/
+/*  margin-left: auto;*/
+/*  margin-right: auto;*/
+/*  padding-top: 30px;*/
+/*}*/
+
+/*.image-reveal {*/
+/*  position: relative;*/
+/*}*/
+
+/*.under-slide {*/
+/*  position: relative;*/
+/*  overflow: hidden;*/
+/*  padding-top: 41%;*/
+/*  top: 0;*/
+/*  left: 0;*/
+/*  background: url("https://s13.postimg.org/6548btl47/Bitmap.png") no-repeat;*/
+/*  background-size: cover;*/
+/*}*/
+
+/*.over-slide {*/
+/*  position: absolute;*/
+/*  top: 0;*/
+/*  left: 0;*/
+/*  height: 100%;*/
+/*  width: 100%;*/
+/*  -webkit-transform: translateX(0px);*/
+/*  overflow: hidden;*/
+/*}*/
+
+/*.over-image {*/
+/*  height: 100%;*/
+/*  width: 100%;*/
+/*  background: url("https://s4.postimg.org/no777lxml/woofbit.png") no-repeat;*/
+/*  background-size: cover;*/
+/*  -webkit-transform: translateX(0px);*/
+/*}*/
+
+/*.divider {*/
+/*  position: absolute;*/
+/*  display: block;*/
+/*  top: 0;*/
+/*  left: 0;*/
+/*  width: 4px;*/
+/*  height: 100%;*/
+/*  margin-left: -2px;*/
+/*  background-color: yellow;*/
+/*}*/
 
     </style>
 </head>
@@ -156,7 +270,7 @@ a:hover {
             
             <div style="display:flex;    flex-direction: column; flex-wrap: nowrap; justify-content: center; align-content: center;
     align-items: center; width: 40%; height: 100vh; line-height: 24px">
-                <h1 style ="margin:0"> WoofJS</h1>
+                <p class="top"> WoofJS</p>
                 <h2 style ="margin:10">Bridging Scratch to Javascript</h2>
                 <p style="font-size: 120%; margin: 0">WoofJS mirrors Scratch to provide a gradual transition from block-based to text-based coding. <br></p>
                  <div style = "display:flex; flex-wrap: nowrap; 
@@ -168,43 +282,75 @@ a:hover {
                  </div>
              </div>
      </div>
+         <!--<div class="container2">-->
+              
+         <!--     <div class="image-reveal js-image-reveal">-->
+         <!--       <div class="under-slide">-->
+         <!--         <div class="over-slide js-over-slide">-->
+         <!--           <div class="over-image js-over-image">-->
+         <!--           </div>-->
+         <!--         </div>-->
+         <!--       </div>-->
+         <!--       <div class="divider js-divider"></div>-->
+         <!--     </div>-->
+              
+         <!--   </div>-->
  
-     <div id ="compare" style= " color: #484848; padding-top:20px; padding-bottom: 20px; display:flex;  flex-direction: column; flex-wrap: nowrap; justify-content: center; align-content: center;
-    align-items: center; width: 100%; height:100vh !important; ">
+     <div id ="educator" style= "background-color: #AD5FC2 ; color: white;   display:flex;  flex-direction: column; flex-wrap: nowrap; justify-content: center; align-content: center;
+    align-items: center; width: 100%; height:100vh; ">
+          <p class="top"> Transition from Scratch to Javascript</p>
     <div class ="container" style="display:flex; flex-wrap: nowrap;
         justify-content: center;
         align-content: center;
         align-items: center; height:100vh;">
-         <div style="margin-left:50px;  margin-bottom: 20px;">
-            <h1>Scratch</h1><br>
-            <img style ="width:569px"  src="https://s22.postimg.org/mvp2jp781/Bitmap_Copy.png" /><br>
+    
+      
+        <div>
+        
+            <h2>Scratch</h2><br>
+            <img style ="width:80%; border-radius: 8px"  src="https://s16.postimg.org/j6r905991/scratchcode.png" /><br>
         </div>
        
-        <div  style="margin-right:50px; margin-bottom: 0px;"><h1> WoofJS</h1><br>
-            <img style ="width:569px" src="https://s13.postimg.org/bhmewn7l3/wooftojs.png" /></div>
+        <div  ><h2> WoofJS</h2><br>
+            <img style ="width:80%; border-radius: 8px" src="https://s12.postimg.org/mjmj8x2a5/Bitmap.png" /></div>
+        
          </div>
-     <div style="width: 60%; font-size: 150%; margin-top:0px;">"I'm done with Scratch," our students tell us. "Now what?"<br><br> We've been trying to answer this question for the past two years: 
-     <b>what's the programming language to learn after Scratch?</b><br><br>
-  </div>
+         
+         <!--<img src="https://s15.postimg.org/hcz96g9t7/Rectangle_7_Copy_21.png">-->
+<p style ="font-size:150%; width:60%; margin-bottom: 40px;">Going from move 10 steps in Scratch to car.move(10)
+in WoofJS is a small enough jump that students familiar with Scratch can pick it up in just a few hours.</p>
+
+   
+  <!--</div>-->
  
     </div>
- <div id ="scratch" style= " background-color: #AD5FC2;color:white; height:100vh; display:flex;  flex-direction: column; flex-wrap: nowrap; justify-content: center; align-content: center;
-    align-items: center; ">
-     <div class ="container" style="display:flex; flex-wrap: wrap;
+ <div id ="scratch" style= " background-color: #59A5D9;color:white; height:100vh; display:flex;  flex-direction: column; flex-wrap: nowrap; justify-content: center; align-content: center;
+    align-items: center; height: 100vh">
+     <p class= "top">What do students learn? </p>
+
+      <div class="container" style =" display:flex; flex-wrap: nowrap;
         justify-content: center;
         align-content: center;
-        align-items: center; font-size: 150%; width: 60%;">
-Scratch is amazing. <br><br>However, it has a ceiling that limits what types of games students can build. Multiplayer is impossible, and so are full screen and mobile games.<br><br>
+        align-items: center;">
+       
+         <div >
+            <img style ="width:300px; " src="https://s18.postimg.org/hjwaobysp/Slice_7_Copy_14.png">
+        </div>
+         
+         <div> 
+            <img style ="width:300px" src="https://s15.postimg.org/tz2vhrvu3/Slice_7_Copy_15.png">
+        </div>
+        
+        <div>
+            <img style ="width:300px"  src="https://s22.postimg.org/a4w4ldghd/Slice_7_Copy_13.png">
+        </div>
+       
+   
+            </div>
+<a  href="https://woofjs.youcanbook.me/"><button  style= "margin-top:40px;" id ="demo">Schedule a Demo</button></a> 
 
-Because WoofJS commands directly correspond to Scratch blocks, they allow students to focus solely on syntax translation. <br><BR>
-
-
-
-<img src="https://s15.postimg.org/hcz96g9t7/Rectangle_7_Copy_21.png"><br>
-Going from move 10 steps in Scratch to car.move(10)
-in WoofJS is a small enough jump that students familiar with Scratch can pick it up in just a few hours.
     </div>
-                    <a  href="https://woofjs.youcanbook.me/"><button  style= "margin-top:40px;" id ="demo">Schedule a Demo</button></a> 
+                    
 
 </div>
       <div id ="switch" style="background-image: 
@@ -212,8 +358,8 @@ in WoofJS is a small enough jump that students familiar with Scratch can pick it
     align-items: center; height:100vh">
 
 
-    <div style ="padding-top: 70px; padding-bottom: 70px">
-        <h2>When to switch your student to WoofJS?</h2>
+    <div>
+        <p class= "top" >When to switch your student to WoofJS?</p>
             <div class= "container" style= "display:flex; flex-wrap: nowrap;
         justify-content: center;
         align-content: center;
@@ -232,9 +378,9 @@ in WoofJS is a small enough jump that students familiar with Scratch can pick it
     
     <div id ="educator" style="background-color: #59A5D9; color: white;flex-direction: column; flex-wrap: nowrap; justify-content: center; align-content: center;
     align-items: center; height: 100vh;">
-         <h1>WoofJS Curriculum</h1>
+         <p class= "top" >WoofJS Curriculum</p>
          <p style="font-size: 150%">Students use Scratch commands they understand to code in Javascript </p>
-    <div class="container" style =" margin-top: 30px;display:flex; flex-wrap: nowrap;
+    <div class="container" style =" display:flex; flex-wrap: nowrap;
         justify-content: center;
         align-content: center;
         align-items: center;">
@@ -264,7 +410,7 @@ in WoofJS is a small enough jump that students familiar with Scratch can pick it
         justify-content: center;
         align-content: center;
         align-items: center;">
-         <div style="width: 80%; "> <h1 >How much coding should my student know?</h1>
+         <div style="width: 80%; "> <p class= "top">How much coding should my student know?</p>
          <p style="font-size: 150%;"> Before coding in WoofJS, we recommend students are very comfortable in Scratch. If they can create <a target ="_blank" href= "http://www.thecodingspace.com/platform-game.html"> a game similar to this </a>on their own, they are defintely ready for WoofJS!
          <br> <br>After WoofJs, the possiblilites are endless. 
          WoofJS allows students to feel confident coding in text-based languages. 
@@ -290,9 +436,9 @@ in WoofJS is a small enough jump that students familiar with Scratch can pick it
         <div style ="margin-top:40px; margin-bottom: 40px"><h2 > Made with <span style="color: pink">&#x2764; </span>by <a style= "underline: none; color:white;" href ="http://www.thecodingspace.com">The Coding Space</a></h2>
          <p style ="font-size: 120%; ">Have a question? Email us at hello@woofjs.com </p>
          </div>
-       
-         <div >
-</div>
+       </div>
+        
+
 
 </body>
 
