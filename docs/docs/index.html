@@ -19,173 +19,28 @@
         </div>
     
         <div :style="menuStyles" id="menus">
-        <div>  
-            <button v-show="!search && (open == undefined || open == 'projects')" :class="{highlight: !search}" class="all" @click="toggle('projects')" id="projects">Starter Projects</button>
-            <div v-show="open == 'projects'">
-                <div id="projects2" v-show="open == 'projects'" :style="{display: 'flex'}" style="width: 440px; flex-direction: row; flex-wrap: wrap; display:none; margin:auto; text-align:center;">
-                    <div @click="toggle('tutorial')" class="project-block">
-                        <a>
-                            <img class="project-image" src="https://s21.postimg.org/oo96sz22f/Screenshot_2016_10_07_at_5_21_21_PM.png">
-                            <div><b>Tutorial</b></div>
-                            <div>Difficulty: &#9733;</div>
-                        </a>
+            
+            <div style="max-width: 100%" v-for="(blocks, menu) in searched(menus)">
+                <template v-if="menu != 'Creating Sprites'"> 
+                    <button v-show="open == undefined || open == menu || search" :class="{highlight: !search}" class="all" :id="menu.split(' ')[0]" @click="toggle(menu)">{{ menu }}</button>
+                    <div v-show="open == menu || search" class="list" v-for="block in blocks">
+                      <vue-block :block="block"></vue-block>
                     </div>
-                    <div class="project-block">
-                        <a href="http://www.thecodingspace.com/bubble-popper.html" target="_blank">
-                            <img class="project-image" src="http://i.imgur.com/KJTZg29.png">
-                            <div><b>Star Catcher</b></div>
-                            <div>Difficulty: &#9733;</div>
-                        </a>
+                </template>
+                <template v-else>
+                  <button v-show="open == undefined || open == menu || search" :class="{highlight: !search}" class="all" :id="menu.split(' ')[0]" @click="toggle(menu)">{{ menu }}</button>
+                  <div v-show="open == menu || Object.keys(blocks).includes(open) || search" class="list">
+                    <div class="list" v-for="(blocks2, submenu) in blocks">
+                      <button v-show="open == menu || open == submenu || search" :class="{highlight: !search}" class="all" :id="submenu.split(' ')[0]" @click="toggle(submenu)">{{ submenu }}</button>
+                      <div v-show="open == submenu || search" class="list">
+                      <div class="list" v-for="block2 in blocks2">
+                        <vue-block :block="block2"></vue-block>
+                      </div>
                     </div>
-                    <div class="project-block">
-                        <a href="http://www.thecodingspace.com/woof-apple-catcher.html" target="_blank">
-                            <img class="project-image" src="http://s11.postimg.org/o657zx483/Screen_Shot_2016_09_26_at_12_00_58_PM.png">
-                            <div><b>Apple Catcher</b></div>
-                            <div>Difficulty: &#9733;</div>
-                        </a>
-                    </div>
-                    <div class="project-block">
-                        <a href="http://www.thecodingspace.com/hungry-crab.html" target="_blank">
-                            <img class="project-image" src="http://s22.postimg.org/pzgwkazxt/Screen_Shot_2016_09_26_at_12_01_31_PM.png">
-                            <div><b>Hungry Crab</b></div>
-                            <div>Difficulty: &#9733;</div>
-                        </a>
-                    </div>
-                    <div class="project-block">
-                        <a href="http://www.thecodingspace.com/squid-chase.html" target="_blank">
-                            <img class="project-image" src=" https://s14.postimg.org/7a8eaurs1/Screen_Shot_2016_10_05_at_2_39_22_PM.png">
-                            <div><b>Squid Chase</b></div>
-                            <div>Difficulty: &#9733;</div>
-                        </a>
-                    </div>
-                    <div class="project-block">
-                        <a href="http://www.thecodingspace.com/star-catcher.html" target="_blank">
-                            <img class="project-image" src="https://s21.postimg.org/k6czzau93/Screen_Shot_2016_10_05_at_2_42_20_PM.png">
-                            <div><b>Star Catcher</b></div>
-                            <div>Difficulty: &#9733;</div>
-                        </a>
-                    </div>
-                    <div class="project-block">
-                        <a href="http://www.thecodingspace.com/block-dodger.html" target="_blank">
-                            <img class="project-image" src="http://s9.postimg.org/n1c599erz/Screen_Shot_2016_09_26_at_12_05_21_PM.png">
-                            <div><b>Obstacle Dodger</b></div>
-                            <div>Difficulty: &#9733; &#9733;</div>
-                        </a>
-                    </div>
-                    <div class="project-block">
-                        <a href="http://www.thecodingspace.com/flappy-bird-woof.html" target="_blank">
-                            <img class="project-image" src="http://s17.postimg.org/r6kbghp67/Screen_Shot_2016_09_26_at_12_07_31_PM.png">
-                            <div><b>Flappy Bird</b></div>
-                            <div>Difficulty: &#9733; &#9733;</div>
-                        </a>
-                    </div>
-                    <div class="project-block">
-                        <a href="http://www.thecodingspace.com/candyland-escape.html" target="_blank">
-                            <img class="project-image" src="https://s22.postimg.org/71iy580g1/Screen_Shot_2016_10_05_at_2_44_16_PM.png">
-                            <div><b>Candyland Escape</b></div>
-                            <div>Difficulty: &#9733; &#9733;</div>
-                        </a>
-                    </div>
-                    <div class="project-block">
-                        <a href="http://www.thecodingspace.com/woof-boss-fight.html" target="_blank">
-                            <img class="project-image" src="http://s21.postimg.org/jhenl7z7r/Screen_Shot_2016_09_26_at_12_08_44_PM.png">
-                            <div><b>Boss Fight</b></div>
-                            <div>Difficulty: &#9733; &#9733; &#9733;</div>
-                        </a>
-                    </div>
-                    <div class="project-block">
-                        <a href="http://www.thecodingspace.com/woof-golf.html" target="_blank">
-                            <img class="project-image" src="http://s3.postimg.org/rfovpypib/Screen_Shot_2016_09_26_at_12_13_31_PM.png">
-                            <div><b>Woof Golf</b></div>
-                            <div>Difficulty: &#9733; &#9733; &#9733;</div>
-                        </a>
-                    </div>
-                </div>
+                    </div>    
+                  </div>    
+                </template>
             </div>
-            <div v-show="open == 'tutorial'" id="typelist" style="display:none">
-                <button @click="toggle('tutorial')" class="all highlight">Menu</button>
-                <div id="container">
-                    <div id="instructions" style="height:100%; min-width: 90%; padding-left: 5px;">
-                <div class="step">
-                    <h4>Step 1 - Set the backdrop to an image</h4>Hint: We did
-                    this for you, but feel free to change it!
-                    <pre><span style=
-                    "background-color:lightgreen">setBackdropURL('http://i.imgur.com/q6Bqraw.jpg')</span></pre>
-                </div>
-                <div class="step">
-                    <h4>Step 2 - Create a circle</h4>
-                    <pre>setBackdropURL('http://i.imgur.com/q6Bqraw.jpg')
-
-<span style="background-color:lightgreen">new Circle({})</span></pre>
-                </div>
-                <div class="step">
-                    <h4>Step 3 - Make your circle bigger</h4>
-                    <pre>setBackdropURL('http://i.imgur.com/q6Bqraw.jpg')
-
-new Circle({<span style="background-color:lightgreen">radius: 20</span>})</pre>
-                </div>
-                <div class="step">
-                    <h4>Step 4 - Change your circle's color</h4>
-                    <pre>setBackdropURL('http://i.imgur.com/q6Bqraw.jpg')
-
-new Circle({radius: 20<span style=
-"background-color:lightgreen">, color: "yellow"</span>})</pre>
-                </div>
-                <div class="step">
-                    <h4>Step 5 - Give your circle a name</h4>
-                    <pre>setBackdropURL('http://i.imgur.com/q6Bqraw.jpg')
-<span style=
-"background-color:lightgreen">var stevensBall = </span>new Circle({radius: 20, color: "yellow"})</pre>
-                </div>
-                <div class="step">
-                    <h4>Step 6 - Make your circle move</h4>
-                    <pre>setBackdropURL('http://i.imgur.com/q6Bqraw.jpg')
-var stevensBall = new Circle({radius: 20, color: "yellow"})
-<span style="background-color:lightgreen">stevensBall.move(10)</span></pre>
-                </div>
-                <div class="step">
-                    <h4>Step 7 - Make your circle move more</h4>
-                    <pre>setBackdropURL('http://i.imgur.com/q6Bqraw.jpg')
-var stevensBall =new Circle({radius: 20, color: "yellow"})
-<span style="background-color:lightgreen">forever(() => {</span>
-<span style="background-color:lightgreen">  </span>stevensBall.move(1)
-<span style="background-color:lightgreen">})</span></pre>
-                </div>
-                <div class="step">
-                    <h4>Step 8 - Make your circle follow your mouse</h4>
-                    <pre>setBackdropURL('http://i.imgur.com/q6Bqraw.jpg')
-var stevensBall = new Circle({radius: 20, color: "yellow"})
-forever(() =&gt; {
-<span style=
-"background-color:lightgreen">  stevensBall.pointTowards(mouseX, mouseY)</span>
-  stevensBall.move(1)
-})</pre>
-                </div>
-            </div>
-        </div>
-        </div>
-        </div>
-        <div style="max-width: 100%" v-for="(blocks, menu) in searched(menus)">
-            <template v-if="menu != 'Creating Sprites'"> 
-                <button v-show="open == undefined || open == menu || search" :class="{highlight: !search}" class="all" :id="menu.split(' ')[0]" @click="toggle(menu)">{{ menu }}</button>
-                <div v-show="open == menu || search" class="list" v-for="block in blocks">
-                  <vue-block :block="block"></vue-block>
-                </div>
-            </template>
-            <template v-else>
-              <button v-show="open == undefined || open == menu || search" :class="{highlight: !search}" class="all" :id="menu.split(' ')[0]" @click="toggle(menu)">{{ menu }}</button>
-              <div v-show="open == menu || Object.keys(blocks).includes(open) || search" class="list">
-                <div class="list" v-for="(blocks2, submenu) in blocks">
-                  <button v-show="open == menu || open == submenu || search" :class="{highlight: !search}" class="all" :id="submenu.split(' ')[0]" @click="toggle(submenu)">{{ submenu }}</button>
-                  <div v-show="open == submenu || search" class="list">
-                  <div class="list" v-for="block2 in blocks2">
-                    <vue-block :block="block2"></vue-block>
-                  </div>
-                </div>
-                </div>    
-              </div>    
-            </template>
-        </div>
         </div>
         </div>
         <script src="./docs.js"></script>
@@ -222,6 +77,52 @@ forever(() =&gt; {
               search: "",
               open: undefined,
               menus: {
+                  "Keyboard Shortcuts": [
+                    {
+                        description: "Save",
+                        code: "Ctl-S"
+                    },
+                    {
+                        description: "Undo",
+                        code: "Ctl-Z"
+                    },
+                    {
+                        description: "Redo",
+                        code: "Ctl-Shift-Z"
+                    },
+                    {
+                        description: "Copy",
+                        code: "Ctl-C"
+                    },
+                    {
+                        description: "Cut",
+                        code: "Ctl-X"
+                    },
+                    {
+                        description: "Paste",
+                        code: "Ctl-V"
+                    },
+                    {
+                        description: "Find",
+                        code: "Ctl-F"
+                    },
+                    {
+                        description: "Select All",
+                        code: "Ctl-A"
+                    },
+                    {
+                        description: "Comment or uncomment code",
+                        code: "Ctl-/"
+                    },
+                    {
+                        description: "Select next occurance of word",
+                        code: "Ctl-D"
+                    },
+                    {
+                        description: "Beautify the selected code with proper indentation",
+                        code: "Ctl-B"
+                    },
+                  ],
                   Motion: [
                     {
                         url: "https://s17.postimg.org/aldfh0hu7/2_0_Move_Steps.png",
@@ -1063,6 +964,7 @@ forever(() =&gt; {
                         alignContent: "stretch",
                         alignItems: "stretch",
                         width: "100%",
+                        maxWidth: "100%"
                     }
                 }
               }
@@ -1089,6 +991,7 @@ forever(() =&gt; {
                 return fuse.search(this.search)
             },
             searched: function (menus) {
+              if (this.search == '') { return menus }
               var newMenus = {}
               for (var menu in menus){
                   if (menu == 'Creating Sprites'){

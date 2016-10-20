@@ -1,0 +1,64 @@
+<style>
+    * {
+        font-family: sans-serif;
+    }
+</style>
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<h1><a href="../projects.html"><span class="glyphicon glyphicon-arrow-left"></span></a>  Tutorial</h1>
+<div id="instructions" style="height:100%; min-width: 90%; padding-left: 5px;">
+    <div class="step">
+        <h4>Step 1 - Set the backdrop to an image</h4>Hint: We did
+        this for you, but feel free to change it!
+        <pre><span style=
+        "background-color:lightgreen">setBackdropURL('http://i.imgur.com/q6Bqraw.jpg')</span></pre>
+    </div>
+    <div class="step">
+        <h4>Step 2 - Create a circle</h4>
+        <pre>setBackdropURL('http://i.imgur.com/q6Bqraw.jpg')
+
+<span style="background-color:lightgreen">new Circle({})</span></pre>
+    </div>
+    <div class="step">
+        <h4>Step 3 - Make your circle bigger</h4>
+        <pre>setBackdropURL('http://i.imgur.com/q6Bqraw.jpg')
+
+new Circle({<span style="background-color:lightgreen">radius: 20</span>})</pre>
+    </div>
+    <div class="step">
+        <h4>Step 4 - Change your circle's color</h4>
+        <pre>setBackdropURL('http://i.imgur.com/q6Bqraw.jpg')
+
+new Circle({radius: 20<span style=
+"background-color:lightgreen">, color: "yellow"</span>})</pre>
+    </div>
+    <div class="step">
+        <h4>Step 5 - Give your circle a name</h4>
+        <pre>setBackdropURL('http://i.imgur.com/q6Bqraw.jpg')
+<span style=
+"background-color:lightgreen">var stevensBall = </span>new Circle({radius: 20, color: "yellow"})</pre>
+    </div>
+    <div class="step">
+        <h4>Step 6 - Make your circle move</h4>
+        <pre>setBackdropURL('http://i.imgur.com/q6Bqraw.jpg')
+var stevensBall = new Circle({radius: 20, color: "yellow"})
+<span style="background-color:lightgreen">stevensBall.move(10)</span></pre>
+    </div>
+    <div class="step">
+        <h4>Step 7 - Make your circle move more</h4>
+        <pre>setBackdropURL('http://i.imgur.com/q6Bqraw.jpg')
+var stevensBall =new Circle({radius: 20, color: "yellow"})
+<span style="background-color:lightgreen">forever(() => {</span>
+<span style="background-color:lightgreen">  </span>stevensBall.move(1)
+<span style="background-color:lightgreen">})</span></pre>
+    </div>
+    <div class="step">
+        <h4>Step 8 - Make your circle follow your mouse</h4>
+        <pre>setBackdropURL('http://i.imgur.com/q6Bqraw.jpg')
+var stevensBall = new Circle({radius: 20, color: "yellow"})
+forever(() =&gt; {
+<span style=
+"background-color:lightgreen">  stevensBall.pointTowards(mouseX, mouseY)</span>
+stevensBall.move(1)
+})</pre>
+    </div>
+</div>

@@ -131,22 +131,24 @@
         </ul>
       </div>
       <span id="title">
-       <fieldset>
-         <container style="width:50px; border-radius:2px; color:white; padding: 5px">  
+        <fieldset>
+          <container style="width:50px; border-radius:2px; color:white; padding: 5px">  
             <input type="checkbox" id ="output-check"><label for="output-check">Output</label>
             <span class="ui"></span>
-            
-      <container style="width:50px;  border-radius:2px; color: white; padding: 5px">
-         <input type="checkbox" id ="block-check" ><label for="block-check">Blocks</label>
-         <span class="ui"></span>
-       </container> 
-       <container style="width:50px;  border-radius:2px; color:white;  padding: 5px">
-           <input type="checkbox" id ="code-check" ><label for="code-check">Code</label>
-           <span class="ui"></span>
-       </container>
-        
-         </container>
-     </fieldset>
+          </container>
+          <container style="width:50px;  border-radius:2px; color: white; padding: 5px">
+            <input type="checkbox" id ="block-check" ><label for="block-check">Blocks</label>
+            <span class="ui"></span>
+          </container> 
+          <container style="width:50px;  border-radius:2px; color: white; padding: 5px">
+            <input type="checkbox" id ="project-check" ><label for="project-check">Projects</label>
+            <span class="ui"></span>
+          </container> 
+          <container style="width:50px;  border-radius:2px; color:white;  padding: 5px">
+            <input type="checkbox" id ="code-check" ><label for="code-check">Code</label>
+            <span class="ui"></span>
+          </container>
+      </fieldset>
       <!--<span id="powered">powered by</span> <a target="blank" href="http://www.thecodingspace.com/"><img style="width:30px; height 30px;" src="./logo-1.png"></img></a>-->
       </span>
       <span id="save">
@@ -156,14 +158,18 @@
     </div>
  
     <div id="container" style="diplay:flex; ">
-        <div id="output" style="height:100%; resize: none; flex: 1.2 1 33%;">
+        <div id="output" style="height:100%; resize: none; flex: 1.2 1 25%;">
             <iframe scrolling="no" id="preview" style="height:100%; width:100%; "></iframe>
         </div>
-        <div id="docs"  style="height:100%; padding-left: 5px; flex: 1.2 1 33%">
-            <iframe src="./docs/index.html" id="scratch" style="height:100%; width:100%; flex: 1.2 1 33%">  </iframe> 
+        <div id="docs"  style="height:100%; padding-left: 5px; flex: 1.2 1 25%">
+            <iframe src="./docs/index.html" id="scratch" style="height:100%; width:100%;"></iframe> 
         </div>
         
-        <div id="code" style="width:33%; height:100%; flex: 1.2 1 33%; word-wrap: break-word; ">
+        <div id="projects" style="width:25%; height:100%; flex: 1.2 1 25%; word-wrap: break-word; ">
+          <iframe src="./projects.html" style="height:100%; width:100%"></iframe> 
+        </div>
+        
+        <div id="code" style="width:25%; height:100%; flex: 1.2 1 25%; word-wrap: break-word; ">
         </div>
       
         
@@ -173,7 +179,9 @@
   $("#block-check").prop("checked", true);
   $("#code-check").prop("checked", true);
   $("#output-check").prop("checked", true);
-
+  
+  $("#project-check").prop("checked", false);
+    $("#projects").toggle()
   
   $('#block-check').click(function(){
     debouncedRunCode()
@@ -183,49 +191,39 @@
     }
     
     else {
-    $('#docs').toggle('fast');
-  }
-}); 
+      $('#docs').toggle('fast');
+    }
+  }); 
 
-$('#block-button').click(function() {
-  debouncedRunCode()
-  $('#docs').slidePanel('slow'); 
-});
-
-$('#code-check').click(function(){
-  debouncedRunCode()
+  $('#code-check').click(function(){
+    debouncedRunCode()
     if ($(this).is(':not(:checked)')) {
       $('#code').toggle('fast');
     }
     else {
-    $('#code').toggle('fast');
-  }
-}); 
+      $('#code').toggle('fast');
+    }
+  }); 
 
-$('#code-button').click(function() {
-  debouncedRunCode()
-  $('#code').slidePanel('slow'); 
-});
+  $('#project-check').click(function(){
+    debouncedRunCode()
+    if ($(this).is(':not(:checked)')) {
+      $('#projects').toggle('fast');
+    }
+    else {
+      $('#projects').toggle('fast');
+    }
+  }); 
 
-
-
-$('#output-check').click(function(){
-  debouncedRunCode()
-    if ($(this).is(':not(:checked)')){
+  $('#output-check').click(function(){
+    debouncedRunCode()
+      if ($(this).is(':not(:checked)')){
+        $('#output').toggle('fast');
+      }
+    else {
       $('#output').toggle('fast');
     }
-  else {
-    $('#output').toggle('fast');
-  }
-}); 
-
-$('#output-button').click(function() {
-  debouncedRunCode()
-  $('#output').toggle('fast');
-});
-
-
-
+  }); 
 </script>
 
     
@@ -400,7 +398,7 @@ $('#output-button').click(function() {
       if(e.ctrlKey && e.key == '/'){
         e.preventDefault();
       }
-      if(e.ctrlKey && e.keyCode == 'S'.charCodeAt(0)){
+      if((e.metaKey || e.ctrlKey) && e.keyCode == 'S'.charCodeAt(0)){
         e.preventDefault();
         save();
       }
