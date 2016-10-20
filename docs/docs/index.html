@@ -202,7 +202,8 @@ forever(() =&gt; {
         </script>
         <script>
         var updateColor = function(e){
-            app.menus.Looks[0].code = "\"" + e.target.value + "\""
+            e.target.parentElement.nextElementSibling.childNodes[2].childNodes[0].innerHTML = e.target.value
+            e.target.parentElement.nextElementSibling.childNodes[0].setAttribute("data-clipboard-text", e.target.value)
         }
         
         Vue.component('vue-block', {
@@ -308,7 +309,7 @@ forever(() =&gt; {
                         description: "Pick a color:",
                         html: '<input value="#409cbc" style="width:100%; height: 50px" type="color" onchange="updateColor(event)"></input>',
                         tags: "color hex pick colour red blue green yellow orange pink",
-                        code: '"#409cbc"'
+                        code: '#409cbc'
                     },
                     {
                         url: "https://camo.githubusercontent.com/586eb4942f6cc1896e2406cb8c130c304cdf4652/68747470733a2f2f692e696d6775722e636f6d2f653650393552302e706e67",
