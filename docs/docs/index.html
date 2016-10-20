@@ -201,6 +201,10 @@ forever(() =&gt; {
             </div>
         </script>
         <script>
+        var updateColor = function(e){
+            e.target.parentElement.nextElementSibling.childNodes[2].childNodes[0].innerHTML = Prism.highlight("\"" + e.target.value + "\"",  Prism.languages.javascript)
+        }
+        
         Vue.component('vue-block', {
           template: "#block-template",
           props: ["block"],
@@ -302,8 +306,9 @@ forever(() =&gt; {
                 Looks: [
                     {
                         description: "Pick a color:",
-                        html: '<input value="#409cbc" style="width:100%; height: 50px" type="color"></input>',
-                        tags: "color hex pick colour red blue green yellow orange pink"
+                        html: '<input value="#409cbc" style="width:100%; height: 50px" type="color" onchange="updateColor(event)"></input>',
+                        tags: "color hex pick colour red blue green yellow orange pink",
+                        code: '"#409cbc"'
                     },
                     {
                         url: "https://camo.githubusercontent.com/586eb4942f6cc1896e2406cb8c130c304cdf4652/68747470733a2f2f692e696d6775722e636f6d2f653650393552302e706e67",
