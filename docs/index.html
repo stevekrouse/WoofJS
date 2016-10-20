@@ -33,6 +33,7 @@
   <script src="./codemirror/lint.js"></script>
   <script src="https://unpkg.com/vue@2.0.1/dist/vue.js"></script>
   <script data-presets="es2015" src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.14.0/babel.min.js"></script>
+  <script src="https://cdn.rawgit.com/beautify-web/js-beautify/1b52eb1f90daaefa6ff0fa7736f97fbfc58093c1/js/lib/beautify.js"></script>
   <style>
     body {
       background-color: #fff;
@@ -117,6 +118,7 @@
   </style>
 </head>
 <body style="height:100%">
+  
     <div id="navbar" style="">
     
       <button style="margin-left: 5px; margin-right:110px" class="btn btn-medium btn-info" type="button" id="login" onclick="window.open('./login.html', 'Sign In', 'width=500,height=500')">Login</button>
@@ -360,18 +362,30 @@ $('#output-button').click(function() {
         });
       }
     };
-  
+    var mac = CodeMirror.keyMap["default"] == CodeMirror.keyMap.macDefault;
+    var ctrl = mac ? "Cmd-" : "Ctrl-";
+    var keymap = {}
+    keymap[ctrl + "B"] = function(cm) {
+      var beautiful = js_beautify(cm.getSelection(), {space_after_anon_function: true, indent_size: 2, indent_with_tabs: false })
+      cm.replaceSelection(beautiful)
+    }
+    
     var editor = CodeMirror(document.getElementById('code'), {
         mode:  "javascript",
         value: editorVal,
         lineNumbers: true,
         theme: "eclipse",
+        tabSize: 2,
+        indentUnit: 2,
+        indentWithTabs: false,
+        electricChars: true,
         keyMap: "sublime",
         autoCloseBrackets: true,
         matchBrackets: true,
         autofocus: true,
         smartIndent: true,
         gutters: ["CodeMirror-lint-markers"],
+        extraKeys: keymap,
         lint: {
           delay: 800, 
           options: {
