@@ -202,7 +202,7 @@ forever(() =&gt; {
         </script>
         <script>
         var updateColor = function(e){
-            e.target.parentElement.nextElementSibling.childNodes[2].childNodes[0].innerHTML = Prism.highlight("\"" + e.target.value + "\"",  Prism.languages.javascript)
+            app.menus.Looks[0].code = "\"" + e.target.value + "\""
         }
         
         Vue.component('vue-block', {
