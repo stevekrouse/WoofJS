@@ -328,7 +328,7 @@ $('#output-button').click(function() {
       if (myCode) {
         name = getID()
       } else {
-        name = window.prompt("Choose a name for your project", "my-project") || '';
+        name = window.prompt('Choose a name for your project. You cannot include ".", "#", "$", "[", "]", or spaces in the name of your project.', "my-project") || '';
       }
       if (name.includes('.') || name.includes('/') || name.includes('$') || name.includes("#") || name.includes("[") || name.includes("]") || name.includes(" ")){
         alert('You cannot include ".", "#", "$", "[", "]", or spaces in the name of your project. Try to save again.')
