@@ -192,10 +192,11 @@ forever(() =&gt; {
         <script id="block-template" type="text/x-template">
             <div style='margin-bottom: 20px; margin-right: 10px' class="block">
                 <img v-if="block.url" :src="block.url">
-                <div>{{ block.description }}</div> 
+                <div v-if="block.description">{{ block.description }}</div>
+                <div v-if="block.html" v-html="block.html"></div> 
                 <div v-if="block.code">
-                <div><span data-toggle="tooltip" title="Copied!" :data-clipboard-text="block.code" class="btn-clipboard">Copy</span></div> 
-                    <pre><code v-html="highlight(block.code)"></code></pre>
+                  <span data-toggle="tooltip" title="Copied!" :data-clipboard-text="block.code" class="btn-clipboard">Copy</span>
+                  <pre><code v-html="highlight(block.code)"></code></pre>
                 </div>
             </div>
         </script>
@@ -299,6 +300,11 @@ forever(() =&gt; {
                     }
                 ],
                 Looks: [
+                    {
+                        description: "Pick a color:",
+                        html: '<input value="#409cbc" style="width:100%; height: 50px" type="color"></input>',
+                        tags: "color hex pick colour red blue green yellow orange pink"
+                    },
                     {
                         url: "https://camo.githubusercontent.com/586eb4942f6cc1896e2406cb8c130c304cdf4652/68747470733a2f2f692e696d6775722e636f6d2f653650393552302e706e67",
                         code: "NAME.show()",
