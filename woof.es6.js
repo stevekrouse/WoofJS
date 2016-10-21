@@ -183,6 +183,7 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
   thisContext.freeze = function() {
     if (arguments.length > 0) { throw new TypeError("freeze() requires no inputs."); }
     if (thisContext.stopped) { return }
+    thisContext._render()
     thisContext.after(10, "miliseconds", () => thisContext.stopped = true);
   };
   thisContext.defrost = function() {

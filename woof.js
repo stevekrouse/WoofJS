@@ -219,6 +219,7 @@ function Woof() {
     if (thisContext.stopped) {
       return;
     }
+    thisContext._render();
     thisContext.after(10, "miliseconds", function () {
       return thisContext.stopped = true;
     });
