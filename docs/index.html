@@ -115,6 +115,14 @@
     #pop {
       cursor: pointer;
     }
+    
+    #error {
+      display: none;
+      color: #a94442;
+      margin-right: 5px;
+      background-color: #f2dede;
+    }
+    
   </style>
 </head>
 <body style="height:100%">
@@ -152,6 +160,7 @@
       <!--<span id="powered">powered by</span> <a target="blank" href="http://www.thecodingspace.com/"><img style="width:30px; height 30px;" src="./logo-1.png"></img></a>-->
       </span>
       <span id="save">
+        <button id="error" class="btn btn-medium btn-error" @click="showError()" :style="{display: error ? 'inline-block' : 'none'}"><span class="glyphicon glyphicon-exclamation-sign"></span> Error</button>
         <button style="display: none" :style="{display: 'inline-block'}" style="margin-right: 5px" class="btn btn-medium" :class="styles" onclick="save()">{{ status == "SAVED" ? 'Saved' : 'Save' }}</button>
         <img onclick="popout()" id="pop" style="margin: 10px" src="./popout.png">
       </span>
@@ -236,7 +245,8 @@
     var saveApp = new Vue({
       el: '#save',
       data: {
-        status: "NEW"
+        status: "NEW",
+        error: undefined
       },
       computed: {
         styles : function() { return {
@@ -246,7 +256,10 @@
         } }
       },
       methods: {
-        getID: getID
+        getID: getID,
+        showError: function(){
+          alert(this.error.message)
+        }
       }
     })
     var myCode = false
@@ -408,8 +421,8 @@
       makeDirty()
       debouncedRunCode()
     });
-    runCode();
-    
+    runCode()
+
     window.onbeforeunload = function(e) {		
        if (saveApp.status == "DIRTY") {		
          var dialogText = 'Make sure to copy and paste your work somewhere safe.';		
@@ -417,6 +430,20 @@
          return dialogText; 		
        }		
     };
+    
+    function tryRunningCode(){
+      saveApp.error = undefined
+      try {
+        var code = Babel.transform(editor.getValue(), { presets: ['es2015'] }).code
+        try {
+          document.getElementById('preview').contentWindow.eval(code);
+        } catch (e) {
+          saveApp.error = e
+        }
+      } catch (e) {
+        saveApp.error = e
+      }
+    }
     
     function runCode() {
         var iframe = document.getElementById('preview');
@@ -432,7 +459,7 @@
                 var evt = document.createEvent('Event');  
                 evt.initEvent('load', false, false);  
                 iframe.contentWindow.dispatchEvent(evt);
-                iframe.contentWindow.eval(Babel.transform(editor.getValue(), { presets: ['es2015'] }).code);
+                tryRunningCode();
             }
         }, 10)
     }
