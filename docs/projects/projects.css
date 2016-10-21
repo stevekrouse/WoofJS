@@ -1,0 +1,47 @@
+a { text-decoration: underline !important; color: white !important }
+
+p { 
+    color:white !important;
+    font-weight:bold !important;
+}
+
+span {
+    color: #337ab7;
+}
+h1 {
+    text-align: center;
+}
+
+* {
+    font-family: sans-serif;
+}
+
+.block {
+   margin: 20px;
+  padding: 15px;
+  box-shadow: 2px 1px 1px gray;
+  background-color: #5794DE;
+  color: white;
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+}
+
+#create {
+    color: black;
+}
+
+.container {
+    display:flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+}
+
+iframe {
+    width: 80%;
+    height: 200px;
+    max-width: 200px;
+}

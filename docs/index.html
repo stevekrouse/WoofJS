@@ -1,456 +1,186 @@
-<!DOCTYPE html>
-<html style="height:100%">
 <head>
-  <meta charset="utf-8">
-  <title>WoofJS</title>
-  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/3.4.0/firebase.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/ui/live/0.5/firebase-ui-auth.js"></script>
-  <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/live/0.5/firebase-ui-auth.css" />
-  <script type="text/javascript" src="https://cdn.rawgit.com/showdownjs/showdown/984942e239c9bda522b9c5544aba72647983b3f1/dist/showdown.min.js"></script>
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.js"></script>
-  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  <link rel="stylesheet" href="./codemirror/codemirror.css">
-  <script type="text/javascript" src="./codemirror/codemirror.js"></script>
-  <script type="text/javascript" src="./codemirror/javascript.js"></script>
-  <script type="text/javascript" src="./codemirror/closebrackets.js"></script>
-  <script type="text/javascript" src="./codemirror/javascript-hint.js"></script>
-  <script type="text/javascript" src="./codemirror/javascript-lint.js"></script>
-  <script type="text/javascript" src="./codemirror/matchbrackets.js"></script>
-  <script type="text/javascript" src="./codemirror/search.js"></script>
-  <script type="text/javascript" src="./codemirror/searchcursor.js"></script>
-  <script type="text/javascript" src="./codemirror/show-hint.js"></script>
-  <script type="text/javascript" src="./codemirror/comment.js"></script>
-  <script type="text/javascript" src="./codemirror/sublime.js"></script>
-  <link rel="stylesheet" href="./codemirror/dialog.css">
-  <link rel="stylesheet" href="./codemirror/show-hint.css">
-  <script src="./codemirror/dialog.js"></script>
-  <link rel="stylesheet" href="./codemirror/lint.css">
-  <script src="./codemirror/jshint.min.js"></script>
-  <script src="./codemirror/lint.js"></script>
-  <script src="https://unpkg.com/vue@2.0.1/dist/vue.js"></script>
-  <script data-presets="es2015" src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.14.0/babel.min.js"></script>
-  <style>
-    body {
-      background-color: #fff;
-      font-family: sans-serif;
-    }
-    h1 {
-      font-weight: normal;
-      font-size: 25px;
-    }
-    .CodeMirror {
-        height: 100%;
-        font-size: 13px;
-    }
-    #title, #title a{
-        font-size: 16px;
-        margin-left: auto;
-        margin-right: auto;
-        color: white;
-        line-height:2;
-    }
-    iframe {
-        border: none;
-    } 
-    #navbar {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background-color: #344D97; 
-      color:white; 
-      height:55px; 
-      width:100%; 
-    }
-    #powered {
-        font-size: 10px;
-    }
-    h4 {
-      text-align: center;
-    }
-    #container {
-      width:100%;
-      display:flex;
-      flex-direction:row;
-      
-      /* Firefox */
-      height: -moz-calc(99% - 55px);
-      /* WebKit */
-      height: -webkit-calc(99% - 55px);
-      /* Opera */
-      height: -o-calc(99% - 55px);
-      /* Standard */
-      height: calc(99% - 55px);
-    }
-    #instructions {
-      -webkit-user-select: none;
-      -khtml-user-select: none;
-      -moz-user-select: none;
-      -ms-user-select: none;
-      -o-user-select: none;
-      user-select: none;
-    }
-    .step {
-      margin-left: 5px;
-      margin-right: 10px;
-      margin-top: 20px;
-      margin-bottom: 20px;
-      padding: 5px;
-      background-color: lightblue;
-    }
-    
-    @media all and (max-width: 600px) {
-      #login {
-        margin-right:5px;
-      }
-      fieldset {
-        display: none;
-      }
-    }
-    
-    #pop {
-      cursor: pointer;
-    }
-  </style>
+ <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+ <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
-<body style="height:100%">
-    <div id="navbar" style="">
-    
-      <button style="margin-left: 5px; margin-right:110px" class="btn btn-medium btn-info" type="button" id="login" onclick="window.open('./login.html', 'Sign In', 'width=500,height=500')">Login</button>
-      <div style="margin-left: 5px" id="logggedin" class="hide dropdown">
-        <button class="btn btn-medium btn-info dropdown-toggle" type="button" id="loggedin-name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"></button>
-        <ul class="dropdown-menu" aria-labelledby="loggedin-name">
-          <li><a href="./">New Project</a></li>
-          <li><a target="_blank" id="login-projects">My Projects</a></li>
-          <li onclick="firebase.auth().signOut()"><a>Logout</a></li>
-        </ul>
-      </div>
-      <span id="title">
-       <fieldset>
-         <container style="width:50px; border-radius:2px; color:white; padding: 5px">  
-            <input type="checkbox" id ="output-check"><label for="output-check">Output</label>
-            <span class="ui"></span>
-            
-      <container style="width:50px;  border-radius:2px; color: white; padding: 5px">
-         <input type="checkbox" id ="block-check" ><label for="block-check">Blocks</label>
-         <span class="ui"></span>
-       </container> 
-       <container style="width:50px;  border-radius:2px; color:white;  padding: 5px">
-           <input type="checkbox" id ="code-check" ><label for="code-check">Code</label>
-           <span class="ui"></span>
-       </container>
-        
-         </container>
-     </fieldset>
-      <!--<span id="powered">powered by</span> <a target="blank" href="http://www.thecodingspace.com/"><img style="width:30px; height 30px;" src="./logo-1.png"></img></a>-->
-      </span>
-      <span id="save">
-        <button style="display: none" :style="{display: 'inline-block'}" style="margin-right: 5px" class="btn btn-medium" :class="styles" onclick="save()">{{ status == "SAVED" ? 'Saved' : 'Save' }}</button>
-        <img onclick="popout()" id="pop" style="margin: 10px" src="./popout.png">
-      </span>
-    </div>
+
+<style>
+ body {
+  margin: auto;
+  font-family: 'Avenir', 'Helvetica Neue', Helvetica, sans-serif;
+  text-align: center;
+ }
  
-    <div id="container" style="diplay:flex; ">
-        <div id="output" style="height:100%; resize: none; flex: 1.2 1 33%;">
-            <iframe scrolling="no" id="preview" style="height:100%; width:100%; "></iframe>
-        </div>
-        <div id="docs"  style="height:100%; padding-left: 5px; flex: 1.2 1 33%">
-            <iframe src="./docs/index.html" id="scratch" style="height:100%; width:100%; flex: 1.2 1 33%">  </iframe> 
-        </div>
-        
-        <div id="code" style="width:33%; height:100%; flex: 1.2 1 33%; word-wrap: break-word; ">
-        </div>
-      
-        
-    </div>
-  <script>
-
-  $("#block-check").prop("checked", true);
-  $("#code-check").prop("checked", true);
-  $("#output-check").prop("checked", true);
-
-  
-  $('#block-check').click(function(){
-    debouncedRunCode()
-    if ($(this).is(':not(:checked)')){
-      $('#docs').toggle('fast');
-     
-    }
-    
-    else {
-    $('#docs').toggle('fast');
+ #navbar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #344D97;
+  color: white;
+  height: 55px;
+  width: 100%;
+ }
+ 
+ #Create,
+ #Teach,
+ #Learn {
+  margin: 5px;
+  color: white;
+ }
+ 
+ #Start {
+  width: 200px;
+  height: 65px;
+  border: none;
+  margin: 10px;
+  background-color: #AD5FC2;
+  border-radius: 40px;
+  color: white;
+  font-size: 150%;
+ }
+ 
+ #demo {
+  width: 300px;
+  height: 65px;
+  border: none;
+  margin: 10px;
+  background-color: #F5A623;
+  border-radius: 40px;
+  color: white;
+  font-size: 150%;
+ }
+ 
+ #teachwoof {
+  width: 250px;
+  height: 65px;
+  border: none;
+  margin: 10px;
+  background-color: #AD5FC2;
+  border-radius: 40px;
+  color: white;
+  font-size: 150%;
+ }
+ 
+ #teachwoof2 {
+  width: 250px;
+  height: 65px;
+  border: none;
+  margin: 10px;
+  background-color: #59A5D9;
+  border-radius: 40px;
+  color: white;
+  font-size: 150%;
+ }
+ 
+ #Learn {
+  width: 200px;
+  height: 65px;
+  border: none;
+  margin: 10px;
+  background-color: #59A5D9;
+  border-radius: 40px;
+  color: white;
+  font-size: 150%;
+ }
+ 
+ #FAQ {
+  width: 200px;
+  height: 65px;
+  border: none;
+  margin: 10px;
+  background-color: #59A5D9;
+  border-radius: 40px;
+  color: white;
+  font-size: 150%;
+ }
+ 
+ button:focus {
+  outline: none
+ }
+ 
+ #Start:hover {
+  background-color: #861AA4;
+ }
+ 
+ #Learn:hover {
+  background-color: #1E72AB;
+ }
+ 
+ #teachwoof:hover {
+  background-color: #861AA4;
+ }
+ 
+ #FAQ:hover {
+  background-color: #1E72AB;
+ }
+ 
+ #demo:hover {
+  background-color: #CF8100;
+ }
+ 
+ #compare {
+  background-color: #ffffff;
+  background-image: url("data:image/svg+xml,%3Csvg width='304' height='304' viewBox='0 0 304 304' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M44.1 224c.463-2.282 2.48-4 4.9-4 2.76 0 5 2.24 5 5s-2.24 5-5 5c-2.42 0-4.437-1.718-4.9-4H0v-2h44.1zm160 48c.463-2.282 2.48-4 4.9-4 2.76 0 5 2.24 5 5s-2.24 5-5 5c-2.42 0-4.437-1.718-4.9-4H82v-2h122.1zm57.8-46c-.463 2.282-2.48 4-4.9 4-2.76 0-5-2.24-5-5s2.24-5 5-5c2.42 0 4.437 1.718 4.9 4H304v2h-42.1zm0 16c-.463 2.282-2.48 4-4.9 4-2.76 0-5-2.24-5-5s2.24-5 5-5c2.42 0 4.437 1.718 4.9 4H304v2h-42.1zm6.2-114c.463-2.282 2.48-4 4.9-4 2.76 0 5 2.24 5 5s-2.24 5-5 5c-2.42 0-4.437-1.718-4.9-4h-86.2c-.463 2.282-2.48 4-4.9 4-2.76 0-5-2.24-5-5s2.24-5 5-5c2.42 0 4.437 1.718 4.9 4h86.2zm-256-48c.463-2.282 2.48-4 4.9-4 2.76 0 5 2.24 5 5s-2.24 5-5 5c-2.42 0-4.437-1.718-4.9-4H0v-2h12.1zm185.8 34c-.463 2.282-2.48 4-4.9 4-2.76 0-5-2.24-5-5s2.24-5 5-5c2.42 0 4.437 1.718 4.9 4h86.2c.463-2.282 2.48-4 4.9-4 2.76 0 5 2.24 5 5s-2.24 5-5 5c-2.42 0-4.437-1.718-4.9-4h-86.2zM258 12.1c2.282.463 4 2.48 4 4.9 0 2.76-2.24 5-5 5s-5-2.24-5-5c0-2.42 1.718-4.437 4-4.9V0h2v12.1zm-64 208c2.282.463 4 2.48 4 4.9 0 2.76-2.24 5-5 5s-5-2.24-5-5c0-2.42 1.718-4.437 4-4.9v-54.2c-2.282-.463-4-2.48-4-4.9 0-2.76 2.24-5 5-5s5 2.24 5 5c0 2.42-1.718 4.437-4 4.9v54.2zm48-198.2c2.282-.463 4-2.48 4-4.9 0-2.76-2.24-5-5-5s-5 2.24-5 5c0 2.42 1.718 4.437 4 4.9V82h64v-2h-62V21.9zm16 16c2.282-.463 4-2.48 4-4.9 0-2.76-2.24-5-5-5s-5 2.24-5 5c0 2.42 1.718 4.437 4 4.9V66h48v-2h-46V37.9zm-128 96c2.282-.463 4-2.48 4-4.9 0-2.76-2.24-5-5-5s-5 2.24-5 5c0 2.42 1.718 4.437 4 4.9V210h16v10.1c-2.282.463-4 2.48-4 4.9 0 2.76 2.24 5 5 5s5-2.24 5-5c0-2.42-1.718-4.437-4-4.9V208h-16v-74.1zm-5.9-21.9c.463-2.282 2.48-4 4.9-4 2.76 0 5 2.24 5 5s-2.24 5-5 5c-2.42 0-4.437-1.718-4.9-4H114v48H85.9c-.463 2.282-2.48 4-4.9 4-2.76 0-5-2.24-5-5s2.24-5 5-5c2.42 0 4.437 1.718 4.9 4H112v-48h12.1zm-6.2 130c-.463 2.282-2.48 4-4.9 4-2.76 0-5-2.24-5-5s2.24-5 5-5c2.42 0 4.437 1.718 4.9 4H176v-74.1c-2.282-.463-4-2.48-4-4.9 0-2.76 2.24-5 5-5s5 2.24 5 5c0 2.42-1.718 4.437-4 4.9V242h-60.1zm-16-64c-.463 2.282-2.48 4-4.9 4-2.76 0-5-2.24-5-5s2.24-5 5-5c2.42 0 4.437 1.718 4.9 4H114v48h10.1c.463-2.282 2.48-4 4.9-4 2.76 0 5 2.24 5 5s-2.24 5-5 5c-2.42 0-4.437-1.718-4.9-4H112v-48h-10.1zM66 284.1c2.282.463 4 2.48 4 4.9 0 2.76-2.24 5-5 5s-5-2.24-5-5c0-2.42 1.718-4.437 4-4.9V274H50v30h-2v-32h18v12.1zM236.1 176c.463-2.282 2.48-4 4.9-4 2.76 0 5 2.24 5 5s-2.24 5-5 5c-2.42 0-4.437-1.718-4.9-4H226v94h48v32h-2v-30h-48v-98h12.1zm25.8-30c-.463 2.282-2.48 4-4.9 4-2.76 0-5-2.24-5-5s2.24-5 5-5c2.42 0 4.437 1.718 4.9 4H274v44.1c2.282.463 4 2.48 4 4.9 0 2.76-2.24 5-5 5s-5-2.24-5-5c0-2.42 1.718-4.437 4-4.9V146h-10.1zm-64 96c-.463 2.282-2.48 4-4.9 4-2.76 0-5-2.24-5-5s2.24-5 5-5c2.42 0 4.437 1.718 4.9 4H208v-80h16v-14h-42.1c-.463 2.282-2.48 4-4.9 4-2.76 0-5-2.24-5-5s2.24-5 5-5c2.42 0 4.437 1.718 4.9 4H226v18h-16v80h-12.1zm86.2-210c.463-2.282 2.48-4 4.9-4 2.76 0 5 2.24 5 5s-2.24 5-5 5c-2.42 0-4.437-1.718-4.9-4H272V0h2v32h10.1zM98 101.9c2.282-.463 4-2.48 4-4.9 0-2.76-2.24-5-5-5s-5 2.24-5 5c0 2.42 1.718 4.437 4 4.9V144H53.9c-.463-2.282-2.48-4-4.9-4-2.76 0-5 2.24-5 5s2.24 5 5 5c2.42 0 4.437-1.718 4.9-4H98v-44.1zM53.9 34c-.463 2.282-2.48 4-4.9 4-2.76 0-5-2.24-5-5s2.24-5 5-5c2.42 0 4.437 1.718 4.9 4H80V0h2v34H53.9zm60.1 3.9c2.282-.463 4-2.48 4-4.9 0-2.76-2.24-5-5-5s-5 2.24-5 5c0 2.42 1.718 4.437 4 4.9V64H80v64H69.9c-.463-2.282-2.48-4-4.9-4-2.76 0-5 2.24-5 5s2.24 5 5 5c2.42 0 4.437-1.718 4.9-4H82V66h32V37.9zM101.9 82c-.463 2.282-2.48 4-4.9 4-2.76 0-5-2.24-5-5s2.24-5 5-5c2.42 0 4.437 1.718 4.9 4H128V37.9c-2.282-.463-4-2.48-4-4.9 0-2.76 2.24-5 5-5s5 2.24 5 5c0 2.42-1.718 4.437-4 4.9V82h-28.1zm16-64c-.463 2.282-2.48 4-4.9 4-2.76 0-5-2.24-5-5s2.24-5 5-5c2.42 0 4.437 1.718 4.9 4H146v44.1c2.282.463 4 2.48 4 4.9 0 2.76-2.24 5-5 5s-5-2.24-5-5c0-2.42 1.718-4.437 4-4.9V18h-26.1zm102.2 270c.463-2.282 2.48-4 4.9-4 2.76 0 5 2.24 5 5s-2.24 5-5 5c-2.42 0-4.437-1.718-4.9-4H98v14h-2v-16h124.1zM242 149.9c2.282-.463 4-2.48 4-4.9 0-2.76-2.24-5-5-5s-5 2.24-5 5c0 2.42 1.718 4.437 4 4.9V162h16v30h-16v66h48v46h2v-48h-48v-62h16v-34h-16v-10.1zM53.9 18c-.463 2.282-2.48 4-4.9 4-2.76 0-5-2.24-5-5s2.24-5 5-5c2.42 0 4.437 1.718 4.9 4H64V2H48V0h18v18H53.9zm112 32c-.463 2.282-2.48 4-4.9 4-2.76 0-5-2.24-5-5s2.24-5 5-5c2.42 0 4.437 1.718 4.9 4H192V0h50v2h-48v48h-28.1zm-48-48c-.463 2.282-2.48 4-4.9 4-2.76 0-5-2.24-5-5 0-.342.034-.677.1-1h2.07c-.11.313-.17.65-.17 1 0 1.657 1.343 3 3 3s3-1.343 3-3c0-.35-.06-.687-.17-1H178v34h-18V21.9c-2.282-.463-4-2.48-4-4.9 0-2.76 2.24-5 5-5s5 2.24 5 5c0 2.42-1.718 4.437-4 4.9V32h14V2h-58.1zm0 96c-.463 2.282-2.48 4-4.9 4-2.76 0-5-2.24-5-5s2.24-5 5-5c2.42 0 4.437 1.718 4.9 4H137l32-32h39V21.9c-2.282-.463-4-2.48-4-4.9 0-2.76 2.24-5 5-5s5 2.24 5 5c0 2.42-1.718 4.437-4 4.9V66h-40.172l-32 32H117.9zm28.1 90.1c2.282.463 4 2.48 4 4.9 0 2.76-2.24 5-5 5s-5-2.24-5-5c0-2.42 1.718-4.437 4-4.9v-76.513L175.586 80H224V21.9c-2.282-.463-4-2.48-4-4.9 0-2.76 2.24-5 5-5s5 2.24 5 5c0 2.42-1.718 4.437-4 4.9V82h-49.586L146 112.414V188.1zm16 32c2.282.463 4 2.48 4 4.9 0 2.76-2.24 5-5 5s-5-2.24-5-5c0-2.42 1.718-4.437 4-4.9v-99.513L184.586 96H300.1c.398-1.96 1.94-3.502 3.9-3.9v2.07c-1.165.413-2 1.524-2 2.83s.835 2.417 2 2.83v2.07c-1.96-.398-3.502-1.94-3.9-3.9H185.414L162 121.414V220.1zm-144-64c2.282.463 4 2.48 4 4.9 0 2.76-2.24 5-5 5s-5-2.24-5-5c0-2.42 1.718-4.437 4-4.9v-3.513l48-48V48h32V0h2v50H66v55.413l-48 48v2.687zM50 53.9c2.282-.463 4-2.48 4-4.9 0-2.76-2.24-5-5-5s-5 2.24-5 5c0 2.42 1.718 4.437 4 4.9v42.686l-48 48V210h28.1c.463 2.282 2.48 4 4.9 4 2.76 0 5-2.24 5-5s-2.24-5-5-5c-2.42 0-4.437 1.718-4.9 4H2v-62.586l48-48V53.9zm-16 16c2.282-.463 4-2.48 4-4.9 0-2.76-2.24-5-5-5s-5 2.24-5 5c0 2.42 1.718 4.437 4 4.9v18.686l-32 32v2.828l34-34V69.9zM12.1 32c.463-2.282 2.48-4 4.9-4 2.76 0 5 2.24 5 5s-2.24 5-5 5c-2.42 0-4.437-1.718-4.9-4H9.414L0 43.414v-2.828L8.586 32H12.1zm265.8 18c-.463 2.282-2.48 4-4.9 4-2.76 0-5-2.24-5-5s2.24-5 5-5c2.42 0 4.437 1.718 4.9 4h18.686L304 40.586v2.828L297.414 50H277.9zm-16 160c-.463 2.282-2.48 4-4.9 4-2.76 0-5-2.24-5-5s2.24-5 5-5c2.42 0 4.437 1.718 4.9 4H288V136.587l16-16v2.827l-14 14V210h-28.1zm-208 32c-.463 2.282-2.48 4-4.9 4-2.76 0-5-2.24-5-5s2.24-5 5-5c2.42 0 4.437 1.718 4.9 4H64v-22.586L40.586 194H21.9c-.463 2.282-2.48 4-4.9 4-2.76 0-5-2.24-5-5s2.24-5 5-5c2.42 0 4.437 1.718 4.9 4h19.513L66 216.586V242H53.9zm150.2 14c.463-2.282 2.48-4 4.9-4 2.76 0 5 2.24 5 5s-2.24 5-5 5c-2.42 0-4.437-1.718-4.9-4H96v-56.598L56.598 162H37.9c-.463 2.282-2.48 4-4.9 4-2.76 0-5-2.24-5-5s2.24-5 5-5c2.42 0 4.437 1.718 4.9 4h19.502L98 200.598V256h106.1zm-150.2 2c-.463 2.282-2.48 4-4.9 4-2.76 0-5-2.24-5-5s2.24-5 5-5c2.42 0 4.437 1.718 4.9 4H80v-46.586L48.586 178H21.9c-.463 2.282-2.48 4-4.9 4-2.76 0-5-2.24-5-5s2.24-5 5-5c2.42 0 4.437 1.718 4.9 4h27.513L82 208.586V258H53.9zM97 100c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm0-16c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm16 16c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm16 16c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm0 16c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm-48 32c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm16 16c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm32 48c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm-16 16c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm32-16c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm0-32c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm16 32c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm32 16c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm0-16c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm-16-64c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm16 0c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm16 96c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm0 16c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm16 16c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm16-144c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm0 32c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm16-32c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm16-16c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm-96 0c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm0 16c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm16-32c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm96 0c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm-16-64c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm16-16c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm-32 0c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm0-16c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm-16 0c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm-16 0c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm-16 0c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM49 36c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm-32 0c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm32 16c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM33 68c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm16-48c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm0 240c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm16 32c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm-16-64c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm0 16c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm-16-32c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm80-176c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm16 0c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm-16-16c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm32 48c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm16-16c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm0-32c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm112 176c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm-16 16c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm0 16c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm0 16c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM17 180c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm0 16c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm0-32c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm16 0c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM17 84c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm32 64c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm16-16c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 39.793V0h-2v40.586L8.586 64H0v2h9.413L34 41.414v-1.62zM2 300.1V258h14v46h2v-48H0V302.17c.313-.11.65-.17 1-.17 1.306 0 2.417.835 2.83 2H5.9c-.398-1.96-1.94-3.502-3.9-3.9zM34 241v63h-2v-62H0v-2h34v1zM17 18h1V0h-2v16H0v2h17zm273-2V0h-2v18h16v-2h-14zm-32 273v15h-2v-14h-14v14h-2v-16h18v1zM0 92.1c.323-.066.658-.1 1-.1 2.76 0 5 2.24 5 5s-2.24 5-5 5c-.342 0-.677-.034-1-.1v-2.07c.313.11.65.17 1 .17 1.657 0 3-1.343 3-3s-1.343-3-3-3c-.35 0-.687.06-1 .17V92.1zM80 272h2v32h-2v-32zm37.9 32c-.463-2.282-2.48-4-4.9-4-2.42 0-4.437 1.718-4.9 4h2.07c.413-1.165 1.524-2 2.83-2s2.417.835 2.83 2h2.07zM5.9 0c.066.323.1.658.1 1 0 2.76-2.24 5-5 5-.342 0-.677-.034-1-.1V3.83C.313 3.94.65 4 1 4c1.657 0 3-1.343 3-3 0-.35-.06-.687-.17-1H5.9zm294.2 0c-.066.323-.1.658-.1 1 0 2.42 1.718 4.437 4 4.9V3.83c-1.165-.413-2-1.524-2-2.83 0-.35.06-.687.17-1h-2.07zm3.9 300.1c-1.96.398-3.502 1.94-3.9 3.9h2.07c.302-.852.978-1.528 1.83-1.83v-2.07z' fill='%23cecece' fill-opacity='0.4' fill-rule='evenodd'/%3E%3C/svg%3E");
+ }
+ 
+ h1 {
+  font-size: 4em;
+ }
+ 
+ h2 {
+  font-size: 2em;
+ }
+ 
+ a:hover {
+  text-decoration: none;
+ }
+ 
+ #testimonial>img {
+  width: 100%;
+ }
+ 
+ .top {
+  font-size: 2em;
+  margin-bottom: 30px;
+  margin-top: 20px;
+  line-height: 40px;
+ }
+ 
+ @media only screen and (max-device-width: 600px) {
+  .top {
+   font-size: 400% !important;
+   line-height: 100px;
   }
-}); 
-
-$('#block-button').click(function() {
-  debouncedRunCode()
-  $('#docs').slidePanel('slow'); 
-});
-
-$('#code-check').click(function(){
-  debouncedRunCode()
-    if ($(this).is(':not(:checked)')) {
-      $('#code').toggle('fast');
-    }
-    else {
-    $('#code').toggle('fast');
+  #first>.container>#main {
+   width: 100% !important;
   }
-}); 
-
-$('#code-button').click(function() {
-  debouncedRunCode()
-  $('#code').slidePanel('slow'); 
-});
-
-
-
-$('#output-check').click(function(){
-  debouncedRunCode()
-    if ($(this).is(':not(:checked)')){
-      $('#output').toggle('fast');
-    }
-  else {
-    $('#output').toggle('fast');
+  #Start,
+  #Learn {
+   font-size: 3em;
+   width: 400px;
+   height: 155px;
+   margin: 20px;
+   border-radius: 30px;
   }
-}); 
+ }
+</style>
 
-$('#output-button').click(function() {
-  debouncedRunCode()
-  $('#output').toggle('fast');
-});
+<div id="first" style="color: white; height: 100vh; background-image: url('https://s22.postimg.org/6qpm1oz01/woofbackdrop.png');   background-repeat: no-repeat;   background-size: cover; ">
+ <div class="container" style="display:flex;  
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+   ">
 
-
-
-</script>
-
-    
-  <script>
-    var getID = function() {
-      return window.location.hash.substring(1, window.location.hash.length);
-    }
-    var currentID = getID()
-    
-    var saveApp = new Vue({
-      el: '#save',
-      data: {
-        status: "NEW"
-      },
-      computed: {
-        styles : function() { return {
-          'btn-warning': this.status == 'DIRTY', 
-          'btn-success': this.status == 'SAVED',
-          'btn-default': this.status == "NEW"
-        } }
-      },
-      methods: {
-        getID: getID
-      }
-    })
-    var myCode = false
-    
-    
-    var config = {
-      apiKey: "AIzaSyBYHv7dCiD0bWiHRlcp4VIZCIqzoMnB4yY",
-      authDomain: "woofjs-d1b27.firebaseapp.com",
-      databaseURL: "https://woofjs-d1b27.firebaseio.com",
-      storageBucket: "woofjs-d1b27.appspot.com",
-      messagingSenderId: "397293370524"
-    };
-    firebase.initializeApp(config);
-    
-    function handleLogin(userName, uid) {
-      $('#loggedin-name').html(userName + ' <span class="caret"></span>')
-      $('#login-projects').attr("href", "./user#" + uid )
-      $('#logggedin').removeClass("hide")
-      $('#login').addClass('hide')
-    }
-    
-    function handleLogout() {
-      $('#logggedin').addClass("hide")
-      $('#login').removeClass("hide")
-      myCode = false
-    }
-    
-    firebase.auth().onAuthStateChanged(function(user) {
-      if (user){
-        handleLogin(user.displayName, user.uid)
-        firebase.database().ref("/user/" + user.uid + "/displayName").set(user.displayName)
-        firebase.database().ref("/user/" + user.uid + "/email").set(user.email)
-      } else {
-        handleLogout()
-      }
-    });
-
-    var makeClean = function() {
-      saveApp.status = "SAVED"
-      currentID = getID()
-    }
-    
-    var makeDirty = function() {
-      saveApp.status = "DIRTY"
-    }
-    
-    var popout = function() {
-      if (saveApp.status == "SAVED"){
-        window.open("./full#" + saveApp.getID(), "_blank")
-      } else {
-        alert("You must save your project to open it in a new window.")
-      }
-    }
-    
-    var editorVal = "setBackdropURL('http://i.imgur.com/q6Bqraw.jpg')\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
-    if (getID() != ''){
-      editorVal = "// Loading...\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
-      firebase.database().ref('/code/' + getID()).limitToLast(1).once('value').then(function(snapshot) {
-        if (snapshot.val()){
-          myCode = firebase.auth().currentUser && snapshot.val()[Object.keys(snapshot.val())[0]].uid == firebase.auth().currentUser.uid
-          editor.setValue(snapshot.val()[Object.keys(snapshot.val())[0]].code)
-          makeClean()
-        }
-      });
-    }
-    
-    window.onhashchange = function() {
-      if (getID() != currentID) {
-        window.location.reload()
-      }
-    }
-    
-    // TODO secure firebase
-    // !root.child('code').child($code).exists()
-    
-    var save = function(){
-      if (saveApp.status == "SAVED") { return }
-      
-      if (myCode) {
-        name = getID()
-      } else {
-        name = window.prompt("Choose a name for your project", "my-project") || '';
-      }
-      if (name.includes('.') || name.includes('/') || name.includes('$') || name.includes("#") || name.includes("[") || name.includes("]") || name.includes(" ")){
-        alert('You cannot include ".", "#", "$", "[", "]", or spaces in the name of your project. Try to save again.')
-      } else if (name) { 
-        firebase.database().ref('/code/' + name).limitToLast(1).once('value').then(function(snapshot) {
-          if (snapshot.val()){
-            if (firebase.auth().currentUser && snapshot.val()[Object.keys(snapshot.val())[0]].uid == firebase.auth().currentUser.uid) {
-                firebase.database().ref().child("/code/" + name).push({
-                  code: editor.getValue(), 
-                  time: firebase.database.ServerValue.TIMESTAMP, 
-                  uid: firebase.auth().currentUser && firebase.auth().currentUser.uid
-                });
-                window.location.hash = name
-                makeClean()
-            } else {
-              alert("That project name has already been taken. Try another one.")
-            }
-          } else {
-            firebase.database().ref().child("/code/" + name).push({
-              code: editor.getValue(), 
-              time: firebase.database.ServerValue.TIMESTAMP, 
-              uid: firebase.auth().currentUser && firebase.auth().currentUser.uid
-            });
-            firebase.database().ref().child("/code/" + name + "/--uid").set(firebase.auth().currentUser && firebase.auth().currentUser.uid)
-            window.location.hash = name
-            myCode = firebase.auth().currentUser
-            makeClean()
-          }
-        });
-      }
-    };
-  
-    var editor = CodeMirror(document.getElementById('code'), {
-        mode:  "javascript",
-        value: editorVal,
-        lineNumbers: true,
-        theme: "eclipse",
-        keyMap: "sublime",
-        autoCloseBrackets: true,
-        matchBrackets: true,
-        autofocus: true,
-        smartIndent: true,
-        gutters: ["CodeMirror-lint-markers"],
-        lint: {
-          delay: 800, 
-          options: {
-            "esversion": 6,
-            "esnext": true,
-            "asi": true
-          }
-        },
-    });
-    
-    onkeydown = function(e){
-      if(e.ctrlKey && e.key == '/'){
-        e.preventDefault();
-      }
-      if(e.ctrlKey && e.keyCode == 'S'.charCodeAt(0)){
-        e.preventDefault();
-        save();
-      }
-    }
-
-    editor.on("change", function(){
-      makeDirty()
-      debouncedRunCode()
-    });
-    runCode();
-    
-    window.onbeforeunload = function(e) {		
-       if (saveApp.status == "DIRTY") {		
-         var dialogText = 'Make sure to copy and paste your work somewhere safe.';		
-         e.returnValue = dialogText;		
-         return dialogText; 		
-       }		
-    };
-    
-    function runCode() {
-        var iframe = document.getElementById('preview');
-        
-        iframe.src = "";
-        setTimeout(function() {
-            var script = iframe.contentWindow.document.createElement("script");
-            script.type = "text/javascript";
-            script.src = "https://cdn.rawgit.com/stevekrouse/WoofJS/40b6f7dda7d89daa9c1252ce2b655cdc0fdd0a4f/woof.js";
-            iframe.contentWindow.document.body.appendChild(script);
-            
-            script.onload = function() {
-                var evt = document.createEvent('Event');  
-                evt.initEvent('load', false, false);  
-                iframe.contentWindow.dispatchEvent(evt);
-                iframe.contentWindow.eval(Babel.transform(editor.getValue(), { presets: ['es2015'] }).code);
-            }
-        }, 10)
-    }
-    function debounce(func, wait, immediate) {
-    	var timeout;
-    	return function() {
-    		var context = this, args = arguments;
-    		var later = function() {
-    			timeout = null;
-    			if (!immediate) func.apply(context, args);
-    		};
-    		var callNow = immediate && !timeout;
-    		clearTimeout(timeout);
-    		timeout = setTimeout(later, wait);
-    		if (callNow) func.apply(context, args);
-    	};
-    };
-    var debouncedRunCode = debounce(runCode, 1000, false)
-
-  </script>
-  <script>
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-  
-    ga('create', 'UA-82374072-1', 'auto');
-    ga('send', 'pageview');
-  
-  </script>
-
-</body>
-</html>
+  <div id="main" style="display:flex;    flex-direction: column; flex-wrap: nowrap; justify-content: center; align-content: center;
+    align-items: center; width: 60%; height: 100vh; ">
+   <div class="top" style="margin:0"><b><span style="font-size:150%">WoofJS</b></span>
+    <br><i>Bridging Scratch to Javascript</i><br> WoofJS mirrors Scratch to provide a gradual transition from block-based to text-based coding. <br>
+   </div>
+   <div style="display:flex;    flex-direction: row; ">
+    <a href="./create.html"><button id ="Start">Start Coding</button></a>
+    <a href="./teach.html"><button id ="Learn">For Educators</button></a></div>
+  </div>
+ </div>
+</div>

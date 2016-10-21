@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html style="height:100%">
+<head>
+  <meta charset="utf-8">
+  <title>WoofJS</title>
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/3.4.0/firebase.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/ui/live/0.5/firebase-ui-auth.js"></script>
+  <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/live/0.5/firebase-ui-auth.css" />
+  <script type="text/javascript" src="https://cdn.rawgit.com/showdownjs/showdown/984942e239c9bda522b9c5544aba72647983b3f1/dist/showdown.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.js"></script>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="./codemirror/codemirror.css">
+  <script type="text/javascript" src="./codemirror/codemirror.js"></script>
+  <script type="text/javascript" src="./codemirror/javascript.js"></script>
+  <script type="text/javascript" src="./codemirror/closebrackets.js"></script>
+  <script type="text/javascript" src="./codemirror/javascript-hint.js"></script>
+  <script type="text/javascript" src="./codemirror/javascript-lint.js"></script>
+  <script type="text/javascript" src="./codemirror/matchbrackets.js"></script>
+  <script type="text/javascript" src="./codemirror/search.js"></script>
+  <script type="text/javascript" src="./codemirror/searchcursor.js"></script>
+  <script type="text/javascript" src="./codemirror/show-hint.js"></script>
+  <script type="text/javascript" src="./codemirror/comment.js"></script>
+  <script type="text/javascript" src="./codemirror/sublime.js"></script>
+  <link rel="stylesheet" href="./codemirror/dialog.css">
+  <link rel="stylesheet" href="./codemirror/show-hint.css">
+  <script src="./codemirror/dialog.js"></script>
+  <link rel="stylesheet" href="./codemirror/lint.css">
+  <script src="./codemirror/jshint.min.js"></script>
+  <script src="./codemirror/lint.js"></script>
+  <script src="https://unpkg.com/vue@2.0.1/dist/vue.js"></script>
+  <script data-presets="es2015" src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.14.0/babel.min.js"></script>
+  <script src="https://cdn.rawgit.com/beautify-web/js-beautify/1b52eb1f90daaefa6ff0fa7736f97fbfc58093c1/js/lib/beautify.js"></script>
+  <style>
+    body {
+      background-color: #fff;
+      font-family: sans-serif;
+    }
+    h1 {
+      font-weight: normal;
+      font-size: 25px;
+    }
+    .CodeMirror {
+        height: 100%;
+        font-size: 13px;
+    }
+    #title, #title a{
+        font-size: 16px;
+        margin-left: auto;
+        margin-right: auto;
+        color: white;
+        line-height:2;
+    }
+    iframe {
+        border: none;
+    } 
+    #navbar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #344D97; 
+      color:white; 
+      height:55px; 
+      width:100%; 
+    }
+    #powered {
+        font-size: 10px;
+    }
+    h4 {
+      text-align: center;
+    }
+    #container {
+      width:100%;
+      display:flex;
+      flex-direction:row;
+      
+      /* Firefox */
+      height: -moz-calc(99% - 55px);
+      /* WebKit */
+      height: -webkit-calc(99% - 55px);
+      /* Opera */
+      height: -o-calc(99% - 55px);
+      /* Standard */
+      height: calc(99% - 55px);
+    }
+    #instructions {
+      -webkit-user-select: none;
+      -khtml-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      -o-user-select: none;
+      user-select: none;
+    }
+    .step {
+      margin-left: 5px;
+      margin-right: 10px;
+      margin-top: 20px;
+      margin-bottom: 20px;
+      padding: 5px;
+      background-color: lightblue;
+    }
+    
+    @media all and (max-width: 600px) {
+      #login {
+        margin-right:5px;
+      }
+      fieldset {
+        display: none;
+      }
+    }
+    
+    #pop {
+      cursor: pointer;
+    }
+    
+    #error {
+      display: none;
+      color: #a94442;
+      margin-right: 5px;
+      background-color: #f2dede;
+    }
+    
+  </style>
+</head>
+<body style="height:100%">
+  <div id="page" style="height:100%">
+    <div id="navbar">
+      <button style="margin-left: 5px; margin-right:110px" class="btn btn-medium btn-info" type="button" id="login" onclick="window.open('./login.html', 'Sign In', 'width=500,height=500')">Login</button>
+      <div style="margin-left: 5px" id="logggedin" class="hide dropdown">
+        <button class="btn btn-medium btn-info dropdown-toggle" type="button" id="loggedin-name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"></button>
+        <ul class="dropdown-menu" aria-labelledby="loggedin-name">
+          <li><a href="./create.html">New Project</a></li>
+          <li><a target="_blank" id="login-projects">My Projects</a></li>
+          <li onclick="firebase.auth().signOut()"><a>Logout</a></li>
+          <li role="separator" class="divider"></li>
+          <li class="dropdown-header">Recent Projects</li>
+          <li v-for="project in projects.slice(0,10)"><a :href="'#' + project.key">{{project.key}}</a></li>
+        </ul>
+      </div>
+      <span id="title">
+        <fieldset>
+          <span style="width:50px; border-radius:2px; color:white; padding: 5px">  
+            <input @click="outputPane = !outputPane" type="checkbox" id ="output-check" checked><label for="output-check">Output</label>
+            <span class="ui"></span>
+          </span>
+          <span style="width:50px;  border-radius:2px; color: white; padding: 5px">
+            <input @click="docsPane = !docsPane" type="checkbox" id ="block-check" checked><label for="block-check">Blocks</label>
+            <span class="ui"></span>
+          </span> 
+          <span style="width:50px;  border-radius:2px; color: white; padding: 5px">
+            <input @click="projectsPane = !projectsPane" type="checkbox" id ="project-check"><label for="project-check">Projects</label>
+            <span class="ui"></span>
+          </span> 
+          <span style="width:50px;  border-radius:2px; color:white;  padding: 5px">
+            <input @click="codePane = !codePane" type="checkbox" id ="code-check" checked><label for="code-check">Code</label>
+            <span class="ui"></span>
+          </span>
+      </fieldset>
+      <!--<span id="powered">powered by</span> <a target="blank" href="http://www.thecodingspace.com/"><img style="width:30px; height 30px;" src="./logo-1.png"></img></a>-->
+      </span>
+      <span id="save">
+        <button id="error" class="btn btn-medium btn-error" @click="showError()" :style="{display: error ? 'inline-block' : 'none'}"><span class="glyphicon glyphicon-exclamation-sign"></span> Error</button>
+        <button style="display: none" :style="{display: 'inline-block'}" style="margin-right: 5px" class="btn btn-medium" :class="styles" onclick="save()">{{ status == "SAVED" ? 'Saved' : 'Save' }}</button>
+        <img onclick="popout()" id="pop" style="margin: 10px" src="./popout.png">
+      </span>
+    </div>
+ 
+    <div id="container" style="diplay:flex; ">
+        <div v-show="outputPane" id="output" style="height:100%; resize: none; flex: 1.2 1 25%;">
+            <iframe scrolling="no" id="preview" style="height:100%; width:100%; "></iframe>
+        </div>
+        
+        <div v-show="docsPane" id="docs"  style="height:100%; padding-left: 5px; flex: 1.2 1 25%">
+            <iframe src="./docs/index.html" id="scratch" style="height:100%; width:100%;"></iframe> 
+        </div>
+        
+        <div v-show="projectsPane" id="projects" style="width:25%; height:100%; flex: 1.2 1 25%; word-wrap: break-word; ">
+          <iframe src="./projects.html" style="height:100%; width:100%"></iframe> 
+        </div>
+        
+        <div v-show="codePane" id="code" style="width:25%; height:100%; flex: 1.2 1 25%; word-wrap: break-word; ">
+        </div>
+      </div>
+    </div>
+  <script>
+    var getID = function() {
+      return window.location.hash.substring(1, window.location.hash.length);
+    }
+    var currentID = getID()
+    
+    var app = new Vue({
+      el: '#page',
+      data: {
+        status: "NEW",
+        error: undefined,
+        projects: [],
+        codePane: true,
+        outputPane: true,
+        docsPane: true,
+        projectsPane: false
+      },
+      computed: {
+        styles : function() { return {
+          'btn-warning': this.status == 'DIRTY', 
+          'btn-success': this.status == 'SAVED',
+          'btn-default': this.status == "NEW"
+        } },
+      },
+      methods: {
+        getID: getID,
+        showError: function(){
+          alert(this.error.message)
+        }
+      }
+    })
+    var myCode = false
+    
+    
+    var config = {
+      apiKey: "AIzaSyBYHv7dCiD0bWiHRlcp4VIZCIqzoMnB4yY",
+      authDomain: "woofjs-d1b27.firebaseapp.com",
+      databaseURL: "https://woofjs-d1b27.firebaseio.com",
+      storageBucket: "woofjs-d1b27.appspot.com",
+      messagingSenderId: "397293370524"
+    };
+    firebase.initializeApp(config);
+    
+    function handleLogin(userName, uid) {
+      $('#loggedin-name').html(userName + ' <span class="caret"></span>')
+      $('#login-projects').attr("href", "./user.html#" + uid )
+      $('#logggedin').removeClass("hide")
+      $('#login').addClass('hide')
+    }
+    
+    function handleLogout() {
+      $('#logggedin').addClass("hide")
+      $('#login').removeClass("hide")
+      myCode = false
+    }
+    
+    firebase.auth().onAuthStateChanged(function(user) {
+      if (user){
+        handleLogin(user.displayName, user.uid)
+        firebase.database().ref("/user/" + user.uid + "/displayName").set(user.displayName)
+        firebase.database().ref("/user/" + user.uid + "/email").set(user.email)
+        
+        firebase.database().ref('/code/').orderByChild("--uid").equalTo(user.uid).once('value').then(function(snapshot) {
+          if (snapshot.val()){
+            app.projects = []
+            for (var key in snapshot.val()) {
+              var project = snapshot.val()[key]
+              var versions = Object.keys(project)
+              var t = project[versions[versions.length-1]].time
+              app.projects.push({key: key, time: t, code: project.code})
+            }
+          }
+          app.projects.sort(function(a,b) {
+            if (a.time < b.time)
+              return 1;
+            if (a.time > b.time)
+              return -1;
+            return 0;
+          })
+        });
+      } else {
+        handleLogout()
+      }
+    });
+
+    var makeClean = function() {
+      app.status = "SAVED"
+      currentID = getID()
+    }
+    
+    var makeDirty = function() {
+      app.status = "DIRTY"
+    }
+    
+    var popout = function() {
+      if (app.status == "SAVED"){
+        window.open("./full#" + app.getID(), "_blank")
+      } else {
+        alert("You must save your project to open it in a new window.")
+      }
+    }
+    
+    var editorVal = "setBackdropURL('http://i.imgur.com/q6Bqraw.jpg')\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
+    if (getID() != ''){
+      editorVal = "// Loading...\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
+      firebase.database().ref('/code/' + getID()).limitToLast(1).once('value').then(function(snapshot) {
+        if (snapshot.val()){
+          myCode = firebase.auth().currentUser && snapshot.val()[Object.keys(snapshot.val())[0]].uid == firebase.auth().currentUser.uid
+          editor.setValue(snapshot.val()[Object.keys(snapshot.val())[0]].code)
+          makeClean()
+        }
+      });
+    }
+    
+    window.onhashchange = function() {
+      if (getID() != currentID) {
+        window.location.reload()
+      }
+    }
+    
+    // TODO secure firebase
+    // !root.child('code').child($code).exists()
+    
+    var save = function(){
+      if (app.status == "SAVED") { return }
+      
+      if (myCode) {
+        name = getID()
+      } else {
+        name = window.prompt('Choose a name for your project. You cannot include ".", "#", "$", "[", "]", or spaces in the name of your project.', "my-project") || '';
+      }
+      if (name.includes('.') || name.includes('/') || name.includes('$') || name.includes("#") || name.includes("[") || name.includes("]") || name.includes(" ")){
+        alert('You cannot include ".", "#", "$", "[", "]", or spaces in the name of your project. Try to save again.')
+      } else if (name) { 
+        firebase.database().ref('/code/' + name).limitToLast(1).once('value').then(function(snapshot) {
+          if (snapshot.val()){
+            if (firebase.auth().currentUser && snapshot.val()[Object.keys(snapshot.val())[0]].uid == firebase.auth().currentUser.uid) {
+                firebase.database().ref().child("/code/" + name).push({
+                  code: editor.getValue(), 
+                  time: firebase.database.ServerValue.TIMESTAMP, 
+                  uid: firebase.auth().currentUser && firebase.auth().currentUser.uid
+                });
+                window.location.hash = name
+                makeClean()
+            } else {
+              alert("That project name has already been taken. Try another one.")
+            }
+          } else {
+            firebase.database().ref().child("/code/" + name).push({
+              code: editor.getValue(), 
+              time: firebase.database.ServerValue.TIMESTAMP, 
+              uid: firebase.auth().currentUser && firebase.auth().currentUser.uid
+            });
+            firebase.database().ref().child("/code/" + name + "/--uid").set(firebase.auth().currentUser && firebase.auth().currentUser.uid)
+            window.location.hash = name
+            myCode = firebase.auth().currentUser
+            makeClean()
+          }
+        });
+      }
+    };
+    var mac = CodeMirror.keyMap["default"] == CodeMirror.keyMap.macDefault;
+    var ctrl = mac ? "Cmd-" : "Ctrl-";
+    var keymap = {}
+    keymap[ctrl + "B"] = function(cm) {
+      var beautiful = js_beautify(cm.getSelection(), {space_after_anon_function: true, indent_size: 2, indent_with_tabs: false })
+      cm.replaceSelection(beautiful)
+    }
+    
+    var editor = CodeMirror(document.getElementById('code'), {
+        mode:  "javascript",
+        value: editorVal,
+        lineNumbers: true,
+        theme: "eclipse",
+        tabSize: 2,
+        indentUnit: 2,
+        indentWithTabs: false,
+        electricChars: true,
+        keyMap: "sublime",
+        autoCloseBrackets: true,
+        matchBrackets: true,
+        autofocus: true,
+        smartIndent: true,
+        gutters: ["CodeMirror-lint-markers"],
+        extraKeys: keymap,
+        lint: {
+          delay: 800, 
+          options: {
+            "esversion": 6,
+            "esnext": true,
+            "asi": true
+          }
+        },
+    });
+    
+    onkeydown = function(e){
+      if(e.ctrlKey && e.key == '/'){
+        e.preventDefault();
+      }
+      if((e.metaKey || e.ctrlKey) && e.keyCode == 'S'.charCodeAt(0)){
+        e.preventDefault();
+        save();
+      }
+    }
+
+    editor.on("change", function(){
+      makeDirty()
+      debouncedRunCode()
+    });
+    runCode()
+
+    window.onbeforeunload = function(e) {		
+       if (app.status == "DIRTY") {		
+         var dialogText = 'Make sure to copy and paste your work somewhere safe.';		
+         e.returnValue = dialogText;		
+         return dialogText; 		
+       }		
+    };
+    
+    function tryRunningCode(){
+      app.error = undefined
+      try {
+        var code = Babel.transform(editor.getValue(), { presets: ['es2015'] }).code
+        try {
+          document.getElementById('preview').contentWindow.eval(code);
+        } catch (e) {
+          app.error = e
+        }
+      } catch (e) {
+        app.error = e
+      }
+    }
+    
+    function runCode() {
+        var iframe = document.getElementById('preview');
+        
+        iframe.src = "";
+        setTimeout(function() {
+            var script = iframe.contentWindow.document.createElement("script");
+            script.type = "text/javascript";
+            script.src = "https://cdn.rawgit.com/stevekrouse/WoofJS/f5be33989f2de512a2656445fe1448a5e635a8cb/woof.js";
+            iframe.contentWindow.document.body.appendChild(script);
+            
+            script.onload = function() {
+                var evt = document.createEvent('Event');  
+                evt.initEvent('load', false, false);  
+                iframe.contentWindow.dispatchEvent(evt);
+                tryRunningCode();
+            }
+        }, 10)
+    }
+    function debounce(func, wait, immediate) {
+    	var timeout;
+    	return function() {
+    		var context = this, args = arguments;
+    		var later = function() {
+    			timeout = null;
+    			if (!immediate) func.apply(context, args);
+    		};
+    		var callNow = immediate && !timeout;
+    		clearTimeout(timeout);
+    		timeout = setTimeout(later, wait);
+    		if (callNow) func.apply(context, args);
+    	};
+    };
+    var debouncedRunCode = debounce(runCode, 1000, false)
+
+  </script>
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  
+    ga('create', 'UA-82374072-1', 'auto');
+    ga('send', 'pageview');
+  
+  </script>
+
+</body>
+</html>
