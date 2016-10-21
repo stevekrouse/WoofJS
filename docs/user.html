@@ -39,8 +39,8 @@
   function elem(key, item){
     var ret = '<a class="list-group-item list-group-item-action">' + key
     ret +=      '<span class="pull-right">'
-    ret +=        '<button style="margin-right: 5px" class="btn btn-info" onclick="window.open(\'../#' + key.replace("'", "\\'") + '\', \'_blank\')">Code</button>'
-    ret +=        '<button class="btn btn-primary" onclick="window.open(\'../full/#' + key.replace("'", "\\'") + '\', \'_blank\')">Full Screen</button>'
+    ret +=        '<button style="margin-right: 5px" class="btn btn-info" onclick="window.open(\'./create.html#' + key.replace("'", "\\'") + '\', \'_blank\')">Code</button>'
+    ret +=        '<button class="btn btn-primary" onclick="window.open(\'./full.html#' + key.replace("'", "\\'") + '\', \'_blank\')">Full Screen</button>'
     ret +=      '</span>'
     ret +=    '</a>'
     console.debug(ret)
