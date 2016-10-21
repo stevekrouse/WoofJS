@@ -115,15 +115,50 @@ a:hover {
  
  #testimonial > img{width:100%;}
  
- @media (max-width: 600px) {
-  h1 {font-size:200%;}
- h2 {font-size: 4em;}
-  
-}
+.top {
+    font-size:2em;
+      margin-bottom:30px;
+      margin-top:20px;
+      line-height:40px;
+  }
  
+ @media only screen and (max-device-width: 600px)  {
+  .top {
+    font-size:400% !important;
+   line-height:100px;
+  }
+    /*p*/
+    /*{font-size: 3em !important;*/
+    /*    line-height: 40px !important;*/
+    /*}*/
+
+#first > .container > #main {width:100% !important;
+ /*font-size:3em;*/
+ /*line-height:200px !important;*/
+}
+
+    /*#first > div.container {width:90% !important;*/
+       /*font-size:200% !important;*/
+       /*line-height:500px !important;*/
+    /*}*/
+    
+    /*#first > .container > div.top {font-size: 6em !important;*/
+    /*line-height:100px;*/
+       /*font-size:200% !important;*/
+       /*line-height:500px !important;*/
+    /*}*/
+    
+    #Start, #Learn{font-size:3em;
+     /*line-height: 50px;*/
+        width: 400px;
+        height: 155px;
+        margin:20px;
+        border-radius: 30px;
+    }
+ }
  </style>
  
- <div id ="first" style= "color: white; padding-top:20px; padding-bottom: 20px;  background-image: url('https://s21.postimg.org/98k0p2usn/img_1386_orig_copy.png'); background-repeat: no-repeat;   background-size: cover; ">
+ <div id ="first" style= "color: white; height: 100vh; background-image: url('https://s22.postimg.org/6qpm1oz01/woofbackdrop.png');   background-repeat: no-repeat;   background-size: cover; ">
          <div class ="container" style="display:flex;  
     flex-direction: row;
     flex-wrap: nowrap;
@@ -132,17 +167,17 @@ a:hover {
     align-items: center;
    ">
             
-            <div style="display:flex;    flex-direction: column; flex-wrap: nowrap; justify-content: center; align-content: center;
-    align-items: center; width: 40%; height: 100vh; ">
-                <h1 style ="margin:0"> WoofJS</h1>
-                <h2 style ="margin:10">Bridging Scratch to Javascript</h2>
-                <p style="font-size: 1.5em; margin: 0">WoofJS mirrors Scratch to provide a gradual transition from block-based to text-based coding. <br></p>
-                 <div style = "display:flex; flex-wrap: nowrap; 
-                    justify-content: center;
-                    align-content: center;
-                    align-items: center; "> <a href="http://www.woofjs.com"><button id ="Start">Start Coding</button></a>
-                 <a href="http://woofjs.com/teach"><button id ="Learn">For Educators</button></a>
+            <div id ="main" style="display:flex;    flex-direction: column; flex-wrap: nowrap; justify-content: center; align-content: center;
+    align-items: center; width: 60%; height: 100vh; ">
+                <div class ="top" style ="margin:0"><b><span style="font-size:150%">WoofJS</b></span> 
+               <br><i>Bridging Scratch to Javascript</i><br>
+                WoofJS mirrors Scratch to provide a gradual transition from block-based to text-based coding. <br>
+                </div>
+                <div style="display:flex;    flex-direction: row; ">
+                 <a href="http://www.woofjs.com"><button id ="Start">Start Coding</button></a>
+                 <a href="http://woofjs.com/teach"><button id ="Learn">For Educators</button></a></div>
                  </div>
                  </div>
-             </div>
-     </div>
+                 </div>
+           
+  
