@@ -128,7 +128,6 @@
 <body style="height:100%">
   <div id="page" style="height:100%">
     <div id="navbar">
-    
       <button style="margin-left: 5px; margin-right:110px" class="btn btn-medium btn-info" type="button" id="login" onclick="window.open('./login.html', 'Sign In', 'width=500,height=500')">Login</button>
       <div style="margin-left: 5px" id="logggedin" class="hide dropdown">
         <button class="btn btn-medium btn-info dropdown-toggle" type="button" id="loggedin-name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"></button>
@@ -143,20 +142,20 @@
       </div>
       <span id="title">
         <fieldset>
-          <span @click="output = !output" style="width:50px; border-radius:2px; color:white; padding: 5px">  
-            <input type="checkbox" id ="output-check"><label for="output-check">Output</label>
+          <span style="width:50px; border-radius:2px; color:white; padding: 5px">  
+            <input @click="outputPane = !outputPane" type="checkbox" id ="output-check" checked><label for="output-check">Output</label>
             <span class="ui"></span>
           </span>
           <span style="width:50px;  border-radius:2px; color: white; padding: 5px">
-            <input type="checkbox" id ="block-check" ><label for="block-check">Blocks</label>
+            <input @click="docsPane = !docsPane" type="checkbox" id ="block-check" checked><label for="block-check">Blocks</label>
             <span class="ui"></span>
           </span> 
           <span style="width:50px;  border-radius:2px; color: white; padding: 5px">
-            <input type="checkbox" id ="project-check" ><label for="project-check">Projects</label>
+            <input @click="projectsPane = !projectsPane" type="checkbox" id ="project-check"><label for="project-check">Projects</label>
             <span class="ui"></span>
           </span> 
           <span style="width:50px;  border-radius:2px; color:white;  padding: 5px">
-            <input type="checkbox" id ="code-check" ><label for="code-check">Code</label>
+            <input @click="codePane = !codePane" type="checkbox" id ="code-check" checked><label for="code-check">Code</label>
             <span class="ui"></span>
           </span>
       </fieldset>
@@ -170,7 +169,7 @@
     </div>
  
     <div id="container" style="diplay:flex; ">
-        <div style="{display: outputPane ? 'block' : 'none'}" id="output" style="height:100%; resize: none; flex: 1.2 1 25%;">
+        <div v-show="outputPane" id="output" style="height:100%; resize: none; flex: 1.2 1 25%;">
             <iframe scrolling="no" id="preview" style="height:100%; width:100%; "></iframe>
         </div>
         
@@ -193,7 +192,7 @@
     var currentID = getID()
     
     var app = new Vue({
-      el: '#navbar',
+      el: '#page',
       data: {
         status: "NEW",
         error: undefined,
