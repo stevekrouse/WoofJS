@@ -126,8 +126,8 @@
   </style>
 </head>
 <body style="height:100%">
-  
-    <div id="navbar" style="">
+  <div id="page" style="height:100%">
+    <div id="navbar">
     
       <button style="margin-left: 5px; margin-right:110px" class="btn btn-medium btn-info" type="button" id="login" onclick="window.open('./login.html', 'Sign In', 'width=500,height=500')">Login</button>
       <div style="margin-left: 5px" id="logggedin" class="hide dropdown">
@@ -143,22 +143,22 @@
       </div>
       <span id="title">
         <fieldset>
-          <container style="width:50px; border-radius:2px; color:white; padding: 5px">  
+          <span @click="output = !output" style="width:50px; border-radius:2px; color:white; padding: 5px">  
             <input type="checkbox" id ="output-check"><label for="output-check">Output</label>
             <span class="ui"></span>
-          </container>
-          <container style="width:50px;  border-radius:2px; color: white; padding: 5px">
+          </span>
+          <span style="width:50px;  border-radius:2px; color: white; padding: 5px">
             <input type="checkbox" id ="block-check" ><label for="block-check">Blocks</label>
             <span class="ui"></span>
-          </container> 
-          <container style="width:50px;  border-radius:2px; color: white; padding: 5px">
+          </span> 
+          <span style="width:50px;  border-radius:2px; color: white; padding: 5px">
             <input type="checkbox" id ="project-check" ><label for="project-check">Projects</label>
             <span class="ui"></span>
-          </container> 
-          <container style="width:50px;  border-radius:2px; color:white;  padding: 5px">
+          </span> 
+          <span style="width:50px;  border-radius:2px; color:white;  padding: 5px">
             <input type="checkbox" id ="code-check" ><label for="code-check">Code</label>
             <span class="ui"></span>
-          </container>
+          </span>
       </fieldset>
       <!--<span id="powered">powered by</span> <a target="blank" href="http://www.thecodingspace.com/"><img style="width:30px; height 30px;" src="./logo-1.png"></img></a>-->
       </span>
@@ -170,87 +170,38 @@
     </div>
  
     <div id="container" style="diplay:flex; ">
-        <div id="output" style="height:100%; resize: none; flex: 1.2 1 25%;">
+        <div style="{display: outputPane ? 'block' : 'none'}" id="output" style="height:100%; resize: none; flex: 1.2 1 25%;">
             <iframe scrolling="no" id="preview" style="height:100%; width:100%; "></iframe>
         </div>
-        <div id="docs"  style="height:100%; padding-left: 5px; flex: 1.2 1 25%">
+        
+        <div v-show="docsPane" id="docs"  style="height:100%; padding-left: 5px; flex: 1.2 1 25%">
             <iframe src="./docs/index.html" id="scratch" style="height:100%; width:100%;"></iframe> 
         </div>
         
-        <div id="projects" style="width:25%; height:100%; flex: 1.2 1 25%; word-wrap: break-word; ">
+        <div v-show="projectsPane" id="projects" style="width:25%; height:100%; flex: 1.2 1 25%; word-wrap: break-word; ">
           <iframe src="./projects.html" style="height:100%; width:100%"></iframe> 
         </div>
         
-        <div id="code" style="width:25%; height:100%; flex: 1.2 1 25%; word-wrap: break-word; ">
+        <div v-show="codePane" id="code" style="width:25%; height:100%; flex: 1.2 1 25%; word-wrap: break-word; ">
         </div>
-      
-        
+      </div>
     </div>
-  <script>
-
-  $("#block-check").prop("checked", true);
-  $("#code-check").prop("checked", true);
-  $("#output-check").prop("checked", true);
-  
-  $("#project-check").prop("checked", false);
-    $("#projects").toggle()
-  
-  $('#block-check').click(function(){
-    debouncedRunCode()
-    if ($(this).is(':not(:checked)')){
-      $('#docs').toggle('fast');
-     
-    }
-    
-    else {
-      $('#docs').toggle('fast');
-    }
-  }); 
-
-  $('#code-check').click(function(){
-    debouncedRunCode()
-    if ($(this).is(':not(:checked)')) {
-      $('#code').toggle('fast');
-    }
-    else {
-      $('#code').toggle('fast');
-    }
-  }); 
-
-  $('#project-check').click(function(){
-    debouncedRunCode()
-    if ($(this).is(':not(:checked)')) {
-      $('#projects').toggle('fast');
-    }
-    else {
-      $('#projects').toggle('fast');
-    }
-  }); 
-
-  $('#output-check').click(function(){
-    debouncedRunCode()
-      if ($(this).is(':not(:checked)')){
-        $('#output').toggle('fast');
-      }
-    else {
-      $('#output').toggle('fast');
-    }
-  }); 
-</script>
-
-    
   <script>
     var getID = function() {
       return window.location.hash.substring(1, window.location.hash.length);
     }
     var currentID = getID()
     
-    var saveApp = new Vue({
+    var app = new Vue({
       el: '#navbar',
       data: {
         status: "NEW",
         error: undefined,
-        projects: []
+        projects: [],
+        codePane: true,
+        outputPane: true,
+        docsPane: true,
+        projectsPane: false
       },
       computed: {
         styles : function() { return {
@@ -299,15 +250,15 @@
         
         firebase.database().ref('/code/').orderByChild("--uid").equalTo(user.uid).once('value').then(function(snapshot) {
           if (snapshot.val()){
-            saveApp.projects = []
+            app.projects = []
             for (var key in snapshot.val()) {
               var project = snapshot.val()[key]
               var versions = Object.keys(project)
               var t = project[versions[versions.length-1]].time
-              saveApp.projects.push({key: key, time: t, code: project.code})
+              app.projects.push({key: key, time: t, code: project.code})
             }
           }
-          saveApp.projects.sort(function(a,b) {
+          app.projects.sort(function(a,b) {
             if (a.time < b.time)
               return 1;
             if (a.time > b.time)
@@ -321,17 +272,17 @@
     });
 
     var makeClean = function() {
-      saveApp.status = "SAVED"
+      app.status = "SAVED"
       currentID = getID()
     }
     
     var makeDirty = function() {
-      saveApp.status = "DIRTY"
+      app.status = "DIRTY"
     }
     
     var popout = function() {
-      if (saveApp.status == "SAVED"){
-        window.open("./full#" + saveApp.getID(), "_blank")
+      if (app.status == "SAVED"){
+        window.open("./full#" + app.getID(), "_blank")
       } else {
         alert("You must save your project to open it in a new window.")
       }
@@ -359,7 +310,7 @@
     // !root.child('code').child($code).exists()
     
     var save = function(){
-      if (saveApp.status == "SAVED") { return }
+      if (app.status == "SAVED") { return }
       
       if (myCode) {
         name = getID()
@@ -447,7 +398,7 @@
     runCode()
 
     window.onbeforeunload = function(e) {		
-       if (saveApp.status == "DIRTY") {		
+       if (app.status == "DIRTY") {		
          var dialogText = 'Make sure to copy and paste your work somewhere safe.';		
          e.returnValue = dialogText;		
          return dialogText; 		
@@ -455,16 +406,16 @@
     };
     
     function tryRunningCode(){
-      saveApp.error = undefined
+      app.error = undefined
       try {
         var code = Babel.transform(editor.getValue(), { presets: ['es2015'] }).code
         try {
           document.getElementById('preview').contentWindow.eval(code);
         } catch (e) {
-          saveApp.error = e
+          app.error = e
         }
       } catch (e) {
-        saveApp.error = e
+        app.error = e
       }
     }
     
