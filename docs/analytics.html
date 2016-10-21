@@ -1,0 +1,145 @@
+<script src="https://unpkg.com/vue@2.0.1/dist/vue.js"></script>
+<script src="https://www.gstatic.com/firebasejs/3.4.0/firebase.js"></script>
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<style>
+    .tablewrap {
+        height: 30%;
+        overflow: scroll;
+        padding: 10px;
+    }
+    h1, h2 {
+        text-align: center;
+    }
+    h2 {
+        font-size: 20px;
+        font-weight: bold;
+    }
+    #totals {
+        background-color: lightblue;
+    }
+    #projects {
+        background-color: lightgreen;
+    }
+    #users {
+        background-color: pink;
+    }
+    table {
+        background-color: white;
+    }
+</style>
+<div id="page">
+    <h1>WoofJS.com Analytics</h1>
+    <div id="totals" class="tablewrap">
+        <h2>Totals</h2>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Projects Created Today</th>
+              <th>Projects Worked On Today</th>
+              <th>Users Active Today</th>
+              <th>Total Users</th>
+              <th>Total Projects</th>
+              <th>Total Revisions</th>
+            </tr>
+          </thead>
+            <tr v-if="users.length == 0 || projects.length == 0"><td>Loading...</td></tr>
+            <tr v-else>
+                <td>{{Object.keys(projects).filter(project => new Date().toDateString() == new Date(firstRevision(projects[project]).time).toDateString()).length}}</td>
+                <td>{{Object.keys(projects).filter(project => new Date().toDateString() == new Date(lastRevision(projects[project]).time).toDateString()).length}}</td>
+                <td>{{Array.from(new Set(Object.keys(projects).filter(project => new Date().toDateString() == new Date(lastRevision(projects[project]).time).toDateString()).map(project => projects[project]['--uid']))).length}}</td>
+                <td>{{Object.keys(users).length}}</td>
+                <td>{{Object.keys(projects).length}}</td>
+                <td>{{Object.keys(projects).reduce((a,b) => a + Object.keys(projects[b]).length, 0)}}</td>
+            </tr>
+        </table>
+    </div>
+    <div id="projects" class="tablewrap">
+        <h2>Projects</h2>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Project</th>
+              <th>Created By</th>
+              <th>Last Revision</th>
+              <th>Created At</th>
+              <th>Number of Revisions</th>
+            </tr>
+          </thead>
+            <tr v-show="projects.length == 0"><td>Loading...</td></tr>
+            <tr v-for="(project, name) in projects">
+                <td>{{name}}</td>
+                <td>{{project['--uid'] ? users[project['--uid']].displayName : 'Anonymous'}}</td>
+                <td>{{new Date(lastRevision(project).time).toLocaleString()}}</td>
+                <td>{{new Date(firstRevision(project).time).toLocaleString()}}</td>
+                <td>{{Object.keys(project).length - 1}}</td>
+            </tr>
+        </table>
+    </div>
+    <div id="users" class="tablewrap">
+        <h2>Users</h2>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Last Active</th>
+              <th>Account Created</th>
+              <th>Number of Projects</th>
+              <th>Number of Revisions</th>
+            </tr>
+          </thead>
+            <tr v-show="users.length == 0"><td>Loading...</td></tr>
+            <tr v-for="(user, id) in users">
+                <td>{{user.displayName}}</td>
+                <td>{{new Date(Object.keys(projects).filter(p => projects[p]['--uid'] == id).map(p => lastRevision(projects[p]).time).sort().reverse()[0]).toLocaleString()}}</td>
+                <td>{{new Date(Object.keys(projects).filter(p => projects[p]['--uid'] == id).map(p => lastRevision(projects[p]).time).sort()[0]).toLocaleString()}}</td>
+                <td>{{Object.keys(projects).filter(p => projects[p]['--uid'] == id).length}}</td>
+                <td>{{Object.keys(projects).filter(p => projects[p]['--uid'] == id).reduce((a,b) => a + Object.keys(projects[b]).length, 0)}}</td>
+            </tr>
+        </table>
+    </div>
+</div>
+<script>
+  var app = new Vue({
+      el: '#page',
+      data: {
+        users: [],
+        projects: []
+      },
+      computed: {
+      },
+      methods: {
+          firstRevision: function(project){
+              return project['--uid'] ? project[Object.keys(project)[1]] : project[Object.keys(project)[0]]
+          },
+          lastRevision: function(project){
+              return project[Object.keys(project)[Object.keys(project).length - 1]]
+          },
+      }
+    })
+    
+  var config = {
+    apiKey: "AIzaSyBYHv7dCiD0bWiHRlcp4VIZCIqzoMnB4yY",
+    authDomain: "woofjs-d1b27.firebaseapp.com",
+    databaseURL: "https://woofjs-d1b27.firebaseio.com",
+    storageBucket: "woofjs-d1b27.appspot.com",
+    messagingSenderId: "397293370524"
+  };
+  
+  firebase.initializeApp(config);
+  
+  firebase.database().ref('/user/').on('value', function(snapshot) {
+    app.users = snapshot.val()
+  });
+  firebase.database().ref('/code/').on('value', function(snapshot) {
+    app.projects = snapshot.val()
+  });
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-82374072-1', 'auto');
+  ga('send', 'pageview');
+</script>
