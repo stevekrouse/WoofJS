@@ -136,9 +136,6 @@
           <li><a href="./">New Project</a></li>
           <li><a target="_blank" id="login-projects">My Projects</a></li>
           <li onclick="firebase.auth().signOut()"><a>Logout</a></li>
-          <li role="separator" class="divider"></li>
-          <li class="dropdown-header">Recent Projects</li>
-          <li v-for="project in projects.slice(0,10)"><a :href="'#' + project.key">{{project.key}}</a></li>
         </ul>
       </div>
       <span id="title">
@@ -246,18 +243,17 @@
     var currentID = getID()
     
     var saveApp = new Vue({
-      el: '#navbar',
+      el: '#save',
       data: {
         status: "NEW",
-        error: undefined,
-        projects: []
+        error: undefined
       },
       computed: {
         styles : function() { return {
           'btn-warning': this.status == 'DIRTY', 
           'btn-success': this.status == 'SAVED',
           'btn-default': this.status == "NEW"
-        } },
+        } }
       },
       methods: {
         getID: getID,
@@ -296,25 +292,6 @@
         handleLogin(user.displayName, user.uid)
         firebase.database().ref("/user/" + user.uid + "/displayName").set(user.displayName)
         firebase.database().ref("/user/" + user.uid + "/email").set(user.email)
-        
-        firebase.database().ref('/code/').orderByChild("--uid").equalTo(user.uid).once('value').then(function(snapshot) {
-          if (snapshot.val()){
-            saveApp.projects = []
-            for (var key in snapshot.val()) {
-              var project = snapshot.val()[key]
-              var versions = Object.keys(project)
-              var t = project[versions[versions.length-1]].time
-              saveApp.projects.push({key: key, time: t, code: project.code})
-            }
-          }
-          saveApp.projects.sort(function(a,b) {
-            if (a.time < b.time)
-              return 1;
-            if (a.time > b.time)
-              return -1;
-            return 0;
-          })
-        });
       } else {
         handleLogout()
       }
