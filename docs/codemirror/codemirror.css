@@ -373,34 +373,6 @@ span.CodeMirror-selectedtext { background: none; }
 
 
 
-
-  
-
-.splitter1, .splitter2 {
-  flex: 0 0 auto;
-  width: 18px;  
-  background: url(https://raw.githubusercontent.com/RickStrahl/jquery-resizable/master/assets/vsizegrip.png) center center no-repeat #535353;
-  min-height: 200px;
-  cursor: col-resize;  
-}
-
-
-/*#docs {*/
-  
-/*  padding: 20px;*/
-/*  margin: 30px 20px;*/
-
-/*  width: 120px;*/
-
-  /* This makes things *much* easier */
-/*  box-sizing: border-box;*/
-/*}*/
-
-/*#container {*/
-/*  width: 100%;*/
-/*  height: 240px;*/
-/*}*/
-
 #block-button ,  #code-button, #output-button {
   background-color: white;
    width: 80px;
@@ -424,81 +396,18 @@ button:hover {
     opacity: .8;
 }
 
-
-[type="checkbox"]:not(:checked),
-[type="checkbox"]:checked {
-  position: absolute;
-  left: -9999px;
-}
-[type="checkbox"]:not(:checked) + label,
-[type="checkbox"]:checked + label {
-  position: relative;
-  padding-left: 44px;
-  cursor: pointer;
-}
-[type="checkbox"]:not(:checked) + label:before,
-[type="checkbox"]:checked + label:before,
-[type="checkbox"]:not(:checked) + label:after,
-[type="checkbox"]:checked + label:after {
-  content: '';
-  position: absolute;
-}
-[type="checkbox"]:not(:checked) + label:before,
-[type="checkbox"]:checked + label:before {
-  left:0; 
-  /*top: -3px;*/
-  width: 40px; height: 20px;
-  background: #D8D9DB;
-  border-radius: 15px;
-  transition: background-color .2s;
-}
-[type="checkbox"]:not(:checked) + label:after,
-[type="checkbox"]:checked + label:after {
-  width: 15px; height: 15px;
-  transition: all .2s;
-  border-radius: 50%;
-  background: white;
-  top: 2.5px; 
-  left: 5px;
+.steve-btn.checked {
+  background-color: #025aa5;
+  box-shadow: inset 0px 0px 5px #252525;
 }
 
-/* on checked */
-[type="checkbox"]:checked + label:before {
-  background:#31b0d5; 
-}
-[type="checkbox"]:checked + label:after {
-  background: white;
-  top: 2.5px; 
-  left: 22px;
+.steve-btn {
+  box-shadow: 1px 1px 1px #383848;
+  background-color: #0275d8;
+  border: 0px;
+  border-radius: 4px;
 }
 
-[type="checkbox"]:checked + label .ui,
-[type="checkbox"]:not(:checked) + label .ui:before,
-[type="checkbox"]:checked + label .ui:after {
-  position: absolute;
-  left: 6px;
-  width: 40px;
-  border-radius: 15px;
-  font-size: 14px;
-  font-weight: bold;
-  line-height: 2px;
-  transition: all .2s;
-}
-[type="checkbox"]:not(:checked) + label .ui:before {
-  content: "Block";
-  left: 32px
-}
-[type="checkbox"]:checked + label .ui:after {
-  content: "yes";
-  color: #39D2B4;
-}
-[type="checkbox"]:focus + label:before {
-  /*border: 1px dashed #777;*/
-  box-sizing: border-box;
-  /*margin-top: -1px;*/
-}
-
-label {
-  line-height: 1.5;
-  font-weight: normal;
+.steve-btn:hover {
+  opacity: 1;
 }
