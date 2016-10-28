@@ -6,6 +6,188 @@ var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = [
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
+/* SAT.js - Version 0.6.0 - Copyright 2012 - 2016 - Jim Riecken <jimr@jimr.ca> - released under the MIT License. https://github.com/jriecken/sat-js */
+function Vector(t, o) {
+  this.x = t || 0, this.y = o || 0;
+}function Circle(t, o) {
+  this.pos = t || new Vector(), this.r = o || 0;
+}function Polygon(t, o) {
+  this.pos = t || new Vector(), this.angle = 0, this.offset = new Vector(), this.setPoints(o || []);
+}function Box(t, o, e) {
+  this.pos = t || new Vector(), this.w = o || 0, this.h = e || 0;
+}function Response() {
+  this.a = null, this.b = null, this.overlapN = new Vector(), this.overlapV = new Vector(), this.clear();
+}function flattenPointsOn(t, o, e) {
+  for (var r = Number.MAX_VALUE, n = -Number.MAX_VALUE, s = t.length, i = 0; s > i; i++) {
+    var p = t[i].dot(o);r > p && (r = p), p > n && (n = p);
+  }e[0] = r, e[1] = n;
+}function isSeparatingAxis(t, o, e, r, n, s) {
+  var i = T_ARRAYS.pop(),
+      p = T_ARRAYS.pop(),
+      c = T_VECTORS.pop().copy(o).sub(t),
+      l = c.dot(n);if (flattenPointsOn(e, n, i), flattenPointsOn(r, n, p), p[0] += l, p[1] += l, i[0] > p[1] || p[0] > i[1]) return T_VECTORS.push(c), T_ARRAYS.push(i), T_ARRAYS.push(p), !0;if (s) {
+    var h = 0;if (i[0] < p[0]) {
+      if (s.aInB = !1, i[1] < p[1]) h = i[1] - p[0], s.bInA = !1;else {
+        var a = i[1] - p[0],
+            y = p[1] - i[0];h = y > a ? a : -y;
+      }
+    } else if (s.bInA = !1, i[1] > p[1]) h = i[0] - p[1], s.aInB = !1;else {
+      var a = i[1] - p[0],
+          y = p[1] - i[0];h = y > a ? a : -y;
+    }var u = Math.abs(h);u < s.overlap && (s.overlap = u, s.overlapN.copy(n), 0 > h && s.overlapN.reverse());
+  }return T_VECTORS.push(c), T_ARRAYS.push(i), T_ARRAYS.push(p), !1;
+}function voronoiRegion(t, o) {
+  var e = t.len2(),
+      r = o.dot(t);return 0 > r ? LEFT_VORONOI_REGION : r > e ? RIGHT_VORONOI_REGION : MIDDLE_VORONOI_REGION;
+}function pointInCircle(t, o) {
+  var e = T_VECTORS.pop().copy(t).sub(o.pos),
+      r = o.r * o.r,
+      n = e.len2();return T_VECTORS.push(e), r >= n;
+}function pointInPolygon(t, o) {
+  TEST_POINT.pos.copy(t), T_RESPONSE.clear();var e = testPolygonPolygon(TEST_POINT, o, T_RESPONSE);return e && (e = T_RESPONSE.aInB), e;
+}function testCircleCircle(t, o, e) {
+  var r = T_VECTORS.pop().copy(o.pos).sub(t.pos),
+      n = t.r + o.r,
+      s = n * n,
+      i = r.len2();if (i > s) return T_VECTORS.push(r), !1;if (e) {
+    var p = Math.sqrt(i);e.a = t, e.b = o, e.overlap = n - p, e.overlapN.copy(r.normalize()), e.overlapV.copy(r).scale(e.overlap), e.aInB = t.r <= o.r && p <= o.r - t.r, e.bInA = o.r <= t.r && p <= t.r - o.r;
+  }return T_VECTORS.push(r), !0;
+}function testPolygonCircle(t, o, e) {
+  for (var r = T_VECTORS.pop().copy(o.pos).sub(t.pos), n = o.r, s = n * n, i = t.calcPoints, p = i.length, c = T_VECTORS.pop(), l = T_VECTORS.pop(), h = 0; p > h; h++) {
+    var a = h === p - 1 ? 0 : h + 1,
+        y = 0 === h ? p - 1 : h - 1,
+        u = 0,
+        V = null;c.copy(t.edges[h]), l.copy(r).sub(i[h]), e && l.len2() > s && (e.aInB = !1);var T = voronoiRegion(c, l);if (T === LEFT_VORONOI_REGION) {
+      c.copy(t.edges[y]);var f = T_VECTORS.pop().copy(r).sub(i[y]);if (T = voronoiRegion(c, f), T === RIGHT_VORONOI_REGION) {
+        var R = l.len();if (R > n) return T_VECTORS.push(r), T_VECTORS.push(c), T_VECTORS.push(l), T_VECTORS.push(f), !1;e && (e.bInA = !1, V = l.normalize(), u = n - R);
+      }T_VECTORS.push(f);
+    } else if (T === RIGHT_VORONOI_REGION) {
+      if (c.copy(t.edges[a]), l.copy(r).sub(i[a]), T = voronoiRegion(c, l), T === LEFT_VORONOI_REGION) {
+        var R = l.len();if (R > n) return T_VECTORS.push(r), T_VECTORS.push(c), T_VECTORS.push(l), !1;e && (e.bInA = !1, V = l.normalize(), u = n - R);
+      }
+    } else {
+      var O = c.perp().normalize(),
+          R = l.dot(O),
+          v = Math.abs(R);if (R > 0 && v > n) return T_VECTORS.push(r), T_VECTORS.push(O), T_VECTORS.push(l), !1;e && (V = O, u = n - R, (R >= 0 || 2 * n > u) && (e.bInA = !1));
+    }V && e && Math.abs(u) < Math.abs(e.overlap) && (e.overlap = u, e.overlapN.copy(V));
+  }return e && (e.a = t, e.b = o, e.overlapV.copy(e.overlapN).scale(e.overlap)), T_VECTORS.push(r), T_VECTORS.push(c), T_VECTORS.push(l), !0;
+}function testCirclePolygon(t, o, e) {
+  var r = testPolygonCircle(o, t, e);if (r && e) {
+    var n = e.a,
+        s = e.aInB;e.overlapN.reverse(), e.overlapV.reverse(), e.a = e.b, e.b = n, e.aInB = e.bInA, e.bInA = s;
+  }return r;
+}function testPolygonPolygon(t, o, e) {
+  for (var r = t.calcPoints, n = r.length, s = o.calcPoints, i = s.length, p = 0; n > p; p++) {
+    if (isSeparatingAxis(t.pos, o.pos, r, s, t.normals[p], e)) return !1;
+  }for (var p = 0; i > p; p++) {
+    if (isSeparatingAxis(t.pos, o.pos, r, s, o.normals[p], e)) return !1;
+  }return e && (e.a = t, e.b = o, e.overlapV.copy(e.overlapN).scale(e.overlap)), !0;
+}var SAT = {};SAT.Vector = Vector, SAT.V = Vector, Vector.prototype.copy = Vector.prototype.copy = function (t) {
+  return this.x = t.x, this.y = t.y, this;
+}, Vector.prototype.clone = Vector.prototype.clone = function () {
+  return new Vector(this.x, this.y);
+}, Vector.prototype.perp = Vector.prototype.perp = function () {
+  var t = this.x;return this.x = this.y, this.y = -t, this;
+}, Vector.prototype.rotate = Vector.prototype.rotate = function (t) {
+  var o = this.x,
+      e = this.y;return this.x = o * Math.cos(t) - e * Math.sin(t), this.y = o * Math.sin(t) + e * Math.cos(t), this;
+}, Vector.prototype.reverse = Vector.prototype.reverse = function () {
+  return this.x = -this.x, this.y = -this.y, this;
+}, Vector.prototype.normalize = Vector.prototype.normalize = function () {
+  var t = this.len();return t > 0 && (this.x = this.x / t, this.y = this.y / t), this;
+}, Vector.prototype.add = Vector.prototype.add = function (t) {
+  return this.x += t.x, this.y += t.y, this;
+}, Vector.prototype.sub = Vector.prototype.sub = function (t) {
+  return this.x -= t.x, this.y -= t.y, this;
+}, Vector.prototype.scale = Vector.prototype.scale = function (t, o) {
+  return this.x *= t, this.y *= o || t, this;
+}, Vector.prototype.project = Vector.prototype.project = function (t) {
+  var o = this.dot(t) / t.len2();return this.x = o * t.x, this.y = o * t.y, this;
+}, Vector.prototype.projectN = Vector.prototype.projectN = function (t) {
+  var o = this.dot(t);return this.x = o * t.x, this.y = o * t.y, this;
+}, Vector.prototype.reflect = Vector.prototype.reflect = function (t) {
+  var o = this.x,
+      e = this.y;return this.project(t).scale(2), this.x -= o, this.y -= e, this;
+}, Vector.prototype.reflectN = Vector.prototype.reflectN = function (t) {
+  var o = this.x,
+      e = this.y;return this.projectN(t).scale(2), this.x -= o, this.y -= e, this;
+}, Vector.prototype.dot = Vector.prototype.dot = function (t) {
+  return this.x * t.x + this.y * t.y;
+}, Vector.prototype.len2 = Vector.prototype.len2 = function () {
+  return this.dot(this);
+}, Vector.prototype.len = Vector.prototype.len = function () {
+  return Math.sqrt(this.len2());
+}, SAT.Circle = Circle, Circle.prototype.getAABB = Circle.prototype.getAABB = function () {
+  var t = this.r,
+      o = this.pos.clone().sub(new Vector(t, t));return new Box(o, 2 * t, 2 * t).toPolygon();
+}, SAT.Polygon = Polygon, Polygon.prototype.setPoints = Polygon.prototype.setPoints = function (t) {
+  var o = !this.points || this.points.length !== t.length;if (o) {
+    var e,
+        r = this.calcPoints = [],
+        n = this.edges = [],
+        s = this.normals = [];for (e = 0; e < t.length; e++) {
+      r.push(new Vector()), n.push(new Vector()), s.push(new Vector());
+    }
+  }return this.points = t, this._recalc(), this;
+}, Polygon.prototype.setAngle = Polygon.prototype.setAngle = function (t) {
+  return this.angle = t, this._recalc(), this;
+}, Polygon.prototype.setOffset = Polygon.prototype.setOffset = function (t) {
+  return this.offset = t, this._recalc(), this;
+}, Polygon.prototype.rotate = Polygon.prototype.rotate = function (t) {
+  for (var o = this.points, e = o.length, r = 0; e > r; r++) {
+    o[r].rotate(t);
+  }return this._recalc(), this;
+}, Polygon.prototype.translate = Polygon.prototype.translate = function (t, o) {
+  for (var e = this.points, r = e.length, n = 0; r > n; n++) {
+    e[n].x += t, e[n].y += o;
+  }return this._recalc(), this;
+}, Polygon.prototype._recalc = function () {
+  var t,
+      o = this.calcPoints,
+      e = this.edges,
+      r = this.normals,
+      n = this.points,
+      s = this.offset,
+      i = this.angle,
+      p = n.length;for (t = 0; p > t; t++) {
+    var c = o[t].copy(n[t]);c.x += s.x, c.y += s.y, 0 !== i && c.rotate(i);
+  }for (t = 0; p > t; t++) {
+    var l = o[t],
+        h = p - 1 > t ? o[t + 1] : o[0],
+        a = e[t].copy(h).sub(l);r[t].copy(a).perp().normalize();
+  }return this;
+}, Polygon.prototype.getAABB = Polygon.prototype.getAABB = function () {
+  for (var t = this.calcPoints, o = t.length, e = t[0].x, r = t[0].y, n = t[0].x, s = t[0].y, i = 1; o > i; i++) {
+    var p = t[i];p.x < e ? e = p.x : p.x > n && (n = p.x), p.y < r ? r = p.y : p.y > s && (s = p.y);
+  }return new Box(this.pos.clone().add(new Vector(e, r)), n - e, s - r).toPolygon();
+}, SAT.Box = Box, Box.prototype.toPolygon = Box.prototype.toPolygon = function () {
+  var t = this.pos,
+      o = this.w,
+      e = this.h;return new Polygon(new Vector(t.x, t.y), [new Vector(), new Vector(o, 0), new Vector(o, e), new Vector(0, e)]);
+}, SAT.Response = Response, Response.prototype.clear = Response.prototype.clear = function () {
+  return this.aInB = !0, this.bInA = !0, this.overlap = Number.MAX_VALUE, this;
+};for (var T_VECTORS = [], i = 0; 10 > i; i++) {
+  T_VECTORS.push(new Vector());
+}for (var T_ARRAYS = [], i = 0; 5 > i; i++) {
+  T_ARRAYS.push([]);
+}var T_RESPONSE = new Response(),
+    TEST_POINT = new Box(new Vector(), 1e-6, 1e-6).toPolygon();SAT.isSeparatingAxis = isSeparatingAxis;var LEFT_VORONOI_REGION = -1,
+    MIDDLE_VORONOI_REGION = 0,
+    RIGHT_VORONOI_REGION = 1;SAT.pointInCircle = pointInCircle, SAT.pointInPolygon = pointInPolygon, SAT.testCircleCircle = testCircleCircle, SAT.testPolygonCircle = testPolygonCircle, SAT.testCirclePolygon = testCirclePolygon, SAT.testPolygonPolygon = testPolygonPolygon;
+function detectCollision(a, b) {
+  if (a instanceof SAT.Circle && b instanceof SAT.Circle) {
+    return SAT.testCircleCircle(a, b);
+  } else if (a instanceof SAT.Polygon && b instanceof SAT.Circle) {
+    return SAT.testPolygonCircle(a, b);
+  } else if (a instanceof SAT.Circle && b instanceof SAT.Polygon) {
+    return SAT.testCirclePolygon(a, b);
+  } else if (a instanceof SAT.Polygon && b instanceof SAT.Polygon) {
+    return SAT.testPolygonPolygon(a, b);
+  } else {
+    throw Error('Unexpected Shape.');
+  }
+}
+
 // saving Image because we will later overwrite Image with Woof.Image on the window
 window.BrowserImage = Image;
 
@@ -212,13 +394,15 @@ function Woof() {
     thisContext.ready(thisContext._renderBackdrop);
   };
 
+  thisContext.freezing = false;
   thisContext.freeze = function () {
     if (arguments.length > 0) {
       throw new TypeError("freeze() requires no inputs.");
     }
-    if (thisContext.stopped) {
+    if (thisContext.freezing || thisContext.stopped) {
       return;
     }
+    thisContext.freezing = true;
     thisContext._render();
     thisContext.after(10, "miliseconds", function () {
       return thisContext.stopped = true;
@@ -534,6 +718,8 @@ Woof.prototype.Sprite = function () {
   var penWidth = _ref3$penWidth === undefined ? 1 : _ref3$penWidth;
   var _ref3$penDown = _ref3.penDown;
   var penDown = _ref3$penDown === undefined ? false : _ref3$penDown;
+  var _ref3$showCollider = _ref3.showCollider;
+  var showCollider = _ref3$showCollider === undefined ? false : _ref3$showCollider;
 
   if (!project) {
     if (global) {
@@ -555,7 +741,7 @@ Woof.prototype.Sprite = function () {
         throw new TypeError("sprite.x can only be set to a number.");
       }
       this.privateX = value;
-      ready(this.trackPen);
+      this.project.ready(this.trackPen);
     }
   });
 
@@ -568,7 +754,7 @@ Woof.prototype.Sprite = function () {
         throw new TypeError("sprite.y can only be set to a number.");
       }
       this.privateY = value;
-      ready(this.trackPen);
+      this.project.ready(this.trackPen);
     }
   });
 
@@ -581,6 +767,7 @@ Woof.prototype.Sprite = function () {
   this.penColor = penColor;
   this.penWidth = penWidth;
   this.deleted = false;
+  this.showCollider = showCollider;
 
   this.toJSON = function () {
     return { x: _this.x, y: _this.y, angle: _this.angle, rotationStyle: _this.rotationStyle, showing: _this.showing, penDown: _this._penDown, penColor: _this.penColor, penWidth: _this.penWidth, deleted: _this.deleted };
@@ -611,10 +798,52 @@ Woof.prototype.Sprite = function () {
     _this.lastY = _ref5[1];
   };
 
+  this.rotatedVector = function (x, y) {
+    var rotatedX = Math.cos(this.radians()) * (x - this.x) - Math.sin(this.radians()) * (y - this.y) + this.x;
+    var rotatedY = Math.sin(this.radians()) * (x - this.x) + Math.cos(this.radians()) * (y - this.y) + this.y;
+    return new SAT.Vector(rotatedX, rotatedY);
+  };
+
+  this.translatedVector = function (pos, v) {
+    return new SAT.Vector(v.x - pos.x, v.y - pos.y);
+  };
+
+  this.collider = function () {
+    var pos = this.rotatedVector(this.x - this.width / 2, this.y - this.height / 2);
+    var v1 = new SAT.Vector(0, 0);
+    var v2 = this.translatedVector(pos, this.rotatedVector(this.x + this.width / 2, this.y - this.height / 2));
+    var v3 = this.translatedVector(pos, this.rotatedVector(this.x + this.width / 2, this.y + this.height / 2));
+    var v4 = this.translatedVector(pos, this.rotatedVector(this.x - this.width / 2, this.y + this.height / 2));
+
+    return new SAT.Polygon(pos, [v1, v2, v3, v4]);
+  };
+
+  this._renderCollider = function (context) {
+    var collider = this.collider();
+
+    context.save();
+    context.beginPath();
+    context.moveTo.apply(context, _toConsumableArray(this.project.translateToCanvas(collider.calcPoints[0].x + collider.pos.x, collider.calcPoints[0].y + collider.pos.y)));
+    context.lineTo.apply(context, _toConsumableArray(this.project.translateToCanvas(collider.calcPoints[1].x + collider.pos.x, collider.calcPoints[1].y + collider.pos.y)));
+    context.lineTo.apply(context, _toConsumableArray(this.project.translateToCanvas(collider.calcPoints[2].x + collider.pos.x, collider.calcPoints[2].y + collider.pos.y)));
+    context.lineTo.apply(context, _toConsumableArray(this.project.translateToCanvas(collider.calcPoints[3].x + collider.pos.x, collider.calcPoints[3].y + collider.pos.y)));
+    context.lineTo.apply(context, _toConsumableArray(this.project.translateToCanvas(collider.calcPoints[0].x + collider.pos.x, collider.calcPoints[0].y + collider.pos.y)));
+    context.strokeStyle = "green";
+    context.lineWidth = 4;
+    context.stroke();
+
+    context.restore();
+  };
+
   this._render = function (context) {
     if (this.showing && !this.deleted && this.overlap(this.project.bounds())) {
+      if (this.showCollider) {
+        this._renderCollider(context);
+      }
+
       context.save();
       context.translate(Math.round(this.canvasX()), Math.round(this.canvasY()));
+
       if (this.rotationStyle == "ROTATE") {
         context.rotate(-this.radians());
       } else if (this.rotationStyle == "NO ROTATE") {
@@ -697,7 +926,6 @@ Woof.prototype.Sprite = function () {
   };
 
   this.bounds = function () {
-    // TODO account for rotation
     var halfWidth = _this.width / 2;
     var halfHeight = _this.height / 2;
 
@@ -723,9 +951,7 @@ Woof.prototype.Sprite = function () {
       return false;
     }
 
-    var r1 = _this.bounds();
-    var r2 = sprite.bounds();
-    if (!_this.overlap(r2)) {
+    if (!detectCollision(_this.collider(), sprite.collider())) {
       return false;
     }
 
@@ -733,6 +959,8 @@ Woof.prototype.Sprite = function () {
       return true;
     }
 
+    var r1 = _this.bounds();
+    var r2 = sprite.bounds();
     var left = Math.min(r1.left, r2.left);
     var top = Math.max(r1.top, r2.top);
     var right = Math.max(r1.right, r2.right);
@@ -966,6 +1194,7 @@ Woof.prototype.Text = function () {
   var _ref7$textAlign = _ref7.textAlign;
   var textAlign = _ref7$textAlign === undefined ? "center" : _ref7$textAlign;
 
+  // TODO remove text align or make the collider take it into account
   Woof.prototype.Sprite.call(this, arguments[0]);
   this.text = text;
   this.size = Math.abs(size);
@@ -979,7 +1208,7 @@ Woof.prototype.Text = function () {
 
       var width;
       this._applyInContext(function () {
-        width = _this2.project._spriteContext.measureText(_this2.text).width;
+        width = _this2.project._spriteContext.measureText(_this2.textEval()).width;
       });
       return width;
     },
@@ -1015,19 +1244,21 @@ Woof.prototype.Text = function () {
     _this4.project._spriteContext.restore();
   };
 
+  this.textEval = function () {
+    if (typeof _this4.text == "function") {
+      try {
+        return _this4.text();
+      } catch (e) {
+        console.error("Error with text function: " + e.message);
+      }
+    } else {
+      return _this4.text;
+    }
+  };
+
   this.textRender = function (context) {
     _this4._applyInContext(function () {
-      var text;
-      if (typeof _this4.text == "function") {
-        try {
-          text = _this4.text();
-        } catch (e) {
-          console.error("Error with text function: " + e.message);
-        }
-      } else {
-        text = _this4.text;
-      }
-      context.fillText(text, 0, 0);
+      context.fillText(_this4.textEval(), 0, _this4.height / 2);
     });
   };
 };
@@ -1139,6 +1370,7 @@ Woof.prototype.Line = function () {
   var _ref10$color = _ref10.color;
   var color = _ref10$color === undefined ? "black" : _ref10$color;
 
+  // TODO make this a helper to create a rectangle so that we can more easily reason about lines and colliders
   Woof.prototype.Sprite.call(this, arguments[0]);
   this.x1 = x1;
   this.y1 = y1;
@@ -1171,7 +1403,7 @@ Woof.prototype.Image = function () {
   var _ref11$project = _ref11.project;
   var project = _ref11$project === undefined ? undefined : _ref11$project;
   var _ref11$url = _ref11.url;
-  var url = _ref11$url === undefined ? "https://www.loveyourdog.com/image3.gif" : _ref11$url;
+  var url = _ref11$url === undefined ? "https://i.imgur.com/SMJjVCL.png/?1" : _ref11$url;
   var height = _ref11.height;
   var width = _ref11.width;
 
