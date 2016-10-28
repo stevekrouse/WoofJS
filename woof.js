@@ -212,13 +212,15 @@ function Woof() {
     thisContext.ready(thisContext._renderBackdrop);
   };
 
+  thisContext.freezing = false;
   thisContext.freeze = function () {
     if (arguments.length > 0) {
       throw new TypeError("freeze() requires no inputs.");
     }
-    if (thisContext.stopped) {
+    if (thisContext.freezing || thisContext.stopped) {
       return;
     }
+    thisContext.freezing = true;
     thisContext._render();
     thisContext.after(10, "miliseconds", function () {
       return thisContext.stopped = true;
