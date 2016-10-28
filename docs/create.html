@@ -303,11 +303,11 @@
       });
     }
     
-    window.onhashchange = function() {
+    window.addEventListener("hashchange", function() {
       if (getID() != currentID) {
         window.location.reload()
       }
-    }
+    })
     
     // TODO secure firebase
     // !root.child('code').child($code).exists()
