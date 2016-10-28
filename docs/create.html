@@ -124,6 +124,10 @@
       background-color: #f2dede;
     }
     
+    .tooltip-inner {background-color: #0275d8;
+      font-size: 1.5em;
+    }
+    
   </style>
 </head>
 <body style="height:100%">
@@ -148,7 +152,9 @@
         <button  @click="docsPane = !docsPane" class="steve-btn" :class="{checked: docsPane}">
           Blocks
         </button>
-        <button @click="projectsPane = !projectsPane" class="steve-btn" :class="{checked: projectsPane}">
+        
+        
+        <button data-toggle="tooltip" title="Pick a project to get started!" data-placement="bottom"  @click="projectsPane = !projectsPane" class="steve-btn" :class="{checked: projectsPane}">
           Projects
         </button>
         <button @click="codePane = !codePane" class="steve-btn" :class="{checked: codePane}">
@@ -468,6 +474,35 @@
     ga('send', 'pageview');
   
   </script>
+<script>
+$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip({trigger: "manual"});  
+    if(!firebase.auth().currentUser){
+       setTimeout(function(){
+        $("[data-toggle='tooltip']").tooltip('show');
+          setTimeout(function(){
+        $("[data-toggle='tooltip']").tooltip('hide');
+        }, 4000);
+    }, 2000);
+      
+      }
+});
+
+$('[data-toggle="tooltip"]').click(function(){
+    $("[data-toggle='tooltip']").tooltip('hide');
+});
+$('#login').click(function(){
+    $("[data-toggle='tooltip']").tooltip('hide');
+});
+
+editor.on("change", function(){
+    $("[data-toggle='tooltip']").tooltip('hide');
+});
+
+
+
+  
+</script>
 
 </body>
 </html>
