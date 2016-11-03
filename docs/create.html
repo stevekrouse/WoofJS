@@ -25,6 +25,12 @@
   <script type="text/javascript" src="./codemirror/show-hint.js"></script>
   <script type="text/javascript" src="./codemirror/comment.js"></script>
   <script type="text/javascript" src="./codemirror/sublime.js"></script>
+  <script type="text/javascript" src="./codemirror/foldcode.js"></script>
+  <link rel="stylesheet" href="./codemirror/foldgutter.css" />
+  <script src="./codemirror/foldcode.js"></script>
+  <script src="./codemirror/foldgutter.js"></script>
+  <script src="./codemirror/brace-fold.js"></script>
+  <script src="./codemirror/comment-fold.js"></script>
   <link rel="stylesheet" href="./codemirror/dialog.css">
   <link rel="stylesheet" href="./codemirror/show-hint.css">
   <script src="./codemirror/dialog.js"></script>
@@ -318,7 +324,7 @@
       }
     }
     
-    var editorVal = "setBackdropURL('https://i.imgur.com/q6Bqraw.jpg')"
+    var editorVal = "setBackdropURL('https://i.imgur.com/q6Bqraw.jpg')\n\n\n"
     if (getID() != ''){
       editorVal = "// Loading..."
       firebase.database().ref('/code/' + getID()).limitToLast(1).once('value').then(function(snapshot) {
@@ -399,7 +405,8 @@
         matchBrackets: true,
         autofocus: true,
         smartIndent: true,
-        gutters: ["CodeMirror-lint-markers"],
+        foldGutter: true,
+        gutters: ["CodeMirror-lint-markers", "CodeMirror-foldgutter"],
         extraKeys: keymap,
         lint: {
           delay: 800, 
