@@ -27,7 +27,7 @@
         background-color: white;
     }
 </style>
-<div id="page">
+<div id="page" style="display: none" :style="{display: authenticated ? 'block' : 'none'}">
     <h1>WoofJS.com Analytics</h1>
     <div id="totals" class="tablewrap">
         <h2>Totals</h2>
@@ -81,6 +81,7 @@
           <thead>
             <tr>
               <th>Name</th>
+              <th>ID</th>
               <th>Last Active</th>
               <th>Account Created</th>
               <th>Number of Projects</th>
@@ -90,6 +91,7 @@
             <tr v-show="users.length == 0"><td>Loading...</td></tr>
             <tr v-for="(user, id) in users">
                 <td>{{user.displayName}}</td>
+                <td>{{id}}</td>
                 <td>{{new Date(Object.keys(projects).filter(p => projects[p]['--uid'] == id).map(p => lastRevision(projects[p]).time).sort().reverse()[0]).toLocaleString()}}</td>
                 <td>{{new Date(Object.keys(projects).filter(p => projects[p]['--uid'] == id).map(p => lastRevision(projects[p]).time).sort()[0]).toLocaleString()}}</td>
                 <td>{{Object.keys(projects).filter(p => projects[p]['--uid'] == id).length}}</td>
@@ -103,7 +105,8 @@
       el: '#page',
       data: {
         users: [],
-        projects: []
+        projects: [],
+        authenticated: false
       },
       computed: {
       },
@@ -116,6 +119,8 @@
           },
       }
     })
+    
+  app.authenticated = prompt("Password") == 'codingspace'
     
   var config = {
     apiKey: "AIzaSyBYHv7dCiD0bWiHRlcp4VIZCIqzoMnB4yY",
