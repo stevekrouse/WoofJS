@@ -260,7 +260,9 @@
     firebase.auth().onAuthStateChanged(function(user) {
       if (!authChanged){
         authChanged = true
-        if(!user){
+        if(user){
+          ga('set', 'userId', user.uid); 
+        } else {
            setTimeout(function(){
             $("[data-toggle='tooltip']").tooltip('show');
               setTimeout(function(){
