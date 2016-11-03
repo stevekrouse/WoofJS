@@ -82,6 +82,7 @@
             <tr>
               <th>Name</th>
               <th>ID</th>
+              <th>Email</th>
               <th>Last Active</th>
               <th>Account Created</th>
               <th>Number of Projects</th>
@@ -92,6 +93,7 @@
             <tr v-for="(user, id) in users">
                 <td>{{user.displayName}}</td>
                 <td>{{id}}</td>
+                <td>{{user.email}}</td>
                 <td>{{new Date(Object.keys(projects).filter(p => projects[p]['--uid'] == id).map(p => lastRevision(projects[p]).time).sort().reverse()[0]).toLocaleString()}}</td>
                 <td>{{new Date(Object.keys(projects).filter(p => projects[p]['--uid'] == id).map(p => lastRevision(projects[p]).time).sort()[0]).toLocaleString()}}</td>
                 <td>{{Object.keys(projects).filter(p => projects[p]['--uid'] == id).length}}</td>
