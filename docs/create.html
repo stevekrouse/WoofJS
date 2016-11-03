@@ -178,7 +178,7 @@
         </div>
         
         <div v-show="projectsPane" id="projects" style="width:25%; height:100%; flex: 1.2 1 25%; word-wrap: break-word; ">
-          <iframe src="https://stevekrouse.github.io/coding.space/woof/index.html" style="height:100%; width:100%"></iframe> 
+          <iframe src="https://cdn.rawgit.com/stevekrouse/coding.space/43f0bb5955d217bdaea312d339c9236d1c1c59c9/woof/index.html" style="height:100%; width:100%"></iframe> 
         </div>
         
         <div v-show="codePane" id="code" style="width:25%; height:100%; flex: 1.2 1 25%; word-wrap: break-word; ">
@@ -250,7 +250,20 @@
       myCode = false
     }
     
+    var authChanged = false
     firebase.auth().onAuthStateChanged(function(user) {
+      if (!authChanged){
+        authChanged = true
+        if(!user){
+           setTimeout(function(){
+            $("[data-toggle='tooltip']").tooltip('show');
+              setTimeout(function(){
+            $("[data-toggle='tooltip']").tooltip('hide');
+            }, 4000);
+          }, 2000);
+        }
+      }
+      
       if (user){
         handleLogin(user.displayName, user.uid)
         firebase.database().ref("/user/" + user.uid + "/displayName").set(user.displayName)
@@ -279,6 +292,15 @@
       }
     });
 
+    $('[data-toggle="tooltip"]').tooltip({trigger: "manual"});
+    $('[data-toggle="tooltip"]').click(function(){
+        $("[data-toggle='tooltip']").tooltip('hide');
+    });
+    $('#login').click(function(){
+        $("[data-toggle='tooltip']").tooltip('hide');
+    });
+    
+    
     var makeClean = function() {
       app.status = "SAVED"
       currentID = getID()
@@ -296,7 +318,7 @@
       }
     }
     
-    var editorVal = "setBackdropURL('http://i.imgur.com/q6Bqraw.jpg')"
+    var editorVal = "setBackdropURL('https://i.imgur.com/q6Bqraw.jpg')"
     if (getID() != ''){
       editorVal = "// Loading..."
       firebase.database().ref('/code/' + getID()).limitToLast(1).once('value').then(function(snapshot) {
@@ -388,7 +410,9 @@
           }
         },
     });
-    
+    editor.on("change", function(){
+      $("[data-toggle='tooltip']").tooltip('hide');
+    });
     onkeydown = function(e){
       if(e.ctrlKey && e.key == '/'){
         e.preventDefault();
@@ -473,35 +497,5 @@
     ga('send', 'pageview');
   
   </script>
-<script>
-$(document).ready(function(){
-    $('[data-toggle="tooltip"]').tooltip({trigger: "manual"});  
-    if(!firebase.auth().currentUser){
-       setTimeout(function(){
-        $("[data-toggle='tooltip']").tooltip('show');
-          setTimeout(function(){
-        $("[data-toggle='tooltip']").tooltip('hide');
-        }, 4000);
-    }, 2000);
-      
-      }
-});
-
-$('[data-toggle="tooltip"]').click(function(){
-    $("[data-toggle='tooltip']").tooltip('hide');
-});
-$('#login').click(function(){
-    $("[data-toggle='tooltip']").tooltip('hide');
-});
-
-editor.on("change", function(){
-    $("[data-toggle='tooltip']").tooltip('hide');
-});
-
-
-
-  
-</script>
-
 </body>
 </html>
