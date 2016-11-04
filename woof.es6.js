@@ -1228,6 +1228,14 @@ Woof.prototype.extend = function(a, b){
   return a;
 };
 
+Woof.prototype.importCodeURL = function(url, callback) {
+  var lib = document.createElement("script");
+  lib.type = "text/javascript";
+  lib.src = url;
+  lib.onload = callback;
+  document.body.appendChild(lib);
+};
+
 if (JSON.parse(document.currentScript.getAttribute('global')) !== false) { 
   Woof.prototype.extend(window, new Woof({global: true, fullScreen: true}));
 }
