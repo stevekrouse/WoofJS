@@ -984,6 +984,11 @@
                         description: "But you can also create a function without a name, which is called an anonymous function:",
                         code: "forever(() => {\n  sprite.x++\n})",
                         tags: "anonymous function"
+                    },
+                    {
+                        description: "Import JavaScript code from an external URL. The second input happens after the code is imported.",
+                        code: "importCodeURL('https://www.gstatic.com/firebasejs/3.4.0/firebase.js', () => {\n  firebase.initializeApp({\/* credentials here */})\n})",
+                        tags: "import code url require firebase library module"
                     }
                 ]
              }
