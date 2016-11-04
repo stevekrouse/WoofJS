@@ -734,10 +734,16 @@
                         tags: "boundary edge off outside"
                     },
                     {
-                        description: "NOTE: touching detects the rectangular boundary of a sprite, so if you have an image with a large transparent border, you will need to crop your image to make touching accurate.",
+                        html: "<b>Cropping images will make <code>touching()</code> more accurate.</b>",
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f733236773670632e706e67",
                         code: "NAME.touching(OTHER_NAME)",
                         tags: "touching intersecting overlap"
+                    },
+                    {
+                        description: "<b>For circular sprites, <code>distanceTo()</code> will be more accurate than <code>touching()</code>.",
+                        url: "./images/68747470733a2f2f692e696d6775722e636f6d2f733236773670632e706e67",
+                        code: "NAME.distanceTo(OTHER_NAME) < 100",
+                        tags: "touching"
                     },
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f634959335359792e706e67",
