@@ -1221,6 +1221,10 @@ function throttle (callback, limit) {
   }
 }
 
+Woof.prototype.rgb = function(red, green, blue){
+  return "rgb(" + red + ", " + green + ", " + blue + ")"
+};
+
 Woof.prototype.extend = function(a, b){
   for(var key in b) {
     a[key] = b[key];
