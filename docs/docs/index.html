@@ -45,7 +45,7 @@
         <script src="./docs.js"></script>
         <script id="block-template" type="text/x-template">
             <div style='margin-bottom: 20px; margin-right: 10px' class="block">
-                <img v-if="block.url" :src="block.url">
+                <img v-if="block.url" ondragstart="event.dataTransfer.setData('text/plain', event.target.alt)" :alt="block.code" :src="block.url">
                 <div v-if="block.description">{{ block.description }}</div>
                 <div v-if="block.html" v-html="block.html"></div> 
                 <div v-if="block.code">
