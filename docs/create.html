@@ -372,10 +372,8 @@
               alert("That project name has already been taken. Try another one.")
             }
           } else {
-            
-firebase.database().ref().child("/code/" + name + "/--uid").set(firebase.auth().currentUser && firebase.auth().currentUser.uid)
-
-firebase.database().ref().child("/code/" + name).push({
+            firebase.database().ref().child("/code/" + name + "/--uid").set(firebase.auth().currentUser && firebase.auth().currentUser.uid)
+            firebase.database().ref().child("/code/" + name).push({
               code: editor.getValue(), 
               time: firebase.database.ServerValue.TIMESTAMP, 
               uid: firebase.auth().currentUser && firebase.auth().currentUser.uid
@@ -471,7 +469,7 @@ firebase.database().ref().child("/code/" + name).push({
         setTimeout(function() {
             var script = iframe.contentWindow.document.createElement("script");
             script.type = "text/javascript";
-            script.src = "https://cdn.rawgit.com/stevekrouse/WoofJS/a3dd7bff61fb6eeb0ea1116298424fa2f9347791/woof.js";
+            script.src = "https://cdn.rawgit.com/stevekrouse/WoofJS/8a81aad06630b568396647c40e4fe4eb1557d98d/woof.js";
             iframe.contentWindow.document.body.appendChild(script);
             
             script.onload = function() {
