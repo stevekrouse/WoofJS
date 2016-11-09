@@ -45,7 +45,7 @@
         <script src="./docs.js"></script>
         <script id="block-template" type="text/x-template">
             <div style='margin-bottom: 20px; margin-right: 10px' class="block">
-                <img v-if="block.url" :src="block.url">
+                <img v-if="block.url" ondragstart="event.dataTransfer.setData('text/plain', event.target.alt)" :alt="block.code" :src="block.url">
                 <div v-if="block.description">{{ block.description }}</div>
                 <div v-if="block.html" v-html="block.html"></div> 
                 <div v-if="block.code">
@@ -155,7 +155,7 @@
                     // },
                     {
                         url: "https://s13.postimg.org/4f7j7p8uf/2_0_Go_to_X_Y.png",
-                        code: "NAME.x = ... \nNAME.y = ...",
+                        code: "NAME.x = maxX \nNAME.y = 47",
                         tags: "teleport move location set x y"
                     },
                     {
@@ -170,22 +170,22 @@
                     },
                     {
                         url: "https://s15.postimg.org/vqzf6gxwb/2_0_Change_X_by.png",
-                        code: 'NAME.x += ...',
+                        code: 'NAME.x += 5',
                         tags: "increase decrease change x move right left"
                     },
                     {
                         url: "https://s10.postimg.org/whzn2xet5/2_0_Change_Y_by.png",
-                        code: 'NAME.y += ...',
+                        code: 'NAME.y += -5',
                         tags: "increase decrease change y move up down"
                     },
                     {
                         url: "https://s10.postimg.org/rgc2vz1eh/2_0_Set_X_to.png",
-                        code: 'NAME.x = ...',
+                        code: 'NAME.x = minX',
                         tags: "set x"
                     },
                     {
                         url: "https://s11.postimg.org/m8cc7585v/2_0_Set_Y_to.png",
-                        code: 'NAME.y = ...',
+                        code: 'NAME.y = minY',
                         tags: "set y"
                     },
                     {
@@ -202,6 +202,11 @@
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f433337716439682e706e67",
                         code: 'NAME.setRotationStyle("NO ROTATE")',
                         tags: "rotation style no turn flip"
+                    },
+                    {
+                        description: "Move camera to change the the perspective center of the screen. This is useful if you want to keep a character always in the center as she moves around.",
+                        code: 'cameraX = NAME.x\ncameraY = NAME.y',
+                        tags: "camera perspective"
                     }
                 ],
                 Looks: [
@@ -210,6 +215,11 @@
                         html: '<input value="#409cbc" style="width:100%; height: 50px" type="color" onchange="updateColor(event)"></input>',
                         tags: "color hex pick colour red blue green yellow orange pink",
                         code: '#409cbc'
+                    },
+                    {
+                        description: "Create a color with red, green and blue values between 0 and 255",
+                        tags: "color rgb colour red blue green yellow orange pink",
+                        code: 'rgb(255, 100, 0)'
                     },
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f653650393552302e706e67",
@@ -223,19 +233,53 @@
                     },
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f513078533746662e706e67",
-                        code: "IMAGE_NAME.setImageURL('...')",
+                        code: "IMAGE_NAME.setImageURL('https://i.imgur.com/SMJjVCL.png/?1')",
                         tags: "costume image url picture"
                     },
                     {
                         description: "You can only setImageURL() for Images.\nChange the color for rectangles, text, lines and circles:",
-                        code: 'RECTANGLE_NAME.color = "purple"\nTEXT_NAME.color = "rgb(10, 150, 30)"\nLINE_NAME.color = "#ff20ff"\nCIRCLE_NAME.color = "green"',
+                        tags: "change color"
+                    },
+                    {
+                        code: 'RECTANGLE_NAME.color = "purple"',
+                        tags: "change color"
+                    },
+                    {
+                        code: 'TEXT_NAME.color = "rgb(10, 150, 30)"',
+                        tags: "change color"
+                    },
+                    {
+                        code: 'LINE_NAME.color = "#ff20ff"',
+                        tags: "change color"
+                    },
+                    {
+                        code: 'CIRCLE_NAME.color = "green"',
                         tags: "change color"
                     },
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f64784f72506d752e706e67",
                         description: "You set the size in different ways for each type of sprite:",
-                        code: 'IMAGE_NAME.height = ... IMAGE_NAME.width = ...\n\nRECTANGLE_NAME.height = ... RECTANGLE_NAME.width = ...\n\nCIRCLE_NAME.radius = ...\n\nLINE_NAME.x1 = ...\nLINE_NAME.y1 = ...\nLINE_NAME.lineWidth = ...\n\nTEXT_NAME.size = 20"\n',
                         tags: "size width height radius"
+                    },
+                    {
+                        code: 'IMAGE_NAME.height = 20\nIMAGE_NAME.width = 20',
+                        tags: "size height width length image"
+                    },
+                    {   
+                        code: 'RECTANGLE_NAME.height = 20\nRECTANGLE_NAME.width = 20',
+                        tags: "size height rectangle width length"
+                    },
+                    {   
+                        code: 'CIRCLE_NAME.radius = 20',
+                        tags: "size circle radius"
+                    },
+                    {  
+                        code: 'LINE_NAME.x1 = 20\nLINE_NAME.y1 = 20\nLINE_NAME.lineWidth = 20',
+                        tags: "size line width length height"
+                    },
+                    {   
+                        code: 'TEXT_NAME.size = 20',
+                        tags: "size font text"
                     },
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f5870676c764a502e706e67",
@@ -322,12 +366,12 @@
                     },
                     {
                         description: "You can combine creating/naming a variable with setting it:",
-                        code: "var VARIABLE_NAME = ...",
+                        code: "var VARIABLE_NAME = 0",
                         tags: "variable"
                     },
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f704b4e46794d772e706e67",
-                        code: "VARIABLE_NAME += ...",
+                        code: "VARIABLE_NAME += 1",
                         tags: "increase change decrease"
                     },
                     {
@@ -343,7 +387,7 @@
                     },
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f304b306e5144332e706e67",
-                        code: "ARRAY_NAME.push(...)",
+                        code: "ARRAY_NAME.push('thing')",
                         description: "You can add anything to an array in JavaScript, including numbers, strings, but even Sprites, functions, and other arrays." ,
                         tags: "add array list"
                     },
@@ -354,7 +398,7 @@
                     },
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f6a587479364c542e706e67",
-                        code: "ARRAY_NAME[1]",
+                        code: "ARRAY_NAME[0]",
                         tags: "array list get element"
                     },
                     {
@@ -379,17 +423,17 @@
                     },
                     {
                         description: 'Check if a condition holds for at least one thing in an array:',
-                        code: "if (ARRAY_NAME.some(thing => thing.over(mouseX, mouseY))) {\n  ...\n}",
+                        code: "if (ARRAY_NAME.some(thing => thing.over(mouseX, mouseY))) {\n  \/* do something here */\n}",
                         tags: "reduce some any list array"
                     },
                     {
                         description: 'Check if a condition holds for everything in an array:',
-                        code: "if(ARRAY_NAME.every(thing => thing.touching(...))) {\n  ...\n}",
+                        code: "if(ARRAY_NAME.every(thing => thing.touching(NAME))) {\n  \/* do something here */\n}",
                         tags: "every list arry reduce"
                     },
                     {
                         description: "Find something in an array:",
-                        code: "var needle = ARRAY_NAME.find(thing => thing.touching(...))\nif(needle) {\n  console.log(needle)\n}",
+                        code: "var needle = ARRAY_NAME.find(thing => thing.touching(NAME))\nif(needle) {\n  console.log(needle)\n}",
                         tags: "find search list array"
                     }
                 ],
@@ -562,96 +606,96 @@
                     {
                         url: "https://s21.postimg.org/tggr983hz/2_0_When_Green_Flag_Clicked.png",
                         description: "Note: Unlike in Scratch, using ready() is reccomended but not always required.",
-                        code: "ready(() => {\n  ...\n})",
+                        code: "ready(() => {\n  \/* do something here */\n})",
                         tags: "on onclick when flag clicked page loaded start ready"
                     },
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f5875506972634f2e706e67",
-                        code: "onMouseDown(() => {\n  ...\n})", 
+                        code: "onMouseDown(() => {\n  \/* do something here */\n})", 
                         tags: "on onclick when click mouse down"
                     }, 
                     {
                         description: "On mouse up",
-                        code: "onMouseUp(() => {\n  ...\n})",
+                        code: "onMouseUp(() => {\n  \/* do something here */\n})",
                         tags: "on when click mouse up"
                     },
                     {
                         description: "On mouse move",
-                        code: "onMouseMove(() => {\n  ...\n})",
+                        code: "onMouseMove(() => {\n  \/* do something here */\n})",
                         tags: "on when mouse move"
                     },
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f7a31356d6e506a2e706e67",
-                        code: "NAME.onMouseDown(() => {\n  ...\n})", 
+                        code: "NAME.onMouseDown(() => {\n  \/* do something here */\n})", 
                         tags: "on onclick when click mouse down"
                     }, 
                     {
                         description: "On mouse up",
-                        code: "NAME.onMouseUp(() => {\n  ...\n})",
+                        code: "NAME.onMouseUp(() => {\n  \/* do something here */\n})",
                         tags: "on when click mouse up"
                     },
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f436f58573132422e706e67",
-                        code: "onKeyDown(() => {\n  ...\n})",
+                        code: "onKeyDown(() => {\n  \/* do something here */\n})",
                         tags: "on when key press down any"
                     },
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f5444436c756c4f2e706e67",
-                        code: "onKeyDown(key => {\n if (key == 'A') {\n   ...\n  }\n})",
+                        code: "onKeyDown(key => {\n if (key == 'A') {\n   \/* do something here */\n  }\n})",
                         tags: "on when key press down"
                     },
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f556175544e77752e706e67",
-                        code: "onKeyDown(key => {\n if (key == 'UP') {\n   ...\n  }\n})",
+                        code: "onKeyDown(key => {\n if (key == 'UP') {\n   \/* do something here */\n  }\n})",
                         tags: "on when key press down"
                     }
                 ],
                   Control: [
                     { 
                       url: "./images/68747470733a2f2f692e696d6775722e636f6d2f723677595838632e706e67",
-                      code: 'after(..., "seconds", () => {\n  ...\n})',
+                      code: 'after(4, "seconds", () => {\n  \/* do something here */\n})',
                       description: 'There is no wait block in JavaScript. Instead, you can use after():',
                       tags: "wait after seconds"
                     },
                     { 
-                      code: 'every(..., "seconds", () => {\n  ...\n})',
+                      code: 'every(3, "seconds", () => {\n  \/* do something here */\n})',
                       description: 'If you want to wait at regular intervals, use every():',
                       tags: "wait every seconds"
                     },
                     { 
                       url: "./images/68747470733a2f2f692e696d6775722e636f6d2f6a77653133626d2e706e67",
-                      code: 'repeat(10, () => {\n  ...\n})',
+                      code: 'repeat(10, () => {\n  \/* do stuff here */\n})',
                       tags: 'repeat times'
                     },
                     { 
                       url: "./images/68747470733a2f2f692e696d6775722e636f6d2f675a4f6a4c444d2e706e67",
-                      code: 'forever(() => {\n  ...\n})',
+                      code: 'forever(() => {\n  \/* do stuff here */\n})',
                       tags: 'forever loop repeat'
                     },
                     { 
                       url: "./images/68747470733a2f2f692e696d6775722e636f6d2f7535724b4133362e706e67",
-                      code: 'if(...) {\n  ...\n}',
+                      code: 'if(\/* condition */) {\n  \/* then do stuff here */\n}',
                       tags: 'if when condition'
                     },
                     { 
                       url: "./images/68747470733a2f2f692e696d6775722e636f6d2f52594f705361712e706e67",
-                      code: 'if(...) {\n  ...\n} else {\n  ... \n}',
+                      code: 'if(\/* condition */) {\n  \/* then do stuff here */\n} else {\n  \/* otherwise do other stuff here */. \n}',
                       tags: 'if else when condition'
                     },
                     { 
                       url: "./images/68747470733a2f2f692e696d6775722e636f6d2f615139694a4e772e706e67",
-                      code: 'repeatUntil(() => ..., () => {\n  ...\n})',
+                      code: 'repeatUntil(() => \/* condition */, () => {\n  \/* something to repeat */\n})',
                       tags: 'repeat until'
                     },
                     { 
                       url: "./images/68747470733a2f2f692e696d6775722e636f6d2f615139694a4e772e706e67",
-                      code: 'repeatUntil(() => ..., () => {}, () => {\n  ...\n})',
+                      code: 'repeatUntil(() => \/* condition */, () => {}, () => {\n  \/* something to do after condition is true, once */\n})',
                       tags: "wait until",
                       description: 'There is no wait-until in JavaScript. You can simulate a wait-until block by specifying a third function to a repeatUntil. Refer to the "Control Flow" section below for more details.'
                     },
                     { 
                       url: "./images/68747470733a2f2f692e696d6775722e636f6d2f4f586c704b394a2e706e67",
-                      code: 'when(() => ..., () => {\n  ...\n})',
+                      code: 'when(() => \/* condition */, () => {\n  \/* do stuff here */\n})',
                       tags: "forever if when",
                       description: 'when() is a short-hand for a forever-if statement:'
                     },
@@ -695,10 +739,16 @@
                         tags: "boundary edge off outside"
                     },
                     {
-                        description: "NOTE: touching detects the rectangular boundary of a sprite, so if you have an image with a large transparent border, you will need to trim your image to make touching accurate.",
+                        html: "<b>Cropping images will make <code>touching()</code> more accurate.</b>",
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f733236773670632e706e67",
                         code: "NAME.touching(OTHER_NAME)",
                         tags: "touching intersecting overlap"
+                    },
+                    {
+                        description: "<b>For circular sprites, <code>distanceTo()</code> will be more accurate than <code>touching()</code>.",
+                        url: "./images/68747470733a2f2f692e696d6775722e636f6d2f733236773670632e706e67",
+                        code: "NAME.distanceTo(OTHER_NAME) < 100",
+                        tags: "touching"
                     },
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f634959335359792e706e67",
@@ -718,6 +768,11 @@
                     {
                         description: "List of keys currently pressed:",
                         code: "keysDown",
+                    },
+                    {
+                        url: "./images/mousedown.png",
+                        code: "mouseDown",
+                        tags: "mouse down clicked pressed"
                     },
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f4a634b4c6631722e706e67",
@@ -819,27 +874,27 @@
                 Operations: [
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f6e73446b436b742e706e67",
-                        code: "... + ...",
+                        code: "NAME.x + 4",
                         tags: "addition add"
                     },
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f585341415449502e706e67",
-                        code: "... - ...",
+                        code: "NAME.y - 10",
                         tags: "minus subtraction"
                     },
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f756a6e477045362e706e67",
-                        code: "... * ...",
+                        code: "NAME.radius * 2",
                         tags: "times multiply multiplication"
                     },
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f423042476b434a2e706e67",
-                        code: "... / ...",
+                        code: "maxX / 2",
                         tags: "divide division"
                     },
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f664148754477792e706e67",
-                        code: "random(..., ...)",
+                        code: "random(1, 10)",
                         tags: "random"
                     },
                     {
@@ -856,31 +911,31 @@
                     },
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f3268716f4866682e706e67",
-                        code: "... < ...",
+                        code: "NAME.x < minX",
                         tags: "less than compare"
                     },
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f715837646d77742e706e67",
-                        code: "... > ...",
+                        code: "NAME.y > maxY",
                         tags: "greater than compare"
                     },
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f3766384652625a2e706e67",
-                        code: "... == ...",
+                        code: "timer === 0",
                         tags: "equal to same as"
                     },
                     
                     {
                         description: "Less Than or Equal To:",
-                        code: "... <= ..."
+                        code: "NAME.y <= minY"
                     },
                     {
                         description: "Greater Than or Equal To:",
-                        code: "... >= ..."
+                        code: "NAME.x >= maxX"
                     },
                     {
                         description: "Not Equals:",
-                        code: "... != ..."
+                        code: "timer !== 0"
                     },
                     {
                         description: "Between Two Numbers :",
@@ -888,17 +943,17 @@
                     },
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f5559684d3574702e706e67",
-                        code: "... && ...",
+                        code: "mouseDown && NAME.mouseOver",
                         tags: "and"
                     },
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f505433496c6e302e706e67",
-                        code: "... || ...",
+                        code: "NAME1.mouseOver || NAME2.mouseOver",
                         tags: "or"
                     },
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f66487253395a4b2e706e67",
-                        code: '!(...)',
+                        code: '!(mouseDown)',
                         tags: "not"
                     },
                     {
@@ -917,12 +972,12 @@
                     },
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f4e466f59396c382e706e67",
-                        code: "... % ...",
+                        code: "NAME.x % 2",
                         tags: "reminder modulus"
                     },
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f746b76796a52542e706e67",
-                        code: "Math.round(...)",
+                        code: "Math.round(5.763)",
                         tags: 'round'
                     }
                 ],
@@ -945,6 +1000,11 @@
                         description: "But you can also create a function without a name, which is called an anonymous function:",
                         code: "forever(() => {\n  sprite.x++\n})",
                         tags: "anonymous function"
+                    },
+                    {
+                        description: "Import JavaScript code from an external URL. The second input happens after the code is imported.",
+                        code: "importCodeURL('https://www.gstatic.com/firebasejs/3.4.0/firebase.js', () => {\n  firebase.initializeApp({\/* credentials here */})\n})",
+                        tags: "import code url require firebase library module"
                     }
                 ]
              }

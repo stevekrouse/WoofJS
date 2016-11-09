@@ -340,20 +340,3 @@ padding:10px;
     background-color: #563d7c;
     border-color: #563d7c;
 }
-
-.project-block {
-    flex: 0 1 150px;
-    margin: 10px;
-}
-
-.project-block > a > img {
-    width: 100%;
-    height: 150px;
-    border-radius: 10px;
-}
-
-.project-block > a:hover, .project-block > a {
-    text-decoration: none;
-    cursor: pointer;
-    color: #404040;
-}

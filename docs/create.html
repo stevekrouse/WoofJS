@@ -25,6 +25,12 @@
   <script type="text/javascript" src="./codemirror/show-hint.js"></script>
   <script type="text/javascript" src="./codemirror/comment.js"></script>
   <script type="text/javascript" src="./codemirror/sublime.js"></script>
+  <script type="text/javascript" src="./codemirror/foldcode.js"></script>
+  <link rel="stylesheet" href="./codemirror/foldgutter.css" />
+  <script src="./codemirror/foldcode.js"></script>
+  <script src="./codemirror/foldgutter.js"></script>
+  <script src="./codemirror/brace-fold.js"></script>
+  <script src="./codemirror/comment-fold.js"></script>
   <link rel="stylesheet" href="./codemirror/dialog.css">
   <link rel="stylesheet" href="./codemirror/show-hint.css">
   <script src="./codemirror/dialog.js"></script>
@@ -178,7 +184,7 @@
         </div>
         
         <div v-show="projectsPane" id="projects" style="width:25%; height:100%; flex: 1.2 1 25%; word-wrap: break-word; ">
-          <iframe src="./projects.html" style="height:100%; width:100%"></iframe> 
+          <iframe src="https://cdn.rawgit.com/stevekrouse/coding.space/43f0bb5955d217bdaea312d339c9236d1c1c59c9/woof/index.html" style="height:100%; width:100%"></iframe> 
         </div>
         
         <div v-show="codePane" id="code" style="width:25%; height:100%; flex: 1.2 1 25%; word-wrap: break-word; ">
@@ -250,7 +256,22 @@
       myCode = false
     }
     
+    var authChanged = false
     firebase.auth().onAuthStateChanged(function(user) {
+      if (!authChanged){
+        authChanged = true
+        if(user){
+          ga('set', 'userId', user.uid); 
+        } else {
+           setTimeout(function(){
+            $("[data-toggle='tooltip']").tooltip('show');
+              setTimeout(function(){
+            $("[data-toggle='tooltip']").tooltip('hide');
+            }, 4000);
+          }, 2000);
+        }
+      }
+      
       if (user){
         handleLogin(user.displayName, user.uid)
         firebase.database().ref("/user/" + user.uid + "/displayName").set(user.displayName)
@@ -279,6 +300,15 @@
       }
     });
 
+    $('[data-toggle="tooltip"]').tooltip({trigger: "manual"});
+    $('[data-toggle="tooltip"]').click(function(){
+        $("[data-toggle='tooltip']").tooltip('hide');
+    });
+    $('#login').click(function(){
+        $("[data-toggle='tooltip']").tooltip('hide');
+    });
+    
+    
     var makeClean = function() {
       app.status = "SAVED"
       currentID = getID()
@@ -296,7 +326,7 @@
       }
     }
     
-    var editorVal = "setBackdropURL('http://i.imgur.com/q6Bqraw.jpg')"
+    var editorVal = "setBackdropURL('https://i.imgur.com/q6Bqraw.jpg')\n\n\n"
     if (getID() != ''){
       editorVal = "// Loading..."
       firebase.database().ref('/code/' + getID()).limitToLast(1).once('value').then(function(snapshot) {
@@ -342,12 +372,13 @@
               alert("That project name has already been taken. Try another one.")
             }
           } else {
+            firebase.database().ref().child("/code/" + name + "/--uid").set(firebase.auth().currentUser && firebase.auth().currentUser.uid)
             firebase.database().ref().child("/code/" + name).push({
               code: editor.getValue(), 
               time: firebase.database.ServerValue.TIMESTAMP, 
               uid: firebase.auth().currentUser && firebase.auth().currentUser.uid
             });
-            firebase.database().ref().child("/code/" + name + "/--uid").set(firebase.auth().currentUser && firebase.auth().currentUser.uid)
+            
             window.location.hash = name
             myCode = firebase.auth().currentUser
             makeClean()
@@ -377,7 +408,8 @@
         matchBrackets: true,
         autofocus: true,
         smartIndent: true,
-        gutters: ["CodeMirror-lint-markers"],
+        foldGutter: true,
+        gutters: ["CodeMirror-lint-markers", "CodeMirror-foldgutter"],
         extraKeys: keymap,
         lint: {
           delay: 800, 
@@ -388,7 +420,9 @@
           }
         },
     });
-    
+    editor.on("change", function(){
+      $("[data-toggle='tooltip']").tooltip('hide');
+    });
     onkeydown = function(e){
       if(e.ctrlKey && e.key == '/'){
         e.preventDefault();
@@ -435,7 +469,7 @@
         setTimeout(function() {
             var script = iframe.contentWindow.document.createElement("script");
             script.type = "text/javascript";
-            script.src = "https://cdn.rawgit.com/stevekrouse/WoofJS/79254cb4fd010d12af94562d16307229e769671c/woof.js";
+            script.src = "https://cdn.rawgit.com/stevekrouse/WoofJS/8a81aad06630b568396647c40e4fe4eb1557d98d/woof.js";
             iframe.contentWindow.document.body.appendChild(script);
             
             script.onload = function() {
@@ -473,35 +507,5 @@
     ga('send', 'pageview');
   
   </script>
-<script>
-$(document).ready(function(){
-    $('[data-toggle="tooltip"]').tooltip({trigger: "manual"});  
-    if(!firebase.auth().currentUser){
-       setTimeout(function(){
-        $("[data-toggle='tooltip']").tooltip('show');
-          setTimeout(function(){
-        $("[data-toggle='tooltip']").tooltip('hide');
-        }, 4000);
-    }, 2000);
-      
-      }
-});
-
-$('[data-toggle="tooltip"]').click(function(){
-    $("[data-toggle='tooltip']").tooltip('hide');
-});
-$('#login').click(function(){
-    $("[data-toggle='tooltip']").tooltip('hide');
-});
-
-editor.on("change", function(){
-    $("[data-toggle='tooltip']").tooltip('hide');
-});
-
-
-
-  
-</script>
-
 </body>
 </html>
