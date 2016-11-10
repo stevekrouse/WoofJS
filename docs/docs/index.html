@@ -12,9 +12,10 @@
 </head>
 <body>
     <div id="body" :style="{display: 'flex'}" style="display: none; flex-direction: column; align-content: stretch; align-content: center; align-items: center;">
-        <div class="btn-group">
-          <input id="searchbar" type="search" class="form-control" placeholder="Search blocks..." v-model="search"></input>
-          <span v-show="search != ''" @click="search = ''" id="searchclear" class="glyphicon glyphicon-remove-circle"></span>
+        
+        <div class="btn-group" style="width: 100%; display: flex; flex-direction: row; align-content: stretch; align-content: center; align-items: center;">
+          <button v-show="open != undefined || search != ''"  @click="search = ''; open = undefined" id="back" class="highlight btn btn-medium btn-info">Back</button>
+          <input id="searchbar" style="margin-left:4px; width: 100%;" type="search" class="form-control" placeholder="Search blocks..." v-model="search"></input>
         </div>
     
         <div :style="menuStyles" id="menus">
