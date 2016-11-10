@@ -365,9 +365,12 @@
                   code: editor.getValue(), 
                   time: firebase.database.ServerValue.TIMESTAMP, 
                   uid: firebase.auth().currentUser && firebase.auth().currentUser.uid
+                }).then(function(){
+                  window.location.hash = name
+                  makeClean()
+                }).catch(function(error){
+                  alert("Unable to save project: " + error)
                 });
-                window.location.hash = name
-                makeClean()
             } else {
               alert("That project name has already been taken. Try another one.")
             }
@@ -377,11 +380,13 @@
               code: editor.getValue(), 
               time: firebase.database.ServerValue.TIMESTAMP, 
               uid: firebase.auth().currentUser && firebase.auth().currentUser.uid
+            }).then(function(){
+              window.location.hash = name
+              myCode = firebase.auth().currentUser
+              makeClean()
+            }).catch(function(error){
+              alert("Unable to save project: " + error)
             });
-            
-            window.location.hash = name
-            myCode = firebase.auth().currentUser
-            makeClean()
           }
         });
       }
