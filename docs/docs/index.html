@@ -126,87 +126,87 @@
                   Motion: [
                     {
                         url: "https://s17.postimg.org/aldfh0hu7/2_0_Move_Steps.png",
-                        code: "NAME.move(10)",
+                        code: "sprite1.move(10)",
                         tags: "move forward glide animate"
                     },
                     {
                         url: "https://s16.postimg.org/406v94ogl/Slice_2.png",
-                        code: "NAME.turnRight(15)",
+                        code: "sprite1.turnRight(15)",
                         tags: "turn angle point direction orientation"
                     }, 
                     {
                         url: "https://s15.postimg.org/gpov03g6j/Slice_2_Copy.png",
-                        code: "NAME.turnLeft(15)",
+                        code: "sprite1.turnLeft(15)",
                         tags: "turn angle point direction orientation"
                     } ,
                     {
                         url: "https://s10.postimg.org/4xd5jv3q1/2_0_Point_in_Direction.png",
-                        code: "NAME.angle = LEFT  \nNAME.angle = RIGHT \nNAME.angle = UP \nNAME.angle = DOWN \nNAME.angle = 47.7",
+                        code: "sprite1.angle = LEFT  \nsprite1.angle = RIGHT \nsprite1.angle = UP \nsprite1.angle = DOWN \nsprite1.angle = 47.7",
                         tags: "angle turn direction right left up down orientation"
                     },
                     {
                         url: "https://s18.postimg.org/qdj0hnosp/2_0_Point_Towards.png",
-                        code: "NAME.pointTowards(mouseX, mouseY) \nNAME.pointTowards(otherNAME.x, otherNAME.y)",
+                        code: "sprite1.pointTowards(mouseX, mouseY) \nsprite1.pointTowards(othersprite1.x, othersprite1.y)",
                         tags: "turn point direction angle sprite character mouse"
                     }, 
                     // {
                     //     url: "./images/68747470733a2f2f692e696d6775722e636f6d2f655173647876522e706e67",
-                    //     code: "NAME.pointTowards(otherNAME.x, otherNAME.y)",
+                    //     code: "sprite1.pointTowards(sprite2.x, sprite2.y)",
                     //     tags: "turn point direction angle sprite character"
                     // },
                     {
                         url: "https://s13.postimg.org/4f7j7p8uf/2_0_Go_to_X_Y.png",
-                        code: "NAME.x = maxX \nNAME.y = 47",
+                        code: "sprite1.x = maxX \nsprite1.y = 47",
                         tags: "teleport move location set x y"
                     },
                     {
                         url: "https://s16.postimg.org/nfbxtx745/2_0_Go_to.png",
-                        code: "NAME.x = mouseX\nNAME.y = mouseY",
+                        code: "sprite1.x = mouseX\nsprite1.y = mouseY",
                         tags: "teleport location move to mouse"
                     }, 
                     {
                         description: "Move to another sprite:",
-                        code: "NAME.x = otherNAME.x \nNAME.y = otherNAME.y",
+                        code: "sprite1.x = sprite2.x \nsprite1.y = sprite2.y",
                         tags: "teleport location other move"
                     },
                     {
                         url: "https://s15.postimg.org/vqzf6gxwb/2_0_Change_X_by.png",
-                        code: 'NAME.x += 5',
+                        code: 'sprite1.x += 5',
                         tags: "increase decrease change x move right left"
                     },
                     {
                         url: "https://s10.postimg.org/whzn2xet5/2_0_Change_Y_by.png",
-                        code: 'NAME.y += -5',
+                        code: 'sprite1.y += -5',
                         tags: "increase decrease change y move up down"
                     },
                     {
                         url: "https://s10.postimg.org/rgc2vz1eh/2_0_Set_X_to.png",
-                        code: 'NAME.x = minX',
+                        code: 'sprite1.x = minX',
                         tags: "set x"
                     },
                     {
                         url: "https://s11.postimg.org/m8cc7585v/2_0_Set_Y_to.png",
-                        code: 'NAME.y = minY',
+                        code: 'sprite1.y = minY',
                         tags: "set y"
                     },
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f4c576c5874444c2e706e67",
-                        code: 'NAME.setRotationStyle("ROTATE LEFT RIGHT")',
+                        code: 'sprite1.setRotationStyle("ROTATE LEFT RIGHT")',
                         tags: "rotation style no turn flip"
                     },
                     {
                         url: "https://s11.postimg.org/oyadagjr7/2_0_Set_Rotation_Style.png",
-                        code: 'NAME.setRotationStyle("ROTATE")',
+                        code: 'sprite1.setRotationStyle("ROTATE")',
                         tags: "rotation style no turn flip"
                     },
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f433337716439682e706e67",
-                        code: 'NAME.setRotationStyle("NO ROTATE")',
+                        code: 'sprite1.setRotationStyle("NO ROTATE")',
                         tags: "rotation style no turn flip"
                     },
                     {
                         description: "Move camera to change the the perspective center of the screen. This is useful if you want to keep a character always in the center as she moves around.",
-                        code: 'cameraX = NAME.x\ncameraY = NAME.y',
+                        code: 'cameraX = sprite1.x\ncameraY = sprite1.y',
                         tags: "camera perspective"
                     }
                 ],
@@ -224,17 +224,17 @@
                     },
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f653650393552302e706e67",
-                        code: "NAME.show()",
+                        code: "sprite1.show()",
                         tags: "show appear"
                     },
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f323355617446352e706e67",
-                        code: "NAME.hide()",
+                        code: "sprite1.hide()",
                         tags: "hide disappear"
                     },
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f513078533746662e706e67",
-                        code: "IMAGE_NAME.setImageURL('https://i.imgur.com/SMJjVCL.png/?1')",
+                        code: "imageSprite1.setImageURL('https://i.imgur.com/SMJjVCL.png/?1')",
                         tags: "costume image url picture"
                     },
                     {
@@ -242,19 +242,19 @@
                         tags: "change color"
                     },
                     {
-                        code: 'RECTANGLE_NAME.color = "purple"',
+                        code: 'rectangleSprite1.color = "purple"',
                         tags: "change color"
                     },
                     {
-                        code: 'TEXT_NAME.color = "rgb(10, 150, 30)"',
+                        code: 'textSprite1.color = "rgb(10, 150, 30)"',
                         tags: "change color"
                     },
                     {
-                        code: 'LINE_NAME.color = "#ff20ff"',
+                        code: 'lineSprite1.color = "#ff20ff"',
                         tags: "change color"
                     },
                     {
-                        code: 'CIRCLE_NAME.color = "green"',
+                        code: 'circleSprite1.color = "green"',
                         tags: "change color"
                     },
                     {
@@ -263,39 +263,39 @@
                         tags: "size width height radius"
                     },
                     {
-                        code: 'IMAGE_NAME.height = 20\nIMAGE_NAME.width = 20',
+                        code: 'imageSprite1.height = 20\nimageSprite1.width = 20',
                         tags: "size height width length image"
                     },
                     {   
-                        code: 'RECTANGLE_NAME.height = 20\nRECTANGLE_NAME.width = 20',
+                        code: 'rectangleSprite1.height = 20\nrectangleSprite1.width = 20',
                         tags: "size height rectangle width length"
                     },
                     {   
-                        code: 'CIRCLE_NAME.radius = 20',
+                        code: 'circleSprite1.radius = 20',
                         tags: "size circle radius"
                     },
                     {  
-                        code: 'LINE_NAME.x1 = 20\nLINE_NAME.y1 = 20\nLINE_NAME.lineWidth = 20',
+                        code: 'lineSprite1.x1 = 20\nlineSprite1.y1 = 20\nlineSprite1.lineWidth = 20',
                         tags: "size line width length height"
                     },
                     {   
-                        code: 'TEXT_NAME.size = 20',
+                        code: 'textSprite1.size = 20',
                         tags: "size font text"
                     },
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f5870676c764a502e706e67",
-                        code: "NAME.sendToBack()",
+                        code: "sprite1.sendToBack()",
                         tags: "layer back behind"
                     },
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f4b756d707167532e706e67",
-                        code: "NAME.sendToFront()",
+                        code: "sprite1.sendToFront()",
                         tags: "layer in front"
                     },
                     {
                         description: "Set the brightness percentage between 0-100 (also known as transparency or opacity)",
                         url: "./images/brightness.png",
-                        code: "NAME.brightness = 50",
+                        code: "sprite1.brightness = 50",
                         tags: "brightness opacity opaqueness transparency"
                     },
                     {
@@ -341,106 +341,106 @@
                     },
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f5457656e5761702e706e67",
-                        code: 'NAME.penDown()',
+                        code: 'sprite1.penDown()',
                         tags: "pen down draw"
                     },
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f354837696a42772e706e67",
-                        code: 'NAME.penUp()',
+                        code: 'sprite1.penUp()',
                         tags: "pen up"
                     },
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f504c744b5663762e706e67",
-                        code: 'NAME.penColor = "blue"\nNAME.penColor = "#ff20ff"\nNAME.penColor = "rgb(10, 100, 20)"',
+                        code: 'sprite1.penColor = "blue"\nsprite1.penColor = "#ff20ff"\nsprite1.penColor = "rgb(10, 100, 20)"',
                         tags: "pen color"
                     },
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f4f7a59355a6a552e706e67",
-                        code: 'NAME.penWidth = 4',
+                        code: 'sprite1.penWidth = 4',
                         tags: "pen width size"
                     }
                 ],
                 Data: [
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f656963593537492e706e67",
-                        code: "var VARIABLE_NAME",
+                        code: "var variable1",
                         tags: "variable"
                     },
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f4859415458584c2e706e67",
-                        code: "VARIABLE_NAME = 0",
+                        code: "variable1 = 0",
                         tags: "variable set"
                     },
                     {
                         description: "You can combine creating/naming a variable with setting it:",
-                        code: "var VARIABLE_NAME = 0",
+                        code: "var variable1 = 0",
                         tags: "variable"
                     },
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f704b4e46794d772e706e67",
-                        code: "VARIABLE_NAME += 1",
+                        code: "variable1 += 1",
                         tags: "increase change decrease"
                     },
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f4447323649634e2e706e67",
-                        code: 'new Text({\n  text: () => "VARIABLE_NAME: " + VARIABLE_NAME,\n  x: 0,\n  y: 0,\n  size: 30\n})',
+                        code: 'new Text({\n  text: () => "variable1: " + variable1,\n  x: 0,\n  y: 0,\n  size: 30\n})',
                         description: '"Showing a variable" works by giving a Text Sprite a function instead of a "string in quotes" as its text attribute. The Text Sprite constantly reevaluates the function which keeps the value on the screen in sync with the value of the variable.',
                         tags: "show variable text"
                     },
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f7366536d6f44542e706e67",
-                        code: "var ARRAY_NAME = []",
+                        code: "var array1 = []",
                         tags: "array list"
                     },
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f304b306e5144332e706e67",
-                        code: "ARRAY_NAME.push('thing')",
+                        code: "array1.push('thing')",
                         description: "You can add anything to an array in JavaScript, including numbers, strings, but even Sprites, functions, and other arrays." ,
                         tags: "add array list"
                     },
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f516754647978652e706e67",
-                        code:"ARRAY_NAME.length",
+                        code:"array1.length",
                         tags: "array list length size"
                     },
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f6a587479364c542e706e67",
-                        code: "ARRAY_NAME[0]",
+                        code: "array1[0]",
                         tags: "array list get element"
                     },
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f6a6170377166522e706e67",
-                        code: "ARRAY_NAME.remove(thing)",
+                        code: "array1.remove(thing)",
                         tags: "array list remove delete",
-                        description: "Note: this only removes things from a list. It doesn't delete them from the screen (use NAME.delete() for that)."
+                        description: "Note: this only removes things from a list. It doesn't delete them from the screen (use sprite1.delete() for that)."
                     },
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f49625a4846706d2e706e67",
-                        code: "ARRAY_NAME.includes(thing)",
+                        code: "array1.includes(thing)",
                         tags: "contains includes array list"
                     },
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f5949473973746c2e706e67",
-                        code: 'new Text({text: () => "ARRAY_NAME: " + ARRAY_NAME})',
+                        code: 'new Text({text: () => "array1: " + array1})',
                     },
                     {
                         description: 'Do something for each thing in an array:',
-                        code:"ARRAY_NAME.forEach(thing => {\n  console.log(thing)\n})",
+                        code:"array1.forEach(thing => {\n  console.log(thing)\n})",
                         tags: "for each loop list array"
                     },
                     {
                         description: 'Check if a condition holds for at least one thing in an array:',
-                        code: "if (ARRAY_NAME.some(thing => thing.over(mouseX, mouseY))) {\n  \/* do something here */\n}",
+                        code: "if (array1.some(thing => thing.over(mouseX, mouseY))) {\n  \/* do something here */\n}",
                         tags: "reduce some any list array"
                     },
                     {
                         description: 'Check if a condition holds for everything in an array:',
-                        code: "if(ARRAY_NAME.every(thing => thing.touching(NAME))) {\n  \/* do something here */\n}",
+                        code: "if(array1.every(thing => thing.touching(sprite1))) {\n  \/* do something here */\n}",
                         tags: "every list arry reduce"
                     },
                     {
                         description: "Find something in an array:",
-                        code: "var needle = ARRAY_NAME.find(thing => thing.touching(NAME))\nif(needle) {\n  console.log(needle)\n}",
+                        code: "var needle = array1.find(thing => thing.touching(sprite1))\nif(needle) {\n  console.log(needle)\n}",
                         tags: "find search list array"
                     }
                 ],
@@ -448,7 +448,7 @@
                     Image: [
                         {
                           description: "Create new image:",
-                          code: 'var IMAGE_NAME = new Image({\n  url: "https://i.imgur.com/SMJjVCL.png/?1" ,\n  width: 30, \n  height: 30, \n  x: 100, \n  y: 20\n})',
+                          code: 'var imageSprite1 = new Image({\n  url: "https://i.imgur.com/SMJjVCL.png/?1" ,\n  width: 30, \n  height: 30, \n  x: 100, \n  y: 20\n})',
                           tags: "create make new image"
                         },
                         {
@@ -512,7 +512,7 @@
                     Text: [
                         {
                           description: "Create new text:",
-                          code: 'var TEXT_NAME = new Text({\n  text: "Hello world!", \n  size: 12, \n  color: "rgb(100, 50, 240)", \n  fontFamily: "arial", \n  textAlign: "left"\n})',
+                          code: 'var textSprite1 = new Text({\n  text: "Hello world!", \n  size: 12, \n  color: "rgb(100, 50, 240)", \n  fontFamily: "arial", \n  textAlign: "left"\n})',
                           tags: 'create make new text words string'
                         },
                         {
@@ -544,7 +544,7 @@
                     Circle: [
                         {
                             description: "Create new circle:",
-                            code: 'var CIRCLE_NAME = new Circle({\n  radius: 10, \n  color: "#ffffff", \n  x: 0, \n  y: 0\n})',
+                            code: 'var circleSprite1 = new Circle({\n  radius: 10, \n  color: "#ffffff", \n  x: 0, \n  y: 0\n})',
                             tags: "create make new circle"
                         },
                         {
@@ -566,7 +566,7 @@
                     Rectangle: [
                         {
                             description: "Create new rectangle:",
-                            code: 'var RECTANGLE_NAME = new Rectangle({\n  width: 20, \n  height: 55, \n  color: "pink"\n})',
+                            code: 'var rectangleSprite1 = new Rectangle({\n  width: 20, \n  height: 55, \n  color: "pink"\n})',
                             tags: "create new rectangle"
                         },
                         {
@@ -586,7 +586,7 @@
                     Line: [
                         {
                             description: "Create new line:",
-                            code: 'var LINE_NAME = new Line({color: "pink", \n  lineWidth: 10, \n  x: -100, \n  y: 100, \n  x1: 10, \n  y1: 20\n})'
+                            code: 'var lineSprite1 = new Line({color: "pink", \n  lineWidth: 10, \n  x: -100, \n  y: 100, \n  x1: 10, \n  y1: 20\n})'
                         },
                         {
                             description: "Set starting point:",
@@ -633,12 +633,12 @@
                     },
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f7a31356d6e506a2e706e67",
-                        code: "NAME.onMouseDown(() => {\n  \/* do something here */\n})", 
+                        code: "sprite1.onMouseDown(() => {\n  \/* do something here */\n})", 
                         tags: "on onclick when click mouse down"
                     }, 
                     {
                         description: "On mouse up",
-                        code: "NAME.onMouseUp(() => {\n  \/* do something here */\n})",
+                        code: "sprite1.onMouseUp(() => {\n  \/* do something here */\n})",
                         tags: "on when click mouse up"
                     },
                     {
@@ -723,7 +723,7 @@
                       tags: 'clone copy'
                     },
                     { 
-                      code: 'NAME.delete()',
+                      code: 'sprite1.delete()',
                       description: "Delete an object:",
                       tags: ' delete remove destroy clones copy'
                     },
@@ -736,35 +736,35 @@
                 Sensing: [
                     {
                        url: "./images/68747470733a2f2f692e696d6775722e636f6d2f515470574f78562e706e67",
-                       code: "NAME.mouseOver",
+                       code: "sprite1.mouseOver",
                        tags: "mouse over"
                     },
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f794558496e4b692e706e67",
                         description: "If you want to see if the center of your sprite is outside of a boundary, here are some expressions that could be helpful:",
-                        code: "NAME.x > maxX\nNAME.x < minX\nNAME.y > maxY\nNAME.y < minY",
+                        code: "sprite1.x > maxX\nsprite1.x < minX\nsprite1.y > maxY\nsprite1.y < minY",
                         tags: "boundary edge off outside"
                     },
                     {
                         html: "<b>Cropping images will make <code>touching()</code> more accurate.</b>",
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f733236773670632e706e67",
-                        code: "NAME.touching(OTHER_NAME)",
+                        code: "sprite1.touching(sprite2)",
                         tags: "touching intersecting overlap"
                     },
                     {
                         description: "<b>For circular sprites, <code>distanceTo()</code> will be more accurate than <code>touching()</code>.",
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f733236773670632e706e67",
-                        code: "NAME.distanceTo(OTHER_NAME) < 100",
+                        code: "sprite1.distanceTo(sprite2) < 100",
                         tags: "touching"
                     },
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f634959335359792e706e67",
-                        code: "NAME.distanceTo(mouseX, mouseY)",
+                        code: "sprite1.distanceTo(mouseX, mouseY)",
                         tags: "distance"
                     },
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f7936735847544b2e706e67",
-                        code: "NAME.distanceTo(OTHER_NAME)",
+                        code: "sprite1.distanceTo(sprite2)",
                         tags: "distance"
                     },
                     {
@@ -793,12 +793,12 @@
                     },
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f61664c6474384b2e706e67",
-                        code: "NAME.x",
+                        code: "sprite1.x",
                         tags: "x position"
                     },
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f42377644686a322e706e67",
-                        code: "NAME.y",
+                        code: "sprite1.y",
                         tags: "y position"
                     },
                     {
@@ -881,17 +881,17 @@
                 Operations: [
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f6e73446b436b742e706e67",
-                        code: "NAME.x + 4",
+                        code: "sprite1.x + 4",
                         tags: "addition add"
                     },
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f585341415449502e706e67",
-                        code: "NAME.y - 10",
+                        code: "sprite1.y - 10",
                         tags: "minus subtraction"
                     },
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f756a6e477045362e706e67",
-                        code: "NAME.radius * 2",
+                        code: "sprite1.radius * 2",
                         tags: "times multiply multiplication"
                     },
                     {
@@ -918,12 +918,12 @@
                     },
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f3268716f4866682e706e67",
-                        code: "NAME.x < minX",
+                        code: "sprite1.x < minX",
                         tags: "less than compare"
                     },
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f715837646d77742e706e67",
-                        code: "NAME.y > maxY",
+                        code: "sprite1.y > maxY",
                         tags: "greater than compare"
                     },
                     {
@@ -934,11 +934,11 @@
                     
                     {
                         description: "Less Than or Equal To:",
-                        code: "NAME.y <= minY"
+                        code: "sprite1.y <= minY"
                     },
                     {
                         description: "Greater Than or Equal To:",
-                        code: "NAME.x >= maxX"
+                        code: "sprite1.x >= maxX"
                     },
                     {
                         description: "Not Equals:",
@@ -946,16 +946,16 @@
                     },
                     {
                         description: "Between Two Numbers :",
-                        code: "NAME.x.between(minX, maxX)"
+                        code: "sprite1.x.between(minX, maxX)"
                     },
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f5559684d3574702e706e67",
-                        code: "mouseDown && NAME.mouseOver",
+                        code: "mouseDown && sprite1.mouseOver",
                         tags: "and"
                     },
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f505433496c6e302e706e67",
-                        code: "NAME1.mouseOver || NAME2.mouseOver",
+                        code: "sprite1.mouseOver || sprite2.mouseOver",
                         tags: "or"
                     },
                     {
@@ -979,7 +979,7 @@
                     },
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f4e466f59396c382e706e67",
-                        code: "NAME.x % 2",
+                        code: "sprite1.x % 2",
                         tags: "reminder modulus"
                     },
                     {
