@@ -334,6 +334,9 @@
           myCode = firebase.auth().currentUser && snapshot.val()[Object.keys(snapshot.val())[0]].uid == firebase.auth().currentUser.uid
           editor.setValue(snapshot.val()[Object.keys(snapshot.val())[0]].code)
           makeClean()
+        } else {
+          alert("Could not find a project with the name: " + getID())
+          editor.setValue("")
         }
       });
     }
