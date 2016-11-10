@@ -447,6 +447,11 @@
     });
     runCode()
 
+
+    editor.on('inputRead', function(){
+      CodeMirror.commands.autocomplete(editor);
+    });
+
     window.onbeforeunload = function(e) {		
        if (app.status == "DIRTY") {		
          var dialogText = 'Make sure to copy and paste your work somewhere safe.';		

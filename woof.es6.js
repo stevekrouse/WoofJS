@@ -769,6 +769,7 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
 };
 
 Woof.prototype.Text = function({project = undefined, text = "Text", size = 12, color = "black", fontFamily = "arial", textAlign = "center"} = {}) {
+  this.type = "text"
   // TODO remove text align or make the collider take it into account
   Woof.prototype.Sprite.call(this, arguments[0]);
   this.text = text;
@@ -831,6 +832,7 @@ Woof.prototype.Text = function({project = undefined, text = "Text", size = 12, c
 };
 
 Woof.prototype.Circle = function({project = undefined, radius = 10, color = "black"} = {}) {
+  this.type = "circle"
   Woof.prototype.Sprite.call(this, arguments[0]);
   this.radius = Math.abs(radius);
   this.color = color;
@@ -863,6 +865,7 @@ Woof.prototype.Circle = function({project = undefined, radius = 10, color = "bla
 
 
 Woof.prototype.Rectangle = function({project = undefined, height = 10, width = 10, color = "black"} = {}) {
+  this.type = "rectangle"
   Woof.prototype.Sprite.call(this, arguments[0]);
   this.rectangleHeight = Math.abs(height);
   this.rectangleWidth = Math.abs(width);
@@ -895,6 +898,7 @@ Woof.prototype.Rectangle = function({project = undefined, height = 10, width = 1
 };
 
 Woof.prototype.Line = function({project = undefined, width = 1, x1 = 10, y1 = 10, color = "black"} = {}) {
+  this.type = "line"
   // TODO make this a helper to create a rectangle so that we can more easily reason about lines and colliders
   Woof.prototype.Sprite.call(this, arguments[0]);
   this.x1 = x1;
@@ -933,6 +937,7 @@ Woof.prototype.Line = function({project = undefined, width = 1, x1 = 10, y1 = 10
 };
 
 Woof.prototype.Image = function({project = undefined, url = "https://i.imgur.com/SMJjVCL.png/?1", height, width} = {}) {
+  this.type = "image"
   Woof.prototype.Sprite.call(this, arguments[0]);
   this.imageHeight = Math.abs(height);
   this.imageWidth = Math.abs(width);

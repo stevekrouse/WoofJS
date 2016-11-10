@@ -83,8 +83,13 @@
     pick: function(data, i) {
       var completion = data.list[i];
       if (completion.hint) completion.hint(this.cm, data, completion);
-      else this.cm.replaceRange(getText(completion), completion.from || data.from,
-                                completion.to || data.to, "complete");
+      else {
+        var text = getText(completion).replace(/\n/g, "\n" + Array(data.from.ch + 1).join(" "))
+        this.cm.replaceRange(text, data.from, data.to, "complete");
+        if (completion.includes("\n  \n")) {
+          this.cm.setCursor(data.from.line + 1, data.from.ch + 2)
+        }
+      }
       CodeMirror.signal(data, "pick", completion);
       this.close();
     },
@@ -125,12 +130,8 @@
       this.data = data;
 
       if (data && data.list.length) {
-        if (picked && data.list.length == 1) {
-          this.pick(data, 0);
-        } else {
-          this.widget = new Widget(this, data);
-          CodeMirror.signal(data, "shown");
-        }
+        this.widget = new Widget(this, data);
+        CodeMirror.signal(data, "shown");
       }
     }
   };

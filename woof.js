@@ -1198,6 +1198,7 @@ Woof.prototype.Text = function () {
   var _ref7$textAlign = _ref7.textAlign;
   var textAlign = _ref7$textAlign === undefined ? "center" : _ref7$textAlign;
 
+  this.type = "text";
   // TODO remove text align or make the collider take it into account
   Woof.prototype.Sprite.call(this, arguments[0]);
   this.text = text;
@@ -1279,6 +1280,7 @@ Woof.prototype.Circle = function () {
   var _ref8$color = _ref8.color;
   var color = _ref8$color === undefined ? "black" : _ref8$color;
 
+  this.type = "circle";
   Woof.prototype.Sprite.call(this, arguments[0]);
   this.radius = Math.abs(radius);
   this.color = color;
@@ -1323,6 +1325,7 @@ Woof.prototype.Rectangle = function () {
   var _ref9$color = _ref9.color;
   var color = _ref9$color === undefined ? "black" : _ref9$color;
 
+  this.type = "rectangle";
   Woof.prototype.Sprite.call(this, arguments[0]);
   this.rectangleHeight = Math.abs(height);
   this.rectangleWidth = Math.abs(width);
@@ -1374,6 +1377,7 @@ Woof.prototype.Line = function () {
   var _ref10$color = _ref10.color;
   var color = _ref10$color === undefined ? "black" : _ref10$color;
 
+  this.type = "line";
   // TODO make this a helper to create a rectangle so that we can more easily reason about lines and colliders
   Woof.prototype.Sprite.call(this, arguments[0]);
   this.x1 = x1;
@@ -1424,6 +1428,7 @@ Woof.prototype.Image = function () {
   var height = _ref11.height;
   var width = _ref11.width;
 
+  this.type = "image";
   Woof.prototype.Sprite.call(this, arguments[0]);
   this.imageHeight = Math.abs(height);
   this.imageWidth = Math.abs(width);
