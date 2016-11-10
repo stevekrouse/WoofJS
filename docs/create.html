@@ -452,8 +452,14 @@
       app.error = undefined
       try {
         var code = Babel.transform(editor.getValue(), { presets: ['es2015'] }).code
+        code = code.replace("'use strict';", '')
         try {
-          document.getElementById('preview').contentWindow.eval(code);
+          document.getElementById('preview').contentWindow.addEventListener("error", function(error) { app.error = error } );
+          
+          var script = document.createElement( "script" );
+          script.type = "text/javascript";
+          script.innerText = code
+          document.getElementById('preview').contentDocument.body.appendChild(script)
         } catch (e) {
           app.error = e
         }
@@ -480,6 +486,7 @@
             }
         }, 10)
     }
+    
     function debounce(func, wait, immediate) {
     	var timeout;
     	return function() {

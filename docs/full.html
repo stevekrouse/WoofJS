@@ -4,6 +4,7 @@
 <script data-presets="es2017" src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.14.0/babel.min.js"></script>
 <script type="text/javascript" src="https://cdn.rawgit.com/stevekrouse/WoofJS/79254cb4fd010d12af94562d16307229e769671c/woof.js"></script>
 <script>
+
   var config = {
     apiKey: "AIzaSyBYHv7dCiD0bWiHRlcp4VIZCIqzoMnB4yY",
     authDomain: "woofjs-d1b27.firebaseapp.com",
@@ -25,7 +26,12 @@
   firebase.database().ref('/code/' + getID()).limitToLast(1).once('value').then(function(snapshot) {
     if (snapshot.val()){
       document.title = getID()
-      eval(Babel.transform(snapshot.val()[Object.keys(snapshot.val())[0]].code, { presets: ['es2015'] }).code)
+      var c = Babel.transform(snapshot.val()[Object.keys(snapshot.val())[0]].code, { presets: ['es2015'] }).code
+      c = c.replace("'use strict';", '')
+      var script = document.createElement( "script" );
+      script.type = "text/javascript";
+      script.innerText = c
+      document.body.appendChild(script)
     } else {
       alert("There's no project called '" + getID() + "'. Sorry :(")
     }
@@ -39,5 +45,6 @@
 
   ga('create', 'UA-82374072-1', 'auto');
   ga('send', 'pageview');
+
 
 </script>
