@@ -400,7 +400,7 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
   thisContext.ready(thisContext._render);
 };
 
-Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, rotationStyle = "ROTATE", showing = true, penColor = "black", penWidth = 1, penDown = false, showCollider = false} = {}) {
+Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, rotationStyle = "ROTATE", showing = true, penColor = "black", penWidth = 1, penDown = false, showCollider = false, brightness = 100} = {}) {
   if (!project) {
     if (global) {
       this.project = window;
@@ -444,6 +444,7 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
   this.penWidth = penWidth;
   this.deleted = false;
   this.showCollider = showCollider;
+  this.brightness = brightness;
 
   this.toJSON = () => {
     return {x: this.x, y: this.y, angle: this.angle, rotationStyle: this.rotationStyle, showing: this.showing, penDown: this._penDown, penColor: this.penColor, penWidth: this.penWidth, deleted: this.deleted};
@@ -510,6 +511,7 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
       
       context.save();
       context.translate(Math.round(this.canvasX()), Math.round(this.canvasY()));
+      context.globalAlpha = this.brightness / 100;
       
       if (this.rotationStyle == "ROTATE") {
         context.rotate(-this.radians());

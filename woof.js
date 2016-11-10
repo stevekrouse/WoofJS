@@ -720,6 +720,8 @@ Woof.prototype.Sprite = function () {
   var penDown = _ref3$penDown === undefined ? false : _ref3$penDown;
   var _ref3$showCollider = _ref3.showCollider;
   var showCollider = _ref3$showCollider === undefined ? false : _ref3$showCollider;
+  var _ref3$brightness = _ref3.brightness;
+  var brightness = _ref3$brightness === undefined ? 100 : _ref3$brightness;
 
   if (!project) {
     if (global) {
@@ -768,6 +770,7 @@ Woof.prototype.Sprite = function () {
   this.penWidth = penWidth;
   this.deleted = false;
   this.showCollider = showCollider;
+  this.brightness = brightness;
 
   this.toJSON = function () {
     return { x: _this.x, y: _this.y, angle: _this.angle, rotationStyle: _this.rotationStyle, showing: _this.showing, penDown: _this._penDown, penColor: _this.penColor, penWidth: _this.penWidth, deleted: _this.deleted };
@@ -843,6 +846,7 @@ Woof.prototype.Sprite = function () {
 
       context.save();
       context.translate(Math.round(this.canvasX()), Math.round(this.canvasY()));
+      context.globalAlpha = this.brightness / 100;
 
       if (this.rotationStyle == "ROTATE") {
         context.rotate(-this.radians());
