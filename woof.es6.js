@@ -894,28 +894,40 @@ Woof.prototype.Rectangle = function({project = undefined, height = 10, width = 1
   };
 };
 
-Woof.prototype.Line = function({project = undefined, lineWidth = 1, x1 = 10, y1 = 10, color = "black"} = {}) {
+Woof.prototype.Line = function({project = undefined, width = 1, x1 = 10, y1 = 10, color = "black"} = {}) {
   // TODO make this a helper to create a rectangle so that we can more easily reason about lines and colliders
   Woof.prototype.Sprite.call(this, arguments[0]);
   this.x1 = x1;
   this.y1 = y1;
   this.color = color;
-  this.lineWidth = Math.abs(lineWidth);
+  this.lineWidth = Math.abs(width);
   
-  this.width = () => {
-    return this.lineWidth;
-  };
+  Object.defineProperty(this, 'width', {
+    get: function() {
+      return this.lineWidth;
+    },
+    set: function(value) {
+      if (typeof value != "number") { throw new TypeError("line.width can only be set to a number."); }
+      this.lineWidth = value;
+    }
+  });
   
-  this.height = () => {
-    return Math.sqrt((Math.pow((this.x - this.x1), 2)) + (Math.pow((this.y - this.y1), 2)));
-  };
+  Object.defineProperty(this, 'height', {
+    get: function() {
+      return Math.sqrt((Math.pow((this.x - this.x1), 2)) + (Math.pow((this.y - this.y1), 2)));
+    },
+    set: function(value) {
+      throw new TypeError("You cannot set line.height directly. You can only modify line.height by changing the length of your line through moving its points."); 
+    }
+  }); 
+  
   
   this.lineRender = (context) => {
     context.beginPath();
     context.moveTo(0, 0);
     context.lineTo(this.x1 - this.x, -this.y1 + this.y);
-    context.strokeStyle = color;
-    context.lineWidth = lineWidth;
+    context.strokeStyle = this.color;
+    context.lineWidth = this.lineWidth;
     context.stroke();
   };
 };

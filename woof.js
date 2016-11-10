@@ -1365,8 +1365,8 @@ Woof.prototype.Line = function () {
 
   var _ref10$project = _ref10.project;
   var project = _ref10$project === undefined ? undefined : _ref10$project;
-  var _ref10$lineWidth = _ref10.lineWidth;
-  var lineWidth = _ref10$lineWidth === undefined ? 1 : _ref10$lineWidth;
+  var _ref10$width = _ref10.width;
+  var width = _ref10$width === undefined ? 1 : _ref10$width;
   var _ref10$x = _ref10.x1;
   var x1 = _ref10$x === undefined ? 10 : _ref10$x;
   var _ref10$y = _ref10.y1;
@@ -1379,22 +1379,35 @@ Woof.prototype.Line = function () {
   this.x1 = x1;
   this.y1 = y1;
   this.color = color;
-  this.lineWidth = Math.abs(lineWidth);
+  this.lineWidth = Math.abs(width);
 
-  this.width = function () {
-    return _this7.lineWidth;
-  };
+  Object.defineProperty(this, 'width', {
+    get: function get() {
+      return this.lineWidth;
+    },
+    set: function set(value) {
+      if (typeof value != "number") {
+        throw new TypeError("line.width can only be set to a number.");
+      }
+      this.lineWidth = value;
+    }
+  });
 
-  this.height = function () {
-    return Math.sqrt(Math.pow(_this7.x - _this7.x1, 2) + Math.pow(_this7.y - _this7.y1, 2));
-  };
+  Object.defineProperty(this, 'height', {
+    get: function get() {
+      return Math.sqrt(Math.pow(this.x - this.x1, 2) + Math.pow(this.y - this.y1, 2));
+    },
+    set: function set(value) {
+      throw new TypeError("You cannot set line.height directly. You can only modify line.height by changing the length of your line through moving its points.");
+    }
+  });
 
   this.lineRender = function (context) {
     context.beginPath();
     context.moveTo(0, 0);
     context.lineTo(_this7.x1 - _this7.x, -_this7.y1 + _this7.y);
-    context.strokeStyle = color;
-    context.lineWidth = lineWidth;
+    context.strokeStyle = _this7.color;
+    context.lineWidth = _this7.lineWidth;
     context.stroke();
   };
 };
