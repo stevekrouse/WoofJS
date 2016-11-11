@@ -334,9 +334,9 @@ div.CodeMirror-dragcursors {
 span.CodeMirror-selectedtext { background: none; }
 
 .cm-s-eclipse span.cm-meta {color: #FF1717;}
-.cm-s-eclipse span.cm-keyword { line-height: 1em; font-weight: bold; color: #7F0055; }
+.cm-s-eclipse span.cm-keyword { line-height: 1em; font-weight: bold; color: #a70ce2; }
 .cm-s-eclipse span.cm-atom {color: #219;}
-.cm-s-eclipse span.cm-number {color: #164;}
+.cm-s-eclipse span.cm-number {color: #1cb9d6;}
 .cm-s-eclipse span.cm-def {color: #00f;}
 .cm-s-eclipse span.cm-variable {color: black;}
 .cm-s-eclipse span.cm-variable-2 {color: #0000C0;}
