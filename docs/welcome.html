@@ -1,0 +1,139 @@
+ <link rel="stylesheet" href="./codemirror/codemirror.css">
+  <script type="text/javascript" src="./codemirror/codemirror.js"></script>
+  <script type="text/javascript" src="./codemirror/javascript.js"></script>
+  <script type="text/javascript" src="./codemirror/closebrackets.js"></script>
+  <script type="text/javascript" src="./codemirror/javascript-hint.js"></script>
+  <script type="text/javascript" src="./codemirror/javascript-lint.js"></script>
+  <script type="text/javascript" src="./codemirror/matchbrackets.js"></script>
+  <script type="text/javascript" src="./codemirror/search.js"></script>
+  <script type="text/javascript" src="./codemirror/searchcursor.js"></script>
+  <script type="text/javascript" src="./codemirror/show-hint.js"></script>
+  <script type="text/javascript" src="./codemirror/comment.js"></script>
+  <script type="text/javascript" src="./codemirror/sublime.js"></script>
+  <script type="text/javascript" src="./codemirror/foldcode.js"></script>
+  <link rel="stylesheet" href="./codemirror/foldgutter.css" />
+  <script src="./codemirror/foldcode.js"></script>
+  <script src="./codemirror/foldgutter.js"></script>
+  <script src="./codemirror/brace-fold.js"></script>
+  <script src="./codemirror/comment-fold.js"></script>
+  <link rel="stylesheet" href="./codemirror/dialog.css">
+  <link rel="stylesheet" href="./codemirror/show-hint.css">
+  <script src="./codemirror/dialog.js"></script>
+  <link rel="stylesheet" href="./codemirror/lint.css">
+  <script src="./codemirror/jshint.min.js"></script>
+  <script src="./codemirror/lint.js"></script>
+
+<style type="text/css">
+        #editor {    margin: auto;
+    z-index: 100;
+    position: absolute;
+    /* left: 45%; */
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    height: 600px;
+    width: 800px;
+            opacity: .8;
+        }
+    
+    #project {z-index:-100;}
+     
+    iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+    }  
+  
+</style>
+<div id="editor"></div>
+<iframe id="output"></iframe>
+    
+<script>
+var cm = CodeMirror(document.getElementById('editor'), {
+        mode:  "javascript",
+        theme: "eclipse",
+        keyMap: "sublime",
+    });
+
+    var pos = 0
+    var code = "// Hey there, welcome to WoofJS!\n" +
+"\n" +
+"// WoofJS is a Scratch-inspired JavaScript library for making games.\n" +
+"\n" +
+"// Let's code something together :)\n" +
+"\n" +
+"// First let's change our background.\n" +
+"setBackdropColor(\"black\")\n" +
+"\n" +
+"// I have a cool idea...\n" +
+"// It starts with a lot of circles.\n" +
+"// Let's make one every .05 seconds.\n" +
+"every(.05, 'seconds', () => {\n" +
+"  var circle = new Circle()\n" +
+"\n" +
+"  // I can't see all my circles!\n" +
+"  // Let's spread them out.\n" +
+"  // New circles should spawn where my mouse is.\n" +
+"  circle.x = mouseX\n" +
+"  circle.y = mouseY\n" +
+"\n" +
+"  // Colors are fun!\n" +
+"  circle.color = randomColor()\n" +
+"\n" +
+"  // Go, little guys, go!\n" +
+"  forever(() => {\n" +
+"    circle.move(2)\n" +
+"  })\n" +
+"\n" +
+"  // Alright, time to get fancy\n" +
+"  // Let's make the angle random.\n" +
+"  circle.angle = random(0, 360)\n" +
+"\n" +
+"// Hope you had fun!\n" +
+"// Feel free to change any of this code.\n" +
+"\n" +
+"// Can't wait to see what you create :)\n";
+		
+
+function runCode() {
+    var iframe = document.getElementById('output');
+    
+    iframe.src = "";
+    setTimeout(function() {
+        var script = iframe.contentWindow.document.createElement("script");
+        script.type = "text/javascript";
+        script.src = "https://cdn.rawgit.com/stevekrouse/WoofJS/8a81aad06630b568396647c40e4fe4eb1557d98d/woof.js";
+        iframe.contentWindow.document.body.appendChild(script);
+        
+        script.onload = function() {
+            var evt = document.createEvent('Event');  
+            evt.initEvent('load', false, false);  
+            iframe.contentWindow.dispatchEvent(evt);
+            document.getElementById('output').contentWindow.eval(cm.getValue());
+        }
+    }, 10)
+}	
+
+var doc = cm.getDoc()
+setInterval(function (){ 
+    if (pos < code.length){
+        doc.replaceSelection(code[pos])
+        pos++
+        if (code.substring(pos-18, pos) == "'seconds', () => {"){
+           doc.replaceSelection("\n\n")
+           doc.replaceSelection("})")
+           doc.setCursor({line: doc.getCursor().line-1, ch: 1})
+        }
+        if (code[pos] == "."){
+            runCode()
+        }
+    }
+}, 30)
+
+//   eval(code)
+//   var evt = document.createEvent('Event');  
+//                 evt.initEvent('load', false, false);  
+//                 window.dispatchEvent(evt);
+</script>
+
