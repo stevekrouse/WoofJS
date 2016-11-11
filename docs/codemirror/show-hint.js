@@ -84,10 +84,14 @@
       var completion = data.list[i];
       if (completion.hint) completion.hint(this.cm, data, completion);
       else {
-        var text = getText(completion).replace(/\n/g, "\n" + Array(data.from.ch + 1).join(" "))
+        var offset = this.cm.getRange({line: data.from.line, ch: 0}, data.from).search(/\S|$/)
+        var text = getText(completion).replace(/\n/g, "\n" + Array(offset + 1).join(" "))
+        
         this.cm.replaceRange(text, data.from, data.to, "complete");
-        if (completion.includes("\n  \n")) {
-          this.cm.setCursor(data.from.line + 1, data.from.ch + 2)
+        if (completion.includes('if () {\n  \n}')) {
+          this.cm.setCursor(data.from.line, offset + 4)
+        } else if (completion.includes("\n  \n")) {
+          this.cm.setCursor(data.from.line + 1, offset + 2)
         }
       }
       CodeMirror.signal(data, "pick", completion);

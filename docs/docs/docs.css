@@ -170,6 +170,7 @@ pre {
     box-shadow: none;
     width: auto !important;
     line-height: 16px;
+    outline: none;
 }
 
 button.highlight:focus {

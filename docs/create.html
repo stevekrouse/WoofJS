@@ -401,6 +401,10 @@
       var beautiful = js_beautify(cm.getSelection(), {space_after_anon_function: true, indent_size: 2, indent_with_tabs: false })
       cm.replaceSelection(beautiful)
     }
+    keymap.Tab = function(cm) {
+      var spaces = Array(cm.getOption("indentUnit") + 1).join(" ");
+      cm.replaceSelection(spaces, "end", "+input");
+    }
     
     var editor = CodeMirror(document.getElementById('code'), {
         mode:  "javascript",
@@ -448,8 +452,10 @@
     runCode()
 
 
-    editor.on('inputRead', function(){
-      CodeMirror.commands.autocomplete(editor);
+    editor.on('inputRead', function(cm, e){
+      if (e.text.length == 1 && e.text[0].length == 1 &&  /^[a-zA-Z0-9\.]/.test(e.text[0])) {
+        CodeMirror.commands.autocomplete(editor);
+      }
     });
 
     window.onbeforeunload = function(e) {		
@@ -488,7 +494,7 @@
         setTimeout(function() {
             var script = iframe.contentWindow.document.createElement("script");
             script.type = "text/javascript";
-            script.src = "https://cdn.rawgit.com/stevekrouse/WoofJS/87a5c2750aaa469c592797c618f3a76fd4664429/woof.js";
+            script.src = "https://cdn.rawgit.com/stevekrouse/WoofJS/ab6678e5831a5b4d6e6324c33fc7d5287da5ac48/woof.js";
             iframe.contentWindow.document.body.appendChild(script);
             
             script.onload = function() {
