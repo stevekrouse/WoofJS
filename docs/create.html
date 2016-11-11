@@ -184,7 +184,7 @@
         </div>
         
         <div v-show="projectsPane" id="projects" style="width:25%; height:100%; flex: 1.2 1 25%; word-wrap: break-word; ">
-          <iframe src="https://cdn.rawgit.com/stevekrouse/coding.space/43f0bb5955d217bdaea312d339c9236d1c1c59c9/woof/index.html" style="height:100%; width:100%"></iframe> 
+          <iframe src="http://coding.space/woof/index.html" style="height:100%; width:100%"></iframe> 
         </div>
         
         <div v-show="codePane" id="code" style="width:25%; height:100%; flex: 1.2 1 25%; word-wrap: break-word; ">
@@ -334,6 +334,9 @@
           myCode = firebase.auth().currentUser && snapshot.val()[Object.keys(snapshot.val())[0]].uid == firebase.auth().currentUser.uid
           editor.setValue(snapshot.val()[Object.keys(snapshot.val())[0]].code)
           makeClean()
+        } else {
+          alert("Could not find a project with the name: " + getID())
+          editor.setValue("")
         }
       });
     }
@@ -365,9 +368,12 @@
                   code: editor.getValue(), 
                   time: firebase.database.ServerValue.TIMESTAMP, 
                   uid: firebase.auth().currentUser && firebase.auth().currentUser.uid
+                }).then(function(){
+                  window.location.hash = name
+                  makeClean()
+                }).catch(function(error){
+                  alert("Unable to save project: " + error)
                 });
-                window.location.hash = name
-                makeClean()
             } else {
               alert("That project name has already been taken. Try another one.")
             }
@@ -377,11 +383,13 @@
               code: editor.getValue(), 
               time: firebase.database.ServerValue.TIMESTAMP, 
               uid: firebase.auth().currentUser && firebase.auth().currentUser.uid
+            }).then(function(){
+              window.location.hash = name
+              myCode = firebase.auth().currentUser
+              makeClean()
+            }).catch(function(error){
+              alert("Unable to save project: " + error)
             });
-            
-            window.location.hash = name
-            myCode = firebase.auth().currentUser
-            makeClean()
           }
         });
       }
@@ -392,6 +400,10 @@
     keymap[ctrl + "B"] = function(cm) {
       var beautiful = js_beautify(cm.getSelection(), {space_after_anon_function: true, indent_size: 2, indent_with_tabs: false })
       cm.replaceSelection(beautiful)
+    }
+    keymap.Tab = function(cm) {
+      var spaces = Array(cm.getOption("indentUnit") + 1).join(" ");
+      cm.replaceSelection(spaces, "end", "+input");
     }
     
     var editor = CodeMirror(document.getElementById('code'), {
@@ -439,6 +451,13 @@
     });
     runCode()
 
+
+    editor.on('inputRead', function(cm, e){
+      if (e.text.length == 1 && e.text[0].length == 1 &&  /^[a-zA-Z0-9\.]/.test(e.text[0])) {
+        CodeMirror.commands.autocomplete(editor);
+      }
+    });
+
     window.onbeforeunload = function(e) {		
        if (app.status == "DIRTY") {		
          var dialogText = 'Make sure to copy and paste your work somewhere safe.';		
@@ -452,8 +471,14 @@
       app.error = undefined
       try {
         var code = Babel.transform(editor.getValue(), { presets: ['es2015'] }).code
+        code = code.replace("'use strict';", '')
         try {
-          document.getElementById('preview').contentWindow.eval(code);
+          document.getElementById('preview').contentWindow.addEventListener("error", function(error) { app.error = error } );
+          
+          var script = document.createElement( "script" );
+          script.type = "text/javascript";
+          script.text = code
+          document.getElementById('preview').contentDocument.body.appendChild(script)
         } catch (e) {
           app.error = e
         }
@@ -469,7 +494,7 @@
         setTimeout(function() {
             var script = iframe.contentWindow.document.createElement("script");
             script.type = "text/javascript";
-            script.src = "https://cdn.rawgit.com/stevekrouse/WoofJS/8a81aad06630b568396647c40e4fe4eb1557d98d/woof.js";
+            script.src = "https://cdn.rawgit.com/stevekrouse/WoofJS/ab6678e5831a5b4d6e6324c33fc7d5287da5ac48/woof.js";
             iframe.contentWindow.document.body.appendChild(script);
             
             script.onload = function() {
@@ -480,6 +505,7 @@
             }
         }, 10)
     }
+    
     function debounce(func, wait, immediate) {
     	var timeout;
     	return function() {

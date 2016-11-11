@@ -400,7 +400,7 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
   thisContext.ready(thisContext._render);
 };
 
-Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, rotationStyle = "ROTATE", showing = true, penColor = "black", penWidth = 1, penDown = false, showCollider = false} = {}) {
+Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, rotationStyle = "ROTATE", showing = true, penColor = "black", penWidth = 1, penDown = false, showCollider = false, brightness = 100} = {}) {
   if (!project) {
     if (global) {
       this.project = window;
@@ -444,6 +444,7 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
   this.penWidth = penWidth;
   this.deleted = false;
   this.showCollider = showCollider;
+  this.brightness = brightness;
 
   this.toJSON = () => {
     return {x: this.x, y: this.y, angle: this.angle, rotationStyle: this.rotationStyle, showing: this.showing, penDown: this._penDown, penColor: this.penColor, penWidth: this.penWidth, deleted: this.deleted};
@@ -510,6 +511,7 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
       
       context.save();
       context.translate(Math.round(this.canvasX()), Math.round(this.canvasY()));
+      context.globalAlpha = this.brightness / 100;
       
       if (this.rotationStyle == "ROTATE") {
         context.rotate(-this.radians());
@@ -767,6 +769,7 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
 };
 
 Woof.prototype.Text = function({project = undefined, text = "Text", size = 12, color = "black", fontFamily = "arial", textAlign = "center"} = {}) {
+  this.type = "text"
   // TODO remove text align or make the collider take it into account
   Woof.prototype.Sprite.call(this, arguments[0]);
   this.text = text;
@@ -829,6 +832,7 @@ Woof.prototype.Text = function({project = undefined, text = "Text", size = 12, c
 };
 
 Woof.prototype.Circle = function({project = undefined, radius = 10, color = "black"} = {}) {
+  this.type = "circle"
   Woof.prototype.Sprite.call(this, arguments[0]);
   this.radius = Math.abs(radius);
   this.color = color;
@@ -861,6 +865,7 @@ Woof.prototype.Circle = function({project = undefined, radius = 10, color = "bla
 
 
 Woof.prototype.Rectangle = function({project = undefined, height = 10, width = 10, color = "black"} = {}) {
+  this.type = "rectangle"
   Woof.prototype.Sprite.call(this, arguments[0]);
   this.rectangleHeight = Math.abs(height);
   this.rectangleWidth = Math.abs(width);
@@ -892,33 +897,47 @@ Woof.prototype.Rectangle = function({project = undefined, height = 10, width = 1
   };
 };
 
-Woof.prototype.Line = function({project = undefined, lineWidth = 1, x1 = 10, y1 = 10, color = "black"} = {}) {
+Woof.prototype.Line = function({project = undefined, width = 1, x1 = 10, y1 = 10, color = "black"} = {}) {
+  this.type = "line"
   // TODO make this a helper to create a rectangle so that we can more easily reason about lines and colliders
   Woof.prototype.Sprite.call(this, arguments[0]);
   this.x1 = x1;
   this.y1 = y1;
   this.color = color;
-  this.lineWidth = Math.abs(lineWidth);
+  this.lineWidth = Math.abs(width);
   
-  this.width = () => {
-    return this.lineWidth;
-  };
+  Object.defineProperty(this, 'width', {
+    get: function() {
+      return this.lineWidth;
+    },
+    set: function(value) {
+      if (typeof value != "number") { throw new TypeError("line.width can only be set to a number."); }
+      this.lineWidth = value;
+    }
+  });
   
-  this.height = () => {
-    return Math.sqrt((Math.pow((this.x - this.x1), 2)) + (Math.pow((this.y - this.y1), 2)));
-  };
+  Object.defineProperty(this, 'height', {
+    get: function() {
+      return Math.sqrt((Math.pow((this.x - this.x1), 2)) + (Math.pow((this.y - this.y1), 2)));
+    },
+    set: function(value) {
+      throw new TypeError("You cannot set line.height directly. You can only modify line.height by changing the length of your line through moving its points."); 
+    }
+  }); 
+  
   
   this.lineRender = (context) => {
     context.beginPath();
     context.moveTo(0, 0);
     context.lineTo(this.x1 - this.x, -this.y1 + this.y);
-    context.strokeStyle = color;
-    context.lineWidth = lineWidth;
+    context.strokeStyle = this.color;
+    context.lineWidth = this.lineWidth;
     context.stroke();
   };
 };
 
 Woof.prototype.Image = function({project = undefined, url = "https://i.imgur.com/SMJjVCL.png/?1", height, width} = {}) {
+  this.type = "image"
   Woof.prototype.Sprite.call(this, arguments[0]);
   this.imageHeight = Math.abs(height);
   this.imageWidth = Math.abs(width);

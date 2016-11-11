@@ -1,80 +1,86 @@
 code,
 pre {
-	color: black;
-	background: none;
-	text-shadow: 0 1px white;
-	font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
-	text-align: left;
-	white-space: pre;
-	word-spacing: normal;
-	word-break: normal;
-	word-wrap: normal;
-	line-height: 1.5;
-
-	-moz-tab-size: 4;
-	-o-tab-size: 4;
-	tab-size: 4;
-
-	-webkit-hyphens: none;
-	-moz-hyphens: none;
-	-ms-hyphens: none;
-	hyphens: none;
+    color: black;
+    background: none;
+    text-shadow: 0 1px white;
+    font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+    text-align: left;
+    white-space: pre;
+    word-spacing: normal;
+    word-break: normal;
+    word-wrap: normal;
+    line-height: 1.5;
+    -moz-tab-size: 4;
+    -o-tab-size: 4;
+    tab-size: 4;
+    -webkit-hyphens: none;
+    -moz-hyphens: none;
+    -ms-hyphens: none;
+    hyphens: none;
 }
 
-pre::-moz-selection, pre ::-moz-selection,
-code::-moz-selection, code ::-moz-selection {
-	text-shadow: none;
-	background: #b3d4fc;
+pre::-moz-selection,
+pre ::-moz-selection,
+code::-moz-selection,
+code ::-moz-selection {
+    text-shadow: none;
+    background: #b3d4fc;
 }
 
-pre::selection, pre ::selection,
-code::selection, code ::selection {
-	text-shadow: none;
-	background: #b3d4fc;
+pre::selection,
+pre ::selection,
+code::selection,
+code ::selection {
+    text-shadow: none;
+    background: #b3d4fc;
 }
 
 @media print {
-	code,
-	pre {
-		text-shadow: none;
-	}
+    code,
+    pre {
+        text-shadow: none;
+    }
 }
 
+
 /* Code blocks */
+
 pre {
-	padding: 1em;
-	overflow: auto;
+    padding: 1em;
+    overflow: auto;
 }
 
 pre {
     margin-right: 10px;
 }
 
-:not(pre) > code,
+:not(pre)>code,
 pre {
-	background: #f5f2f0;
+    background: #f5f2f0;
 }
 
+
 /* Inline code */
-:not(pre) > code {
-	padding: .1em;
-	border-radius: .3em;
-	white-space: normal;
+
+:not(pre)>code {
+    padding: .1em;
+    border-radius: .3em;
+    white-space: normal;
 }
 
 .token.comment,
 .token.prolog,
 .token.doctype,
 .token.cdata {
-	color: slategray;
+    color: slategray;
 }
 
 .token.punctuation {
-	color: #999;
+    color: #999;
 }
 
 .namespace {
-	opacity: .7;
+    opacity: .7;
 }
 
 .token.property,
@@ -84,7 +90,7 @@ pre {
 .token.constant,
 .token.symbol,
 .token.deleted {
-	color: #905;
+    color: #905;
 }
 
 .token.selector,
@@ -93,7 +99,7 @@ pre {
 .token.char,
 .token.builtin,
 .token.inserted {
-	color: #690;
+    color: #690;
 }
 
 .token.operator,
@@ -101,36 +107,37 @@ pre {
 .token.url,
 .language-css .token.string,
 .style .token.string {
-	color: #a67f59;
-	background: hsla(0, 0%, 100%, .5);
+    color: #a67f59;
+    background: hsla(0, 0%, 100%, .5);
 }
 
 .token.atrule,
 .token.attr-value,
 .token.keyword {
-	color: #07a;
+    color: #07a;
 }
 
 .token.function {
-	color: #DD4A68;
+    color: #DD4A68;
 }
 
 .token.regex,
 .token.important,
 .token.variable {
-	color: #e90;
+    color: #e90;
 }
 
 .token.important,
 .token.bold {
-	font-weight: bold;
+    font-weight: bold;
 }
+
 .token.italic {
-	font-style: italic;
+    font-style: italic;
 }
 
 .token.entity {
-	cursor: help;
+    cursor: help;
 }
 
 #searchbar {
@@ -153,6 +160,17 @@ pre {
     font-family: "Open Sans", sans-serif;
     font-size: 20px;
     box-shadow: none;
+}
+
+#back {
+    border-radius: 5px;
+    font-family: "Open Sans", sans-serif;
+    font-size: 16px;
+    height: 30px;
+    box-shadow: none;
+    width: auto !important;
+    line-height: 16px;
+    outline: none;
 }
 
 button.highlight:focus {
@@ -203,112 +221,152 @@ button.highlight:hover {
     background-color: #5A4097;
 }
 
-#Keyboard {background-color: #E04D4D}
-#Creating {background-color: #A3A3A3}
-#Github {background-color: #7775D3}
+#Keyboard {
+    background-color: #E04D4D
+}
 
-#Tutorial {background-color: #5AA7DC}
+#Creating {
+    background-color: #A3A3A3
+}
 
-#Jsbin {background-color: #534B95}
+#Github {
+    background-color: #7775D3
+}
+
+#Tutorial {
+    background-color: #5AA7DC
+}
+
+#Jsbin {
+    background-color: #534B95
+}
+
 .list {
     font-family: "Open Sans", "Lato", Arial;
     font-size: 100%;
     line-height: 1.5;
     margin-top: 15px;
-    display:block;
+    display: block;
     max-width: 100%;
     margin-left: 5px;
 }
 
+
 /*#startlist{width:50%;}*/
 
-pre.language-javascript{min-width:90%;
-    white-space: pre-wrap;       /* css-3 */
- white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
- white-space: -pre-wrap;      /* Opera 4-6 */
- white-space: -o-pre-wrap;    /* Opera 7 */
- word-wrap: break-word;   
+pre.language-javascript {
+    min-width: 90%;
+    white-space: pre-wrap;
+    /* css-3 */
+    white-space: -moz-pre-wrap;
+    /* Mozilla, since 1999 */
+    white-space: -pre-wrap;
+    /* Opera 4-6 */
+    white-space: -o-pre-wrap;
+    /* Opera 7 */
+    word-wrap: break-word;
 }
 
-pre {min-width:90%;
-    white-space: pre-wrap;       /* css-3 */
- white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
- white-space: -pre-wrap;      /* Opera 4-6 */
- white-space: -o-pre-wrap;    /* Opera 7 */
- word-wrap: break-word;   
+pre {
+    min-width: 90%;
+    white-space: pre-wrap;
+    /* css-3 */
+    white-space: -moz-pre-wrap;
+    /* Mozilla, since 1999 */
+    white-space: -pre-wrap;
+    /* Opera 4-6 */
+    white-space: -o-pre-wrap;
+    /* Opera 7 */
+    word-wrap: break-word;
 }
 
-#Type:hover{opacity:.8;
+#Type:hover {
+    opacity: .8;
     cursor: pointer;
 }
 
+
 /*#all {width:100%;}*/
+
 
 /* Woof Tutorial CSS */
 
 h4 {
-      text-align: center;
-}
-#instructions {
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  -o-user-select: none;
-  user-select: none;
-}
-.step {
-  margin-left: 10px;
-  margin-right: 15px;
-  margin-top: 25px;
-  margin-bottom: 25px;
-  padding: 15px;
-  background-color: white;
-  border:1px solid gray;
-  border-radius:5px;
-  
+    text-align: center;
 }
 
-#typelist pre { background-color: #F3F3F3;
-padding:10px;
- font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
- font-size:80%;
+#instructions {
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+}
+
+.step {
+    margin-left: 10px;
+    margin-right: 15px;
+    margin-top: 25px;
+    margin-bottom: 25px;
+    padding: 15px;
+    background-color: white;
+    border: 1px solid gray;
+    border-radius: 5px;
+}
+
+#typelist pre {
+    background-color: #F3F3F3;
+    padding: 10px;
+    font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+    font-size: 80%;
 }
 
 @media all and (max-width: 900px) {
     button {
-       margin:1.5% ;
-       width: 45%;
-    height: 13%;
+        margin: 1.5%;
+        width: 45%;
+        height: 13%;
     }
 }
 
-
-#Image {background-color: #49A6DF;
-  
-}
-#Text {background-color: #4875D1;
-}
-#Circle {background-color: #AD5FC2;
-    
-}
-#Rectangle {background-color: #7775D3;
-     
-}
-#Line{background-color:#5A4097;
-   
+#Image {
+    background-color: #49A6DF;
 }
 
-#Image, #Text, #Circle, #Rectangle, #Line {  height:10%;
-    width:33%;
-    border-radius:10px;}
-    
-    #postimage{
-        background-color: #7775D3;
-        height:10%;
-    width:80%;
-    border-radius:10px;}
-    
+#Text {
+    background-color: #4875D1;
+}
+
+#Circle {
+    background-color: #AD5FC2;
+}
+
+#Rectangle {
+    background-color: #7775D3;
+}
+
+#Line {
+    background-color: #5A4097;
+}
+
+#Image,
+#Text,
+#Circle,
+#Rectangle,
+#Line {
+    height: 10%;
+    width: 33%;
+    border-radius: 10px;
+}
+
+#postimage {
+    background-color: #7775D3;
+    height: 10%;
+    width: 80%;
+    border-radius: 10px;
+}
+
 #searchclear {
     position: absolute;
     left: 75%;
