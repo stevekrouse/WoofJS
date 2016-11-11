@@ -107,26 +107,28 @@
         theme: "eclipse",
         keyMap: "sublime",
         lineWrapping: true,
-        scrollbarStyle: "null"
+        scrollbarStyle: "null",
+        autofocus: true
     });
+    
     // TODO make cursor blink
     var pos = 0
     var code = "// Hey there, welcome to WoofJS! WoofJS is a Scratch-inspired JavaScript library for making games.\n" +
         "\n" +
         "// Want to code something together? :-)\n" +
-        "every(.05, 'seconds', () => {" +
+        "every(.001, 'seconds', () => {" +
         "  var circle = new Circle()\n" +
         "\n" +
         "  // Go, little guys, go!\n" +
         "  forever(() => {\n" +
-        "    circle.move(2)\n" +
+        "    circle.move(5)\n" +
         "  })\n\n" +
         "  // Colors are fun\n" +
         "  circle.color = randomColor()\n" +
         "\n" +
         "  // I say scatter!\n" +
         "  circle.angle = random(0, 360)\n\n" +
-        "  // Feel free to change this code :-)";
+        "  // Feel free to edit this code :-)";
 
 
     function runCode() {
@@ -149,6 +151,21 @@
             }
         }, 10)
     }
+    function debounce(func, wait, immediate) {
+    	var timeout;
+    	return function() {
+    		var context = this, args = arguments;
+    		var later = function() {
+    			timeout = null;
+    			if (!immediate) func.apply(context, args);
+    		};
+    		var callNow = immediate && !timeout;
+    		clearTimeout(timeout);
+    		timeout = setTimeout(later, wait);
+    		if (callNow) func.apply(context, args);
+    	};
+    };
+    var debouncedRunCode = debounce(runCode, 1000, false)
 
     var doc = cm.getDoc()
     setInterval(function() {
@@ -173,6 +190,9 @@
         else if (pos == code.length) {
             runCode()
             pos++
+            cm.on("change", function(){
+              debouncedRunCode()
+            });
         }
-    }, 30)
+    }, 50)
 </script>
