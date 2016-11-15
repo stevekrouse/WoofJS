@@ -861,17 +861,7 @@ Woof.prototype.Sprite = function () {
           }
         }
 
-      if (this instanceof Woof.prototype.Image) {
-        this.imageRender(context);
-      } else if (this instanceof Woof.prototype.Text) {
-        this.textRender(context);
-      } else if (this instanceof Woof.prototype.Circle) {
-        this.circleRender(context);
-      } else if (this instanceof Woof.prototype.Rectangle) {
-        this.rectangleRender(context);
-      } else if (this instanceof Woof.prototype.Line) {
-        this.lineRender(context);
-      }
+      this.render(context);
       context.restore();
     }
   };
@@ -1261,7 +1251,7 @@ Woof.prototype.Text = function () {
     }
   };
 
-  this.textRender = function (context) {
+  this.render = function (context) {
     _this4._applyInContext(function () {
       context.fillText(_this4.textEval(), 0, _this4.height / 2);
     });
@@ -1303,7 +1293,7 @@ Woof.prototype.Circle = function () {
     }
   });
 
-  this.circleRender = function (context) {
+  this.render = function (context) {
     context.beginPath();
     context.arc(0, 0, _this5.radius, 0, 2 * Math.PI);
     context.fillStyle = _this5.color;
@@ -1355,7 +1345,7 @@ Woof.prototype.Rectangle = function () {
     }
   });
 
-  this.rectangleRender = function (context) {
+  this.render = function (context) {
     context.fillStyle = _this6.color;
     context.fillRect(-_this6.width / 2, -_this6.height / 2, _this6.width, _this6.height);
   };
@@ -1406,7 +1396,7 @@ Woof.prototype.Line = function () {
     }
   });
 
-  this.lineRender = function (context) {
+  this.render = function (context) {
     context.beginPath();
     context.moveTo(0, 0);
     context.lineTo(_this7.x1 - _this7.x, -_this7.y1 + _this7.y);
@@ -1469,8 +1459,20 @@ Woof.prototype.Image = function () {
     }
   });
 
-  this.imageRender = function (context) {
+  this.render = function (context) {
     context.drawImage(_this8.image, -_this8.width / 2, -_this8.height / 2, _this8.width, _this8.height);
+  };
+};
+
+Woof.prototype.customSprite = function (render) {
+  return function () {
+    var _ref12 = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
+    var _ref12$project = _ref12.project;
+    var project = _ref12$project === undefined ? undefined : _ref12$project;
+
+    Woof.prototype.Sprite.call(this, arguments[0]);
+    this.render = render;
   };
 };
 

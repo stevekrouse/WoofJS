@@ -526,17 +526,7 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
         }
       }
       
-      if (this instanceof Woof.prototype.Image) {
-        this.imageRender(context);
-      } else if (this instanceof Woof.prototype.Text) {
-        this.textRender(context);
-      } else if (this instanceof Woof.prototype.Circle) {
-        this.circleRender(context);
-      } else if (this instanceof Woof.prototype.Rectangle) {
-        this.rectangleRender(context);
-      } else if (this instanceof Woof.prototype.Line) {
-        this.lineRender(context);
-      }
+      this.render(context);
       context.restore();
     }
   };
@@ -824,7 +814,7 @@ Woof.prototype.Text = function({project = undefined, text = "Text", size = 12, c
     }
   }
   
-  this.textRender = (context) => {
+  this.render = (context) => {
     this._applyInContext(() => {
       context.fillText(this.textEval(), 0, this.height / 2);
     });
@@ -855,7 +845,7 @@ Woof.prototype.Circle = function({project = undefined, radius = 10, color = "bla
     }
   });  
   
-  this.circleRender = (context) => {
+  this.render = (context) => {
     context.beginPath();
     context.arc(0, 0, this.radius, 0, 2*Math.PI);
     context.fillStyle=this.color;
@@ -891,7 +881,7 @@ Woof.prototype.Rectangle = function({project = undefined, height = 10, width = 1
     }
   });  
   
-  this.rectangleRender = (context) => {
+  this.render = (context) => {
     context.fillStyle=this.color;
     context.fillRect(-this.width / 2, -this.height / 2, this.width, this.height);
   };
@@ -926,7 +916,7 @@ Woof.prototype.Line = function({project = undefined, width = 1, x1 = 10, y1 = 10
   }); 
   
   
-  this.lineRender = (context) => {
+  this.render = (context) => {
     context.beginPath();
     context.moveTo(0, 0);
     context.lineTo(this.x1 - this.x, -this.y1 + this.y);
@@ -974,10 +964,17 @@ Woof.prototype.Image = function({project = undefined, url = "https://i.imgur.com
     }
   }); 
   
-  this.imageRender = (context) => {
+  this.render = (context) => {
     context.drawImage(this.image, -this.width / 2, -this.height / 2, this.width, this.height);
   };
 };
+
+Woof.prototype.customSprite = function(render) {
+  return function({project = undefined} = {}) {
+    Woof.prototype.Sprite.call(this, arguments[0]);
+    this.render = render;
+  }
+}
 
 Woof.prototype.Repeat = function(times, func, after) {
   this.func = func;
