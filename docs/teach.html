@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <link rel="shortcut icon" type="image/png" href="./favicon.png"/>
+    <link rel="shortcut icon" type="image/png" href="./favicon.png" />
     <script src="https://code.jquery.com/jquery-1.12.4.js">
     </script>
     <link crossorigin="anonymous" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" rel="stylesheet">
@@ -220,6 +220,9 @@
             width: 80%;
             height: 500px;
         }
+        #logo {
+            width: 150px;
+        }
     </style>
     <title>Teach WoofJS</title>
 </head>
@@ -229,8 +232,14 @@
     <div id="first" style="color: white; padding-top:20px; padding-bottom: 20px; background-image: url(./images/woofbackdrop.png); background-repeat: no-repeat; background-size: cover;">
         <div class="container" style="display:flex; flex-direction: column; flex-wrap: nowrap; justify-content: center; align-content: center; align-items: center; width: 60%; height: 100vh; line-height: 30px">
 
-
-            <div class="top" style="margin: 0">Your students love Scratch.<br> You want to take them to the next level. <br><b> WoofJS</b></div>
+            <img id="logo" src="./images/logo-dog-circle.png"></img>
+            <div class="top" style="top-margin: 0">
+                Your students love Scratch.
+                <br> 
+                You want to take them to the next level. 
+                <br>
+                WoofJS
+            </div>
             <div>
                 <a href="./create.html"><button id="Start">Start Coding</button></a> <a href="#educator"><button id="Learn">Learn
                 More</button></a></div>
@@ -256,9 +265,15 @@
     <div id="scratch" style=" background-color: #59A5D9;color:white; height:600px; flex-direction: column; display:flex; justify-content: center; align-content: center; align-items: center; width: 100%">
         <div class="top">What do students learn?</div>
         <div class="container" style="display:flex; flex-direction: row; justify-content: center; align-content: center; align-items: center;">
-            <a href="./create.html"><div><img src="./images/Slice_7_Copy_14.png" style="width:80%;"></div></a>
-            <a href="./create.html"><div><img src="./images/Slice_7_Copy_15.png" style="width:80%"></div></a>
-            <a href="./create.html"><div><img src="./images/Slice_7_Copy_13.png" style="width:80%"></div></a>
+            <a href="./create.html">
+                <div><img src="./images/Slice_7_Copy_14.png" style="width:80%;"></div>
+            </a>
+            <a href="./create.html">
+                <div><img src="./images/Slice_7_Copy_15.png" style="width:80%"></div>
+            </a>
+            <a href="./create.html">
+                <div><img src="./images/Slice_7_Copy_13.png" style="width:80%"></div>
+            </a>
         </div>
         <div> <a href="https://woofjs.youcanbook.me/"><button id="demo" >Schedule a Demo</button></a></div>
     </div>
@@ -303,20 +318,27 @@
             <div style="margin-top:40px; margin-bottom: 40px">
                 <h2>Made with <span style="color: pink">&#x2764;</span> by
                     <a href="http://www.thecodingspace.com" style="underline: none; color:#1E72AB;">The Coding Space</a></h2>
-                <p style="font-size: 120%;">Have a question? Email us at <a style ="color:pink" href ="mailto:hello@woofjs.com">hello@woofjs.com</a>
+                <p style="font-size: 120%;">Have a question? Email us at <a style="color:pink" href="mailto:hello@woofjs.com">hello@woofjs.com</a>
                 </p>
             </div>
         </div>
     </div>
 </body>
-  <script>
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-  
+<script>
+    (function(i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function() {
+            (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+            m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
     ga('create', 'UA-82374072-1', 'auto');
     ga('send', 'pageview');
-  
-  </script>
+</script>
+
 </html>
