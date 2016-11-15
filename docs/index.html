@@ -1,7 +1,15 @@
+<script>
+    var getID = function() {
+      return window.location.hash.substring(1, window.location.hash.length);
+    }
+    if (getID() != '') {
+        window.location = './create.html#' + getID()
+    }
+</script>
+
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="./codemirror/codemirror.css">
-    <script src="//load.sumome.com/" data-sumo-site-id="44245233c319d8fe9fb7ce8c7ed64db9381aa56477888a10319261f655cfffe2" async="async"></script>
-
+<script src="//load.sumome.com/" data-sumo-site-id="44245233c319d8fe9fb7ce8c7ed64db9381aa56477888a10319261f655cfffe2" async="async"></script>
 <script type="text/javascript" src="./codemirror/codemirror.js"></script>
 <script type="text/javascript" src="./codemirror/javascript.js"></script>
 <script type="text/javascript" src="./codemirror/closebrackets.js"></script>
@@ -109,26 +117,29 @@
         theme: "eclipse",
         keyMap: "sublime",
         lineWrapping: true,
-        scrollbarStyle: "null"
+        scrollbarStyle: "null",
+        autofocus: true
     });
-    // TODO make cursor blink
+    
     var pos = 0
     var code = "// Hey there, welcome to WoofJS! WoofJS is a Scratch-inspired JavaScript library for making games.\n" +
         "\n" +
         "// Want to code something together? :-)\n" +
-        "every(.05, 'seconds', () => {" +
+        "every(.001, 'seconds', () => {" +
         "  var circle = new Circle()\n" +
         "\n" +
-        "  // Go, little guys, go!\n" +
+        "  // Go, little circles, go!\n" +
         "  forever(() => {\n" +
-        "    circle.move(2)\n" +
+        "    circle.move(5)\n" +
         "  })\n\n" +
-        "  // Colors are fun\n" +
+        "  // Let's randomize size\n" +
+        "  circle.radius = random(5, 20)\n\n" +
+        "  // Colors are fun!\n" +
         "  circle.color = randomColor()\n" +
         "\n" +
         "  // I say scatter!\n" +
         "  circle.angle = random(0, 360)\n\n" +
-        "  // Feel free to change this code :-)";
+        "  // Now it's your turn. Play with this code by changing any of the numbers above.";
 
 
     function runCode() {
@@ -151,6 +162,21 @@
             }
         }, 10)
     }
+    function debounce(func, wait, immediate) {
+    	var timeout;
+    	return function() {
+    		var context = this, args = arguments;
+    		var later = function() {
+    			timeout = null;
+    			if (!immediate) func.apply(context, args);
+    		};
+    		var callNow = immediate && !timeout;
+    		clearTimeout(timeout);
+    		timeout = setTimeout(later, wait);
+    		if (callNow) func.apply(context, args);
+    	};
+    };
+    var debouncedRunCode = debounce(runCode, 1000, false)
 
     var doc = cm.getDoc()
     setInterval(function() {
@@ -175,8 +201,11 @@
         else if (pos == code.length) {
             runCode()
             pos++
+            cm.on("change", function(){
+              debouncedRunCode()
+            });
         }
-    }, 30)
+    }, 50)
 </script>
 
 <script>
