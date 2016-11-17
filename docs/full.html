@@ -31,7 +31,7 @@
       c = c.replace("'use strict';", '')
       var script = document.createElement( "script" );
       script.type = "text/javascript";
-      script.innerText = c
+      script.text = c
       document.body.appendChild(script)
     } else {
       alert("There's no project called '" + getID() + "'. Sorry :(")
