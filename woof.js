@@ -854,7 +854,6 @@ Woof.prototype.Sprite = function () {
         // no rotate
       } else if (this.rotationStyle == "ROTATE LEFT RIGHT") {
           if (this.angle % 360 >= 90 && this.angle % 360 < 270) {
-            context.translate(Math.round(this.width), 0);
             context.scale(-1, 1);
           } else if (this.angle % 360 >= 0 && this.angle % 360 < 90 || this.angle % 360 <= 360 && this.angle % 360 >= 270) {
             // no rotate
