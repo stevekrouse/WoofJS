@@ -1,4 +1,6 @@
 <link rel="shortcut icon" type="image/png" href="./favicon.png"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.2/lodash.min.js"></script>
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
 <script src="https://unpkg.com/vue@2.0.1/dist/vue.js"></script>
 <script src="https://www.gstatic.com/firebasejs/3.4.0/firebase.js"></script>
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -32,98 +34,252 @@
     <h1>WoofJS.com Analytics</h1>
     <div id="totals" class="tablewrap">
         <h2>Totals</h2>
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <th>Projects Created Today</th>
-              <th>Projects Worked On Today</th>
-              <th>Users Active Today</th>
-              <th>Total Users</th>
-              <th>Total Projects</th>
-              <th>Total Revisions</th>
-            </tr>
-          </thead>
-            <tr v-if="users.length == 0 || projects.length == 0"><td>Loading...</td></tr>
-            <tr v-else>
-                <td>{{Object.keys(projects).filter(project => new Date().toDateString() == new Date(firstRevision(projects[project]).time).toDateString()).length}}</td>
-                <td>{{Object.keys(projects).filter(project => new Date().toDateString() == new Date(lastRevision(projects[project]).time).toDateString()).length}}</td>
-                <td>{{Array.from(new Set(Object.keys(projects).filter(project => new Date().toDateString() == new Date(lastRevision(projects[project]).time).toDateString()).map(project => projects[project]['--uid']))).length}}</td>
-                <td>{{Object.keys(users).length}}</td>
-                <td>{{Object.keys(projects).length}}</td>
-                <td>{{Object.keys(projects).reduce((a,b) => a + Object.keys(projects[b]).length, 0)}}</td>
-            </tr>
-        </table>
+        <analytics-table
+          :columns="aggregateColumns"
+          :rows="[{}]"
+          :joins="{users: users, projects: projects}"
+        ></analytics-table>
     </div>
     <div id="projects" class="tablewrap">
         <h2>Projects</h2>
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <th>Project</th>
-              <th>Created By</th>
-              <th>Last Revision</th>
-              <th>Created At</th>
-              <th>Number of Revisions</th>
-            </tr>
-          </thead>
-            <tr v-show="projects.length == 0"><td>Loading...</td></tr>
-            <tr v-for="(project, name) in projects">
-                <td>{{name}}</td>
-                <td>{{project['--uid'] ? users[project['--uid']].displayName : 'Anonymous'}}</td>
-                <td>{{new Date(lastRevision(project).time).toLocaleString()}}</td>
-                <td>{{new Date(firstRevision(project).time).toLocaleString()}}</td>
-                <td>{{Object.keys(project).length - 1}}</td>
-            </tr>
-        </table>
+        <analytics-table
+          :columns="projectColumns"
+          :rows="projects"
+          :joins="{users: users}"
+        ></analytics-table>
     </div>
     <div id="users" class="tablewrap">
-        <h2>Users</h2>
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>ID</th>
-              <th>Email</th>
-              <th>Last Active</th>
-              <th>Account Created</th>
-              <th>Number of Projects</th>
-              <th>Number of Revisions</th>
-            </tr>
-          </thead>
-            <tr v-show="users.length == 0"><td>Loading...</td></tr>
-            <tr v-for="(user, id) in users">
-                <td>{{user.displayName}}</td>
-                <td>{{id}}</td>
-                <td>{{user.email}}</td>
-                <td>{{new Date(Object.keys(projects).filter(p => projects[p]['--uid'] == id).map(p => lastRevision(projects[p]).time).sort().reverse()[0]).toLocaleString()}}</td>
-                <td>{{new Date(Object.keys(projects).filter(p => projects[p]['--uid'] == id).map(p => lastRevision(projects[p]).time).sort()[0]).toLocaleString()}}</td>
-                <td>{{Object.keys(projects).filter(p => projects[p]['--uid'] == id).length}}</td>
-                <td>{{Object.keys(projects).filter(p => projects[p]['--uid'] == id).reduce((a,b) => a + Object.keys(projects[b]).length, 0)}}</td>
-            </tr>
-        </table>
+      <h2>Users</h2>
+      <analytics-table
+        :columns="userColumns"
+        :rows="users"
+        :joins="{projects: projects}"
+      ></analytics-table>
     </div>
 </div>
+<script type="text/x-template" id="analytics-table-template">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th @click="clickSort(column)" v-for="column in columns" :style="{fontWeight: sortColumn.name == column.name ? 'bold' : 'normal'}">
+          {{column.name}}
+          <i v-show="sortColumn.name == column.name" :class="[sortDirection == 'UP' ? 'fa-caret-square-o-up' : 'fa-caret-square-o-down', 'fa']"></i>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <i v-show="rows.length == 0" class="fa fa-spinner fa-pulse fa-3x fa-fw" style="margin-left:auto; margin-right: auto"></i>
+      <tr v-for="row in sortedRows">
+          <td v-for="column in columns">{{calculateCell(column, row, joins)}}</td>
+      </tr>
+    </tbody>
+  </table>
+</script>
+
 <script>
+  Vue.component('analytics-table', {
+    template: '#analytics-table-template',
+    props: [
+      "columns",
+      "rows",
+      "joins"
+    ],
+    data: function(){ return {
+      sortColumn: this.columns[0],
+      sortDirection: "DOWN"
+    }},
+    methods: {
+      clickSort: function(column) {
+        if (this.sortColumn == column){
+          this.sortDirection = this.sortDirection == "DOWN" ? "UP" : "DOWN"
+        } else {
+          this.sortColumn = column
+          this.sortDirection = "DOWN"
+        }
+      },
+      calculateCell: function(column, row, joins){
+        var result = column.func(row, joins)
+        if (column.type == "DATE"){
+          result = new Date(result)
+          if (result.toString() == "Invalid Date"){
+            result = ""
+          } else {
+            result = result.toLocaleString()
+          }
+        }
+        return result
+      }
+    },
+    computed: {
+      sortedRows: function(){
+        var sorted
+        if (this.sortDirection == "DOWN"){
+          var undefineds = _.filter(this.rows, row => this.sortColumn.func(row, this.joins) === undefined)
+          var hardVaules = _.filter(this.rows, row => this.sortColumn.func(row, this.joins) !== undefined)
+          sorted = _.sortBy(hardVaules, row => this.sortColumn.func(row, this.joins)).reverse()
+          sorted.concat(undefineds)
+        } else {
+          sorted = _.sortBy(this.rows, row => this.sortColumn.func(row, this.joins))
+        }
+        
+        return sorted
+      }
+    }
+  })
+  
+  var utils = {}
+  utils.projectFirstRevision = function(project){
+      return project.revisions[0]
+  }
+  utils.projectLastRevision = function(project){
+      return project.revisions[project.revisions.length - 1]
+  }
+  
+  var aggregateColumns = [
+  
+    {
+      name: "Projects Created Today",
+      func: function(row, joins) {
+        return joins.projects.filter(project => new Date().toDateString() == new Date(utils.projectFirstRevision(project).time).toDateString()).length
+      }
+    },
+    {
+      name: "Projects Worked On Today",
+      func: function(row, joins) {
+        return joins.projects.filter(project => new Date().toDateString() == new Date(utils.projectLastRevision(project).time).toDateString()).length
+      }
+    },
+    {
+      name: "Users Active Today",
+      func: function(row, joins) {
+        return Array.from(new Set(joins.projects.filter(project => new Date().toDateString() == new Date(utils.projectLastRevision(project).time).toDateString()).map(project => project['--uid']))).length
+      }
+    },
+    {
+      name: "Total Users",
+      func: function(row, joins) {
+        return joins.users.length
+      }
+    },
+    {
+      name: "Total Projects",
+      func: function(row, joins) {
+        return joins.projects.length 
+      }
+    },
+    {
+      name: "Total Revisions",
+      func: function(row, joins) {
+        return joins.projects.reduce((a,b) => a + b.revisions.length, 0)
+      }
+    }
+  ]
+  
+  var projectColumns = [
+    {
+      name: "Project",
+      func: function(project, joins) {
+        return project.key
+      }
+      
+    },
+    {
+      name: "Created By",
+      func: function(project, joins) {
+        return project.user ? project.user.displayName : 'Anonymous'
+      }
+    },
+    {
+      name: "Last Revision",
+      func: function(project, joins) {
+        return utils.projectLastRevision(project).time
+      },
+      type: "DATE"
+    },
+    {
+      name: "Created At",
+      func: function(project, joins) {
+        return utils.projectFirstRevision(project).time
+      },
+      type: "DATE"
+    },
+    {
+      name: "Number of Revisions",
+      func: function(project, joins) {
+        return project.revisions.length - 1
+      }
+    }
+  ]
+  
+  var userColumns = [
+      {
+        name: "Name",
+        func: function(user, joins){
+          return user.displayName
+        }
+      },
+      {
+        name: "ID",
+        func: function(user, joins){
+          return user.key
+        }
+      },
+      {
+        name: "Email",
+        func: function(user, joins){
+          return user.email
+        }  
+      },
+      {
+        name: "Last Active",
+        func: function(user, joins){
+          if (user.projects.length > 0){
+            // last revision
+            return user.projects.map(project => utils.projectLastRevision(project).time).sort().reverse()[0]
+          } else {
+            // account created
+            return user.projects.map(project => utils.projectFirstRevision(project).time).sort()[0]
+          }
+          
+        },
+        type: "DATE"
+      },
+      {
+        name: "First Account Activity",
+        func: function(user, joins){
+          return user.projects.map(project => utils.projectFirstRevision(project).time).sort()[0]
+        },
+        type: "DATE" 
+      },
+      {
+        name: "Number of Projects",
+        func: function(user, joins){
+          return user.projects.length
+        }  
+      },
+      {
+        name: "Number of Revisions",
+        func: function(user, joins){
+          return user.projects.reduce((a,b) => a + b.revisions.length, 0)
+      
+        }
+      }
+  ]
+  
   var app = new Vue({
       el: '#page',
       data: {
         users: [],
+        userColumns: userColumns,
         projects: [],
-        authenticated: false
+        projectColumns: projectColumns,
+        aggregateColumns: aggregateColumns,
+        authenticated: false,
       },
-      computed: {
-      },
-      methods: {
-          firstRevision: function(project){
-              return project['--uid'] ? project[Object.keys(project)[1]] : project[Object.keys(project)[0]]
-          },
-          lastRevision: function(project){
-              return project[Object.keys(project)[Object.keys(project).length - 1]]
-          },
-      }
+      methods: utils
     })
     
-  app.authenticated = prompt("Password") == 'codingspace'
+  app.authenticated = true // prompt("Password") == 'codingspace'
     
   var config = {
     apiKey: "AIzaSyBYHv7dCiD0bWiHRlcp4VIZCIqzoMnB4yY",
@@ -135,11 +291,38 @@
   
   firebase.initializeApp(config);
   
+  var objectOfObjectsToArray = function(obj, keyName = "key"){
+    return Object.keys(obj).map(function(key) {
+      var child = obj[key]
+      child[keyName] = key
+      return child;
+    })
+  }
+  
   firebase.database().ref('/user/').on('value', function(snapshot) {
-    app.users = snapshot.val()
+    app.users = objectOfObjectsToArray(snapshot.val())
+    app.users.forEach(user => user.projects = [])
   });
   firebase.database().ref('/code/').on('value', function(snapshot) {
-    app.projects = snapshot.val()
+    var projects = objectOfObjectsToArray(snapshot.val())
+    app.projects = projects.map(function(project){
+      var keys = Object.keys(project)
+      var revisionKeys = keys.filter(key => key != '--uid' && key != 'key')
+      return {
+        key: project.key,
+        "--uid": project["--uid"],
+        // TODO add keys to revisions as "key"
+        revisions: revisionKeys.map(key => project[key])
+      }
+    })
+    
+    // join projects to users and users to projects
+    app.projects.forEach(function(project) {
+      project.user = app.users.find(user => user.key == project['--uid']) 
+      if (project.user){
+        project.user.projects.push(project)
+      }
+    })
   });
 </script>
 <script>
