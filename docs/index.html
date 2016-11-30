@@ -124,15 +124,23 @@
 <iframe id="output"></iframe>
 
 <script>
+   var readOnly = true
     var cm = CodeMirror(document.getElementById('editor'), {
-        value: "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n",
+        value: "",
         mode: "javascript",
         theme: "eclipse",
         keyMap: "sublime",
         lineWrapping: true,
         scrollbarStyle: "null",
-        autofocus: true
+        autofocus: true,
+        readOnly: readOnly
     });
+    
+    cm.on("mousedown", function(e) {
+      if (readOnly) {
+        e.preventDefault()  
+      }
+    })
     
     var pos = 0
     var code = "// Hey there, welcome to WoofJS! WoofJS is a Scratch-inspired JavaScript library for making games.\n" +
@@ -214,6 +222,8 @@
         else if (pos == code.length) {
             runCode()
             pos++
+            cm.setOption("readOnly", false)
+            readOnly = false
             cm.on("change", function(){
               debouncedRunCode()
             });
