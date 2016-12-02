@@ -342,8 +342,15 @@
       
       if (user){
         handleLogin(user.displayName, user.uid)
-        firebase.database().ref("/user/" + user.uid + "/displayName").set(user.displayName)
-        firebase.database().ref("/user/" + user.uid + "/email").set(user.email)
+        firebase.database().ref('/user/' + user.uid).once('value').then(function(snapshot) {
+          if (!snapshot.val()) {
+            firebase.database().ref("/user/" + user.uid).set({
+              displayName: user.displayName,
+              email: user.email,
+              createdDate: firebase.database.ServerValue.TIMESTAMP
+            })
+          }
+        })
         
         firebase.database().ref('/code/').orderByChild("--uid").equalTo(user.uid).once('value').then(function(snapshot) {
           if (snapshot.val()){
