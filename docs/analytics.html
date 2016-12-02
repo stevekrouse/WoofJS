@@ -2,8 +2,12 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.2/lodash.min.js"></script>
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
 <script src="https://unpkg.com/vue@2.0.1/dist/vue.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 <script src="https://www.gstatic.com/firebasejs/3.4.0/firebase.js"></script>
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<link href="https://cdn.rawgit.com/mozilla/metrics-graphics/aca3532f9945b08c85ba5e72946863ff3f2b762a/dist/metricsgraphics.css" rel="stylesheet"></link>
+<script src="https://cdn.rawgit.com/mozilla/metrics-graphics/aca3532f9945b08c85ba5e72946863ff3f2b762a/dist/metricsgraphics.min.js"></script>
 <style>
     .tablewrap {
         height: 30%;
@@ -19,6 +23,7 @@
     }
     #totals {
         background-color: lightblue;
+        height: 200px;
     }
     #projects {
         background-color: lightgreen;
@@ -32,6 +37,7 @@
 </style>
 <div id="page" style="display: none" :style="{display: authenticated ? 'block' : 'none'}">
     <h1>WoofJS.com Analytics</h1>
+    <div style="height: 300px; width: 100%" id="chart"></div>
     <div id="totals" class="tablewrap">
         <h2>Totals</h2>
         <analytics-table
@@ -231,6 +237,20 @@
         }  
       },
       {
+        name: "Account Created",
+        func: function(user, joins){
+          return user.createdDate
+        },
+        type: "DATE" 
+      },
+      {
+        name: "First Revision",
+        func: function(user, joins){
+          return user.projects.map(project => utils.projectFirstRevision(project).time).sort()[0]
+        },
+        type: "DATE" 
+      },
+      {
         name: "Last Active",
         func: function(user, joins){
           if (user.projects.length > 0){
@@ -243,13 +263,6 @@
           
         },
         type: "DATE"
-      },
-      {
-        name: "First Account Activity",
-        func: function(user, joins){
-          return user.projects.map(project => utils.projectFirstRevision(project).time).sort()[0]
-        },
-        type: "DATE" 
       },
       {
         name: "Number of Projects",
@@ -303,6 +316,7 @@
     app.users = objectOfObjectsToArray(snapshot.val())
     app.users.forEach(user => user.projects = [])
   });
+  var usersCreatedByDay
   firebase.database().ref('/code/').on('value', function(snapshot) {
     var projects = objectOfObjectsToArray(snapshot.val())
     app.projects = projects.map(function(project){
@@ -323,6 +337,31 @@
         project.user.projects.push(project)
       }
     })
+    
+    
+    // Graphs!
+    
+    // TODO map all Dates to nearest whole date (cutting off time)
+    usersCreatedByDay = _.map(_.countBy(app.users, user => new Date(user.createdDate).toISOString().split("T")[0]), function(value, prop) {
+      var d = new Date(prop)
+      d.setDate(d.getDate() + 1)
+      return { date: d, users: value };
+    })
+    usersCreatedByDay = _.sortBy(usersCreatedByDay, "date")
+
+    MG.data_graphic({
+      data: [usersCreatedByDay],
+      full_width: true,
+      interpolate: d3.curveLinear,
+      height: 300,
+      target: document.getElementById("chart"),
+      x_accessor: "date",
+      y_accessor: "users",
+      x_label: 'Time',
+      y_extended_ticks: true,
+      legend: ['Accounts Created','Projects Created','Revisions'],
+    });
+
   });
 </script>
 <script>
