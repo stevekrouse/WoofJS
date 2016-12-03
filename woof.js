@@ -405,7 +405,8 @@ function Woof() {
     thisContext.freezing = true;
     thisContext._render();
     thisContext.after(10, "miliseconds", function () {
-      return thisContext.stopped = true;
+      thisContext.stopped = true;
+      thisContext.freezing = false;
     });
   };
   thisContext.defrost = function () {
