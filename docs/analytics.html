@@ -20,10 +20,11 @@
     h2 {
         font-size: 20px;
         font-weight: bold;
+        margin-top: 10px;
     }
     #totals {
         background-color: lightblue;
-        height: 200px;
+        height: 170px;
     }
     #projects {
         background-color: lightgreen;
@@ -37,7 +38,8 @@
 </style>
 <div id="page" style="display: none" :style="{display: authenticated ? 'block' : 'none'}">
     <h1>WoofJS.com Analytics</h1>
-    <div style="height: 300px; width: 100%" id="chart"></div>
+    <div style="height: 350px; width: 100%" id="chart"></div>
+    <div style="width: 100%; text-align: center; margin-bottom: 20px" id="legend"></div>
     <div id="totals" class="tablewrap">
         <h2>Totals</h2>
         <analytics-table
@@ -292,7 +294,7 @@
       methods: utils
     })
     
-  app.authenticated = prompt("Password") == 'codingspace'
+  app.authenticated = true // prompt("Password") == 'codingspace'
     
   var config = {
     apiKey: "AIzaSyBYHv7dCiD0bWiHRlcp4VIZCIqzoMnB4yY",
@@ -316,17 +318,25 @@
     app.users = objectOfObjectsToArray(snapshot.val())
     app.users.forEach(user => user.projects = [])
   });
-  var usersCreatedByDay
+  
+  var accountsCreatedByDay, revisions, revisionsByDay, projectsCreatedByDay, projectsEditedByDay
+  
   firebase.database().ref('/code/').on('value', function(snapshot) {
     var projects = objectOfObjectsToArray(snapshot.val())
+    
+    // nesting revisions under projects
     app.projects = projects.map(function(project){
       var keys = Object.keys(project)
       var revisionKeys = keys.filter(key => key != '--uid' && key != 'key')
       return {
         key: project.key,
         "--uid": project["--uid"],
-        // TODO add keys to revisions as "key"
-        revisions: revisionKeys.map(key => project[key])
+        revisions: _.map(revisionKeys, key => {
+          var revision = project[key]
+          revision.key = key
+          revision.project = project
+          return revision
+        })
       }
     })
     
@@ -339,27 +349,58 @@
     })
     
     
-    // Graphs!
+    // Graph data
+    function MGbyDay(rows, date) {
+      //rows.forEach(row => console.log(row.time))
+      // count users by created date (chopping off time from date string)
+      var byDay = _.countBy(rows, row => new Date(row[date]).toISOString().split("T")[0])
+      // make the date string a Date object for MG
+      byDay = _.map(byDay, function(value, prop) {
+        var d = new Date(prop)
+        d.setDate(d.getDate() + 1)
+        return { date: d, value: value  };
+      })
+      return byDay
+    }
     
-    // TODO map all Dates to nearest whole date (cutting off time)
-    usersCreatedByDay = _.map(_.countBy(app.users, user => new Date(user.createdDate).toISOString().split("T")[0]), function(value, prop) {
-      var d = new Date(prop)
-      d.setDate(d.getDate() + 1)
-      return { date: d, users: value };
+    accountsCreatedByDay = MGbyDay(app.users, "createdDate")
+    
+    revisions = _.filter(_.flatten(_.map(app.projects, "revisions")), revision => revision.time)
+    
+    revisionsByDay =  MGbyDay(revisions, "time")
+    revisionsByDay.forEach(row => {
+      row.value /= 10
     })
-    usersCreatedByDay = _.sortBy(usersCreatedByDay, "date")
+    
+    projectsEditedByDay = _.uniqWith(_.map(revisions, revision => {
+      return {
+        projectKey: revision.project.key,
+        date: new Date(revision.time).toISOString().split("T")[0]
+      }
+    }), _.isEqual)
+    projectsEditedByDay = MGbyDay(projectsEditedByDay, "date")
+    
+    projectsCreatedByDay = _.filter(_.map(app.projects, project => {
+      return {date: project.revisions[0].time}
+    }), "date")
+    projectsCreatedByDay = MGbyDay(projectsCreatedByDay, "date")
+    
+    // Graphs
 
     MG.data_graphic({
-      data: [usersCreatedByDay],
+      data: [accountsCreatedByDay, revisionsByDay, projectsEditedByDay, projectsCreatedByDay],
       full_width: true,
       interpolate: d3.curveLinear,
-      height: 300,
+      full_height: true,
       target: document.getElementById("chart"),
       x_accessor: "date",
-      y_accessor: "users",
-      x_label: 'Time',
+      y_accessor: "value",
+      aggregate_rollover: true,
       y_extended_ticks: true,
-      legend: ['Accounts Created','Projects Created','Revisions'],
+      legend: ['Accounts Created', 'Revisions (10s)', 'Projects Edited', "Projects Created"],
+      legend_target: '#legend',
+      bottom: 20,
+      top: 10,
     });
 
   });
