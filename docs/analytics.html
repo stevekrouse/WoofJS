@@ -319,7 +319,7 @@
     app.users.forEach(user => user.projects = [])
   });
   
-  var accountsCreatedByDay, revisions, revisionsByDay, projectsCreatedByDay, projectsEditedByDay
+  var accountsCreatedByDay, revisions, revisionsByDay, projectsCreatedByDay, projectsEditedByDay, usersActiveByDay
   
   firebase.database().ref('/code/').on('value', function(snapshot) {
     var projects = objectOfObjectsToArray(snapshot.val())
@@ -343,6 +343,7 @@
     // join projects to users and users to projects
     app.projects.forEach(function(project) {
       project.user = app.users.find(user => user.key == project['--uid']) 
+      project.revisions.forEach(r => r.project.user = project.user)
       if (project.user){
         project.user.projects.push(project)
       }
@@ -380,6 +381,14 @@
     }), _.isEqual)
     projectsEditedByDay = MGbyDay(projectsEditedByDay, "date")
     
+    usersActiveByDay = _.uniqWith(_.map(revisions, revision => {
+      return {
+        userKey: revision.project.user && revision.project.user.key,
+        date: new Date(revision.time).toISOString().split("T")[0]
+      }
+    }), _.isEqual)
+    usersActiveByDay = MGbyDay(usersActiveByDay, "date")
+    
     projectsCreatedByDay = _.filter(_.map(app.projects, project => {
       return {date: project.revisions[0].time}
     }), "date")
@@ -388,7 +397,7 @@
     // Graphs
 
     MG.data_graphic({
-      data: [accountsCreatedByDay, revisionsByDay, projectsEditedByDay, projectsCreatedByDay],
+      data: [accountsCreatedByDay, revisionsByDay, projectsEditedByDay, projectsCreatedByDay, usersActiveByDay],
       full_width: true,
       interpolate: d3.curveLinear,
       full_height: true,
@@ -397,7 +406,7 @@
       y_accessor: "value",
       aggregate_rollover: true,
       y_extended_ticks: true,
-      legend: ['Accounts Created', 'Revisions (10s)', 'Projects Edited', "Projects Created"],
+      legend: ['Accounts Created', 'Revisions (10s)', 'Projects Edited', "Projects Created", "Users Active"],
       legend_target: '#legend',
       bottom: 20,
       top: 10,
