@@ -252,7 +252,7 @@
         </div>
         
         <div v-show="projectsPane" id="projects" style="width:25%; height:100%; flex: 1.2 1 25%; word-wrap: break-word; ">
-          <iframe src="http://coding.space/woof/index.html" style="height:100%; width:100%"></iframe> 
+          <iframe id="projectsIframe" src="http://coding.space/woof/index.html" style="height:100%; width:100%"></iframe> 
         </div>
         
         <div v-show="codePane" id="code" style="width:25%; height:100%; flex: 1.2 1 25%; word-wrap: break-word; ">
@@ -300,7 +300,8 @@
       }
     })
     var myCode = false
-    
+    scratch.src = scratch.src
+    projectsIframe.src = projectsIframe.src
     
     var config = {
       apiKey: "AIzaSyBYHv7dCiD0bWiHRlcp4VIZCIqzoMnB4yY",
