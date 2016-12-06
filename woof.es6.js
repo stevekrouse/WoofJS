@@ -1258,6 +1258,8 @@ Woof.prototype.importCodeURL = function(url, callback) {
   document.body.appendChild(lib);
 };
 
-if (JSON.parse(document.currentScript.getAttribute('global')) !== false) { 
+var currentScript = document.currentScript || Array.prototype.slice.call(document.getElementsByTagName('script')).find(s => s.src.includes('woof.js'))
+
+if (JSON.parse(currentScript.getAttribute('global')) !== false) { 
   Woof.prototype.extend(window, new Woof({global: true, fullScreen: true}));
 }
