@@ -142,6 +142,12 @@
       }
     })
     
+    cm.on("touchstart", function(e) {
+      if (readOnly) {
+        e.preventDefault()  
+      }
+    })
+    
     var pos = 0
     var code = "// Hey there, welcome to WoofJS! WoofJS is a Scratch-inspired JavaScript library for making games.\n" +
         "\n" +
