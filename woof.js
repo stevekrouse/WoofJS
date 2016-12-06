@@ -211,7 +211,8 @@ function Woof() {
   thisContext.sprites = [];
   thisContext.backdrop = undefined;
   thisContext.stopped = true;
-  thisContext.fullScreen = fullScreen;
+  // internally named fullScreen1 for firefox
+  thisContext.fullScreen1 = fullScreen;
 
   thisContext._cameraX = 0;
   thisContext._cameraY = 0;
@@ -238,7 +239,7 @@ function Woof() {
     }
   });
 
-  if (thisContext.fullScreen) {
+  if (thisContext.fullScreen1) {
     width = window.innerWidth;
     height = window.innerHeight;
     window.addEventListener("load", function () {
@@ -308,7 +309,7 @@ function Woof() {
     if (typeof width != "number" || typeof height != "number") {
       throw new TypeError("setBackdropSize(width, height) requires two number inputs.");
     }
-    if (thisContext.fullScreen) {
+    if (thisContext.fullScreen1) {
       throw Error("You cannot manually set the backdrop size in full-screen mode. You can full-screen mode off with: fullScreen = false.");
     } else {
       thisContext._setCanvasSize(width, height);
@@ -339,7 +340,7 @@ function Woof() {
   };
   thisContext._setCanvasSize(width, height);
   window.addEventListener("resize", function () {
-    if (thisContext.fullScreen) {
+    if (thisContext.fullScreen1) {
       thisContext._setCanvasSize(window.innerWidth, window.innerHeight);
     }
   });
