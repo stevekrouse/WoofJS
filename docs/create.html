@@ -429,6 +429,11 @@
     var save = function(){
       if (app.status == "SAVED") { return }
       
+      if (editor.getValue().startsWith("// Loading...")){
+        return 
+      }
+      
+      var name
       if (myCode) {
         name = getID()
       } else {
