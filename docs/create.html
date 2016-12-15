@@ -207,7 +207,6 @@
       left: 0px;
       top: 0px;
     }
-    
   </style>
 </head>
 <body style="height:100%">
@@ -270,9 +269,26 @@
     </div>
   <script>
     var getID = function() {
-      return window.location.hash.substring(1, window.location.hash.length);
+      return window.location.hash.substring(1, window.location.hash.length).split("/")[0];
     }
-    var currentID = getID()
+    var getCurrentRevisionCode = function(revisions) {
+      var revision = parseInt(window.location.hash.substring(1, window.location.hash.length).split("/")[1])
+      
+      var keys = Object.keys(revisions)
+      keys = keys.slice(1, keys.length)  // remove --uid
+      
+      var key
+      if (!isNaN(revision) && (revision !== 0 && revision !== -1 * keys.length) && Math.abs(revision) < keys.length + 1){
+        if (revision < 0){
+          revision = keys.length + revision // -1 gives the previous revision
+        }
+        key = keys[revision - 1]
+      } else {
+        key = keys[keys.length - 1]
+      }
+      return revisions[key].code
+    }
+    var currentHash = window.location.hash
     
     var app = new Vue({
       el: '#page',
@@ -396,7 +412,7 @@
     
     var makeClean = function() {
       app.status = "SAVED"
-      currentID = getID()
+      currentHash = window.location.hash
     }
     
     var makeDirty = function() {
@@ -414,10 +430,10 @@
     var editorVal = "setBackdropURL('https://i.imgur.com/q6Bqraw.jpg')\n\n\n"
     if (getID() != ''){
       editorVal = "// Loading..."
-      firebase.database().ref('/code/' + getID()).limitToLast(1).once('value').then(function(snapshot) {
+      firebase.database().ref('/code/' + getID())/*.limitToLast(1)*/.once('value').then(function(snapshot) {
         if (snapshot.val()){
           myCode = firebase.auth().currentUser && snapshot.val()[Object.keys(snapshot.val())[0]].uid == firebase.auth().currentUser.uid
-          editor.setValue(snapshot.val()[Object.keys(snapshot.val())[0]].code)
+          editor.setValue(getCurrentRevisionCode(snapshot.val()))
           makeClean()
         } else {
           alert("Could not find a project with the name: " + getID())
@@ -427,13 +443,10 @@
     }
     
     window.addEventListener("hashchange", function() {
-      if (getID() != currentID) {
+      if (currentHash != window.location.hash) {
         window.location.reload()
       }
     })
-    
-    // TODO secure firebase
-    // !root.child('code').child($code).exists()
     
     var save = function(){
       if (app.status == "SAVED") { return }

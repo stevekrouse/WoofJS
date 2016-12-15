@@ -1,17 +1,66 @@
 <link rel="shortcut icon" type="image/png" href="./favicon.png"/>
+
 <style>
   a {
     font-size: 20px;
 
   }
-  body {
-    padding-left: 30%;
-    padding-right: 30%
+  button {
+    min-height: 40px;
+    position: relative;
+    bottom: 6px;
   }
 </style>
+
+<script src="https://unpkg.com/vue@2.0.1/dist/vue.js"></script>
 <script src="https://www.gstatic.com/firebasejs/3.4.0/firebase.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-<script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<title>Projects</title>
+<body>
+  <div id="page" class="container">
+    <h1 id="title">{{ name }}</h1>
+    <ul id="list" class="list-group">
+      <woof-project v-for="project in projects" :project="project"></woof-project>
+    </ul>
+  </div>
+  <script id="project-template" type="text/x-template">
+    <a class="list-group-item list-group-item-action">{{ project.key }}
+      <span class="pull-right">
+        <button class="btn btn-info"     @click="codeClick"       style="margin-right: 5px">Code</button>
+        <button class="btn btn-primary"  @click="fullScreenClick" style="margin-right: 5px">Full Screen</button>
+        <button class="btn"              @click="openRevision($event)">View Version  <input type="number" min="1" :max="project.revisions.length" :value="project.revisions.length" style="text-align: right; width: 3em"></input></button>
+      </span>
+    </a>
+  </script>
+  <script>
+  Vue.component('woof-project', {
+    template: "#project-template",
+    props: ["project"],
+    methods: {
+      openRevision: function($event) {
+        if ($event.target.nodeName == "BUTTON"){
+          window.open('./create.html#' + this.project.key + '/' + $event.target.firstElementChild.value, '_blank')
+        }
+      },
+      codeClick: function() {
+        window.open('./create.html#' + this.project.key, '_blank')
+      },
+      fullScreenClick: function() {
+        window.open('./full.html#' + this.project.key , '_blank')
+      }
+    }
+  })
+  
+  var app = new Vue({
+    el: '#page',
+    data: {
+      name: "Loading...",
+      projects: []
+    }
+  })
   var config = {
     apiKey: "AIzaSyBYHv7dCiD0bWiHRlcp4VIZCIqzoMnB4yY",
     authDomain: "woofjs-d1b27.firebaseapp.com",
@@ -26,45 +75,41 @@
       return window.location.hash.substring(1, window.location.hash.length);
   }
   
-  // TODO later, query for code with versions
-  
   firebase.database().ref('/user/' + getUID() + "/displayName").once('value', function(snap) {
     if (snap.val()){
-      document.getElementById("title").innerHTML = snap.val() 
+      app.name = snap.val() 
       document.title = snap.val()
-    } else {
-      document.title = "Projects"
     }
   });
   
-  function elem(key, item){
-    var ret = '<a class="list-group-item list-group-item-action">' + key
-    ret +=      '<span class="pull-right">'
-    ret +=        '<button style="margin-right: 5px" class="btn btn-info" onclick="window.open(\'./create.html#' + key.replace("'", "\\'") + '\', \'_blank\')">Code</button>'
-    ret +=        '<button class="btn btn-primary" onclick="window.open(\'./full.html#' + key.replace("'", "\\'") + '\', \'_blank\')">Full Screen</button>'
-    ret +=      '</span>'
-    ret +=    '</a>'
-    console.debug(ret)
-    return ret
+  var objectOfObjectsToArray = function(obj, keyName = "key"){
+    return Object.keys(obj).map(function(key) {
+      var child = obj[key]
+      child[keyName] = key
+      return child;
+    })
   }
-  
+
   firebase.database().ref('/code/').orderByChild("--uid").equalTo(getUID()).once('value').then(function(snapshot) {
-    if (snapshot.val()){
-      // TODO sort snapshots by most recent change and put timestamp on it for last touched
-      for (var key in snapshot.val()){
-        var item = snapshot.val()[key]
-        document.getElementById("list").innerHTML += elem(key, item)
+    var projects = objectOfObjectsToArray(snapshot.val())
+  
+    // nesting revisions under projects
+    app.projects = projects.map(function(project){
+      var keys = Object.keys(project)
+      var revisionKeys = keys.filter(key => key != '--uid' && key != 'key')
+      return {
+        key: project.key,
+        "--uid": project["--uid"],
+        revisions: revisionKeys.map(key => {
+          var revision = project[key]
+          revision.key = key
+          revision.project = project
+          return revision
+        })
       }
-    } else {
-        document.getElementById("list").innerHTML += "<h3>If you save a project, it'll show up here.</h3>"
-    }
-  });
+    })
+  })
 </script>
-<title>Projects</title>
-<body>
-  <h1 id="title"></h1>
-  <ul id="list" class="list-group">
-  </ul>
     <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
