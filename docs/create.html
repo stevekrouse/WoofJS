@@ -275,7 +275,10 @@
       var revision = parseInt(window.location.hash.substring(1, window.location.hash.length).split("/")[1])
       
       var keys = Object.keys(revisions)
-      keys = keys.slice(1, keys.length)  // remove --uid
+      if (keys.length > 1){
+        keys = keys.slice(1, keys.length)
+      }
+      
       
       var key
       if (!isNaN(revision) && (revision !== 0 && revision !== -1 * keys.length) && Math.abs(revision) < keys.length + 1){
