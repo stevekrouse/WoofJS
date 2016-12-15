@@ -25,7 +25,7 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
 
   thisContext.global = global;
   thisContext.sprites = [];
-  thisContext.backdrop = undefined;
+  thisContext.backdrop = {color: null, type: null, url: null, size: null};
   thisContext.stopped = true;
   // internally named fullScreen1 for firefox
   thisContext.fullScreen1 = fullScreen;
@@ -105,7 +105,7 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
     thisContext._penCanvas.style.zIndex = 2;
     thisContext._penCanvas.style.position = "absolute";
     
-    thisContext._backdropCanvas = document.createElement("canvas");
+    thisContext._backdropCanvas = document.createElement("div");
     thisContext._mainDiv.appendChild(thisContext._backdropCanvas);
     thisContext._backdropCanvas.id = "backdrop";
     thisContext._backdropCanvas.width = width;
@@ -115,7 +115,7 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
   
     thisContext._spriteContext = thisContext._spriteCanvas.getContext("2d");
     thisContext._penContext = thisContext._penCanvas.getContext("2d");
-    thisContext._backdropContext = thisContext._backdropCanvas.getContext("2d");
+    thisContext._backdropContext = thisContext._backdropCanvas; //thisContext._backdropCanvas.getContext("2d");
     
     thisContext._runReadys();
   });
@@ -146,8 +146,8 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
       thisContext._penCanvas.height = thisContext.height;
       thisContext._penContext.putImageData(penData, 0, 0);
       
-      thisContext._backdropCanvas.width = thisContext.width;
-      thisContext._backdropCanvas.height = thisContext.height;
+      thisContext._backdropCanvas.style.width = thisContext.width;
+      thisContext._backdropCanvas.style.height = thisContext.height;
       setTimeout(thisContext._renderBackdrop);
     })
   };
@@ -173,7 +173,13 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
   };
   
   thisContext._renderBackdrop = () => {
-    thisContext._backdropContext.clearRect(0, 0, thisContext.width, thisContext.height);
+    var {size, type, url, color} = thisContext.backdrop;
+    console.log("rendering: ", thisContext.backdrop)
+    
+    thisContext._backdropContext.style.background = (type === 'url' ) ? `url('${url}')` : color //might be "blue", might be "url('blue.png')"
+    thisContext._backdropContext.style.backgroundSize = size;
+
+    /* thisContext._backdropContext.clearRect(0, 0, thisContext.width, thisContext.height);
     if (thisContext.backdrop instanceof BrowserImage) {
       thisContext._backdropContext.drawImage(thisContext.backdrop, 0, 0, thisContext.width, thisContext.height);
     } else if (typeof thisContext.backdrop == "string"){
@@ -181,21 +187,33 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
       thisContext._backdropContext.fillStyle=thisContext.backdrop;
       thisContext._backdropContext.fillRect(0, 0, thisContext.width, thisContext.height);
       thisContext._backdropContext.restore();
-    }
+    }*/
   };
   
+
   thisContext.setBackdropURL = function(url){
     if (typeof url != "string") { throw new TypeError("setBackDropUrl(url) requires one string input."); }
-    var backdrop = new BrowserImage();
-    backdrop.src = url;
-    thisContext.backdrop = backdrop;
-    thisContext.backdrop.onload = function() { thisContext.ready(thisContext._renderBackdrop); };
+    // var backdrop = new BrowserImage();
+    // backdrop.src = url;
+    thisContext.backdrop.url =  url;
+    thisContext.backdrop.type = 'url'
+    // thisContext._renderBackdrop();
+    console.log('setting backdrop URL')
+    thisContext.ready(thisContext._renderBackdrop)
   };
+  
+  thisContext.setBackdropStyle = function(coverOrContain){
+    if(coverOrContain !== "cover" && coverOrContain !== "contain"){
+      throw Error("setBackdropStyle cannot be called with a string other than cover or contain")
+    }
+    thisContext.backdrop.size = coverOrContain;
 
+  }
+  
   thisContext.setBackdropColor = function(color){
-    if (typeof color != "string") { throw new TypeError("setBackdropColor() takes one string input."); }
-    thisContext.backdrop = color;
-    thisContext.ready(thisContext._renderBackdrop);
+    if (typeof color != "string") { throw new TypeError("setBackdropColor(color) takes one string input."); }
+    thisContext.backdrop.color = color;
+    thisContext.backdrop.type = 'color'
   };
   
   thisContext.freezing = false
