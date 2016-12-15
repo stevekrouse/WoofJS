@@ -178,28 +178,13 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
     
     thisContext._backdropContext.style.background = (type === 'url' ) ? `url('${url}')` : color //might be "blue", might be "url('blue.png')"
     thisContext._backdropContext.style.backgroundSize = size;
-
-    /* thisContext._backdropContext.clearRect(0, 0, thisContext.width, thisContext.height);
-    if (thisContext.backdrop instanceof BrowserImage) {
-      thisContext._backdropContext.drawImage(thisContext.backdrop, 0, 0, thisContext.width, thisContext.height);
-    } else if (typeof thisContext.backdrop == "string"){
-      thisContext._backdropContext.save();
-      thisContext._backdropContext.fillStyle=thisContext.backdrop;
-      thisContext._backdropContext.fillRect(0, 0, thisContext.width, thisContext.height);
-      thisContext._backdropContext.restore();
-    }*/
   };
   
 
   thisContext.setBackdropURL = function(url){
     if (typeof url != "string") { throw new TypeError("setBackDropUrl(url) requires one string input."); }
-    // var backdrop = new BrowserImage();
-    // backdrop.src = url;
     thisContext.backdrop.url =  url;
     thisContext.backdrop.type = 'url'
-    // thisContext._renderBackdrop();
-    console.log('setting backdrop URL')
-    thisContext.ready(thisContext._renderBackdrop)
   };
   
   thisContext.setBackdropStyle = function(coverOrContain){
