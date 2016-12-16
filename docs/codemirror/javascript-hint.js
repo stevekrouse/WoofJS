@@ -174,7 +174,7 @@
       var backdropMethods = ["setBackdropURL('https://i.imgur.com/q6Bqraw.jpg')", 
                              "setBackdropColor('blue')", 
                              "setBackdropStyle('cover')",
-                             "setBackdropStyle('contain')",
+                             "setBackdropStyle('50%')",
                              "setBackdropRepeat('no-repeat')",
                              "setBackdropRepeat('repeat-y')",
                              "setBackdropRepeat('repeat-x')",];

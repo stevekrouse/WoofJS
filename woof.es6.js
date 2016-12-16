@@ -176,8 +176,8 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
     var {size, type, url, color, repeat} = thisContext.backdrop;
     
     thisContext._backdropContext.style.background = (type === 'url' ) ? `url('${url}')` : color //might be "blue", might be "url('blue.png')"
-    thisContext._backdropContext.style.backgroundSize = size;
     thisContext._backdropContext.style.backgroundRepeat = repeat;
+    thisContext._backdropContext.style.backgroundSize = size;
   };
   
 
@@ -188,10 +188,20 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
   };
   
   thisContext.setBackdropStyle = function(coverOrContain){
-    if(!["cover", "contain"].includes(coverOrContain)){
-      throw Error("setBackdropStyle cannot be called with a string other than cover or contain")
+    coverOrContain = coverOrContain.split(' ')
+    if(coverOrContain.length > 2){
+      throw Error("setBackdropStyle can take one or two arguments, separated by a space.")
     }
-    thisContext.backdrop.size = coverOrContain;
+    //match each part of the input, maybe it looks like '50% 50px' or 'auto auto' or just '3em'
+    //regex translates to: the word cover on its own, the word contain on its own, at least one digit followed by 'em', at least on digit followed by 'px', at least one digit followed by '%'
+    let acceptableSizes = [/^cover$/,/^contain$/,/^\d+em$/,/^\d+px$/,/^\d+%$/] 
+
+    if(!coverOrContain.every(prop => acceptableSizes.some(each => prop.match(each)))){
+      throw Error("setBackdropStyle only understands sizes such as 5em, 50px, 50% and the keywords cover, contain, and auto")
+    }
+
+    thisContext.backdrop.size = coverOrContain.join(' ');
+
   };
   thisContext.setBackdropRepeat = function(repeatString){
     let acceptableValues = ["repeat", "no-repeat", "repeat-x", "repeat-y","space","round"]
