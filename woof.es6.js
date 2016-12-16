@@ -25,7 +25,7 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
 
   thisContext.global = global;
   thisContext.sprites = [];
-  thisContext.backdrop = {color: null, type: null, url: null, size: null};
+  thisContext.backdrop = {color: null, type: null, url: null, size: null, repeat: null};
   thisContext.stopped = true;
   // internally named fullScreen1 for firefox
   thisContext.fullScreen1 = fullScreen;
@@ -173,11 +173,11 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
   };
   
   thisContext._renderBackdrop = () => {
-    var {size, type, url, color} = thisContext.backdrop;
-    console.log("rendering: ", thisContext.backdrop)
+    var {size, type, url, color, repeat} = thisContext.backdrop;
     
     thisContext._backdropContext.style.background = (type === 'url' ) ? `url('${url}')` : color //might be "blue", might be "url('blue.png')"
     thisContext._backdropContext.style.backgroundSize = size;
+    thisContext._backdropContext.style.backgroundRepeat = repeat;
   };
   
 
@@ -188,11 +188,17 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
   };
   
   thisContext.setBackdropStyle = function(coverOrContain){
-    if(coverOrContain !== "cover" && coverOrContain !== "contain"){
+    if(!["cover", "contain"].includes(coverOrContain)){
       throw Error("setBackdropStyle cannot be called with a string other than cover or contain")
     }
     thisContext.backdrop.size = coverOrContain;
-
+  };
+  thisContext.setBackdropRepeat = function(repeatString){
+    let acceptableValues = ["repeat", "no-repeat", "repeat-x", "repeat-y","space","round"]
+    if(!acceptableValues.includes(repeatString)){
+      throw Error(`setBackdropRepeat can only understand one of the following: ${acceptableValues.join(', ')}`)
+    }
+    thisContext.backdrop.repeat = repeatString;
   }
   
   thisContext.setBackdropColor = function(color){

@@ -169,7 +169,16 @@
       var lne = 'var lineSprite1 = new Line({\n  color: "pink", \n  lineWidth: 10, \n  x: -100, \n  y: 100, \n  x1: 10, \n  y1: 20\n})'
       var iff = 'if () {\n  \n}'
       var elsee = 'else {\n  \n}'
-      var woof = [iff, elsee, 'randomColor()', 'when(() => mouseDown, () => {\n  \n})', 'random(0, 10)', "var variable1 = 0", img, txt, clc, rct, lne, "new Image({})", "new Rectangle({})", "new Line({})", "new Text({})", "new Circle({})", "cameraX", "cameraY", "ready", "height", "width", "minX", "maxX", "minY", "maxY", "randomX()", "randomY()", "setBackdropURL('https://i.imgur.com/q6Bqraw.jpg')", "setBackdropColor('blue')", "setBackdropStyle('cover')","setBackdropStyle('contain')","freeze()", "defrost()", "mouseDown", "mouseX", "mouseY", "pMouseX", "pMouseY", "mouseXSpeed", "mouseYSpeed", "keysDown.includes('UP')", "onMouseMove(() => {\n  \n})", "onMouseDown(() => {\n  \n})", "onMouseUp(() => {\n  \n})", "onKeyDown(() => {\n  \n})", "onKeyUp(() => {\n  \n})", "every(1, 'second', () => {\n  \n})", "forever(() => {\n  \n})", "when(() => mouseDown, () => {\n  \n})", "repeat(10, () => {\n  \n})", "repeatUntil(() => mouseDown, () => {\n  \n})", "after(1, 'second', () => {\n  \n})", "clearPen()",]
+      var woof = [iff, elsee, 'randomColor()', 'when(() => mouseDown, () => {\n  \n})', 'random(0, 10)', "var variable1 = 0", img, txt, clc, rct, lne, "new Image({})", "new Rectangle({})", "new Line({})", "new Text({})", "new Circle({})", "cameraX", "cameraY", "ready", "height", "width", "minX", "maxX", "minY", "maxY", "randomX()", "randomY()","freeze()", "defrost()", "mouseDown", "mouseX", "mouseY", "pMouseX", "pMouseY", "mouseXSpeed", "mouseYSpeed", "keysDown.includes('UP')", "onMouseMove(() => {\n  \n})", "onMouseDown(() => {\n  \n})", "onMouseUp(() => {\n  \n})", "onKeyDown(() => {\n  \n})", "onKeyUp(() => {\n  \n})", "every(1, 'second', () => {\n  \n})", "forever(() => {\n  \n})", "when(() => mouseDown, () => {\n  \n})", "repeat(10, () => {\n  \n})", "repeatUntil(() => mouseDown, () => {\n  \n})", "after(1, 'second', () => {\n  \n})", "clearPen()",]
+      
+      var backdropMethods = ["setBackdropURL('https://i.imgur.com/q6Bqraw.jpg')", 
+                             "setBackdropColor('blue')", 
+                             "setBackdropStyle('cover')",
+                             "setBackdropStyle('contain')",
+                             "setBackdropRepeat('no-repeat')",
+                             "setBackdropRepeat('repeat-y')",
+                             "setBackdropRepeat('repeat-x')",];
+      woof = woof.concat(backdropMethods)
       forEach(woof, maybeAdd)
       
       // If not, just look in the global object and any local scope
