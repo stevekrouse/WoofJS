@@ -193,7 +193,7 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
     }
     //match each part of the input, maybe it looks like '50% 50px' or 'auto auto' or just '3em'
     //regex translates to: the word cover on its own, the word contain on its own, at least one digit followed by 'em', at least on digit followed by 'px', at least one digit followed by '%'
-    let acceptableSizes = [/^cover$/,/^contain$/,/^\d+em$/,/^\d+px$/,/^\d+%$/] 
+    let acceptableSizes = [/^cover$/,/^contain$/,/^\d+em$/,/^\d+px$/,/^\d+%$/,/^auto$/] 
 
     if(!coverOrContain.every(prop => acceptableSizes.some(each => prop.match(each)))){
       throw Error("setBackdropStyle only understands sizes such as 5em, 50px, 50% and the keywords cover, contain, and auto")
