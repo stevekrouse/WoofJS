@@ -25,7 +25,7 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
 
   thisContext.global = global;
   thisContext.sprites = [];
-  thisContext.backdrop = {color: null, type: null, url: null, size: null};
+  thisContext.backdrop = {color: null, type: null, url: null, size: null, repeat: null};
   thisContext.stopped = true;
   // internally named fullScreen1 for firefox
   thisContext.fullScreen1 = fullScreen;
@@ -105,17 +105,16 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
     thisContext._penCanvas.style.zIndex = 2;
     thisContext._penCanvas.style.position = "absolute";
     
-    thisContext._backdropCanvas = document.createElement("div");
-    thisContext._mainDiv.appendChild(thisContext._backdropCanvas);
-    thisContext._backdropCanvas.id = "backdrop";
-    thisContext._backdropCanvas.width = width;
-    thisContext._backdropCanvas.height = height;
-    thisContext._backdropCanvas.style.zIndex = 1;
-    thisContext._backdropCanvas.style.position = "absolute";
+    thisContext._backdropDiv = document.createElement("div");
+    thisContext._mainDiv.appendChild(thisContext._backdropDiv);
+    thisContext._backdropDiv.id = "backdrop";
+    thisContext._backdropDiv.width = width;
+    thisContext._backdropDiv.height = height;
+    thisContext._backdropDiv.style.zIndex = 1;
+    thisContext._backdropDiv.style.position = "absolute";
   
     thisContext._spriteContext = thisContext._spriteCanvas.getContext("2d");
     thisContext._penContext = thisContext._penCanvas.getContext("2d");
-    thisContext._backdropContext = thisContext._backdropCanvas; //thisContext._backdropCanvas.getContext("2d");
     
     thisContext._runReadys();
   });
@@ -146,8 +145,8 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
       thisContext._penCanvas.height = thisContext.height;
       thisContext._penContext.putImageData(penData, 0, 0);
       
-      thisContext._backdropCanvas.style.width = thisContext.width;
-      thisContext._backdropCanvas.style.height = thisContext.height;
+      thisContext._backdropDiv.style.width = thisContext.width;
+      thisContext._backdropDiv.style.height = thisContext.height;
       setTimeout(thisContext._renderBackdrop);
     })
   };
@@ -173,11 +172,11 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
   };
   
   thisContext._renderBackdrop = () => {
-    var {size, type, url, color} = thisContext.backdrop;
-    console.log("rendering: ", thisContext.backdrop)
+    var {size, type, url, color, repeat} = thisContext.backdrop;
     
-    thisContext._backdropContext.style.background = (type === 'url' ) ? `url('${url}')` : color //might be "blue", might be "url('blue.png')"
-    thisContext._backdropContext.style.backgroundSize = size;
+    thisContext._backdropDiv.style.background = (type === 'url' ) ? `url('${url}')` : color //might be "blue", might be "url('blue.png')"
+    thisContext._backdropDiv.style.backgroundRepeat = repeat;
+    thisContext._backdropDiv.style.backgroundSize = size;
   };
   
 
@@ -188,11 +187,27 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
   };
   
   thisContext.setBackdropStyle = function(coverOrContain){
-    if(coverOrContain !== "cover" && coverOrContain !== "contain"){
-      throw Error("setBackdropStyle cannot be called with a string other than cover or contain")
+    coverOrContain = coverOrContain.split(' ')
+    if(coverOrContain.length > 2){
+      throw Error("setBackdropStyle can take one or two arguments, separated by a space.")
     }
-    thisContext.backdrop.size = coverOrContain;
+    //match each part of the input, maybe it looks like '50% 50px' or 'auto auto' or just '3em'
+    //regex translates to: the word cover on its own, the word contain on its own, at least one digit followed by 'em', at least on digit followed by 'px', at least one digit followed by '%'
+    let acceptableSizes = [/^cover$/,/^contain$/,/^\d+em$/,/^\d+px$/,/^\d+%$/,/^auto$/] 
 
+    if(!coverOrContain.every(prop => acceptableSizes.some(each => prop.match(each)))){
+      throw Error("setBackdropStyle only understands sizes such as 5em, 50px, 50% and the keywords cover, contain, and auto")
+    }
+
+    thisContext.backdrop.size = coverOrContain.join(' ');
+
+  };
+  thisContext.setBackdropRepeat = function(repeatString){
+    let acceptableValues = ["repeat", "no-repeat", "repeat-x", "repeat-y","space","round"]
+    if(!acceptableValues.includes(repeatString)){
+      throw Error(`setBackdropRepeat can only understand one of the following: ${acceptableValues.join(', ')}`)
+    }
+    thisContext.backdrop.repeat = repeatString;
   }
   
   thisContext.setBackdropColor = function(color){

@@ -309,10 +309,25 @@
                         code: 'setBackdropColor("blue")',
                         tags: "backdrop background picture"
                     },
+                    // {
+                    //     description: "Set the backdrop size:",
+                    //     code: "fullScreen = false\nvar width = 300\nvar height = 400\nsetBackdropSize(width, height)",
+                    //     tags: "screen"
+                    // },
                     {
-                        description: "Set the backdrop size:",
-                        code: "fullScreen = false\nvar width = 300\nvar height = 400\nsetBackdropSize(width, height)",
-                        tags: "screen"
+                        description: "Set a backdrop image so that it resizes to fill the screen without stretching or compressing",
+                        code:  'setBackdropURL("https://i.imgur.com/RkP7fcR.jpg")\nsetBackdropStyle("cover")',
+                        tags: "backdrop background picture"
+                    },
+                    {
+                        description: "Set the backdrop image size. The image repeats in both directions by default:",
+                        code:  'setBackdropURL("https://i.imgur.com/RkP7fcR.jpg")\nsetBackdropStyle("200px 300px")',
+                        tags: "backdrop background picture repeat"
+                    },
+                    {
+                        description: "Set the backdrop image to repeat in one direction but not the other:",
+                        code:  'setBackdropURL("https://i.imgur.com/RkP7fcR.jpg")\nsetBackdropStyle("200px 300px")\nsetBackdropRepeat("repeat-y")',
+                        tags: "backdrop background picture repeat"
                     }
                 ],
                 Sound: [
