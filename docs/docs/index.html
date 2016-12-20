@@ -309,25 +309,35 @@
                         code: 'setBackdropColor("blue")',
                         tags: "backdrop background picture"
                     },
-                    // {
-                    //     description: "Set the backdrop size:",
-                    //     code: "fullScreen = false\nvar width = 300\nvar height = 400\nsetBackdropSize(width, height)",
-                    //     tags: "screen"
-                    // },
                     {
                         description: "Set a backdrop image so that it resizes to fill the screen without stretching or compressing",
-                        code:  'setBackdropURL("https://i.imgur.com/RkP7fcR.jpg")\nsetBackdropStyle("cover")',
-                        tags: "backdrop background picture"
+                        code:  'setBackdropStyle("cover")',
+                        tags: "backdrop background picture cover style"
                     },
                     {
-                        description: "Set the backdrop image size. The image repeats in both directions by default:",
-                        code:  'setBackdropURL("https://i.imgur.com/RkP7fcR.jpg")\nsetBackdropStyle("200px 300px")',
-                        tags: "backdrop background picture repeat"
+                        description: "Set the backdrop image's width and height via pixel values.",
+                        code:  'setBackdropStyle("200px 300px")',
+                        tags: "backdrop background picture pixel size style"
                     },
                     {
-                        description: "Set the backdrop image to repeat in one direction but not the other:",
-                        code:  'setBackdropURL("https://i.imgur.com/RkP7fcR.jpg")\nsetBackdropStyle("200px 300px")\nsetBackdropRepeat("repeat-y")',
-                        tags: "backdrop background picture repeat"
+                        description: "Set the backdrop image to percentages of the screen's width and height. (The default is 100% 100%.)",
+                        code:  'setBackdropStyle("100% 100%")',
+                        tags: "backdrop background picture default style"
+                    },
+                    {
+                        description: "Set the backdrop image to repeat in the x-direction and not the y-direction. (This is useful if you set the backdrop style to pixels.)",
+                        code:  'setBackdropRepeat("repeat-x")',
+                        tags: "backdrop background picture repeat style x"
+                    },
+                    {
+                        description: "Set the backdrop image to repeat in the y-direction and not the x-direction. (This is useful if you set the backdrop style to pixels.)",
+                        code:  'setBackdropRepeat("repeat-y")',
+                        tags: "backdrop background picture repeat style y"
+                    },
+                    {
+                        description: "Set the backdrop image to not repeat in either direction. (no-repeat is the default.)",
+                        code:  'setBackdropRepeat("no-repeat")',
+                        tags: "backdrop background picture no repeat style "
                     }
                 ],
                 Sound: [
