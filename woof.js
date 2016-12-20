@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 
@@ -209,7 +209,7 @@ function Woof() {
 
   thisContext.global = global;
   thisContext.sprites = [];
-  thisContext.backdrop = undefined;
+  thisContext.backdrop = { color: null, type: null, url: null, size: "100% 100%", repeat: "no-repeat" };
   thisContext.stopped = true;
   // internally named fullScreen1 for firefox
   thisContext.fullScreen1 = fullScreen;
@@ -290,17 +290,16 @@ function Woof() {
     thisContext._penCanvas.style.zIndex = 2;
     thisContext._penCanvas.style.position = "absolute";
 
-    thisContext._backdropCanvas = document.createElement("canvas");
-    thisContext._mainDiv.appendChild(thisContext._backdropCanvas);
-    thisContext._backdropCanvas.id = "backdrop";
-    thisContext._backdropCanvas.width = width;
-    thisContext._backdropCanvas.height = height;
-    thisContext._backdropCanvas.style.zIndex = 1;
-    thisContext._backdropCanvas.style.position = "absolute";
+    thisContext._backdropDiv = document.createElement("div");
+    thisContext._mainDiv.appendChild(thisContext._backdropDiv);
+    thisContext._backdropDiv.id = "backdrop";
+    thisContext._backdropDiv.width = width;
+    thisContext._backdropDiv.height = height;
+    thisContext._backdropDiv.style.zIndex = 1;
+    thisContext._backdropDiv.style.position = "absolute";
 
     thisContext._spriteContext = thisContext._spriteCanvas.getContext("2d");
     thisContext._penContext = thisContext._penCanvas.getContext("2d");
-    thisContext._backdropContext = thisContext._backdropCanvas.getContext("2d");
 
     thisContext._runReadys();
   });
@@ -333,8 +332,8 @@ function Woof() {
       thisContext._penCanvas.height = thisContext.height;
       thisContext._penContext.putImageData(penData, 0, 0);
 
-      thisContext._backdropCanvas.width = thisContext.width;
-      thisContext._backdropCanvas.height = thisContext.height;
+      thisContext._backdropDiv.style.width = thisContext.width;
+      thisContext._backdropDiv.style.height = thisContext.height;
       setTimeout(thisContext._renderBackdrop);
     });
   };
@@ -364,35 +363,60 @@ function Woof() {
   };
 
   thisContext._renderBackdrop = function () {
-    thisContext._backdropContext.clearRect(0, 0, thisContext.width, thisContext.height);
-    if (thisContext.backdrop instanceof BrowserImage) {
-      thisContext._backdropContext.drawImage(thisContext.backdrop, 0, 0, thisContext.width, thisContext.height);
-    } else if (typeof thisContext.backdrop == "string") {
-      thisContext._backdropContext.save();
-      thisContext._backdropContext.fillStyle = thisContext.backdrop;
-      thisContext._backdropContext.fillRect(0, 0, thisContext.width, thisContext.height);
-      thisContext._backdropContext.restore();
-    }
+    var _thisContext$backdrop = thisContext.backdrop;
+    var size = _thisContext$backdrop.size;
+    var type = _thisContext$backdrop.type;
+    var url = _thisContext$backdrop.url;
+    var color = _thisContext$backdrop.color;
+    var repeat = _thisContext$backdrop.repeat;
+
+
+    thisContext._backdropDiv.style.background = type === 'url' ? "url('" + url + "')" : color;
+    thisContext._backdropDiv.style.backgroundRepeat = repeat;
+    thisContext._backdropDiv.style.backgroundSize = size;
   };
 
   thisContext.setBackdropURL = function (url) {
     if (typeof url != "string") {
       throw new TypeError("setBackDropUrl(url) requires one string input.");
     }
-    var backdrop = new BrowserImage();
-    backdrop.src = url;
-    thisContext.backdrop = backdrop;
-    thisContext.backdrop.onload = function () {
-      thisContext.ready(thisContext._renderBackdrop);
-    };
+    thisContext.backdrop.url = url;
+    thisContext.backdrop.type = 'url';
+  };
+
+  thisContext.setBackdropStyle = function (coverOrContain) {
+    coverOrContain = coverOrContain.split(' ');
+    if (coverOrContain.length > 2) {
+      throw Error("setBackdropStyle can take one or two arguments, separated by a space.");
+    }
+    //match each part of the input, maybe it looks like '50% 50px' or 'auto auto' or just '3em'
+    //regex translates to: the word cover on its own, the word contain on its own, at least one digit followed by 'em', at least on digit followed by 'px', at least one digit followed by '%'
+    var acceptableSizes = [/^cover$/, /^contain$/, /^\d+em$/, /^\d+px$/, /^\d+%$/, /^auto$/];
+
+    if (!coverOrContain.every(function (prop) {
+      return acceptableSizes.some(function (each) {
+        return prop.match(each);
+      });
+    })) {
+      throw Error("setBackdropStyle only understands sizes such as 5em, 50px, 50% and the keywords cover, contain, and auto");
+    }
+
+    thisContext.backdrop.size = coverOrContain.join(' ');
+  };
+  thisContext.setBackdropRepeat = function (repeatString) {
+    var acceptableValues = ["repeat", "no-repeat", "repeat-x", "repeat-y", "space", "round"];
+    if (!acceptableValues.includes(repeatString)) {
+      throw Error("setBackdropRepeat can only understand one of the following: " + acceptableValues.join(', '));
+    }
+    thisContext.backdrop.repeat = repeatString;
   };
 
   thisContext.setBackdropColor = function (color) {
     if (typeof color != "string") {
-      throw new TypeError("setBackdropColor() takes one string input.");
+      throw new TypeError("setBackdropColor(color) takes one string input.");
     }
-    thisContext.backdrop = color;
-    thisContext.ready(thisContext._renderBackdrop);
+    thisContext.backdrop.color = color;
+    thisContext.backdrop.type = 'color';
   };
 
   thisContext.freezing = false;
@@ -869,7 +893,7 @@ Woof.prototype.Sprite = function () {
 
   this.distanceTo = function distanceTo(xGiven, yGiven) {
     if (arguments.length === 1) {
-      if ((typeof xGiven === 'undefined' ? 'undefined' : _typeof(xGiven)) == "object") {
+      if ((typeof xGiven === "undefined" ? "undefined" : _typeof(xGiven)) == "object") {
         var x = this.x - xGiven.x;
         var y = this.y - xGiven.y;
         return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
@@ -935,7 +959,7 @@ Woof.prototype.Sprite = function () {
   this.collisionContext = this.collisionCanvas.getContext('2d');
 
   this.touching = function (sprite, precise) {
-    if (!((typeof sprite === 'undefined' ? 'undefined' : _typeof(sprite)) == "object")) {
+    if (!((typeof sprite === "undefined" ? "undefined" : _typeof(sprite)) == "object")) {
       throw new TypeError("touching(sprite) requires one sprite input.");
     }
 
@@ -1096,7 +1120,7 @@ Woof.prototype.Sprite = function () {
 
   this.pointTowards = function (x2, y2) {
     if (arguments.length === 1) {
-      if ((typeof x2 === 'undefined' ? 'undefined' : _typeof(x2)) == "object") {
+      if ((typeof x2 === "undefined" ? "undefined" : _typeof(x2)) == "object") {
         this.angle = Math.atan2(x2.y - this.y, x2.x - this.x) * 180 / Math.PI;
       } else {
         throw new TypeError("pointTowards(sprite) requires one sprite input.");

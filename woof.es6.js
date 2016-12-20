@@ -25,7 +25,7 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
 
   thisContext.global = global;
   thisContext.sprites = [];
-  thisContext.backdrop = {color: null, type: null, url: null, size: null, repeat: null};
+  thisContext.backdrop = {color: null, type: null, url: null, size: "100% 100%", repeat: "no-repeat"};
   thisContext.stopped = true;
   // internally named fullScreen1 for firefox
   thisContext.fullScreen1 = fullScreen;
@@ -174,7 +174,7 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
   thisContext._renderBackdrop = () => {
     var {size, type, url, color, repeat} = thisContext.backdrop;
     
-    thisContext._backdropDiv.style.background = (type === 'url' ) ? `url('${url}')` : color //might be "blue", might be "url('blue.png')"
+    thisContext._backdropDiv.style.background = (type === 'url' ) ? `url('${url}')` : color
     thisContext._backdropDiv.style.backgroundRepeat = repeat;
     thisContext._backdropDiv.style.backgroundSize = size;
   };
