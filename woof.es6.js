@@ -221,7 +221,6 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
     if (arguments.length > 0) { throw new TypeError("freeze() requires no inputs."); }
     if (thisContext.freezing || thisContext.stopped) { return }
     thisContext.freezing = true
-    thisContext._render()
     thisContext.after(10, "miliseconds", () => {
       thisContext.stopped = true
       thisContext.freezing = false

@@ -428,7 +428,6 @@ function Woof() {
       return;
     }
     thisContext.freezing = true;
-    thisContext._render();
     thisContext.after(10, "miliseconds", function () {
       thisContext.stopped = true;
       thisContext.freezing = false;
