@@ -21,16 +21,22 @@ We reccomend that you get started with WoofJS on [woofjs.com](http://woofjs.com)
 
 ### Installing WoofJS
 
-Include the following script tag into your code to get the latest version of WoofJS:
+#### For development (which always grabs the latest version): 
 
 ```html
-<script src="TODO"></script>
+<script src="https://rawgit.com/stevekrouse/WoofJS/master/dist/woof.js"></script>
 ```
 
-The latest stable version of WoofJS is:
+#### For production (which is tied to a specific commit hash):
+
+Go to rawgit.com and type this in:
+
+    https://github.com/stevekrouse/WoofJS/blob/master/dist/woof.js
+    
+And grab the link on the left, which should look like:
 
 ```html
-<script src="https://github.com/stevekrouse/WoofJS/blob/03ca9710d0d0432720b354fe3379bd043185fc4f/woof.js"></script>
+<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/a3752aea/dist/woof.js"></script>
 ```
 
 ### Global mode
