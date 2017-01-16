@@ -184,6 +184,12 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
     if (typeof url != "string") { throw new TypeError("setBackDropUrl(url) requires one string input."); }
     thisContext.backdrop.url =  url;
     thisContext.backdrop.type = 'url'
+    
+    var img = new BrowserImage()
+    img.onload = function(){
+       thisContext.ready(thisContext._renderBackdrop);
+    };
+    img.src = url;
   };
   
   thisContext.setBackdropStyle = function(coverOrContain){
@@ -200,7 +206,7 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
     }
 
     thisContext.backdrop.size = coverOrContain.join(' ');
-
+    thisContext.ready(thisContext._renderBackdrop);
   };
   thisContext.setBackdropRepeat = function(repeatString){
     let acceptableValues = ["repeat", "no-repeat", "repeat-x", "repeat-y","space","round"]
@@ -208,12 +214,14 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
       throw Error(`setBackdropRepeat can only understand one of the following: ${acceptableValues.join(', ')}`)
     }
     thisContext.backdrop.repeat = repeatString;
+    thisContext.ready(thisContext._renderBackdrop);
   }
   
   thisContext.setBackdropColor = function(color){
     if (typeof color != "string") { throw new TypeError("setBackdropColor(color) takes one string input."); }
     thisContext.backdrop.color = color;
     thisContext.backdrop.type = 'color'
+    thisContext.ready(thisContext._renderBackdrop);
   };
   
   thisContext.freezing = false

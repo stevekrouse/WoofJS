@@ -382,6 +382,12 @@ function Woof() {
     }
     thisContext.backdrop.url = url;
     thisContext.backdrop.type = 'url';
+
+    var img = new BrowserImage();
+    img.onload = function () {
+      thisContext.ready(thisContext._renderBackdrop);
+    };
+    img.src = url;
   };
 
   thisContext.setBackdropStyle = function (coverOrContain) {
@@ -402,6 +408,7 @@ function Woof() {
     }
 
     thisContext.backdrop.size = coverOrContain.join(' ');
+    thisContext.ready(thisContext._renderBackdrop);
   };
   thisContext.setBackdropRepeat = function (repeatString) {
     var acceptableValues = ["repeat", "no-repeat", "repeat-x", "repeat-y", "space", "round"];
@@ -409,6 +416,7 @@ function Woof() {
       throw Error("setBackdropRepeat can only understand one of the following: " + acceptableValues.join(', '));
     }
     thisContext.backdrop.repeat = repeatString;
+    thisContext.ready(thisContext._renderBackdrop);
   };
 
   thisContext.setBackdropColor = function (color) {
@@ -417,6 +425,7 @@ function Woof() {
     }
     thisContext.backdrop.color = color;
     thisContext.backdrop.type = 'color';
+    thisContext.ready(thisContext._renderBackdrop);
   };
 
   thisContext.freezing = false;
