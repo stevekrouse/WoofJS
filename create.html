@@ -246,7 +246,7 @@
         <button id="clean-up" class="btn btn-medium btn-default" @click="cleanAll()" style="display: none" :style="{display: canClean ? 'inline-block' : 'none'}"><span class="glyphicon glyphicon-align-left"></span> Clean Code</button>
         <button id="error" class="btn btn-medium btn-error" @click="showError()" :style="{display: error ? 'inline-block' : 'none'}"><span class="glyphicon glyphicon-exclamation-sign"></span> Error</button>
         <button style="display: none" :style="{display: 'inline-block'}" style="margin-right: 5px" class="btn btn-medium" :class="styles" onclick="save()">{{ status == "SAVED" ? 'Saved' : 'Save' }}</button>
-        <img onclick="popout()" id="pop" style="margin: 10px" src="./popout.png">
+        <img onclick="popout()" id="pop" style="margin: 10px" src="./images/popout.png">
       </span>
     </div>
  
@@ -600,7 +600,7 @@
         setTimeout(function() {
             var script = iframe.contentWindow.document.createElement("script");
             script.type = "text/javascript";
-            script.src = "https://cdn.rawgit.com/stevekrouse/WoofJS/1f27f093e1547e4573bd7d714442a42f385d4427/woof.js";
+            script.src = "./dist/woof.js";
             iframe.contentWindow.document.body.appendChild(script);
             
             script.onload = function() {
