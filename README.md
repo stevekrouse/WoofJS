@@ -79,7 +79,7 @@ woofjs.com is hosted on Github pages from this repository. This means that all o
   * favicon.png
   * etc
 
-The documentation that you find woofjs.com/create is contained within the docs/ folder.
+The documentation that you find on woofjs.com/create is contained within the docs/ folder.
 
 #### woof.js core library
 

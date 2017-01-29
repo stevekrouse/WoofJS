@@ -2,29 +2,31 @@
 <html style="height:100%">
 <head>
   <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:url" content="http://woofjs.com/create">
-   <meta name="twitter:title" content="WoofJS">
-<meta name="twitter:description" content="WoofJS is a Scratch-inspired Javascript library for making games.">
-<meta name="twitter:image" content="http://i.imgur.com/qIgC8Ae.png">
+  <meta name="twitter:url" content="http://woofjs.com/create">
+  <meta name="twitter:title" content="WoofJS">
+  <meta name="twitter:description" content="WoofJS is a Scratch-inspired Javascript library for making games.">
+  <meta name="twitter:image" content="http://i.imgur.com/qIgC8Ae.png">
     
-   
-    <meta property="og:image" content="http://i.imgur.com/qIgC8Ae.png">
-    <meta property="og:title" content="WoofJS">
-<meta property="og:description" content="WoofJS is a Scratch-inspired Javascript library for making games.">
+  <meta property="og:image" content="http://i.imgur.com/qIgC8Ae.png">
+  <meta property="og:title" content="WoofJS">
+  <meta property="og:description" content="WoofJS is a Scratch-inspired Javascript library for making games.">
 
-  <meta charset="utf-8">
-  <title>WoofJS</title>
-      <script src="//load.sumome.com/" data-sumo-site-id="44245233c319d8fe9fb7ce8c7ed64db9381aa56477888a10319261f655cfffe2" async="async"></script>
-      <script type="text/javascript">
+  <script src="//load.sumome.com/" data-sumo-site-id="44245233c319d8fe9fb7ce8c7ed64db9381aa56477888a10319261f655cfffe2" async="async"></script>
+  
+  <script type="text/javascript">
     window._chatlio = window._chatlio||[];
     !function(){ var t=document.getElementById("chatlio-widget-embed");if(t&&window.ChatlioReact&&_chatlio.init)return void _chatlio.init(t,ChatlioReact);for(var e=function(t){return function(){_chatlio.push([t].concat(arguments)) }},i=["configure","identify","track","show","hide","isShown","isOnline"],a=0;a<i.length;a++)_chatlio[i[a]]||(_chatlio[i[a]]=e(i[a]));var n=document.createElement("script"),c=document.getElementsByTagName("script")[0];n.id="chatlio-widget-embed",n.src="https://w.chatlio.com/w.chatlio-widget.js",n.async=!0,n.setAttribute("data-embed-version","2.1");
        n.setAttribute('data-widget-id','1d14bee6-57d0-40e3-4768-8cc33e8abf47');
        c.parentNode.insertBefore(n,c);
     }();
-</script>
+  </script>
 
-
+  <meta charset="utf-8">
+  
+  <title>WoofJS</title>
   <link rel="shortcut icon" type="image/png" href="./favicon.png"/>
+      
+      
   <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
   <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
@@ -269,9 +271,11 @@
     </div>
   <script>
     var getID = function() {
+      // returns the name of a project, not inlcuding the current revision
       return window.location.hash.substring(1, window.location.hash.length).split("/")[0];
     }
     var getCurrentRevisionCode = function(revisions) {
+      // returns the code that corresponds to the current project and revision
       var revision = parseInt(window.location.hash.substring(1, window.location.hash.length).split("/")[1])
       
       var keys = Object.keys(revisions)
@@ -307,11 +311,13 @@
       },
       computed: {
         styles : function() { return {
+           // styles for the "Save" button
           'btn-warning': this.status == 'DIRTY', 
           'btn-success': this.status == 'SAVED',
           'btn-default': this.status == "NEW"
         } },
         canClean: function(){
+          // whether or not the code can be "cleaned" or if its already pristine
           return !this.error && this.code != js_beautify(this.code, {space_after_anon_function: true, indent_size: 2, indent_with_tabs: false })
         },
       },
@@ -328,8 +334,8 @@
       }
     })
     var myCode = false
-    scratch.src = scratch.src
-    projectsIframe.src = projectsIframe.src
+    scratch.src = scratch.src // the documentation sometimes doesn't load unless you remind it to here, strange VueJS bug
+    projectsIframe.src = projectsIframe.src // ditto for the project's iframe
     
     var config = {
       apiKey: "AIzaSyBYHv7dCiD0bWiHRlcp4VIZCIqzoMnB4yY",
@@ -371,6 +377,7 @@
       
       if (user){
         handleLogin(user.displayName, user.uid)
+        // if the user is logged in, and we don't have their name/email in our database, save it now
         firebase.database().ref('/user/' + user.uid).once('value').then(function(snapshot) {
           if (!snapshot.val()) {
             firebase.database().ref("/user/" + user.uid).set({
@@ -381,6 +388,7 @@
           }
         })
         
+        // this puts the user's most recent project under their name
         firebase.database().ref('/code/').orderByChild("--uid").equalTo(user.uid).once('value').then(function(snapshot) {
           if (snapshot.val()){
             app.projects = []
@@ -391,6 +399,7 @@
               app.projects.push({key: key, time: t, code: project.code})
             }
           }
+          // sort the proejcts by most recently touched
           app.projects.sort(function(a,b) {
             if (a.time < b.time)
               return 1;
@@ -404,6 +413,7 @@
       }
     });
 
+    // this is the code for the tooltip that tells you to click on "untutorials"
     $('[data-toggle="tooltip"]').tooltip({trigger: "manual"});
     $('[data-toggle="tooltip"]').click(function(){
         $("[data-toggle='tooltip']").tooltip('hide');
@@ -430,6 +440,7 @@
       }
     }
     
+    // set the text in the editor
     var editorVal = "setBackdropURL('https://i.imgur.com/q6Bqraw.jpg')\n\n\n"
     if (getID() != ''){
       editorVal = "// Loading..."
@@ -445,6 +456,8 @@
       });
     }
     
+    // we add the project name to the hash on save
+    // this code prevents that from triggering a page reload
     window.addEventListener("hashchange", function() {
       if (currentHash != window.location.hash) {
         window.location.reload()
@@ -455,7 +468,7 @@
       if (app.status == "SAVED") { return }
       
       if (editor.getValue().startsWith("// Loading...")){
-        return 
+        return // don't allow students to save projects that haven't loaded
       }
       
       var name
@@ -470,6 +483,7 @@
         firebase.database().ref('/code/' + name).limitToLast(1).once('value').then(function(snapshot) {
           if (snapshot.val()){
             if (firebase.auth().currentUser && snapshot.val()[Object.keys(snapshot.val())[0]].uid == firebase.auth().currentUser.uid) {
+                // if the project exists and you own it, push the new code as a revision
                 firebase.database().ref().child("/code/" + name).push({
                   code: editor.getValue(), 
                   time: firebase.database.ServerValue.TIMESTAMP, 
@@ -484,6 +498,7 @@
               alert("That project name has already been taken. Try another one.")
             }
           } else {
+            // else create a new project and push this code as the first revision
             firebase.database().ref().child("/code/" + name + "/--uid").set(firebase.auth().currentUser && firebase.auth().currentUser.uid)
             firebase.database().ref().child("/code/" + name).push({
               code: editor.getValue(), 
@@ -500,6 +515,8 @@
         });
       }
     };
+    
+    // keyboard shortcuts
     var mac = CodeMirror.keyMap["default"] == CodeMirror.keyMap.macDefault;
     var ctrl = mac ? "Cmd-" : "Ctrl-";
     var keymap = {}
@@ -551,6 +568,7 @@
       }
     }
 
+    // run the code (debounced) on every change to the editor 
     editor.on("change", function(){
       makeDirty()
       debouncedRunCode()
@@ -560,10 +578,12 @@
 
     editor.on('inputRead', function(cm, e){
       if (e.text.length == 1 && e.text[0].length == 1 &&  /^[a-zA-Z\.]/.test(e.text[0])) {
+        // constantly show autocomplete suggestions
         CodeMirror.commands.autocomplete(editor);
       }
     });
 
+    // warns the user when they try to close the page without saving
     window.onbeforeunload = function(e) {		
        if (app.status == "DIRTY") {		
          var dialogText = 'Make sure to copy and paste your work somewhere safe.';		
@@ -596,14 +616,16 @@
     function runCode() {
         var iframe = document.getElementById('preview');
         
-        iframe.src = "";
+        iframe.src = ""; // first, we clear the preview iframe
         setTimeout(function() {
+            // then we create a script tag with the woof code and add it to the page
             var script = iframe.contentWindow.document.createElement("script");
             script.type = "text/javascript";
             script.src = "./dist/woof.js";
             iframe.contentWindow.document.body.appendChild(script);
             
             script.onload = function() {
+                // when the woof.js library loads, run the user's code
                 var evt = document.createEvent('Event');  
                 evt.initEvent('load', false, false);  
                 iframe.contentWindow.dispatchEvent(evt);
@@ -626,6 +648,7 @@
     		if (callNow) func.apply(context, args);
     	};
     };
+    // helper function to prevent runCode from running too often
     var debouncedRunCode = debounce(runCode, 1000, false)
 
   </script>
