@@ -10,6 +10,11 @@
     position: relative;
     bottom: 6px;
   }
+  button > input {
+    background-color: transparent;
+    border: 1px solid gray;
+    margin-left: 6px;
+  }
 </style>
 
 <script src="https://unpkg.com/vue@2.0.1/dist/vue.js"></script>
@@ -29,9 +34,8 @@
   <script id="project-template" type="text/x-template">
     <a class="list-group-item list-group-item-action">{{ project.key }}
       <span class="pull-right">
-        <button class="btn btn-info"     @click="codeClick"       style="margin-right: 5px">Code</button>
-        <button class="btn btn-primary"  @click="fullScreenClick" style="margin-right: 5px">Full Screen</button>
-        <button class="btn"              @click="openRevision($event)">View Version  <input type="number" min="1" :max="project.revisions.length" :value="project.revisions.length" style="text-align: right; width: 3em"></input></button>
+        <button class="btn btn-info"     @click="codeClick($event)"       style="margin-right: 5px">Code v.<input type="number" min="1" :max="project.revisions.length" :value="project.revisions.length" style="text-align: right; width: 3em"></input></button>
+        <button class="btn btn-primary"  @click="fullScreenClick($event)" style="margin-right: 5px">Full Screen v.<input type="number" min="1" :max="project.revisions.length" :value="project.revisions.length" style="text-align: right; width: 3em"></input></button>
       </span>
     </a>
   </script>
@@ -40,16 +44,15 @@
     template: "#project-template",
     props: ["project"],
     methods: {
-      openRevision: function($event) {
+      codeClick: function($event) {
         if ($event.target.nodeName == "BUTTON"){
           window.open('./create.html#' + this.project.key + '/' + $event.target.firstElementChild.value, '_blank')
         }
       },
-      codeClick: function() {
-        window.open('./create.html#' + this.project.key, '_blank')
-      },
-      fullScreenClick: function() {
-        window.open('./full.html#' + this.project.key , '_blank')
+      fullScreenClick: function($event) {
+        if ($event.target.nodeName == "BUTTON"){
+          window.open('./full.html#' + this.project.key + '/' + $event.target.firstElementChild.value, '_blank')
+        }
       }
     }
   })
