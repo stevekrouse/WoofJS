@@ -85,9 +85,10 @@ The documentation that you find on woofjs.com/create is contained within the doc
 
 If you'd like to contribute to the core WoofJS library, you will edit the code in src/woofjs.es6.js.
 
-You will then use babel to compile src/woof.es6.js to dist/woof.js with the included .babelrc and the following command:
+You will then use babel to compile src/woof.es6.js to dist/woof.js with the included .babelrc
 
-    babel WoofJS/src/woof.es6.js --watch --out-file WoofJS/dist/woof.js
+For more help, see the more detailed instructions below.
+
     
 ### Getting started
 
@@ -95,9 +96,43 @@ You will then use babel to compile src/woof.es6.js to dist/woof.js with the incl
 2. Take a look at our issues and see if there are any issues that speak to you as good places to tackle first. Pay particular attention to issues labeled "good student projects."
 3. Fork the repo, make your changes, and submit a pull request
 
+#### More detailed instructions to get started
+
+1. We recommend using https://c9.io as your development environment -- when you create an account, it asks for a credit card, but it won't charge you.
+
+2. Create a new basic HTML workstation, and clone the Woof repository.
+        
+3. Initialize npm (the following command makes this as simple as possible)
+    
+    ```
+    npm init --yes
+    ```
+4. Install babel-cli and babel-preset-es2015 (npm may give you some warnings but don't worry)
+
+    ```
+    npm install babel-cli babel-preset-es2015 --save-dev
+    ```
+
+#### Making changes to the core library and compiling with babel
+
+You will make your edits in src/woof.es6.js but these need to be compiled to dist/woof.js
+
+There are two options to do this:
+
+1. Every time you make changes and want to implement them, enter this command to compile:
+
+    ```
+    ./node_modules/.bin/babel WoofJS/src/woof.es6.js --out-file WoofJS/dist/woof.js
+    ```
+2. Or -- tell babel to always watch for changes and auto-compile (less work for you!). Open a new terminal and run this:
+
+    ```
+    ./node_modules/.bin/babel WoofJS/src/woof.es6.js --watch --out-file WoofJS/dist/woof.js
+    ```
+
 If you have any questions, please email steve at thecodingspace.com :)
 
 
-## Liscense
+## License
 
-MIT Liscense, so do with our code as you will. If you want help using the code or integrating with WoofJS, we're happy to help :)
+MIT License, so do with our code as you will. If you want help using the code or integrating with WoofJS, we're happy to help :)
