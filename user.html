@@ -34,8 +34,7 @@
   <script id="project-template" type="text/x-template">
     <a class="list-group-item list-group-item-action">{{ project.key }}
       <span class="pull-right">
-        <button class="btn btn-info"     @click="codeClick($event)"       style="margin-right: 5px">Code v.<input type="number" min="1" :max="project.revisions.length" :value="project.revisions.length" style="text-align: right; width: 3em"></input></button>
-        <button class="btn btn-primary"  @click="fullScreenClick($event)" style="margin-right: 5px">Full Screen v.<input type="number" min="1" :max="project.revisions.length" :value="project.revisions.length" style="text-align: right; width: 3em"></input></button>
+        <button class="btn btn-info"     @click="codeClick($event)"       style="margin-right: 5px">View Version<input type="number" min="1" :max="project.revisions.length" :value="project.revisions.length" style="text-align: right; width: 3em"></input></button>
       </span>
     </a>
   </script>
@@ -49,11 +48,6 @@
           window.open('./create.html#' + this.project.key + '/' + $event.target.firstElementChild.value, '_blank')
         }
       },
-      fullScreenClick: function($event) {
-        if ($event.target.nodeName == "BUTTON"){
-          window.open('./full.html#' + this.project.key + '/' + $event.target.firstElementChild.value, '_blank')
-        }
-      }
     }
   })
   

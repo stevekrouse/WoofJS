@@ -274,6 +274,10 @@
       // returns the name of a project, not inlcuding the current revision
       return window.location.hash.substring(1, window.location.hash.length).split("/")[0];
     }
+    var getIDWithRevision = function() {
+      // returns the name of a project, not inlcuding the current revision
+      return window.location.hash.substring(1, window.location.hash.length);
+    }
     var getCurrentRevisionCode = function(revisions) {
       // returns the code that corresponds to the current project and revision
       var revision = parseInt(window.location.hash.substring(1, window.location.hash.length).split("/")[1])
@@ -434,7 +438,7 @@
     
     var popout = function() {
       if (app.status == "SAVED"){
-        window.open("./full#" + app.getID(), "_blank")
+        window.open("./full.html#" + getIDWithRevision(), "_blank")
       } else {
         alert("You must save your project to open it in a new window.")
       }
