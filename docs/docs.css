@@ -350,10 +350,15 @@ h4 {
     background-color: #5A4097;
 }
 
+#Background {
+    background-color: #495BDF;
+}
+
 #Image,
 #Text,
 #Circle,
 #Rectangle,
+#Background,
 #Line {
     height: 10%;
     width: 33%;
