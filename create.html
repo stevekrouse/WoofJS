@@ -622,6 +622,11 @@
         
         iframe.src = ""; // first, we clear the preview iframe
         setTimeout(function() {
+            // add a base tag to the page so it knows where to pull relative image urls
+            var base = iframe.contentWindow.document.createElement("base");
+            base.href = document.baseURI
+            iframe.contentWindow.document.body.appendChild(base);
+          
             // then we create a script tag with the woof code and add it to the page
             var script = iframe.contentWindow.document.createElement("script");
             script.type = "text/javascript";
