@@ -50,7 +50,7 @@ However, if you'd like to turn off this mode, simply add `global="false"` in you
 ```javascript
 var project = new Woof({global: false, width: 300, height: 400})
 
-var IMAGE_NAME = new Woof.Image({project: project, url: "https://i.imgur.com/SMJjVCL.png?1"})
+var IMAGE_NAME = new Woof.Image({project: project, url: "./images/SMJjVCL.png"})
 ```
 
 ## Reporting a bug

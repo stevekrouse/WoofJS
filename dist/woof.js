@@ -1447,7 +1447,7 @@ Woof.prototype.Image = function () {
   var _ref11$project = _ref11.project;
   var project = _ref11$project === undefined ? undefined : _ref11$project;
   var _ref11$url = _ref11.url;
-  var url = _ref11$url === undefined ? "https://i.imgur.com/SMJjVCL.png/?1" : _ref11$url;
+  var url = _ref11$url === undefined ? "./images/SMJjVCL.png" : _ref11$url;
   var height = _ref11.height;
   var width = _ref11.width;
 
