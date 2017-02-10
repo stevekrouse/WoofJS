@@ -155,6 +155,15 @@
       background-color: #f2dede;
     }
     
+    .rotate {
+  color: #FFFFFF;
+  -webkit-transform: rotate(90deg);
+  -moz-transform: rotate(90deg);
+  -ms-transform: rotate(90deg);
+  -o-transform: rotate(90deg);
+  transform: rotate(90deg);
+}
+    
     .tooltip-inner {background-color: #0275d8;
       font-size: 1.5em;
     }
@@ -241,62 +250,62 @@
  
     <div id="container" style="diplay:flex; ">
        
-       <div  v-show="previewbar"  @click="previewbar= !previewbar"  :style="{display: Minimize ? 'inline-block, display' : 'none, flex'}" :style="{display: Minimize ? 'flex-direction' : 'column'}" style=" width:20px; height:100%; display:flex; flex-direction:column; justify-content: center;  background-color:#4875D1" >
-              <img src="./images/preview.png" style=" width: 15px; height:65px;" >
-            </div> 
-            <div v-show="outputPane" :style="{display: !previewbar ? 'inline-block' : 'none'}"  id="output" style="height:100%; resize: none; flex: 1.2 1 25%;">
-              <div id ="PreviewNav" style="text-align:center; background-color:#4875D1; color:white; font-size:1.1em style; display:flex; justify-content: space-between;"> 
-                 <span style="margin-left:8px;  margin-top:4px">Preview</span>
-                 <span style="margin-right:8px" >
-                     <img onclick="popout()" id="pop" style="margin: 5px; width: 18px; height:18px" src="./images/pop.png">
-                     <img @click="previewbar = !previewbar"  style="margin: 5px; width: 16px; height:18px" src="./images/minimize.png">
-                 </span>
-              </div>
-            <iframe scrolling="no" id="preview" style="height:100%; width:100%; "></iframe>
-        </div>
-            
-            
-        <div  v-show="docsbar"  @click="docsbar= !docsbar"  :style="{display: Minimize ? 'inline-block, display' : 'none, flex' } " style=" width:20px; height:100%; display:flex; flex-direction:column; justify-content: center;  background-color:#7F68D5" >
-              <img src="./images/documentation.png" style=" width: 15px; height:125px;" >
-            </div> 
-            <div v-show="docsPane" :style="{display: !docsbar ? 'inline-block' : 'none'}" id="docs"  style="height:100%; padding-left: 5px; flex: 1.2 1 25%">
-              <div id ="DocsNav" style="text-align:center; background-color:#7F68D5; color:white; font-size:1.1em; display:flex; justify-content: space-between;"> 
-                    <span style="margin-left:8px;  margin-top:4px">Documentation</span> 
-                    <span style= "margin-right:8px">
-                         <img @click="docsbar = !docsbar"  style="margin: 5px; width: 16px; height:18px" src="./images/minimize.png">
-                    </span>
-              </div>
-           <iframe src="./docs/index.html" id="scratch" style="height:100%; width:100%;"></iframe> 
+       <div v-show="previewbar" @click="previewbar= !previewbar" :style="{display: 'flex'}" style="flex-grow:1; display:none; inline-block: none; flex-direction:column; width:25% height:100%; flex-direction:column; justify-content: center;  background-color:#4875D1">
+         <span class="rotate" style="font-size:2em">Preview</span>
+       </div>
+       <div v-show="outputPane" :style="{display: !previewbar ? 'inline-block' : 'none'}" id="output" style="flex-grow:20; inline-block: none;height:100%; resize: none; flex: 10 1 25%;">
+         <div id="PreviewNav" @click="previewbar = !previewbar" style="height:25px;text-align:center; background-color:#4875D1; color:white; font-size:1.1em style; display:flex; justify-content: space-between;">
+           <span style="margin-left:8px;  margin-top:4px">Preview</span>
+           <span style="margin-right:8px">
+                            <img @click="previewbar = !previewbar"  onclick="popout()" id="pop" style="margin: 5px; width: 18px; height:18px" src="./images/pop.png">
+                            <img  style="margin: 5px; width: 16px; height:18px" src="./images/minimize.png">
+                        </span>
          </div>
-         
-            
-        <div v-show="projectbar"  @click="projectbar= !projectbar"  :style="{display: Minimize ? 'inline-block, display, margin-left' : 'none, flex,.5px' } " style="width:20px; height:100%; display:flex; flex-direction:column; justify-content: center;  background-color:#AD5FC2"   @click="projectsPane = !projectsPane" :class="{'ios-container-disabled': !projectsPane}">
-              <img src="./images/tutorials.png" style=" width: 15px; height:78px; margin: auto" >
-            </div> 
-            <div v-show="projectsPane" :style="{display: !projectbar ? 'inline-block' : 'none'}"  id="projects" style="width:25%; height:100%; flex: 1.2 1 25%; word-wrap: break-word; ">
-               <div id ="ProjectsNav" style="text-align:center; background-color:#AD5FC2; color:white; font-size:1.1em; display:flex; justify-content: space-between; border:none"> 
-                    <span style="margin-left:8px; margin-top:4px">Tutorials</span>  
-                    <span style= "margin-right:8px">
-                        <img @click="projectbar = !projectbar"  style="margin: 5px; width: 16px; height:18px" src="./images/minimize.png">
-                    </span>
-              </div>
-              <iframe id="projectsIframe" src="http://coding.space/woof/index.html" style="height:100%; width:100%"></iframe> 
-        </div>
-            
-            
-        <div  v-show="codebar"  @click="codebar= !codebar"  :style="{display: Minimize ? 'inline-block, display, margin-right' : 'none, flex, 1px' } " style=" width:20px; height:100%; display:flex; flex-direction:column; justify-content: center;  background-color:#49A6DF" >
-              <img src="./images/code.png" style=" width: 15px;" >
-            </div> 
-            <div v-show="codePane" :style="{display: !codebar ? 'inline-block' : 'none'}" id="code" style="width:25%; height:100%; flex: 1.2 1 25%; word-wrap: break-word;">
-              <div id ="CodeNav" style="text-align:center; background-color:#49A6DF; color:white; font-size:1.1em; display:flex; justify-content: space-between;"> 
-                   <span style="margin-left:8px; margin-top:4px">Code</span>  
-                   <span style= "margin-right:8px">
-                       <img @click="codebar = !codebar" style="margin: 5px; width: 16px; height:18px" src="./images/minimize.png">
-                   </span>
-              </div>
-        </div>
-            
-    </div>
+         <iframe scrolling="no" id="preview" style="height:100%; width:100%; "></iframe>
+       </div>
+       
+       
+       <div v-show="docsbar" @click="docsbar= !docsbar" :style="{display: 'flex'}" style="flex-grow:1;  display:none; inline-block:none; width:25px; height:100%; flex-direction:column; justify-content: center;  background-color:#7F68D5">
+         <span class="rotate" style="font-size:2em">Documentation</span>
+       </div>
+       <div v-show="docsPane" :style="{display: !docsbar ? 'inline-block' : 'none'}" id="docs" style="flex-grow:20; height:100%; padding-left: 5px; flex: 10 1 25%">
+         <div id="DocsNav" @click="docsbar = !docsbar" style="height:25px; text-align:center; background-color:#7F68D5; color:white; font-size:1.1em; display:flex; justify-content: space-between;">
+           <span style="margin-left:8px;  margin-top:4px">Documentation</span>
+           <span style="margin-right:8px">
+                                <img  style="margin-left:5px; width: 16px; height:18px" src="./images/minimize.png">
+                           </span>
+         </div>
+         <iframe src="./docs/index.html" id="scratch" style="height:100%; width:100%;"></iframe>
+       </div>
+       
+       
+       <div v-show="projectbar" @click="projectbar= !projectbar" :style="{display: 'flex'}" style="flex-grow:1;  display:none;inline-block:none; width:25px; height:100%; flex-direction:column; justify-content: center;  background-color:#AD5FC2" @click="projectsPane = !projectsPane">
+         <span class="rotate" style="font-size:2em">Tutorials</span>
+       </div>
+       <div v-show="projectsPane" :style="{display: !projectbar ? 'inline-block' : 'none'}" id="projects" style="width:25%; height:100%; flex: 10 1 25%; word-wrap: break-word; ">
+         <div id="ProjectsNav" @click="projectbar = !projectbar" style="height:25px; text-align:center; background-color:#AD5FC2; color:white; font-size:1.1em; display:flex; justify-content: space-between; border:none">
+           <span style="margin-left:8px; margin-top:4px">Tutorials</span>
+           <span style="margin-right:8px">
+                               <img  style="margin: 5px; width: 16px; height:18px" src="./images/minimize.png">
+                           </span>
+         </div>
+         <iframe id="projectsIframe" src="http://coding.space/woof/index.html" style="height:100%; width:100%"></iframe>
+       </div>
+       
+       
+       <div v-show="codebar" @click="codebar= !codebar" :style="{display: 'flex'}" style="flex-grow:1; display:none; inline-block:none; width:25px; height:100%;flex-direction:column; justify-content: center;  background-color:#49A6DF">
+         <span class="rotate" style="font-size:2em">Code</span>
+       </div>
+       <div v-show="codePane" :style="{display: !codebar ? 'inline-block' : 'none'}" id="code" style="flex-grow:20; width:25%; height:100%; flex: 10 1 25%; word-wrap: break-word;">
+         <div id="CodeNav" @click="codebar = !codebar" style="height:25px;text-align:center; background-color:#49A6DF; color:white; font-size:1.1em; display:flex; justify-content: space-between;">
+           <span style="margin-left:8px; margin-top:4px">Code</span>
+           <span style="margin-right:8px">
+                              <img  style="margin: 5px; width: 16px; height:18px" src="./images/minimize.png">
+                          </span>
+         </div>
+       </div>
+       
+       </div>
     </div>
   <script>
     
@@ -359,16 +368,7 @@
           return !this.error && this.code != js_beautify(this.code, {space_after_anon_function: true, indent_size: 2, indent_with_tabs: false })
         },
         
-        Minimize: function() {
-         return {
-           outputPane:false, 
-           docsPane:false,
-           codePane:false,
-           projectPane:false,
-         
-         }
-       }
-  
+        
       },
       methods: {
         getID: getID,
