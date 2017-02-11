@@ -91,11 +91,21 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      background-color: #F8FFFF; 
+      background-color: #6DC0F2; 
       color:white; 
       height:55px; 
       width:100%; 
     }
+    
+    #clean-up { background-color: #80CFFF;
+      border:none;
+      color:white;
+    }
+    
+    .btn-default {background-color: #49A6DF;
+      border:none;
+      color:white;}
+   
     #powered {
         font-size: 10px;
     }
@@ -136,7 +146,7 @@
     @media all and (max-width: 600px) {
       #login {
         margin-right:5px;
-        border-color: #E4E4E4 !important;
+        
         
       }
       fieldset {
@@ -226,7 +236,7 @@
   <div id="page" style="height:100%">
     <div id="navbar" style ="display:flex; justify-content: space-between;"> 
     
-      <button style="background-color: white; color: black; border:1px #E4E4E4 solid;  border-radius:4px; margin:8px" class="btn btn-medium btn-info" type="button" id="login" onclick="window.open('./login.html', 'Sign In', 'width=500,height=500')">Login / Sign Up</button>
+      <button style="background-color: #80CFFF; color: white;  border-radius:4px; border:none; margin:8px" class="btn btn-medium btn-info" type="button" id="login" onclick="window.open('./login.html', 'Sign In', 'width=500,height=500')">Login / Sign Up</button>
       <div style="margin-left: 5px" id="logggedin" class="hide dropdown">
         <button class="btn btn-medium btn-info dropdown-toggle" type="button" id="loggedin-name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"></button>
         <ul class="dropdown-menu" aria-labelledby="loggedin-name">
@@ -238,19 +248,19 @@
           <li v-for="project in projects.slice(0,10)"><a :href="'#' + project.key">{{project.key}}</a></li>
         </ul>
       </div>
-      <img style= "width:160px; height: 40px;" src="./images/wooflogo.png">
+      <img  style= "width:160px; height: 40px;" src="./images/logowhite.png">
       
       <span style="margin:8px" id="save">
         <button id="clean-up" class="btn btn-medium btn-default" @click="cleanAll()" style="display: none" :style="{display: canClean ? 'inline-block' : 'none'}"><span class="glyphicon glyphicon-align-left"></span> Clean Code</button>
         <button id="error" class="btn btn-medium btn-error" @click="showError()" :style="{display: error ? 'inline-block' : 'none'}"><span class="glyphicon glyphicon-exclamation-sign"></span> Error</button>
-        <button style="display: none" :style="{display: 'inline-block'}" style="margin-right: 5px; background-color:#27AE60 !important; color:white; " class="btn btn-medium" :class="styles" onclick="save()">{{ status == "SAVED" ? 'Saved' : 'Save' }}</button>
+        <button style="display: none" :style="{display: 'inline-block'}" style="margin-right: 5px; background-color:#4390BF !important; ; border:none; color:white; " class="btn btn-medium" :class="styles" onclick="save()">{{ status == "SAVED" ? 'Saved' : 'Save' }}</button>
        
       </span>
     </div>
  
     <div id="container" style="diplay:flex; ">
        
-       <div v-show="previewbar" @click="previewbar= !previewbar" :style="{display: 'flex'}" style="flex-grow:1; display:none; inline-block: none; flex-direction:column; width:25% height:100%; flex-direction:column; justify-content: center;  background-color:#4875D1">
+       <div v-show="previewbar" @click="previewbar= !previewbar" :style="{display: 'flex'}" style="flex-grow:1;  display:none; inline-block:none; width:25px; height:100%; flex-direction:column; justify-content: center;  background-color:#4875D1" >
          <span class="rotate" style="font-size:2em">Preview</span>
        </div>
        <div v-show="outputPane" :style="{display: !previewbar ? 'inline-block' : 'none'}" id="output" style="flex-grow:20; inline-block: none;height:100%; resize: none; flex: 10 1 25%;">
@@ -368,6 +378,8 @@
           return !this.error && this.code != js_beautify(this.code, {space_after_anon_function: true, indent_size: 2, indent_with_tabs: false })
         },
         
+            
+        
         
       },
       methods: {
@@ -375,8 +387,7 @@
         showError: function(){
           alert(this.error.message)
         },
-        
-        
+    
         
         cleanAll: function(){
           var beautiful = js_beautify(editor.getValue(), {space_after_anon_function: true, indent_size: 2, indent_with_tabs: false })
