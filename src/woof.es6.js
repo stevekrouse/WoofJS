@@ -995,7 +995,7 @@ Woof.prototype.Line = function({project = undefined, width = 1, x1 = 10, y1 = 10
   };
 };
 
-Woof.prototype.Image = function({project = undefined, url = "https://i.imgur.com/SMJjVCL.png/?1", height, width} = {}) {
+Woof.prototype.Image = function({project = undefined, url = "./images/SMJjVCL.png", height, width} = {}) {
   this.type = "image"
   Woof.prototype.Sprite.call(this, arguments[0]);
   this.imageHeight = Math.abs(height);

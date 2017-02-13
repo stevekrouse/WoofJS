@@ -107,7 +107,7 @@
   
   
   var spriteProps = ["brightness = 50", "width", "height",  "x", "y", "angle", "x = 10", "y = 10", "angle = UP", "rotationStyle", "showing", "penColor", "penWidth", "deleted", "showCollider", "toJSON", "lastX", "lastY", "distanceTo(sprite1)", "move(10)", "setRotationStyle('NO ROTATE')", "touching", "over", "turnLeft", "turnRight", "sendToBack()", "sendToFront()", "penUp()", "show()", "hide()", "pointTowards(sprite1)", "onMouseDown(() => {\n  \n})", "onMouseUp(() => {\n  \n})", "delete()"]
-  var imageProps = spriteProps.concat(["setImageURL('https://i.imgur.com/SMJjVCL.png?1')", "width = 100", "height = 10"])
+  var imageProps = spriteProps.concat(["setImageURL('./images/SMJjVCL.png)", "width = 100", "height = 10"])
   var rectangleProps = spriteProps.concat(["width = 10", "height = 10", "color", "color = 'blue'"])
   var circleProps = spriteProps.concat(["width = 10", "height = 10", "color", "color = 'blue'"])
   var lineProps = spriteProps.concat(["width = 5", "x1 = 100", "y1 = 100", "color = 'red'"])
@@ -162,7 +162,7 @@
       if (base != null) gatherCompletions(base);
     }
     else {
-      var img = 'var imageSprite1 = new Image({\n  url: "https://i.imgur.com/SMJjVCL.png/?1" ,\n  width: 284, \n  height: 200, \n  x: 100, \n  y: 20\n})'
+      var img = 'var imageSprite1 = new Image({\n  url: "./images/SMJjVCL.png" ,\n  width: 284, \n  height: 200, \n  x: 100, \n  y: 20\n})'
       var txt = 'var textSprite1 = new Text({\n  text: () => "Hello world!", \n  size: 16, \n  color: "rgb(100, 50, 240)", \n  fontFamily: "arial", })'
       var clc = 'var circleSprite1 = new Circle({\n  radius: 10, \n  color: "blue", \n  x: 0, \n  y: 0\n})'
       var rct = 'var rectangleSprite1 = new Rectangle({\n  width: 20, \n  height: 55, \n  color: "pink"\n})'
@@ -171,7 +171,7 @@
       var elsee = 'else {\n  \n}'
       var woof = [iff, elsee, 'randomColor()', 'when(() => mouseDown, () => {\n  \n})', 'random(0, 10)', "var variable1 = 0", img, txt, clc, rct, lne, "new Image({})", "new Rectangle({})", "new Line({})", "new Text({})", "new Circle({})", "cameraX", "cameraY", "ready", "height", "width", "minX", "maxX", "minY", "maxY", "randomX()", "randomY()","freeze()", "defrost()", "mouseDown", "mouseX", "mouseY", "pMouseX", "pMouseY", "mouseXSpeed", "mouseYSpeed", "keysDown.includes('UP')", "onMouseMove(() => {\n  \n})", "onMouseDown(() => {\n  \n})", "onMouseUp(() => {\n  \n})", "onKeyDown(() => {\n  \n})", "onKeyUp(() => {\n  \n})", "every(1, 'second', () => {\n  \n})", "forever(() => {\n  \n})", "when(() => mouseDown, () => {\n  \n})", "repeat(10, () => {\n  \n})", "repeatUntil(() => mouseDown, () => {\n  \n})", "after(1, 'second', () => {\n  \n})", "clearPen()",]
       
-      var backdropMethods = ["setBackdropURL('https://i.imgur.com/q6Bqraw.jpg')", 
+      var backdropMethods = ["setBackdropURL('./images/q6Bqraw.jpg')", 
                              "setBackdropColor('blue')", 
                              "setBackdropStyle('cover')",
                              "setBackdropStyle('50%')",

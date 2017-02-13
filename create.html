@@ -5,9 +5,9 @@
   <meta name="twitter:url" content="http://woofjs.com/create">
   <meta name="twitter:title" content="WoofJS">
   <meta name="twitter:description" content="WoofJS is a Scratch-inspired Javascript library for making games.">
-  <meta name="twitter:image" content="http://i.imgur.com/qIgC8Ae.png">
+  <meta name="twitter:image" content="./images/qIgC8Ae.png">
     
-  <meta property="og:image" content="http://i.imgur.com/qIgC8Ae.png">
+  <meta property="og:image" content="./images/qIgC8Ae.png">
   <meta property="og:title" content="WoofJS">
   <meta property="og:description" content="WoofJS is a Scratch-inspired Javascript library for making games.">
 
@@ -118,13 +118,13 @@
       flex-direction:row;
       
       /* Firefox */
-      height: -moz-calc(99% - 55px);
+      height: -moz-calc(99% - 79px);
       /* WebKit */
-      height: -webkit-calc(99% - 55px);
+      height: -webkit-calc(99% - 79px);
       /* Opera */
-      height: -o-calc(99% - 55px);
+      height: -o-calc(99% - 79px);
       /* Standard */
-      height: calc(99% - 55px);
+      height: calc(99% - 79px);
     }
     #instructions {
       -webkit-user-select: none;
@@ -166,70 +166,14 @@
     }
     
     .rotate {
-  color: #FFFFFF;
-  -webkit-transform: rotate(90deg);
-  -moz-transform: rotate(90deg);
-  -ms-transform: rotate(90deg);
-  -o-transform: rotate(90deg);
-  transform: rotate(90deg);
-}
-    
-    .tooltip-inner {background-color: #0275d8;
-      font-size: 1.5em;
+      color: #FFFFFF;
+      -webkit-transform: rotate(90deg);
+      -moz-transform: rotate(90deg);
+      -ms-transform: rotate(90deg);
+      -o-transform: rotate(90deg);
+      transform: rotate(90deg);
     }
     
-    .ios-container {
-      background-color: #53d76a;
-      height: 32px;
-      display: inline-block;
-      border-radius: 50px;
-      position: relative;
-      font-size: 14px;
-      font-weight: bold;
-      transition: background-color .2s linear;
-    }
-    
-    .ios-container-disabled {
-      background-color: #fafafa;
-      box-shadow: inset 0 0 0 1px #d3d3d3;
-    }
-    
-    .ios-text {
-      line-height: 31px;
-      padding-left: 15px;
-      padding-right: 35px;
-      text-align: center;
-      color: white;
-      font-family: sans-serif;
-      font-size: 16px;
-      pointer-events: none;
-      transition: all .2s linear;
-    }
-    
-    .ios-container-disabled>.ios-text {
-      color: #8e8e8e;
-      padding-left: 35px;
-      padding-right: 15px;
-    }
-    
-    .ios-toggle {
-      pointer-events: none;
-      left: calc(100% - 30px);
-      top: 0px;
-      transition: all .2s linear;
-      position: absolute;
-      width: 30px;
-      height: 30px;
-      border-radius: 30px;
-      background-color: white;
-      display: inline-block;
-      box-shadow: inset 0 -3px 3px hsla(0, 0%, 0%, .025), 0 1px 4px hsla(0, 0%, 0%, .15), 0 4px 4px hsla(0, 0%, 0%, .1);
-    }
-    
-    .ios-container-disabled>.ios-toggle {
-      left: 0px;
-      top: 0px;
-    }
   </style>
 </head>
 <body style="height:100%">
@@ -257,7 +201,7 @@
  
     <div id="container" style="diplay:flex; ">
     
-      <div v-show="previewbar" @click="previewbar= !previewbar" :style="{display: 'flex'}" style="flex-grow:0.65;  display:none; inline-block:none; width:25px; height:100%; flex-direction:column; justify-content: center;  background-color:#4875D1">
+      <div v-show="previewbar" @click="previewbar= !previewbar" :style="{display: 'flex'}" style="flex-grow:0.65;     align-items: center; display:none; inline-block:none; width:25px; height:100%; flex-direction:column; justify-content: center;  background-color:#4875D1">
         <span class="rotate" style="font-size:1.65em">Preview</span>
       </div>
       <div v-show="outputPane" :style="{display: !previewbar ? 'inline-block' : 'none'}" id="output" style="flex-grow:20; inline-block: none;height:100%; resize: none; flex: 10 1 25%;">
@@ -272,7 +216,7 @@
       </div>
     
     
-      <div v-show="docsbar" @click="docsbar= !docsbar" :style="{display: 'flex'}" style="flex-grow:0.65;  display:none; inline-block:none; width:25px; height:100%; flex-direction:column; justify-content: center;  background-color:#7F68D5">
+      <div v-show="docsbar" @click="docsbar= !docsbar" :style="{display: 'flex'}" style="flex-grow:0.65;     align-items: center; display:none; inline-block:none; width:25px; height:100%; flex-direction:column; justify-content: center;  background-color:#7F68D5">
         <span class="rotate" style="font-size:1.65em">Documentation</span>
       </div>
       <div v-show="docsPane" :style="{display: !docsbar ? 'inline-block' : 'none'}" id="docs" style="flex-grow:20; height:100%; padding-left: 5px; flex: 10 1 25%">
@@ -286,7 +230,7 @@
       </div>
     
     
-      <div v-show="projectbar" @click="projectbar= !projectbar" :style="{display: 'flex'}" style="flex-grow:0.65;  display:none;inline-block:none; width:25px; height:100%; flex-direction:column; justify-content: center;  background-color:#AD5FC2" @click="projectsPane = !projectsPane">
+      <div v-show="projectbar" @click="projectbar= !projectbar" :style="{display: 'flex'}" style="flex-grow:0.65;     align-items: center; display:none;inline-block:none; width:25px; height:100%; flex-direction:column; justify-content: center;  background-color:#AD5FC2" @click="projectsPane = !projectsPane">
         <span class="rotate" style="font-size:1.65em">Tutorials</span>
       </div>
       <div v-show="projectsPane" :style="{display: !projectbar ? 'inline-block' : 'none'}" id="projects" style="width:25%; height:100%; flex: 10 1 25%; word-wrap: break-word; ">
@@ -300,7 +244,7 @@
       </div>
     
     
-      <div v-show="codebar" @click="codebar= !codebar" :style="{display: 'flex'}" style="flex-grow:0.65; display:none; inline-block:none; width:25px; height:100%;flex-direction:column; justify-content: center;  background-color:#49A6DF">
+      <div v-show="codebar" @click="codebar= !codebar" :style="{display: 'flex'}" style="flex-grow:0.65;     align-items: center;display:none; inline-block:none; width:25px; height:100%;flex-direction:column; justify-content: center;  background-color:#49A6DF">
         <span class="rotate" style="font-size:1.65em">Code</span>
       </div>
       <div v-show="codePane" :style="{display: !codebar ? 'inline-block' : 'none'}" id="code" style="flex-grow:20; width:25%; height:100%; flex: 10 1 25%; word-wrap: break-word;">
@@ -681,6 +625,11 @@
         
         iframe.src = ""; // first, we clear the preview iframe
         setTimeout(function() {
+            // add a base tag to the page so it knows where to pull relative image urls
+            var base = iframe.contentWindow.document.createElement("base");
+            base.href = document.baseURI
+            iframe.contentWindow.document.body.appendChild(base);
+          
             // then we create a script tag with the woof code and add it to the page
             var script = iframe.contentWindow.document.createElement("script");
             script.type = "text/javascript";
