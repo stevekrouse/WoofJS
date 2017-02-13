@@ -91,11 +91,21 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      background-color: #344D97; 
+      background-color: #6DC0F2; 
       color:white; 
       height:55px; 
       width:100%; 
     }
+    
+    #clean-up { background-color: #80CFFF;
+      border:none;
+      color:white;
+    }
+    
+    .btn-default {background-color: #49A6DF;
+      border:none;
+      color:white;}
+   
     #powered {
         font-size: 10px;
     }
@@ -108,13 +118,13 @@
       flex-direction:row;
       
       /* Firefox */
-      height: -moz-calc(99% - 55px);
+      height: -moz-calc(99% - 79px);
       /* WebKit */
-      height: -webkit-calc(99% - 55px);
+      height: -webkit-calc(99% - 79px);
       /* Opera */
-      height: -o-calc(99% - 55px);
+      height: -o-calc(99% - 79px);
       /* Standard */
-      height: calc(99% - 55px);
+      height: calc(99% - 79px);
     }
     #instructions {
       -webkit-user-select: none;
@@ -136,6 +146,8 @@
     @media all and (max-width: 600px) {
       #login {
         margin-right:5px;
+        
+        
       }
       fieldset {
         display: none;
@@ -153,68 +165,21 @@
       background-color: #f2dede;
     }
     
-    .tooltip-inner {background-color: #0275d8;
-      font-size: 1.5em;
+    .rotate {
+      color: #FFFFFF;
+      -webkit-transform: rotate(90deg);
+      -moz-transform: rotate(90deg);
+      -ms-transform: rotate(90deg);
+      -o-transform: rotate(90deg);
+      transform: rotate(90deg);
     }
     
-    .ios-container {
-      background-color: #53d76a;
-      height: 32px;
-      display: inline-block;
-      border-radius: 50px;
-      position: relative;
-      font-size: 14px;
-      font-weight: bold;
-      transition: background-color .2s linear;
-    }
-    
-    .ios-container-disabled {
-      background-color: #fafafa;
-      box-shadow: inset 0 0 0 1px #d3d3d3;
-    }
-    
-    .ios-text {
-      line-height: 31px;
-      padding-left: 15px;
-      padding-right: 35px;
-      text-align: center;
-      color: white;
-      font-family: sans-serif;
-      font-size: 16px;
-      pointer-events: none;
-      transition: all .2s linear;
-    }
-    
-    .ios-container-disabled>.ios-text {
-      color: #8e8e8e;
-      padding-left: 35px;
-      padding-right: 15px;
-    }
-    
-    .ios-toggle {
-      pointer-events: none;
-      left: calc(100% - 30px);
-      top: 0px;
-      transition: all .2s linear;
-      position: absolute;
-      width: 30px;
-      height: 30px;
-      border-radius: 30px;
-      background-color: white;
-      display: inline-block;
-      box-shadow: inset 0 -3px 3px hsla(0, 0%, 0%, .025), 0 1px 4px hsla(0, 0%, 0%, .15), 0 4px 4px hsla(0, 0%, 0%, .1);
-    }
-    
-    .ios-container-disabled>.ios-toggle {
-      left: 0px;
-      top: 0px;
-    }
   </style>
 </head>
 <body style="height:100%">
   <div id="page" style="height:100%">
-    <div id="navbar">
-      <button style="margin-left: 5px; margin-right:110px" class="btn btn-medium btn-info" type="button" id="login" onclick="window.open('./login.html', 'Sign In', 'width=500,height=500')">Login / Sign Up</button>
+    <div id="navbar" style ="display:flex; justify-content: space-between;"> 
+      <button style="background-color: #80CFFF; color: white;  border-radius:4px; border:none; margin:8px" class="btn btn-medium btn-info" type="button" id="login" onclick="window.open('./login.html', 'Sign In', 'width=500,height=500')">Login / Sign Up</button>
       <div style="margin-left: 5px" id="logggedin" class="hide dropdown">
         <button class="btn btn-medium btn-info dropdown-toggle" type="button" id="loggedin-name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"></button>
         <ul class="dropdown-menu" aria-labelledby="loggedin-name">
@@ -226,50 +191,76 @@
           <li v-for="project in projects.slice(0,10)"><a :href="'#' + project.key">{{project.key}}</a></li>
         </ul>
       </div>
-      <span id="title">
-        <span class="ios-container" @click="outputPane = !outputPane" :class="{'ios-container-disabled': !outputPane}">
-          <span class="ios-text">Output</span>
-          <span class="ios-toggle"></span>
-        </span>
-        <span class="ios-container" @click="docsPane = !docsPane" :class="{'ios-container-disabled': !docsPane}">
-          <span class="ios-text">Blocks</span>
-          <span class="ios-toggle"></span>
-        </span>
-        <span class="ios-container" data-toggle="tooltip" title="Pick a project to get started!" data-placement="bottom"  @click="projectsPane = !projectsPane" :class="{'ios-container-disabled': !projectsPane}">
-          <span class="ios-text">Untutorials</span>
-          <span class="ios-toggle"></span>
-        </span>
-        <span class="ios-container" @click="codePane = !codePane" :class="{'ios-container-disabled': !codePane}">
-          <span class="ios-text">Code</span>
-          <span class="ios-toggle"></span>
-        </span>
-      </span>
-      <span id="save">
+      <img  style= "width:160px; height: 40px;" src="./images/logowhite.png">
+      <span style="margin:8px" id="save">
         <button id="clean-up" class="btn btn-medium btn-default" @click="cleanAll()" style="display: none" :style="{display: canClean ? 'inline-block' : 'none'}"><span class="glyphicon glyphicon-align-left"></span> Clean Code</button>
         <button id="error" class="btn btn-medium btn-error" @click="showError()" :style="{display: error ? 'inline-block' : 'none'}"><span class="glyphicon glyphicon-exclamation-sign"></span> Error</button>
-        <button style="display: none" :style="{display: 'inline-block'}" style="margin-right: 5px" class="btn btn-medium" :class="styles" onclick="save()">{{ status == "SAVED" ? 'Saved' : 'Save' }}</button>
-        <img onclick="popout()" id="pop" style="margin: 10px" src="./images/popout.png">
+        <button style="display: none" :style="{display: 'inline-block'}" style="margin-right: 5px; background-color:#4390BF !important; ; border:none; color:white; " class="btn btn-medium" :class="styles" onclick="save()">{{ status == "SAVED" ? 'Saved' : 'Save' }}</button>
       </span>
     </div>
  
     <div id="container" style="diplay:flex; ">
-        <div v-show="outputPane" id="output" style="height:100%; resize: none; flex: 1.2 1 25%;">
-            <iframe scrolling="no" id="preview" style="height:100%; width:100%; "></iframe>
+    
+      <div v-show="previewbar" @click="previewbar= !previewbar" :style="{display: 'flex'}" style="flex-grow:0.65;     align-items: center; display:none; inline-block:none; width:25px; height:100%; flex-direction:column; justify-content: center;  background-color:#4875D1">
+        <span class="rotate" style="font-size:1.65em">Preview</span>
+      </div>
+      <div v-show="outputPane" :style="{display: !previewbar ? 'inline-block' : 'none'}" id="output" style="flex-grow:20; inline-block: none;height:100%; resize: none; flex: 10 1 25%;">
+        <div id="PreviewNav" @click="previewbar = !previewbar" style="height:25px;text-align:center; background-color:#4875D1; color:white; font-size:1.1em style; display:flex; justify-content: space-between;">
+          <span style="margin-left:8px;  margin-top:4px">Preview</span>
+          <span style="margin-right:8px">
+            <img @click="previewbar = !previewbar"  onclick="popout()" id="pop" style="margin: 5px; width: 18px; height:18px" src="./images/pop.png">
+            <img  style="margin: 5px; width: 16px; height:18px" src="./images/minimize.png">
+          </span>
         </div>
-        
-        <div v-show="docsPane" id="docs"  style="height:100%; padding-left: 5px; flex: 1.2 1 25%">
-            <iframe src="./docs/index.html" id="scratch" style="height:100%; width:100%;"></iframe> 
+        <iframe scrolling="no" id="preview" style="height:100%; width:100%; "></iframe>
+      </div>
+    
+    
+      <div v-show="docsbar" @click="docsbar= !docsbar" :style="{display: 'flex'}" style="flex-grow:0.65;     align-items: center; display:none; inline-block:none; width:25px; height:100%; flex-direction:column; justify-content: center;  background-color:#7F68D5">
+        <span class="rotate" style="font-size:1.65em">Documentation</span>
+      </div>
+      <div v-show="docsPane" :style="{display: !docsbar ? 'inline-block' : 'none'}" id="docs" style="flex-grow:20; height:100%; padding-left: 5px; flex: 10 1 25%">
+        <div id="DocsNav" @click="docsbar = !docsbar" style="height:25px; text-align:center; background-color:#7F68D5; color:white; font-size:1.1em; display:flex; justify-content: space-between;">
+          <span style="margin-left:8px;  margin-top:4px">Documentation</span>
+          <span style="margin-right:8px">
+            <img  style="margin-left:5px; width: 16px; height:18px" src="./images/minimize.png">
+          </span>
         </div>
-        
-        <div v-show="projectsPane" id="projects" style="width:25%; height:100%; flex: 1.2 1 25%; word-wrap: break-word; ">
-          <iframe id="projectsIframe" src="http://coding.space/woof/index.html" style="height:100%; width:100%"></iframe> 
+        <iframe src="./docs/index.html" id="scratch" style="height:100%; width:100%;"></iframe>
+      </div>
+    
+    
+      <div v-show="projectbar" @click="projectbar= !projectbar" :style="{display: 'flex'}" style="flex-grow:0.65;     align-items: center; display:none;inline-block:none; width:25px; height:100%; flex-direction:column; justify-content: center;  background-color:#AD5FC2" @click="projectsPane = !projectsPane">
+        <span class="rotate" style="font-size:1.65em">Tutorials</span>
+      </div>
+      <div v-show="projectsPane" :style="{display: !projectbar ? 'inline-block' : 'none'}" id="projects" style="width:25%; height:100%; flex: 10 1 25%; word-wrap: break-word; ">
+        <div id="ProjectsNav" @click="projectbar = !projectbar" style="height:25px; text-align:center; background-color:#AD5FC2; color:white; font-size:1.1em; display:flex; justify-content: space-between; border:none">
+          <span style="margin-left:8px; margin-top:4px">Tutorials</span>
+          <span style="margin-right:8px">
+            <img  style="margin: 5px; width: 16px; height:18px" src="./images/minimize.png">
+          </span>
         </div>
-        
-        <div v-show="codePane" id="code" style="width:25%; height:100%; flex: 1.2 1 25%; word-wrap: break-word; ">
+        <iframe id="projectsIframe" src="http://coding.space/woof/index.html" style="height:100%; width:100%"></iframe>
+      </div>
+    
+    
+      <div v-show="codebar" @click="codebar= !codebar" :style="{display: 'flex'}" style="flex-grow:0.65;     align-items: center;display:none; inline-block:none; width:25px; height:100%;flex-direction:column; justify-content: center;  background-color:#49A6DF">
+        <span class="rotate" style="font-size:1.65em">Code</span>
+      </div>
+      <div v-show="codePane" :style="{display: !codebar ? 'inline-block' : 'none'}" id="code" style="flex-grow:20; width:25%; height:100%; flex: 10 1 25%; word-wrap: break-word;">
+        <div id="CodeNav" @click="codebar = !codebar" style="height:25px;text-align:center; background-color:#49A6DF; color:white; font-size:1.1em; display:flex; justify-content: space-between;">
+          <span style="margin-left:8px; margin-top:4px">Code</span>
+          <span style="margin-right:8px">
+            <img  style="margin: 5px; width: 16px; height:18px" src="./images/minimize.png">
+          </span>
         </div>
       </div>
+    
     </div>
+  </div>
   <script>
+    
+    
     var getID = function() {
       // returns the name of a project, not inlcuding the current revision
       return window.location.hash.substring(1, window.location.hash.length).split("/")[0];
@@ -311,7 +302,10 @@
         codePane: true,
         outputPane: true,
         docsPane: true,
-        projectsPane: false
+        projectbar: true,
+        previewbar: false,
+        docsbar:false,
+        codebar:false,
       },
       computed: {
         styles : function() { return {
@@ -324,12 +318,17 @@
           // whether or not the code can be "cleaned" or if its already pristine
           return !this.error && this.code != js_beautify(this.code, {space_after_anon_function: true, indent_size: 2, indent_with_tabs: false })
         },
+        
+            
+        
+        
       },
       methods: {
         getID: getID,
         showError: function(){
           alert(this.error.message)
         },
+    
         
         cleanAll: function(){
           var beautiful = js_beautify(editor.getValue(), {space_after_anon_function: true, indent_size: 2, indent_with_tabs: false })
@@ -341,6 +340,8 @@
     scratch.src = scratch.src // the documentation sometimes doesn't load unless you remind it to here, strange VueJS bug
     projectsIframe.src = projectsIframe.src // ditto for the project's iframe
     
+    
+    
     var config = {
       apiKey: "AIzaSyBYHv7dCiD0bWiHRlcp4VIZCIqzoMnB4yY",
       authDomain: "woofjs-d1b27.firebaseapp.com",
@@ -350,6 +351,8 @@
     };
     firebase.initializeApp(config);
     
+   
+        
     function handleLogin(userName, uid) {
       $('#loggedin-name').html(userName + ' <span class="caret"></span>')
       $('#login-projects').attr("href", "./user.html#" + uid )
@@ -417,14 +420,14 @@
       }
     });
 
-    // this is the code for the tooltip that tells you to click on "untutorials"
-    $('[data-toggle="tooltip"]').tooltip({trigger: "manual"});
-    $('[data-toggle="tooltip"]').click(function(){
-        $("[data-toggle='tooltip']").tooltip('hide');
-    });
-    $('#login').click(function(){
-        $("[data-toggle='tooltip']").tooltip('hide');
-    });
+    // // this is the code for the tooltip that tells you to click on "untutorials"
+    // $('[data-toggle="tooltip"]').tooltip({trigger: "manual"});
+    // $('[data-toggle="tooltip"]').click(function(){
+    //     $("[data-toggle='tooltip']").tooltip('hide');
+    // });
+    // $('#login').click(function(){
+    //     $("[data-toggle='tooltip']").tooltip('hide');
+    // });
     
     
     var makeClean = function() {
@@ -445,7 +448,7 @@
     }
     
     // set the text in the editor
-    var editorVal = "setBackdropURL('./images/q6Bqraw.jpg')\n\n\n"
+    var editorVal = "setBackdropURL('./images/outerspace.jpg')\n\n\n"
     if (getID() != ''){
       editorVal = "// Loading..."
       firebase.database().ref('/code/' + getID()).once('value').then(function(snapshot) {
