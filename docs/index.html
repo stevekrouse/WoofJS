@@ -13,41 +13,40 @@
 </head>
 
 <body>
-    <div id="body" :style="{display: 'flex'}" style="display: none; flex-direction: column; align-content: stretch; align-content: center; align-items: center;">
-
-        <div class="btn-group" style="width: 100%; display: flex; flex-direction: row; align-content: stretch; align-content: center; align-items: center;">
-            <button v-show="open != undefined || search != ''" @click="search = ''; open = undefined" id="back" class="highlight btn btn-medium btn-info">Back</button>
-            <input id="searchbar" style="margin-left:4px; width: 100%;" type="search" class="form-control" placeholder="Search blocks..." v-model="search"></input>
-        </div>
-
+    <div id="body">
         <div :style="menuStyles" id="menus">
-
-            <div style="max-width: 100%" v-for="(blocks, menu) in searched(menus)">
-                <template v-if="menu != 'Sprites & Backgrounds'"> 
-                    <button v-show="open == undefined || open == menu || search" :class="{highlight: !search}" class="all" :id="menu.split(' ')[0]" @click="toggle(menu)">{{ menu }}</button>
-                    <div v-show="open == menu || search" class="list" v-for="block in blocks">
+            <div class="btn-group search">
+                <button v-show="open != undefined || search != ''" @click="search = ''; open = undefined" id="back" class="highlight btn btn-medium btn-info">Back</button>
+            <input  id="searchbar" type="search" class="form-control" placeholder="Search blocks..." v-model="search"></input>
+        </div>
+        <div :style="menuItem" v-for="(blocks, menu) in searched(menus)">
+            <template v-if="menu != 'Sprites & Backgrounds'"> 
+                <button v-show="open == undefined || open == menu || search" :class="{highlight: !search}" class="all" :id="menu.split(' ')[0]" @click="toggle(menu)">{{ menu }}</button>
+                <div v-show="open == menu || search" class="list" v-for="block in blocks">
                       <vue-block :block="block"></vue-block>
-                    </div>
-                </template>
-                <template v-else>
-                  <button v-show="open == undefined || open == menu || search" :class="{highlight: !search}" class="all" :id="menu.split(' ')[0]" @click="toggle(menu)">{{ menu }}</button>
-                  <div v-show="open == menu || Object.keys(blocks).includes(open) || search" class="list">
+                </div>
+            </template>
+            <template v-else>
+                <button v-show="open == undefined || open == menu || search" :class="{highlight: !search}" class="all" :id="menu.split(' ')[0]" @click="toggle(menu)">{{ menu }}
+                </button>
+                <div v-show="open == menu || Object.keys(blocks).includes(open) || search" class="list">
                     <div class="list" v-for="(blocks2, submenu) in blocks">
-                      <button v-show="open == menu || open == submenu || search" :class="{highlight: !search}" class="all" :id="submenu.split(' ')[0]" @click="toggle(submenu)">{{ submenu }}</button>
-                      <div v-show="open == submenu || search" class="list">
-                      <div class="list" v-for="block2 in blocks2">
-                        <vue-block :block="block2"></vue-block>
-                      </div>
-                    </div>
+                        <button v-show="open == menu || open == submenu || search" :class="{highlight: !search}" class="all" :id="submenu.split(' ')[0]" @click="toggle(submenu)">{{ submenu }}
+                        </button>
+                        <div v-show="open == submenu || search" class="list">
+                            <div class="list" v-for="block2 in blocks2">
+                                <vue-block :block="block2"></vue-block>
+                            </div>
+                        </div>
                     </div>    
-                  </div>    
-                </template>
+                </div>    
+            </template>
             </div>
         </div>
     </div>
     <script src="./docs.js"></script>
     <script id="block-template" type="text/x-template">
-        <div style='margin-bottom: 20px; margin-right: 10px' class="block">
+        <div class="block">
             <img v-if="block.url" ondragstart="event.dataTransfer.setData('text/plain', event.target.alt)" :alt="block.code" :src="block.url">
             <div v-if="block.description">{{ block.description }}</div>
             <div v-if="block.html" v-html="block.html"></div>
@@ -410,9 +409,7 @@
                                 code: "x: 30, y: 30",
                                 tags: "image location x y"
                             },
-
-
-
+                            
                             {
                                 url: "./images/kpU9y5M.png",
                                 code: 'var unicorn = new Image({\n  url: "./docs/images/unicorn.png",\n  width: 120, \n  height: 80,\n})',
@@ -518,28 +515,14 @@
                                 tags: "elephant sprite",
                             },
 
-
-
-
-
                             {
                                 url: "./images/uvKjnQI.png",
                                 code: 'var soccer = new Image({\n  url: "./docs/images/soccer.png",\n  width: 180, \n  height: 200,\n})',
                                 tags: "soccer ball sprite",
                             },
-
-
-
-
-
-
-
-
                         ],
 
                         Background: [
-
-
                             {
                                 description: "Set the backdrop to a color:",
                                 code: 'setBackdropColor("blue")',
@@ -580,8 +563,6 @@
                                 code: 'setBackdropURL("./docs/images/outerspace.jpg")\nsetBackdropStyle("cover")',
                                 tags: "outer space mountain",
                             },
-
-
 
                             {
                                 url: "./images/PzNK9g5.jpg",
@@ -636,19 +617,11 @@
                                 tags: "desert background",
                             },
 
-
                             {
                                 url: "./images/tVl9GGw.jpg",
                                 code: 'setBackdropURL("./docs/images/grass.jpg")\nsetBackdropStyle("cover")',
                                 tags: "golf grass background",
                             },
-
-
-
-
-
-
-
 
                         ],
                         Circle: [{
@@ -699,8 +672,6 @@
                             description: "Set color:",
                             code: "color: rgb(100, 50, 240)"
                         }, ]
-
-
                     },
                     Events: [{
                         description: "Warning: The shape of events in Scratch prevent you from putting an event inside other blocks.\nAlthough JavaScript doesn't prevent you from putting events insideother blocks, you should avoid it.\nFor example, don't place an onMouseDown() event inside a forever() block."
@@ -1030,21 +1001,35 @@
                 menuStyles: function() {
                     if (this.search || this.open) {
                         return {
-                            width: "100%"
+                            width: "98%",
+                            margin: "1%"
+                        }
+                    }
+                    else {
+                        return {
+                            display: "flex",
+                            flexWrap: "wrap",
+                            width: "100%",
+                            height: "100%"
+                        }
+                    }
+                },
+                menuItem: function() {
+                    if (this.search || this.open) {
+                        return {
+                            width: "98%",
+                            margin: "1%"
                         }
                     }
                     else {
                         return {
                             display: "flex",
                             flexFlow: "column wrap",
-                            maxHeight: "600px",
-                            alignContent: "stretch",
-                            alignItems: "stretch",
-                            width: "100%",
-                            maxWidth: "100%"
+                            width: "48%",
+                            margin: "1%"
                         }
                     }
-                }
+                },
             },
             methods: {
                 searchMenu: function(menu) {
@@ -1121,8 +1106,6 @@
 
         })
     </script>
-    </div>
-    </div>
 </body>
 
 </html>
