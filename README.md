@@ -7,7 +7,7 @@ WoofJS was created to be the next step after block-based coding in Scratch. For 
 
 ## Getting Started
 
-We reccomend that you get started with WoofJS on [woofjs.com](http://woofjs.com), because you...
+We recommend that you get started with WoofJS on [woofjs.com](http://woofjs.com), because you...
 
   * can get started with zero set-up
   * use our [interactive and searchable documentation](http://woofjs.com/docs)
@@ -83,39 +83,7 @@ The documentation that you find on woofjs.com/create is contained within the doc
 
 #### woof.js core library
 
-If you'd like to contribute to the core WoofJS library, you will edit the code in src/woofjs.es6.js.
-
-You will then use babel to compile src/woof.es6.js to dist/woof.js with the included .babelrc
-
-For more help, see the more detailed instructions below.
-
-    
-### Getting started
-
-1. Clone WoofJS to your development environment of choice.
-2. Take a look at our issues and see if there are any issues that speak to you as good places to tackle first. Pay particular attention to issues labeled "good student projects."
-3. Fork the repo, make your changes, and submit a pull request
-
-#### More detailed instructions to get started
-
-1. We recommend using https://c9.io as your development environment -- when you create an account, it asks for a credit card, but it won't charge you.
-
-2. Create a new basic HTML workstation, and clone the Woof repository.
-        
-3. Initialize npm (the following command makes this as simple as possible)
-    
-    ```
-    npm init --yes
-    ```
-4. Install babel-cli and babel-preset-es2015 (npm may give you some warnings but don't worry)
-
-    ```
-    npm install babel-cli babel-preset-es2015 --save-dev
-    ```
-
-#### Making changes to the core library and compiling with babel
-
-You will make your edits in src/woof.es6.js but these need to be compiled to dist/woof.js
+If you'd like to contribute to the core WoofJS library, you will edit the code in src/woofjs.es6.js , but these edits need to be compiled to dist/woof.js using babel
 
 There are two options to do this:
 
@@ -129,6 +97,44 @@ There are two options to do this:
     ```
     ./node_modules/.bin/babel WoofJS/src/woof.es6.js --watch --out-file WoofJS/dist/woof.js
     ```
+
+### Getting started
+
+1. We recommend using https://c9.io as your development environment -- when you create an account, it asks for a credit card, but it won't charge you.
+
+2. Create a new basic HTML workstation, and clone the Woof repository.
+
+    ```
+    git clone https://github.com/stevekrouse/WoofJS.git
+    ```     
+3. Initialize npm (the following command makes this as simple as possible).
+    
+    ```
+    npm init --yes
+    ```
+4. Install babel-cli and babel-preset-es2015 (npm may give you some warnings but don't worry).
+
+    ```
+    npm install babel-cli babel-preset-es2015 --save-dev
+    ```
+5. Take a look at our issues and see if there are any issues that speak to you as good places to tackle first. Pay particular attention to issues labeled "good student projects."
+
+6. Create a new local branch to work on your issue -- use a descriptive branch name like in this example:
+
+    ```
+    git checkout -b more-pokemon-sprites
+    ```
+7. Once you've  made your changes, commit them to your branch.
+
+    ```
+    git commit -m "add more pokemon sprites"
+    ```
+8. Push your new branch (not master!) to the GitHub repo.
+
+    ```
+    git push origin more-pokemon-sprites
+    ```
+9. Submit a pull request so your changes can be reviewed.
 
 If you have any questions, please email steve at thecodingspace.com :)
 
