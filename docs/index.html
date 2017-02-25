@@ -17,7 +17,7 @@
         <div :style="menuStyles" id="menus">
             <div class="btn-group search">
                 <button v-show="open != undefined || search != ''" @click="search = ''; open = undefined" id="back" class="highlight btn btn-medium btn-info">Back</button>
-            <input  id="searchbar" type="search" class="form-control" placeholder="Search blocks..." v-model="search"></input>
+                <input  id="searchbar" type="search" class="form-control" placeholder="Search blocks..." v-model="search"></input>
         </div>
         <div :style="menuItem" v-for="(blocks, menu) in searched(menus)">
             <template v-if="menu != 'Sprites & Backgrounds'"> 

@@ -19,21 +19,6 @@ pre {
     hyphens: none;
 }
 
-div.search {
-    display: flex; 
-    flex-direction: row; 
-    align-content: center; 
-    align-items: center; 
-    width: 98%; 
-    margin: 1%;
-}
-
-@media (max-width: 320px) {
-    #menus > div[style] {
-        width: 100% !important;
-    }
-}
-
 pre::-moz-selection,
 pre ::-moz-selection,
 code::-moz-selection,
@@ -155,19 +140,56 @@ pre {
     cursor: help;
 }
 
-.search {
-   
+div.search {
+    display: flex; 
+    flex-direction: row; 
+    align-content: center; 
+    align-items: center; 
+    width: 98%; 
+    margin: 1%;
 }
 
-
-#searchbar[input] {
+#searchbar {
     width: 100%;
     padding: 10px;
     border-radius: 5px;
     font-size: 16px;
-    margin: 10px;
     border: 1px solid black;
     outline: 0px;
+}
+
+#menus div:nth-child(3) {
+    order: 3;
+}
+#menus div:nth-child(4) {
+    order: 5;
+}
+#menus div:nth-child(5) {
+    order: 7;
+}
+#menus div:nth-child(6) {
+    order: 9;
+}
+#menus div:nth-child(7) {
+    order: 11;
+}
+#menus div:nth-child(8) {
+    order: 2;
+}
+#menus div:nth-child(9) {
+    order: 4;
+}
+#menus div:nth-child(10) {
+    order: 6;
+}
+#menus div:nth-child(11) {
+    order: 8;
+}
+#menus div:nth-child(12) {
+    order: 10;
+}
+#menus div:nth-child(13) {
+    order: 12;
 }
 
 .all {
@@ -178,7 +200,6 @@ pre {
     font-family: "Open Sans", sans-serif;
     font-size: 20px;
     box-shadow: none;
-    width: 98%;
     display: block;
     padding: 10px;
     width: 100%;
