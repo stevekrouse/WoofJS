@@ -146,7 +146,8 @@ div.search {
     align-content: center; 
     align-items: center; 
     width: 98%; 
-    margin: 1%;
+    margin-left: 1%;
+    margin-right: 1%;
 }
 
 #searchbar {
