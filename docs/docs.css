@@ -343,26 +343,32 @@ h4 {
 
 #Image {
     background-color: #49A6DF;
+    width:50% !important;
 }
 
 #Text {
     background-color: #4875D1;
+    width:50% !important;
 }
 
 #Circle {
     background-color: #AD5FC2;
+    width:50% !important;
 }
 
 #Rectangle {
     background-color: #7775D3;
+    width:50% !important;
 }
 
 #Line {
     background-color: #5A4097;
+    width:50% !important;
 }
 
 #Background {
     background-color: #495BDF;
+    width:50% !important;
 }
 
 #Sprites {background-color: #9D9D9D;}
