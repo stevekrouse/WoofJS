@@ -112,282 +112,6 @@
                         description: "Beautify the selected code with proper indentation",
                         code: "Ctl-B"
                     }, ],
-                    Motion: [{
-                            url: "https://s17.postimg.org/aldfh0hu7/2_0_Move_Steps.png",
-                            code: "sprite1.move(10)",
-                            tags: "move forward glide animate"
-                        }, {
-                            url: "https://s16.postimg.org/406v94ogl/Slice_2.png",
-                            code: "sprite1.turnRight(15)",
-                            tags: "turn angle point direction orientation"
-                        }, {
-                            url: "https://s15.postimg.org/gpov03g6j/Slice_2_Copy.png",
-                            code: "sprite1.turnLeft(15)",
-                            tags: "turn angle point direction orientation"
-                        }, {
-                            url: "https://s10.postimg.org/4xd5jv3q1/2_0_Point_in_Direction.png",
-                            code: "sprite1.angle = LEFT  \nsprite1.angle = RIGHT \nsprite1.angle = UP \nsprite1.angle = DOWN \nsprite1.angle = 47.7",
-                            tags: "angle turn direction right left up down orientation"
-                        }, {
-                            url: "https://s18.postimg.org/qdj0hnosp/2_0_Point_Towards.png",
-                            code: "sprite1.pointTowards(mouseX, mouseY) \nsprite1.pointTowards(othersprite1.x, othersprite1.y)",
-                            tags: "turn point direction angle sprite character mouse"
-                        },
-                        // {
-                        //     url: "./images/68747470733a2f2f692e696d6775722e636f6d2f655173647876522e706e67",
-                        //     code: "sprite1.pointTowards(sprite2.x, sprite2.y)",
-                        //     tags: "turn point direction angle sprite character"
-                        // },
-                        {
-                            url: "https://s13.postimg.org/4f7j7p8uf/2_0_Go_to_X_Y.png",
-                            code: "sprite1.x = maxX \nsprite1.y = 47",
-                            tags: "teleport move location set x y"
-                        }, {
-                            url: "https://s16.postimg.org/nfbxtx745/2_0_Go_to.png",
-                            code: "sprite1.x = mouseX\nsprite1.y = mouseY",
-                            tags: "teleport location move to mouse"
-                        }, {
-                            description: "Move to another sprite:",
-                            code: "sprite1.x = sprite2.x \nsprite1.y = sprite2.y",
-                            tags: "teleport location other move"
-                        }, {
-                            url: "https://s15.postimg.org/vqzf6gxwb/2_0_Change_X_by.png",
-                            code: 'sprite1.x += 5',
-                            tags: "increase decrease change x move right left"
-                        }, {
-                            url: "https://s10.postimg.org/whzn2xet5/2_0_Change_Y_by.png",
-                            code: 'sprite1.y += -5',
-                            tags: "increase decrease change y move up down"
-                        }, {
-                            url: "https://s10.postimg.org/rgc2vz1eh/2_0_Set_X_to.png",
-                            code: 'sprite1.x = minX',
-                            tags: "set x"
-                        }, {
-                            url: "https://s11.postimg.org/m8cc7585v/2_0_Set_Y_to.png",
-                            code: 'sprite1.y = minY',
-                            tags: "set y"
-                        }, {
-                            url: "./images/68747470733a2f2f692e696d6775722e636f6d2f4c576c5874444c2e706e67",
-                            code: 'sprite1.setRotationStyle("ROTATE LEFT RIGHT")',
-                            tags: "rotation style no turn flip"
-                        }, {
-                            url: "https://s11.postimg.org/oyadagjr7/2_0_Set_Rotation_Style.png",
-                            code: 'sprite1.setRotationStyle("ROTATE")',
-                            tags: "rotation style no turn flip"
-                        }, {
-                            url: "./images/68747470733a2f2f692e696d6775722e636f6d2f433337716439682e706e67",
-                            code: 'sprite1.setRotationStyle("NO ROTATE")',
-                            tags: "rotation style no turn flip"
-                        }, {
-                            description: "Move camera to change the the perspective center of the screen. This is useful if you want to keep a character always in the center as she moves around.",
-                            code: 'cameraX = sprite1.x\ncameraY = sprite1.y',
-                            tags: "camera perspective"
-                        }
-                    ],
-                    Looks: [{
-                        description: "Pick a color:",
-                        html: '<input value="#409cbc" style="width:100%; height: 50px" type="color" onchange="updateColor(event)"></input>',
-                        tags: "color hex pick colour red blue green yellow orange pink",
-                        code: '#409cbc'
-                    }, {
-                        description: "Create a color with red, green and blue values between 0 and 255",
-                        tags: "color rgb colour red blue green yellow orange pink",
-                        code: 'rgb(255, 100, 0)'
-                    }, {
-                        url: "./images/68747470733a2f2f692e696d6775722e636f6d2f653650393552302e706e67",
-                        code: "sprite1.show()",
-                        tags: "show appear"
-                    }, {
-                        url: "./images/68747470733a2f2f692e696d6775722e636f6d2f323355617446352e706e67",
-                        code: "sprite1.hide()",
-                        tags: "hide disappear"
-                    }, {
-                        url: "./images/68747470733a2f2f692e696d6775722e636f6d2f513078533746662e706e67",
-                        code: "imageSprite1.setImageURL('./images/SMJjVCL.png')",
-                        tags: "costume image url picture"
-                    }, {
-                        description: "You can only setImageURL() for Images.\nChange the color for rectangles, text, lines and circles:",
-                        tags: "change color"
-                    }, {
-                        code: 'rectangleSprite1.color = "purple"',
-                        tags: "change color"
-                    }, {
-                        code: 'textSprite1.color = "rgb(10, 150, 30)"',
-                        tags: "change color"
-                    }, {
-                        code: 'lineSprite1.color = "#ff20ff"',
-                        tags: "change color"
-                    }, {
-                        code: 'circleSprite1.color = "green"',
-                        tags: "change color"
-                    }, {
-                        url: "./images/68747470733a2f2f692e696d6775722e636f6d2f64784f72506d752e706e67",
-                        description: "You set the size in different ways for each type of sprite:",
-                        tags: "size width height radius"
-                    }, {
-                        code: 'imageSprite1.height = 20\nimageSprite1.width = 20',
-                        tags: "size height width length image"
-                    }, {
-                        code: 'rectangleSprite1.height = 20\nrectangleSprite1.width = 20',
-                        tags: "size height rectangle width length"
-                    }, {
-                        code: 'circleSprite1.radius = 20',
-                        tags: "size circle radius"
-                    }, {
-                        code: 'lineSprite1.x1 = 20\nlineSprite1.y1 = 20\nlineSprite1.lineWidth = 20',
-                        tags: "size line width length height"
-                    }, {
-                        code: 'textSprite1.size = 20',
-                        tags: "size font text"
-                    }, {
-                        url: "./images/68747470733a2f2f692e696d6775722e636f6d2f5870676c764a502e706e67",
-                        code: "sprite1.sendToBack()",
-                        tags: "layer back behind"
-                    }, {
-                        url: "./images/68747470733a2f2f692e696d6775722e636f6d2f4b756d707167532e706e67",
-                        code: "sprite1.sendToFront()",
-                        tags: "layer in front"
-                    }, {
-                        description: "Set the brightness percentage between 0-100 (also known as transparency or opacity)",
-                        url: "./images/brightness.png",
-                        code: "sprite1.brightness = 50",
-                        tags: "brightness opacity opaqueness transparency"
-                    }, {
-                        url: "./images/68747470733a2f2f692e696d6775722e636f6d2f7a616a30706c302e706e67",
-                        description: "Set the backdrop to an image URL:",
-                        code: 'setBackdropURL("./images/RkP7fcR.jpg")',
-                        tags: "background backdrop picture"
-                    }, {
-                        description: "Set the backdrop to a color:",
-                        code: 'setBackdropColor("blue")',
-                        tags: "backdrop background picture"
-                    }, {
-                        description: "Set a backdrop image so that it resizes to fill the screen without stretching or compressing",
-                        code: 'setBackdropStyle("cover")',
-                        tags: "backdrop background picture cover style"
-                    }, {
-                        description: "Set the backdrop image's width and height via pixel values.",
-                        code: 'setBackdropStyle("200px 300px")',
-                        tags: "backdrop background picture pixel size style"
-                    }, {
-                        description: "Set the backdrop image to percentages of the screen's width and height. (The default is 100% 100%.)",
-                        code: 'setBackdropStyle("100% 100%")',
-                        tags: "backdrop background picture default style"
-                    }, {
-                        description: "Set the backdrop image to repeat in the x-direction and not the y-direction. (This is useful if you set the backdrop style to pixels.)",
-                        code: 'setBackdropRepeat("repeat-x")',
-                        tags: "backdrop background picture repeat style x"
-                    }, {
-                        description: "Set the backdrop image to repeat in the y-direction and not the x-direction. (This is useful if you set the backdrop style to pixels.)",
-                        code: 'setBackdropRepeat("repeat-y")',
-                        tags: "backdrop background picture repeat style y"
-                    }, {
-                        description: "Set the backdrop image to not repeat in either direction. (no-repeat is the default.)",
-                        code: 'setBackdropRepeat("no-repeat")',
-                        tags: "backdrop background picture no repeat style "
-                    }],
-                    Sound: [{
-                        url: "./images/68747470733a2f2f692e696d6775722e636f6d2f4c387a6e6d4f622e706e67",
-                        code: "var bruce = new Audio('http://mhoerner.dyndns.org/mp3/Bruce%20Springsteen/Born%20To%20Run/05%20Born%20To%20Run.mp3')\nbruce.play()",
-                        tags: "music play sounds audio"
-                    }, {
-                        url: "./images/68747470733a2f2f692e696d6775722e636f6d2f58396b6b3679572e706e67",
-                        code: "bruce.pause()",
-                        tags: "pause music sounds"
-                    }, {
-                        url: "./images/68747470733a2f2f692e696d6775722e636f6d2f7439584b4f706e2e706e67",
-                        code: "intitle:index.of?mp3 NAME-OF-SONG",
-                        description: "To get the URL of an mp3, Google search:",
-                        tags: "mp3 sound file"
-                    }],
-                    Pen: [{
-                        url: "./images/68747470733a2f2f692e696d6775722e636f6d2f6241636d366a482e706e67",
-                        code: 'clearPen()',
-                        tags: "pen clear"
-                    }, {
-                        url: "./images/68747470733a2f2f692e696d6775722e636f6d2f5457656e5761702e706e67",
-                        code: 'sprite1.penDown()',
-                        tags: "pen down draw"
-                    }, {
-                        url: "./images/68747470733a2f2f692e696d6775722e636f6d2f354837696a42772e706e67",
-                        code: 'sprite1.penUp()',
-                        tags: "pen up"
-                    }, {
-                        url: "./images/68747470733a2f2f692e696d6775722e636f6d2f504c744b5663762e706e67",
-                        code: 'sprite1.penColor = "blue"\nsprite1.penColor = "#ff20ff"\nsprite1.penColor = "rgb(10, 100, 20)"',
-                        tags: "pen color"
-                    }, {
-                        url: "./images/68747470733a2f2f692e696d6775722e636f6d2f4f7a59355a6a552e706e67",
-                        code: 'sprite1.penWidth = 4',
-                        tags: "pen width size"
-                    }],
-                    Data: [{
-                        url: "./images/68747470733a2f2f692e696d6775722e636f6d2f656963593537492e706e67",
-                        code: "var variable1",
-                        tags: "variable"
-                    }, {
-                        url: "./images/68747470733a2f2f692e696d6775722e636f6d2f4859415458584c2e706e67",
-                        code: "variable1 = 0",
-                        tags: "variable set"
-                    }, {
-                        description: "You can combine creating/naming a variable with setting it:",
-                        code: "var variable1 = 0",
-                        tags: "variable"
-                    }, {
-                        url: "./images/68747470733a2f2f692e696d6775722e636f6d2f704b4e46794d772e706e67",
-                        code: "variable1 += 1",
-                        tags: "increase change decrease"
-                    }, {
-                        url: "./images/68747470733a2f2f692e696d6775722e636f6d2f4447323649634e2e706e67",
-                        code: 'new Text({\n  text: () => "variable1: " + variable1,\n  x: 0,\n  y: 0,\n  size: 30\n})',
-                        description: '"Showing a variable" works by giving a Text Sprite a function instead of a "string in quotes" as its text attribute. The Text Sprite constantly reevaluates the function which keeps the value on the screen in sync with the value of the variable.',
-                        tags: "show variable text"
-                    }, {
-                        url: "./images/68747470733a2f2f692e696d6775722e636f6d2f7366536d6f44542e706e67",
-                        code: "var array1 = []",
-                        tags: "array list"
-                    }, {
-                        url: "./images/68747470733a2f2f692e696d6775722e636f6d2f304b306e5144332e706e67",
-                        code: "array1.push('thing')",
-                        description: "You can add anything to an array in JavaScript, including numbers, strings, but even Sprites, functions, and other arrays.",
-                        tags: "add array list"
-                    }, {
-                        url: "./images/68747470733a2f2f692e696d6775722e636f6d2f516754647978652e706e67",
-                        code: "array1.length",
-                        tags: "array list length size"
-                    }, {
-                        url: "./images/68747470733a2f2f692e696d6775722e636f6d2f6a587479364c542e706e67",
-                        code: "array1[0]",
-                        tags: "array list get element"
-                    }, {
-                        url: "./images/68747470733a2f2f692e696d6775722e636f6d2f6a6170377166522e706e67",
-                        code: "array1.remove(thing)",
-                        tags: "array list remove delete",
-                        description: "Note: this only removes things from a list. It doesn't delete them from the screen (use sprite1.delete() for that)."
-                    }, {
-                        url: "./images/68747470733a2f2f692e696d6775722e636f6d2f49625a4846706d2e706e67",
-                        code: "array1.includes(thing)",
-                        tags: "contains includes array list"
-                    }, {
-                        url: "./images/68747470733a2f2f692e696d6775722e636f6d2f5949473973746c2e706e67",
-                        code: 'new Text({text: () => "array1: " + array1})',
-                    }, {
-                        description: 'Do something for each thing in an array:',
-                        code: "array1.forEach(thing => {\n  console.log(thing)\n})",
-                        tags: "for each loop list array"
-                    }, {
-                        description: 'Check if a condition holds for at least one thing in an array:',
-                        code: "if (array1.some(thing => thing.over(mouseX, mouseY))) {\n  \/* do something here */\n}",
-                        tags: "reduce some any list array"
-                    }, {
-                        description: 'Check if a condition holds for everything in an array:',
-                        code: "if(array1.every(thing => thing.touching(sprite1))) {\n  \/* do something here */\n}",
-                        tags: "every list arry reduce"
-                    }, {
-                        description: "Find something in an array:",
-                        code: "var needle = array1.find(thing => thing.touching(sprite1))\nif(needle) {\n  console.log(needle)\n}",
-                        tags: "find search list array"
-                    }],
                     "Sprites & Backgrounds": {
                         Image: [{
                                 description: "Create new image:",
@@ -673,6 +397,78 @@
                             code: "color: rgb(100, 50, 240)"
                         }, ]
                     },
+                    Motion: [{
+                            url: "https://s17.postimg.org/aldfh0hu7/2_0_Move_Steps.png",
+                            code: "sprite1.move(10)",
+                            tags: "move forward glide animate"
+                        }, {
+                            url: "https://s16.postimg.org/406v94ogl/Slice_2.png",
+                            code: "sprite1.turnRight(15)",
+                            tags: "turn angle point direction orientation"
+                        }, {
+                            url: "https://s15.postimg.org/gpov03g6j/Slice_2_Copy.png",
+                            code: "sprite1.turnLeft(15)",
+                            tags: "turn angle point direction orientation"
+                        }, {
+                            url: "https://s10.postimg.org/4xd5jv3q1/2_0_Point_in_Direction.png",
+                            code: "sprite1.angle = LEFT  \nsprite1.angle = RIGHT \nsprite1.angle = UP \nsprite1.angle = DOWN \nsprite1.angle = 47.7",
+                            tags: "angle turn direction right left up down orientation"
+                        }, {
+                            url: "https://s18.postimg.org/qdj0hnosp/2_0_Point_Towards.png",
+                            code: "sprite1.pointTowards(mouseX, mouseY) \nsprite1.pointTowards(othersprite1.x, othersprite1.y)",
+                            tags: "turn point direction angle sprite character mouse"
+                        },
+                        // {
+                        //     url: "./images/68747470733a2f2f692e696d6775722e636f6d2f655173647876522e706e67",
+                        //     code: "sprite1.pointTowards(sprite2.x, sprite2.y)",
+                        //     tags: "turn point direction angle sprite character"
+                        // },
+                        {
+                            url: "https://s13.postimg.org/4f7j7p8uf/2_0_Go_to_X_Y.png",
+                            code: "sprite1.x = maxX \nsprite1.y = 47",
+                            tags: "teleport move location set x y"
+                        }, {
+                            url: "https://s16.postimg.org/nfbxtx745/2_0_Go_to.png",
+                            code: "sprite1.x = mouseX\nsprite1.y = mouseY",
+                            tags: "teleport location move to mouse"
+                        }, {
+                            description: "Move to another sprite:",
+                            code: "sprite1.x = sprite2.x \nsprite1.y = sprite2.y",
+                            tags: "teleport location other move"
+                        }, {
+                            url: "https://s15.postimg.org/vqzf6gxwb/2_0_Change_X_by.png",
+                            code: 'sprite1.x += 5',
+                            tags: "increase decrease change x move right left"
+                        }, {
+                            url: "https://s10.postimg.org/whzn2xet5/2_0_Change_Y_by.png",
+                            code: 'sprite1.y += -5',
+                            tags: "increase decrease change y move up down"
+                        }, {
+                            url: "https://s10.postimg.org/rgc2vz1eh/2_0_Set_X_to.png",
+                            code: 'sprite1.x = minX',
+                            tags: "set x"
+                        }, {
+                            url: "https://s11.postimg.org/m8cc7585v/2_0_Set_Y_to.png",
+                            code: 'sprite1.y = minY',
+                            tags: "set y"
+                        }, {
+                            url: "./images/68747470733a2f2f692e696d6775722e636f6d2f4c576c5874444c2e706e67",
+                            code: 'sprite1.setRotationStyle("ROTATE LEFT RIGHT")',
+                            tags: "rotation style no turn flip"
+                        }, {
+                            url: "https://s11.postimg.org/oyadagjr7/2_0_Set_Rotation_Style.png",
+                            code: 'sprite1.setRotationStyle("ROTATE")',
+                            tags: "rotation style no turn flip"
+                        }, {
+                            url: "./images/68747470733a2f2f692e696d6775722e636f6d2f433337716439682e706e67",
+                            code: 'sprite1.setRotationStyle("NO ROTATE")',
+                            tags: "rotation style no turn flip"
+                        }, {
+                            description: "Move camera to change the the perspective center of the screen. This is useful if you want to keep a character always in the center as she moves around.",
+                            code: 'cameraX = sprite1.x\ncameraY = sprite1.y',
+                            tags: "camera perspective"
+                        }
+                    ],
                     Events: [{
                         description: "Warning: The shape of events in Scratch prevent you from putting an event inside other blocks.\nAlthough JavaScript doesn't prevent you from putting events insideother blocks, you should avoid it.\nFor example, don't place an onMouseDown() event inside a forever() block."
                     }, {
@@ -712,6 +508,108 @@
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f556175544e77752e706e67",
                         code: "onKeyDown(key => {\n if (key == 'UP') {\n   \/* do something here */\n  }\n})",
                         tags: "on when key press down"
+                    }],
+                    Looks: [{
+                        description: "Pick a color:",
+                        html: '<input value="#409cbc" style="width:100%; height: 50px" type="color" onchange="updateColor(event)"></input>',
+                        tags: "color hex pick colour red blue green yellow orange pink",
+                        code: '#409cbc'
+                    }, {
+                        description: "Create a color with red, green and blue values between 0 and 255",
+                        tags: "color rgb colour red blue green yellow orange pink",
+                        code: 'rgb(255, 100, 0)'
+                    }, {
+                        url: "./images/68747470733a2f2f692e696d6775722e636f6d2f653650393552302e706e67",
+                        code: "sprite1.show()",
+                        tags: "show appear"
+                    }, {
+                        url: "./images/68747470733a2f2f692e696d6775722e636f6d2f323355617446352e706e67",
+                        code: "sprite1.hide()",
+                        tags: "hide disappear"
+                    }, {
+                        url: "./images/68747470733a2f2f692e696d6775722e636f6d2f513078533746662e706e67",
+                        code: "imageSprite1.setImageURL('./images/SMJjVCL.png')",
+                        tags: "costume image url picture"
+                    }, {
+                        description: "You can only setImageURL() for Images.\nChange the color for rectangles, text, lines and circles:",
+                        tags: "change color"
+                    }, {
+                        code: 'rectangleSprite1.color = "purple"',
+                        tags: "change color"
+                    }, {
+                        code: 'textSprite1.color = "rgb(10, 150, 30)"',
+                        tags: "change color"
+                    }, {
+                        code: 'lineSprite1.color = "#ff20ff"',
+                        tags: "change color"
+                    }, {
+                        code: 'circleSprite1.color = "green"',
+                        tags: "change color"
+                    }, {
+                        url: "./images/68747470733a2f2f692e696d6775722e636f6d2f64784f72506d752e706e67",
+                        description: "You set the size in different ways for each type of sprite:",
+                        tags: "size width height radius"
+                    }, {
+                        code: 'imageSprite1.height = 20\nimageSprite1.width = 20',
+                        tags: "size height width length image"
+                    }, {
+                        code: 'rectangleSprite1.height = 20\nrectangleSprite1.width = 20',
+                        tags: "size height rectangle width length"
+                    }, {
+                        code: 'circleSprite1.radius = 20',
+                        tags: "size circle radius"
+                    }, {
+                        code: 'lineSprite1.x1 = 20\nlineSprite1.y1 = 20\nlineSprite1.lineWidth = 20',
+                        tags: "size line width length height"
+                    }, {
+                        code: 'textSprite1.size = 20',
+                        tags: "size font text"
+                    }, {
+                        url: "./images/68747470733a2f2f692e696d6775722e636f6d2f5870676c764a502e706e67",
+                        code: "sprite1.sendToBack()",
+                        tags: "layer back behind"
+                    }, {
+                        url: "./images/68747470733a2f2f692e696d6775722e636f6d2f4b756d707167532e706e67",
+                        code: "sprite1.sendToFront()",
+                        tags: "layer in front"
+                    }, {
+                        description: "Set the brightness percentage between 0-100 (also known as transparency or opacity)",
+                        url: "./images/brightness.png",
+                        code: "sprite1.brightness = 50",
+                        tags: "brightness opacity opaqueness transparency"
+                    }, {
+                        url: "./images/68747470733a2f2f692e696d6775722e636f6d2f7a616a30706c302e706e67",
+                        description: "Set the backdrop to an image URL:",
+                        code: 'setBackdropURL("./images/RkP7fcR.jpg")',
+                        tags: "background backdrop picture"
+                    }, {
+                        description: "Set the backdrop to a color:",
+                        code: 'setBackdropColor("blue")',
+                        tags: "backdrop background picture"
+                    }, {
+                        description: "Set a backdrop image so that it resizes to fill the screen without stretching or compressing",
+                        code: 'setBackdropStyle("cover")',
+                        tags: "backdrop background picture cover style"
+                    }, {
+                        description: "Set the backdrop image's width and height via pixel values.",
+                        code: 'setBackdropStyle("200px 300px")',
+                        tags: "backdrop background picture pixel size style"
+                    }, {
+                        description: "Set the backdrop image to percentages of the screen's width and height. (The default is 100% 100%.)",
+                        code: 'setBackdropStyle("100% 100%")',
+                        tags: "backdrop background picture default style"
+                    }, {
+                        description: "Set the backdrop image to repeat in the x-direction and not the y-direction. (This is useful if you set the backdrop style to pixels.)",
+                        code: 'setBackdropRepeat("repeat-x")',
+                        tags: "backdrop background picture repeat style x"
+                    }, {
+                        description: "Set the backdrop image to repeat in the y-direction and not the x-direction. (This is useful if you set the backdrop style to pixels.)",
+                        code: 'setBackdropRepeat("repeat-y")',
+                        tags: "backdrop background picture repeat style y"
+                    }, {
+                        description: "Set the backdrop image to not repeat in either direction. (no-repeat is the default.)",
+                        code: 'setBackdropRepeat("no-repeat")',
+                        tags: "backdrop background picture no repeat style "
                     }],
                     Control: [{
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f723677595838632e706e67",
@@ -773,6 +671,20 @@
                         code: '// after a mousedown, you won\'t be able to trigger this event again for 1000 milliseconds\nonMouseDown(throttle(() => score++, 1000))',
                         description: 'Only allow something to happen once every X miliseconds:',
                         tags: "debounce throttle"
+                    }],
+                    Sound: [{
+                        url: "./images/68747470733a2f2f692e696d6775722e636f6d2f4c387a6e6d4f622e706e67",
+                        code: "var bruce = new Audio('http://mhoerner.dyndns.org/mp3/Bruce%20Springsteen/Born%20To%20Run/05%20Born%20To%20Run.mp3')\nbruce.play()",
+                        tags: "music play sounds audio"
+                    }, {
+                        url: "./images/68747470733a2f2f692e696d6775722e636f6d2f58396b6b3679572e706e67",
+                        code: "bruce.pause()",
+                        tags: "pause music sounds"
+                    }, {
+                        url: "./images/68747470733a2f2f692e696d6775722e636f6d2f7439584b4f706e2e706e67",
+                        code: "intitle:index.of?mp3 NAME-OF-SONG",
+                        description: "To get the URL of an mp3, Google search:",
+                        tags: "mp3 sound file"
                     }],
                     Sensing: [{
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f515470574f78562e706e67",
@@ -887,6 +799,27 @@
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f697357785538432e706e67",
                         code: "year()"
                     }],
+                    Pen: [{
+                        url: "./images/68747470733a2f2f692e696d6775722e636f6d2f6241636d366a482e706e67",
+                        code: 'clearPen()',
+                        tags: "pen clear"
+                    }, {
+                        url: "./images/68747470733a2f2f692e696d6775722e636f6d2f5457656e5761702e706e67",
+                        code: 'sprite1.penDown()',
+                        tags: "pen down draw"
+                    }, {
+                        url: "./images/68747470733a2f2f692e696d6775722e636f6d2f354837696a42772e706e67",
+                        code: 'sprite1.penUp()',
+                        tags: "pen up"
+                    }, {
+                        url: "./images/68747470733a2f2f692e696d6775722e636f6d2f504c744b5663762e706e67",
+                        code: 'sprite1.penColor = "blue"\nsprite1.penColor = "#ff20ff"\nsprite1.penColor = "rgb(10, 100, 20)"',
+                        tags: "pen color"
+                    }, {
+                        url: "./images/68747470733a2f2f692e696d6775722e636f6d2f4f7a59355a6a552e706e67",
+                        code: 'sprite1.penWidth = 4',
+                        tags: "pen width size"
+                    }],
                     Operations: [{
                             url: "./images/68747470733a2f2f692e696d6775722e636f6d2f6e73446b436b742e706e67",
                             code: "sprite1.x + 4",
@@ -975,6 +908,73 @@
                             tags: 'round'
                         }
                     ],
+                    Data: [{
+                        url: "./images/68747470733a2f2f692e696d6775722e636f6d2f656963593537492e706e67",
+                        code: "var variable1",
+                        tags: "variable"
+                    }, {
+                        url: "./images/68747470733a2f2f692e696d6775722e636f6d2f4859415458584c2e706e67",
+                        code: "variable1 = 0",
+                        tags: "variable set"
+                    }, {
+                        description: "You can combine creating/naming a variable with setting it:",
+                        code: "var variable1 = 0",
+                        tags: "variable"
+                    }, {
+                        url: "./images/68747470733a2f2f692e696d6775722e636f6d2f704b4e46794d772e706e67",
+                        code: "variable1 += 1",
+                        tags: "increase change decrease"
+                    }, {
+                        url: "./images/68747470733a2f2f692e696d6775722e636f6d2f4447323649634e2e706e67",
+                        code: 'new Text({\n  text: () => "variable1: " + variable1,\n  x: 0,\n  y: 0,\n  size: 30\n})',
+                        description: '"Showing a variable" works by giving a Text Sprite a function instead of a "string in quotes" as its text attribute. The Text Sprite constantly reevaluates the function which keeps the value on the screen in sync with the value of the variable.',
+                        tags: "show variable text"
+                    }, {
+                        url: "./images/68747470733a2f2f692e696d6775722e636f6d2f7366536d6f44542e706e67",
+                        code: "var array1 = []",
+                        tags: "array list"
+                    }, {
+                        url: "./images/68747470733a2f2f692e696d6775722e636f6d2f304b306e5144332e706e67",
+                        code: "array1.push('thing')",
+                        description: "You can add anything to an array in JavaScript, including numbers, strings, but even Sprites, functions, and other arrays.",
+                        tags: "add array list"
+                    }, {
+                        url: "./images/68747470733a2f2f692e696d6775722e636f6d2f516754647978652e706e67",
+                        code: "array1.length",
+                        tags: "array list length size"
+                    }, {
+                        url: "./images/68747470733a2f2f692e696d6775722e636f6d2f6a587479364c542e706e67",
+                        code: "array1[0]",
+                        tags: "array list get element"
+                    }, {
+                        url: "./images/68747470733a2f2f692e696d6775722e636f6d2f6a6170377166522e706e67",
+                        code: "array1.remove(thing)",
+                        tags: "array list remove delete",
+                        description: "Note: this only removes things from a list. It doesn't delete them from the screen (use sprite1.delete() for that)."
+                    }, {
+                        url: "./images/68747470733a2f2f692e696d6775722e636f6d2f49625a4846706d2e706e67",
+                        code: "array1.includes(thing)",
+                        tags: "contains includes array list"
+                    }, {
+                        url: "./images/68747470733a2f2f692e696d6775722e636f6d2f5949473973746c2e706e67",
+                        code: 'new Text({text: () => "array1: " + array1})',
+                    }, {
+                        description: 'Do something for each thing in an array:',
+                        code: "array1.forEach(thing => {\n  console.log(thing)\n})",
+                        tags: "for each loop list array"
+                    }, {
+                        description: 'Check if a condition holds for at least one thing in an array:',
+                        code: "if (array1.some(thing => thing.over(mouseX, mouseY))) {\n  \/* do something here */\n}",
+                        tags: "reduce some any list array"
+                    }, {
+                        description: 'Check if a condition holds for everything in an array:',
+                        code: "if(array1.every(thing => thing.touching(sprite1))) {\n  \/* do something here */\n}",
+                        tags: "every list arry reduce"
+                    }, {
+                        description: "Find something in an array:",
+                        code: "var needle = array1.find(thing => thing.touching(sprite1))\nif(needle) {\n  console.log(needle)\n}",
+                        tags: "find search list array"
+                    }],
                     "More Blocks": [{
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f415a6c526236682e706e67",
                         description: "You can create a function with a name:",
@@ -1021,6 +1021,7 @@
                         return {
                             width: "98%",
                             marginLeft: "1%",
+                            marginTop: "5px",
                             marginBottom: "5px"
                         }
                     }
@@ -1029,7 +1030,8 @@
                             display: "flex",
                             flexFlow: "column wrap",
                             width: "48%",
-                            marginLeft: "1%",
+                            marginLeft: "auto",
+                            marginRight: "auto",
                             marginBottom: "5px"
                         }
                     }

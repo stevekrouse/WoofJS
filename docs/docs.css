@@ -148,6 +148,7 @@ div.search {
     width: 98%; 
     margin-left: 1%;
     margin-right: 1%;
+    margin-top: 5px;
 }
 
 #searchbar {
@@ -157,40 +158,6 @@ div.search {
     font-size: 16px;
     border: 1px solid black;
     outline: 0px;
-}
-
-#menus div:nth-child(3) {
-    order: 3;
-}
-#menus div:nth-child(4) {
-    order: 5;
-}
-#menus div:nth-child(5) {
-    order: 7;
-}
-#menus div:nth-child(6) {
-    order: 9;
-}
-#menus div:nth-child(7) {
-    order: 11;
-}
-#menus div:nth-child(8) {
-    order: 2;
-}
-#menus div:nth-child(9) {
-    order: 4;
-}
-#menus div:nth-child(10) {
-    order: 6;
-}
-#menus div:nth-child(11) {
-    order: 8;
-}
-#menus div:nth-child(12) {
-    order: 10;
-}
-#menus div:nth-child(13) {
-    order: 12;
 }
 
 .all {
