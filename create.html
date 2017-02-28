@@ -220,7 +220,7 @@
       <div v-show="docsbar" @click="docsbar= !docsbar" :style="{display: 'flex'}" style="flex-grow:0.65;     align-items: center; display:none; inline-block:none; width:25px; height:100%; flex-direction:column; justify-content: center;  background-color:#7F68D5">
         <span class="rotate" style="font-size:1.65em">Documentation</span>
       </div>
-      <div v-show="docsPane" :style="{display: !docsbar ? 'inline-block' : 'none'}" id="docs" style="flex-grow:20; height:100%; padding-left: 5px; flex: 10 1 25%">
+      <div v-show="docsPane" :style="{display: !docsbar ? 'inline-block' : 'none'}" id="docs" style="flex-grow:20; height:100%; flex: 10 1 25%">
         <div id="DocsNav" @click="docsbar = !docsbar" style="height:25px; text-align:center; background-color:#7F68D5; color:white; font-size:1.1em; display:flex; justify-content: space-between;">
           <span style="margin-left:8px;  margin-top:4px">Documentation</span>
           <span style="margin-right:8px">
