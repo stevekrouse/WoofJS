@@ -163,7 +163,7 @@
     }
     else {
       var img = 'var imageSprite1 = new Image({\n  url: "./images/SMJjVCL.png" ,\n  width: 284, \n  height: 200, \n  x: 100, \n  y: 20\n})'
-      var txt = 'var textSprite1 = new Text({\n  text: () => "Hello world!", \n  size: 16, \n  color: "rgb(100, 50, 240)", \n  fontFamily: "arial", })'
+      var txt = 'var textSprite1 = new Text({\n  text: () => "Hello world!", \n  size: 16, \n  color: "rgb(100, 50, 240)", \n  fontFamily: "arial"\n})'
       var clc = 'var circleSprite1 = new Circle({\n  radius: 10, \n  color: "blue", \n  x: 0, \n  y: 0\n})'
       var rct = 'var rectangleSprite1 = new Rectangle({\n  width: 20, \n  height: 55, \n  color: "pink"\n})'
       var lne = 'var lineSprite1 = new Line({\n  color: "pink", \n  lineWidth: 10, \n  x: -100, \n  y: 100, \n  x1: 10, \n  y1: 20\n})'
