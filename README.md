@@ -99,6 +99,12 @@ There are two options to do this:
     ./node_modules/.bin/babel WoofJS/src/woof.es6.js --watch --out-file WoofJS/dist/woof.js
     ```
 
+#### WoofJS.com's Tutorials
+
+WoofJS.com's tutorials actually live at an entirely different repo: https://github.com/stevekrouse/coding.space.
+
+You can find them there in the `woof/` subdirectory. If you'd like to cotribute to the WoofJS curriculum, head on over to that repo.
+
 ### Getting started
 
 1. We recommend using https://c9.io as your development environment -- when you create an account, it asks for a credit card, but it won't charge you.
