@@ -4,8 +4,9 @@ WoofJS is a *learnable* JavaScript framework for creating games by [The Coding S
 
 WoofJS was created to be the next step after block-based coding in Scratch. For more details, you can [read our announcement post](https://medium.com/@stevekrouse/woof-d9adf2110fc6).
 
+## Getting Started with WoofJS.com
 
-## Getting Started
+![screenshot 2017-03-03 at 10 04 05 am](https://cloud.githubusercontent.com/assets/2288939/23556045/1693c70c-fff9-11e6-950b-5e95c7a0112a.png)
 
 We recommend that you get started with WoofJS on [woofjs.com](http://woofjs.com), because you...
 
