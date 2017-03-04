@@ -61,6 +61,7 @@
   <link rel="stylesheet" href="./vendor/codemirror/lint.css">
   <script src="./vendor/codemirror/jshint.min.js"></script>
   <script src="./vendor/codemirror/lint.js"></script>
+  <script src="./vendor/codemirror/scrollpastend.js"></script>
   <script src="https://unpkg.com/vue@2.0.1/dist/vue.js"></script>
   <script data-presets="es2015" src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.14.0/babel.min.js"></script>
   <script src="https://cdn.rawgit.com/beautify-web/js-beautify/1b52eb1f90daaefa6ff0fa7736f97fbfc58093c1/js/lib/beautify.js"></script>
@@ -172,6 +173,14 @@
       -ms-transform: rotate(90deg);
       -o-transform: rotate(90deg);
       transform: rotate(90deg);
+    }
+    
+    #chatlio-widget .chatlio-widget {
+      right: 0;  
+    }
+    
+    #chatlio-widget .chatlio-widget.closed {
+      width: 200px;
     }
     
   </style>
@@ -455,7 +464,7 @@
     }
     
     // set the text in the editor
-    var editorVal = "setBackdropURL('./images/outerspace.jpg')\n\n\n"
+    var editorVal = "setBackdropURL('./images/outerspace.jpg')\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
     if (getID() != ''){
       editorVal = "// Loading..."
       firebase.database().ref('/code/' + getID()).once('value').then(function(snapshot) {
@@ -547,6 +556,7 @@
         mode:  "javascript",
         value: editorVal,
         lineNumbers: true,
+        lineWrapping: true,
         theme: "eclipse",
         tabSize: 2,
         indentUnit: 2,
@@ -558,7 +568,7 @@
         autofocus: true,
         smartIndent: true,
         foldGutter: true,
-        gutters: ["CodeMirror-lint-markers", "CodeMirror-foldgutter"],
+       // gutters: ["CodeMirror-lint-markers", "CodeMirror-foldgutter"],
         extraKeys: keymap,
         lint: {
           delay: 800, 
