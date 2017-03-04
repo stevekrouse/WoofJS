@@ -606,26 +606,46 @@
        }		
     };
     
-    function tryRunningCode(){
+    function tryRunningCode() {
       app.code = editor.getValue()
       app.error = undefined
+    
       try {
-        var code = Babel.transform(editor.getValue(), { presets: ['es2015'] }).code
+        var code = Babel.transform(editor.getValue(), {
+          presets: ['es2015']
+        }).code
         code = code.replace("'use strict';", '')
+    
         try {
-          document.getElementById('preview').contentWindow.addEventListener("error", function(error) { app.error = error } );
-          
-          var script = document.createElement( "script" );
+          document.getElementById('preview').contentWindow.addEventListener("error", function(error) {
+            app.error = error
+          });
+          var script = document.createElement("script");
           script.type = "text/javascript";
           script.text = code
           document.getElementById('preview').contentDocument.body.appendChild(script)
-        } catch (e) {
-          app.error = e
+    
+          // If sprite1 is not changed, create popup for user to input variable name
+          if (editor.getValue().indexOf('sprite1') != -1) {
+            var sprite_name = prompt("Enter the name of your Sprite", "unicorn_sprite");
+            editor.setValue(editor.getValue().replace(/sprite1/g, sprite_name));
+          }
+    
+    
         }
-      } catch (e) {
+        catch (e) {
+          app.error = e;
+        }
+      }
+      catch (e) {
+    
         app.error = e
       }
+    
+    
     }
+    
+    
     
     function runCode() {
         var iframe = document.getElementById('preview');
