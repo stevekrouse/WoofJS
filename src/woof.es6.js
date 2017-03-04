@@ -1350,3 +1350,4 @@ if (JSON.parse(currentScript.getAttribute('global')) !== false) {
   Woof.prototype.extend(window, new Woof({global: true, fullScreen: true}));
 }
 
+}
