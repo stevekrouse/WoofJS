@@ -1,12 +1,13 @@
 "use strict";
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
-/* SAT.js - Version 0.6.0 - Copyright 2012 - 2016 - Jim Riecken <jimr@jimr.ca> - released under the MIT License. https://github.com/jriecken/sat-js */
+// We include SAT.js here as our only "external" dependency to help us detect when rotated sprites intersect. It's not really an "external" dependency because we include it here internally.
+// SAT.js - Version 0.6.0 - Copyright 2012 - 2016 - Jim Riecken <jimr@jimr.ca> - released under the MIT License. https://github.com/jriecken/sat-js 
 function Vector(t, o) {
   this.x = t || 0, this.y = o || 0;
 }function Circle(t, o) {
@@ -188,30 +189,30 @@ function detectCollision(a, b) {
   }
 }
 
-// saving Image because we will later overwrite Image with Woof.Image on the window
+// alias Image to BrowserImage because we will overwrite Image with Woof.Image
 window.BrowserImage = Image;
 
 function Woof() {
-  var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-
-  var _ref$global = _ref.global;
-  var global = _ref$global === undefined ? false : _ref$global;
-  var _ref$fullScreen = _ref.fullScreen;
-  var fullScreen = _ref$fullScreen === undefined ? false : _ref$fullScreen;
-  var _ref$height = _ref.height;
-  var height = _ref$height === undefined ? 500 : _ref$height;
-  var _ref$width = _ref.width;
-  var width = _ref$width === undefined ? 350 : _ref$width;
+  var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+      _ref$global = _ref.global,
+      global = _ref$global === undefined ? false : _ref$global,
+      _ref$fullScreen = _ref.fullScreen,
+      fullScreen = _ref$fullScreen === undefined ? false : _ref$fullScreen,
+      _ref$height = _ref.height,
+      height = _ref$height === undefined ? 500 : _ref$height,
+      _ref$width = _ref.width,
+      width = _ref$width === undefined ? 350 : _ref$width;
 
   if (window.global) throw new Error("You must turn off global mode in the Woof script tag if you want to create your own Woof object.");
   this.global = global;
+  // thisContext is either the Woof object or the window, depending on whether or not you start Woof in global mode
   var thisContext = this.global ? window : this;
 
   thisContext.global = global;
   thisContext.sprites = [];
   thisContext.backdrop = { color: null, type: null, url: null, size: "100% 100%", repeat: "no-repeat" };
   thisContext.stopped = true;
-  // internally named fullScreen1 for firefox
+  // internally named fullScreen1 because the keyword "fullScreen" on the global scope was wonky in firefox
   thisContext.fullScreen1 = fullScreen;
 
   thisContext._cameraX = 0;
@@ -221,6 +222,7 @@ function Woof() {
       return thisContext._cameraX;
     },
     set: function set(value) {
+      // whenever the camera is changed, update relevant values
       thisContext.maxX = value + this.width / 2;
       thisContext.minX = value - this.width / 2;
       thisContext.mouseX += value - thisContext._cameraX;
@@ -232,6 +234,7 @@ function Woof() {
       return thisContext._cameraY;
     },
     set: function set(value) {
+      // whenever the camera is changed, update relevant values
       thisContext.maxY = value + this.height / 2;
       thisContext.minY = value - this.height / 2;
       thisContext.mouseY += value - thisContext._cameraY;
@@ -269,11 +272,13 @@ function Woof() {
   };
 
   window.addEventListener("load", function () {
+    // create the main div that Woof lives in
     thisContext._mainDiv = document.createElement("div");
     document.body.appendChild(thisContext._mainDiv);
     thisContext._mainDiv.id = "project";
     thisContext._mainDiv.style.position = "relative";
 
+    // create the canvas where we will draw sprites
     thisContext._spriteCanvas = document.createElement("canvas");
     thisContext._mainDiv.appendChild(thisContext._spriteCanvas);
     thisContext._spriteCanvas.id = "sprites";
@@ -282,6 +287,7 @@ function Woof() {
     thisContext._spriteCanvas.style.zIndex = 3;
     thisContext._spriteCanvas.style.position = "absolute";
 
+    // create the canvas where we will draw the pen
     thisContext._penCanvas = document.createElement("canvas");
     thisContext._mainDiv.appendChild(thisContext._penCanvas);
     thisContext._penCanvas.id = "pen";
@@ -290,6 +296,7 @@ function Woof() {
     thisContext._penCanvas.style.zIndex = 2;
     thisContext._penCanvas.style.position = "absolute";
 
+    // create the div where we show the backdrop using CSS
     thisContext._backdropDiv = document.createElement("div");
     thisContext._mainDiv.appendChild(thisContext._backdropDiv);
     thisContext._backdropDiv.id = "backdrop";
@@ -327,6 +334,7 @@ function Woof() {
       thisContext._spriteCanvas.width = thisContext.width;
       thisContext._spriteCanvas.height = thisContext.height;
 
+      // when you change the canvas size, you have to copy the pen data onto the newly-sized canvas
       var penData = thisContext._penContext.getImageData(0, 0, width, height);
       thisContext._penCanvas.width = thisContext.width;
       thisContext._penCanvas.height = thisContext.height;
@@ -363,12 +371,12 @@ function Woof() {
   };
 
   thisContext._renderBackdrop = function () {
-    var _thisContext$backdrop = thisContext.backdrop;
-    var size = _thisContext$backdrop.size;
-    var type = _thisContext$backdrop.type;
-    var url = _thisContext$backdrop.url;
-    var color = _thisContext$backdrop.color;
-    var repeat = _thisContext$backdrop.repeat;
+    var _thisContext$backdrop = thisContext.backdrop,
+        size = _thisContext$backdrop.size,
+        type = _thisContext$backdrop.type,
+        url = _thisContext$backdrop.url,
+        color = _thisContext$backdrop.color,
+        repeat = _thisContext$backdrop.repeat;
 
 
     thisContext._backdropDiv.style.background = type === 'url' ? "url('" + url + "')" : color;
@@ -428,7 +436,10 @@ function Woof() {
     thisContext.ready(thisContext._renderBackdrop);
   };
 
-  thisContext.freezing = false;
+  // WARNING - freeze is notoriously difficult to get right
+  // Any change you make to it will have unintended consequenses.
+  // Only change this code if absolutely neccesary and after rigerous testing.
+  thisContext.freezing = false; // whether or not a freeze is currently in progress
   thisContext.freeze = function () {
     if (arguments.length > 0) {
       throw new TypeError("freeze() requires no inputs.");
@@ -449,13 +460,23 @@ function Woof() {
     thisContext.stopped = false;
   };
 
+  // the HTML canvas puts (0, 0) in the top-left corner of the screen
+  // the x-axis works as you'd expect, with x increasing as you move left-to-right
+  // the y-axis works counter-intuitively, decreasing as you move up, and increasing as you move down
+  // translateToCenter maps coordinates from the HTML canvas to the Scratch-world where (0,0) is in the center of the screen  
   thisContext.translateToCenter = function (x, y) {
     return [x - thisContext.width / 2 + thisContext.cameraX - thisContext._spriteCanvas.offsetLeft, thisContext.height / 2 - y + thisContext.cameraY + thisContext._spriteCanvas.offsetTop];
   };
+  // translateToCanvas (the opposite of translateToCenter) maps coordinates from the Scratch-world to the HTML canvas world with (0,0) in the top-left  
   thisContext.translateToCanvas = function (x, y) {
     return [x + thisContext.maxX - thisContext._spriteCanvas.offsetLeft, thisContext.maxY - y + thisContext._spriteCanvas.offsetTop];
   };
 
+  // Below is where we handle mouse and keyboard events
+  // The strategy is:
+  // 1. Listen to all mouse and keyboard events
+  // 2. Keep global values updated, including which keys are down, and whether the mouse is down
+  // 3. Run events if we have them for that corresponding event
   thisContext.mouseDown = false;
   thisContext.mouseX = 0;
   thisContext.mouseY = 0;
@@ -464,6 +485,13 @@ function Woof() {
   thisContext.mouseXSpeed = 0;
   thisContext.mouseYSpeed = 0;
   thisContext.keysDown = [];
+
+  //modify keysDown.includes() to not be case-sensitive
+  thisContext.keysDown.oldIncludes = thisContext.keysDown.includes;
+  thisContext.keysDown.includes = function (item) {
+    return this.oldIncludes(item.toUpperCase());
+  };
+
   thisContext.ready(function () {
     thisContext._spriteCanvas.addEventListener("mousedown", function (event) {
       thisContext.mouseDown = true;
@@ -525,24 +553,40 @@ function Woof() {
 
     document.body.addEventListener("keydown", function (event) {
       var key = Woof.prototype.keyCodeToString(event.keyCode);
-      if (!thisContext.keysDown.includes(key)) {
-        thisContext.keysDown.push(key);
+      if ((typeof key === "undefined" ? "undefined" : _typeof(key)) == "object") {
+        //if keyCodeToString returns an array, eg ["SPACE", "SPACE BAR", "SPACEBAR"]
+        key.forEach(function (item) {
+          if (!thisContext.keysDown.includes(item)) {
+            thisContext.keysDown.push(item);
+          }
+        });
+      } else {
+        if (!thisContext.keysDown.includes(key)) {
+          thisContext.keysDown.push(key);
+        }
       }
     });
     document.body.addEventListener("keyup", function (event) {
       var key = Woof.prototype.keyCodeToString(event.keyCode);
-      if (thisContext.keysDown.includes(key)) {
-        thisContext.keysDown.splice(thisContext.keysDown.indexOf(key), 1);
+      if ((typeof key === "undefined" ? "undefined" : _typeof(key)) == "object") {
+        //if keyCodeToString returns an array, eg ["SPACE", "SPACE BAR", "SPACEBAR"]
+        key.forEach(function (item) {
+          if (thisContext.keysDown.includes(item)) {
+            thisContext.keysDown.splice(thisContext.keysDown.indexOf(item), 1);
+          }
+        });
+      } else {
+        if (thisContext.keysDown.includes(key)) {
+          thisContext.keysDown.splice(thisContext.keysDown.indexOf(key), 1);
+        }
       }
     });
 
     thisContext._onMouseMoveHandler = function (event) {
-      var _thisContext$translat11 = thisContext.translateToCenter(event.clientX, event.clientY);
-
-      var _thisContext$translat12 = _slicedToArray(_thisContext$translat11, 2);
-
-      var mouseX = _thisContext$translat12[0];
-      var mouseY = _thisContext$translat12[1];
+      var _thisContext$translat11 = thisContext.translateToCenter(event.clientX, event.clientY),
+          _thisContext$translat12 = _slicedToArray(_thisContext$translat11, 2),
+          mouseX = _thisContext$translat12[0],
+          mouseY = _thisContext$translat12[1];
 
       thisContext._onMouseMoves.forEach(function (func) {
         func(mouseX, mouseY);
@@ -550,12 +594,10 @@ function Woof() {
     };
     thisContext._spriteCanvas.addEventListener("mousemove", thisContext._onMouseMoveHandler);
     thisContext._onMouseDownHandler = function (event) {
-      var _thisContext$translat13 = thisContext.translateToCenter(event.clientX, event.clientY);
-
-      var _thisContext$translat14 = _slicedToArray(_thisContext$translat13, 2);
-
-      var mouseX = _thisContext$translat14[0];
-      var mouseY = _thisContext$translat14[1];
+      var _thisContext$translat13 = thisContext.translateToCenter(event.clientX, event.clientY),
+          _thisContext$translat14 = _slicedToArray(_thisContext$translat13, 2),
+          mouseX = _thisContext$translat14[0],
+          mouseY = _thisContext$translat14[1];
 
       thisContext._onMouseDowns.forEach(function (func) {
         func(mouseX, mouseY);
@@ -563,12 +605,10 @@ function Woof() {
     };
     thisContext._spriteCanvas.addEventListener("mousedown", thisContext._onMouseDownHandler);
     thisContext._onMouseUpHandler = function (event) {
-      var _thisContext$translat15 = thisContext.translateToCenter(event.clientX, event.clientY);
-
-      var _thisContext$translat16 = _slicedToArray(_thisContext$translat15, 2);
-
-      var mouseX = _thisContext$translat16[0];
-      var mouseY = _thisContext$translat16[1];
+      var _thisContext$translat15 = thisContext.translateToCenter(event.clientX, event.clientY),
+          _thisContext$translat16 = _slicedToArray(_thisContext$translat15, 2),
+          mouseX = _thisContext$translat16[0],
+          mouseY = _thisContext$translat16[1];
 
       thisContext._onMouseUps.forEach(function (func) {
         func(mouseX, mouseY);
@@ -578,19 +618,53 @@ function Woof() {
 
     thisContext._onKeyDownHandler = function (event) {
       var key = Woof.prototype.keyCodeToString(event.keyCode);
-      thisContext._onKeyDowns.forEach(function (func) {
-        func(key);
-      });
+
+      if ((typeof key === "undefined" ? "undefined" : _typeof(key)) == "object") {
+        // if keyCodeToString returns an array e.g. ["SPACE", "SPACE BAR", "SPACEBAR"]
+        key.forEach(function (item) {
+          thisContext._onKeyDowns.forEach(function (func) {
+            func(item);
+          });
+          thisContext._onKeyDowns.forEach(function (func) {
+            func(item.toLowerCase());
+          }); // eliminate case-sensitivity
+        });
+      } else {
+        thisContext._onKeyDowns.forEach(function (func) {
+          func(key);
+        });
+        thisContext._onKeyDowns.forEach(function (func) {
+          func(key.toLowerCase());
+        }); //eliminate case-sensitivity
+      }
     };
     document.body.addEventListener("keydown", thisContext._onKeyDownHandler);
+
     thisContext._onKeyUpHandler = function (event) {
       var key = Woof.prototype.keyCodeToString(event.keyCode);
-      thisContext._onKeyUps.forEach(function (func) {
-        func(key);
-      });
+
+      if ((typeof key === "undefined" ? "undefined" : _typeof(key)) == "object") {
+        // if keyCodeToString returns an array e.g. ["SPACE", "SPACE BAR", "SPACEBAR"]
+        key.forEach(function (item) {
+          thisContext._onKeyUps.forEach(function (func) {
+            func(item);
+          });
+          thisContext._onKeyUps.forEach(function (func) {
+            func(item.toLowerCase());
+          }); // eliminate case-sensitivity
+        });
+      } else {
+        thisContext._onKeyUps.forEach(function (func) {
+          func(key);
+        });
+        thisContext._onKeyUps.forEach(function (func) {
+          func(key.toLowerCase());
+        }); // eliminate case-sensitivity
+      }
     };
     document.body.addEventListener("keyup", thisContext._onKeyUpHandler);
   });
+  // The following methods is where we keep track of user's events
   thisContext._onMouseMoves = [];
   thisContext.onMouseMove = function (func) {
     if (typeof func != "function") {
@@ -664,6 +738,9 @@ function Woof() {
     });
   };
 
+  // Woof repeats differ from a traditional JavaScript while or for-loop:
+  // 1. JavaScript loops are synchronous, and Woof loops are asynchronous
+  // 2. JavaScript loops are wicked fast, and Woof loops happen as fast as Woof forevers (about 30 times per second, in line with 30fps) which allow users to animate with them
   thisContext._repeats = [];
   thisContext.repeat = function (times, func, after) {
     if (typeof func != "function" || typeof times != "number" || after !== undefined && typeof after != "function") {
@@ -718,9 +795,9 @@ function Woof() {
   };
 
   thisContext._render = function () {
-    thisContext._runRepeats();
+    thisContext._runRepeats(); // we need to run the repeats even if stopped because the defrost() code likely lives in a repeat
     thisContext._calculateMouseSpeed();
-    thisContext.renderInterval = window.requestAnimationFrame(thisContext._render);
+    thisContext.renderInterval = window.requestAnimationFrame(thisContext._render); // WARNING this line makes render recursive. Only call is once and it will continue to call itself ~30fps.
     if (thisContext.stopped) {
       return;
     }
@@ -732,30 +809,29 @@ function Woof() {
 Woof.prototype.Sprite = function () {
   var _this = this;
 
-  var _ref3 = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-
-  var _ref3$project = _ref3.project;
-  var project = _ref3$project === undefined ? undefined : _ref3$project;
-  var _ref3$x = _ref3.x;
-  var x = _ref3$x === undefined ? 0 : _ref3$x;
-  var _ref3$y = _ref3.y;
-  var y = _ref3$y === undefined ? 0 : _ref3$y;
-  var _ref3$angle = _ref3.angle;
-  var angle = _ref3$angle === undefined ? 0 : _ref3$angle;
-  var _ref3$rotationStyle = _ref3.rotationStyle;
-  var rotationStyle = _ref3$rotationStyle === undefined ? "ROTATE" : _ref3$rotationStyle;
-  var _ref3$showing = _ref3.showing;
-  var showing = _ref3$showing === undefined ? true : _ref3$showing;
-  var _ref3$penColor = _ref3.penColor;
-  var penColor = _ref3$penColor === undefined ? "black" : _ref3$penColor;
-  var _ref3$penWidth = _ref3.penWidth;
-  var penWidth = _ref3$penWidth === undefined ? 1 : _ref3$penWidth;
-  var _ref3$penDown = _ref3.penDown;
-  var penDown = _ref3$penDown === undefined ? false : _ref3$penDown;
-  var _ref3$showCollider = _ref3.showCollider;
-  var showCollider = _ref3$showCollider === undefined ? false : _ref3$showCollider;
-  var _ref3$brightness = _ref3.brightness;
-  var brightness = _ref3$brightness === undefined ? 100 : _ref3$brightness;
+  var _ref3 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+      _ref3$project = _ref3.project,
+      project = _ref3$project === undefined ? undefined : _ref3$project,
+      _ref3$x = _ref3.x,
+      x = _ref3$x === undefined ? 0 : _ref3$x,
+      _ref3$y = _ref3.y,
+      y = _ref3$y === undefined ? 0 : _ref3$y,
+      _ref3$angle = _ref3.angle,
+      angle = _ref3$angle === undefined ? 0 : _ref3$angle,
+      _ref3$rotationStyle = _ref3.rotationStyle,
+      rotationStyle = _ref3$rotationStyle === undefined ? "ROTATE" : _ref3$rotationStyle,
+      _ref3$showing = _ref3.showing,
+      showing = _ref3$showing === undefined ? true : _ref3$showing,
+      _ref3$penColor = _ref3.penColor,
+      penColor = _ref3$penColor === undefined ? "black" : _ref3$penColor,
+      _ref3$penWidth = _ref3.penWidth,
+      penWidth = _ref3$penWidth === undefined ? 1 : _ref3$penWidth,
+      _ref3$penDown = _ref3.penDown,
+      penDown = _ref3$penDown === undefined ? false : _ref3$penDown,
+      _ref3$showCollider = _ref3.showCollider,
+      showCollider = _ref3$showCollider === undefined ? false : _ref3$showCollider,
+      _ref3$brightness = _ref3.brightness,
+      brightness = _ref3$brightness === undefined ? 100 : _ref3$brightness;
 
   if (!project) {
     if (global) {
@@ -777,7 +853,7 @@ Woof.prototype.Sprite = function () {
         throw new TypeError("sprite.x can only be set to a number.");
       }
       this.privateX = value;
-      this.project.ready(this.trackPen);
+      this.project.ready(this.trackPen); // any change to x, is tracked for the pen
     }
   });
 
@@ -790,7 +866,7 @@ Woof.prototype.Sprite = function () {
         throw new TypeError("sprite.y can only be set to a number.");
       }
       this.privateY = value;
-      this.project.ready(this.trackPen);
+      this.project.ready(this.trackPen); // any change to y to tracked for the pen
     }
   });
 
@@ -835,6 +911,7 @@ Woof.prototype.Sprite = function () {
     _this.lastY = _ref5[1];
   };
 
+  // SAT collision for touching, works with rotated sprites
   this.rotatedVector = function (x, y) {
     var rotatedX = Math.cos(this.radians()) * (x - this.x) - Math.sin(this.radians()) * (y - this.y) + this.x;
     var rotatedY = Math.sin(this.radians()) * (x - this.x) + Math.cos(this.radians()) * (y - this.y) + this.y;
@@ -855,6 +932,7 @@ Woof.prototype.Sprite = function () {
     return new SAT.Polygon(pos, [v1, v2, v3, v4]);
   };
 
+  // for debugging purposes, this function displays the collider on the screen                                     
   this._renderCollider = function (context) {
     var collider = this.collider();
 
@@ -887,12 +965,12 @@ Woof.prototype.Sprite = function () {
       } else if (this.rotationStyle == "NO ROTATE") {
         // no rotate
       } else if (this.rotationStyle == "ROTATE LEFT RIGHT") {
-          if (this.angle % 360 >= 90 && this.angle % 360 < 270) {
-            context.scale(-1, 1);
-          } else if (this.angle % 360 >= 0 && this.angle % 360 < 90 || this.angle % 360 <= 360 && this.angle % 360 >= 270) {
-            // no rotate
-          }
+        if (this.angle % 360 >= 90 && this.angle % 360 < 270) {
+          context.scale(-1, 1);
+        } else if (this.angle % 360 >= 0 && this.angle % 360 < 90 || this.angle % 360 <= 360 && this.angle % 360 >= 270) {
+          // no rotate
         }
+      }
 
       this.render(context);
       context.restore();
@@ -918,11 +996,12 @@ Woof.prototype.Sprite = function () {
   };
 
   this.move = function () {
-    var steps = arguments.length <= 0 || arguments[0] === undefined ? 1 : arguments[0];
+    var steps = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
 
     if (typeof steps != "number") {
       throw new TypeError("move(steps) requires one number input.");
     }
+    // we modify privateX and privateY here before tracking pen so that the pen thinks they changed at the same time
     this.privateX += steps * Math.cos(this.radians());
     this.privateY += steps * Math.sin(this.radians());
     this.project.ready(this.trackPen);
@@ -986,6 +1065,8 @@ Woof.prototype.Sprite = function () {
       return true;
     }
 
+    // this code scans the pixels of both sprites to see if they are touching
+    // it's very slow so we turn it off by default
     var r1 = _this.bounds();
     var r2 = sprite.bounds();
     var left = Math.min(r1.left, r2.left);
@@ -1000,13 +1081,10 @@ Woof.prototype.Sprite = function () {
     _this.collisionContext.globalCompositeOperation = 'source-in';
     sprite._render(_this.collisionContext);
 
-    var _project$translateToC = _this.project.translateToCanvas(left, top);
-
-    var _project$translateToC2 = _slicedToArray(_project$translateToC, 2);
-
-    var canvasLeft = _project$translateToC2[0];
-    var canvasTop = _project$translateToC2[1];
-
+    var _project$translateToC = _this.project.translateToCanvas(left, top),
+        _project$translateToC2 = _slicedToArray(_project$translateToC, 2),
+        canvasLeft = _project$translateToC2[0],
+        canvasTop = _project$translateToC2[1];
 
     try {
       var data = _this.collisionContext.getImageData(canvasLeft, canvasTop, right - left, top - bottom).data;
@@ -1028,10 +1106,10 @@ Woof.prototype.Sprite = function () {
   };
 
   this.overlap = function (_ref6) {
-    var left = _ref6.left;
-    var right = _ref6.right;
-    var top = _ref6.top;
-    var bottom = _ref6.bottom;
+    var left = _ref6.left,
+        right = _ref6.right,
+        top = _ref6.top,
+        bottom = _ref6.bottom;
 
     var r1 = _this.bounds();
     return !(left > r1.right || right < r1.left || top < r1.bottom || bottom > r1.top);
@@ -1072,7 +1150,7 @@ Woof.prototype.Sprite = function () {
   });
 
   this.turnLeft = function () {
-    var degrees = arguments.length <= 0 || arguments[0] === undefined ? 1 : arguments[0];
+    var degrees = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
 
     if (typeof degrees != "number") {
       throw new TypeError("turnLeft(degrees) requires one number input.");
@@ -1081,7 +1159,7 @@ Woof.prototype.Sprite = function () {
   };
 
   this.turnRight = function () {
-    var degrees = arguments.length <= 0 || arguments[0] === undefined ? 1 : arguments[0];
+    var degrees = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
 
     if (typeof degrees != "number") {
       throw new TypeError("turnRight(degrees) requires one number input.");
@@ -1129,6 +1207,7 @@ Woof.prototype.Sprite = function () {
   this.pointTowards = function (x2, y2) {
     if (arguments.length === 1) {
       if ((typeof x2 === "undefined" ? "undefined" : _typeof(x2)) == "object") {
+        // if no y2 and x2 is an object, we will assume it's a sprite and point towards it
         this.angle = Math.atan2(x2.y - this.y, x2.x - this.x) * 180 / Math.PI;
       } else {
         throw new TypeError("pointTowards(sprite) requires one sprite input.");
@@ -1140,6 +1219,7 @@ Woof.prototype.Sprite = function () {
     }
   };
 
+  // track user events specfically for this sprite
   this._onMouseDowns = [];
   this.onMouseDown = function (func) {
     if (typeof func != "function") {
@@ -1148,12 +1228,10 @@ Woof.prototype.Sprite = function () {
     _this._onMouseDowns.push(func);
   };
   this._onMouseDownHandler = function (event) {
-    var _project$translateToC3 = _this.project.translateToCenter(event.clientX, event.clientY);
-
-    var _project$translateToC4 = _slicedToArray(_project$translateToC3, 2);
-
-    var mouseX = _project$translateToC4[0];
-    var mouseY = _project$translateToC4[1];
+    var _project$translateToC3 = _this.project.translateToCenter(event.clientX, event.clientY),
+        _project$translateToC4 = _slicedToArray(_project$translateToC3, 2),
+        mouseX = _project$translateToC4[0],
+        mouseY = _project$translateToC4[1];
 
     if (_this.showing && _this.over(mouseX, mouseY)) {
       _this._onMouseDowns.forEach(function (func) {
@@ -1169,12 +1247,10 @@ Woof.prototype.Sprite = function () {
     _this._onMouseUps.push(func);
   };
   this._onMouseUpHandler = function (event) {
-    var _project$translateToC5 = _this.project.translateToCenter(event.clientX, event.clientY);
-
-    var _project$translateToC6 = _slicedToArray(_project$translateToC5, 2);
-
-    var mouseX = _project$translateToC6[0];
-    var mouseY = _project$translateToC6[1];
+    var _project$translateToC5 = _this.project.translateToCenter(event.clientX, event.clientY),
+        _project$translateToC6 = _slicedToArray(_project$translateToC5, 2),
+        mouseX = _project$translateToC6[0],
+        mouseY = _project$translateToC6[1];
 
     if (_this.showing && _this.over(mouseX, mouseY)) {
       _this._onMouseUps.forEach(function (func) {
@@ -1206,28 +1282,28 @@ Woof.prototype.Sprite = function () {
 Woof.prototype.Text = function () {
   var _this4 = this;
 
-  var _ref7 = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-
-  var _ref7$project = _ref7.project;
-  var project = _ref7$project === undefined ? undefined : _ref7$project;
-  var _ref7$text = _ref7.text;
-  var text = _ref7$text === undefined ? "Text" : _ref7$text;
-  var _ref7$size = _ref7.size;
-  var size = _ref7$size === undefined ? 12 : _ref7$size;
-  var _ref7$color = _ref7.color;
-  var color = _ref7$color === undefined ? "black" : _ref7$color;
-  var _ref7$fontFamily = _ref7.fontFamily;
-  var fontFamily = _ref7$fontFamily === undefined ? "arial" : _ref7$fontFamily;
-  var _ref7$textAlign = _ref7.textAlign;
-  var textAlign = _ref7$textAlign === undefined ? "center" : _ref7$textAlign;
+  var _ref7 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+      _ref7$project = _ref7.project,
+      project = _ref7$project === undefined ? undefined : _ref7$project,
+      _ref7$text = _ref7.text,
+      text = _ref7$text === undefined ? "Text" : _ref7$text,
+      _ref7$size = _ref7.size,
+      size = _ref7$size === undefined ? 12 : _ref7$size,
+      _ref7$color = _ref7.color,
+      color = _ref7$color === undefined ? "black" : _ref7$color,
+      _ref7$fontFamily = _ref7.fontFamily,
+      fontFamily = _ref7$fontFamily === undefined ? "arial" : _ref7$fontFamily,
+      _ref7$textAlign = _ref7.textAlign,
+      textAlign = _ref7$textAlign === undefined ? "center" : _ref7$textAlign;
 
   this.type = "text";
-  // TODO remove text align or make the collider take it into account
   Woof.prototype.Sprite.call(this, arguments[0]);
   this.text = text;
   this.size = Math.abs(size);
   this.color = color;
   this.fontFamily = fontFamily;
+  // TODO remove text align or make the collider take it into account
+  // currently, the collider doesn't know about textAlign so things can be quite inaccurate
   this.textAlign = textAlign;
 
   Object.defineProperty(this, 'width', {
@@ -1251,6 +1327,8 @@ Woof.prototype.Text = function () {
 
       var height;
       this._applyInContext(function () {
+        // the height of text is notoriously difficult to measure
+        // the width of the letter "M" in that font is usually a good proxy
         height = _this3.project._spriteContext.measureText("M").width;
       });
       return height;
@@ -1260,6 +1338,7 @@ Woof.prototype.Text = function () {
     }
   });
 
+  // this function saves us from copy-and-pasing the font declarations all over
   this._applyInContext = function (func) {
     _this4.project._spriteContext.save();
 
@@ -1274,6 +1353,7 @@ Woof.prototype.Text = function () {
 
   this.textEval = function () {
     if (typeof _this4.text == "function") {
+      // if we get a functions for text, evaluate it every time we are asked to render the text
       try {
         return _this4.text();
       } catch (e) {
@@ -1294,14 +1374,13 @@ Woof.prototype.Text = function () {
 Woof.prototype.Circle = function () {
   var _this5 = this;
 
-  var _ref8 = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-
-  var _ref8$project = _ref8.project;
-  var project = _ref8$project === undefined ? undefined : _ref8$project;
-  var _ref8$radius = _ref8.radius;
-  var radius = _ref8$radius === undefined ? 10 : _ref8$radius;
-  var _ref8$color = _ref8.color;
-  var color = _ref8$color === undefined ? "black" : _ref8$color;
+  var _ref8 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+      _ref8$project = _ref8.project,
+      project = _ref8$project === undefined ? undefined : _ref8$project,
+      _ref8$radius = _ref8.radius,
+      radius = _ref8$radius === undefined ? 10 : _ref8$radius,
+      _ref8$color = _ref8.color,
+      color = _ref8$color === undefined ? "black" : _ref8$color;
 
   this.type = "circle";
   Woof.prototype.Sprite.call(this, arguments[0]);
@@ -1337,16 +1416,15 @@ Woof.prototype.Circle = function () {
 Woof.prototype.Rectangle = function () {
   var _this6 = this;
 
-  var _ref9 = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-
-  var _ref9$project = _ref9.project;
-  var project = _ref9$project === undefined ? undefined : _ref9$project;
-  var _ref9$height = _ref9.height;
-  var height = _ref9$height === undefined ? 10 : _ref9$height;
-  var _ref9$width = _ref9.width;
-  var width = _ref9$width === undefined ? 10 : _ref9$width;
-  var _ref9$color = _ref9.color;
-  var color = _ref9$color === undefined ? "black" : _ref9$color;
+  var _ref9 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+      _ref9$project = _ref9.project,
+      project = _ref9$project === undefined ? undefined : _ref9$project,
+      _ref9$height = _ref9.height,
+      height = _ref9$height === undefined ? 10 : _ref9$height,
+      _ref9$width = _ref9.width,
+      width = _ref9$width === undefined ? 10 : _ref9$width,
+      _ref9$color = _ref9.color,
+      color = _ref9$color === undefined ? "black" : _ref9$color;
 
   this.type = "rectangle";
   Woof.prototype.Sprite.call(this, arguments[0]);
@@ -1387,21 +1465,23 @@ Woof.prototype.Rectangle = function () {
 Woof.prototype.Line = function () {
   var _this7 = this;
 
-  var _ref10 = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+  var _ref10 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+      _ref10$project = _ref10.project,
+      project = _ref10$project === undefined ? undefined : _ref10$project,
+      _ref10$width = _ref10.width,
+      width = _ref10$width === undefined ? 1 : _ref10$width,
+      _ref10$x = _ref10.x1,
+      x1 = _ref10$x === undefined ? 10 : _ref10$x,
+      _ref10$y = _ref10.y1,
+      y1 = _ref10$y === undefined ? 10 : _ref10$y,
+      _ref10$color = _ref10.color,
+      color = _ref10$color === undefined ? "black" : _ref10$color;
 
-  var _ref10$project = _ref10.project;
-  var project = _ref10$project === undefined ? undefined : _ref10$project;
-  var _ref10$width = _ref10.width;
-  var width = _ref10$width === undefined ? 1 : _ref10$width;
-  var _ref10$x = _ref10.x1;
-  var x1 = _ref10$x === undefined ? 10 : _ref10$x;
-  var _ref10$y = _ref10.y1;
-  var y1 = _ref10$y === undefined ? 10 : _ref10$y;
-  var _ref10$color = _ref10.color;
-  var color = _ref10$color === undefined ? "black" : _ref10$color;
+  // currently the line collider and collision detection is wonky
+  // because a line is really a rectangle that's defined from it's endpoints...
+  // TODO make this a helper function to create a rectangle 
 
   this.type = "line";
-  // TODO make this a helper to create a rectangle so that we can more easily reason about lines and colliders
   Woof.prototype.Sprite.call(this, arguments[0]);
   this.x1 = x1;
   this.y1 = y1;
@@ -1442,14 +1522,13 @@ Woof.prototype.Line = function () {
 Woof.prototype.Image = function () {
   var _this8 = this;
 
-  var _ref11 = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-
-  var _ref11$project = _ref11.project;
-  var project = _ref11$project === undefined ? undefined : _ref11$project;
-  var _ref11$url = _ref11.url;
-  var url = _ref11$url === undefined ? "./images/SMJjVCL.png" : _ref11$url;
-  var height = _ref11.height;
-  var width = _ref11.width;
+  var _ref11 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+      _ref11$project = _ref11.project,
+      project = _ref11$project === undefined ? undefined : _ref11$project,
+      _ref11$url = _ref11.url,
+      url = _ref11$url === undefined ? "./images/SMJjVCL.png" : _ref11$url,
+      height = _ref11.height,
+      width = _ref11.width;
 
   this.type = "image";
   Woof.prototype.Sprite.call(this, arguments[0]);
@@ -1458,10 +1537,13 @@ Woof.prototype.Image = function () {
 
   this.setImageURL = function (url) {
     this.image = new window.BrowserImage();
+    // the code in comments below were designed to allow CORS for bad images
+    // this caused more problems then it solved so it's currently removed but should be revisited eventually
+    // https://github.com/stevekrouse/WoofJS/issues/161
     // this.image.crossOrigin = "Anonymous"
     this.image.src = url;
     // this.image.`EventListener('error', e => {
-    //     e.preventDefault();
+    //     e.preventDefault(); 
     //     this.image = new window.BrowserImage();
     //     this.image.src = url;
     // });
@@ -1497,15 +1579,19 @@ Woof.prototype.Image = function () {
   };
 };
 
-Woof.prototype.customSprite = function (render) {
+// this function allows a user a custom sprite with its own render method
+// this is new and not really used so probably needs to be fleshed out
+Woof.prototype.customSprite = function (subClass) {
+  if (!subClass.render) {
+    throw new TypeError("customSprites must contain a render function");
+  } // TODO more errors like these, probably for width and height
   return function () {
-    var _ref12 = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-
-    var _ref12$project = _ref12.project;
-    var project = _ref12$project === undefined ? undefined : _ref12$project;
+    var _ref12 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+        _ref12$project = _ref12.project,
+        project = _ref12$project === undefined ? undefined : _ref12$project;
 
     Woof.prototype.Sprite.call(this, arguments[0]);
-    this.render = render;
+    Woof.prototype.extend(this, subClass);
   };
 };
 
@@ -1567,27 +1653,27 @@ Woof.prototype.RepeatUntil = function (condition, func, after) {
 
 Woof.prototype.keyCodeToString = function (keyCode) {
   if (keyCode == 38) {
-    return "UP";
+    return ["UP", "UP ARROW"];
   } else if (keyCode == 37) {
-    return "LEFT";
+    return ["LEFT", "LEFT ARROW"];
   } else if (keyCode == 39) {
-    return "RIGHT";
+    return ["RIGHT", "RIGHT ARROW"];
   } else if (keyCode == 40) {
-    return "DOWN";
+    return ["DOWN", "DOWN ARROW"];
   } else if (keyCode == 9) {
     return "TAB";
   } else if (keyCode == 13) {
-    return "ENTER";
+    return ["ENTER", "RETURN"];
   } else if (keyCode == 16) {
     return "SHIFT";
   } else if (keyCode == 17) {
-    return "CTRL";
+    return ["CTRL", "CONTROL"];
   } else if (keyCode == 18) {
-    return "ALT";
+    return ["ALT", "OPTION"];
   } else if (keyCode == 27) {
-    return "ESCAPE";
+    return ["ESCAPE", "ESC"];
   } else if (keyCode == 32) {
-    return "SPACE";
+    return ["SPACE", "SPACE BAR", "SPACEBAR"];
   } else if (keyCode == 192) {
     return "`";
   } else if (keyCode == 186) {
@@ -1606,14 +1692,22 @@ Woof.prototype.keyCodeToString = function (keyCode) {
     return "/";
   } else if (keyCode == 190) {
     return ".";
-  } else if (keyCode == 191) {
-    return "/";
   } else if (keyCode == 188) {
     return ",";
   } else if (keyCode == 20) {
-    return "CAPS LOCK";
+    return ["CAPS", "CAPS LOCK"];
+  } else if (keyCode == 8) {
+    return ["DELETE", "DEL", "BACKSPACE"];
+  } else if (keyCode == 91) {
+    return ["COMMAND", "CMD", "WINDOWS", "SEARCH"];
   } else {
-    return String.fromCharCode(keyCode);
+    if (keyCode >= 65 && keyCode <= 90 || keyCode >= 48 && keyCode <= 57) {
+      //if it's a number or a letter, return the number/letter as a string
+      return String.fromCharCode(keyCode);
+    } else {
+      //if it's anything other than what's covered above, return the keycode as a string
+      return keyCode.toString();
+    }
   }
 };
 
@@ -1756,6 +1850,8 @@ Array.prototype.remove = function (item) {
   }
 };
 
+// this is a useful funciton if you want to limit how often a function can be called
+// for example, a user can only get a point every 2 seconds
 function throttle(callback, limit) {
   if (typeof callback != "function" || typeof limit != "number") {
     throw new TypeError("throttle(function, limit) requires one function input and one number.");
@@ -1785,6 +1881,7 @@ Woof.prototype.extend = function (a, b) {
   return a;
 };
 
+// users can use this funcition to import external scripts to their Woof projects, like firebase
 Woof.prototype.importCodeURL = function (url, callback) {
   var lib = document.createElement("script");
   lib.type = "text/javascript";
@@ -1793,10 +1890,12 @@ Woof.prototype.importCodeURL = function (url, callback) {
   document.body.appendChild(lib);
 };
 
+// find the woof.js script tag in the page
 var currentScript = document.currentScript || Array.prototype.slice.call(document.getElementsByTagName('script')).find(function (s) {
   return s.src.includes('woof.js');
 });
 
 if (JSON.parse(currentScript.getAttribute('global')) !== false) {
+  // unless the script tag containing Woof has an attribute global="false", start Woof in global mode
   Woof.prototype.extend(window, new Woof({ global: true, fullScreen: true }));
 }

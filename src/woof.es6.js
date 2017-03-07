@@ -276,6 +276,13 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
   thisContext.mouseXSpeed = 0;
   thisContext.mouseYSpeed = 0;
   thisContext.keysDown = [];
+  
+  //modify keysDown.includes() to not be case-sensitive
+  thisContext.keysDown.oldIncludes = thisContext.keysDown.includes
+  thisContext.keysDown.includes = function(item) {
+    return this.oldIncludes(item.toUpperCase())
+  }
+  
   thisContext.ready(() => {
     thisContext._spriteCanvas.addEventListener("mousedown", (event) => {
       thisContext.mouseDown = true;
@@ -303,17 +310,35 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
       [thisContext.mouseX, thisContext.mouseY] = thisContext.translateToCenter(event.targetTouches[0].clientX, event.targetTouches[0].clientY);
       event.preventDefault();
     });
-    
+
     document.body.addEventListener("keydown", event => {
       var key = Woof.prototype.keyCodeToString(event.keyCode);
-      if (!thisContext.keysDown.includes(key)){
-       thisContext.keysDown.push(key); 
-      }
+        if (typeof key == "object") { //if keyCodeToString returns an array, eg ["SPACE", "SPACE BAR", "SPACEBAR"]
+          key.forEach(item => {
+            if (!thisContext.keysDown.includes(item)){
+              thisContext.keysDown.push(item)
+            }
+          })
+        }
+        else{
+          if (!thisContext.keysDown.includes(key)){
+            thisContext.keysDown.push(key)
+          }
+        }
     });
     document.body.addEventListener("keyup", event => {
       var key = Woof.prototype.keyCodeToString(event.keyCode);
-      if (thisContext.keysDown.includes(key)){
-        thisContext.keysDown.splice(thisContext.keysDown.indexOf(key), 1);
+      if (typeof key == "object") { //if keyCodeToString returns an array, eg ["SPACE", "SPACE BAR", "SPACEBAR"]
+        key.forEach(item => {
+          if (thisContext.keysDown.includes(item)){
+            thisContext.keysDown.splice(thisContext.keysDown.indexOf(item), 1);
+          }
+        })
+      }
+      else{
+        if (thisContext.keysDown.includes(key)){
+          thisContext.keysDown.splice(thisContext.keysDown.indexOf(key), 1);
+        }
       }
     });
     
@@ -332,15 +357,36 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
       thisContext._onMouseUps.forEach((func) => {func(mouseX, mouseY)});
     };
     thisContext._spriteCanvas.addEventListener("mouseup", thisContext._onMouseUpHandler);
-  
+    
     thisContext._onKeyDownHandler = event => {
       var key = Woof.prototype.keyCodeToString(event.keyCode);
-      thisContext._onKeyDowns.forEach((func) => {func(key)});
+      
+      if (typeof key == "object") { // if keyCodeToString returns an array e.g. ["SPACE", "SPACE BAR", "SPACEBAR"]
+        key.forEach(item => {
+          thisContext._onKeyDowns.forEach((func) => {func(item)});
+          thisContext._onKeyDowns.forEach((func) => {func(item.toLowerCase())}); // eliminate case-sensitivity
+        })
+      }
+      else {
+        thisContext._onKeyDowns.forEach((func) => {func(key)});
+        thisContext._onKeyDowns.forEach((func) => {func(key.toLowerCase())}); //eliminate case-sensitivity
+      }
     };
     document.body.addEventListener("keydown", thisContext._onKeyDownHandler);
+    
     thisContext._onKeyUpHandler = event => {
       var key = Woof.prototype.keyCodeToString(event.keyCode);
-      thisContext._onKeyUps.forEach((func) => {func(key)});
+      
+      if (typeof key == "object") { // if keyCodeToString returns an array e.g. ["SPACE", "SPACE BAR", "SPACEBAR"]
+        key.forEach(item => {
+          thisContext._onKeyUps.forEach((func) => {func(item)});
+          thisContext._onKeyUps.forEach((func) => {func(item.toLowerCase())}); // eliminate case-sensitivity
+        })
+      }
+      else {
+        thisContext._onKeyUps.forEach((func) => {func(key)});
+        thisContext._onKeyUps.forEach((func) => {func(key.toLowerCase())}); // eliminate case-sensitivity
+      }
     };
     document.body.addEventListener("keyup", thisContext._onKeyUpHandler);
     
@@ -1101,37 +1147,37 @@ Woof.prototype.RepeatUntil = function(condition, func, after){
 
 Woof.prototype.keyCodeToString = function(keyCode) {
   if (keyCode == 38) {
-    return "UP";
+    return ["UP", "UP ARROW"];
   }
   else if (keyCode == 37){
-    return "LEFT";
+    return ["LEFT", "LEFT ARROW"];
   }
   else if (keyCode == 39){
-    return "RIGHT";
+    return ["RIGHT", "RIGHT ARROW"];
   }
   else if (keyCode == 40){
-    return "DOWN";
+    return ["DOWN", "DOWN ARROW"];
   }
   else if (keyCode == 9){
     return "TAB";
   }
   else if (keyCode == 13){
-    return "ENTER";
+    return ["ENTER", "RETURN"];
   }
   else if (keyCode == 16){
     return "SHIFT";
   }
   else if (keyCode == 17){
-    return "CTRL";
+    return ["CTRL", "CONTROL"];
   }
   else if (keyCode == 18){
-    return "ALT";
+    return ["ALT", "OPTION"];
   }
   else if (keyCode == 27){
-    return "ESCAPE";
+    return ["ESCAPE", "ESC"];
   }
   else if (keyCode == 32){
-    return "SPACE";
+    return ["SPACE", "SPACE BAR", "SPACEBAR"];
   }
   else if (keyCode == 192){
     return "`";
@@ -1160,17 +1206,25 @@ Woof.prototype.keyCodeToString = function(keyCode) {
   else if (keyCode == 190){
     return ".";
   }
-  else if (keyCode == 191){
-    return "/";
-  }
   else if (keyCode == 188){
     return ",";
   }
   else if (keyCode == 20){
-    return "CAPS LOCK";
+    return ["CAPS", "CAPS LOCK"];
+  }
+  else if (keyCode == 8){
+    return ["DELETE", "DEL", "BACKSPACE"];
+  }
+  else if (keyCode == 91) {
+    return ["COMMAND", "CMD", "WINDOWS", "SEARCH"]
   }
   else {
-    return String.fromCharCode(keyCode);
+    if ((keyCode >= 65 && keyCode <= 90) || (keyCode >= 48 && keyCode <= 57)) { //if it's a number or a letter, return the number/letter as a string
+      return String.fromCharCode(keyCode);
+    }
+    else { //if it's anything other than what's covered above, return the keycode as a string
+      return keyCode.toString();
+    }
   }
 };
 
