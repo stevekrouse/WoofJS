@@ -243,6 +243,15 @@ function Woof() {
     }
   });
 
+  Object.defineProperty(thisContext, 'fullScreen', {
+    get: function get() {
+      return thisContext.fullScreen1;
+    },
+    set: function set(value) {
+      thisContext.fullScreen1 = value;
+    }
+  });
+
   if (thisContext.fullScreen1) {
     width = window.innerWidth;
     height = window.innerHeight;
