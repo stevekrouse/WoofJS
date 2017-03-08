@@ -37,7 +37,7 @@ Go to rawgit.com and type this in:
 And grab the link on the left, which should look like:
 
 ```html
-<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/a3752aea/dist/woof.js"></script>
+<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/b41555bf/dist/woof.js"></script>
 ```
 
 ### Global mode
@@ -46,12 +46,38 @@ When you include the Woof script in your code, it defaults to creating a full-sc
 
 We find not having to type "Woof." over and over again makes a huge difference for beginner programmers, especially those new to typing.
 
-However, if you'd like to turn off this mode, simply add `global="false"` in your script tag and create your project manually:
+However, if you'd like to turn off this mode, simply add `global="false"` in your HTML script tag:
+
+```html
+<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/b41555bf/dist/woof.js" global="false"></script>
+```
+
+Then in your JavaScript, you'd need to create your project manually:
 
 ```javascript
 var project = new Woof({global: false, width: 300, height: 400})
 
 var IMAGE_NAME = new Woof.Image({project: project, url: "./images/SMJjVCL.png"})
+```
+
+### Full Screen
+
+You can disable the fullScreen default by putting `fullScreen=false` in your JavaScript code and then manually setting the size you'd like it to be:
+
+```javascript
+fullScreen = false
+setBackdropSize(500, 300)
+```
+**Note**: `setBackdropSize(x,y)` only accepts number inputs. If you'd like your background to be a percentage of the screen size, you need to calculate that yourself:
+
+```javascript
+// set the x to 50% of the window's width and y to 500px
+setBackdropSize(window.innerWidth * (50/100), 500)
+
+// every time the window resizes, recalculate the width from the `window.innerWidth` property
+window.addEventListener("resize", () => {
+  setBackdropSize(window.innerWidth * (50/100), 500)
+})
 ```
 
 ## Reporting a bug
