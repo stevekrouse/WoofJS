@@ -1,4 +1,5 @@
 # WoofJS
+[![license](https://img.shields.io/github/license/mashape/apistatus.svg)]() [![Code Triagers Badge](https://www.codetriage.com/stevekrouse/woofjs/badges/users.svg)](https://www.codetriage.com/stevekrouse/woofjs) 
 
 WoofJS is a *learnable* JavaScript framework for creating games by [The Coding Space](http://thecodingspace.com).
 
