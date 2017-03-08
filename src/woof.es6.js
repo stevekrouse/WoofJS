@@ -59,7 +59,14 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
     }
   });
   
-
+  Object.defineProperty(thisContext, 'fullScreen', {
+    get: function() {
+      return thisContext.fullScreen1;
+    },
+    set: function(value) {
+      thisContext.fullScreen1 = value;
+    }
+  });
   
   if (thisContext.fullScreen1) {
     width = window.innerWidth;
