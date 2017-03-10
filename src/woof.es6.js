@@ -1070,12 +1070,6 @@ Woof.prototype.Repeat = function(times, func, after) {
     }
   };
 };
-
-//error if user does not change sprite1
-Woof.prototype.Sprite = function() {
-  if (typeof sprite1 === 'undefined') {
-   throw new TypeError("you must change sprite1 to your variable name");
-}
   
 
 
@@ -1350,4 +1344,3 @@ if (JSON.parse(currentScript.getAttribute('global')) !== false) {
   Woof.prototype.extend(window, new Woof({global: true, fullScreen: true}));
 }
 
-}
