@@ -625,9 +625,9 @@
           script.text = code
           document.getElementById('preview').contentDocument.body.appendChild(script)
     
-          // If sprite1 is not changed, create popup for user to input variable name
-          if (editor.getValue().indexOf('sprite1') != -1) {
-            var sprite_name = prompt("Enter the name of your Sprite", "unicorn_sprite");
+          // If "sprite1" is in the editor, ask the user for how they'd like to rename sprite1
+          if (myCode & editor.getValue().includes('sprite1')) {
+            var sprite_name = prompt("Enter the name of your Sprite", "unicornSprite");
             editor.setValue(editor.getValue().replace(/sprite1/g, sprite_name));
           }
     
