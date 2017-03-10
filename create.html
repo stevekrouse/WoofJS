@@ -164,13 +164,6 @@
       margin-right: 5px;
     }
     
-     #suggestion {
-      display: none;
-      color: white;
-      margin-right: 5px;
-      background-color: #F2C94C;
-    }
-    
     .rotate {
       color: #FFFFFF;
       -webkit-transform: rotate(90deg);
@@ -335,20 +328,17 @@
         getID: getID,
         showError: function(){
           // If "sprite1" is in the editor, ask the user for how they'd like to rename sprite1
-           if (editor.getValue().includes('sprite1') && $('#logggedin').is(':visible')) {
-            var sprite_name = prompt("It looks like you have not renamed your your sprite! It is still set as the default 'Sprite1'.\n\nWhat is the name of your variable?", "unicornSprite");
-                if (sprite_name === null) {   
-                  return;}
-              
-            editor.setValue(editor.getValue().replace(/sprite1/g, sprite_name));
-            
-            
-            
+          if (this.error.message.includes('sprite1') && $('#logggedin').is(':visible')) {
+            var spriteName = prompt("It looks like you have not renamed your your sprite! It is still set as the default 'Sprite1'.\n\nWhat is the name of your variable?", "unicornSprite");    
+            if (spriteName !== null) {   
+                editor.setValue(editor.getValue().replace(/sprite1/g, spriteName));
             }
-            else 
+            
+            
+          }
+          else {
              alert(this.error.message)
-         
-          
+          }
         },
     
         
