@@ -69,24 +69,21 @@
       background-color: #fff;
       font-family: sans-serif;
     }
+    
     h1 {
       font-weight: normal;
       font-size: 25px;
     }
+    
     .CodeMirror {
         height: 100%;
         font-size: 13px;
     }
-    #title, #title a{
-        font-size: 16px;
-        margin-left: auto;
-        margin-right: auto;
-        color: white;
-        line-height:2;
-    }
+    
     iframe {
         border: none;
     } 
+    
     #navbar {
       display: flex;
       align-items: center;
@@ -97,25 +94,22 @@
       width:100%; 
     }
     
-    #clean-up { background-color: #80CFFF;
-      border:none;
-      color:white;
+    #clean-up { 
+      background-color: #80CFFF;
+      border: none;
+      color: white;
     }
     
-    .btn-default {background-color: #49A6DF;
-      border:none;
-      color:white;}
-   
-    #powered {
-        font-size: 10px;
+    .btn-default {
+      background-color: #49A6DF;
+      border: none;
+      color: white;
     }
-    h4 {
-      text-align: center;
-    }
+    
     #container {
-      width:100%;
-      display:flex;
-      flex-direction:row;
+      width: 100%;
+      display: flex;
+      flex-direction: row;
       
       /* Firefox */
       height: -moz-calc(99% - 79px);
@@ -126,28 +120,10 @@
       /* Standard */
       height: calc(99% - 79px);
     }
-    #instructions {
-      -webkit-user-select: none;
-      -khtml-user-select: none;
-      -moz-user-select: none;
-      -ms-user-select: none;
-      -o-user-select: none;
-      user-select: none;
-    }
-    .step {
-      margin-left: 5px;
-      margin-right: 10px;
-      margin-top: 20px;
-      margin-bottom: 20px;
-      padding: 5px;
-      background-color: lightblue;
-    }
     
     @media all and (max-width: 600px) {
       #login {
-        margin-right:5px;
-        
-        
+        margin-right: 5px; 
       }
       fieldset {
         display: none;
@@ -319,42 +295,29 @@
           // whether or not the code can be "cleaned" or if its already pristine
           return !this.error && this.code != js_beautify(this.code, {space_after_anon_function: true, indent_size: 2, indent_with_tabs: false })
         },
-        
-            
-        
-        
       },
       methods: {
         getID: getID,
         showError: function(){
-          // If "sprite1" is in the editor, ask the user for how they'd like to rename sprite1
           if (this.error.message.includes('sprite1') && $('#logggedin').is(':visible')) {
-            var spriteName = prompt("It looks like you have not renamed your your sprite! It is still set as the default 'Sprite1'.\n\nWhat is the name of your variable?", "unicornSprite");    
+            var spriteName = prompt("It looks like you have not renamed your your sprite! It is still set as the default 'sprite1'.\n\nWhat is the name of your sprite?", "unicornSprite");    
             if (spriteName !== null) {   
                 editor.setValue(editor.getValue().replace(/sprite1/g, spriteName));
-            }
-            
-            
+            }  
           }
           else {
              alert(this.error.message)
           }
         },
-    
-        
         cleanAll: function(){
           var beautiful = js_beautify(editor.getValue(), {space_after_anon_function: true, indent_size: 2, indent_with_tabs: false })
           editor.setValue(beautiful)
-        },
-        
-        
+        }
       }
     })
     var myCode = false
     scratch.src = scratch.src // the documentation sometimes doesn't load unless you remind it to here, strange VueJS bug
     projectsIframe.src = projectsIframe.src // ditto for the project's iframe
-    
-    
     
     var config = {
       apiKey: "AIzaSyBYHv7dCiD0bWiHRlcp4VIZCIqzoMnB4yY",
@@ -364,9 +327,7 @@
       messagingSenderId: "397293370524"
     };
     firebase.initializeApp(config);
-    
-   
-        
+      
     function handleLogin(userName, uid) {
       $('#loggedin-name').html(userName + ' <span class="caret"></span>')
       $('#login-projects').attr("href", "./user.html#" + uid )
@@ -434,16 +395,6 @@
       }
     });
 
-    // // this is the code for the tooltip that tells you to click on "untutorials"
-    // $('[data-toggle="tooltip"]').tooltip({trigger: "manual"});
-    // $('[data-toggle="tooltip"]').click(function(){
-    //     $("[data-toggle='tooltip']").tooltip('hide');
-    // });
-    // $('#login').click(function(){
-    //     $("[data-toggle='tooltip']").tooltip('hide');
-    // });
-    
-    
     var makeClean = function() {
       app.status = "SAVED"
       currentHash = window.location.hash
@@ -452,9 +403,6 @@
     var makeDirty = function() {
       app.status = "DIRTY"
     }
-    
-
-        
     
     var popout = function() {
       if (app.status == "SAVED"){
@@ -644,11 +592,7 @@
     
         app.error = e
       }
-    
-    
     }
-    
-    
     
     function runCode() {
         var iframe = document.getElementById('preview');
