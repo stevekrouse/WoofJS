@@ -160,9 +160,8 @@
     
     #error {
       display: none;
-      color: #a94442;
+      color: white;
       margin-right: 5px;
-      background-color: #f2dede;
     }
     
     .rotate {
@@ -194,7 +193,7 @@
       <img  style= "width:160px; height: 40px;" src="./images/logowhite.png">
       <span style="margin:8px" id="save">
         <button id="clean-up" class="btn btn-medium btn-default" @click="cleanAll()" style="display: none" :style="{display: canClean ? 'inline-block' : 'none'}"><span class="glyphicon glyphicon-align-left"></span> Clean Code</button>
-        <button id="error" class="btn btn-medium btn-error" @click="showError()" :style="{display: error ? 'inline-block' : 'none'}"><span class="glyphicon glyphicon-exclamation-sign"></span> Error</button>
+        <button id="error" class="btn btn-danger" @click="showError()" :style="{display: error ? 'inline-block' : 'none'}"><span class="glyphicon glyphicon-exclamation-sign"></span> Error</button>
         <button style="display: none" :style="{display: 'inline-block'}" style="margin-right: 5px; background-color:#4390BF !important; ; border:none; color:white; " class="btn btn-medium" :class="styles" onclick="save()">{{ status == "SAVED" ? 'Saved' : 'Save' }}</button>
       </span>
     </div>
@@ -328,7 +327,18 @@
       methods: {
         getID: getID,
         showError: function(){
-          alert(this.error.message)
+          // If "sprite1" is in the editor, ask the user for how they'd like to rename sprite1
+          if (this.error.message.includes('sprite1') && $('#logggedin').is(':visible')) {
+            var spriteName = prompt("It looks like you have not renamed your your sprite! It is still set as the default 'Sprite1'.\n\nWhat is the name of your variable?", "unicornSprite");    
+            if (spriteName !== null) {   
+                editor.setValue(editor.getValue().replace(/sprite1/g, spriteName));
+            }
+            
+            
+          }
+          else {
+             alert(this.error.message)
+          }
         },
     
         
@@ -606,26 +616,39 @@
        }		
     };
     
-    function tryRunningCode(){
+    function tryRunningCode() {
       app.code = editor.getValue()
       app.error = undefined
+    
       try {
-        var code = Babel.transform(editor.getValue(), { presets: ['es2015'] }).code
+        var code = Babel.transform(editor.getValue(), {
+          presets: ['es2015']
+        }).code
         code = code.replace("'use strict';", '')
+    
         try {
-          document.getElementById('preview').contentWindow.addEventListener("error", function(error) { app.error = error } );
-          
-          var script = document.createElement( "script" );
+          document.getElementById('preview').contentWindow.addEventListener("error", function(error) {
+            app.error = error
+          });
+          var script = document.createElement("script");
           script.type = "text/javascript";
           script.text = code
           document.getElementById('preview').contentDocument.body.appendChild(script)
-        } catch (e) {
-          app.error = e
+    
         }
-      } catch (e) {
+        catch (e) {
+          app.error = e;
+        }
+      }
+      catch (e) {
+    
         app.error = e
       }
+    
+    
     }
+    
+    
     
     function runCode() {
         var iframe = document.getElementById('preview');

@@ -1077,6 +1077,8 @@ Woof.prototype.Repeat = function(times, func, after) {
     }
   };
 };
+  
+
 
 Woof.prototype.RepeatUntil = function(condition, func, after){
   // TODO if (typeof condition !== "string") { throw Error("You must give repeatUntil a string condition in quotes. You gave it: " + condition); }
@@ -1348,3 +1350,4 @@ if (JSON.parse(currentScript.getAttribute('global')) !== false) {
   // unless the script tag containing Woof has an attribute global="false", start Woof in global mode
   Woof.prototype.extend(window, new Woof({global: true, fullScreen: true}));
 }
+
