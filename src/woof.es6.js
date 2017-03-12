@@ -277,7 +277,7 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
   thisContext.mouseYSpeed = 0;
   thisContext.keysDown = [];
   
-  //modify keysDown.includes() to not be case-sensitive, and to accept more user input possibilities
+  //modify keysDown.includes() to not be case-sensitive and to accept more user input possibilities
   thisContext.keysDown.oldIncludes = thisContext.keysDown.includes
   thisContext.keysDown.includes = function(arg) {
     var key = arg.toUpperCase()
@@ -312,7 +312,7 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
     else if (key === "CAPS") {
       key = "CAPS LOCK"
     }
-    else if (key === "DEL" || "BACKSPACE") {
+    else if (key === "DEL" || key === "BACKSPACE") {
       key = "DELETE"
     }
     else if (key === "CMD" || key === "WINDOWS" || key === "SEARCH") {
@@ -349,36 +349,17 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
       [thisContext.mouseX, thisContext.mouseY] = thisContext.translateToCenter(event.targetTouches[0].clientX, event.targetTouches[0].clientY);
       event.preventDefault();
     });
-
     document.body.addEventListener("keydown", event => {
       var key = Woof.prototype.keyCodeToString(event.keyCode);
-        // if (typeof key == "object") { //if keyCodeToString returns an array, eg ["SPACE", "SPACE BAR", "SPACEBAR"]
-        //   key.forEach(item => {
-        //     if (!thisContext.keysDown.includes(item)){
-        //       thisContext.keysDown.push(item)
-        //     }
-        //   })
-        // }
-        // else{
-          if (!thisContext.keysDown.includes(key)){
-            thisContext.keysDown.push(key)
-          }
-        // }
+      if (!thisContext.keysDown.includes(key)){
+       thisContext.keysDown.push(key); 
+      }
     });
     document.body.addEventListener("keyup", event => {
       var key = Woof.prototype.keyCodeToString(event.keyCode);
-      // if (typeof key == "object") { //if keyCodeToString returns an array, eg ["SPACE", "SPACE BAR", "SPACEBAR"]
-      //   key.forEach(item => {
-      //     if (thisContext.keysDown.includes(item)){
-      //       thisContext.keysDown.splice(thisContext.keysDown.indexOf(item), 1);
-      //     }
-      //   })
-      // }
-      // else{
-        if (thisContext.keysDown.includes(key)){
-          thisContext.keysDown.splice(thisContext.keysDown.indexOf(key), 1);
-        }
-      // }
+      if (thisContext.keysDown.includes(key)){
+        thisContext.keysDown.splice(thisContext.keysDown.indexOf(key), 1);
+      }
     });
     
     thisContext._onMouseMoveHandler = event => {
@@ -399,33 +380,12 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
     
     thisContext._onKeyDownHandler = event => {
       var key = Woof.prototype.keyCodeToString(event.keyCode);
-      
-      if (typeof key == "object") { // if keyCodeToString returns an array e.g. ["SPACE", "SPACE BAR", "SPACEBAR"]
-        key.forEach(item => {
-          thisContext._onKeyDowns.forEach((func) => {func(item)});
-          thisContext._onKeyDowns.forEach((func) => {func(item.toLowerCase())}); // eliminate case-sensitivity
-        })
-      }
-      else {
-        thisContext._onKeyDowns.forEach((func) => {func(key)});
-        thisContext._onKeyDowns.forEach((func) => {func(key.toLowerCase())}); //eliminate case-sensitivity
-      }
+      thisContext._onKeyDowns.forEach((func) => {func(key)});
     };
     document.body.addEventListener("keydown", thisContext._onKeyDownHandler);
-    
     thisContext._onKeyUpHandler = event => {
       var key = Woof.prototype.keyCodeToString(event.keyCode);
-      
-      if (typeof key == "object") { // if keyCodeToString returns an array e.g. ["SPACE", "SPACE BAR", "SPACEBAR"]
-        key.forEach(item => {
-          thisContext._onKeyUps.forEach((func) => {func(item)});
-          thisContext._onKeyUps.forEach((func) => {func(item.toLowerCase())}); // eliminate case-sensitivity
-        })
-      }
-      else {
-        thisContext._onKeyUps.forEach((func) => {func(key)});
-        thisContext._onKeyUps.forEach((func) => {func(key.toLowerCase())}); // eliminate case-sensitivity
-      }
+      thisContext._onKeyUps.forEach((func) => {func(key)});
     };
     document.body.addEventListener("keyup", thisContext._onKeyUpHandler);
     

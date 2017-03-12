@@ -486,7 +486,7 @@ function Woof() {
   thisContext.mouseYSpeed = 0;
   thisContext.keysDown = [];
 
-  //modify keysDown.includes() to not be case-sensitive, and to accept more user input possibilities
+  //modify keysDown.includes() to not be case-sensitive and to accept more user input possibilities
   thisContext.keysDown.oldIncludes = thisContext.keysDown.includes;
   thisContext.keysDown.includes = function (arg) {
     var key = arg.toUpperCase();
@@ -511,7 +511,7 @@ function Woof() {
       key = "SPACE";
     } else if (key === "CAPS") {
       key = "CAPS LOCK";
-    } else if (key === "DEL" || "BACKSPACE") {
+    } else if (key === "DEL" || key === "BACKSPACE") {
       key = "DELETE";
     } else if (key === "CMD" || key === "WINDOWS" || key === "SEARCH") {
       key = "COMMAND";
@@ -578,36 +578,17 @@ function Woof() {
 
       event.preventDefault();
     });
-
     document.body.addEventListener("keydown", function (event) {
       var key = Woof.prototype.keyCodeToString(event.keyCode);
-      // if (typeof key == "object") { //if keyCodeToString returns an array, eg ["SPACE", "SPACE BAR", "SPACEBAR"]
-      //   key.forEach(item => {
-      //     if (!thisContext.keysDown.includes(item)){
-      //       thisContext.keysDown.push(item)
-      //     }
-      //   })
-      // }
-      // else{
       if (!thisContext.keysDown.includes(key)) {
         thisContext.keysDown.push(key);
       }
-      // }
     });
     document.body.addEventListener("keyup", function (event) {
       var key = Woof.prototype.keyCodeToString(event.keyCode);
-      // if (typeof key == "object") { //if keyCodeToString returns an array, eg ["SPACE", "SPACE BAR", "SPACEBAR"]
-      //   key.forEach(item => {
-      //     if (thisContext.keysDown.includes(item)){
-      //       thisContext.keysDown.splice(thisContext.keysDown.indexOf(item), 1);
-      //     }
-      //   })
-      // }
-      // else{
       if (thisContext.keysDown.includes(key)) {
         thisContext.keysDown.splice(thisContext.keysDown.indexOf(key), 1);
       }
-      // }
     });
 
     thisContext._onMouseMoveHandler = function (event) {
@@ -646,49 +627,16 @@ function Woof() {
 
     thisContext._onKeyDownHandler = function (event) {
       var key = Woof.prototype.keyCodeToString(event.keyCode);
-
-      if ((typeof key === "undefined" ? "undefined" : _typeof(key)) == "object") {
-        // if keyCodeToString returns an array e.g. ["SPACE", "SPACE BAR", "SPACEBAR"]
-        key.forEach(function (item) {
-          thisContext._onKeyDowns.forEach(function (func) {
-            func(item);
-          });
-          thisContext._onKeyDowns.forEach(function (func) {
-            func(item.toLowerCase());
-          }); // eliminate case-sensitivity
-        });
-      } else {
-        thisContext._onKeyDowns.forEach(function (func) {
-          func(key);
-        });
-        thisContext._onKeyDowns.forEach(function (func) {
-          func(key.toLowerCase());
-        }); //eliminate case-sensitivity
-      }
+      thisContext._onKeyDowns.forEach(function (func) {
+        func(key);
+      });
     };
     document.body.addEventListener("keydown", thisContext._onKeyDownHandler);
-
     thisContext._onKeyUpHandler = function (event) {
       var key = Woof.prototype.keyCodeToString(event.keyCode);
-
-      if ((typeof key === "undefined" ? "undefined" : _typeof(key)) == "object") {
-        // if keyCodeToString returns an array e.g. ["SPACE", "SPACE BAR", "SPACEBAR"]
-        key.forEach(function (item) {
-          thisContext._onKeyUps.forEach(function (func) {
-            func(item);
-          });
-          thisContext._onKeyUps.forEach(function (func) {
-            func(item.toLowerCase());
-          }); // eliminate case-sensitivity
-        });
-      } else {
-        thisContext._onKeyUps.forEach(function (func) {
-          func(key);
-        });
-        thisContext._onKeyUps.forEach(function (func) {
-          func(key.toLowerCase());
-        }); // eliminate case-sensitivity
-      }
+      thisContext._onKeyUps.forEach(function (func) {
+        func(key);
+      });
     };
     document.body.addEventListener("keyup", thisContext._onKeyUpHandler);
   });
