@@ -277,10 +277,49 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
   thisContext.mouseYSpeed = 0;
   thisContext.keysDown = [];
   
-  //modify keysDown.includes() to not be case-sensitive
+  //modify keysDown.includes() to not be case-sensitive, and to accept more user input possibilities
   thisContext.keysDown.oldIncludes = thisContext.keysDown.includes
-  thisContext.keysDown.includes = function(item) {
-    return this.oldIncludes(item.toUpperCase())
+  thisContext.keysDown.includes = function(arg) {
+    var key = arg.toUpperCase()
+    
+    if (key === "UP ARROW") {
+      key = "UP"
+    }
+    else if (key === "LEFT ARROW") {
+      key = "LEFT"
+    }
+    else if (key === "RIGHT ARROW") {
+      key = "RIGHT"
+    }
+    else if (key === "DOWN ARROW") {
+      key = "DOWN"
+    }
+    else if (key === "RETURN") {
+      key = "ENTER"
+    }
+    else if (key === "CONTROL") {
+      key = "CTRL"
+    }
+    else if (key === "OPTION") {
+      key = "ALT"
+    }
+    else if (key === "ESC") {
+      key = "ESCAPE"
+    }
+    else if (key === "SPACE BAR" || key === "SPACEBAR") {
+      key = "SPACE"
+    }
+    else if (key === "CAPS") {
+      key = "CAPS LOCK"
+    }
+    else if (key === "DEL" || "BACKSPACE") {
+      key = "DELETE"
+    }
+    else if (key === "CMD" || key === "WINDOWS" || key === "SEARCH") {
+      key = "COMMAND"
+    }
+    
+    return this.oldIncludes(key)
   }
   
   thisContext.ready(() => {
@@ -313,33 +352,33 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
 
     document.body.addEventListener("keydown", event => {
       var key = Woof.prototype.keyCodeToString(event.keyCode);
-        if (typeof key == "object") { //if keyCodeToString returns an array, eg ["SPACE", "SPACE BAR", "SPACEBAR"]
-          key.forEach(item => {
-            if (!thisContext.keysDown.includes(item)){
-              thisContext.keysDown.push(item)
-            }
-          })
-        }
-        else{
+        // if (typeof key == "object") { //if keyCodeToString returns an array, eg ["SPACE", "SPACE BAR", "SPACEBAR"]
+        //   key.forEach(item => {
+        //     if (!thisContext.keysDown.includes(item)){
+        //       thisContext.keysDown.push(item)
+        //     }
+        //   })
+        // }
+        // else{
           if (!thisContext.keysDown.includes(key)){
             thisContext.keysDown.push(key)
           }
-        }
+        // }
     });
     document.body.addEventListener("keyup", event => {
       var key = Woof.prototype.keyCodeToString(event.keyCode);
-      if (typeof key == "object") { //if keyCodeToString returns an array, eg ["SPACE", "SPACE BAR", "SPACEBAR"]
-        key.forEach(item => {
-          if (thisContext.keysDown.includes(item)){
-            thisContext.keysDown.splice(thisContext.keysDown.indexOf(item), 1);
-          }
-        })
-      }
-      else{
+      // if (typeof key == "object") { //if keyCodeToString returns an array, eg ["SPACE", "SPACE BAR", "SPACEBAR"]
+      //   key.forEach(item => {
+      //     if (thisContext.keysDown.includes(item)){
+      //       thisContext.keysDown.splice(thisContext.keysDown.indexOf(item), 1);
+      //     }
+      //   })
+      // }
+      // else{
         if (thisContext.keysDown.includes(key)){
           thisContext.keysDown.splice(thisContext.keysDown.indexOf(key), 1);
         }
-      }
+      // }
     });
     
     thisContext._onMouseMoveHandler = event => {
@@ -1147,37 +1186,37 @@ Woof.prototype.RepeatUntil = function(condition, func, after){
 
 Woof.prototype.keyCodeToString = function(keyCode) {
   if (keyCode == 38) {
-    return ["UP", "UP ARROW"];
+    return "UP";
   }
   else if (keyCode == 37){
-    return ["LEFT", "LEFT ARROW"];
+    return "LEFT";
   }
   else if (keyCode == 39){
-    return ["RIGHT", "RIGHT ARROW"];
+    return "RIGHT";
   }
   else if (keyCode == 40){
-    return ["DOWN", "DOWN ARROW"];
+    return "DOWN";
   }
   else if (keyCode == 9){
     return "TAB";
   }
   else if (keyCode == 13){
-    return ["ENTER", "RETURN"];
+    return "ENTER";
   }
   else if (keyCode == 16){
     return "SHIFT";
   }
   else if (keyCode == 17){
-    return ["CTRL", "CONTROL"];
+    return "CTRL";
   }
   else if (keyCode == 18){
-    return ["ALT", "OPTION"];
+    return "ALT";
   }
   else if (keyCode == 27){
-    return ["ESCAPE", "ESC"];
+    return "ESCAPE";
   }
   else if (keyCode == 32){
-    return ["SPACE", "SPACE BAR", "SPACEBAR"];
+    return "SPACE";
   }
   else if (keyCode == 192){
     return "`";
@@ -1210,19 +1249,21 @@ Woof.prototype.keyCodeToString = function(keyCode) {
     return ",";
   }
   else if (keyCode == 20){
-    return ["CAPS", "CAPS LOCK"];
+    return "CAPS LOCK";
   }
   else if (keyCode == 8){
-    return ["DELETE", "DEL", "BACKSPACE"];
+    return "DELETE";
   }
   else if (keyCode == 91) {
-    return ["COMMAND", "CMD", "WINDOWS", "SEARCH"]
+    return "COMMAND";
   }
   else {
-    if ((keyCode >= 65 && keyCode <= 90) || (keyCode >= 48 && keyCode <= 57)) { //if it's a number or a letter, return the number/letter as a string
+    // if it's a number or a letter, return the number/letter as a string
+    if ((keyCode >= 65 && keyCode <= 90) || (keyCode >= 48 && keyCode <= 57)) {
       return String.fromCharCode(keyCode);
     }
-    else { //if it's anything other than what's covered above, return the keycode as a string
+    // if it's anything other than what's covered above, return the keycode as a string
+    else {
       return keyCode.toString();
     }
   }
