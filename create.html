@@ -13,13 +13,9 @@
 
   <script src="//load.sumome.com/" data-sumo-site-id="44245233c319d8fe9fb7ce8c7ed64db9381aa56477888a10319261f655cfffe2" async="async"></script>
   
-  <script type="text/javascript">
-    window._chatlio = window._chatlio||[];
-    !function(){ var t=document.getElementById("chatlio-widget-embed");if(t&&window.ChatlioReact&&_chatlio.init)return void _chatlio.init(t,ChatlioReact);for(var e=function(t){return function(){_chatlio.push([t].concat(arguments)) }},i=["configure","identify","track","show","hide","isShown","isOnline"],a=0;a<i.length;a++)_chatlio[i[a]]||(_chatlio[i[a]]=e(i[a]));var n=document.createElement("script"),c=document.getElementsByTagName("script")[0];n.id="chatlio-widget-embed",n.src="https://w.chatlio.com/w.chatlio-widget.js",n.async=!0,n.setAttribute("data-embed-version","2.1");
-       n.setAttribute('data-widget-id','1d14bee6-57d0-40e3-4768-8cc33e8abf47');
-       c.parentNode.insertBefore(n,c);
-    }();
-  </script>
+
+
+
 
   <meta charset="utf-8">
   
@@ -61,6 +57,7 @@
   <link rel="stylesheet" href="./vendor/codemirror/lint.css">
   <script src="./vendor/codemirror/jshint.min.js"></script>
   <script src="./vendor/codemirror/lint.js"></script>
+  <script src="./vendor/codemirror/scrollpastend.js"></script>
   <script src="https://unpkg.com/vue@2.0.1/dist/vue.js"></script>
   <script data-presets="es2015" src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.14.0/babel.min.js"></script>
   <script src="https://cdn.rawgit.com/beautify-web/js-beautify/1b52eb1f90daaefa6ff0fa7736f97fbfc58093c1/js/lib/beautify.js"></script>
@@ -147,6 +144,14 @@
       -ms-transform: rotate(90deg);
       -o-transform: rotate(90deg);
       transform: rotate(90deg);
+    }
+    
+    #chatlio-widget .chatlio-widget {
+      right: 10px;  
+    }
+    
+    .chatlio-widget.chatlio-title-bar-chip-container.closed {
+      margin-bottom: 5px !important;
     }
     
   </style>
@@ -413,7 +418,7 @@
     }
     
     // set the text in the editor
-    var editorVal = "setBackdropURL('./images/outerspace.jpg')\n\n\n"
+    var editorVal = "setBackdropURL('./images/outerspace.jpg')\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
     if (getID() != ''){
       editorVal = "// Loading..."
       firebase.database().ref('/code/' + getID()).once('value').then(function(snapshot) {
@@ -505,6 +510,7 @@
         mode:  "javascript",
         value: editorVal,
         lineNumbers: true,
+        lineWrapping: false,
         theme: "eclipse",
         tabSize: 2,
         indentUnit: 2,
@@ -648,5 +654,13 @@
     ga('send', 'pageview');
   
   </script>
+<script type="text/javascript">
+    window._chatlio = window._chatlio||[];
+    !function(){ var t=document.getElementById("chatlio-widget-embed");if(t&&window.ChatlioReact&&_chatlio.init)return void _chatlio.init(t,ChatlioReact);for(var e=function(t){return function(){_chatlio.push([t].concat(arguments)) }},i=["configure","identify","track","show","hide","isShown","isOnline"],a=0;a<i.length;a++)_chatlio[i[a]]||(_chatlio[i[a]]=e(i[a]));var n=document.createElement("script"),c=document.getElementsByTagName("script")[0];n.id="chatlio-widget-embed",n.src="https://w.chatlio.com/w.chatlio-widget.js",n.async=!0,n.setAttribute("data-embed-version","2.1");
+       n.setAttribute('data-widget-id','1d14bee6-57d0-40e3-4768-8cc33e8abf47');
+       c.parentNode.insertBefore(n,c);
+    }();
+</script>
+
 </body>
 </html>
