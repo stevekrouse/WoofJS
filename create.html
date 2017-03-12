@@ -13,13 +13,9 @@
 
   <script src="//load.sumome.com/" data-sumo-site-id="44245233c319d8fe9fb7ce8c7ed64db9381aa56477888a10319261f655cfffe2" async="async"></script>
   
-  <script type="text/javascript">
-    window._chatlio = window._chatlio||[];
-    !function(){ var t=document.getElementById("chatlio-widget-embed");if(t&&window.ChatlioReact&&_chatlio.init)return void _chatlio.init(t,ChatlioReact);for(var e=function(t){return function(){_chatlio.push([t].concat(arguments)) }},i=["configure","identify","track","show","hide","isShown","isOnline"],a=0;a<i.length;a++)_chatlio[i[a]]||(_chatlio[i[a]]=e(i[a]));var n=document.createElement("script"),c=document.getElementsByTagName("script")[0];n.id="chatlio-widget-embed",n.src="https://w.chatlio.com/w.chatlio-widget.js",n.async=!0,n.setAttribute("data-embed-version","2.1");
-       n.setAttribute('data-widget-id','1d14bee6-57d0-40e3-4768-8cc33e8abf47');
-       c.parentNode.insertBefore(n,c);
-    }();
-  </script>
+
+
+
 
   <meta charset="utf-8">
   
@@ -176,11 +172,11 @@
     }
     
     #chatlio-widget .chatlio-widget {
-      right: 0;  
+      right: 10px;  
     }
     
-    #chatlio-widget .chatlio-widget.closed {
-      width: 200px;
+    .chatlio-widget.chatlio-title-bar-chip-container.closed {
+      margin-bottom: 5px !important;
     }
     
   </style>
@@ -556,7 +552,7 @@
         mode:  "javascript",
         value: editorVal,
         lineNumbers: true,
-        lineWrapping: true,
+        lineWrapping: false,
         theme: "eclipse",
         tabSize: 2,
         indentUnit: 2,
@@ -568,7 +564,7 @@
         autofocus: true,
         smartIndent: true,
         foldGutter: true,
-       // gutters: ["CodeMirror-lint-markers", "CodeMirror-foldgutter"],
+        gutters: ["CodeMirror-lint-markers", "CodeMirror-foldgutter"],
         extraKeys: keymap,
         lint: {
           delay: 800, 
@@ -691,5 +687,13 @@
     ga('send', 'pageview');
   
   </script>
+<script type="text/javascript">
+    window._chatlio = window._chatlio||[];
+    !function(){ var t=document.getElementById("chatlio-widget-embed");if(t&&window.ChatlioReact&&_chatlio.init)return void _chatlio.init(t,ChatlioReact);for(var e=function(t){return function(){_chatlio.push([t].concat(arguments)) }},i=["configure","identify","track","show","hide","isShown","isOnline"],a=0;a<i.length;a++)_chatlio[i[a]]||(_chatlio[i[a]]=e(i[a]));var n=document.createElement("script"),c=document.getElementsByTagName("script")[0];n.id="chatlio-widget-embed",n.src="https://w.chatlio.com/w.chatlio-widget.js",n.async=!0,n.setAttribute("data-embed-version","2.1");
+       n.setAttribute('data-widget-id','1d14bee6-57d0-40e3-4768-8cc33e8abf47');
+       c.parentNode.insertBefore(n,c);
+    }();
+</script>
+
 </body>
 </html>
