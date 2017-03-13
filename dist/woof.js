@@ -7,7 +7,7 @@ var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = [
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 // We include SAT.js here as our only "external" dependency to help us detect when rotated sprites intersect. It's not really an "external" dependency because we include it here internally.
-// SAT.js - Version 0.6.0 - Copyright 2012 - 2016 - Jim Riecken <jimr@jimr.ca> - released under the MIT License. https://github.com/jriecken/sat-js 
+// SAT.js - Version 0.6.0 - Copyright 2012 - 2016 - Jim Riecken <jimr@jimr.ca> - released under the MIT License. https://github.com/jriecken/sat-js
 function Vector(t, o) {
   this.x = t || 0, this.y = o || 0;
 }function Circle(t, o) {
@@ -242,6 +242,15 @@ function Woof() {
     }
   });
 
+  Object.defineProperty(thisContext, 'fullScreen', {
+    get: function get() {
+      return thisContext.fullScreen1;
+    },
+    set: function set(value) {
+      thisContext.fullScreen1 = value;
+    }
+  });
+
   if (thisContext.fullScreen1) {
     width = window.innerWidth;
     height = window.innerHeight;
@@ -463,11 +472,11 @@ function Woof() {
   // the HTML canvas puts (0, 0) in the top-left corner of the screen
   // the x-axis works as you'd expect, with x increasing as you move left-to-right
   // the y-axis works counter-intuitively, decreasing as you move up, and increasing as you move down
-  // translateToCenter maps coordinates from the HTML canvas to the Scratch-world where (0,0) is in the center of the screen  
+  // translateToCenter maps coordinates from the HTML canvas to the Scratch-world where (0,0) is in the center of the screen 
   thisContext.translateToCenter = function (x, y) {
     return [x - thisContext.width / 2 + thisContext.cameraX - thisContext._spriteCanvas.offsetLeft, thisContext.height / 2 - y + thisContext.cameraY + thisContext._spriteCanvas.offsetTop];
   };
-  // translateToCanvas (the opposite of translateToCenter) maps coordinates from the Scratch-world to the HTML canvas world with (0,0) in the top-left  
+  // translateToCanvas (the opposite of translateToCenter) maps coordinates from the Scratch-world to the HTML canvas world with (0,0) in the top-left 
   thisContext.translateToCanvas = function (x, y) {
     return [x + thisContext.maxX - thisContext._spriteCanvas.offsetLeft, thisContext.maxY - y + thisContext._spriteCanvas.offsetTop];
   };
@@ -908,7 +917,7 @@ Woof.prototype.Sprite = function () {
     return new SAT.Polygon(pos, [v1, v2, v3, v4]);
   };
 
-  // for debugging purposes, this function displays the collider on the screen                                     
+  // for debugging purposes, this function displays the collider on the screen                                    
   this._renderCollider = function (context) {
     var collider = this.collider();
 
@@ -1456,6 +1465,10 @@ Woof.prototype.Line = function () {
   // currently the line collider and collision detection is wonky
   // because a line is really a rectangle that's defined from it's endpoints...
   // TODO make this a helper function to create a rectangle 
+
+  // currently the line collider and collision detection is wonky
+  // because a line is really a rectangle that's defined from it's endpoints...
+  // TODO make this a helper function to create a rectangle
 
   this.type = "line";
   Woof.prototype.Sprite.call(this, arguments[0]);
