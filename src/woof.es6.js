@@ -283,6 +283,52 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
   thisContext.mouseXSpeed = 0;
   thisContext.mouseYSpeed = 0;
   thisContext.keysDown = [];
+  
+  //modify keysDown.includes() to not be case-sensitive and to accept more user input possibilities
+  thisContext.keysDown.oldIncludes = thisContext.keysDown.includes
+  thisContext.keysDown.includes = function(arg) {
+    var key = arg.toUpperCase()
+    
+    if (key === "UP ARROW") {
+      key = "UP"
+    }
+    else if (key === "LEFT ARROW") {
+      key = "LEFT"
+    }
+    else if (key === "RIGHT ARROW") {
+      key = "RIGHT"
+    }
+    else if (key === "DOWN ARROW") {
+      key = "DOWN"
+    }
+    else if (key === "RETURN") {
+      key = "ENTER"
+    }
+    else if (key === "CONTROL") {
+      key = "CTRL"
+    }
+    else if (key === "OPTION") {
+      key = "ALT"
+    }
+    else if (key === "ESC") {
+      key = "ESCAPE"
+    }
+    else if (key === "SPACE BAR" || key === "SPACEBAR") {
+      key = "SPACE"
+    }
+    else if (key === "CAPS") {
+      key = "CAPS LOCK"
+    }
+    else if (key === "DEL" || key === "BACKSPACE") {
+      key = "DELETE"
+    }
+    else if (key === "CMD" || key === "WINDOWS" || key === "SEARCH") {
+      key = "COMMAND"
+    }
+    
+    return this.oldIncludes(key)
+  }
+  
   thisContext.ready(() => {
     thisContext._spriteCanvas.addEventListener("mousedown", (event) => {
       thisContext.mouseDown = true;
@@ -310,7 +356,6 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
       [thisContext.mouseX, thisContext.mouseY] = thisContext.translateToCenter(event.targetTouches[0].clientX, event.targetTouches[0].clientY);
       event.preventDefault();
     });
-    
     document.body.addEventListener("keydown", event => {
       var key = Woof.prototype.keyCodeToString(event.keyCode);
       if (!thisContext.keysDown.includes(key)){
@@ -339,7 +384,7 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
       thisContext._onMouseUps.forEach((func) => {func(mouseX, mouseY)});
     };
     thisContext._spriteCanvas.addEventListener("mouseup", thisContext._onMouseUpHandler);
-  
+    
     thisContext._onKeyDownHandler = event => {
       var key = Woof.prototype.keyCodeToString(event.keyCode);
       thisContext._onKeyDowns.forEach((func) => {func(key)});
@@ -1169,17 +1214,27 @@ Woof.prototype.keyCodeToString = function(keyCode) {
   else if (keyCode == 190){
     return ".";
   }
-  else if (keyCode == 191){
-    return "/";
-  }
   else if (keyCode == 188){
     return ",";
   }
   else if (keyCode == 20){
     return "CAPS LOCK";
   }
+  else if (keyCode == 8){
+    return "DELETE";
+  }
+  else if (keyCode == 91) {
+    return "COMMAND";
+  }
   else {
-    return String.fromCharCode(keyCode);
+    // if it's a number or a letter, return the number/letter as a string
+    if ((keyCode >= 65 && keyCode <= 90) || (keyCode >= 48 && keyCode <= 57)) {
+      return String.fromCharCode(keyCode);
+    }
+    // if it's anything other than what's covered above, return the keycode as a string
+    else {
+      return keyCode.toString();
+    }
   }
 };
 
