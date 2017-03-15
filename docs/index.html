@@ -435,26 +435,24 @@
                         }, {
                             url: "https://s16.postimg.org/406v94ogl/Slice_2.png",
                             code: "sprite1.turnRight(15)",
-                            tags: "turn angle point direction orientation"
+                            tags: "turn angle point in direction orientation"
                         }, {
                             url: "https://s15.postimg.org/gpov03g6j/Slice_2_Copy.png",
                             code: "sprite1.turnLeft(15)",
-                            tags: "turn angle point direction orientation"
+                            tags: "turn angle point in direction orientation"
                         }, {
                             url: "https://s10.postimg.org/4xd5jv3q1/2_0_Point_in_Direction.png",
                             code: "sprite1.angle = LEFT  \nsprite1.angle = RIGHT \nsprite1.angle = UP \nsprite1.angle = DOWN \nsprite1.angle = 47.7",
-                            tags: "angle turn direction right left up down orientation"
+                            tags: "angle turn point in direction right left up down orientation"
                         }, {
                             url: "https://s18.postimg.org/qdj0hnosp/2_0_Point_Towards.png",
-                            code: "sprite1.pointTowards(mouseX, mouseY) \nsprite1.pointTowards(othersprite1.x, othersprite1.y)",
-                            tags: "turn point direction angle sprite character mouse"
-                        },
-                        // {
-                        //     url: "./images/68747470733a2f2f692e696d6775722e636f6d2f655173647876522e706e67",
-                        //     code: "sprite1.pointTowards(sprite2.x, sprite2.y)",
-                        //     tags: "turn point direction angle sprite character"
-                        // },
-                        {
+                            code: "sprite1.pointTowards(sprite2)",
+                            tags: "turn point in direction angle sprite character mouse"
+                        }, {
+                            url: "https://s18.postimg.org/qdj0hnosp/2_0_Point_Towards.png",
+                            code: "sprite1.pointTowards(mouseX, mouseY)",
+                            tags: "turn point in direction angle sprite character mouse"
+                        }, {
                             url: "https://s13.postimg.org/4f7j7p8uf/2_0_Go_to_X_Y.png",
                             code: "sprite1.x = maxX \nsprite1.y = 47",
                             tags: "teleport move location set x y"
