@@ -1398,6 +1398,22 @@ Woof.prototype.importCodeURL = function(url, callback) {
   document.body.appendChild(lib);
 };
 
+// Detect if the user is on mobile -- return TRUE if on mobile, FALSE otherwise
+Woof.prototype.mobile = function() {
+  if( navigator.userAgent.match(/Android/i)
+    || navigator.userAgent.match(/webOS/i)
+    || navigator.userAgent.match(/iPhone/i)
+    || navigator.userAgent.match(/iPad/i)
+    || navigator.userAgent.match(/iPod/i)
+    || navigator.userAgent.match(/BlackBerry/i)
+    || navigator.userAgent.match(/Windows Phone/i)) {
+      return true;
+  }
+  else {
+    return false;
+  }
+}
+
 // find the woof.js script tag in the page
 var currentScript = document.currentScript || Array.prototype.slice.call(document.getElementsByTagName('script')).find(s => s.src.includes('woof.js'))
 
