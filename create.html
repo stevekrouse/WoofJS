@@ -310,7 +310,6 @@
                 editor.setValue(editor.getValue().replace(/sprite1/g, spriteName));
             }  
           }
-          
           else if (this.error.message.includes("Uncaught InvalidStateError: Failed to execute 'drawImage' on 'CanvasRenderingContext2D': The HTMLImageElement provided is in the 'broken' state.")) {
              alert("You're using a broken link to an image. Take a look at the most recent link you added to make sure it works. \n\nTip: Try commenting out all of your images. Add them back one by one until you identify the broken link.");    
           }
