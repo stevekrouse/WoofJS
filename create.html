@@ -310,6 +310,10 @@
                 editor.setValue(editor.getValue().replace(/sprite1/g, spriteName));
             }  
           }
+          
+          if (this.error.message.includes('CanvasRenderingContext2D') && $('#logggedin').is(':visible')) {
+           alert("You're using a broken link to an image. Take a look at the link to your image and make sure it is correct!");    
+          }
           else {
              alert(this.error.message)
           }
