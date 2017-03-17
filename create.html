@@ -304,15 +304,15 @@
       methods: {
         getID: getID,
         showError: function(){
-          if (this.error.message.includes('sprite1') && $('#logggedin').is(':visible')) {
+          if (this.error.message.includes('Uncaught ReferenceError: sprite1 is not defined')) {
             var spriteName = prompt("It looks like you have not renamed your your sprite! It is still set as the default 'sprite1'.\n\nWhat is the name of your sprite?", "unicornSprite");    
             if (spriteName !== null) {   
                 editor.setValue(editor.getValue().replace(/sprite1/g, spriteName));
             }  
           }
           
-          if (this.error.message.includes('CanvasRenderingContext2D') && $('#logggedin').is(':visible')) {
-           alert("You're using a broken link to an image. Take a look at the link to your image and make sure it is correct!");    
+          else if (this.error.message.includes("Uncaught InvalidStateError: Failed to execute 'drawImage' on 'CanvasRenderingContext2D': The HTMLImageElement provided is in the 'broken' state.")) {
+             alert("You're using a broken link to an image. Take a look at the most recent link you added to make sure it works. \n\nTip: Try commenting out all of your images. Add them back one by one until you identify the broken link.");    
           }
           else {
              alert(this.error.message)
