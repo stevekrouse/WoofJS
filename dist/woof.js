@@ -1877,12 +1877,9 @@ Woof.prototype.importCodeURL = function (url, callback) {
 };
 
 // Detect if the user is on mobile -- return TRUE if on mobile, FALSE otherwise
+// sourced from https://coderwall.com/p/i817wa/one-line-function-to-detect-mobile-devices-with-javascript
 Woof.prototype.mobile = function () {
-  if (navigator.userAgent.match(/Android/i) || navigator.userAgent.match(/webOS/i) || navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/iPad/i) || navigator.userAgent.match(/iPod/i) || navigator.userAgent.match(/BlackBerry/i) || navigator.userAgent.match(/Windows Phone/i)) {
-    return true;
-  } else {
-    return false;
-  }
+  return typeof window.orientation !== "undefined" || navigator.userAgent.indexOf('IEMobile') !== -1;
 };
 
 // find the woof.js script tag in the page
