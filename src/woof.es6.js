@@ -1262,7 +1262,24 @@ Woof.prototype.random = function(a, b) {
   if (Number.isInteger(min) && Number.isInteger(max)) {
     return Math.round(rand);
   } else {
-    return rand;
+    
+    var minDecimals, maxDecimals
+    
+    if (Math.floor(min) === min) {
+      minDecimals = 0
+    } 
+    else {
+      minDecimals = min.toString().split(".")[1].length || 0
+    }
+    if (Math.floor(max) === max) {
+      maxDecimals = 0
+    }
+    else {
+      maxDecimals = max.toString().split(".")[1].length || 0
+    }
+    
+
+    return rand.toFixed(Math.max(minDecimals, maxDecimals));
   }
 };
 
