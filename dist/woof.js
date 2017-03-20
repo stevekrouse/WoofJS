@@ -7,7 +7,7 @@ var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = [
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 // We include SAT.js here as our only "external" dependency to help us detect when rotated sprites intersect. It's not really an "external" dependency because we include it here internally.
-// SAT.js - Version 0.6.0 - Copyright 2012 - 2016 - Jim Riecken <jimr@jimr.ca> - released under the MIT License. https://github.com/jriecken/sat-js
+// SAT.js - Version 0.6.0 - Copyright 2012 - 2016 - Jim Riecken <jimr@jimr.ca> - released under the MIT License. https://github.com/jriecken/sat-js 
 function Vector(t, o) {
   this.x = t || 0, this.y = o || 0;
 }function Circle(t, o) {
@@ -472,11 +472,11 @@ function Woof() {
   // the HTML canvas puts (0, 0) in the top-left corner of the screen
   // the x-axis works as you'd expect, with x increasing as you move left-to-right
   // the y-axis works counter-intuitively, decreasing as you move up, and increasing as you move down
-  // translateToCenter maps coordinates from the HTML canvas to the Scratch-world where (0,0) is in the center of the screen 
+  // translateToCenter maps coordinates from the HTML canvas to the Scratch-world where (0,0) is in the center of the screen  
   thisContext.translateToCenter = function (x, y) {
     return [x - thisContext.width / 2 + thisContext.cameraX - thisContext._spriteCanvas.offsetLeft, thisContext.height / 2 - y + thisContext.cameraY + thisContext._spriteCanvas.offsetTop];
   };
-  // translateToCanvas (the opposite of translateToCenter) maps coordinates from the Scratch-world to the HTML canvas world with (0,0) in the top-left 
+  // translateToCanvas (the opposite of translateToCenter) maps coordinates from the Scratch-world to the HTML canvas world with (0,0) in the top-left  
   thisContext.translateToCanvas = function (x, y) {
     return [x + thisContext.maxX - thisContext._spriteCanvas.offsetLeft, thisContext.maxY - y + thisContext._spriteCanvas.offsetTop];
   };
@@ -855,6 +855,44 @@ Woof.prototype.Sprite = function () {
     }
   });
 
+  // this holds the original object passed into the constructor, to be used to make new Sprites as clones
+  this._clone = arguments[0];
+
+  // array to hold the clones
+  this.clones = [];
+
+  // this creates a new clone by passing this._clone into the proper object constructor
+  // you can optionally pass an object into this function, and it lets you set starting values for the clone
+  this.createClone = function (obj) {
+    var clone;
+    if (Image.prototype.isPrototypeOf(_this)) {
+      clone = new Image(_this._clone);
+    } else if (Text.prototype.isPrototypeOf(_this)) {
+      clone = new Text(_this._clone);
+    } else if (Circle.prototype.isPrototypeOf(_this)) {
+      clone = new Circle(_this._clone);
+    } else if (Rectangle.prototype.isPrototypeOf(_this)) {
+      clone = new Rectangle(_this._clone);
+    } else if (Line.prototype.isPrototypeOf(_this)) {
+      clone = new Line(_this._clone);
+    }
+
+    if (obj) {
+      for (var param in obj) {
+        clone[param] = obj[param];
+      }
+    }
+
+    _this.clones.push(clone);
+  };
+
+  // this hides forEach() from the user, and puts it syntactically within the sprite whose clones they are controlling
+  this.clonesDo = function (func) {
+    _this.clones.forEach(function (clone) {
+      func(clone);
+    });
+  };
+
   this.privateX = x;
   this.privateY = y;
   this.angle = angle;
@@ -917,7 +955,7 @@ Woof.prototype.Sprite = function () {
     return new SAT.Polygon(pos, [v1, v2, v3, v4]);
   };
 
-  // for debugging purposes, this function displays the collider on the screen                                    
+  // for debugging purposes, this function displays the collider on the screen                                     
   this._renderCollider = function (context) {
     var collider = this.collider();
 
@@ -1465,10 +1503,6 @@ Woof.prototype.Line = function () {
   // currently the line collider and collision detection is wonky
   // because a line is really a rectangle that's defined from it's endpoints...
   // TODO make this a helper function to create a rectangle 
-
-  // currently the line collider and collision detection is wonky
-  // because a line is really a rectangle that's defined from it's endpoints...
-  // TODO make this a helper function to create a rectangle
 
   this.type = "line";
   Woof.prototype.Sprite.call(this, arguments[0]);

@@ -541,6 +541,50 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
     }
   });
 
+
+  // this holds the original object passed into the constructor, to be used to make new Sprites as clones
+  this._clone = arguments[0];
+  
+  // array to hold the clones
+  this.clones = [];
+  
+  // this creates a new clone by passing this._clone into the proper object constructor
+  // you can optionally pass an object into this function, and it lets you set starting values for the clone
+  this.createClone = (obj) => {
+    var clone
+    if (Image.prototype.isPrototypeOf(this)) {
+      clone = new Image(this._clone)
+    }
+    else if (Text.prototype.isPrototypeOf(this)) {
+      clone = new Text(this._clone)
+    }
+    else if (Circle.prototype.isPrototypeOf(this)) {
+      clone = new Circle(this._clone)
+    }
+    else if (Rectangle.prototype.isPrototypeOf(this)) {
+      clone = new Rectangle(this._clone)
+    }
+    else if (Line.prototype.isPrototypeOf(this)) {
+      clone = new Line(this._clone)
+    }
+    
+    if (obj) {
+      for (var param in obj) {
+        clone[param] = obj[param]
+      }
+    }
+    
+    this.clones.push(clone)
+  }
+  
+  // this hides forEach() from the user, and puts it syntactically within the sprite whose clones they are controlling
+  this.clonesDo = (func) => {
+    this.clones.forEach(clone => {
+      func(clone)
+    })
+  }
+
+
   this.privateX = x;
   this.privateY = y;
   this.angle = angle
