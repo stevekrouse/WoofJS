@@ -1398,6 +1398,12 @@ Woof.prototype.importCodeURL = function(url, callback) {
   document.body.appendChild(lib);
 };
 
+// Detect if the user is on mobile -- return TRUE if on mobile, FALSE otherwise
+// sourced from https://coderwall.com/p/i817wa/one-line-function-to-detect-mobile-devices-with-javascript
+Woof.prototype.mobile = function() {
+    return (typeof window.orientation !== "undefined") || (navigator.userAgent.indexOf('IEMobile') !== -1);
+};
+
 // find the woof.js script tag in the page
 var currentScript = document.currentScript || Array.prototype.slice.call(document.getElementsByTagName('script')).find(s => s.src.includes('woof.js'))
 
