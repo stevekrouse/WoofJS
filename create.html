@@ -185,12 +185,12 @@
         <span class="rotate" style="font-size:1.65em">Preview</span>
       </div>
       <div v-show="outputPane" :style="{display: !previewbar ? 'inline-block' : 'none'}" id="output" style="flex-grow:20; inline-block: none;height:100%; resize: none; flex: 10 1 25%;">
-        <div id="PreviewNav" @click="previewbar = !previewbar" style="height:25px;text-align:center; background-color:#4875D1; color:white; font-size:1.1em style; display:flex; justify-content: space-between;">
+        <div id="PreviewNav" style="height:25px;text-align:center; background-color:#4875D1; color:white; font-size:1.1em style; display:flex; justify-content: space-between;">
           <span style="margin-left:8px;  margin-top:4px">Preview</span>
           <span style="margin-right:8px">
-            <img @click="previewbar = !previewbar"  onclick="runCode(); focusPreview()" id="pop" style="margin: 2px; width: 17px; height:17px" src="./images/refresh.png">
-            <img @click="previewbar = !previewbar"  onclick="popout()" id="pop" style="margin: 2px; width: 17px; height:17px" src="./images/pop.png">
-            <img  style="margin: 5px; width: 16px; height:18px" src="./images/minimize.png">
+            <img  onclick="runCode(); focusPreview()" id="pop" style="margin: 2px; width: 17px; height:17px" src="./images/refresh.png">
+            <img  onclick="popout()" id="pop" style="margin: 2px; width: 17px; height:17px" src="./images/pop.png">
+            <img  @click="previewbar = !previewbar"  style="margin: 5px; width: 16px; height:18px" src="./images/minimize.png">
           </span>
         </div>
         <iframe scrolling="no" id="preview" style="height:100%; width:100%; "></iframe>
@@ -201,10 +201,10 @@
         <span class="rotate" style="font-size:1.65em">Documentation</span>
       </div>
       <div v-show="docsPane" :style="{display: !docsbar ? 'inline-block' : 'none'}" id="docs" style="flex-grow:20; height:100%; flex: 10 1 25%">
-        <div id="DocsNav" @click="docsbar = !docsbar" style="height:25px; text-align:center; background-color:#7F68D5; color:white; font-size:1.1em; display:flex; justify-content: space-between;">
+        <div id="DocsNav" style="height:25px; text-align:center; background-color:#7F68D5; color:white; font-size:1.1em; display:flex; justify-content: space-between;">
           <span style="margin-left:8px;  margin-top:4px">Documentation</span>
           <span style="margin-right:8px">
-            <img  style="margin-left:5px; width: 16px; height:18px" src="./images/minimize.png">
+            <img   @click="docsbar = !docsbar"  style="margin-left:5px; width: 16px; height:18px" src="./images/minimize.png">
           </span>
         </div>
         <iframe src="./docs/index.html" id="scratch" style="height:100%; width:100%;"></iframe>
@@ -215,10 +215,10 @@
         <span class="rotate" style="font-size:1.65em">Tutorials</span>
       </div>
       <div v-show="projectsPane" :style="{display: !projectbar ? 'inline-block' : 'none'}"  :style="{display: 'flex'}" id="projects" style="width:25%; height:100%; flex: 10 1 25%; display:none;inline-block:none; word-wrap: break-word; ">
-        <div id="ProjectsNav" @click="projectbar = !projectbar" style="height:25px; text-align:center; background-color:#AD5FC2; color:white; font-size:1.1em; display:flex; justify-content: space-between; border:none">
+        <div id="ProjectsNav"  style="height:25px; text-align:center; background-color:#AD5FC2; color:white; font-size:1.1em; display:flex; justify-content: space-between; border:none">
           <span style="margin-left:8px; margin-top:4px">Tutorials</span>
           <span style="margin-right:8px">
-            <img  style="margin: 5px; width: 16px; height:18px" src="./images/minimize.png">
+            <img @click="projectbar = !projectbar" style="margin: 5px; width: 16px; height:18px" src="./images/minimize.png">
           </span>
         </div>
         <iframe id="projectsIframe" src="http://coding.space/woof/index.html" style="height:100%; width:100%"></iframe>
@@ -229,10 +229,10 @@
         <span class="rotate" style="font-size:1.65em">Code</span>
       </div>
       <div v-show="codePane" :style="{display: !codebar ? 'inline-block' : 'none'}" id="code" style="flex-grow:20; width:25%; height:100%; flex: 10 1 25%; word-wrap: break-word;">
-        <div id="CodeNav" @click="codebar = !codebar" style="height:25px;text-align:center; background-color:#49A6DF; color:white; font-size:1.1em; display:flex; justify-content: space-between;">
+        <div id="CodeNav" style="height:25px;text-align:center; background-color:#49A6DF; color:white; font-size:1.1em; display:flex; justify-content: space-between;">
           <span style="margin-left:8px; margin-top:4px">Code</span>
           <span style="margin-right:8px">
-            <img  style="margin: 5px; width: 16px; height:18px" src="./images/minimize.png">
+            <img   @click="codebar = !codebar" style="margin: 5px; width: 16px; height:18px" src="./images/minimize.png">
           </span>
         </div>
       </div>

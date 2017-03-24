@@ -1716,15 +1716,18 @@ Woof.prototype.random = function (a, b) {
     throw new TypeError("random(a, b) requires two number inputs.");
   }
 
-  var min = Math.min.apply(Math, [a, b]),
-      max = Math.max.apply(Math, [a, b]);
-
+  var min = Math.min(a, b),
+      max = Math.max(a, b);
   var rand = Math.random() * (max - min) + min;
-  if (Number.isInteger(min) && Number.isInteger(max)) {
-    return Math.round(rand);
-  } else {
-    return rand;
-  }
+  // this will return the number of decimals, and if it's an integer, it will return 0
+  // source: http://stackoverflow.com/a/17369384
+  var countDecimals = function countDecimals(value) {
+    if (value % 1 != 0) return value.toString().split(".")[1].length;
+    return 0;
+  };
+  // store the greater number of decimals and use that to round the number appropriately
+  var randDecimals = Math.max(countDecimals(max), countDecimals(min));
+  return Math.round(rand * Math.pow(10, randDecimals)) / Math.pow(10, randDecimals);
 };
 
 Woof.prototype.dayOfMonth = function () {
