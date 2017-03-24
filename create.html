@@ -188,8 +188,8 @@
         <div id="PreviewNav" style="height:25px;text-align:center; background-color:#4875D1; color:white; font-size:1.1em style; display:flex; justify-content: space-between;">
           <span style="margin-left:8px;  margin-top:4px">Preview</span>
           <span style="margin-right:8px">
-            <img  onclick="runCode()" id="pop" style="margin: 2px; width: 17px; height:17px" src="./images/refresh.png">
-            <img   onclick="popout()" id="pop" style="margin: 2px; width: 17px; height:17px" src="./images/pop.png">
+            <img  onclick="runCode(); focusPreview()" id="pop" style="margin: 2px; width: 17px; height:17px" src="./images/refresh.png">
+            <img  onclick="popout()" id="pop" style="margin: 2px; width: 17px; height:17px" src="./images/pop.png">
             <img  @click="previewbar = !previewbar"  style="margin: 5px; width: 16px; height:18px" src="./images/minimize.png">
           </span>
         </div>
@@ -555,6 +555,11 @@
       debouncedRunCode()
     });
     runCode()
+    
+    // focus on the preview when refreshed
+     function focusPreview() {
+       document.getElementById('preview').focus();
+     };
 
 
     editor.on('inputRead', function(cm, e){
