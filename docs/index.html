@@ -692,7 +692,7 @@
                         code: '// create a list to store all of the clones\nvar clones = []\nevery(4, "seconds", () => {\n  // create a clone every 4 seconds\n  var clone = new Circle({radius: 10, color: "pink", x:\nrandomX(), y: randomY()})\n  // add each clone to the list\n  clones.push(clone)\n})\n\nforever(() => {\n  // forever, for each clone in clones\n  clones.forEach(clone => {\n    // move it to the right\n    clone.x++\n    // delete it if it goes off the screen\n    if (clone.x > maxX) {\n      clone.delete()\n    }\n  })\n})',
                         tags: 'clone copy'
                     }, {
-                        code: 'sprite1.delete()',
+                        code: '// delete an object from the screen\nclone.delete()\n\n\// delete an object from a list\nclones.remove(clone)',
                         description: "Delete an object:",
                         tags: ' delete remove destroy clones copy'
                     }, {
