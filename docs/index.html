@@ -702,12 +702,28 @@
                     }],
                     Sound: [{
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f4c387a6e6d4f622e706e67",
-                        code: "var bruce = new Audio('http://mhoerner.dyndns.org/mp3/Bruce%20Springsteen/Born%20To%20Run/05%20Born%20To%20Run.mp3')\nbruce.play()",
+                        code: "var bruce = new Audio('http://mhoerner.dyndns.org/mp3/Bruce%20Springsteen/Born%20To%20Run/05%20Born%20To%20Run.mp3')\nbruce.startPlaying()",
                         tags: "music play sounds audio"
                     }, {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f58396b6b3679572e706e67",
-                        code: "bruce.pause()",
-                        tags: "pause music sounds"
+                        code: "bruce.stopPlaying()",
+                        tags: "pause stop music sounds"
+                    }, {
+                        description: "Returns true if sound never played:",
+                        code: "bruce.neverPlayed",
+                        tags: "loop music sounds"
+                    }, {
+                        description: "Loop:",
+                        code: "bruce.enableLoop()",
+                        tags: "loop music sounds"
+                    }, {
+                        description: "Change speed: (2 = double speed; 1 = full speed; 0.5 = half speed)",
+                        code: "bruce.changeSpeed(2)",
+                        tags: "speed music sounds"
+                    }, {                        
+                        description: "Change volume: (1 = highest volume; 0.5 = half volume; 0 = mute)",
+                        code: "bruce.changeVolume(0.5)",
+                        tags: "volume music mute sounds"
                     }, {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f7439584b4f706e2e706e67",
                         code: "intitle:index.of?mp3 NAME-OF-SONG",
