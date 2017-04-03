@@ -689,11 +689,11 @@
                         tags: 'freeze stop start defrost'
                     }, {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f674e7a547053302e706e67",
-                        code: '// create a list to store all of the clones\nvar clones = []\nevery(4, "seconds", () => {\n  // create a clone every 4 seconds\n  var clone = new Circle({radius: 10, color: "pink", x:\nrandomX(), y: randomY()})\n  // add each clone to the list\n  clones.push(clone)\n})\n\nforever(() => {\n  // forever, for each clone in clones\n  clones.forEach(clone => {\n    // move it to the right\n    clone.x++\n    // delete it if it goes off the screen\n    if (clone.x > maxX) {\n      clone.delete()\n    }\n  })\n})',
+                        code: '// create a list to store all of the clones\nvar clones = []\nevery(4, "seconds", () => {\n  // create a clone every 4 seconds\n  var clone = new Circle({radius: 10, color: "pink", x:\nrandomX(), y: randomY()})\n  // add each clone to the list\n  clones.push(clone)\n})\n\nforever(() => {\n  // forever, for each clone in clones\n  clones.forEach(clone => {\n    // move it to the right\n    clone.x++\n    if (clone.x > maxX) {\n      // delete it if it goes off the screen\n      clone.delete()\n      // remove it from the list\n      clones.remove(clone)\n    }\n  })\n})',
                         tags: 'clone copy'
                     }, {
                         code: 'sprite1.delete()',
-                        description: "Delete an object:",
+                        description: "Delete an object. (Note: This only deletes it from the screen. To truly delete it, you may need to remove it from any arrays it is in.)",
                         tags: ' delete remove destroy clones copy'
                     }, {
                         code: '// after a mousedown, you won\'t be able to trigger this event again for 1000 milliseconds\nonMouseDown(throttle(() => score++, 1000))',
