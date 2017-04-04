@@ -615,9 +615,8 @@
         setTimeout(function() {
         
             // add doctype to iframe
-            var myContent = '<!DOCTYPE html>'
-            iframe.contentWindow.document.open('text/htmlreplace');
-            iframe.contentWindow.document.write(myContent);
+            iframe.contentWindow.document.open();
+            iframe.contentWindow.document.write('<!DOCTYPE html>');
             iframe.contentWindow.document.close();
             
             // add a base tag to the page so it knows where to pull relative image urls

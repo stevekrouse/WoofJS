@@ -94,11 +94,12 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
   };
   
   window.addEventListener("load", () => {
-    // create the main div that Woof lives in
     document.documentElement.style.width = "100%";
     document.documentElement.style.height = "100%";
     document.body.style.width = "100%";
     document.body.style.height = "100%";
+    
+    // create the main div that Woof lives in
     thisContext._mainDiv = document.createElement("div");
     document.body.appendChild(thisContext._mainDiv);
     thisContext._mainDiv.id = "project";

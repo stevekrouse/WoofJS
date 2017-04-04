@@ -281,11 +281,13 @@ function Woof() {
   };
 
   window.addEventListener("load", function () {
-    // create the main div that Woof lives in
+    // add 100% width and height to containers
     document.documentElement.style.width = "100%";
     document.documentElement.style.height = "100%";
     document.body.style.width = "100%";
     document.body.style.height = "100%";
+
+    // create the main div that Woof lives in
     thisContext._mainDiv = document.createElement("div");
     document.body.appendChild(thisContext._mainDiv);
     thisContext._mainDiv.id = "project";
