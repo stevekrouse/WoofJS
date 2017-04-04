@@ -281,11 +281,19 @@ function Woof() {
   };
 
   window.addEventListener("load", function () {
+    // add 100% width and height to containers
+    document.documentElement.style.width = "100%";
+    document.documentElement.style.height = "100%";
+    document.body.style.width = "100%";
+    document.body.style.height = "100%";
+
     // create the main div that Woof lives in
     thisContext._mainDiv = document.createElement("div");
     document.body.appendChild(thisContext._mainDiv);
     thisContext._mainDiv.id = "project";
     thisContext._mainDiv.style.position = "relative";
+    thisContext._mainDiv.style.width = "100%";
+    thisContext._mainDiv.style.height = "100%";
 
     // create the canvas where we will draw sprites
     thisContext._spriteCanvas = document.createElement("canvas");
@@ -313,6 +321,8 @@ function Woof() {
     thisContext._backdropDiv.height = height;
     thisContext._backdropDiv.style.zIndex = 1;
     thisContext._backdropDiv.style.position = "absolute";
+    thisContext._backdropDiv.style.width = "100%";
+    thisContext._backdropDiv.style.height = "100%";
 
     thisContext._spriteContext = thisContext._spriteCanvas.getContext("2d");
     thisContext._penContext = thisContext._penCanvas.getContext("2d");
