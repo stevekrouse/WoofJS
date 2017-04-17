@@ -281,7 +281,6 @@ function Woof() {
   };
 
   window.addEventListener("load", function () {
-    // add 100% width and height to containers
     document.documentElement.style.width = "100%";
     document.documentElement.style.height = "100%";
     document.body.style.width = "100%";
@@ -699,12 +698,28 @@ function Woof() {
 
   thisContext._everys = [];
   thisContext.every = function (time, units, func) {
-    var milis = Woof.prototype.unitsToMiliseconds(time, units);
-    if (typeof func != "function" || typeof time != "number") {
+    if (typeof func != "function" || typeof time != "number" && (typeof time === "undefined" ? "undefined" : _typeof(time)) != "object") {
       throw new TypeError("every(time, units, function) requires a number, unit and function input.");
     }
-    func();
-    thisContext._everys.push(setInterval(func, milis));
+
+    // the idea here is that the user would type every([random, 1, 10], 'second', () => {...})
+    // including "random" in the array isn't really necessary other than identifying what you're doing while coding
+    if ((typeof time === "undefined" ? "undefined" : _typeof(time)) == "object") {
+      var init = function init() {
+        var theFunction = function theFunction() {
+          func();
+          var randomTime = Woof.prototype.random(time[1], time[2]);
+          var ms = Woof.prototype.unitsToMiliseconds(randomTime, units);
+          setTimeout(theFunction, ms);
+        };
+        theFunction();
+      };
+      thisContext._everys.push(init());
+    } else {
+      var milis = Woof.prototype.unitsToMiliseconds(time, units);
+      func();
+      thisContext._everys.push(setInterval(func, milis));
+    }
   };
   thisContext.forever = function (func) {
     if (typeof func != "function") {
