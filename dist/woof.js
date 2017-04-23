@@ -698,18 +698,19 @@ function Woof() {
 
   thisContext._everys = [];
   thisContext.every = function (time, units, func) {
-    if (typeof func != "function" || typeof time != "number" && (typeof time === "undefined" ? "undefined" : _typeof(time)) != "object") {
-      throw new TypeError("every(time, units, function) requires a number, unit and function input.");
+    if (typeof func != "function" || typeof time != "number" && typeof time != "function") {
+      throw new TypeError("every(time, units, function) requires a number/function, time unit and function input.");
     }
-
-    // the idea here is that the user would type every([random, 1, 10], 'second', () => {...})
-    // including "random" in the array isn't really necessary other than identifying what you're doing while coding
-    if ((typeof time === "undefined" ? "undefined" : _typeof(time)) == "object") {
+    // if the user inputs something like () => random(1, 10) for the time parameter, re-evaluate the function every time it's run, and update the frequency
+    if (typeof time == "function") {
+      if (typeof time() != "number") {
+        throw new TypeError("every(time, units, function) requires a time function that returns a number");
+      }
       var init = function init() {
         var theFunction = function theFunction() {
+          var ms = Woof.prototype.unitsToMiliseconds(time(), units);
           func();
-          var randomTime = Woof.prototype.random(time[1], time[2]);
-          var ms = Woof.prototype.unitsToMiliseconds(randomTime, units);
+          // use setTimeout() here instead of setInterval() because the interval has to be able to change
           setTimeout(theFunction, ms);
         };
         theFunction();
@@ -721,6 +722,7 @@ function Woof() {
       thisContext._everys.push(setInterval(func, milis));
     }
   };
+
   thisContext.forever = function (func) {
     if (typeof func != "function") {
       throw new TypeError("forever(function) requires one function input.");
