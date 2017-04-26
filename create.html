@@ -62,6 +62,23 @@
   <script data-presets="es2015" src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.14.0/babel.min.js"></script>
   <script src="https://cdn.rawgit.com/beautify-web/js-beautify/1b52eb1f90daaefa6ff0fa7736f97fbfc58093c1/js/lib/beautify.js"></script>
   <style>
+     
+     html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      width: 100%;
+    }
+    
+    #page {
+      position: relative;
+      display: flex;
+      flex-flow: row wrap;
+      align-items: stretch;
+      align-content: stretch;
+      height: 100%;
+    }
+    
     body {
       background-color: #fff;
       font-family: sans-serif;
@@ -73,25 +90,29 @@
     }
     
     .CodeMirror {
-        height: 100%;
         font-size: 13px;
+        flex: 1 0 auto;
     }
     
     iframe {
         border: none;
-    } 
-    
-    #navbar {
+        flex: 1 0 auto;
+        width: 100%;
+    }
+  
+  #navbar {
+      background-color: #6DC0F2;
+      position: absolute;
+      width: 100%;
+      z-index: 1;
+      top: 0;
+      height: 55px;
       display: flex;
       align-items: center;
-      justify-content: center;
-      background-color: #6DC0F2; 
-      color:white; 
-      height:55px; 
-      width:100%; 
+      justify-content: space-between;
     }
     
-    #clean-up { 
+    #clean-up {
       background-color: #80CFFF;
       border: none;
       color: white;
@@ -107,15 +128,55 @@
       width: 100%;
       display: flex;
       flex-direction: row;
-      
-      /* Firefox */
-      height: -moz-calc(99% - 79px);
-      /* WebKit */
-      height: -webkit-calc(99% - 79px);
-      /* Opera */
-      height: -o-calc(99% - 79px);
-      /* Standard */
-      height: calc(99% - 79px);
+      margin-top: 55px;
+    }
+    
+    #previewbar, #docsbar, #projectbar, #codebar {
+       flex-grow: 0.65; 
+       align-items: center; 
+       display: none; 
+       width: 25px; 
+       height: 100%; 
+       flex-direction: column; 
+       justify-content: center;  
+    }
+    
+    #output, #docs, #projects, #code {
+      flex-flow: column wrap; 
+      height: 100%; 
+      resize: none; 
+      flex: 10 1 25%;
+    }
+    
+    #code {
+      word-wrap: break-word;
+      width: 25%;
+    }
+    
+    #PreviewNav, #DocsNav, #ProjectsNav, #CodeNav {
+      height: 25px;
+      text-align: center; 
+      color: white; 
+      font-size: 1.1em;
+      display: flex; 
+      justify-content: space-between;
+    }
+    
+    #previewbar, #PreviewNav {
+    background-color:#4875D1;
+
+    }
+    
+    #docsbar, #DocsNav {
+      background-color: #7F68D5;
+    }
+    
+    #projectbar, #ProjectsNav {
+      background-color: #AD5FC2;
+    }
+    
+    #codebar, #CodeNav {
+      background-color: #49A6DF;
     }
     
     @media all and (max-width: 600px) {
@@ -145,20 +206,12 @@
       -o-transform: rotate(90deg);
       transform: rotate(90deg);
     }
-    
-    #chatlio-widget .chatlio-widget {
-      right: 10px;  
-    }
-    
-    .chatlio-widget.chatlio-title-bar-chip-container.closed {
-      margin-bottom: 5px !important;
-    }
-    
+
   </style>
 </head>
-<body style="height:100%">
-  <div id="page" style="height:100%">
-    <div id="navbar" style ="display:flex; justify-content: space-between;"> 
+<body>
+  <div id="page">
+    <div id="navbar"> 
       <button style="background-color: #80CFFF; color: white;  border-radius:4px; border:none; margin:8px" class="btn btn-medium btn-info" type="button" id="login" onclick="window.open('./login.html', 'Sign In', 'width=500,height=500')">Login / Sign Up</button>
       <div style="margin-left: 5px" id="logggedin" class="hide dropdown">
         <button class="btn btn-medium btn-info dropdown-toggle" type="button" id="loggedin-name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"></button>
@@ -179,57 +232,56 @@
       </span>
     </div>
  
-    <div id="container" style="diplay:flex; ">
+    <div id="container">
     
-      <div v-show="previewbar" @click="previewbar= !previewbar" :style="{display: 'flex'}" style="flex-grow:0.65;     align-items: center; display:none; inline-block:none; width:25px; height:100%; flex-direction:column; justify-content: center;  background-color:#4875D1">
-        <span class="rotate" style="font-size:1.65em">Preview</span>
+      <div id="previewbar" v-show="previewbar" @click="previewbar= !previewbar" :style="{display: 'flex'}">
+        <span class="rotate" style="font-size: 1.65em">Preview</span>
       </div>
-      <div v-show="outputPane" :style="{display: !previewbar ? 'inline-block' : 'none'}" id="output" style="flex-grow:20; inline-block: none;height:100%; resize: none; flex: 10 1 25%;">
-        <div id="PreviewNav" style="height:25px;text-align:center; background-color:#4875D1; color:white; font-size:1.1em style; display:flex; justify-content: space-between;">
-          <span style="margin-left:8px;  margin-top:4px">Preview</span>
+      <div v-show="outputPane" :style="{display: !previewbar ? 'flex' : 'none'}" id="output">
+        <div id="PreviewNav">
+          <span style="margin-left:8px; margin-top:4px">Preview</span>
           <span style="margin-right:8px">
-            <img  onclick="runCode(); focusPreview()" id="pop" style="margin: 2px; width: 17px; height:17px" src="./images/refresh.png">
+            <img onclick="runCode(); focusPreview()" id="pop" style="margin: 2px; width: 17px; height:17px" src="./images/refresh.png">
             <img  onclick="popout()" id="pop" style="margin: 2px; width: 17px; height:17px" src="./images/pop.png">
             <img  @click="previewbar = !previewbar"  style="margin: 5px; width: 16px; height:18px" src="./images/minimize.png">
           </span>
         </div>
-        <iframe scrolling="no" id="preview" style="height:100%; width:100%; "></iframe>
+        <iframe scrolling="no" id="preview"></iframe>
       </div>
     
     
-      <div v-show="docsbar" @click="docsbar= !docsbar" :style="{display: 'flex'}" style="flex-grow:0.65;     align-items: center; display:none; inline-block:none; width:25px; height:100%; flex-direction:column; justify-content: center;  background-color:#7F68D5">
-        <span class="rotate" style="font-size:1.65em">Documentation</span>
+      <div id="docsbar" v-show="docsbar" @click="docsbar= !docsbar" :style="{display: 'flex'}">
+        <span class="rotate" style="font-size: 1.65em">Documentation</span>
       </div>
-      <div v-show="docsPane" :style="{display: !docsbar ? 'inline-block' : 'none'}" id="docs" style="flex-grow:20; height:100%; flex: 10 1 25%">
-        <div id="DocsNav" style="height:25px; text-align:center; background-color:#7F68D5; color:white; font-size:1.1em; display:flex; justify-content: space-between;">
+      <div v-show="docsPane" :style="{display: !docsbar ? 'flex' : 'none'}" id="docs">
+        <div id="DocsNav">
           <span style="margin-left:8px;  margin-top:4px">Documentation</span>
           <span style="margin-right:8px">
             <img   @click="docsbar = !docsbar"  style="margin-left:5px; width: 16px; height:18px" src="./images/minimize.png">
           </span>
         </div>
-        <iframe src="./docs/index.html" id="scratch" style="height:100%; width:100%;"></iframe>
+        <iframe src="./docs/index.html" id="scratch"></iframe>
       </div>
     
     
-      <div v-show="projectbar" @click="projectbar= !projectbar" :style="{display: 'flex'}" style="flex-grow:0.65;     align-items: center; display:none;inline-block:none; width:25px; height:100%; flex-direction:column; justify-content: center;  background-color:#AD5FC2" @click="projectsPane = !projectsPane">
+      <div id="projectbar" v-show="projectbar" @click="projectbar= !projectbar" :style="{display: 'flex'}" @click="projectsPane = !projectsPane">
         <span class="rotate" style="font-size:1.65em">Tutorials</span>
       </div>
-      <div v-show="projectsPane" :style="{display: !projectbar ? 'inline-block' : 'none'}"  :style="{display: 'flex'}" id="projects" style="width:25%; height:100%; flex: 10 1 25%; display:none;inline-block:none; word-wrap: break-word; ">
-        <div id="ProjectsNav"  style="height:25px; text-align:center; background-color:#AD5FC2; color:white; font-size:1.1em; display:flex; justify-content: space-between; border:none">
+      <div v-show="projectsPane" :style="{display: !projectbar ? 'flex' : 'none'}"  :style="{display: 'flex'}" id="projects">
+        <div id="ProjectsNav">
           <span style="margin-left:8px; margin-top:4px">Tutorials</span>
           <span style="margin-right:8px">
             <img @click="projectbar = !projectbar" style="margin: 5px; width: 16px; height:18px" src="./images/minimize.png">
           </span>
         </div>
-        <iframe id="projectsIframe" src="http://coding.space/woof/index.html" style="height:100%; width:100%"></iframe>
+        <iframe id="projectsIframe" src="http://coding.space/woof/index.html"></iframe>
       </div>
     
-    
-      <div v-show="codebar" @click="codebar= !codebar" :style="{display: 'flex'}" style="flex-grow:0.65;     align-items: center;display:none; inline-block:none; width:25px; height:100%;flex-direction:column; justify-content: center;  background-color:#49A6DF">
+      <div id="codebar" v-show="codebar" @click="codebar= !codebar" :style="{display: 'flex'}">
         <span class="rotate" style="font-size:1.65em">Code</span>
       </div>
-      <div v-show="codePane" :style="{display: !codebar ? 'inline-block' : 'none'}" id="code" style="flex-grow:20; width:25%; height:100%; flex: 10 1 25%; word-wrap: break-word;">
-        <div id="CodeNav" style="height:25px;text-align:center; background-color:#49A6DF; color:white; font-size:1.1em; display:flex; justify-content: space-between;">
+      <div v-show="codePane" :style="{display: !codebar ? 'flex' : 'none'}" id="code">
+        <div id="CodeNav">
           <span style="margin-left:8px; margin-top:4px">Code</span>
           <span style="margin-right:8px">
             <img   @click="codebar = !codebar" style="margin: 5px; width: 16px; height:18px" src="./images/minimize.png">
