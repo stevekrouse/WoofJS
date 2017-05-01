@@ -1,5 +1,5 @@
 # WoofJS
-[![license](https://img.shields.io/github/license/mashape/apistatus.svg)]() [![Code Triagers Badge](https://www.codetriage.com/stevekrouse/woofjs/badges/users.svg)](https://www.codetriage.com/stevekrouse/woofjs) 
+[![license](https://img.shields.io/github/license/mashape/apistatus.svg)]() [![Code Triagers Badge](https://www.codetriage.com/stevekrouse/woofjs/badges/users.svg)](https://www.codetriage.com/stevekrouse/woofjs)       [![cloud9](https://img.shields.io/badge/cloud9-open-red.svg)](https://c9.io/auth/github?r=https%3A%2F%2Fc9.io%2Fopen%2F%3Fclone_url%3Dhttps%253A%252F%252Fgithub.com%252Fstevekrouse%252FWoofJS)
 
 WoofJS is a *learnable* JavaScript framework for creating games by [The Coding Space](http://thecodingspace.com).
 
@@ -23,7 +23,7 @@ We recommend that you get started with WoofJS on [woofjs.com](http://woofjs.com)
 
 ### Installing WoofJS
 
-#### For development (which always grabs the latest version): 
+#### For development (which always grabs the latest version):
 
 ```html
 <script src="https://rawgit.com/stevekrouse/WoofJS/master/dist/woof.js"></script>
@@ -34,7 +34,7 @@ We recommend that you get started with WoofJS on [woofjs.com](http://woofjs.com)
 Go to rawgit.com and type this in:
 
     https://github.com/stevekrouse/WoofJS/blob/master/dist/woof.js
-    
+
 And grab the link on the left, which should look like:
 
 ```html
@@ -43,7 +43,7 @@ And grab the link on the left, which should look like:
 
 ### Global mode
 
-When you include the Woof script in your code, it defaults to creating a full-screen project and polluting your global namespace with Woof's methods. 
+When you include the Woof script in your code, it defaults to creating a full-screen project and polluting your global namespace with Woof's methods.
 
 We find not having to type "Woof." over and over again makes a huge difference for beginner programmers, especially those new to typing.
 
@@ -88,7 +88,7 @@ Simply create an issue with a link to the simpliest code you can create that wou
 
 ## Contributing
 
-WoofJS is used by hundreds of students all over the world to build games and animations. 
+WoofJS is used by hundreds of students all over the world to build games and animations.
 
 We'd love your help in making it even more learnable and dependable for them.
 
@@ -142,7 +142,7 @@ You can find them there in the `woof/` subdirectory. If you'd like to cotribute 
     git clone https://github.com/stevekrouse/WoofJS.git
     ```     
 3. Initialize npm (the following command makes this as simple as possible).
-    
+
     ```
     npm init --yes
     ```
