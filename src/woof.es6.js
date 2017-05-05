@@ -435,27 +435,42 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
   };
 
   thisContext._everys = [];
+  // thisContext.every = (time, units, func) => {
+  //   if (typeof func != "function" || (typeof time != "number" && typeof time != "function")) { throw new TypeError("every(time, units, function) requires a number/function, time unit and function input."); }
+  //   // if the user inputs something like () => random(1, 10) for the time parameter, re-evaluate the function every time it's run, and update the frequency
+  //   if (typeof time == "function") {
+  //     if (typeof time() != "number") { throw new TypeError("every(time, units, function) requires a time function that returns a number")}
+  //     // var init = function() {
+  //     //   var theFunction = function() {
+  //     //     var ms = Woof.prototype.unitsToMiliseconds(time(), units);
+  //     //     func();
+  //     //     // use setTimeout() here instead of setInterval() because the interval has to be able to change
+  //     //     thisContext._everys.push(setTimeout(theFunction, ms));
+  //     //   }
+  //     //   theFunction();
+  //     // }
+  //     // thisContext._everys.push(init());
+  //     // init();
+  //     // var theFunction = function() {
+  //     //   var ms = Woof.prototype.unitsToMiliseconds(time(), units);
+  //     //   func();
+  //     //   // use setTimeout() here instead of setInterval() because the interval has to be able to change
+  //     //   thisContext._everys.push(setTimeout(theFunction, ms));
+  //     // }
+  //     // theFunction();
+  //   }
+  //   else {
+  //     var milis = Woof.prototype.unitsToMiliseconds(time, units);
+  //     func();
+  //     thisContext._everys.push(setInterval(func, milis));
+  //   }
+  // };
+  
   thisContext.every = (time, units, func) => {
-    if (typeof func != "function" || (typeof time != "number" && typeof time != "function")) { throw new TypeError("every(time, units, function) requires a number/function, time unit and function input."); }
-    // if the user inputs something like () => random(1, 10) for the time parameter, re-evaluate the function every time it's run, and update the frequency
-    if (typeof time == "function") {
-      if (typeof time() != "number") { throw new TypeError("every(time, units, function) requires a time function that returns a number")}
-      var init = function() {
-        var theFunction = function() {
-          var ms = Woof.prototype.unitsToMiliseconds(time(), units);
-          func();
-          // use setTimeout() here instead of setInterval() because the interval has to be able to change
-          setTimeout(theFunction, ms);
-        }
-        theFunction();
-      }
-      thisContext._everys.push(init());
-    }
-    else {
-      var milis = Woof.prototype.unitsToMiliseconds(time, units);
-      func();
-      thisContext._everys.push(setInterval(func, milis));
-    }
+    var milis = Woof.prototype.unitsToMiliseconds(time, units);
+    if (typeof func != "function" || typeof time != "number") { throw new TypeError("every(time, units, function) requires a number, unit and function input."); }
+    func();
+    thisContext._everys.push(setInterval(func, milis));
   };
   
   thisContext.forever = (func) => {
