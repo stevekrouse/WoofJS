@@ -707,6 +707,10 @@
                         description: 'If you want to wait at regular intervals, use every():',
                         tags: "wait every seconds"
                     }, {
+                        code: 'every(() => random(1, 5), "seconds", () => {\n \/* do something here */\n})',
+                        description: 'If you want to wait at changing intervals, use every() with a function instead of a number.',
+                        tags: "wait every seconds random"
+                    }, {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f6a77653133626d2e706e67",
                         code: 'repeat(10, () => {\n  \/* do stuff here */\n})',
                         tags: 'repeat times'

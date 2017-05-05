@@ -436,11 +436,42 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
 
   thisContext._everys = [];
   thisContext.every = (time, units, func) => {
-    var milis = Woof.prototype.unitsToMiliseconds(time, units);
-    if (typeof func != "function" || typeof time != "number") { throw new TypeError("every(time, units, function) requires a number, unit and function input."); }
-    func();
-    thisContext._everys.push(setInterval(func, milis));
+    if (typeof func != "function" || (typeof time != "number" && typeof time != "function")) { throw new TypeError("every(time, units, function) requires a number/function, time unit and function input."); }
+    // if the user inputs something like () => random(1, 10) for the time parameter, re-evaluate the function every time it's run, and update the frequency
+    if (typeof time == "function") {
+      if (typeof time() != "number") { throw new TypeError("every(time, units, function) requires a time function that returns a number")}
+      
+      // create a variable that will be used to store the value of the previous setTimeout()
+      var theFunction = function(timeoutValue) {
+        var ms = Woof.prototype.unitsToMiliseconds(time(), units);
+        func();
+        // if the previous setTimeout() value is in the ._everys array, remove it
+        if (timeoutValue && thisContext._everys.includes(timeoutValue)) {
+          thisContext._everys.splice(thisContext._everys.indexOf(timeoutValue), 1)
+        }
+        // use setTimeout() here instead of setInterval() because the interval has to be able to change
+        // pass an anonymous function so we can pass the argument lastTimeout to theFunction()
+        var lastTimeout = setTimeout(function() {
+          theFunction(lastTimeout)
+        }, ms)
+        thisContext._everys.push(lastTimeout);
+      }
+      theFunction()
+    }
+    else {
+      var milis = Woof.prototype.unitsToMiliseconds(time, units);
+      func();
+      thisContext._everys.push(setInterval(func, milis));
+    }
   };
+  
+  // thisContext.every = (time, units, func) => {
+  //   var milis = Woof.prototype.unitsToMiliseconds(time, units);
+  //   if (typeof func != "function" || typeof time != "number") { throw new TypeError("every(time, units, function) requires a number, unit and function input."); }
+  //   func();
+  //   thisContext._everys.push(setInterval(func, milis));
+  // };
+  
   thisContext.forever = (func) => {
     if (typeof func != "function") { throw new TypeError("forever(function) requires one function input."); }
     thisContext.repeatUntil(() => false, func);
