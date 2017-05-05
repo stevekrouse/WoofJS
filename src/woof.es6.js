@@ -454,9 +454,7 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
         var lastTimeout = setTimeout(function() {
           theFunction(lastTimeout)
         }, ms)
-        
         thisContext._everys.push(lastTimeout);
-        console.log(thisContext._everys)
       }
       theFunction()
     }

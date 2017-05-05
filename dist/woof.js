@@ -720,9 +720,7 @@ function Woof() {
         var lastTimeout = setTimeout(function () {
           theFunction(lastTimeout);
         }, ms);
-
         thisContext._everys.push(lastTimeout);
-        console.log(thisContext._everys);
       };
       theFunction();
     } else {
