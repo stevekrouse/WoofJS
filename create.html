@@ -256,7 +256,7 @@
           <span style="margin-right:8px">
             <img onclick="runCode(); focusPreview()" id="pop" style="margin: 2px; width: 17px; height:17px" src="./images/refresh.png">
             <img  onclick="popout()" id="pop" style="margin: 2px; width: 17px; height:17px" src="./images/pop.png">
-            <img  @click="previewbar = !previewbar"  style="margin: 5px; width: 16px; height:18px" src="./images/minimize.png">
+            <img  @click="previewbar = !previewbar"  style="margin: 5px; width: 16px; height:18px; cursor:pointer" src="./images/minimize.png">
           </span>
         </div>
         <iframe scrolling="no" id="preview"></iframe>
@@ -270,7 +270,7 @@
         <div id="DocsNav">
           <span style="margin-left:8px;  margin-top:4px">Documentation</span>
           <span style="margin-right:8px">
-            <img   @click="docsbar = !docsbar"  style="margin-left:5px; width: 16px; height:18px" src="./images/minimize.png">
+            <img   @click="docsbar = !docsbar"  style="margin-left:5px; width: 16px; height:18px; cursor:pointer" src="./images/minimize.png">
           </span>
         </div>
         <iframe src="./docs/index.html" id="scratch"></iframe>
@@ -284,7 +284,7 @@
         <div id="ProjectsNav">
           <span style="margin-left:8px; margin-top:4px">Tutorials</span>
           <span style="margin-right:8px">
-            <img @click="projectbar = !projectbar" style="margin: 5px; width: 16px; height:18px" src="./images/minimize.png">
+            <img @click="projectbar = !projectbar" style="margin: 5px; width: 16px; height:18px; cursor:pointer" src="./images/minimize.png">
           </span>
         </div>
         <iframe id="projectsIframe" src="http://coding.space/woof/index.html"></iframe>
@@ -298,7 +298,7 @@
         <div id="CodeNav">
           <span style="margin-left:8px; margin-top:4px">Code</span>
           <span style="margin-right:8px">
-            <img @click="codebar = !codebar" style="margin: 5px; width: 16px; height:18px" src="./images/minimize.png">
+            <img @click="codebar = !codebar" style="margin: 5px; width: 16px; height:18px; cursor:pointer" src="./images/minimize.png">
           </span>
         </div>
       </div>
