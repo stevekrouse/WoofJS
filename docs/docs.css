@@ -337,7 +337,12 @@ h4 {
     }
 }
 
-#Image {
+#Create {
+    background-color: #4875D1;
+    width:90% !important;
+}
+
+#Predefined {
     background-color: #49A6DF;
     width:90% !important;
 }
