@@ -617,8 +617,16 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
   
   // SAT collision for touching, works with rotated sprites
   this.rotatedVector = function(x, y){
-    var rotatedX = Math.cos(this.radians()) * (x - this.x) - Math.sin(this.radians()) * (y - this.y) + this.x
-    var rotatedY =  Math.sin(this.radians()) * (x - this.x) + Math.cos(this.radians()) * (y - this.y) + this.y
+    var rotatedX;
+    var rotatedY;
+    if (this.type == 'line') {
+      rotatedX = Math.cos(this.radians()) * (x - this.x) - Math.sin(this.radians()) * (y - this.y + this.height / 2) + this.x;
+      rotatedY =  Math.sin(this.radians()) * (x - this.x) + Math.cos(this.radians()) * (y - this.y + this.height / 2) + this.y;
+    }
+    else {
+      rotatedX = Math.cos(this.radians()) * (x - this.x) - Math.sin(this.radians()) * (y - this.y) + this.x;
+      rotatedY =  Math.sin(this.radians()) * (x - this.x) + Math.cos(this.radians()) * (y - this.y) + this.y;
+    }
     return new SAT.Vector(rotatedX, rotatedY);
   }
   
@@ -1046,9 +1054,6 @@ Woof.prototype.Rectangle = function({project = undefined, height = 10, width = 1
 };
 
 Woof.prototype.Line = function({project = undefined, width = 1, x1 = 10, y1 = 10, color = "black"} = {}) {
-  // currently the line collider and collision detection is wonky
-  // because a line is really a rectangle that's defined from it's endpoints...
-  // TODO make this a helper function to create a rectangle 
   
   this.type = "line"
   Woof.prototype.Sprite.call(this, arguments[0]);
@@ -1056,6 +1061,8 @@ Woof.prototype.Line = function({project = undefined, width = 1, x1 = 10, y1 = 10
   this.y1 = y1;
   this.color = color;
   this.lineWidth = Math.abs(width);
+  this.angle = Math.atan2(-this.x1 + this.x, this.y1 - this.y) * 180 / Math.PI;
+
   
   Object.defineProperty(this, 'width', {
     get: function() {
@@ -1076,14 +1083,9 @@ Woof.prototype.Line = function({project = undefined, width = 1, x1 = 10, y1 = 10
     }
   }); 
   
-  
   this.render = (context) => {
-    context.beginPath();
-    context.moveTo(0, 0);
-    context.lineTo(this.x1 - this.x, -this.y1 + this.y);
-    context.strokeStyle = this.color;
-    context.lineWidth = this.lineWidth;
-    context.stroke();
+    context.fillStyle=this.color;
+    context.fillRect(-this.width / 2, -this.height, this.width, this.height);
   };
 };
 
