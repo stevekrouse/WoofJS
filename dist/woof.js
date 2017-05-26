@@ -941,6 +941,7 @@ Woof.prototype.Sprite = function () {
   this.rotatedVector = function (x, y) {
     var rotatedX;
     var rotatedY;
+    // If sprite is a line, offsets positioning by half the height as line is drawn from endpoints, not center
     if (this.type == 'line') {
       rotatedX = Math.cos(this.radians()) * (x - this.x) - Math.sin(this.radians()) * (y - this.y + this.height / 2) + this.x;
       rotatedY = Math.sin(this.radians()) * (x - this.x) + Math.cos(this.radians()) * (y - this.y + this.height / 2) + this.y;
@@ -951,10 +952,12 @@ Woof.prototype.Sprite = function () {
     return new SAT.Vector(rotatedX, rotatedY);
   };
 
+  // Makes collider vector vertices relative to the point 'pos'
   this.translatedVector = function (pos, v) {
     return new SAT.Vector(v.x - pos.x, v.y - pos.y);
   };
 
+  // Creates collider polygon from vector vertices
   this.collider = function () {
     var pos = this.rotatedVector(this.x - this.width / 2, this.y - this.height / 2);
     var v1 = new SAT.Vector(0, 0);
@@ -1495,6 +1498,7 @@ Woof.prototype.Rectangle = function () {
   };
 };
 
+// Creates a 'line' sprite by rendering a rotated rectangle
 Woof.prototype.Line = function () {
   var _this7 = this;
 
@@ -1516,6 +1520,7 @@ Woof.prototype.Line = function () {
   this.y1 = y1;
   this.color = color;
   this.lineWidth = Math.abs(width);
+  // Rotates rectangle by the angle between x1 and x and y1 and y
   this.angle = Math.atan2(-this.x1 + this.x, this.y1 - this.y) * 180 / Math.PI;
 
   Object.defineProperty(this, 'width', {
@@ -1530,6 +1535,7 @@ Woof.prototype.Line = function () {
     }
   });
 
+  // Sets height property to hypotenuse of triangle created from x and x1 and y and y1 - this is the length of the 'line'
   Object.defineProperty(this, 'height', {
     get: function get() {
       return Math.sqrt(Math.pow(this.x - this.x1, 2) + Math.pow(this.y - this.y1, 2));
