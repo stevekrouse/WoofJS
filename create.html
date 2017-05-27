@@ -639,11 +639,11 @@
       app.error = undefined
     
       try {
-        var code = Babel.transform(editor.getValue(), {
-          presets: ['es2015']
-        }).code
-        code = code.replace("'use strict';", '')
-    
+        var result = Babel.transform(editor.getValue(), {
+          presets: [['es2015', {'modules': false}]], // modules: false to remove strict mode
+        })
+        var code = result.code
+
         try {
           document.getElementById('preview').contentWindow.addEventListener("error", function(error) {
             app.error = error
