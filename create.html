@@ -421,14 +421,7 @@
         authChanged = true
         if(user){
           ga('set', 'userId', user.uid); 
-        } else {
-           setTimeout(function(){
-            $("[data-toggle='tooltip']").tooltip('show');
-              setTimeout(function(){
-            $("[data-toggle='tooltip']").tooltip('hide');
-            }, 4000);
-          }, 2000);
-        }
+        } 
       }
       
       if (user){
@@ -601,9 +594,6 @@
             "asi": true
           }
         },
-    });
-    editor.on("change", function(){
-      $("[data-toggle='tooltip']").tooltip('hide');
     });
     onkeydown = function(e){
       if(e.ctrlKey && e.key == '/'){
