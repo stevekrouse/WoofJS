@@ -371,7 +371,7 @@
         getID: getID,
         showError: function(){
           if (this.error.message.includes('Uncaught ReferenceError: sprite1 is not defined')) {
-            var spriteName = prompt("It looks like you have not renamed your your sprite! It is still set as the default 'sprite1'.\n\nWhat is the name of your sprite?", "unicornSprite");    
+            var spriteName = prompt("Error on line " + this.error.lineno  + "\n\n" + "You need to rename 'sprite1'. What would you like to name it?", "unicornSprite");    
             if (spriteName !== null) {   
                 editor.setValue(editor.getValue().replace(/sprite1/g, spriteName));
             }  
@@ -379,8 +379,12 @@
           else if (this.error.message.includes("Uncaught InvalidStateError: Failed to execute 'drawImage' on 'CanvasRenderingContext2D': The HTMLImageElement provided is in the 'broken' state.")) {
              alert("You're using a broken link to an image. Take a look at the most recent link you added to make sure it works. \n\nTip: Try commenting out all of your images. Add them back one by one until you identify the broken link.");    
           }
+          else if (this.error.message.includes("Uncaught ReferenceError")) {
+            var message = this.error.message.replace("Uncaught ReferenceError: ", "")
+            alert("Error on line " + this.error.lineno  + "\n\n" + message + ". Check the spelling of your variable definitions.")
+          }
           else {
-             alert(this.error.message)
+             alert("Error on line " + this.error.lineno  + "\n\n" + this.error.message)
           }
         },
         cleanAll: function(){
@@ -641,25 +645,24 @@
       try {
         var result = Babel.transform(editor.getValue(), {
           presets: [['es2015', {'modules': false}]], // modules: false to remove strict mode
+          retainLines: true
         })
         var code = result.code
-
         try {
           document.getElementById('preview').contentWindow.addEventListener("error", function(error) {
             app.error = error
           });
           var script = document.createElement("script");
           script.type = "text/javascript";
+          script.crossorigin = "anonymous"
           script.text = code
           document.getElementById('preview').contentDocument.body.appendChild(script)
-    
         }
         catch (e) {
           app.error = e;
         }
       }
       catch (e) {
-    
         app.error = e
       }
     }
