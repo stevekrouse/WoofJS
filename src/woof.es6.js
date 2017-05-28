@@ -1129,7 +1129,10 @@ Woof.prototype.Image = function({project = undefined, url = "./images/SMJjVCL.pn
   }); 
   
   this.render = (context) => {
-    context.drawImage(this.image, -this.width / 2, -this.height / 2, this.width, this.height);
+    // checking if the image is loaded and not broken via https://stackoverflow.com/a/34726863/2180575
+    if (this.image.complete && this.image.naturalHeight !== 0) {
+      context.drawImage(this.image, -this.width / 2, -this.height / 2, this.width, this.height);
+    }
   };
 };
 
