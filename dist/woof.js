@@ -414,7 +414,12 @@ function Woof() {
     img.onload = function () {
       thisContext.ready(thisContext._renderBackdrop);
     };
-    // TODO on error should throw and error
+    img.onerror = function (e) {
+      var error = new Error();
+      error.type = "ImageLoadError";
+      error.url = url;
+      throw error;
+    };
     img.src = url;
   };
 
@@ -1584,17 +1589,13 @@ Woof.prototype.Image = function () {
 
   this.setImageURL = function (url) {
     this.image = new window.BrowserImage();
-    // the code in comments below were designed to allow CORS for bad images
-    // this caused more problems then it solved so it's currently removed but should be revisited eventually
-    // https://github.com/stevekrouse/WoofJS/issues/161
-    // this.image.crossOrigin = "Anonymous"
     this.image.src = url;
-    // this.image.`EventListener('error', e => {
-    //     e.preventDefault();
-    //     this.image = new window.BrowserImage();
-    //     this.image.src = url;
-    // });
-    // TODO throw error with URL
+    this.image.onerror = function (e) {
+      var error = new Error();
+      error.type = "ImageLoadError";
+      error.url = url;
+      throw error;
+    };
   };
   this.setImageURL(url);
 

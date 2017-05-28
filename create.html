@@ -664,8 +664,14 @@
         })
         var code = result.code
         try {
-          document.getElementById('preview').contentWindow.addEventListener("error", function(error) {
-            app.error = error
+          document.getElementById('preview').contentWindow.addEventListener("error", function(event) {
+            var error = event.error
+            if (error.type == "ImageLoadError") {
+              app.error = {message: "There is a problem with your image URL: " + error.url, lineno: code.substring(0, code.indexOf(error.url)).split('\n').length}
+            } else {
+              app.error = event
+            }
+            
           });
           var script = document.createElement("script");
           script.type = "text/javascript";
