@@ -391,6 +391,13 @@
           var beautiful = js_beautify(editor.getValue(), {space_after_anon_function: true, indent_size: 2, indent_with_tabs: false })
           editor.setValue(beautiful)
         }
+      },
+      watch: {
+        error: function() {
+          if (this.error.lineno) {
+            CodeMirror.commands.markGutter(editor, "error", this.error.lineno, this.error.message)
+          }
+        }
       }
     })
     var myCode = false
@@ -593,7 +600,6 @@
         lint: {
           delay: 800, 
           options: {
-            "esversion": 6,
             "esnext": true,
             "asi": true
           }
