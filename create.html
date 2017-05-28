@@ -393,9 +393,9 @@
         }
       },
       watch: {
-        error: function() {
-          if (this.error.lineno) {
-            CodeMirror.commands.markGutter(editor, "error", this.error.lineno, this.error.message)
+        error: function(newError) {
+          if (newError && newError.lineno) {
+            CodeMirror.commands.markGutter(editor, "error", newError.lineno, newError.message)
           }
         }
       }
