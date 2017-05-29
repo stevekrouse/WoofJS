@@ -9,6 +9,19 @@
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.5.12/clipboard.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    
+    <script>
+      (function() {
+        var cx = '013503992169221670283:hbw3q1osfjo';
+        var gcse = document.createElement('script');
+        gcse.type = 'text/javascript';
+        gcse.async = true;
+        gcse.src = 'https://cse.google.com/cse.js?cx=' + cx;
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(gcse, s);
+      })();
+    </script>
+
     <title>WoofJS Documentation</title>
 </head>
 
@@ -113,7 +126,11 @@
                         code: "Ctl-B"
                     }, ],
                     "Sprites & Backgrounds": {
-                        Image: [{
+                        Image: [
+                            {
+                                html: '<gcse:search defaultToImageSearch="true" disableWebSearch="true" newWindow="false" imageSearchResultSetSize="large"></gcse:search>' 
+                            },
+                            {
                                 url: "./images/kpU9y5M.png",
                                 code: 'var unicorn = new Image({\n  url: "./docs/images/unicorn.png",\n  width: 120, \n  height: 80,\n})',
                                 tags: "unicorn sprite",
