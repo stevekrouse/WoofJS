@@ -204,7 +204,13 @@
     #pop {
       cursor: pointer;
     }
-    
+
+    @keyframes glowing {
+      0% { background-color: #B20000; box-shadow: 0 0 1px #c9302c; }
+      50% { background-color: #FF0000; box-shadow: 0 0 2px #FF0000; }
+      100% { background-color: #B20000; box-shadow: 0 0 1px #c9302c; }
+    }
+
     #error {
       display: none;
       color: white;
@@ -240,7 +246,7 @@
       <img  style= "width:160px; height: 40px;" src="./images/logowhite.png">
       <span style="margin:8px" id="save">
         <button id="clean-up" class="btn btn-medium btn-default" @click="cleanAll()" style="display: none" :style="{display: canClean ? 'inline-block' : 'none'}"><span class="glyphicon glyphicon-align-left"></span> Clean Code</button>
-        <button id="error" class="btn btn-danger" @click="showError()" :style="{display: error ? 'inline-block' : 'none'}"><span class="glyphicon glyphicon-exclamation-sign"></span> Error</button>
+        <button id="error" class="btn btn-danger" @click="showError()" :style="{display: error ? 'inline-block' : 'none', animation: seenError ? 'none' : 'glowing 1200ms infinite'}"><span class="glyphicon glyphicon-exclamation-sign"></span> Error</button>
         <button style="display: none" :style="{display: 'inline-block'}" style="margin-right: 5px; background-color:#4390BF !important; ; border:none; color:white; " class="btn btn-medium" :class="styles" onclick="save()">{{ status == "SAVED" ? 'Saved' : 'Save' }}</button>
       </span>
     </div>
@@ -357,7 +363,8 @@
         docsbar:false,
         codebar:false,
         mouseX: 0,
-        mouseY: 0
+        mouseY: 0,
+        seenError: true,
       },
       computed: {
         styles : function() { return {
@@ -374,6 +381,7 @@
       methods: {
         getID: getID,
         showError: function(){
+          this.seenError = true
           if (this.error.message.includes('Uncaught ReferenceError: sprite1 is not defined')) {
             var spriteName = prompt("Error on line " + this.error.lineno  + "\n\n" + "You need to rename 'sprite1'. What would you like to name it?", "unicornSprite");    
             if (spriteName !== null) {   
@@ -391,7 +399,7 @@
         cleanAll: function(){
           var beautiful = js_beautify(editor.getValue(), {space_after_anon_function: true, indent_size: 2, indent_with_tabs: false })
           editor.setValue(beautiful)
-        }
+        },
       },
       watch: {
         error: function(newError) {
@@ -615,7 +623,7 @@
         save();
       }
     }
-
+    
     function WoofJSLint(){
       if (app.error) { return }
       const code = js_beautify(app.code, {space_after_anon_function: true, indent_size: 2, indent_with_tabs: false})
@@ -657,6 +665,8 @@
        }		
     };
     
+    
+    
     function tryRunningCode() {
       app.code = editor.getValue()
       app.error = undefined
@@ -687,6 +697,7 @@
           })
           document.getElementById('preview').contentWindow.addEventListener("error", function(event) {
             var error = event.error
+            app.seenError = false
             if (error.type == "ImageLoadError") {
               app.error = {message: "There is a problem with your image URL: " + error.url, lineno: code.substring(0, code.indexOf(error.url)).split('\n').length}
             } else {
@@ -701,10 +712,12 @@
           document.getElementById('preview').contentDocument.body.appendChild(script)
         }
         catch (e) {
+          app.seenError = false
           app.error = e;
         }
       }
       catch (e) {
+        app.seenError = false
         app.error = e
       }
     }
