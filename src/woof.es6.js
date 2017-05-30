@@ -1064,16 +1064,12 @@ Woof.prototype.Rectangle = function({project = undefined, height = 10, width = 1
 
 // Creates a 'line' sprite by rendering a rotated rectangle
 Woof.prototype.Line = function({project = undefined, width = 1, x1 = 10, y1 = 10, color = "black"} = {}) {
-  
   this.type = "line"
   Woof.prototype.Sprite.call(this, arguments[0]);
   this.x1 = x1;
   this.y1 = y1;
   this.color = color;
   this.lineWidth = Math.abs(width);
-  // Rotates rectangle by the angle between x1 and x and y1 and y
-  this.angle = Math.atan2(-this.x1 + this.x, this.y1 - this.y) * 180 / Math.PI;
-
   
   Object.defineProperty(this, 'width', {
     get: function() {
@@ -1092,6 +1088,16 @@ Woof.prototype.Line = function({project = undefined, width = 1, x1 = 10, y1 = 10
     },
     set: function(value) {
       throw new TypeError("You cannot set line.height directly. You can only modify line.height by changing the length of your line through moving its points."); 
+    }
+  }); 
+  
+  // Rotates rectangle by the angle between x1 and x and y1 and y
+  Object.defineProperty(this, 'angle', {
+    get: function() {
+      return Math.atan2(-this.x1 + this.x, this.y1 - this.y) * 180 / Math.PI;
+    },
+    set: function(value) {
+      throw new TypeError("You cannot set line.angle directly. You can only modify line.angle by changing the position of the line's points."); 
     }
   }); 
   
