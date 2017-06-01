@@ -61,7 +61,11 @@
   <script src="https://unpkg.com/vue@2.0.1/dist/vue.js"></script>
   <script data-presets="es2015" src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.14.0/babel.min.js"></script>
   <script src="https://cdn.rawgit.com/beautify-web/js-beautify/1b52eb1f90daaefa6ff0fa7736f97fbfc58093c1/js/lib/beautify.js"></script>
-  <style>
+ 
+   <!-- Firepad -->
+<link rel="stylesheet" href="https://cdn.firebase.com/libs/firepad/1.4.0/firepad.css" />
+<script src="https://cdn.firebase.com/libs/firepad/1.4.0/firepad.min.js"></script>
+   <style>
      
      html, body {
       margin: 0;
@@ -157,7 +161,7 @@
     }
     
     #output, #docs, #projects, #code {
-      flex-flow: column wrap; 
+      flex-flow: column; 
       resize: none; 
       flex: 10 1 25%;
     }
@@ -225,6 +229,14 @@
       -o-transform: rotate(90deg);
       transform: rotate(90deg);
     }
+    
+    a.powered-by-firepad {
+      display: none;
+    }
+    
+    #saveStatus {
+      transition: color 2s;
+    }
 
   </style>
 </head>
@@ -248,7 +260,8 @@
       <span style="margin:8px" id="save">
         <button id="clean-up" class="btn btn-medium btn-default" @click="cleanAll()" style="display: none" :style="{display: canClean ? 'inline-block' : 'none'}"><span class="glyphicon glyphicon-align-left"></span> Clean Code</button>
         <button id="error" class="btn btn-danger" @click="showError()" :style="{display: error ? 'inline-block' : 'none', animation: seenError ? 'none' : 'glowing 1200ms infinite'}"><span class="glyphicon glyphicon-exclamation-sign"></span> Error</button>
-        <button style="display: none" :style="{display: 'inline-block'}" style="margin-right: 5px; background-color:#4390BF !important; ; border:none; color:white; " class="btn btn-medium" :class="styles" onclick="save()">{{ status == "SAVED" ? 'Saved' : 'Save' }}</button>
+        <span id="saveStatus" :style="{display: 'inline-block', color: status != 'DIRTY' ? 'green' : 'yellow'}" style="display: none; margin: 10px"><span class="glyphicon" :class="styles" style="margin-right: 5px;"></span>{{ status != "DIRTY" ? 'Saved' : 'Not Saved' }}</span>
+        <!--<button style="display: none" :style="{display: 'inline-block'}" style="margin-right: 5px; background-color: purple !important; ; border:none; color:white; " class="btn btn-medium" :class="styles" onclick="save()"><span class="glyphicon glyphicon-upload"></span> Publish</button>-->
       </span>
     </div>
  
@@ -315,7 +328,14 @@
     </div>
   </div>
   <script>
-    
+
+  
+  // TODO check if the name exists on creating new project
+
+  // TODO backwards / forwards in edits
+  
+  // TODO blog post
+  
     
     var getID = function() {
       // returns the name of a project, not inlcuding the current revision
@@ -369,10 +389,9 @@
       },
       computed: {
         styles : function() { return {
-           // styles for the "Save" button
-          'btn-warning': this.status == 'DIRTY', 
-          'btn-success': this.status == 'SAVED',
-          'btn-default': this.status == "NEW"
+           // styles for the "Save" icon
+          'glyphicon-floppy-remove': this.status == 'DIRTY', 
+          'glyphicon-floppy-saved': this.status == 'SAVED' || this.status == "NEW"
         } },
         canClean: function(){
           // whether or not the code can be "cleaned" or if its already pristine
@@ -440,21 +459,30 @@
     firebase.auth().onAuthStateChanged(function(user) {
       if (!authChanged){
         authChanged = true
-        if(user){
-          ga('set', 'userId', user.uid); 
-        } 
       }
       
       if (user){
+        ga('set', 'userId', user.uid); 
+        firepad.setUserId(user.uid)
+        
         handleLogin(user.displayName, user.uid)
-        // if the user is logged in, and we don't have their name/email in our database, save it now
+        
         firebase.database().ref('/user/' + user.uid).once('value').then(function(snapshot) {
-          if (!snapshot.val()) {
+          var userVal = snapshot.val()
+          
+          // if the user is logged in, and we don't have their name/email in our database, save it now
+          if (!userVal) {
             firebase.database().ref("/user/" + user.uid).set({
               displayName: user.displayName,
               email: user.email,
               createdDate: firebase.database.ServerValue.TIMESTAMP
             })
+          }
+         
+          if (userVal && userVal.team && Object.values(userVal.team).includes(getID())) {
+            // do nothing because we've already added this project to the user
+          } else {
+            firebase.database().ref("/user/" + user.uid + "/team/").push(getID())
           }
         })
         
@@ -493,27 +521,11 @@
     }
     
     var popout = function() {
-      if (app.status == "SAVED"){
-        window.open("./full.html#" + getIDWithRevision(), "_blank")
+      if (app.status != "DIRTY"){
+        window.open("./team-full.html#" + getIDWithRevision(), "_blank")
       } else {
         alert("You must save your project to open it in a new window.")
       }
-    }
-    
-    // set the text in the editor
-    var editorVal = "setBackdropURL('./images/outerspace.jpg')\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
-    if (getID() != ''){
-      editorVal = "// Loading..."
-      firebase.database().ref('/code/' + getID()).once('value').then(function(snapshot) {
-        if (snapshot.val()){
-          myCode = firebase.auth().currentUser && snapshot.val()["--uid"] == firebase.auth().currentUser.uid
-          editor.setValue(getCurrentRevisionCode(snapshot.val()))
-          makeClean()
-        } else {
-          alert("Could not find a project with the name: " + getID())
-          editor.setValue("")
-        }
-      });
     }
     
     // we add the project name to the hash on save
@@ -591,7 +603,7 @@
     
     var editor = CodeMirror(document.getElementById('code'), {
         mode:  "javascript",
-        value: editorVal,
+        //value: editorVal,
         lineNumbers: true,
         lineWrapping: false,
         theme: "eclipse",
@@ -615,6 +627,38 @@
           }
         },
     });
+    
+    // It's probably a bad idea to have a super large data structure like this in JS
+    // One bad side effect is that it turns off syntax highlighting in the code below it
+    const adjs = ["adorable","beautiful","clean","drab","elegant","fancy","glamorous","handsome","long","magnificent","old-fashioned","plain","quaint","sparkling","ugliest","unsightly","wide-eyed","red","orange","yellow","green","blue","purple","gray","black","white","alive","better","careful","clever","dead","easy","famous","gifted","helpful","important","inexpensive","mushy","odd","powerful","rich","shy","tender","uninterested","vast","wrong","angry","clumsy","defeated","embarrassed","fierce","grumpy","helpless","jealous","lazy","mysterious","nervous","obnoxious","panicky","repulsive","scary","thoughtless","uptight","worried","agreeable","brave","calm","delightful","eager","faithful","gentle","happy","jolly","kind","lively","nice","obedient","proud","relieved","silly","thankful","victorious","witty","zealous","broad","chubby","crooked","curved","deep","flat","high","hollow","low","narrow","round","shallow","skinny","square","steep","straight","wide","big","colossal","fat","gigantic","great","huge","immense","large","little","mammoth","massive","miniature","petite","puny","scrawny","short","small","tall","teeny","teeny-tiny","tiny","cooing","deafening","faint","hissing","loud","melodic","noisy","purring","quiet","raspy","screeching","thundering","voiceless","whispering","ancient","brief","early","fast","late","long","modern","old","old-fashioned","quick","rapid","short","slow","swift","young","bitter","delicious","fresh","greasy","juicy","hot","icy","loose","melted","nutritious","prickly","rainy","rotten","salty","sticky","strong","sweet","tart","tasteless","uneven","weak","wet","wooden","yummy","boiling","breeze","broken","bumpy","chilly","cold","cool","creepy","crooked","cuddly","curly","damaged","damp","dirty","dry","dusty","filthy","flaky","fluffy","freezing","hot","warm","wet","abundant","empty","few","full","heavy","light","many","numerous","sparse","substantial"]
+    const  nouns = ["aardvark","air","airplane","airport","alarm","alligator","almond","alphabet","ambulance","animal","ankle","ant","anteater","antelope","ape","apple","arm","armchair","arrow","asparagus","baby","back","backbone","bacon","badge","badger","bag","bagpipe","bait","bakery","ball","balloon","bamboo","banana","band","bandana","banjo","bank","baseball","basket","basketball","bat","bath","bathroom","bathtub","battery","battle","bay","beach","bead","bean","bear","beard","beast","beat","beauty","beaver","bed","bedroom","bee","beef","beetle","bell","belt","bench","beret","berry","bicycle","bike","bird","birthday","bite","blade","blanket","blob","block","blood","blouse","boar","board","bus","bush","butter","button","cabbage","cactus","cafe","cake","calculator","calendar","calf","camel","camera","camp","candle","canoe","canvas","cap","captain","car","card","cardboard","cardigan","carpenter","carrot","carton","cartoon","cat","caterpillar","cathedral","cattle","cauliflower","cave","CD","ceiling","celery","cello","cement","cemetery","cereal","boat","bobcat","body","bone","bonsai","book","bookcase","booklet","boot","border","bottle","bottom","boundary","bow","bowling","box","boy","brain","brake","branch","brass","bread","break","breakfast","breath","brick","bridge","broccoli","brochure","brother","brush","bubble","bucket","bug","building","bulb","bull","bulldozer","bun","butter","chain","chair","chalk","channel","character","cheek","cheese","cheetah","cherry","chess","chest","chick","chicken","children","chimpanzee","chin","chip","chive","chocolate","church","cicada","cinema","circle","city","clam","clarinet","click","clip","clock","closet","cloth","cloud","coach","coal","coast","coat","cobweb","cockroach","cocoa","coffee","coil","coin","coke","collar","college","colt","comb","comics","comma","computer","cone","copy","corn","cotton","couch","cougar","country","course","court","cousin","cow","crab","crack","cracker","crate","crayfish","crayon","cream","creek","cricket","crocodile","crop","crow","crowd","crown","crumb","cucumber","cup","cupboard","curtain","curve","cushion","cyclone","dad","daffodil","daisy","dance","daughter","deer","denim","dentist","desert","desk","dessert","detective","dew","diamond","dictionary","dinghy","dinosaur","dirt","dish","dock","dog","doll","dollar","door","dragon","dragonfly","drain","drawer","drawing","dress","dresser","drill","drink","drum","dryer","duck","duckling","dungeon","dust","eagle","ear","earth","earthquake","eel","egg","eggplant","elbow","elephant","energy","engine","equipment","eye","eyebrow","face","fact","factory","fairies","family","fan","fang","farm","fat","fear","feast","feather","feet","ferryboat","field","finger","fire","fireplace","fish","fist","flag","flame","flood","floor","flower","flute","fly","foam","fog","food","foot","football","forehead","forest","fork","fountain","fox","frame","freckle","freezer","frog","frost","fruit","fuel","fur","furniture","game","garage","garden","garlic","gas","gate","gear","ghost","giraffe","girl","glass","glove","glue","goal","goat","gold","goldfish","golf","gorilla","government","grape","grass","grasshopper","grater","grease","grill","grin","group","guitar","gum","gym","gymnast","hail","hair","haircut","hall","ham","hamburger","hammer","hamster","hand","handball","handle","hardware","harmonica","harmony","hat","hawk","head","headlight","heart","heat","hedge","height","helicopter","helmet","hem","hen","hill","hip","hippopotamus","hockey","hog","hole","home","honey","hood","hook","horn","horse","hose","hospital","house","hurricane","hyena","ice","icicle","ink","insect","instrument","iron","island","jacket","jade","jaguar","jail","jam","jar","jaw","jeans","jeep","jelly","jellyfish","jet","jewel","joke","journey","judge","judo","juice","jump","jumper","kangaroo","karate","kayak","kettle","key","keyboard","kick","kiss","kitchen","kite","kitten","knee","knife","knight","knot","lace","ladybug","lake","lamb","lamp","land","lasagna","laugh","laundry","leaf","leather","leek","leg","lemonade","leopard","letter","lettuce","library","lift","light","lightning","lily","line","lion","lip","lipstick","liquid","list","litter","lizard","loaf","lobster","lock","locket","locust","look","lotion","love","lunch","lynx","macaroni","machine","magazine","magic","magician","mail","mailbox","mailman","makeup","map","marble","mark","market","mascara","mask","match","meal","meat","mechanic","medicine","memory","men","menu","message","metal","mice","middle","milk","milkshake","mint","minute","mirror","mist","mistake","mitten","Monday","money","monkey","month","moon","morning","mosquito","motorboat","motorcycle","mountain","mouse","moustache","mouth","music","mustard","nail","name","napkin","neck","needle","nest","net","news","night","noise","noodle","nose","note","notebook","number","nut","oak","oatmeal","ocean","octopus","office","oil","olive","onion","orange","orchestra","ostrich","otter","oven","owl","ox","oxygen","oyster","packet","page","pail","pain","paint","pair","pajama","pamphlet","pan","pancake","panda","pansy","panther","pants","paper","parcel","parent","park","parrot","party","pasta","paste","pastry","patch","path","pea","peace","peanut","pear","pedestrian","pelican","pen","pencil","pepper","perfume","person","pest","pet","phone","piano","pickle","picture","pie","pig","pigeon","pillow","pilot","pimple","pin","pipe","pizza","plane","plant","plantation","plastic","plate","playground","plot","pocket","poison","police","policeman","pollution","pond","popcorn","poppy","porcupine","postage","postbox","pot","potato","poultry","powder","power","price","printer","prison","pumpkin","puppy","pyramid","queen","question","quicksand","quill","quilt","rabbit","radio","radish","raft","rail","railway","rain","rainbow","raincoat","rainstorm","rake","rat","ravioli","ray","recorder","rectangle","refrigerator","reindeer","relatives","restaurant","reward","rhinoceros","rice","riddle","ring","river","road","roast","rock","roll","roof","room","rooster","rose","rowboat","rubber","sack","sail","sailboat","sailor","salad","salmon","salt","sand","sandwich","sardine","sauce","sausage","saw","saxophone","scarecrow","scarf","school","scissors","scooter","scorpion","screw","screwdriver","sea","seagull","seal","seaplane","seashore","season","seat","second","seed","sentence","servant","shade","shadow","shallot","shampoo","shark","shears","sheep","sheet","shelf","shell","shield","ship","shirt","shoe","shoemaker","shop","shorts","shoulder","shovel","show","side","sidewalk","sign","signature","silk","silver","singer","sink","sister","skin","skirt","sky","sled","slippers","slope","smoke","snail","snake","sneeze","snow","snowflake","snowman","soap","soccer","sock","sofa","softball","soldier","son","song","sound","soup","soybean","space","spade","spaghetti","spark","sparrow","spear","speedboat","spider","spike","spinach","sponge","spoon","spot","sprout","spy","square","squash","squid","squirrel","stage","staircase","stamp","star","station","steam","steel","stem","step","stew","stick","stitch","stinger","stomach","stone","stool","stopsign","stopwatch","store","storm","story","stove","stranger","straw","stream","string","submarine","sugar","suit","summer","sun","sunshine","sunflower","supermarket","surfboard","surname","surprise","sushi","swallow","swamp","swan","sweater","sweatshirt","sweets","swing","switch","sword","swordfish","syrup","table","tabletop","tadpole","tail","target","tax","taxi","tea","teacher","team","teeth","television","tennis","tent","textbook","theater","thistle","thought","thread","throat","throne","thumb","thunder","thunderstorm","ticket","tie","tiger","tile","time","tire","toad","toast","toe","toilet","tomato","tongue","tooth","toothbrush","toothpaste","top","tornado","tortoise","tower","town","toy","tractor","traffic","trail","train","transport","tray","tree","triangle","trick","trip","trombone","trouble","trousers","truck","trumpet","trunk","t-shirt","tub","tuba","tugboat","tulip","tuna","tune","turkey","turnip","turtle","tv","twig","twilight","twine","umbrella","valley","van","vase","vegetable","veil","vein","vessel","vest","violin","volcano","volleyball","vulture","wagon","wall","wallaby","walnut","walrus","washer","wasp","waste","watch","watchmaker","water","wave","wax","weasel","weather","web","wedge","well","whale","wheat","wheel","wheelchair","whip","whisk","whistle","wilderness","willow","wind","wind chime","window","windscreen","wing","winter","wire","wish","wolf","woman","wood","wool","word","workshop","worm","wound","wren","wrench","wrinkles","wrist","xylophone","yacht","yak","yard"]
+    const adjLength = adjs.length
+    const nounLength = nouns.length
+    function randomName(){
+      const randomAdj = adjs[Math.floor(Math.random()*adjLength)]
+      const randomNoun = nouns[Math.floor(Math.random()*nounLength)]
+      
+      return randomAdj + "-" + randomNoun
+    }
+
+    var editorVal = ""
+    if (getID() == '') {
+      const name = randomName()
+      window.location.hash = name
+      makeClean() // prevents page reload
+      
+      editorVal += "// Welcome to team " + name + "!\n//\n"
+      editorVal += "// Share this link to collaborate:\n//\n"
+      editorVal += "// woofjs.com/team#" + name + "\n\n"
+      // editorVal += "// Press the Publish button to create a private project that nobody else can edit"
+      editorVal += "setBackdropURL('./docs/images/nyc.jpg')\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
+    } 
+    
+    var firepadRef = firebase.database().ref('/team/' + getID()); 
+    var firepad = Firepad.fromCodeMirror(firepadRef, editor, {
+      defaultText: editorVal,
+    });
+    
     onkeydown = function(e){
       if(e.ctrlKey && e.key == '/'){
         e.preventDefault();
@@ -635,10 +679,20 @@
         CodeMirror.commands.markGutter(editor, "warning", lineNumber, "We reccomend moving this " + result[3] + " event outside all loops and other events.")
       }
     }
+    
+    firepad.on('synced', function(isSynced) {
+      // isSynced will be false immediately after the user edits the pad,
+      // and true when their edit has been saved to Firebase.
+      if (isSynced) {
+        makeClean()
+      }
+      else {
+        makeDirty() 
+      }
+    });
 
     // run the code (debounced) on every change to the editor 
     editor.on("change", function(){
-      makeDirty()
       debouncedRunCode()
       setTimeout(function() {WoofJSLint()}, 1000); 
     });
