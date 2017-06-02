@@ -623,15 +623,26 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
   
   // SAT collision for touching, works with rotated sprites
   this.rotatedVector = function(x, y){
-    var rotatedX = Math.cos(this.radians()) * (x - this.x) - Math.sin(this.radians()) * (y - this.y) + this.x
-    var rotatedY =  Math.sin(this.radians()) * (x - this.x) + Math.cos(this.radians()) * (y - this.y) + this.y
+    var rotatedX;
+    var rotatedY;
+    // If sprite is a line, offsets positioning by half the height as line is drawn from endpoints, not center
+    if (this.type == 'line') {
+      rotatedX = Math.cos(this.radians()) * (x - this.x) - Math.sin(this.radians()) * (y - this.y + this.height / 2) + this.x;
+      rotatedY =  Math.sin(this.radians()) * (x - this.x) + Math.cos(this.radians()) * (y - this.y + this.height / 2) + this.y;
+    }
+    else {
+      rotatedX = Math.cos(this.radians()) * (x - this.x) - Math.sin(this.radians()) * (y - this.y) + this.x;
+      rotatedY =  Math.sin(this.radians()) * (x - this.x) + Math.cos(this.radians()) * (y - this.y) + this.y;
+    }
     return new SAT.Vector(rotatedX, rotatedY);
   }
   
+  // Makes collider vector vertices relative to the point 'pos'
   this.translatedVector = function(pos, v){
     return new SAT.Vector(v.x - pos.x, v.y - pos.y); 
   }
   
+  // Creates collider polygon from vector vertices
   this.collider = function() {
     var pos = this.rotatedVector(this.x - this.width / 2, this.y - this.height / 2)
     var v1 = new SAT.Vector(0, 0)
@@ -1051,11 +1062,8 @@ Woof.prototype.Rectangle = function({project = undefined, height = 10, width = 1
   };
 };
 
+// Creates a 'line' sprite by rendering a rotated rectangle
 Woof.prototype.Line = function({project = undefined, width = 1, x1 = 10, y1 = 10, color = "black"} = {}) {
-  // currently the line collider and collision detection is wonky
-  // because a line is really a rectangle that's defined from it's endpoints...
-  // TODO make this a helper function to create a rectangle 
-  
   this.type = "line"
   Woof.prototype.Sprite.call(this, arguments[0]);
   this.x1 = x1;
@@ -1073,6 +1081,7 @@ Woof.prototype.Line = function({project = undefined, width = 1, x1 = 10, y1 = 10
     }
   });
   
+  // Sets height property to hypotenuse of triangle created from x and x1 and y and y1 - this is the length of the 'line'
   Object.defineProperty(this, 'height', {
     get: function() {
       return Math.sqrt((Math.pow((this.x - this.x1), 2)) + (Math.pow((this.y - this.y1), 2)));
@@ -1082,14 +1091,19 @@ Woof.prototype.Line = function({project = undefined, width = 1, x1 = 10, y1 = 10
     }
   }); 
   
+  // Rotates rectangle by the angle between x1 and x and y1 and y
+  Object.defineProperty(this, 'angle', {
+    get: function() {
+      return Math.atan2(-this.x1 + this.x, this.y1 - this.y) * 180 / Math.PI;
+    },
+    set: function(value) {
+      throw new TypeError("You cannot set line.angle directly. You can only modify line.angle by changing the position of the line's points."); 
+    }
+  }); 
   
   this.render = (context) => {
-    context.beginPath();
-    context.moveTo(0, 0);
-    context.lineTo(this.x1 - this.x, -this.y1 + this.y);
-    context.strokeStyle = this.color;
-    context.lineWidth = this.lineWidth;
-    context.stroke();
+    context.fillStyle=this.color;
+    context.fillRect(-this.width / 2, -this.height, this.width, this.height);
   };
 };
 
