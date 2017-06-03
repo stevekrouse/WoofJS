@@ -628,11 +628,11 @@
     function WoofJSLint(){
       if (app.error) { return }
       const code = js_beautify(app.code, {space_after_anon_function: true, indent_size: 2, indent_with_tabs: false})
-      const regEx = /  ((\w)*\.)?(ready|onKeyDown|onKeyUp|onMouseDown|onMouseUp|onMouseMove)/g   // matches any event indented with two spaces 
+      const regEx = /  ((\w)*\.)?(ready|onKeyDown|onKeyUp|onMouseDown|onMouseUp|onMouseMove|forever|repeatUntil)/g   // matches any event indented with two spaces 
       var result;
       while ((result = regEx.exec(code)) !== null) {
         var lineNumber = code.substring(0, result.index).split('\n').length
-        CodeMirror.commands.markGutter(editor, "warning", lineNumber, "We reccomend moving this " + result[3] + " event outside all loops and other events.")
+        CodeMirror.commands.markGutter(editor, "warning", lineNumber, "It's usually a bad idea to have " + result[3] + "'s inside loops and other events.")
       }
     }
 
