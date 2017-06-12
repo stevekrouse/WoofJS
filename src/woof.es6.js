@@ -627,8 +627,10 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
     var rotatedY;
     // If sprite is a line, offsets positioning by half the height as line is drawn from endpoints, not center
     if (this.type == 'line') {
-      rotatedX = Math.cos(this.radians()) * (x - this.x) - Math.sin(this.radians()) * (y - this.y + this.height / 2) + this.x;
-      rotatedY =  Math.sin(this.radians()) * (x - this.x) + Math.cos(this.radians()) * (y - this.y + this.height / 2) + this.y;
+      // rotatedX = Math.cos(this.radians()) * (x - this.x) - Math.sin(this.radians()) * (y - this.y + this.height / 2) + this.x;
+      // rotatedY =  Math.sin(this.radians()) * (x - this.x) + Math.cos(this.radians()) * (y - this.y + this.height / 2) + this.y;
+      rotatedX = Math.cos(this.radians()) * (x - this.x - this.width / 2) - Math.sin(this.radians()) * (y - this.y) + this.x;
+      rotatedY =  Math.sin(this.radians()) * (x - this.x - this.width / 2) + Math.cos(this.radians()) * (y - this.y) + this.y;
     }
     else {
       rotatedX = Math.cos(this.radians()) * (x - this.x) - Math.sin(this.radians()) * (y - this.y) + this.x;
@@ -1063,47 +1065,66 @@ Woof.prototype.Rectangle = function({project = undefined, height = 10, width = 1
 };
 
 // Creates a 'line' sprite by rendering a rotated rectangle
-Woof.prototype.Line = function({project = undefined, width = 1, x1 = 10, y1 = 10, color = "black"} = {}) {
-  this.type = "line"
+Woof.prototype.Line = function({project = undefined, thickness = 1, x1 = 10, y1 = 10, color = "black"} = {}) {
+  this.type = "line";
   Woof.prototype.Sprite.call(this, arguments[0]);
   this.x1 = x1;
   this.y1 = y1;
   this.color = color;
-  this.lineWidth = Math.abs(width);
+  this.lineThickness = Math.abs(thickness);
   
-  Object.defineProperty(this, 'width', {
+  Object.defineProperty(this, 'thickness', {
     get: function() {
-      return this.lineWidth;
+      return this.lineThickness;
     },
     set: function(value) {
       if (typeof value != "number") { throw new TypeError("line.width can only be set to a number."); }
-      this.lineWidth = value;
+      this.lineThickness = value;
     }
   });
   
   // Sets height property to hypotenuse of triangle created from x and x1 and y and y1 - this is the length of the 'line'
-  Object.defineProperty(this, 'height', {
+  Object.defineProperty(this, 'length', {
     get: function() {
       return Math.sqrt((Math.pow((this.x - this.x1), 2)) + (Math.pow((this.y - this.y1), 2)));
     },
     set: function(value) {
-      throw new TypeError("You cannot set line.height directly. You can only modify line.height by changing the length of your line through moving its points."); 
+      throw new TypeError("You cannot set line.height directly. You can only modify line.height by changing the length of your line by moving its endpoints."); 
     }
   }); 
   
   // Rotates rectangle by the angle between x1 and x and y1 and y
   Object.defineProperty(this, 'angle', {
     get: function() {
-      return Math.atan2(-this.x1 + this.x, this.y1 - this.y) * 180 / Math.PI;
+      // return Math.atan2(-this.x1 + this.x, this.y1 - this.y) * 180 / Math.PI;
+      return Math.atan2(this.y - this.y1, this.x - this.x1) * 180 / Math.PI;
     },
     set: function(value) {
       throw new TypeError("You cannot set line.angle directly. You can only modify line.angle by changing the position of the line's points."); 
     }
-  }); 
+  });
+  
+  Object.defineProperty(this, 'height', {
+    get: function() {
+      return this.thickness;
+    },
+    set: function() {
+      throw new TypeError("You cannot set line.height. Please set line.thickness instead.");
+    }
+  });
+  
+  Object.defineProperty(this, 'width', {
+    get: function() {
+      return this.length;
+    },
+    set: function() {
+      throw new TypeError("You cannot set line.width. You can only modify it by changing the length of your line by moving its endpoints.")
+    }
+  })
   
   this.render = (context) => {
     context.fillStyle=this.color;
-    context.fillRect(-this.width / 2, -this.height, this.width, this.height);
+    context.fillRect(-this.width, -this.height / 2, this.width, this.height);
   };
 };
 

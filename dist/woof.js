@@ -949,8 +949,10 @@ Woof.prototype.Sprite = function () {
     var rotatedY;
     // If sprite is a line, offsets positioning by half the height as line is drawn from endpoints, not center
     if (this.type == 'line') {
-      rotatedX = Math.cos(this.radians()) * (x - this.x) - Math.sin(this.radians()) * (y - this.y + this.height / 2) + this.x;
-      rotatedY = Math.sin(this.radians()) * (x - this.x) + Math.cos(this.radians()) * (y - this.y + this.height / 2) + this.y;
+      // rotatedX = Math.cos(this.radians()) * (x - this.x) - Math.sin(this.radians()) * (y - this.y + this.height / 2) + this.x;
+      // rotatedY =  Math.sin(this.radians()) * (x - this.x) + Math.cos(this.radians()) * (y - this.y + this.height / 2) + this.y;
+      rotatedX = Math.cos(this.radians()) * (x - this.x - this.width / 2) - Math.sin(this.radians()) * (y - this.y) + this.x;
+      rotatedY = Math.sin(this.radians()) * (x - this.x - this.width / 2) + Math.cos(this.radians()) * (y - this.y) + this.y;
     } else {
       rotatedX = Math.cos(this.radians()) * (x - this.x) - Math.sin(this.radians()) * (y - this.y) + this.x;
       rotatedY = Math.sin(this.radians()) * (x - this.x) + Math.cos(this.radians()) * (y - this.y) + this.y;
@@ -1511,8 +1513,8 @@ Woof.prototype.Line = function () {
   var _ref10 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
       _ref10$project = _ref10.project,
       project = _ref10$project === undefined ? undefined : _ref10$project,
-      _ref10$width = _ref10.width,
-      width = _ref10$width === undefined ? 1 : _ref10$width,
+      _ref10$thickness = _ref10.thickness,
+      thickness = _ref10$thickness === undefined ? 1 : _ref10$thickness,
       _ref10$x = _ref10.x1,
       x1 = _ref10$x === undefined ? 10 : _ref10$x,
       _ref10$y = _ref10.y1,
@@ -1525,43 +1527,62 @@ Woof.prototype.Line = function () {
   this.x1 = x1;
   this.y1 = y1;
   this.color = color;
-  this.lineWidth = Math.abs(width);
+  this.lineThickness = Math.abs(thickness);
 
-  Object.defineProperty(this, 'width', {
+  Object.defineProperty(this, 'thickness', {
     get: function get() {
-      return this.lineWidth;
+      return this.lineThickness;
     },
     set: function set(value) {
       if (typeof value != "number") {
         throw new TypeError("line.width can only be set to a number.");
       }
-      this.lineWidth = value;
+      this.lineThickness = value;
     }
   });
 
   // Sets height property to hypotenuse of triangle created from x and x1 and y and y1 - this is the length of the 'line'
-  Object.defineProperty(this, 'height', {
+  Object.defineProperty(this, 'length', {
     get: function get() {
       return Math.sqrt(Math.pow(this.x - this.x1, 2) + Math.pow(this.y - this.y1, 2));
     },
     set: function set(value) {
-      throw new TypeError("You cannot set line.height directly. You can only modify line.height by changing the length of your line through moving its points.");
+      throw new TypeError("You cannot set line.height directly. You can only modify line.height by changing the length of your line by moving its endpoints.");
     }
   });
 
   // Rotates rectangle by the angle between x1 and x and y1 and y
   Object.defineProperty(this, 'angle', {
     get: function get() {
-      return Math.atan2(-this.x1 + this.x, this.y1 - this.y) * 180 / Math.PI;
+      // return Math.atan2(-this.x1 + this.x, this.y1 - this.y) * 180 / Math.PI;
+      return Math.atan2(this.y - this.y1, this.x - this.x1) * 180 / Math.PI;
     },
     set: function set(value) {
       throw new TypeError("You cannot set line.angle directly. You can only modify line.angle by changing the position of the line's points.");
     }
   });
 
+  Object.defineProperty(this, 'height', {
+    get: function get() {
+      return this.thickness;
+    },
+    set: function set() {
+      throw new TypeError("You cannot set line.height. Please set line.thickness instead.");
+    }
+  });
+
+  Object.defineProperty(this, 'width', {
+    get: function get() {
+      return this.length;
+    },
+    set: function set() {
+      throw new TypeError("You cannot set line.width. You can only modify it by changing the length of your line by moving its endpoints.");
+    }
+  });
+
   this.render = function (context) {
     context.fillStyle = _this7.color;
-    context.fillRect(-_this7.width / 2, -_this7.height, _this7.width, _this7.height);
+    context.fillRect(-_this7.width, -_this7.height / 2, _this7.width, _this7.height);
   };
 };
 
