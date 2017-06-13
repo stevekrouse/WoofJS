@@ -716,13 +716,9 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
   
   this.move = function(steps = 1){
     if (typeof steps != "number") { throw new TypeError("move(steps) requires one number input."); }
-    // moving lines with this method is tricky, so throw an error (should probably be fixed at some point)
-    if (this.type == "line") { throw new TypeError("You cannot move lines with move() unfortunately! Change the x, y, x1, and y1 values instead."); }
     // we modify privateX and privateY here before tracking pen so that the pen thinks they changed at the same time
-    else {
-      this.privateX += steps * Math.cos(this.radians());
-      this.privateY += steps * Math.sin(this.radians());
-    }
+    this.privateX += steps * Math.cos(this.radians());
+    this.privateY += steps * Math.sin(this.radians());
     this.project.ready(this.trackPen);
   };
   
@@ -739,9 +735,6 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
   };
   
   this.radians = () => {
-    // subtract 90 from the angle of a line before calculating radians (undoing the correction in the Line() constructor)
-    if (this.type == "line")
-      return (this.angle - 90) * Math.PI / 180;
     return this.angle * Math.PI / 180;
   };
   
@@ -1108,6 +1101,14 @@ Woof.prototype.Line = function({project = undefined, width = 1, x1 = 10, y1 = 10
       throw new TypeError("You cannot set line.angle directly. You can only modify line.angle by changing the position of the line's points."); 
     }
   }); 
+  
+  // using move() with lines is tricky, so throw an error (should probably be fixed at some point)
+  this.move = function() { throw new TypeError("You cannot move lines with move() unfortunately! Change the x, y, x1, and y1 values instead."); };
+  
+  // subtract 90 from the angle of a line before calculating radians (undoing the correction in the Line() constructor)
+  this.radians = function() {
+    return (this.angle - 90) * Math.PI / 180;
+  };
   
   this.render = (context) => {
     context.fillStyle=this.color;

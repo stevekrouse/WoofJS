@@ -1043,15 +1043,9 @@ Woof.prototype.Sprite = function () {
     if (typeof steps != "number") {
       throw new TypeError("move(steps) requires one number input.");
     }
-    // moving lines with this method is tricky, so throw an error (should probably be fixed at some point)
-    if (this.type == "line") {
-      throw new TypeError("You cannot move lines with move() unfortunately! Change the x, y, x1, and y1 values instead.");
-    }
     // we modify privateX and privateY here before tracking pen so that the pen thinks they changed at the same time
-    else {
-        this.privateX += steps * Math.cos(this.radians());
-        this.privateY += steps * Math.sin(this.radians());
-      }
+    this.privateX += steps * Math.cos(this.radians());
+    this.privateY += steps * Math.sin(this.radians());
     this.project.ready(this.trackPen);
   };
 
@@ -1068,8 +1062,6 @@ Woof.prototype.Sprite = function () {
   };
 
   this.radians = function () {
-    // subtract 90 from the angle of a line before calculating radians (undoing the correction in the Line() constructor)
-    if (_this.type == "line") return (_this.angle - 90) * Math.PI / 180;
     return _this.angle * Math.PI / 180;
   };
 
@@ -1567,6 +1559,16 @@ Woof.prototype.Line = function () {
       throw new TypeError("You cannot set line.angle directly. You can only modify line.angle by changing the position of the line's points.");
     }
   });
+
+  // using move() with lines is tricky, so throw an error (should probably be fixed at some point)
+  this.move = function () {
+    throw new TypeError("You cannot move lines with move() unfortunately! Change the x, y, x1, and y1 values instead.");
+  };
+
+  // subtract 90 from the angle of a line before calculating radians (undoing the correction in the Line() constructor)
+  this.radians = function () {
+    return (this.angle - 90) * Math.PI / 180;
+  };
 
   this.render = function (context) {
     context.fillStyle = _this7.color;
