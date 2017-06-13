@@ -949,10 +949,8 @@ Woof.prototype.Sprite = function () {
     var rotatedY;
     // If sprite is a line, offsets positioning by half the height as line is drawn from endpoints, not center
     if (this.type == 'line') {
-      // rotatedX = Math.cos(this.radians()) * (x - this.x) - Math.sin(this.radians()) * (y - this.y + this.height / 2) + this.x;
-      // rotatedY =  Math.sin(this.radians()) * (x - this.x) + Math.cos(this.radians()) * (y - this.y + this.height / 2) + this.y;
-      rotatedX = Math.cos(this.radians()) * (x - this.x - this.width / 2) - Math.sin(this.radians()) * (y - this.y) + this.x;
-      rotatedY = Math.sin(this.radians()) * (x - this.x - this.width / 2) + Math.cos(this.radians()) * (y - this.y) + this.y;
+      rotatedX = Math.cos(this.radians()) * (x - this.x) - Math.sin(this.radians()) * (y - this.y + this.height / 2) + this.x;
+      rotatedY = Math.sin(this.radians()) * (x - this.x) + Math.cos(this.radians()) * (y - this.y + this.height / 2) + this.y;
     } else {
       rotatedX = Math.cos(this.radians()) * (x - this.x) - Math.sin(this.radians()) * (y - this.y) + this.x;
       rotatedY = Math.sin(this.radians()) * (x - this.x) + Math.cos(this.radians()) * (y - this.y) + this.y;
@@ -1045,9 +1043,15 @@ Woof.prototype.Sprite = function () {
     if (typeof steps != "number") {
       throw new TypeError("move(steps) requires one number input.");
     }
+    // moving lines with this method is tricky, so throw an error (should probably be fixed at some point)
+    if (this.type == "line") {
+      throw new TypeError("You cannot move lines with move() unfortunately! Change the x, y, x1, and y1 values instead.");
+    }
     // we modify privateX and privateY here before tracking pen so that the pen thinks they changed at the same time
-    this.privateX += steps * Math.cos(this.radians());
-    this.privateY += steps * Math.sin(this.radians());
+    else {
+        this.privateX += steps * Math.cos(this.radians());
+        this.privateY += steps * Math.sin(this.radians());
+      }
     this.project.ready(this.trackPen);
   };
 
@@ -1064,6 +1068,8 @@ Woof.prototype.Sprite = function () {
   };
 
   this.radians = function () {
+    // subtract 90 from the angle of a line before calculating radians (undoing the correction in the Line() constructor)
+    if (_this.type == "line") return (_this.angle - 90) * Math.PI / 180;
     return _this.angle * Math.PI / 180;
   };
 
@@ -1513,8 +1519,8 @@ Woof.prototype.Line = function () {
   var _ref10 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
       _ref10$project = _ref10.project,
       project = _ref10$project === undefined ? undefined : _ref10$project,
-      _ref10$thickness = _ref10.thickness,
-      thickness = _ref10$thickness === undefined ? 1 : _ref10$thickness,
+      _ref10$width = _ref10.width,
+      width = _ref10$width === undefined ? 1 : _ref10$width,
       _ref10$x = _ref10.x1,
       x1 = _ref10$x === undefined ? 10 : _ref10$x,
       _ref10$y = _ref10.y1,
@@ -1527,62 +1533,44 @@ Woof.prototype.Line = function () {
   this.x1 = x1;
   this.y1 = y1;
   this.color = color;
-  this.lineThickness = Math.abs(thickness);
+  this.lineWidth = Math.abs(width);
 
-  Object.defineProperty(this, 'thickness', {
+  Object.defineProperty(this, 'width', {
     get: function get() {
-      return this.lineThickness;
+      return this.lineWidth;
     },
     set: function set(value) {
       if (typeof value != "number") {
         throw new TypeError("line.width can only be set to a number.");
       }
-      this.lineThickness = value;
+      this.lineWidth = value;
     }
   });
 
   // Sets height property to hypotenuse of triangle created from x and x1 and y and y1 - this is the length of the 'line'
-  Object.defineProperty(this, 'length', {
+  Object.defineProperty(this, 'height', {
     get: function get() {
       return Math.sqrt(Math.pow(this.x - this.x1, 2) + Math.pow(this.y - this.y1, 2));
     },
     set: function set(value) {
-      throw new TypeError("You cannot set line.height directly. You can only modify line.height by changing the length of your line by moving its endpoints.");
+      throw new TypeError("You cannot set line.height directly. You can only modify line.height by changing the length of your line through moving its points.");
     }
   });
 
   // Rotates rectangle by the angle between x1 and x and y1 and y
+  // Add 90 to the angle because "height" and "width" are essentially reversed in comparison to a rectangle sprite
   Object.defineProperty(this, 'angle', {
     get: function get() {
-      // return Math.atan2(-this.x1 + this.x, this.y1 - this.y) * 180 / Math.PI;
-      return Math.atan2(this.y - this.y1, this.x - this.x1) * 180 / Math.PI;
+      return Math.atan2(-this.x1 + this.x, this.y1 - this.y) * 180 / Math.PI + 90;
     },
     set: function set(value) {
       throw new TypeError("You cannot set line.angle directly. You can only modify line.angle by changing the position of the line's points.");
     }
   });
 
-  Object.defineProperty(this, 'height', {
-    get: function get() {
-      return this.thickness;
-    },
-    set: function set() {
-      throw new TypeError("You cannot set line.height. Please set line.thickness instead.");
-    }
-  });
-
-  Object.defineProperty(this, 'width', {
-    get: function get() {
-      return this.length;
-    },
-    set: function set() {
-      throw new TypeError("You cannot set line.width. You can only modify it by changing the length of your line by moving its endpoints.");
-    }
-  });
-
   this.render = function (context) {
     context.fillStyle = _this7.color;
-    context.fillRect(-_this7.width, -_this7.height / 2, _this7.width, _this7.height);
+    context.fillRect(-_this7.width / 2, -_this7.height, _this7.width, _this7.height);
   };
 };
 
