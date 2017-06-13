@@ -1105,7 +1105,7 @@ Woof.prototype.Line = function({project = undefined, width = 1, x1 = 10, y1 = 10
   // using move() with lines is tricky, so throw an error (should probably be fixed at some point)
   this.move = function() { throw new TypeError("You cannot move lines with move() unfortunately! Change the x, y, x1, and y1 values instead."); };
   
-  // subtract 90 from the angle of a line before calculating radians (undoing the correction in the Line() constructor)
+  // subtract 90 from the angle of a line before calculating radians (undoing the correction in line.angle above)
   this.radians = function() {
     return (this.angle - 90) * Math.PI / 180;
   };
