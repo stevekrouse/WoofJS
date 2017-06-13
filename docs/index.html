@@ -186,7 +186,7 @@
                                 code: 'var snitch = new Image({\n  url: "./docs/images/snitch.png",\n  width: 250, \n  height: 150,\n})',
                                 tags: "snitch harry potter sprite",
                             },
-							
+                            
                             {
                                 url: "./images/Gf0MwWP.png",
                                 code: 'var bird = new Image({\n  url: "./docs/images/bird.png",\n  width: 120, \n  height: 80,\n})',
@@ -222,7 +222,7 @@
                                 code: 'var spaceShip = new Image({\n  url: "./docs/images/space_ship.png",\n  width: 300, \n  height: 170,\n})',
                                 tags: "space ship sprite",
                             },
-							
+                            
                             {
                                 url: "./images/9EkQfhM.png",
                                 code: 'var coolEmoji = new Image({\n  url: "./docs/images/emoji-glasses.png",\n  width: 120, \n  height: 120,\n})',
@@ -472,47 +472,73 @@
                             url: "https://s15.postimg.org/gpov03g6j/Slice_2_Copy.png",
                             code: "sprite1.turnLeft(15)",
                             tags: "turn angle point in direction orientation"
-                        }, {
+                        }, 
+                        {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
+                        {
                             url: "https://s10.postimg.org/4xd5jv3q1/2_0_Point_in_Direction.png",
-                            code: "sprite1.angle = LEFT  \nsprite1.angle = RIGHT \nsprite1.angle = UP \nsprite1.angle = DOWN \nsprite1.angle = 47.7",
+                            code: "sprite1.angle = LEFT  \nsprite1.angle = RIGHT \nsprite1.angle = UP \nsprite1.angle = DOWN \nsprite1.angle = 45",
                             tags: "angle turn point in direction right left up down orientation"
                         }, {
-                            url: "https://s18.postimg.org/qdj0hnosp/2_0_Point_Towards.png",
+                            url: "http://i.imgur.com/CL4jZed.png",
                             code: "sprite1.pointTowards(sprite2)",
                             tags: "turn point in direction angle sprite character mouse"
                         }, {
-                            url: "https://s18.postimg.org/qdj0hnosp/2_0_Point_Towards.png",
+                            url: "http://i.imgur.com/a3RbeJ9.png",
                             code: "sprite1.pointTowards(mouseX, mouseY)",
                             tags: "turn point in direction angle sprite character mouse"
-                        }, {
+                        }, 
+                        {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
+                        {
                             url: "https://s13.postimg.org/4f7j7p8uf/2_0_Go_to_X_Y.png",
-                            code: "sprite1.x = maxX \nsprite1.y = 47",
+                            code: "sprite1.x = 0 \nsprite1.y = 0",
                             tags: "teleport move location set x y"
+                        }, {
+                            url: "http://i.imgur.com/9SQ0gCK.png",
+                            code: "sprite1.x = randomX() \nsprite1.y = randomY()",
+                            tags: "teleport move location set x y random go to"
                         }, {
                             url: "https://s16.postimg.org/nfbxtx745/2_0_Go_to.png",
                             code: "sprite1.x = mouseX\nsprite1.y = mouseY",
                             tags: "teleport location move to mouse"
                         }, {
-                            description: "Move to another sprite:",
+                            url: "http://i.imgur.com/Jg1oFeu.png",
                             code: "sprite1.x = sprite2.x \nsprite1.y = sprite2.y",
                             tags: "teleport location other move"
-                        }, {
+                        }, 
+                        {
+                            url: "./images/glide.png",
+                            description: "This block does not exist in WoofJS, but you can use other Motion blocks to achieve this.",
+                            tags:"glide"
+                        },
+                        {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
+                        {
                             url: "https://s15.postimg.org/vqzf6gxwb/2_0_Change_X_by.png",
-                            code: 'sprite1.x += 5',
+                            code: 'sprite1.x += 10',
                             tags: "increase decrease change x move right left"
-                        }, {
+                        }, 
+                        {
+                            url: "https://s10.postimg.org/rgc2vz1eh/2_0_Set_X_to.png",
+                            code: 'sprite1.x = 0',
+                            tags: "set x"
+                        },
+                        {
                             url: "https://s10.postimg.org/whzn2xet5/2_0_Change_Y_by.png",
-                            code: 'sprite1.y += -5',
+                            code: 'sprite1.y += -10',
                             tags: "increase decrease change y move up down"
                         }, {
-                            url: "https://s10.postimg.org/rgc2vz1eh/2_0_Set_X_to.png",
-                            code: 'sprite1.x = minX',
-                            tags: "set x"
-                        }, {
                             url: "https://s11.postimg.org/m8cc7585v/2_0_Set_Y_to.png",
-                            code: 'sprite1.y = minY',
+                            code: 'sprite1.y = 0',
                             tags: "set y"
-                        }, {
+                        }, 
+                        {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
+                        {
+                            url: "http://i.imgur.com/PVCNRik.png",
+                            description:"This block does not exist in WoofJS, but there are other ways you can do the same thing. Here is an example:",
+                            code: 'if(sprite1.x > maxX) {sprite1.turnRight(180)}',
+                            tags: "rotate bounce turn edge on"
+                        }, 
+                        {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
+                        {
                             url: "./images/68747470733a2f2f692e696d6775722e636f6d2f4c576c5874444c2e706e67",
                             code: 'sprite1.setRotationStyle("ROTATE LEFT RIGHT")',
                             tags: "rotation style no turn flip"
@@ -524,39 +550,36 @@
                             url: "./images/68747470733a2f2f692e696d6775722e636f6d2f433337716439682e706e67",
                             code: 'sprite1.setRotationStyle("NO ROTATE")',
                             tags: "rotation style no turn flip"
-                        }, {
-                            description: "Set color:",
-                            code: "color: rgb(100, 50, 240)"
-                        }, 
+                        },
+                        {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
+                        {
+                            url:"./images/xpos.png",
+                            code:"sprite1.x",
+                            tags:"x position coordinate"
+                        },
+                        {
+                            url:"./images/ypos.png",
+                            code:"sprite1.y",
+                            tags:"y position coordinate"
+                        },
+                        {
+                            url:"./images/direction.png",
+                            code:"sprite1.angle",
+                            tags:"direction angle"
+                        },
                     ],
                     Events: [{
                         description: "Warning: The shape of events in Scratch prevent you from putting an event inside other blocks.\nAlthough JavaScript doesn't prevent you from putting events insideother blocks, you should avoid it.\nFor example, don't place an onMouseDown() event inside a forever() block."
-                    }, {
+                    }, 
+                    {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
+                    {
                         url: "https://s21.postimg.org/tggr983hz/2_0_When_Green_Flag_Clicked.png",
                         description: "Note: Unlike in Scratch, using ready() is reccomended but not always required.",
                         code: "ready(() => {\n  \/* do something here */\n})",
                         tags: "on onclick when flag clicked page loaded start ready"
-                    }, {
-                        url: "./images/68747470733a2f2f692e696d6775722e636f6d2f5875506972634f2e706e67",
-                        code: "onMouseDown(() => {\n  \/* do something here */\n})",
-                        tags: "on onclick when click mouse down"
-                    }, {
-                        description: "On mouse up",
-                        code: "onMouseUp(() => {\n  \/* do something here */\n})",
-                        tags: "on when click mouse up"
-                    }, {
-                        description: "On mouse move",
-                        code: "onMouseMove(() => {\n  \/* do something here */\n})",
-                        tags: "on when mouse move"
-                    }, {
-                        url: "./images/68747470733a2f2f692e696d6775722e636f6d2f7a31356d6e506a2e706e67",
-                        code: "sprite1.onMouseDown(() => {\n  \/* do something here */\n})",
-                        tags: "on onclick when click mouse down"
-                    }, {
-                        description: "On mouse up",
-                        code: "sprite1.onMouseUp(() => {\n  \/* do something here */\n})",
-                        tags: "on when click mouse up"
-                    }, {
+                    }, 
+                    {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
+                    {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f436f58573132422e706e67",
                         code: "onKeyDown(() => {\n  \/* do something here */\n})",
                         tags: "on when key press down any"
@@ -568,8 +591,53 @@
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f556175544e77752e706e67",
                         code: "onKeyDown(() => {\n if (keysDown.includes('UP')) {\n   \/* do something here */\n  }\n})",
                         tags: "on when key press down"
-                    }],
-                    Looks: [{
+                    },
+                    {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
+                    {
+                        url: "./images/68747470733a2f2f692e696d6775722e636f6d2f5875506972634f2e706e67",
+                        code: "onMouseDown(() => {\n  \/* do something here */\n})",
+                        tags: "on onclick when click mouse down"
+                    }, 
+                    {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
+                    {
+                        description: "On mouse up",
+                        code: "onMouseUp(() => {\n  \/* do something here */\n})",
+                        tags: "on when click mouse up"
+                    }, {
+                        description: "On mouse move",
+                        code: "onMouseMove(() => {\n  \/* do something here */\n})",
+                        tags: "on when mouse move"
+                    }, 
+                    {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
+                    {
+                        url: "./images/68747470733a2f2f692e696d6775722e636f6d2f7a31356d6e506a2e706e67",
+                        code: "sprite1.onMouseDown(() => {\n  \/* do something here */\n})",
+                        tags: "on onclick when click mouse down"
+                    }, {
+                        description: "On mouse up",
+                        code: "sprite1.onMouseUp(() => {\n  \/* do something here */\n})",
+                        tags: "on when click mouse up"
+                    }, 
+                    {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
+                    {
+                        url:"./images/backdropSwitch.png",
+                        description:"This block does not exist in WoofJS.",
+                        tags:"backdrop switches when"
+                    },
+                    {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
+                    {
+                        url:"./images/loudness.png",
+                        description:"This block does not exist in WoofJS.",
+                        tags:"loudness when"
+                    },
+                    {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
+                    {
+                        url:"./images/broadcast.png",
+                        description:"These blocks do not exist in WoofJS.",
+                        tags:"broadcast receive"
+                    }
+                    ],
+                    Looks: [ {
                         description: "Pick a color:",
                         html: '<input value="#409cbc" style="width:100%; height: 50px" type="color" onchange="updateColor(event)"></input>',
                         tags: "color hex pick colour red blue green yellow orange pink",
@@ -578,15 +646,27 @@
                         description: "Create a color with red, green and blue values between 0 and 255",
                         tags: "color rgb colour red blue green yellow orange pink",
                         code: 'rgb(255, 100, 0)'
-                    }, {
+                    },
+                    {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
+                    {
+                        url:"./images/sayAndThink.png",
+                        description:"These blocks do not exist in WoofJS, but you can use text for a similar effect. Here is an example:",
+                        code:'var textSprite1 = new Text({\n  text: () => "Hello!", \n  size: 12, \n  color: "rgb(100, 50, 240)", \n  fontFamily: "arial", \n  textAlign: "left"\n})',
+                        tags:"say think"
+                    },
+                    {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
+                    {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f653650393552302e706e67",
                         code: "sprite1.show()",
                         tags: "show appear"
-                    }, {
+                    }, 
+                    {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f323355617446352e706e67",
                         code: "sprite1.hide()",
                         tags: "hide disappear"
-                    }, {
+                    },
+                    {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
+                    {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f513078533746662e706e67",
                         code: "imageSprite1.setImageURL('./images/SMJjVCL.png')",
                         tags: "costume image url picture"
@@ -605,39 +685,9 @@
                     }, {
                         code: 'circleSprite1.color = "green"',
                         tags: "change color"
-                    }, {
-                        url: "./images/68747470733a2f2f692e696d6775722e636f6d2f64784f72506d752e706e67",
-                        description: "You set the size in different ways for each type of sprite:",
-                        tags: "size width height radius"
-                    }, {
-                        code: 'imageSprite1.height = 20\nimageSprite1.width = 20',
-                        tags: "size height width length image"
-                    }, {
-                        code: 'rectangleSprite1.height = 20\nrectangleSprite1.width = 20',
-                        tags: "size height rectangle width length"
-                    }, {
-                        code: 'circleSprite1.radius = 20',
-                        tags: "size circle radius"
-                    }, {
-                        code: 'lineSprite1.x1 = 20\nlineSprite1.y1 = 20\nlineSprite1.width = 20',
-                        tags: "size line width length height"
-                    }, {
-                        code: 'textSprite1.size = 20',
-                        tags: "size font text"
-                    }, {
-                        url: "./images/68747470733a2f2f692e696d6775722e636f6d2f5870676c764a502e706e67",
-                        code: "sprite1.sendToBack()",
-                        tags: "layer back behind"
-                    }, {
-                        url: "./images/68747470733a2f2f692e696d6775722e636f6d2f4b756d707167532e706e67",
-                        code: "sprite1.sendToFront()",
-                        tags: "layer in front"
-                    }, {
-                        description: "Set the brightness percentage between 0-100 (also known as transparency or opacity)",
-                        url: "./images/brightness.png",
-                        code: "sprite1.brightness = 50",
-                        tags: "brightness opacity opaqueness transparency"
-                    }, {
+                    }, 
+                    {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
+                    {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f7a616a30706c302e706e67",
                         description: "Set the backdrop to an image URL:",
                         code: 'setBackdropURL("./images/RkP7fcR.jpg")',
@@ -670,6 +720,48 @@
                         description: "Set the backdrop image to not repeat in either direction. (no-repeat is the default.)",
                         code: 'setBackdropRepeat("no-repeat")',
                         tags: "backdrop background picture no repeat style "
+                    },
+                    {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
+                    {
+                        url:"./images/colorEffect.png",
+                        description:"These blocks do not exist in WoofJS, but you can change the colors of rectangle, text, lines, and circle sprites.",
+                        tags:"color effect"
+                    },{
+                        description: "Set the brightness percentage between 0-100 (also known as transparency or opacity)",
+                        url: "./images/brightness.png",
+                        code: "sprite1.brightness = 50",
+                        tags: "brightness opacity opaqueness transparency"
+                    },
+                    {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
+                     {
+                        url: "./images/changeSetSize.png",
+                        description: "You set and change the size in different ways for each type of sprite:",
+                        tags: "size width height radius"
+                    }, {
+                        code: 'imageSprite1.height = 20\nimageSprite1.width = 20',
+                        tags: "size height width length image"
+                    }, {
+                        code: 'rectangleSprite1.height = 20\nrectangleSprite1.width = 20',
+                        tags: "size height rectangle width length"
+                    }, {
+                        code: 'circleSprite1.radius = 20',
+                        tags: "size circle radius"
+                    }, {
+                        code: 'lineSprite1.x1 = 20\nlineSprite1.y1 = 20\nlineSprite1.width = 20',
+                        tags: "size line width length height"
+                    }, {
+                        code: 'textSprite1.size = 20',
+                        tags: "size font text"
+                    },
+                    {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"}, {
+                        url: "./images/68747470733a2f2f692e696d6775722e636f6d2f4b756d707167532e706e67",
+                        code: "sprite1.sendToFront()",
+                        tags: "layer in front"
+                    },
+                    {
+                        url: "./images/68747470733a2f2f692e696d6775722e636f6d2f5870676c764a502e706e67",
+                        code: "sprite1.sendToBack()",
+                        tags: "layer back behind"
                     }],
                     Control: [{
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f723677595838632e706e67",
@@ -684,7 +776,9 @@
                         code: 'every(() => random(1, 5), "seconds", () => {\n \/* do something here */\n})',
                         description: 'If you want to wait at changing intervals, use every() with a function instead of a number.',
                         tags: "wait every seconds random"
-                    }, {
+                    },
+                     {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
+                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f6a77653133626d2e706e67",
                         code: 'repeat(10, () => {\n  \/* do stuff here */\n})',
                         tags: 'repeat times'
@@ -692,7 +786,9 @@
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f675a4f6a4c444d2e706e67",
                         code: 'forever(() => {\n  \/* do stuff here */\n})',
                         tags: 'forever loop repeat'
-                    }, {
+                    },
+                     {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
+                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f7535724b4133362e706e67",
                         code: 'if(\/* condition */) {\n  \/* then do stuff here */\n}',
                         tags: 'if when condition'
@@ -714,7 +810,9 @@
                         code: 'when(() => \/* condition */, () => {\n  \/* do stuff here */\n})',
                         tags: "forever if when",
                         description: 'when() is a short-hand for a forever-if statement:'
-                    }, {
+                    },
+                     {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
+                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f5357537864566d2e706e67",
                         code: 'freeze()',
                         description: 'Freeze the screen. You can reanimate the screen with defrost()',
@@ -723,7 +821,9 @@
                         description: 'Un-freezes the screen. Use this after you use freeze()',
                         code: 'defrost()',
                         tags: 'freeze stop start defrost'
-                    }, {
+                    },
+                     {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
+                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f674e7a547053302e706e67",
                         code: '// create a list to store all of the clones\nvar clones = []\nevery(4, "seconds", () => {\n  // create a clone every 4 seconds\n  var clone = new Circle({radius: 10, color: "pink", x:\nrandomX(), y: randomY()})\n  // add each clone to the list\n  clones.push(clone)\n})\n\nforever(() => {\n  // forever, for each clone in clones\n  clones.forEach(clone => {\n    // move it to the right\n    clone.x++\n    if (clone.x > maxX) {\n      // delete it if it goes off the screen\n      clone.delete()\n      // remove it from the list\n      clones.remove(clone)\n    }\n  })\n})',
                         tags: 'clone copy'
@@ -812,7 +912,12 @@
                         code: "mario.pause()",
                         tags: "pause music sounds"
                     }, 
-                    
+                    {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
+                    {
+                        url:"./images/soundFeatures.png",
+                        description:"These blocks do not exist in WoofJS."
+                    },
+                    {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f7439584b4f706e2e706e67",
                         code: "intitle:index.of?mp3 NAME-OF-SONG",
@@ -833,12 +938,19 @@
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f733236773670632e706e67",
                         code: "sprite1.touching(sprite2)",
                         tags: "touching intersecting overlap"
-                    }, {
-                        description: "<b>For circular sprites, <code>distanceTo()</code> will be more accurate than <code>touching()</code>.",
+                    }, 
+                     {
+                        html: "<b>For circular sprites, <code>distanceTo()</code> will be more accurate than <code>touching()</code>.",
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f733236773670632e706e67",
                         code: "sprite1.distanceTo(sprite2) < 100",
                         tags: "touching"
-                    }, {
+                    },
+                    {
+                        url:"./images/touchingColor.png",
+                        description:"These blocks do not exist in WoofJS.",
+                        tags:"touching color"
+                    },
+                    {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f634959335359792e706e67",
                         code: "sprite1.distanceTo(mouseX, mouseY)",
                         tags: "distance"
@@ -846,7 +958,9 @@
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f7936735847544b2e706e67",
                         code: "sprite1.distanceTo(sprite2)",
                         tags: "distance"
-                    }, {
+                    }, 
+                      {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
+                    {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f625a6e7a524b482e706e67",
                         code: "keysDown.includes('SPACE')",
                         tags: "key down pressed"
@@ -865,7 +979,27 @@
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f6a3843467155742e706e67",
                         code: "mouseY",
                         tags: "mouse Y position"
-                    }, {
+                    }, 
+                     {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
+                     {
+                        url:"./images/loudnessLevel.png",
+                        description:"This block does not exist in WoofJS.",
+                        tags: "loudness"
+                     },
+                      {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
+                      {
+                        url:"./images/video.png",
+                        description:"These blocks do not exist in WoofJS.",
+                        tags: "video"
+                     },
+                     {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
+                     {
+                        url:"./images/timer.png",
+                        description:"These blocks do not exist in WoofJS.",
+                        tags: "timer"
+                     },
+                     {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
+                    {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f61664c6474384b2e706e67",
                         code: "sprite1.x",
                         tags: "x position"
@@ -907,7 +1041,9 @@
                     }, {
                         description: "Height of the screen:",
                         code: "height"
-                    }, {
+                    },
+                    {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
+                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f316b4f4852797a2e706e67",
                         code: "hour()"
                     }, {
@@ -931,7 +1067,15 @@
                     }, {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f697357785538432e706e67",
                         code: "year()"
-                    }, {
+                    }, 
+                    {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
+                    {
+                        url: "./images/username.png",
+                        description:"This block does not exist in WoofJS.",
+                        tags:"username"
+                    },
+                    {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
+                    {
                         description: "User is on a mobile device:",
                         code: "mobile()"
                     }],
@@ -939,7 +1083,14 @@
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f6241636d366a482e706e67",
                         code: 'clearPen()',
                         tags: "pen clear"
-                    }, {
+                    }, 
+                    {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
+                    {
+                        url:"./images/stamp.png",
+                        description:"This block does not exist in WoofJS."
+                    },
+                    {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
+                    {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f5457656e5761702e706e67",
                         code: 'sprite1.penDown()',
                         tags: "pen down draw"
@@ -947,15 +1098,36 @@
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f354837696a42772e706e67",
                         code: 'sprite1.penUp()',
                         tags: "pen up"
-                    }, {
+                    },
+                    {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
+                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f504c744b5663762e706e67",
                         code: 'sprite1.penColor = "blue"\nsprite1.penColor = "#ff20ff"\nsprite1.penColor = "rgb(10, 100, 20)"',
                         tags: "pen color"
-                    }, {
+                    }, 
+                    {
+                        url:"./images/penColor.png",
+                        description:"These blocks do not exist in WoofJS.",
+                        tags: "pen color change"
+                    },
+                    {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
+                    {
+                        url:"./images/penShade.png",
+                        description:"These blocks do not exist in WoofJS.",
+                        tags: "pen shade"
+                    },
+                    {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
+                    {
+                        url:"./images/changePenSize.png",
+                        code:"sprite1.penWidth += 1",
+                        tags:"pen width size"
+                    },
+                    {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f4f7a59355a6a552e706e67",
                         code: 'sprite1.penWidth = 4',
                         tags: "pen width size"
-                    }],
+                    }
+                    ],
                     Operations: [{
                             url: "./images/68747470733a2f2f692e696d6775722e636f6d2f6e73446b436b742e706e67",
                             code: "sprite1.x + 4",
@@ -972,7 +1144,9 @@
                             url: "./images/68747470733a2f2f692e696d6775722e636f6d2f423042476b434a2e706e67",
                             code: "maxX / 2",
                             tags: "divide division"
-                        }, {
+                        }, 
+                        {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
+                        {
                             url: "./images/68747470733a2f2f692e696d6775722e636f6d2f664148754477792e706e67",
                             code: "random(1, 10)",
                             tags: "random"
@@ -985,7 +1159,9 @@
                         }, {
                             description: "Random color:",
                             code: "randomColor()"
-                        }, {
+                        }, 
+                        {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
+                        {
                             url: "./images/68747470733a2f2f692e696d6775722e636f6d2f3268716f4866682e706e67",
                             code: "sprite1.x < minX",
                             tags: "less than compare"
@@ -1011,7 +1187,9 @@
                         }, {
                             description: "Between Two Numbers :",
                             code: "sprite1.x.between(minX, maxX)"
-                        }, {
+                        }, 
+                        {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
+                        {
                             url: "./images/68747470733a2f2f692e696d6775722e636f6d2f5559684d3574702e706e67",
                             code: "mouseDown && sprite1.mouseOver",
                             tags: "and"
@@ -1023,7 +1201,9 @@
                             url: "./images/68747470733a2f2f692e696d6775722e636f6d2f66487253395a4b2e706e67",
                             code: '!(mouseDown)',
                             tags: "not"
-                        }, {
+                        }, 
+                        {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
+                        {
                             url: "./images/68747470733a2f2f692e696d6775722e636f6d2f5671674c32696f2e706e67",
                             code: '"hello " + "world"',
                             tags: "combine string add append join"
@@ -1034,7 +1214,9 @@
                         }, {
                             url: "./images/68747470733a2f2f692e696d6775722e636f6d2f717354526143782e706e67",
                             code: '"world".length'
-                        }, {
+                        }, 
+                        {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
+                        {
                             url: "./images/68747470733a2f2f692e696d6775722e636f6d2f4e466f59396c382e706e67",
                             code: "sprite1.x % 2",
                             tags: "reminder modulus"
@@ -1042,7 +1224,84 @@
                             url: "./images/68747470733a2f2f692e696d6775722e636f6d2f746b76796a52542e706e67",
                             code: "Math.round(5.763)",
                             tags: 'round'
-                        }
+                        },
+                        {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
+                         {
+                            url:"./images/sqrt.png",
+                            code:"Math.sqrt(9)",
+                            tags:"sqrt root square"
+                        },
+                        {
+                            url:"./images/abs.png",
+                            code:"Math.abs(-9)",
+                            tags:"abs absolute value"
+                        },
+                        {
+                            url:"./images/floor.png",
+                            code:"Math.floor(9.8)",
+                            tags:"floor round"
+                        },
+                        {
+                            url:"./images/ceiling.png",
+                            code:"Math.ceil(9.8)",
+                            tags:"ceiling round"
+                        },
+                        {
+                            url:"./images/sin.png",
+                            code:"Math.sin(90)",
+                            html: "<b>The sin function takes a number in radians. To convert your angle in degrees to radians use: <code>angle/180*Math.PI</code></b>.",
+                            tags:"sin sine"
+                        },
+                        {
+                            url:"./images/cos.png",
+                            code:"Math.cos(90)",
+                            html: "<b>The cos function takes a number in radians. To convert your angle in degrees to radians use: <code>angle/180*Math.PI</code></b>.",
+                            tags:"cos cosine"
+                        },
+                        {
+                            url:"./images/tan.png",
+                            code:"Math.tan(90)",
+                            html: "<b>The tan function takes a number in radians. To convert your angle in degrees to radians use: <code>angle/180*Math.PI</code></b>.",
+                            tags:"tan  tangent"
+                        },
+                        {
+                            url:"./images/asin.png",
+                            code:"Math.asin(1)",
+                            html: "<b>The asin function takes a number in radians. To convert your angle in degrees to radians use: <code>angle/180*Math.PI</code></b>.",
+                            tags:"asin arcsin inverse"
+                        },
+                        {
+                            url:"./images/acos.png",
+                            code:"Math.acos(0)",
+                            html: "<b>The acos function takes a number in radians. To convert your angle in degrees to radians use: <code>angle/180*Math.PI</code></b>.",
+                            tags:"acos arccos inverse"
+                        },
+                        {
+                            url:"./images/atan.png",
+                            code:"Math.atan(1)",
+                            html: "<b>The atan function takes a number in radians. To convert your angle in degrees to radians use: <code>angle/180*Math.PI</code></b>.",
+                            tags:"atan arctan inverse"
+                        },
+                        {
+                            url:"./images/ln.png",
+                            code:"Math.log(4)",
+                            tags:"ln natural log"
+                        },
+                        {
+                            url:"./images/log.png",
+                            code:"Math.log(100)/Math.log(10)",
+                            tags:"log logarithm"
+                        },
+                        {
+                            url:"./images/e.png",
+                            code:"Math.pow(Math.E,1)",
+                            tags:"e to the power"
+                        },
+                        {
+                            url:"./images/10.png",
+                            code:"Math.pow(10,2)",
+                            tags:"10 to the power"
+                        },
                     ],
                     Data: [{
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f656963593537492e706e67",
@@ -1065,7 +1324,9 @@
                         code: 'new Text({\n  text: () => "variable1: " + variable1,\n  x: 0,\n  y: 0,\n  size: 30\n})',
                         description: '"Showing a variable" works by giving a Text Sprite a function instead of a "string in quotes" as its text attribute. The Text Sprite constantly reevaluates the function which keeps the value on the screen in sync with the value of the variable.',
                         tags: "show variable text"
-                    }, {
+                    }, 
+                    {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
+                    {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f7366536d6f44542e706e67",
                         code: "var array1 = []",
                         tags: "array list"
