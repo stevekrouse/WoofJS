@@ -1092,14 +1092,23 @@ Woof.prototype.Line = function({project = undefined, width = 1, x1 = 10, y1 = 10
   }); 
   
   // Rotates rectangle by the angle between x1 and x and y1 and y
+  // Add 90 to the angle because "height" and "width" are essentially reversed in comparison to a rectangle sprite
   Object.defineProperty(this, 'angle', {
     get: function() {
-      return Math.atan2(-this.x1 + this.x, this.y1 - this.y) * 180 / Math.PI;
+      return (Math.atan2(-this.x1 + this.x, this.y1 - this.y) * 180 / Math.PI) + 90;
     },
     set: function(value) {
       throw new TypeError("You cannot set line.angle directly. You can only modify line.angle by changing the position of the line's points."); 
     }
   }); 
+  
+  // using move() with lines is tricky, so throw an error (should probably be fixed at some point)
+  this.move = function() { throw new TypeError("You cannot move lines with move() unfortunately! Change the x, y, x1, and y1 values instead."); };
+  
+  // subtract 90 from the angle of a line before calculating radians (undoing the correction in line.angle above)
+  this.radians = function() {
+    return (this.angle - 90) * Math.PI / 180;
+  };
   
   this.render = (context) => {
     context.fillStyle=this.color;
