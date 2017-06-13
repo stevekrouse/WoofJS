@@ -474,44 +474,53 @@
                             tags: "turn angle point in direction orientation"
                         }, {
                             url: "https://s10.postimg.org/4xd5jv3q1/2_0_Point_in_Direction.png",
-                            code: "sprite1.angle = LEFT  \nsprite1.angle = RIGHT \nsprite1.angle = UP \nsprite1.angle = DOWN \nsprite1.angle = 47.7",
+                            code: "sprite1.angle = LEFT  \nsprite1.angle = RIGHT \nsprite1.angle = UP \nsprite1.angle = DOWN \nsprite1.angle = 45",
                             tags: "angle turn point in direction right left up down orientation"
                         }, {
-                            url: "https://s18.postimg.org/qdj0hnosp/2_0_Point_Towards.png",
+                            url: "http://i.imgur.com/CL4jZed.png",
                             code: "sprite1.pointTowards(sprite2)",
                             tags: "turn point in direction angle sprite character mouse"
                         }, {
-                            url: "https://s18.postimg.org/qdj0hnosp/2_0_Point_Towards.png",
+                            url: "http://i.imgur.com/a3RbeJ9.png",
                             code: "sprite1.pointTowards(mouseX, mouseY)",
                             tags: "turn point in direction angle sprite character mouse"
                         }, {
                             url: "https://s13.postimg.org/4f7j7p8uf/2_0_Go_to_X_Y.png",
-                            code: "sprite1.x = maxX \nsprite1.y = 47",
+                            code: "sprite1.x = 0 \nsprite1.y = 0",
                             tags: "teleport move location set x y"
+                        }, {
+                            url: "http://i.imgur.com/9SQ0gCK.png",
+                            code: "sprite1.x = randomX() \nsprite1.y = randomY()",
+                            tags: "teleport move location set x y random go to"
                         }, {
                             url: "https://s16.postimg.org/nfbxtx745/2_0_Go_to.png",
                             code: "sprite1.x = mouseX\nsprite1.y = mouseY",
                             tags: "teleport location move to mouse"
                         }, {
-                            description: "Move to another sprite:",
+                            url: "http://i.imgur.com/Jg1oFeu.png",
                             code: "sprite1.x = sprite2.x \nsprite1.y = sprite2.y",
                             tags: "teleport location other move"
                         }, {
                             url: "https://s15.postimg.org/vqzf6gxwb/2_0_Change_X_by.png",
-                            code: 'sprite1.x += 5',
+                            code: 'sprite1.x += 10',
                             tags: "increase decrease change x move right left"
                         }, {
                             url: "https://s10.postimg.org/whzn2xet5/2_0_Change_Y_by.png",
-                            code: 'sprite1.y += -5',
+                            code: 'sprite1.y += -10',
                             tags: "increase decrease change y move up down"
                         }, {
                             url: "https://s10.postimg.org/rgc2vz1eh/2_0_Set_X_to.png",
-                            code: 'sprite1.x = minX',
+                            code: 'sprite1.x = 0',
                             tags: "set x"
                         }, {
                             url: "https://s11.postimg.org/m8cc7585v/2_0_Set_Y_to.png",
-                            code: 'sprite1.y = minY',
+                            code: 'sprite1.y = 0',
                             tags: "set y"
+                        }, {
+                            url: "http://i.imgur.com/PVCNRik.png",
+                            description:"This block does not exist in WoofJS, but there are other ways you can do the same thing. Here is an example:",
+                            code: 'if(sprite1.x > maxX) {sprite1.turnRight(180)}',
+                            tags: "rotate bounce turn edge on"
                         }, {
                             url: "./images/68747470733a2f2f692e696d6775722e636f6d2f4c576c5874444c2e706e67",
                             code: 'sprite1.setRotationStyle("ROTATE LEFT RIGHT")',
@@ -524,10 +533,7 @@
                             url: "./images/68747470733a2f2f692e696d6775722e636f6d2f433337716439682e706e67",
                             code: 'sprite1.setRotationStyle("NO ROTATE")',
                             tags: "rotation style no turn flip"
-                        }, {
-                            description: "Set color:",
-                            code: "color: rgb(100, 50, 240)"
-                        }, 
+                        }
                     ],
                     Events: [{
                         description: "Warning: The shape of events in Scratch prevent you from putting an event inside other blocks.\nAlthough JavaScript doesn't prevent you from putting events insideother blocks, you should avoid it.\nFor example, don't place an onMouseDown() event inside a forever() block."
