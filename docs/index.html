@@ -461,78 +461,79 @@
                         }, ]
                     },
                     Motion: [{
-                            url: "https://s17.postimg.org/aldfh0hu7/2_0_Move_Steps.png",
+                            url: "./images/moveSteps.png",
                             code: "sprite1.move(10)",
                             tags: "move forward glide animate"
                         }, {
-                            url: "https://s16.postimg.org/406v94ogl/Slice_2.png",
+                            url: "./images/turnRight.png",
                             code: "sprite1.turnRight(15)",
                             tags: "turn angle point in direction orientation"
                         }, {
-                            url: "https://s15.postimg.org/gpov03g6j/Slice_2_Copy.png",
+                            url: "./images/turnLeft.png",
                             code: "sprite1.turnLeft(15)",
                             tags: "turn angle point in direction orientation"
                         }, 
                         {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                         {
-                            url: "https://s10.postimg.org/4xd5jv3q1/2_0_Point_in_Direction.png",
+                            url: "./images/point90.png",
                             code: "sprite1.angle = LEFT  \nsprite1.angle = RIGHT \nsprite1.angle = UP \nsprite1.angle = DOWN \nsprite1.angle = 45",
                             tags: "angle turn point in direction right left up down orientation"
                         }, {
-                            url: "http://i.imgur.com/CL4jZed.png",
+                            url: "./images/pointTowardsSprite.png",
                             code: "sprite1.pointTowards(sprite2)",
                             tags: "turn point in direction angle sprite character mouse"
                         }, {
-                            url: "http://i.imgur.com/a3RbeJ9.png",
+                            url: "./images/pointTowardsMouse.png",
                             code: "sprite1.pointTowards(mouseX, mouseY)",
                             tags: "turn point in direction angle sprite character mouse"
                         }, 
                         {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                         {
-                            url: "https://s13.postimg.org/4f7j7p8uf/2_0_Go_to_X_Y.png",
+                            url: "./images/goToXY.png",
                             code: "sprite1.x = 0 \nsprite1.y = 0",
                             tags: "teleport move location set x y"
                         }, {
-                            url: "http://i.imgur.com/9SQ0gCK.png",
+                            url: "./images/goToRandom.png",
                             code: "sprite1.x = randomX() \nsprite1.y = randomY()",
                             tags: "teleport move location set x y random go to"
                         }, {
-                            url: "https://s16.postimg.org/nfbxtx745/2_0_Go_to.png",
+                            url: "./images/goToMouse.png",
                             code: "sprite1.x = mouseX\nsprite1.y = mouseY",
                             tags: "teleport location move to mouse"
                         }, {
-                            url: "http://i.imgur.com/Jg1oFeu.png",
+                            url: "./images/goToSprite2.png",
                             code: "sprite1.x = sprite2.x \nsprite1.y = sprite2.y",
                             tags: "teleport location other move"
                         }, 
                         {
                             url: "./images/glide.png",
-                            description: "This block does not exist in WoofJS, but you can use other Motion blocks to achieve this.",
+                            description: "This block does not exist in WoofJS, but you can use other Motion blocks to achieve this. For example:",
+                            code: "sprite1.pointTowards(166, -136)\nrepeat(100, () => {\n sprite1.move(1)\n})",
                             tags:"glide"
                         },
                         {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                         {
-                            url: "https://s15.postimg.org/vqzf6gxwb/2_0_Change_X_by.png",
+                            url: "./images/changeX.png",
                             code: 'sprite1.x += 10',
                             tags: "increase decrease change x move right left"
                         }, 
                         {
-                            url: "https://s10.postimg.org/rgc2vz1eh/2_0_Set_X_to.png",
+                            url: "./images/setX.png",
                             code: 'sprite1.x = 0',
                             tags: "set x"
                         },
                         {
-                            url: "https://s10.postimg.org/whzn2xet5/2_0_Change_Y_by.png",
+                            url: "./images/changeY.png",
                             code: 'sprite1.y += -10',
                             tags: "increase decrease change y move up down"
                         }, {
-                            url: "https://s11.postimg.org/m8cc7585v/2_0_Set_Y_to.png",
+                            url: "./images/setY.png",
                             code: 'sprite1.y = 0',
                             tags: "set y"
                         }, 
                         {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                         {
-                            url: "http://i.imgur.com/PVCNRik.png",
+                            url: "./images/ifOnEdge.png",
                             description:"This block does not exist in WoofJS, but there are other ways you can do the same thing. Here is an example:",
                             code: 'if(sprite1.x > maxX) {sprite1.turnRight(180)}',
                             tags: "rotate bounce turn edge on"
@@ -543,7 +544,7 @@
                             code: 'sprite1.setRotationStyle("ROTATE LEFT RIGHT")',
                             tags: "rotation style no turn flip"
                         }, {
-                            url: "https://s11.postimg.org/oyadagjr7/2_0_Set_Rotation_Style.png",
+                            url: "./images/setRotate.png",
                             code: 'sprite1.setRotationStyle("ROTATE")',
                             tags: "rotation style no turn flip"
                         }, {
@@ -573,7 +574,7 @@
                     }, 
                     {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                     {
-                        url: "https://s21.postimg.org/tggr983hz/2_0_When_Green_Flag_Clicked.png",
+                        url: "./images/whenGreenFlag.png",
                         description: "Note: Unlike in Scratch, using ready() is reccomended but not always required.",
                         code: "ready(() => {\n  \/* do something here */\n})",
                         tags: "on onclick when flag clicked page loaded start ready"
@@ -633,7 +634,7 @@
                     {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                     {
                         url:"./images/broadcast.png",
-                        description:"These blocks do not exist in WoofJS.",
+                        description:"These blocks do not exist in WoofJS. Scratch is first-person programming so if you want one sprite to communicate with another, you need to send messages. However, WoofJS is third-person so you can coordinate things between sprites without them talking to each other. You can use varaiables to hold \"messages\".",
                         tags:"broadcast receive"
                     }
                     ],
@@ -651,7 +652,7 @@
                     {
                         url:"./images/sayAndThink.png",
                         description:"These blocks do not exist in WoofJS, but you can use text for a similar effect. Here is an example:",
-                        code:'var textSprite1 = new Text({\n  text: () => "Hello!", \n  size: 12, \n  color: "rgb(100, 50, 240)", \n  fontFamily: "arial", \n  textAlign: "left"\n})',
+                        code:'//First create your speech bubble image sprite\nvar speechBubble = new Image({\n  url: "./docs/images/speechBubble.png",\n  width: 150, \n  height: 75,\n})\n//Then create text\nvar text = new Text({\n text: () => "Hello!", \n size: 25\n})\n//Then use a forever to keep the text aligned with the bubble \nforever(() => {\n text.x = speechBubble.x\n text.y = speechBubble.y + 10\n})\n//Lastly, you need to align the speech bubble with your sprite',
                         tags:"say think"
                     },
                     {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
@@ -915,7 +916,8 @@
                     {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                     {
                         url:"./images/soundFeatures.png",
-                        description:"These blocks do not exist in WoofJS."
+                        description:"These blocks do not exist in WoofJS.",
+                        tags:"drum note volume play tempo"
                     },
                     {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                     {
