@@ -1477,6 +1477,24 @@ Woof.prototype.mobile = function() {
     return (typeof window.orientation !== "undefined") || (navigator.userAgent.indexOf('IEMobile') !== -1);
 };
 
+// generate an array with the given parameters (starting value, ending value, incrementation) default incrementation is 1
+Woof.prototype.makeArray = function(start, end, incr = 1) {
+  var output = [];
+  if (start < end) {
+    incr = Math.abs(incr);
+    for (var i = start; i < end + 1; i += incr) {
+      output.push(i);
+    }
+  }
+  else if (start > end) {
+    incr = -Math.abs(incr);
+    for (var j = start; j > end - 1; j += incr) {
+      output.push(j);
+    }
+  }
+  return output;
+};
+
 // find the woof.js script tag in the page
 var currentScript = document.currentScript || Array.prototype.slice.call(document.getElementsByTagName('script')).find(s => s.src.includes('woof.js'))
 
