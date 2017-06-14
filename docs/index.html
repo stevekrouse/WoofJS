@@ -652,7 +652,7 @@
                     {
                         url:"./images/sayAndThink.png",
                         description:"These blocks do not exist in WoofJS, but you can use text for a similar effect. Here is an example:",
-                        code:'//First create your speech bubble image sprite\nvar speechBubble = new Image({\n  url: "./docs/images/speechBubble.png",\n  width: 150, \n  height: 75,\n})\n//Then create text\nvar text = new Text({\n text: () => "Hello!", \n size: 25\n})\n//Then use a forever to keep the text aligned with the bubble \nforever(() => {\n text.x = speechBubble.x\n text.y = speechBubble.y + 10\n})\n//Lastly, you need to align the speech bubble with your sprite',
+                        code:'//First create your speech bubble image sprite\nvar speechBubble = new Image({\n  url: "./docs/images/speechBubble.png",\n  width: 150, \n  height: 75,\n})\n//Then create text\nvar text = new Text({\n text: () => "Hello!", \n size: 25\n})\nforever(() => {\n // Align the speech bubble with your sprite\n // uncomment the following lines and change sprite1 to the name of your sprite:\n // speechBubble.x = sprite1.x + (speechBubble.width / 2) + (sprite1.width / 2)\n // speechBubble.y = sprite1.y + (speechBubble.height / 2) + (sprite1.height / 2)\n // Keep the text aligned with the bubble \n text.x = speechBubble.x\n text.y = speechBubble.y + 10\n})',
                         tags:"say think"
                     },
                     {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
@@ -961,6 +961,14 @@
                         code: "sprite1.distanceTo(sprite2)",
                         tags: "distance"
                     }, 
+                      {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
+                    {
+                        url:"./images/ask.png",
+                        description:"These blocks do not exist in WoofJS, but you can achieve a similar effect by doing the following:",
+                        code:"var answer = prompt(\"Please enter your name\", \"\")",
+                        tags:"ask answer prompt input"
+
+                    },
                       {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f625a6e7a524b482e706e67",
