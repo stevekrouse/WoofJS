@@ -1062,6 +1062,55 @@ Woof.prototype.Rectangle = function({project = undefined, height = 10, width = 1
   };
 };
 
+
+Woof.prototype.RegularPolygon = function({project = undefined, sides = 3, length = 100, color = "black"} = {}) {
+  this.type = "regularpolygon"
+  Woof.prototype.Sprite.call(this, arguments[0]);
+  this.regularpolygonSides = Math.abs(sides);
+  this.regularpolygonLength = Math.abs(length);
+  this.color = color;
+  
+  Object.defineProperty(this, 'sides', {
+    get: function() {
+      return this.regularpolygonSides;
+    },
+    set: function(value) {
+      if (typeof value != "number" || value < 3) { throw new TypeError("regularpolygon.sides can only be set to a number that is greater than or equal to 3."); }
+      this.regularpolygonSides = sides;
+    }
+  });
+  
+  Object.defineProperty(this, 'length', {
+    get: function() {
+      return this.regularpolygonLength;
+    },
+    set: function(value) {
+      if (typeof value != "number") { throw new TypeError("regularpolygon.length can only be set to a number."); }
+      this.regularpolygonLength = value;
+    }
+  });  
+
+  this.collider = function() {
+    var pos = this.rotatedVector(this.x - this.length, this.y - this.length)
+    var v1 = new SAT.Vector(0, 0)
+    var v2 = this.translatedVector(pos, this.rotatedVector(this.x + this.length, this.y - this.length))
+    var v3 = this.translatedVector(pos, this.rotatedVector(this.x + this.length, this.y + this.length))
+    var v4 = this.translatedVector(pos, this.rotatedVector(this.x - this.length, this.y + this.length))
+    
+    return new SAT.Polygon(pos, [v1, v2, v3, v4])
+  }
+  
+  this.render = (context) => {
+    context.fillStyle=this.color;
+    context.beginPath();
+    context.moveTo(length*1,length*0);
+    for(i = 1; i<sides; i++){
+      context.lineTo(length*Math.cos(i*(2*Math.PI/sides)),length*Math.sin(i*(2*Math.PI/sides)))
+    }
+    context.fill();
+  };
+};
+
 // Creates a 'line' sprite by rendering a rotated rectangle
 Woof.prototype.Line = function({project = undefined, width = 1, x1 = 10, y1 = 10, color = "black"} = {}) {
   this.type = "line"

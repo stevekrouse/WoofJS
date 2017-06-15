@@ -362,6 +362,11 @@ h4 {
     width:90% !important;
 }
 
+#RegularPolygon {
+    background-color: #B80CE8;
+    width:90% !important;
+}
+
 #Background {
     background-color: #495BDF;
     width:90% !important;
@@ -373,6 +378,7 @@ h4 {
 #Text,
 #Circle,
 #Rectangle,
+#RegularPolygon,
 #Background,
 #Line {
     height: 10%;
