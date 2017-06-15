@@ -1504,18 +1504,69 @@ Woof.prototype.Rectangle = function () {
   };
 };
 
-Woof.prototype.RegularPolygon = function () {
+Woof.prototype.Oval = function () {
   var _this7 = this;
 
   var _ref10 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
       _ref10$project = _ref10.project,
       project = _ref10$project === undefined ? undefined : _ref10$project,
-      _ref10$sides = _ref10.sides,
-      sides = _ref10$sides === undefined ? 3 : _ref10$sides,
-      _ref10$length = _ref10.length,
-      length = _ref10$length === undefined ? 100 : _ref10$length,
+      _ref10$height = _ref10.height,
+      height = _ref10$height === undefined ? 50 : _ref10$height,
+      _ref10$width = _ref10.width,
+      width = _ref10$width === undefined ? 20 : _ref10$width,
       _ref10$color = _ref10.color,
-      color = _ref10$color === undefined ? "black" : _ref10$color;
+      color = _ref10$color === undefined ? "green" : _ref10$color;
+
+  this.type = "oval";
+  Woof.prototype.Sprite.call(this, arguments[0]);
+  this.ovalHeight = Math.abs(height);
+  this.ovalWidth = Math.abs(width);
+  this.color = color;
+
+  Object.defineProperty(this, 'width', {
+    get: function get() {
+      return this.ovalWidth;
+    },
+    set: function set(value) {
+      if (typeof value != "number") {
+        throw new TypeError("oval.width can only be set to a number.");
+      }
+      this.ovalWidth = value;
+    }
+  });
+
+  Object.defineProperty(this, 'height', {
+    get: function get() {
+      return this.ovalHeight;
+    },
+    set: function set(value) {
+      if (typeof value != "number") {
+        throw new TypeError("oval.height can only be set to a number.");
+      }
+      this.ovalHeight = value;
+    }
+  });
+
+  this.render = function (context) {
+    context.fillStyle = _this7.color;
+    context.beginPath();
+    context.ellipse(0, 0, width / 2, height / 2, 0, 0, 2 * Math.PI);
+    context.fill();
+  };
+};
+
+Woof.prototype.RegularPolygon = function () {
+  var _this8 = this;
+
+  var _ref11 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+      _ref11$project = _ref11.project,
+      project = _ref11$project === undefined ? undefined : _ref11$project,
+      _ref11$sides = _ref11.sides,
+      sides = _ref11$sides === undefined ? 3 : _ref11$sides,
+      _ref11$length = _ref11.length,
+      length = _ref11$length === undefined ? 100 : _ref11$length,
+      _ref11$color = _ref11.color,
+      color = _ref11$color === undefined ? "black" : _ref11$color;
 
   this.type = "regularpolygon";
   Woof.prototype.Sprite.call(this, arguments[0]);
@@ -1558,7 +1609,7 @@ Woof.prototype.RegularPolygon = function () {
   };
 
   this.render = function (context) {
-    context.fillStyle = _this7.color;
+    context.fillStyle = _this8.color;
     context.beginPath();
     context.moveTo(length * 1, length * 0);
     for (i = 1; i < sides; i++) {
@@ -1570,19 +1621,19 @@ Woof.prototype.RegularPolygon = function () {
 
 // Creates a 'line' sprite by rendering a rotated rectangle
 Woof.prototype.Line = function () {
-  var _this8 = this;
+  var _this9 = this;
 
-  var _ref11 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-      _ref11$project = _ref11.project,
-      project = _ref11$project === undefined ? undefined : _ref11$project,
-      _ref11$width = _ref11.width,
-      width = _ref11$width === undefined ? 1 : _ref11$width,
-      _ref11$x = _ref11.x1,
-      x1 = _ref11$x === undefined ? 10 : _ref11$x,
-      _ref11$y = _ref11.y1,
-      y1 = _ref11$y === undefined ? 10 : _ref11$y,
-      _ref11$color = _ref11.color,
-      color = _ref11$color === undefined ? "black" : _ref11$color;
+  var _ref12 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+      _ref12$project = _ref12.project,
+      project = _ref12$project === undefined ? undefined : _ref12$project,
+      _ref12$width = _ref12.width,
+      width = _ref12$width === undefined ? 1 : _ref12$width,
+      _ref12$x = _ref12.x1,
+      x1 = _ref12$x === undefined ? 10 : _ref12$x,
+      _ref12$y = _ref12.y1,
+      y1 = _ref12$y === undefined ? 10 : _ref12$y,
+      _ref12$color = _ref12.color,
+      color = _ref12$color === undefined ? "black" : _ref12$color;
 
   this.type = "line";
   Woof.prototype.Sprite.call(this, arguments[0]);
@@ -1635,21 +1686,21 @@ Woof.prototype.Line = function () {
   };
 
   this.render = function (context) {
-    context.fillStyle = _this8.color;
-    context.fillRect(-_this8.width / 2, -_this8.height, _this8.width, _this8.height);
+    context.fillStyle = _this9.color;
+    context.fillRect(-_this9.width / 2, -_this9.height, _this9.width, _this9.height);
   };
 };
 
 Woof.prototype.Image = function () {
-  var _this9 = this;
+  var _this10 = this;
 
-  var _ref12 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-      _ref12$project = _ref12.project,
-      project = _ref12$project === undefined ? undefined : _ref12$project,
-      _ref12$url = _ref12.url,
-      url = _ref12$url === undefined ? "./images/SMJjVCL.png" : _ref12$url,
-      height = _ref12.height,
-      width = _ref12.width;
+  var _ref13 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+      _ref13$project = _ref13.project,
+      project = _ref13$project === undefined ? undefined : _ref13$project,
+      _ref13$url = _ref13.url,
+      url = _ref13$url === undefined ? "./images/SMJjVCL.png" : _ref13$url,
+      height = _ref13.height,
+      width = _ref13.width;
 
   this.type = "image";
   Woof.prototype.Sprite.call(this, arguments[0]);
@@ -1694,8 +1745,8 @@ Woof.prototype.Image = function () {
 
   this.render = function (context) {
     // checking if the image is loaded and not broken via https://stackoverflow.com/a/34726863/2180575
-    if (_this9.image.complete && _this9.image.naturalHeight !== 0) {
-      context.drawImage(_this9.image, -_this9.width / 2, -_this9.height / 2, _this9.width, _this9.height);
+    if (_this10.image.complete && _this10.image.naturalHeight !== 0) {
+      context.drawImage(_this10.image, -_this10.width / 2, -_this10.height / 2, _this10.width, _this10.height);
     }
   };
 };
@@ -1707,9 +1758,9 @@ Woof.prototype.customSprite = function (subClass) {
     throw new TypeError("customSprites must contain a render function");
   } // TODO more errors like these, probably for width and height
   return function () {
-    var _ref13 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-        _ref13$project = _ref13.project,
-        project = _ref13$project === undefined ? undefined : _ref13$project;
+    var _ref14 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+        _ref14$project = _ref14.project,
+        project = _ref14$project === undefined ? undefined : _ref14$project;
 
     Woof.prototype.Sprite.call(this, arguments[0]);
     Woof.prototype.extend(this, subClass);
@@ -1717,50 +1768,17 @@ Woof.prototype.customSprite = function (subClass) {
 };
 
 Woof.prototype.Repeat = function (times, func, after) {
-  var _this10 = this;
+  var _this11 = this;
 
   this.func = func;
   this.times = times;
   this.done = false;
 
   this.next = function () {
-    if (_this10.done) {
-      return;
-    }
-    if (_this10.times <= 0) {
-      _this10.done = true;
-      if (after) {
-        after();
-      }
-      return;
-    } else {
-      _this10.func();
-      _this10.times--;
-    }
-  };
-};
-
-Woof.prototype.RepeatUntil = function (condition, func, after) {
-  var _this11 = this;
-
-  // TODO if (typeof condition !== "string") { throw Error("You must give repeatUntil a string condition in quotes. You gave it: " + condition); }
-  this.func = func;
-  this.condition = condition;
-  this.done = false;
-
-  this.next = function () {
     if (_this11.done) {
       return;
     }
-    var cond;
-    try {
-      cond = _this11.condition();
-    } catch (e) {
-      console.error("Error in Repeat Until condition");
-      throw e;
-    }
-
-    if (cond) {
+    if (_this11.times <= 0) {
       _this11.done = true;
       if (after) {
         after();
@@ -1768,6 +1786,39 @@ Woof.prototype.RepeatUntil = function (condition, func, after) {
       return;
     } else {
       _this11.func();
+      _this11.times--;
+    }
+  };
+};
+
+Woof.prototype.RepeatUntil = function (condition, func, after) {
+  var _this12 = this;
+
+  // TODO if (typeof condition !== "string") { throw Error("You must give repeatUntil a string condition in quotes. You gave it: " + condition); }
+  this.func = func;
+  this.condition = condition;
+  this.done = false;
+
+  this.next = function () {
+    if (_this12.done) {
+      return;
+    }
+    var cond;
+    try {
+      cond = _this12.condition();
+    } catch (e) {
+      console.error("Error in Repeat Until condition");
+      throw e;
+    }
+
+    if (cond) {
+      _this12.done = true;
+      if (after) {
+        after();
+      }
+      return;
+    } else {
+      _this12.func();
     }
   };
 };

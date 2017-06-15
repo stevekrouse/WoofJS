@@ -1062,6 +1062,40 @@ Woof.prototype.Rectangle = function({project = undefined, height = 10, width = 1
   };
 };
 
+Woof.prototype.Oval = function({project = undefined, height = 50, width = 20, color = "green"} = {}) {
+  this.type = "oval"
+  Woof.prototype.Sprite.call(this, arguments[0]);
+  this.ovalHeight = Math.abs(height);
+  this.ovalWidth = Math.abs(width);
+  this.color = color;
+  
+  Object.defineProperty(this, 'width', {
+    get: function() {
+      return this.ovalWidth;
+    },
+    set: function(value) {
+      if (typeof value != "number") { throw new TypeError("oval.width can only be set to a number."); }
+      this.ovalWidth = value;
+    }
+  });
+  
+  Object.defineProperty(this, 'height', {
+    get: function() {
+      return this.ovalHeight;
+    },
+    set: function(value) {
+      if (typeof value != "number") { throw new TypeError("oval.height can only be set to a number."); }
+      this.ovalHeight = value;
+    }
+  });  
+  
+  this.render = (context) => {
+    context.fillStyle=this.color;
+    context.beginPath();
+    context.ellipse(0, 0, width/2, height/2, 0, 0,  2*Math.PI);
+    context.fill();
+  };
+};
 
 Woof.prototype.RegularPolygon = function({project = undefined, sides = 3, length = 100, color = "black"} = {}) {
   this.type = "regularpolygon"
