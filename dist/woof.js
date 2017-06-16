@@ -663,9 +663,9 @@ function Woof() {
       });
     };
     document.body.addEventListener("keyup", thisContext._onKeyUpHandler);
-  });
+  }
   // The following methods is where we keep track of user's events
-  thisContext._onMouseMoves = [];
+  );thisContext._onMouseMoves = [];
   thisContext.onMouseMove = function (func) {
     if (typeof func != "function") {
       throw new TypeError("onMouseMove(function) requires one function input.");
@@ -1132,9 +1132,9 @@ Woof.prototype.Sprite = function () {
       var data = _this.collisionContext.getImageData(canvasLeft, canvasTop, right - left, top - bottom).data;
     } catch (e) {
       if (e instanceof DOMException) {
-        console.warn("You have an image at an untrusted URL. Consider uploading to Imgur and using https.");
+        console.warn("You have an image at an untrusted URL. Consider uploading to Imgur and using https."
         // bounds are overlapping and we can't get canvas data, so return true
-        return true;
+        );return true;
       }
     }
 
@@ -1955,6 +1955,98 @@ Woof.prototype.importCodeURL = function (url, callback) {
 // sourced from https://coderwall.com/p/i817wa/one-line-function-to-detect-mobile-devices-with-javascript
 Woof.prototype.mobile = function () {
   return typeof window.orientation !== "undefined" || navigator.userAgent.indexOf('IEMobile') !== -1;
+};
+
+//Math Functions
+Woof.prototype.sqrt = function (a) {
+  if (typeof a != "number") {
+    throw new TypeError("sqrt(a) requires one number input.");
+  }
+  return Math.sqrt(a);
+};
+
+Woof.prototype.abs = function (a) {
+  if (typeof a != "number") {
+    throw new TypeError("abs(a) requires one number input.");
+  }
+  return Math.abs(a);
+};
+
+Woof.prototype.floor = function (a) {
+  if (typeof a != "number") {
+    throw new TypeError("floor(a) requires one number input.");
+  }
+  return Math.floor(a);
+};
+
+Woof.prototype.ceiling = function (a) {
+  if (typeof a != "number") {
+    throw new TypeError("ceiling(a) requires one number input.");
+  }
+  return Math.ceil(a);
+};
+
+Woof.prototype.sin = function (a) {
+  if (typeof a != "number") {
+    throw new TypeError("sin(a) requires one number input.");
+  }
+  return Math.sin(a * (Math.PI / 180));
+};
+
+Woof.prototype.cos = function (a) {
+  if (typeof a != "number") {
+    throw new TypeError("cos(a) requires one number input.");
+  }
+  return Math.cos(a * (Math.PI / 180));
+};
+
+Woof.prototype.tan = function (a) {
+  if (typeof a != "number") {
+    throw new TypeError("tan(a) requires one number input.");
+  }
+  return Math.tan(a * (Math.PI / 180));
+};
+
+Woof.prototype.asin = function (a) {
+  if (typeof a != "number") {
+    throw new TypeError("asin(a) requires one number input.");
+  }
+  return Math.asin(a) * (180 / Math.PI);
+};
+
+Woof.prototype.acos = function (a) {
+  if (typeof a != "number") {
+    throw new TypeError("acos(a) requires one number input.");
+  }
+  return Math.acos(a) * (180 / Math.PI);
+};
+
+Woof.prototype.atan = function (a) {
+  if (typeof a != "number") {
+    throw new TypeError("atan(a) requires one number input.");
+  }
+  return Math.atan(a) * (180 / Math.PI);
+};
+
+Woof.prototype.ln = function (a) {
+  if (typeof a != "number") {
+    throw new TypeError("ln(a) requires one number input.");
+  }
+  return Math.log(a);
+};
+
+Woof.prototype.log = function (a) {
+  if (typeof a != "number") {
+    throw new TypeError("log(a) requires one number input.");
+  }
+  return Math.log(a) / Math.log(10);
+};
+
+Woof.prototype.pow = function (a, b) {
+  if (typeof a != "number" || typeof b != "number") {
+    throw new TypeError("pow(a,b) requires two number inputs.");
+  }
+  return Math.pow(a, b);
 };
 
 // find the woof.js script tag in the page
