@@ -337,8 +337,9 @@ h4 {
     }
 }
 
+
 #Image {
-    background-color: #49A6DF;
+    background-color: #495BDF;
     width:90% !important;
 }
 
@@ -348,7 +349,7 @@ h4 {
 }
 
 #Circle {
-    background-color: #AD5FC2;
+    background-color: #8F4FA1;
     width:90% !important;
 }
 
@@ -358,12 +359,22 @@ h4 {
 }
 
 #Line {
-    background-color: #5A4097;
+    background-color: #221838;
+    width:90% !important;
+}
+
+#Polygon {
+    background-color: #AD5FC2;
+    width:90% !important;
+}
+
+#Oval {
+    background-color: #49347A;
     width:90% !important;
 }
 
 #Background {
-    background-color: #495BDF;
+    background-color: #49A6DF;
     width:90% !important;
 }
 
@@ -373,9 +384,11 @@ h4 {
 #Text,
 #Circle,
 #Rectangle,
+#Polygon,
+#Oval,
 #Background,
 #Line {
-    height: 10%;
+    height: 8%;
     width: 33%;
     border-radius: 10px;
 }

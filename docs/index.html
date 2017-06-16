@@ -113,6 +113,140 @@
                         code: "Ctl-B"
                     }, ],
                     "Sprites & Backgrounds": {
+                        Background: [
+                            {
+                                description: "Set the backdrop to a color:",
+                                code: 'setBackdropColor("blue")',
+                                tags: "backdrop"
+                            },
+
+                            {
+                                url: "./images/rhYjKGM.jpg",
+                                code: 'setBackdropURL("./docs/images/beach.jpg")\nsetBackdropStyle("cover")',
+                                tags: "beach",
+                            },
+
+                            {
+                                url: "./images/DTY6Ot3.jpg",
+                                code: 'setBackdropURL("./docs/images/nyc.jpg")\nsetBackdropStyle("cover")',
+                                tags: "new york",
+                            },
+
+                            {
+                                url: "./images/gtdHEEm.jpg",
+                                code: 'setBackdropURL("./docs/images/candyland.jpg")\nsetBackdropStyle("cover")',
+                                tags: "candy land",
+                            },
+
+                            {
+                                url: "./images/ZdUAxjL.jpg",
+                                code: 'setBackdropURL("./docs/images/minecraft.jpg")\nsetBackdropStyle("cover")',
+                                tags: "minecraft",
+                            },
+
+
+                            {
+                                url: "./images/UeoAmcy.jpg",
+                                code: 'setBackdropURL("./docs/images/snow.jpg")\nsetBackdropStyle("cover")',
+                                tags: "snow mountain",
+                            }, {
+                                url: "./images/jfYqi3n.jpg",
+                                code: 'setBackdropURL("./docs/images/outerspace.jpg")\nsetBackdropStyle("cover")',
+                                tags: "outer space mountain",
+                            },
+
+                            {
+                                url: "./images/PzNK9g5.jpg",
+                                code: 'setBackdropURL("./docs/images/ocean.jpg")\nsetBackdropStyle("cover")',
+                                tags: "ocean",
+                            }, {
+                                url: "./images/h5LNTSe.jpg",
+                                code: 'setBackdropURL("./docs/images/emojibackground.jpg")\nsetBackdropStyle("cover")',
+                                tags: "emoji",
+                            },
+
+
+                            {
+                                url: "./images/mWjGt0s.jpg",
+                                code: 'setBackdropURL("./docs/images/galaxy.jpg")\nsetBackdropStyle("cover")',
+                                tags: "galaxy",
+                            },
+
+                            {
+                                url: "./images/f53dVlr.jpg",
+                                code: 'setBackdropURL("./docs/images/harrypotter.jpg")\nsetBackdropStyle("cover")',
+                                tags: "harry potter",
+                            },
+
+                            {
+                                url: "./images/rONbYts.jpg",
+                                code: 'setBackdropURL("./docs/images/starwars.jpg")\nsetBackdropStyle("cover")',
+                                tags: "star wars",
+                            },
+
+                            {
+                                url: "./images/ebDLHpM.jpg",
+                                code: 'setBackdropURL("./docs/images/marioback.jpg")\nsetBackdropStyle("cover")',
+                                tags: "mario background",
+                            },
+
+                            {
+                                url: "./images/XZusMbv.jpg",
+                                code: 'setBackdropURL("./docs/images/soccer.jpg")\nsetBackdropStyle("cover")',
+                                tags: "soccer background",
+                            },
+
+                            {
+                                url: "./images/msdHw1d.png",
+                                code: 'setBackdropURL("./docs/images/flappyback.png")\nsetBackdropStyle("cover")',
+                                tags: "flappy bird background",
+                            },
+
+                            {
+                                url: "./images/7UOJ1zN.jpg",
+                                code: 'setBackdropURL("./docs/images/desert.jpg")\nsetBackdropStyle("cover")',
+                                tags: "desert background",
+                            },
+
+                            {
+                                url: "./images/tVl9GGw.jpg",
+                                code: 'setBackdropURL("./docs/images/grass.jpg")\nsetBackdropStyle("cover")',
+                                tags: "golf grass background",
+                            },
+
+                        ],
+                        Text: [ 
+                        {
+                           description: "Create new text:",
+                           code: 'var textSprite1 = new Text({\n  text: () => "Hello world!", \n  size: 12, \n  color: "rgb(100, 50, 240)", \n  fontFamily: "arial", \n  textAlign: "left"\n})',
+                           tags: 'create make new text words string'
+                         },
+                         {
+                             description: "Set location:",
+                             code: "x: 50, y: -100",
+                             tags: "text words string location x y"
+                         },
+                         {
+                             description: "Set color:",
+                             code: "color: rgb(100, 50, 240)",
+                             tags: "text font words string color"
+                         },
+                         {
+                             description: "Set font:",
+                             code: "fontFamily: 'arial'",
+                             tags: "text words string font family"
+                         }, 
+                         {
+                             description: "Text alignment:",
+                             code: 'textAlign: "center"\ntextAlign: "left"\ntextAlign: "right"',
+                             tags: "text font words string alignment left center right"
+                         },
+                         {
+                             description: "Font size",
+                             code: "size: 12",
+                             tags: "text font words string size"
+                         }
+                        ],
                         Image: [{
                                 url: "./images/kpU9y5M.png",
                                 code: 'var unicorn = new Image({\n  url: "./docs/images/unicorn.png",\n  width: 120, \n  height: 80,\n})',
@@ -307,140 +441,38 @@
                                 tags: "explosion sprite",
                             }
                         ],
-                        Background: [
-                            {
-                                description: "Set the backdrop to a color:",
-                                code: 'setBackdropColor("blue")',
-                                tags: "backdrop"
-                            },
-
-                            {
-                                url: "./images/rhYjKGM.jpg",
-                                code: 'setBackdropURL("./docs/images/beach.jpg")\nsetBackdropStyle("cover")',
-                                tags: "beach",
-                            },
-
-                            {
-                                url: "./images/DTY6Ot3.jpg",
-                                code: 'setBackdropURL("./docs/images/nyc.jpg")\nsetBackdropStyle("cover")',
-                                tags: "new york",
-                            },
-
-                            {
-                                url: "./images/gtdHEEm.jpg",
-                                code: 'setBackdropURL("./docs/images/candyland.jpg")\nsetBackdropStyle("cover")',
-                                tags: "candy land",
-                            },
-
-                            {
-                                url: "./images/ZdUAxjL.jpg",
-                                code: 'setBackdropURL("./docs/images/minecraft.jpg")\nsetBackdropStyle("cover")',
-                                tags: "minecraft",
-                            },
-
-
-                            {
-                                url: "./images/UeoAmcy.jpg",
-                                code: 'setBackdropURL("./docs/images/snow.jpg")\nsetBackdropStyle("cover")',
-                                tags: "snow mountain",
-                            }, {
-                                url: "./images/jfYqi3n.jpg",
-                                code: 'setBackdropURL("./docs/images/outerspace.jpg")\nsetBackdropStyle("cover")',
-                                tags: "outer space mountain",
-                            },
-
-                            {
-                                url: "./images/PzNK9g5.jpg",
-                                code: 'setBackdropURL("./docs/images/ocean.jpg")\nsetBackdropStyle("cover")',
-                                tags: "ocean",
-                            }, {
-                                url: "./images/h5LNTSe.jpg",
-                                code: 'setBackdropURL("./docs/images/emojibackground.jpg")\nsetBackdropStyle("cover")',
-                                tags: "emoji",
-                            },
-
-
-                            {
-                                url: "./images/mWjGt0s.jpg",
-                                code: 'setBackdropURL("./docs/images/galaxy.jpg")\nsetBackdropStyle("cover")',
-                                tags: "galaxy",
-                            },
-
-                            {
-                                url: "./images/f53dVlr.jpg",
-                                code: 'setBackdropURL("./docs/images/harrypotter.jpg")\nsetBackdropStyle("cover")',
-                                tags: "harry potter",
-                            },
-
-                            {
-                                url: "./images/rONbYts.jpg",
-                                code: 'setBackdropURL("./docs/images/starwars.jpg")\nsetBackdropStyle("cover")',
-                                tags: "star wars",
-                            },
-
-                            {
-                                url: "./images/ebDLHpM.jpg",
-                                code: 'setBackdropURL("./docs/images/marioback.jpg")\nsetBackdropStyle("cover")',
-                                tags: "mario background",
-                            },
-
-                            {
-                                url: "./images/XZusMbv.jpg",
-                                code: 'setBackdropURL("./docs/images/soccer.jpg")\nsetBackdropStyle("cover")',
-                                tags: "soccer background",
-                            },
-
-                            {
-                                url: "./images/msdHw1d.png",
-                                code: 'setBackdropURL("./docs/images/flappyback.png")\nsetBackdropStyle("cover")',
-                                tags: "flappy bird background",
-                            },
-
-                            {
-                                url: "./images/7UOJ1zN.jpg",
-                                code: 'setBackdropURL("./docs/images/desert.jpg")\nsetBackdropStyle("cover")',
-                                tags: "desert background",
-                            },
-
-                            {
-                                url: "./images/tVl9GGw.jpg",
-                                code: 'setBackdropURL("./docs/images/grass.jpg")\nsetBackdropStyle("cover")',
-                                tags: "golf grass background",
-                            },
-
-                        ],
-                        Text: [ 
-                        {
-                           description: "Create new text:",
-                           code: 'var textSprite1 = new Text({\n  text: () => "Hello world!", \n  size: 12, \n  color: "rgb(100, 50, 240)", \n  fontFamily: "arial", \n  textAlign: "left"\n})',
-                           tags: 'create make new text words string'
-                         },
-                         {
-                             description: "Set location:",
-                             code: "x: 50, y: -100",
-                             tags: "text words string location x y"
-                         },
-                         {
-                             description: "Set color:",
-                             code: "color: rgb(100, 50, 240)",
-                             tags: "text font words string color"
-                         },
-                         {
-                             description: "Set font:",
-                             code: "fontFamily: 'arial'",
-                             tags: "text words string font family"
-                         }, 
-                         {
-                             description: "Text alignment:",
-                             code: 'textAlign: "center"\ntextAlign: "left"\ntextAlign: "right"',
-                             tags: "text font words string alignment left center right"
-                         },
-                         {
-                             description: "Font size",
-                             code: "size: 12",
-                             tags: "text font words string size"
-                         }
-                        ],
+                        Rectangle: [{
+                            description: "Create new rectangle:",
+                            code: 'var rectangleSprite1 = new Rectangle({\n  width: 20, \n  height: 55, \n  color: "pink"\n})',
+                            tags: "create new rectangle"
+                        }, {
+                            description: "Set location:",
+                            code: "x: 50, y: -100",
+                            tags: "rectangle location x y"
+                        }, {
+                            description: "Set color:",
+                            code: "color: rgb(100, 50, 240)"
+                        }, {
+                            description: "Set width and height:",
+                            code: "width: 30, height: 30"
+                        }],
+                       
+                         Polygon: [{
+                            description: "Create new polygon:",
+                            code: 'var polygonSprite1 = new Polygon({\n  sides: 6, \n  length: 100, \n  color: "orange"\n})',
+                            tags: "create new polygon gon"
+                        }, {
+                            description: "Set location:",
+                            code: "x: 50, y: -100",
+                            tags: "polygon gon location x y"
+                        }, {
+                            description: "Set color:",
+                            code: "color: rgb(100, 50, 240)"
+                        }, {
+                            description: "Set sides and lnegth:",
+                            code: "sides: 12, length: 120"
+                        }],
+                        
                         Circle: [{
                             description: "Create new circle:",
                             code: 'var circleSprite1 = new Circle({\n  radius: 10, \n  color: "#ffffff", \n  x: 0, \n  y: 0\n})',
@@ -458,14 +490,15 @@
                             code: "radius: 12",
                             tags: "circle size radius"
                         }],
-                        Rectangle: [{
-                            description: "Create new rectangle:",
-                            code: 'var rectangleSprite1 = new Rectangle({\n  width: 20, \n  height: 55, \n  color: "pink"\n})',
-                            tags: "create new rectangle"
+                        
+                         Oval: [{
+                            description: "Create new oval:",
+                            code: 'var ovalSprite1 = new Oval({\n  width: 20, \n  height: 55, \n  color: "green"\n})',
+                            tags: "create new oval ellipse"
                         }, {
                             description: "Set location:",
                             code: "x: 50, y: -100",
-                            tags: "rectangle location x y"
+                            tags: "oval ellipse location x y"
                         }, {
                             description: "Set color:",
                             code: "color: rgb(100, 50, 240)"
@@ -473,7 +506,7 @@
                             description: "Set width and height:",
                             code: "width: 30, height: 30"
                         }],
-                        Line: [{
+                         Line: [{
                             description: "Create new line:",
                             code: 'var lineSprite1 = new Line({color: "pink", \n  width: 10, \n  x: -100, \n  y: 100, \n  x1: 10, \n  y1: 20\n})'
                         }, {
@@ -488,7 +521,7 @@
                         }, {
                             description: "Set color:",
                             code: "color: rgb(100, 50, 240)"
-                        }, ]
+                        } ],
                     },
                     Motion: [{
                             url: "./images/moveSteps.png",
