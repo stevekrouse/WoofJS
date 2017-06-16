@@ -1555,7 +1555,7 @@ Woof.prototype.Oval = function () {
   };
 };
 
-Woof.prototype.RegularPolygon = function () {
+Woof.prototype.Polygon = function () {
   var _this8 = this;
 
   var _ref11 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
@@ -1568,33 +1568,33 @@ Woof.prototype.RegularPolygon = function () {
       _ref11$color = _ref11.color,
       color = _ref11$color === undefined ? "black" : _ref11$color;
 
-  this.type = "regularpolygon";
+  this.type = "polygon";
   Woof.prototype.Sprite.call(this, arguments[0]);
-  this.regularpolygonSides = Math.abs(sides);
-  this.regularpolygonLength = Math.abs(length);
+  this.polygonSides = Math.abs(sides);
+  this.polygonLength = Math.abs(length);
   this.color = color;
 
   Object.defineProperty(this, 'sides', {
     get: function get() {
-      return this.regularpolygonSides;
+      return this.polygonSides;
     },
     set: function set(value) {
       if (typeof value != "number" || value < 3) {
-        throw new TypeError("regularpolygon.sides can only be set to a number that is greater than or equal to 3.");
+        throw new TypeError("polygon.sides can only be set to a number that is greater than or equal to 3.");
       }
-      this.regularpolygonSides = sides;
+      this.polygonSides = sides;
     }
   });
 
   Object.defineProperty(this, 'length', {
     get: function get() {
-      return this.regularpolygonLength;
+      return this.polygonLength;
     },
     set: function set(value) {
       if (typeof value != "number") {
-        throw new TypeError("regularpolygon.length can only be set to a number.");
+        throw new TypeError("polygon.length can only be set to a number.");
       }
-      this.regularpolygonLength = value;
+      this.polygonLength = value;
     }
   });
 

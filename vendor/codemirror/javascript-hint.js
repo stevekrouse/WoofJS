@@ -171,11 +171,11 @@
       var clc = 'var circleSprite1 = new Circle({\n  radius: 10, \n  color: "blue", \n  x: 0, \n  y: 0\n})'
       var rct = 'var rectangleSprite1 = new Rectangle({\n  width: 20, \n  height: 55, \n  color: "pink"\n})'
       var ovl = 'var ovalSprite1 = new Oval({\n  width: 20, \n  height: 55, \n  color: "green"\n})'
-      var pol = 'var polygonSprite1 = new RegularPolygon({\n  sides: 6, \n  length: 100, \n  color: "orange"\n})'
+      var pol = 'var polygonSprite1 = new Polygon({\n  sides: 6, \n  length: 100, \n  color: "orange"\n})'
       var lne = 'var lineSprite1 = new Line({\n  color: "pink", \n  width: 10, \n  x: -100, \n  y: 100, \n  x1: 10, \n  y1: 20\n})'
       var iff = 'if () {\n  \n}'
       var elsee = 'else {\n  \n}'
-      var woof = [iff, elsee, 'randomColor()', 'when(() => mouseDown, () => {\n  \n})', 'random(0, 10)', "var variable1 = 0", img, txt, clc, rct, ovl, lne, pol, "new Image({})", "new Rectangle({})", "new Line({})", "new Text({})", "new Circle({})", "cameraX", "cameraY", "ready", "height", "width", "minX", "maxX", "minY", "maxY", "randomX()", "randomY()","freeze()", "defrost()", "mouseDown", "mouseX", "mouseY", "pMouseX", "pMouseY", "mouseXSpeed", "mouseYSpeed", "keysDown.includes('UP')", "onMouseMove(() => {\n  \n})", "onMouseDown(() => {\n  \n})", "onMouseUp(() => {\n  \n})", "onKeyDown(() => {\n  \n})", "onKeyUp(() => {\n  \n})", "every(1, 'second', () => {\n  \n})", "forever(() => {\n  \n})", "when(() => mouseDown, () => {\n  \n})", "repeat(10, () => {\n  \n})", "repeatUntil(() => mouseDown, () => {\n  \n})", "after(1, 'second', () => {\n  \n})", "clearPen()", "mobile()"]
+      var woof = [iff, elsee, 'randomColor()', 'when(() => mouseDown, () => {\n  \n})', 'random(0, 10)', "var variable1 = 0", img, txt, clc, rct, ovl, lne, pol, "new Image({})", "new Rectangle({})", "new Line({})", "new Text({})", "new Circle({})","new Polygon({})","new Oval({})", "cameraX", "cameraY", "ready", "height", "width", "minX", "maxX", "minY", "maxY", "randomX()", "randomY()","freeze()", "defrost()", "mouseDown", "mouseX", "mouseY", "pMouseX", "pMouseY", "mouseXSpeed", "mouseYSpeed", "keysDown.includes('UP')", "onMouseMove(() => {\n  \n})", "onMouseDown(() => {\n  \n})", "onMouseUp(() => {\n  \n})", "onKeyDown(() => {\n  \n})", "onKeyUp(() => {\n  \n})", "every(1, 'second', () => {\n  \n})", "forever(() => {\n  \n})", "when(() => mouseDown, () => {\n  \n})", "repeat(10, () => {\n  \n})", "repeatUntil(() => mouseDown, () => {\n  \n})", "after(1, 'second', () => {\n  \n})", "clearPen()", "mobile()"]
       
       var backdropMethods = ["setBackdropURL('./images/q6Bqraw.jpg')", 
                              "setBackdropColor('blue')", 
