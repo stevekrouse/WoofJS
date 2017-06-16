@@ -410,6 +410,36 @@
                                 code: 'var soccer = new Image({\n  url: "./docs/images/soccer.png",\n  width: 180, \n  height: 200,\n})',
                                 tags: "soccer ball sprite",
                             },
+                            {
+                                url: "./images/rocket.png",
+                                code: 'var rocket = new Image({\n  url: "./docs/images/rocket.png",\n  width: 120, \n  height: 60,\n})',
+                                tags: "rocket ship sprite",
+                            },
+                            {
+                                url: "./images/crab.png",
+                                code: 'var crab = new Image({\n  url: "./docs/images/crab.png",\n  width: 150, \n  height: 100,\n})',
+                                tags: "crab sprite",
+                            },
+                            {
+                                url: "./images/fish.png",
+                                code: 'var fish = new Image({\n  url: "./docs/images/fish.png",\n  width: 70, \n  height: 30,\n})',
+                                tags: "fish sprite",
+                            },
+                            {
+                                url: "./images/bottomPipe.png",
+                                code: 'var bottomPipe = new Image({\n  url: "./docs/images/bottomPipe.png",\n  width: 100, \n  height: 500,\n})',
+                                tags: "bottom pipe flappy bird sprite",
+                            },
+                            {
+                                url: "./images/topPipe.png",
+                                code: 'var topPipe = new Image({\n  url: "./docs/images/topPipe.png",\n  width: 100, \n  height: 500,\n})',
+                                tags: "top pipe flappy bird sprite",
+                            },
+                            {
+                                url: "./images/explosion.png",
+                                code: 'var explosion = new Image({\n  url: "./docs/images/explosion.png",\n  width: 100, \n  height: 100,\n})',
+                                tags: "explosion sprite",
+                            }
                         ],
                         Rectangle: [{
                             description: "Create new rectangle:",
@@ -699,6 +729,11 @@
                         code: "sprite1.hide()",
                         tags: "hide disappear"
                     },
+                    {
+                        code: "if(sprite1.showing){\n /* then do stuff here */\n}",
+                        html:"Use the <code>.showing</code> attribute to check if your sprite is showing.",
+                        tags: "showing hiding"
+                    },
                     {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f513078533746662e706e67",
@@ -885,31 +920,31 @@
                       {
                         url: "./images/playapplause.png",
                         code: "var applause = new Audio('./docs/sounds/applause.mp3')\napplause.play()",
-                        tags: "music play sounds audio"
+                        tags: "applause music play sounds audio"
                     }, 
                     
                      {
                         url: "./images/playbark.png",
                         code: "var bark = new Audio('./docs/sounds/bark.mp3')\nbark.play()",
-                        tags: "music play sounds audio"
+                        tags: "bark dog music play sounds audio"
                     }, 
                     
                     {
                         url: "./images/playswitch.png",
                         code: "var switchSound = new Audio('./docs/sounds/switch.mp3')\nswitchSound.play()",
-                        tags: "music play sounds audio"
+                        tags: "switch music play sounds audio"
                     }, 
                    
                      {
                         url: "./images/playlevel.png",
                         code: "var levelUp = new Audio('./docs/sounds/mario-coin.wav')\nlevelUp.play()",
-                        tags: "music play sounds audio"
+                        tags: "mario music play sounds audio"
                     }, 
                     
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f4c387a6e6d4f622e706e67",
                         code: "var meow = new Audio('./docs/sounds/meow.mp3')\nmeow.play()",
-                        tags: "music play sounds audio"
+                        tags: "meow cat music play sounds audio"
                     },
                     
                      {
@@ -921,25 +956,39 @@
                      {
                         url: "./images/playfart.png",
                         code: "var fart = new Audio('./docs/sounds/fart.wav')\nfart.play()",
-                        tags: "music play sounds audio"
+                        tags: "fart music play sounds audio"
                     }, 
                     
                      {
                         url: "./images/playstarwars.png",
                         code: "var starWars = new Audio('./docs/sounds/star-wars.mp3')\nstarWars.play()",
-                        tags: "music play sounds audio"
+                        tags: "star wards music play sounds audio"
                     }, 
-                    
-                    
                     
                     {
                         url: "./images/playround.png",
                         code: "var newRound = new Audio('./docs/sounds/new-round.mp3')\nnewRound.play()",
-                        tags: "music play sounds audio"
+                        tags: "level up music play sounds audio"
                     }, 
                     
-                   
+                    {
+                        url: "./images/pop.png",
+                        code: "var pop = new Audio('./docs/sounds/pop.wav')\npop.play()",
+                        tags: "pop music play sounds audio"
+                    }, 
                     
+                    {
+                        url: "./images/bang.png",
+                        code: "var bang = new Audio('./docs/sounds/bang.wav')\nbang.play()",
+                        tags: "bang music play sounds audio"
+                    }, 
+
+                    {
+                        url: "./images/shoot.png",
+                        code: "var shoot = new Audio('./docs/sounds/shoot.wav')\nshoot.play()",
+                        tags: "shoot music play sounds audio"
+                    }, 
+
                     
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f58396b6b3679572e706e67",
@@ -1271,78 +1320,79 @@
                         {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                          {
                             url:"./images/sqrt.png",
-                            code:"Math.sqrt(9)",
+                            code:"sqrt(9)",
                             tags:"sqrt root square"
                         },
                         {
                             url:"./images/abs.png",
-                            code:"Math.abs(-9)",
+                            code:"abs(-9)",
                             tags:"abs absolute value"
                         },
                         {
                             url:"./images/floor.png",
-                            code:"Math.floor(9.8)",
+                            code:"floor(9.8)",
                             tags:"floor round"
                         },
                         {
                             url:"./images/ceiling.png",
-                            code:"Math.ceil(9.8)",
+                            code:"ceiling(9.8)",
                             tags:"ceiling round"
                         },
                         {
                             url:"./images/sin.png",
-                            code:"Math.sin(90)",
-                            html: "<b>The sin function takes a number in radians. To convert your angle in degrees to radians use: <code>angle/180*Math.PI</code></b>.",
+                            code:"sin(90)",
+                            description: "This function takes an input in degrees.",
                             tags:"sin sine"
                         },
                         {
                             url:"./images/cos.png",
-                            code:"Math.cos(90)",
-                            html: "<b>The cos function takes a number in radians. To convert your angle in degrees to radians use: <code>angle/180*Math.PI</code></b>.",
+                            code:"cos(90)",
+                            description: "This function takes an input in degrees.",
                             tags:"cos cosine"
                         },
                         {
                             url:"./images/tan.png",
-                            code:"Math.tan(90)",
-                            html: "<b>The tan function takes a number in radians. To convert your angle in degrees to radians use: <code>angle/180*Math.PI</code></b>.",
+                            code:"tan(90)",
+                            description: "This function takes an input in degrees.",
                             tags:"tan  tangent"
                         },
                         {
                             url:"./images/asin.png",
-                            code:"Math.asin(1)",
-                            html: "<b>The asin function takes a number in radians. To convert your angle in degrees to radians use: <code>angle/180*Math.PI</code></b>.",
+                            code:"asin(1)",
+                            description: "This function takes an input in degrees.",
                             tags:"asin arcsin inverse"
                         },
                         {
                             url:"./images/acos.png",
-                            code:"Math.acos(0)",
-                            html: "<b>The acos function takes a number in radians. To convert your angle in degrees to radians use: <code>angle/180*Math.PI</code></b>.",
+                            code:"acos(0)",
+                            description: "This function takes an input in degrees.",
                             tags:"acos arccos inverse"
                         },
                         {
                             url:"./images/atan.png",
-                            code:"Math.atan(1)",
-                            html: "<b>The atan function takes a number in radians. To convert your angle in degrees to radians use: <code>angle/180*Math.PI</code></b>.",
+                            code:"atan(1)",
+                            description: "This function takes an input in degrees.",
                             tags:"atan arctan inverse"
                         },
                         {
                             url:"./images/ln.png",
-                            code:"Math.log(4)",
+                            code:"ln(4)",
                             tags:"ln natural log"
                         },
                         {
                             url:"./images/log.png",
-                            code:"Math.log(100)/Math.log(10)",
+                            code:"log(100)",
+                            description: "This function is log base 10.",
                             tags:"log logarithm"
                         },
                         {
                             url:"./images/e.png",
-                            code:"Math.pow(Math.E,1)",
+                            code:"pow(Math.E,1)",
                             tags:"e to the power"
                         },
                         {
                             url:"./images/10.png",
-                            code:"Math.pow(10,2)",
+                            code:"pow(10,2)",
                             tags:"10 to the power"
                         },
                     ],
