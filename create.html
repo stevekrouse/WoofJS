@@ -13,7 +13,9 @@
 
   <script src="//load.sumome.com/" data-sumo-site-id="44245233c319d8fe9fb7ce8c7ed64db9381aa56477888a10319261f655cfffe2" async="async"></script>
   
-
+  <head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+</head>
 
 
 
@@ -251,7 +253,33 @@
         <button style="display: none" :style="{display: 'inline-block'}" style="margin-right: 5px; background-color:#4390BF !important; ; border:none; color:white; " class="btn btn-medium" :class="styles" onclick="save()">{{ status == "SAVED" ? 'Saved' : 'Save' }}</button>
       </span>
     </div>
- 
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Choose a name for your project:</h4>
+      </div>
+      <div class="modal-body">
+      You cannot include ".", "#", "$", "[", "]" in the name of your project.
+      <br>
+      <br>
+         <div id="projectNameGroup" class="form-group">
+            <input type="text" class="form-control" id="projectName" placeholder="my-project" onkeypress="validate()" onkeyup="validate()">
+            <span id="illegalCharacter" style="display:none;"class="help-block">Your name includes illegal characters.</span>
+             <span id="nametaken" style="display:none;"class="help-block">That project name has already been taken. Try another one.</span>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" id="saveChanges" class="btn btn-primary disabled" data-dismiss="modal" onclick="saveName()">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
     <div id="container">
     
       <div id="previewbar" v-show="previewbar" @click="previewbar= !previewbar" :style="{display: 'flex'}">
@@ -523,20 +551,36 @@
         window.location.reload()
       }
     })
+
+    var validate = function() {
+      var input = document.getElementById("projectName").value;
+      var parts = input.split(" ");
+      input = parts.join("-");
+      document.getElementById("projectName").value = input;
+      if(input.includes(".")||input.includes("#")||input.includes("$")||input.includes("[")||input.includes("]")){
+        inputError();
+      }
+      else{
+        inputSuccess();
+      }
+    }
+
+    var inputError = function(){
+      document.getElementById("projectNameGroup").className = "form-group has-error animated shake";
+      document.getElementById("illegalCharacter").style.display = "block"; 
+      document.getElementById("saveChanges").className="btn btn-primary disabled";
+      document.getElementById("nametaken").style.display = "none"; 
+    }
+
+    var inputSuccess = function(){
+      document.getElementById("projectNameGroup").className = "form-group has-success";
+       document.getElementById("illegalCharacter").style.display = "none";
+       document.getElementById("saveChanges").className="btn btn-primary";
+       document.getElementById("nametaken").style.display = "none"; 
+    }
     
-    var save = function(){
-      if (app.status == "SAVED") { return }
-      
-      if (editor.getValue().startsWith("// Loading...")){
-        return // don't allow students to save projects that haven't loaded
-      }
-      
-      var name
-      if (myCode) {
-        name = getID()
-      } else {
-        name = window.prompt('Choose a name for your project. You cannot include ".", "#", "$", "[", "]", or spaces in the name of your project.', "my-project") || '';
-      }
+    var saveName = function() {
+      var name = document.getElementById("projectName").value;
       if (name.includes('.') || name.includes('/') || name.includes('$') || name.includes("#") || name.includes("[") || name.includes("]") || name.includes(" ")){
         alert('You cannot include ".", "#", "$", "[", "]", or spaces in the name of your project. Try to save again.')
       } else if (name) { 
@@ -555,7 +599,11 @@
                   alert("Unable to save project: " + error)
                 });
             } else {
-              alert("That project name has already been taken. Try another one.")
+              // alert("That project name has already been taken. Try another one.")
+              $('#myModal').modal('toggle');
+              document.getElementById("projectNameGroup").className = "form-group has-error animated shake";
+              document.getElementById("nametaken").style.display = "block"; 
+              document.getElementById("saveChanges").className="btn btn-primary disabled";
             }
           } else {
             // else create a new project and push this code as the first revision
@@ -573,6 +621,22 @@
             });
           }
         });
+      }
+    }
+
+    var save = function(){
+      if (app.status == "SAVED") { return }
+      
+      if (editor.getValue().startsWith("// Loading...")){
+        return // don't allow students to save projects that haven't loaded
+      }
+      
+      var name
+      if (myCode) {
+        name = getID()
+      } else {
+        $('#myModal').modal('toggle')
+        // name = window.prompt('Choose a name for your project. You cannot include ".", "#", "$", "[", "]", or spaces in the name of your project.', "my-project") || '';
       }
     };
     
@@ -790,6 +854,5 @@
        c.parentNode.insertBefore(n,c);
     }();
 </script>
-
 </body>
 </html>
