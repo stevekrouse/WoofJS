@@ -106,7 +106,7 @@
     "if in instanceof isnt new no not null of off on or return switch then throw true try typeof until void while with yes").split(" ");
   
   
-  var spriteProps = ["brightness = 50", "width", "height",  "x", "y", "angle", "x = 10", "y = 10", "angle = UP", "rotationStyle", "showing", "penColor", "penWidth", "deleted", "showCollider", "toJSON", "lastX", "lastY", "distanceTo(sprite1)", "move(10)", "setRotationStyle('NO ROTATE')", "touching", "over", "turnLeft", "turnRight", "sendToBack()", "sendToFront()", "penUp()", "show()", "hide()", "pointTowards(sprite1)", "onMouseDown(() => {\n  \n})", "onMouseUp(() => {\n  \n})", "delete()"]
+  var spriteProps = ["brightness = 50", "width", "height",  "x", "y", "angle", "x = 10", "y = 10", "angle = UP", "rotationStyle", "showing", "penColor", "penWidth", "deleted", "showCollider", "toJSON", "lastX", "lastY", "distanceTo(sprite1)", "move(10)", "setRotationStyle('NO ROTATE')", "touching", "over", "turnLeft", "turnRight", "sendToBack()", "sendToFront()", "penUp()", "penDown()", "show()", "hide()", "pointTowards(sprite1)", "onMouseDown(() => {\n  \n})", "onMouseUp(() => {\n  \n})", "delete()"]
   var imageProps = spriteProps.concat(["setImageURL('./images/SMJjVCL.png)", "width = 100", "height = 10"])
   var rectangleProps = spriteProps.concat(["width = 10", "height = 10", "color", "color = 'blue'"])
   var circleProps = spriteProps.concat(["width = 10", "height = 10", "color", "color = 'blue'"])
