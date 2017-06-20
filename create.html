@@ -246,9 +246,29 @@
       </div>
       <img  style= "width:160px; height: 40px;" src="./images/logowhite.png">
       <span style="margin:8px" id="save">
-        <button id="clean-up" class="btn btn-medium btn-default" @click="cleanAll()" style="display: none" :style="{display: canClean ? 'inline-block' : 'none'}"><span class="glyphicon glyphicon-align-left"></span> Clean Code</button>
+
+      
+         <button id="clean-up" class="btn btn-medium btn-default" @click="cleanAll()" style="display: none" :style="{display: canClean ? 'inline-block' : 'none'}"><span class="glyphicon glyphicon-align-left"></span> Clean Code</button>
         <button id="error" class="btn btn-danger" @click="showError()" :style="{display: error ? 'inline-block' : 'none', animation: seenError ? 'none' : 'glowing 1200ms infinite'}"><span class="glyphicon glyphicon-exclamation-sign"></span> Error</button>
-        <button style="display: none" :style="{display: 'inline-block'}" style="margin-right: 5px; background-color:#4390BF !important; ; border:none; color:white; " class="btn btn-medium" :class="styles" onclick="save()">{{ status == "SAVED" ? 'Saved' : 'Save' }}</button>
+        <button style="display: none" :style="{display: 'inline-block'}" style="margin-right: 5px; background-color:#4390BF !important; ; border:none; color:white; " class="btn btn-medium" :class="styles" onclick="save()">{{ status == "SAVED" ? 'Saved' : 'Save' }}</button> 
+        <div class="dropdown" style="display:inline;">
+          <button class="btn btn-primary btn-medium dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+            Tools
+            <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1" style="margin-top:12px;">
+            <li><a href="#">Copy <small style="color:gray;">Ctl-C</small></a></li>
+            <li><a href="#">Paste <small style="color:gray;">Ctl-V</small></a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="#">Undo <small style="color:gray;">Ctl-Z</small></a></li>
+            <li><a href="#">Redo <small style="color:gray;">Ctl-Shift-Z</small></a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="#">Clean Code</a></li>
+            <li><a href="#">Save</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="#">Share</a></li>
+          </ul>
+        </div>
       </span>
     </div>
  
