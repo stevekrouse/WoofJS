@@ -252,28 +252,26 @@
       </span>
     </div>
 
-<!-- Modal -->
-<div class="modal fade" id="saveModal" tabindex="-1" role="dialog" aria-labelledby="saveModalLabel">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="saveModalLabel">Choose a name for your project:</h4>
-      </div>
-      <div class="modal-body">
-         <div id="projectNameGroup" class="form-group">
-            <input type="text" class="form-control" id="projectName" placeholder="my-project"  onkeyup="validate()" onkeydown="validate()">
+    <div class="modal fade" id="saveModal" tabindex="-1" role="dialog" aria-labelledby="saveModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title" id="saveModalLabel">Choose a name for your project</h4>
           </div>
-          <span id="nameTaken" style="display:none;" class="text-danger">That project name has already been taken. Try another one.</span>
-          <span id="illegalCharacter" class="text-danger"></span>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" id="saveChanges" class="btn btn-primary disabled" data-loading-text="Loading..."  onclick="saveName()">Save</button>
+          <div class="modal-body">
+            <div id="projectNameGroup" class="form-group" :class="{'has-info': projectNameInputValue == '', 'has-error': projectNameRequest == 'NAME TAKEN', 'has-success': projectNameInputValue != '' && projectNameRequest != 'NAME TAKEN', animated: projectNameRequest == 'NAME TAKEN' || projectNameLastKeyIllegal, shake: projectNameRequest == 'NAME TAKEN' || projectNameLastKeyIllegal}">
+              <input type="text" class="form-control" id="projectName" placeholder="my-project" :value="projectNameInputValue" @input="validate($event)" @keyDown.enter="saveName(projectNameInputValue)">
+              <span id="nameTaken" :style="{opacity: projectNameRequest == 'NAME TAKEN' ? '1' : '0'}" class="text-danger">That project name has already been taken. Try another one.</span>
+            </div>
+            <span id="illegalCharacter" class="text-danger" :class="{animated: projectNameLastKeyIllegal, shake: projectNameLastKeyIllegal}" style="display: inline-block" :style="{opacity: projectNameLastKeyIllegal ? '1' : '0'}">You cannot include {{ projectNameLastKeyIllegal }} in project names.</span>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="button" id="saveChanges" class="btn btn-primary" :class="{disabled: projectNameRequest != 'NOT LOADING' || projectNameInputValue == ''}" @click="saveName()">{{ projectNameRequest == "LOADING" ? "Loading..." : "Save" }}</button>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</div>
 
     <div id="container">
     
@@ -345,7 +343,7 @@
       return window.location.hash.substring(1, window.location.hash.length).split("/")[0];
     }
     var getIDWithRevision = function() {
-      // returns the name of a project, not inlcuding the current revision
+      // returns the name of a project, inlcuding the current revision
       return window.location.hash.substring(1, window.location.hash.length);
     }
     var getCurrentRevisionCode = function(revisions) {
@@ -389,6 +387,10 @@
         mouseX: 0,
         mouseY: 0,
         seenError: true,
+        
+        projectNameRequest: "NOT LOADING", // or "LOADING" or "NAME TAKEN"
+        projectNameInputValue: "",
+        projectNameLastKeyIllegal: false,
       },
       computed: {
         styles : function() { return {
@@ -423,6 +425,34 @@
         cleanAll: function(){
           var beautiful = js_beautify(editor.getValue(), {space_after_anon_function: true, indent_size: 2, indent_with_tabs: false })
           editor.setValue(beautiful)
+        },
+        validate: function($event) {
+          var newName = $event.target.value
+          
+          this.projectNameRequest = 'NOT LOADING'  // reset state so that you can hit save after you change the name after you get a NAME TAKEN error
+          
+          this.projectNameLastKeyIllegal = false // take off the animation
+          setTimeout(function() {
+            var lastKeyPressIllegal = newName.length > 0 && newName[newName.length - 1].match(/\.|#|\$|\/|\[|\]/) 
+            if (lastKeyPressIllegal) {
+              this.projectNameLastKeyIllegal = lastKeyPressIllegal[0]
+            } else {
+              this.projectNameLastKeyIllegal = false
+            }
+          }.bind(this), 10)
+          
+          
+          this.projectNameInputValue = newName.replace(" ", "-")
+          this.projectNameInputValue = this.projectNameInputValue.replace(/\.|#|\$|\/|\[|\]/g, "")
+        },
+        saveName : function() {
+          if (app.projectNameRequest == "NOT LOADING"){
+            app.projectNameRequest = "LOADING"
+            var name = app.projectNameInputValue
+            if (name) { 
+              saveProject(name);
+            }
+          }
         },
       },
       watch: {
@@ -547,87 +577,29 @@
       }
     })
 
-    var errorChar = "";
-    var characterErrorMessages = "\n";
-    document.getElementById("illegalCharacter").innerText = characterErrorMessages;
-
-    var validate = function() {
-      document.getElementById("illegalCharacter").style.display = "block";
-      document.getElementById("illegalCharacter").innerText = characterErrorMessages;
-      if (errorChar != "#" && errorChar != "$"){
-        document.getElementById("illegalCharacter").className = 'text-danger';
-      } else {
-        errorChar = "";
-      }
-      //Using onkeyup and onkeydown checkers to achieve validation on every action 
-      var input = document.getElementById("projectName").value;
-      if (input.includes(".") || input.includes("#") || input.includes("$") || input.includes('/') || input.includes("[") || input.includes("]") || input.includes(" ")){
-        if (input[input.length-1] != " "){
-          inputError(input[input.length-1]);
-          document.getElementById("projectNameGroup").className = "form-group has-success";
-          document.getElementById("nameTaken").className = "text-danger";
-        }
-        var input = document.getElementById("projectName").value;
-        var cleanedString = "";
-        for (i=0; i<input.length; i++){
-          if (input[i] == " "){
-            cleanedString += "-";
-          }else if (input[i]!="." && input[i] != "#" && input[i] != "$" && input[i] != "/" && input[i] != "[" && input[i] != "]"){
-            cleanedString += input[i];
-          }
-        }
-        document.getElementById("projectName").value = cleanedString;
-        if (cleanedString == ""){
-          document.getElementById("projectNameGroup").className = "form-group has-info";
-          document.getElementById("nameTaken").className = "text-danger";
-        }
-      } else if (input == ""){
-        document.getElementById("projectNameGroup").className = "form-group has-info";
-        document.getElementById("nameTaken").className = "text-danger";
-      } else {
-        inputSuccess();
-      }
-    }
-
-    var inputError = function(character){
-      characterErrorMessages = "You cannot include \"" + character + "\" in project names.";
-      errorChar = character;
-      document.getElementById("illegalCharacter").innerText = characterErrorMessages;
-      document.getElementById("illegalCharacter").className = 'text-danger animated shake';
-    }
-
-    var inputSuccess = function(){
-      document.getElementById("projectNameGroup").className = "form-group has-success";
-      document.getElementById("nameTaken").className = "text-danger";
-      document.getElementById("saveChanges").className="btn btn-primary";
-      document.getElementById("nameTaken").style.display = "none"; 
-    }
-
     var saveProject = function(name){
       firebase.database().ref('/code/' + name).limitToLast(1).once('value').then(function(snapshot) {
         if (snapshot.val()){
           if (firebase.auth().currentUser && snapshot.val()[Object.keys(snapshot.val())[0]].uid == firebase.auth().currentUser.uid) {
-              // if the project exists and you own it, push the new code as a revision
-              $('#saveModal').modal('hide');
-              firebase.database().ref().child("/code/" + name).push({
-                code: editor.getValue(), 
-                time: firebase.database.ServerValue.TIMESTAMP, 
-                uid: firebase.auth().currentUser && firebase.auth().currentUser.uid
-              }).then(function(){
-                window.location.hash = name
-                makeClean()
-              }).catch(function(error){
-                alert("Unable to save project: " + error)
-              });
-              } else {
-                document.getElementById("projectNameGroup").className = "form-group has-error animated shake";
-                document.getElementById("nameTaken").className = "text-danger animated shake";
-                document.getElementById("nameTaken").style.display = "block"; 
-                document.getElementById("saveChanges").className="btn btn-primary disabled";
-                document.getElementById("saveChanges").innerText="Save";
-              }
+            // if the project exists and you own it, push the new code as a revision
+            $('#saveModal').modal('hide');
+            app.projectNameRequest = "NOT LOADING"
+            firebase.database().ref().child("/code/" + name).push({
+              code: editor.getValue(), 
+              time: firebase.database.ServerValue.TIMESTAMP, 
+              uid: firebase.auth().currentUser && firebase.auth().currentUser.uid
+            }).then(function(){
+              window.location.hash = name
+              makeClean()
+            }).catch(function(error){
+              alert("Unable to save project: " + error)
+            });
+          } else {
+            app.projectNameRequest = "NAME TAKEN"
+          }
         } else {
           $('#saveModal').modal('hide');
+          app.projectNameRequest = "NOT LOADING"
           firebase.database().ref().child("/code/" + name + "/--uid").set(firebase.auth().currentUser && firebase.auth().currentUser.uid)
           firebase.database().ref().child("/code/" + name).push({
             code: editor.getValue(), 
@@ -643,23 +615,7 @@
         }
       });
     }
-
-    var saveName = function() {
-      document.getElementById("illegalCharacter").style.display = "none"; 
-      var input = document.getElementById("projectName").value;
-      if (!(document.getElementById("saveChanges").innerText == "Loading..." || document.getElementById("saveChanges").className == "btn btn-primary disabled")){   
-        document.getElementById("saveChanges").className="btn btn-primary disabled";
-        document.getElementById("saveChanges").innerText="Loading...";
-        var name = document.getElementById("projectName").value;
-        if (name) { 
-          characterErrorMessages = "\n";
-          document.getElementById("illegalCharacter").innerText = characterErrorMessages;
-          saveProject(name);
-        }
-      }
-    }
     
-
     var save = function(){
       if (app.status == "SAVED") { return }
       
@@ -667,29 +623,30 @@
         return // don't allow students to save projects that haven't loaded
       }
       
-      var name
-      if (myCode) {
-        name = getID()
+      if (myCode && getID()) {
+        saveProject(getID())
       } else {
-        $('#saveModal').modal('show')
-        var projName = window.location.href.split("#")[1];
-        if (projName != undefined){
-            if (projName[projName.length-2] == "-" && parseInt(projName[projName.length-1]) != NaN ){
-              var versionNumber = parseInt(projName[projName.length-1]);
-              versionNumber += 1;
-              document.getElementById("projectName").value = projName.substring(0,projName.length-2) + "-" + versionNumber.toString();
-            } else {
-              document.getElementById("projectName").value = window.location.href.split("#")[1] + "-1";
-            }
-            document.getElementById("saveChanges").className="btn btn-primary";
-            document.getElementById("saveChanges").innerText="Save";
-            document.getElementById("projectNameGroup").className = "form-group has-success";
+        if (getID()) {
+          app.projectNameInputValue = autoIncrimentedName()
         }
+        $('#saveModal').modal('show')
       }
-      if (name) { 
-          saveProject(name);
+    }
+    
+    $('.modal').on('shown.bs.modal', function () {
+      $('#projectName').focus() // focus on the project name input box when the modal loads
+    })
+    
+    var autoIncrimentedName = function() {
+      var projName = getID();
+      var versionNumber = parseInt(projName[projName.length-1])
+      if (!isNaN(versionNumber) && projName[projName.length-2] == "-"){
+        versionNumber += 1;
+        return projName.substring(0, projName.length-1) + versionNumber.toString();
+      } else {
+        return projName + "-1";
       }
-    };
+    }
     
     // keyboard shortcuts
     var mac = CodeMirror.keyMap["default"] == CodeMirror.keyMap.macDefault;
