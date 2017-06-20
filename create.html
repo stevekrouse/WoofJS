@@ -674,6 +674,19 @@
         name = getID()
       } else {
         $('#saveModal').modal('show')
+        var projName = window.location.href.split("#")[1];
+        if (projName != undefined){
+            if (projName[projName.length-2] == "-" && parseInt(projName[projName.length-1]) != NaN ){
+              var versionNumber = parseInt(projName[projName.length-1]);
+              versionNumber += 1;
+              document.getElementById("projectName").value = projName.substring(0,projName.length-2) + "-" + versionNumber.toString();
+            } else {
+              document.getElementById("projectName").value = window.location.href.split("#")[1] + "-1";
+            }
+            document.getElementById("saveChanges").className="btn btn-primary";
+            document.getElementById("saveChanges").innerText="Save";
+            document.getElementById("projectNameGroup").className = "form-group has-success";
+        }
       }
       if (name) { 
           saveProject(name);
