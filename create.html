@@ -255,22 +255,19 @@
     </div>
 
 <!-- Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<div class="modal fade" id="saveModal" tabindex="-1" role="dialog" aria-labelledby="saveModalLabel">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Choose a name for your project:</h4>
+        <h4 class="modal-title" id="saveModalLabel">Choose a name for your project:</h4>
       </div>
       <div class="modal-body">
-      You cannot include ".", "#", "$", "[", "]" in the name of your project.
-      <br>
-      <br>
          <div id="projectNameGroup" class="form-group">
-            <input type="text" class="form-control" id="projectName" placeholder="my-project" onkeypress="validate()" onkeyup="validate()">
-            <span id="illegalCharacter" style="display:none;"class="help-block">Your name includes illegal characters.</span>
-             <span id="nametaken" style="display:none;"class="help-block">That project name has already been taken. Try another one.</span>
+            <input type="text" class="form-control" id="projectName" placeholder="my-project"  onkeyup="validate()" onkeydown="validate()">
           </div>
+          <span id="nameTaken" style="display:none;" class="text-danger">That project name has already been taken. Try another one.</span>
+          <span id="illegalCharacter" class="text-danger"></span>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -552,83 +549,114 @@
       }
     })
 
+    var errorChar = "";
+    var characterErrorMessages = "\n";
+    document.getElementById("illegalCharacter").innerText = characterErrorMessages;
+
     var validate = function() {
-      var input = document.getElementById("projectName").value;
-      var parts = input.split(" ");
-      input = parts.join("-");
-      document.getElementById("projectName").value = input;
-      if(input.includes(".")||input.includes("#")||input.includes("$")||input.includes('/')||input.includes("[")||input.includes("]")|| input.includes(" ")){
-        inputError();
+      document.getElementById("illegalCharacter").style.display = "block";
+      document.getElementById("illegalCharacter").innerText = characterErrorMessages;
+      if (errorChar != "#" && errorChar != "$"){
+        document.getElementById("illegalCharacter").className = 'text-danger';
+      } else {
+        errorChar = "";
       }
-      else{
+      //Using onkeyup and onkeydown checkers to achieve validation on every action 
+      var input = document.getElementById("projectName").value;
+      if (input.includes(".") || input.includes("#") || input.includes("$") || input.includes('/') || input.includes("[") || input.includes("]") || input.includes(" ")){
+        if (input[input.length-1] != " "){
+          inputError(input[input.length-1]);
+          document.getElementById("projectNameGroup").className = "form-group has-success";
+          document.getElementById("nameTaken").className = "text-danger";
+        }
+        var input = document.getElementById("projectName").value;
+        var cleanedString = "";
+        for (i=0; i<input.length; i++){
+          if (input[i] == " "){
+            cleanedString += "-";
+          }else if (input[i]!="." && input[i] != "#" && input[i] != "$" && input[i] != "/" && input[i] != "[" && input[i] != "]"){
+            cleanedString += input[i];
+          }
+        }
+        document.getElementById("projectName").value = cleanedString;
+        if (cleanedString == ""){
+          document.getElementById("projectNameGroup").className = "form-group has-info";
+          document.getElementById("nameTaken").className = "text-danger";
+        }
+      } else if (input == ""){
+        document.getElementById("projectNameGroup").className = "form-group has-info";
+        document.getElementById("nameTaken").className = "text-danger";
+      } else {
         inputSuccess();
       }
     }
 
-    var inputError = function(){
-      document.getElementById("projectNameGroup").className = "form-group has-error animated shake";
-      document.getElementById("illegalCharacter").style.display = "block"; 
-      document.getElementById("saveChanges").className="btn btn-primary disabled";
-      document.getElementById("nametaken").style.display = "none"; 
+    var inputError = function(character){
+      characterErrorMessages = "You cannot include \"" + character + "\" in project names.";
+      errorChar = character;
+      document.getElementById("illegalCharacter").innerText = characterErrorMessages;
+      document.getElementById("illegalCharacter").className = 'text-danger animated shake';
     }
 
     var inputSuccess = function(){
       document.getElementById("projectNameGroup").className = "form-group has-success";
-       document.getElementById("illegalCharacter").style.display = "none";
-       document.getElementById("saveChanges").className="btn btn-primary";
-       document.getElementById("nametaken").style.display = "none"; 
+      document.getElementById("nameTaken").className = "text-danger";
+      document.getElementById("saveChanges").className="btn btn-primary";
+      document.getElementById("nameTaken").style.display = "none"; 
     }
 
-    var saveName = function() {
-      var input = document.getElementById("projectName").value;
-      if(input.includes(".")||input.includes("#")||input.includes("$")||input.includes("[")||input.includes("]")||input==""||input.includes('/')|| input.includes(" ")||document.getElementById("saveChanges").innerText=="Loading..."||document.getElementById("saveChanges").className=="btn btn-primary disabled"){
-
-      }else{
-        document.getElementById("saveChanges").className="btn btn-primary disabled";
-        document.getElementById("saveChanges").innerText="Loading...";
-        // $('#myModal').modal('toggle');
-        var name = document.getElementById("projectName").value;
-        if (name) { 
-          firebase.database().ref('/code/' + name).limitToLast(1).once('value').then(function(snapshot) {
-            if (snapshot.val()){
-              if (firebase.auth().currentUser && snapshot.val()[Object.keys(snapshot.val())[0]].uid == firebase.auth().currentUser.uid) {
-                  // if the project exists and you own it, push the new code as a revision
-                  $('#myModal').modal('toggle');
-                  firebase.database().ref().child("/code/" + name).push({
-                    code: editor.getValue(), 
-                    time: firebase.database.ServerValue.TIMESTAMP, 
-                    uid: firebase.auth().currentUser && firebase.auth().currentUser.uid
-                  }).then(function(){
-                    window.location.hash = name
-                    makeClean()
-                  }).catch(function(error){
-                    $('#myModal').modal('toggle');
-                    alert("Unable to save project: " + error)
-                  });
-              } else {
-                document.getElementById("projectNameGroup").className = "form-group has-error animated shake";
-                document.getElementById("nametaken").style.display = "block"; 
-                document.getElementById("saveChanges").className="btn btn-primary disabled";
-               document.getElementById("saveChanges").innerText="Save";
-              }
-            } else {
-              // else create a new project and push this code as the first revision
-              $('#myModal').modal('toggle');
-              firebase.database().ref().child("/code/" + name + "/--uid").set(firebase.auth().currentUser && firebase.auth().currentUser.uid)
+    var saveProject = function(name){
+      firebase.database().ref('/code/' + name).limitToLast(1).once('value').then(function(snapshot) {
+        if (snapshot.val()){
+          if (firebase.auth().currentUser && snapshot.val()[Object.keys(snapshot.val())[0]].uid == firebase.auth().currentUser.uid) {
+              // if the project exists and you own it, push the new code as a revision
+              $('#saveModal').modal('hide');
               firebase.database().ref().child("/code/" + name).push({
                 code: editor.getValue(), 
                 time: firebase.database.ServerValue.TIMESTAMP, 
                 uid: firebase.auth().currentUser && firebase.auth().currentUser.uid
               }).then(function(){
                 window.location.hash = name
-                myCode = firebase.auth().currentUser
                 makeClean()
               }).catch(function(error){
-                $('#myModal').modal('toggle');
                 alert("Unable to save project: " + error)
               });
-            }
+              } else {
+                document.getElementById("projectNameGroup").className = "form-group has-error animated shake";
+                document.getElementById("nameTaken").className = "text-danger animated shake";
+                document.getElementById("nameTaken").style.display = "block"; 
+                document.getElementById("saveChanges").className="btn btn-primary disabled";
+                document.getElementById("saveChanges").innerText="Save";
+              }
+        } else {
+          $('#saveModal').modal('hide');
+          firebase.database().ref().child("/code/" + name + "/--uid").set(firebase.auth().currentUser && firebase.auth().currentUser.uid)
+          firebase.database().ref().child("/code/" + name).push({
+            code: editor.getValue(), 
+            time: firebase.database.ServerValue.TIMESTAMP, 
+            uid: firebase.auth().currentUser && firebase.auth().currentUser.uid
+          }).then(function(){
+            window.location.hash = name
+            myCode = firebase.auth().currentUser
+            makeClean()
+          }).catch(function(error){
+            alert("Unable to save project: " + error)
           });
+        }
+      });
+    }
+
+    var saveName = function() {
+      document.getElementById("illegalCharacter").style.display = "none"; 
+      var input = document.getElementById("projectName").value;
+      if (!(document.getElementById("saveChanges").innerText == "Loading..." || document.getElementById("saveChanges").className == "btn btn-primary disabled")){   
+        document.getElementById("saveChanges").className="btn btn-primary disabled";
+        document.getElementById("saveChanges").innerText="Loading...";
+        var name = document.getElementById("projectName").value;
+        if (name) { 
+          characterErrorMessages = "\n";
+          document.getElementById("illegalCharacter").innerText = characterErrorMessages;
+          saveProject(name);
         }
       }
     }
@@ -645,42 +673,10 @@
       if (myCode) {
         name = getID()
       } else {
-        $('#myModal').modal('toggle')
+        $('#saveModal').modal('show')
       }
       if (name) { 
-        firebase.database().ref('/code/' + name).limitToLast(1).once('value').then(function(snapshot) {
-          if (snapshot.val()){
-            if (firebase.auth().currentUser && snapshot.val()[Object.keys(snapshot.val())[0]].uid == firebase.auth().currentUser.uid) {
-                // if the project exists and you own it, push the new code as a revision
-                firebase.database().ref().child("/code/" + name).push({
-                  code: editor.getValue(), 
-                  time: firebase.database.ServerValue.TIMESTAMP, 
-                  uid: firebase.auth().currentUser && firebase.auth().currentUser.uid
-                }).then(function(){
-                  window.location.hash = name
-                  makeClean()
-                }).catch(function(error){
-                  alert("Unable to save project: " + error)
-                });
-            } else {
-              alert("That project name has already been taken. Try another one.")
-            }
-          } else {
-            // else create a new project and push this code as the first revision
-            firebase.database().ref().child("/code/" + name + "/--uid").set(firebase.auth().currentUser && firebase.auth().currentUser.uid)
-            firebase.database().ref().child("/code/" + name).push({
-              code: editor.getValue(), 
-              time: firebase.database.ServerValue.TIMESTAMP, 
-              uid: firebase.auth().currentUser && firebase.auth().currentUser.uid
-            }).then(function(){
-              window.location.hash = name
-              myCode = firebase.auth().currentUser
-              makeClean()
-            }).catch(function(error){
-              alert("Unable to save project: " + error)
-            });
-          }
-        });
+          saveProject(name);
       }
     };
     
