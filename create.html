@@ -46,6 +46,7 @@
   <script type="text/javascript" src="./vendor/codemirror/comment.js"></script>
   <script type="text/javascript" src="./vendor/codemirror/sublime.js"></script>
   <script type="text/javascript" src="./vendor/codemirror/foldcode.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.5.12/clipboard.min.js"></script>
   <link rel="stylesheet" href="./vendor/codemirror/foldgutter.css" />
   <script src="./vendor/codemirror/foldcode.js"></script>
   <script src="./vendor/codemirror/foldgutter.js"></script>
@@ -244,29 +245,23 @@
           <li v-for="project in projects.slice(0,10)"><a :href="'#' + project.key">{{project.key}}</a></li>
         </ul>
       </div>
+
       <img  style= "width:160px; height: 40px;" src="./images/logowhite.png">
       <span style="margin:8px" id="save">
 
       
-         <button id="clean-up" class="btn btn-medium btn-default" @click="cleanAll()" style="display: none" :style="{display: canClean ? 'inline-block' : 'none'}"><span class="glyphicon glyphicon-align-left"></span> Clean Code</button>
+<!--          <button id="clean-up" class="btn btn-medium btn-default" @click="cleanAll()" style="display: none" :style="{display: canClean ? 'inline-block' : 'none'}"><span class="glyphicon glyphicon-align-left"></span> Clean Code</button> -->
         <button id="error" class="btn btn-danger" @click="showError()" :style="{display: error ? 'inline-block' : 'none', animation: seenError ? 'none' : 'glowing 1200ms infinite'}"><span class="glyphicon glyphicon-exclamation-sign"></span> Error</button>
         <button style="display: none" :style="{display: 'inline-block'}" style="margin-right: 5px; background-color:#4390BF !important; ; border:none; color:white; " class="btn btn-medium" :class="styles" onclick="save()">{{ status == "SAVED" ? 'Saved' : 'Save' }}</button> 
         <div class="dropdown" style="display:inline;">
           <button class="btn btn-primary btn-medium dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-            Tools
+            File
             <span class="caret"></span>
           </button>
           <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1" style="margin-top:12px;">
-            <li><a href="#">Copy <small style="color:gray;">Ctl-C</small></a></li>
-            <li><a href="#">Paste <small style="color:gray;">Ctl-V</small></a></li>
+            <li><a @click="cleanAll()"><span class="glyphicon glyphicon-align-left"></span> Clean Code</a></li>
             <li role="separator" class="divider"></li>
-            <li><a href="#">Undo <small style="color:gray;">Ctl-Z</small></a></li>
-            <li><a href="#">Redo <small style="color:gray;">Ctl-Shift-Z</small></a></li>
-            <li role="separator" class="divider"></li>
-            <li><a href="#">Clean Code</a></li>
-            <li><a href="#">Save</a></li>
-            <li role="separator" class="divider"></li>
-            <li><a href="#">Share</a></li>
+            <li><a @click="share()"><span class="glyphicon glyphicon-share-alt"></span> Share</a></li>
           </ul>
         </div>
       </span>
@@ -289,6 +284,57 @@
           </span>
         </div>
         <iframe scrolling="no" id="preview"></iframe>
+      </div>
+
+      <div id="shareModal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title"><span class="glyphicon glyphicon-share-alt"></span> Share this project</h4>
+            </div>
+            <h4 class="modal-body text-danger" :style="{display: !getID() ? 'block' : 'none'}">You must save a project in order to share it.</h4>
+            <div class="modal-body" :style="{display: getID() ? 'block' : 'none'}">
+          
+
+              <div class="form-group">
+                <label for="link">Link (Code & Output)</label>
+                <div class="input-group">
+                  <input type="text" class="form-control" id="link"  :value="link()">
+                  <span class="input-group-btn">
+                    <button data-toggle="tooltip" title="Copied!" :data-clipboard-text="link()" class="btn-clipboard btn btn-secondary">Copy</button>
+                  </span>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="fullLink">Full Link (Full Size Output)</label>
+                <div class="input-group">
+                  <input type="text" class="form-control" id="fullLink"  :value="fullLink()">
+                  <span class="input-group-btn">
+                    <button data-toggle="tooltip" title="Copied!" :data-clipboard-text="fullLink()" class="btn-clipboard btn btn-secondary">Copy</button>
+                  </span>
+                </div>
+              <div class="form-group">
+                <label for="embed">Embed</label>
+                <div class="input-group">
+                  <input type="text" class="form-control" id="embed"  :value="embed()">
+                  <span class="input-group-btn">
+                    <button data-toggle="tooltip" title="Copied!" :data-clipboard-text="embed()" class="btn-clipboard btn btn-secondary">Copy</button>
+                  </span>
+                </div>
+              </div>
+
+              </div>
+
+
+
+            </div>
+          <!--   <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary">Save changes</button>
+            </div> -->
+          </div>
+        </div>
       </div>
     
     
@@ -421,6 +467,18 @@
           var beautiful = js_beautify(editor.getValue(), {space_after_anon_function: true, indent_size: 2, indent_with_tabs: false })
           editor.setValue(beautiful)
         },
+        share: function(){
+          $('#shareModal').modal('show')
+        },
+        link: function(){
+          return "http://woofjs.com/create.html#" + getID()
+        },
+        fullLink: function(){
+          return "http://woofjs.com/full.html#" + getID()
+        },
+        embed: function(){
+          return "<iframe src=\"woofjs.com/full#" + getID() + "\">\n</iframe>"
+        },
       },
       watch: {
         error: function(newError) {
@@ -430,6 +488,24 @@
         }
       }
     })
+    
+
+    var clipboard = new Clipboard('.btn-clipboard');
+    Vue.nextTick(function() {
+        $('[data-toggle="tooltip"]').tooltip({
+            trigger: 'manual'
+        });
+        clipboard.destroy()
+        clipboard = new Clipboard('.btn-clipboard');
+        clipboard.on('success', function(e) {
+            $(e.trigger).tooltip('show')
+            setTimeout(function() {
+                $(e.trigger).tooltip('hide')
+            }, 1000)
+        });
+
+    })
+
     var myCode = false
     scratch.src = scratch.src // the documentation sometimes doesn't load unless you remind it to here, strange VueJS bug
     projectsIframe.src = projectsIframe.src // ditto for the project's iframe
