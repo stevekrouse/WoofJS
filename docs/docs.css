@@ -393,6 +393,29 @@ h4 {
     border-radius: 10px;
 }
 
+#Firebase {
+    background-color: #ffca27;
+    width:90% !important;
+}
+#Local{
+    background-color: #0BCC9E;
+    width:90% !important; 
+}
+
+/*CURRENCY FUNCTIONS STILL IN THE WORKS*/
+/*#Currency{
+    background-color: #00DA1F;
+    width:90% !important;    
+}*/
+
+/*#Currency,*/
+#Local,
+#Firebase {
+    height: 8%;
+    width: 33%;
+    border-radius: 10px;
+}
+
 #postimage {
     background-color: #7775D3;
     height: 10%;

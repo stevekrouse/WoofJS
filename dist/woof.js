@@ -663,9 +663,9 @@ function Woof() {
       });
     };
     document.body.addEventListener("keyup", thisContext._onKeyUpHandler);
-  }
+  });
   // The following methods is where we keep track of user's events
-  );thisContext._onMouseMoves = [];
+  thisContext._onMouseMoves = [];
   thisContext.onMouseMove = function (func) {
     if (typeof func != "function") {
       throw new TypeError("onMouseMove(function) requires one function input.");
@@ -1132,9 +1132,9 @@ Woof.prototype.Sprite = function () {
       var data = _this.collisionContext.getImageData(canvasLeft, canvasTop, right - left, top - bottom).data;
     } catch (e) {
       if (e instanceof DOMException) {
-        console.warn("You have an image at an untrusted URL. Consider uploading to Imgur and using https."
+        console.warn("You have an image at an untrusted URL. Consider uploading to Imgur and using https.");
         // bounds are overlapping and we can't get canvas data, so return true
-        );return true;
+        return true;
       }
     }
 
@@ -2163,6 +2163,30 @@ Woof.prototype.pow = function (a, b) {
   }
   return Math.pow(a, b);
 };
+
+//IN THE MIDDLE OF ADDING CURRENCY FUNCTIONS
+// const getData = (url, callback) => {
+//   fetch(url,{mode:'cors',header:{'Access-Control-Allow-Origin':'*'}}).then(result => {
+//     result.json().then(data => {
+//       callback(data)
+//     })
+//   })
+// }
+
+// function func(data){
+//   return data.rates;
+// }
+
+// Woof.prototype.currencyConversionRate = function(from, to) {
+//   // httpGetAsync("http://samples.openweathermap.org/data/2.5/weather?q=London,uk&appid=b1b15e88fa797225412429c1c50c122a1", "");
+//   var rate = undefined;
+//   var url = "http://api.fixer.io/latest?base=" + from;
+//   getData(url, data => {
+//     rate = data;
+//     console.log(rate);
+//   })
+//   return rate;
+// };
 
 // find the woof.js script tag in the page
 var currentScript = document.currentScript || Array.prototype.slice.call(document.getElementsByTagName('script')).find(function (s) {

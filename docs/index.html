@@ -20,7 +20,7 @@
                 <input  id="searchbar" type="search" class="form-control" placeholder="Search blocks..." v-model="search"></input>
         </div>
         <div :style="menuItem" v-for="(blocks, menu) in searched(menus)">
-            <template v-if="menu != 'Sprites & Backgrounds'"> 
+            <template v-if="menu != 'Sprites & Backgrounds' && menu != 'Integrations' "> 
                 <button v-show="open == undefined || open == menu || search" :class="{highlight: !search}" class="all" :id="menu.split(' ')[0]" @click="toggle(menu)">{{ menu }}</button>
                 <div v-show="open == menu || search" class="list" v-for="block in blocks">
                       <vue-block :block="block"></vue-block>
@@ -47,6 +47,7 @@
     <script src="./docs.js"></script>
     <script id="block-template" type="text/x-template">
         <div class="block">
+            <div v-if="block.integrationDescription" class="alert" :class='block.integrationDescriptionClass' role='alert'>{{ block.integrationDescription }}</div>
             <img v-if="block.url" ondragstart="event.dataTransfer.setData('text/plain', event.target.alt)" :alt="block.code" :src="block.url">
             <div v-if="block.description">{{ block.description }}</div>
             <div v-if="block.html" v-html="block.html"></div>
@@ -78,40 +79,69 @@
                 search: "",
                 open: undefined,
                 menus: {
-                    "Keyboard Shortcuts": [{
-                        description: "Save",
-                        code: "Ctl-S"
-                    }, {
-                        description: "Undo",
-                        code: "Ctl-Z"
-                    }, {
-                        description: "Redo",
-                        code: "Ctl-Shift-Z"
-                    }, {
-                        description: "Copy",
-                        code: "Ctl-C"
-                    }, {
-                        description: "Cut",
-                        code: "Ctl-X"
-                    }, {
-                        description: "Paste",
-                        code: "Ctl-V"
-                    }, {
-                        description: "Find",
-                        code: "Ctl-F"
-                    }, {
-                        description: "Select All",
-                        code: "Ctl-A"
-                    }, {
-                        description: "Comment or uncomment code",
-                        code: "Ctl-/"
-                    }, {
-                        description: "Select next occurance of word",
-                        code: "Ctl-D"
-                    }, {
-                        description: "Beautify the selected code with proper indentation",
-                        code: "Ctl-B"
-                    }, ],
+                    "Integrations": {
+                        Firebase: [
+                            {
+                                integrationDescription:"Firebase is Google's mobile platform that helps you with cloud storage.",
+                                integrationDescriptionClass:"alert-info"
+                            },
+                            {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
+                            {
+                                description: "Import JavaScript code from an external URL. The second input happens after the code is imported.",
+                                code: "importCodeURL('https://www.gstatic.com/firebasejs/3.4.0/firebase.js', () => {\n  firebase.initializeApp({\/* credentials here */})\n})",
+                                tags: "import code url require firebase library module"
+                            },
+                            {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
+                            {
+                                integrationDescription:"Here is a quick run through of how to use Firebase to store a high score:",
+                                integrationDescriptionClass:"alert-info",
+                                html:"<iframe src='http://coding.space/woof/high_score.html' width='100%' height='500px'></iframe>",
+                                tags:"firebase cloud storage high score"
+                            },
+                        ],
+                        "Local Storage": [
+                            {
+                                integrationDescription:"Use Local Storage to keep data for a specific user on a specific device. Local Stroage can help you to keep track of a specific user's high score.",
+                                integrationDescriptionClass:"alert-info"
+                            },
+                            {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
+                            {
+                                description:"First, you want to check if local storage for a specific variable exists. If it doesn't, then create it.",
+                                code:'if (!localStorage.highscore) {\n localStorage.setItem("highscore", 0)\n}',
+                                tags:"local storage high score"
+                            },
+                            {
+                                description:"Retrieve your local storage.",
+                                code:'localStorage.highscore',
+                                tags:"local storage high score"
+                            },
+                            {
+                                description:"Set your local storage.",
+                                code:'//At the end of the game\nlocalStorage.highscore = 50',
+                                tags:"local storage high score"
+                            },
+                            {
+                                description:"Display your local storage.",
+                                code:'var textSprite = new Text({\n  text: () => localStorage.highscore, \n  size: 12, \n  color: "rgb(100, 50, 240)", \n  fontFamily: "arial", \n  textAlign: "left"\n})',
+                                tags:"local storage high score" 
+                            }
+                        ],
+                        //CURRENCY FUNCTIONS STILL IN THE WORKS
+                        // "Currency Conversion":[
+                        //     {
+                        //         integrationDescription:"Use the corrency conversion functions to convert with current conversion rates.",
+                        //         html:"<a href='https://www.easymarkets.com/int/learn-centre/discover-trading/currency-acronyms-and-abbreviations/'>Click here for a list of currency abbreviations</a>",
+                        //         integrationDescriptionClass:"alert-info"
+                        //     },
+                        //     {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
+                        //     {
+                        //         description:"Get the current conversion rate.",
+                        //         code:'//From USD to EUR\ncurrencyConversionRate("USD","EUR")\n//From GBP to USD\ncurrencyConversionRate("GBP","USD")',
+                        //         tags:"currency conversion"
+                        //     }
+                        // ]
+
+                     },
                     "Sprites & Backgrounds": {
                         Background: [
                             {
@@ -1481,10 +1511,6 @@
                         description: "But you can also create a function without a name, which is called an anonymous function:",
                         code: "forever(() => {\n  sprite.x++\n})",
                         tags: "anonymous function"
-                    }, {
-                        description: "Import JavaScript code from an external URL. The second input happens after the code is imported.",
-                        code: "importCodeURL('https://www.gstatic.com/firebasejs/3.4.0/firebase.js', () => {\n  firebase.initializeApp({\/* credentials here */})\n})",
-                        tags: "import code url require firebase library module"
                     }]
                 }
             },
@@ -1557,7 +1583,7 @@
                     }
                     var newMenus = {}
                     for (var menu in menus) {
-                        if (menu == 'Sprites & Backgrounds') {
+                        if (menu == 'Sprites & Backgrounds' || menu == 'Integrations') {
                             var s = this.searched(menus[menu])
                             if (Object.keys(s).length > 0) {
                                 newMenus[menu] = s
