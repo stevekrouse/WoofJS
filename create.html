@@ -52,6 +52,7 @@
   <script src="./vendor/codemirror/foldgutter.js"></script>
   <script src="./vendor/codemirror/brace-fold.js"></script>
   <script src="./vendor/codemirror/comment-fold.js"></script>
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
   <link rel="stylesheet" href="./vendor/codemirror/dialog.css">
   <link rel="stylesheet" href="./vendor/codemirror/show-hint.css">
   <script src="./vendor/codemirror/dialog.js"></script>
@@ -255,11 +256,18 @@
         <button style="display: none" :style="{display: 'inline-block'}" style="margin-right: 5px; background-color:#4390BF !important; ; border:none; color:white; " class="btn btn-medium" :class="styles" onclick="save()">{{ status == "SAVED" ? 'Saved' : 'Save' }}</button> 
         <div class="dropdown" style="display:inline;">
           <button class="btn btn-primary btn-medium dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-            File
+            Tools
             <span class="caret"></span>
           </button>
           <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1" style="margin-top:12px;">
-            <li><a @click="cleanAll()"><span class="glyphicon glyphicon-align-left"></span> Clean Code</a></li>
+            <li><a @click="undo()"><span class="fa fa-undo"></span> Undo</a></li>
+            <li><a @click="redo()"><span class="fa fa-repeat"></span> Redo</a></li>
+            <li><a @click="selectAll()"><span class="fa fa-bars"></span> Select All</a></li>
+            <li><a @click="find()"><span class="fa fa-search"></span> Find</a></li>
+            <!-- COPY ISN'T WORKING -->
+           <!--  <li><a :data-clipboard-text="copy()" class="btn-clipboard"><span class="fa fa-clipboard"></span> Copy</a></li> -->
+            <li role="separator" class="divider" :style="{display: canClean ? 'block' : 'none'}"></li>
+            <li><a @click="cleanAll()" :style="{display: canClean ? 'inline-block' : 'none'}"><span class="glyphicon glyphicon-align-left"></span> Clean Code</a></li>
             <li role="separator" class="divider"></li>
             <li><a @click="share()"><span class="glyphicon glyphicon-share-alt"></span> Share</a></li>
           </ul>
@@ -298,7 +306,7 @@
           
 
               <div class="form-group">
-                <label for="link">Link (Code & Output)</label>
+                <label for="link">Code & Output</label>
                 <div class="input-group">
                   <input type="text" class="form-control" id="link"  :value="link()">
                   <span class="input-group-btn">
@@ -307,7 +315,7 @@
                 </div>
               </div>
               <div class="form-group">
-                <label for="fullLink">Full Link (Full Size Output)</label>
+                <label for="fullLink">Full Screen Output</label>
                 <div class="input-group">
                   <input type="text" class="form-control" id="fullLink"  :value="fullLink()">
                   <span class="input-group-btn">
@@ -323,16 +331,8 @@
                   </span>
                 </div>
               </div>
-
               </div>
-
-
-
             </div>
-          <!--   <div class="modal-footer">
-              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary">Save changes</button>
-            </div> -->
           </div>
         </div>
       </div>
@@ -381,8 +381,7 @@
     </div>
   </div>
   <script>
-    
-    
+
     var getID = function() {
       // returns the name of a project, not inlcuding the current revision
       return window.location.hash.substring(1, window.location.hash.length).split("/")[0];
@@ -477,7 +476,23 @@
           return "http://woofjs.com/full.html#" + getID()
         },
         embed: function(){
-          return "<iframe src=\"woofjs.com/full#" + getID() + "\">\n</iframe>"
+          return "<iframe src=\"http://woofjs.com/full#" + getID() + "\">\n</iframe>"
+        },
+        selectAll: function(){
+          editor.execCommand("selectAll")
+        },
+        undo: function(){
+          editor.execCommand("undo")
+        },
+        redo: function(){
+          editor.execCommand("redo")
+        },
+        find: function(){
+          editor.execCommand("find")
+        },
+        //COPY ISN'T WORKING
+        copy: function(){
+          editor.getSelection()
         },
       },
       watch: {
@@ -488,7 +503,6 @@
         }
       }
     })
-    
 
     var clipboard = new Clipboard('.btn-clipboard');
     Vue.nextTick(function() {
@@ -672,6 +686,7 @@
       }
     };
     
+
     // keyboard shortcuts
     var mac = CodeMirror.keyMap["default"] == CodeMirror.keyMap.macDefault;
     var ctrl = mac ? "Cmd-" : "Ctrl-";
@@ -684,6 +699,7 @@
       var spaces = Array(cm.getOption("indentUnit") + 1).join(" ");
       cm.replaceSelection(spaces, "end", "+input");
     }
+
     
     var editor = CodeMirror(document.getElementById('code'), {
         mode:  "javascript",
