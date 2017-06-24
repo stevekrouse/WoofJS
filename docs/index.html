@@ -126,20 +126,70 @@
                                 tags:"local storage high score" 
                             }
                         ],
-                        //CURRENCY FUNCTIONS STILL IN THE WORKS
-                        // "Currency Conversion":[
-                        //     {
-                        //         integrationDescription:"Use the corrency conversion functions to convert with current conversion rates.",
-                        //         html:"<a href='https://www.easymarkets.com/int/learn-centre/discover-trading/currency-acronyms-and-abbreviations/'>Click here for a list of currency abbreviations</a>",
-                        //         integrationDescriptionClass:"alert-info"
-                        //     },
-                        //     {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
-                        //     {
-                        //         description:"Get the current conversion rate.",
-                        //         code:'//From USD to EUR\ncurrencyConversionRate("USD","EUR")\n//From GBP to USD\ncurrencyConversionRate("GBP","USD")',
-                        //         tags:"currency conversion"
-                        //     }
-                        // ]
+                        "Get Requests": [
+                            {
+                                integrationDescription:"Use the getData() function to pull data from various APIs. You can see specific examples for several APIs in the Integrations section of the WoofJS documentation.",
+                                integrationDescriptionClass:"alert-info"
+                            },
+                            {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
+                            {
+                                description:"getData() works by taking an url and a function to do with the returned data. This is an example using the Sunrise-Sunset API.",
+                                 code:'//First set up temporary text that will be replaced\nvar temp = new Text({\n text: "...", \n size: 60, \n color: "white", \nfontFamily: "arial",\n})\n//Then set your variables for the request\nvar lat = 40.7128\nvar lng = -74.0059 \n//Then set the url for your request\nvar url = "https://api.sunrise-sunset.org/json?lat=" + lat + "&lng=" + lng\n//Finaly call the getData() function\ngetData(url, data => {\n //Replace the temporary text\n temp.text = data.results.sunset\n}) ',
+                                tags:"get request json http"
+                            },
+                            {
+                                integrationDescription:"The data returned will in JSON format so it will need to be parsed to get the proper value you are looking for.",
+                                 html:"<a target='_blank'  href='https://joebeachjoebeach.github.io/json-path-finder/'>Use this JSON Path Finder to help you find the correct path for the data you are looking to retreive.</a>",
+                                integrationDescriptionClass:"alert-info"
+                            },
+                        ],
+                        "Currency Conversion":[
+                            {
+                                integrationDescription:"Use the Currency Conversion API to get current conversion rates.",
+                                html:"<a target='_blank'  href='http://fixer.io/'>Click here for the Currency Conversion API documentation</a>",
+                                integrationDescriptionClass:"alert-info"
+                            },
+                            {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
+                            {
+                                description:"Here is a walk through of a program shows how much $5 is currently worth in EUR.",
+                                code:'//First set up temporary text that will be replaced\nvar temp = new Text({\n text: "...", \n size: 60, \n color: "white", \n fontFamily: "arial",\n})\n//Then set your variables for the request\nvar base = "USD"\n//Then set the url for your request\nvar url = "http://api.fixer.io/latest?base=" + base\n//Finaly call the getData() function\ngetData(url, data => {\n //Replace the temporary text with the converted amoung\n temp.text = Math.round( 5*data.rates.EUR * 100) /100 + " EUR"\n}) ',
+                                tags:"currency conversion"
+                            },
+                            {
+                                description:"Here is a walk through of a program shows how much 10 GBP is currently worth in USD.",
+                                code:'//First set up temporary text that will be replaced\nvar temp = new Text({\n text: "...", \n size: 60, \n color: "white", \n fontFamily: "arial",\n})\n//Then set your variables for the request\nvar base = "GBP"\n//Then set the url for your request\nvar url = "http://api.fixer.io/latest?base=" + base\n//Finaly call the getData() function\ngetData(url, data => {\n //Replace the temporary text with the converted amoung\n temp.text = Math.round( 10*data.rates.USD * 100) /100 + " USD"\n}) ',
+                                tags:"currency conversion"
+                            },
+                            {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
+                            {
+                                integrationDescription:"For other currencies visit the API's documentation for help.",
+                                html:"<a target='_blank'  href='http://fixer.io/'>Click here for the Currency Conversion API documentation</a>",
+                                integrationDescriptionClass:"alert-info"
+                            },
+                        ],
+                        "Sunrise and Sunset Data":[
+                            {
+                                integrationDescription:"Use the Sunrise-Sunset API to get data about upcoming or past sunrises and sunsets.",
+                                html:"<a target='_blank'  href='https://sunrise-sunset.org/api'>Click here for Sunrise-Sunset API documentation</a><br><a target='_blank'  href='http://www.latlong.net/'>Click here to find latitude and longitude values</a>",
+                                integrationDescriptionClass:"alert-info"
+                            },
+                            {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
+                            {
+                                description:"Here is a walk through of how to display today's sunrise time in NYC:",
+                                code:'//First set up temporary text that will be replaced\nvar temp = new Text({\n text: "...", \n size: 60, \n color: "white", \nfontFamily: "arial",\n})\n//Then set your variables for the request\nvar lat = 40.7128\nvar lng = -74.0059 \n//Then set the url for your request\nvar url = "https://api.sunrise-sunset.org/json?lat=" + lat + "&lng=" + lng\n//Finaly call the getData() function\ngetData(url, data => {\n //Replace the temporary text\n temp.text = data.results.sunset\n}) ',
+                                tags:"sunrise sunrise url"
+                            },
+                            {
+                                description:"Here is a walk through of how to display today's sunset time in NYC:",
+                                code:'//First set up temporary text that will be replaced\nvar temp = new Text({\n text: "...", \n size: 60, \n color: "white", \nfontFamily: "arial",\n})\n//Then set your variables for the request\nvar lat = 40.7128\nvar lng = -74.0059 \n//Then set the url for your request\nvar url = "https://api.sunrise-sunset.org/json?lat=" + lat + "&lng=" + lng\n//Finaly call the getData() function\ngetData(url, data => {\n //Replace the temporary text\n temp.text = data.results.sunset\n}) ',
+                                tags:"sunrise sunset url"
+                            },
+                            {
+                                description:"There is even more you can do with the Sunrise-Sunset API:",
+                                code:'//Instead of data.results.sunrise or data.results.sunset, try:\ndata.results.solar_noon\ndata.results.day_length\ndata.results.civil_twilight_begin\ndata.results.civil_twilight_end\ndata.results.nautical_twilight_begin\ndata.results.nautical_twilight_end\nata.results.astronomical_twilight_begin\nata.results.astronomical_twilight_begin',
+                                tags:"sunrise sunset url"
+                            }
+                        ]
 
                      },
                     "Sprites & Backgrounds": {

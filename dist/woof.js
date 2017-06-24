@@ -2164,29 +2164,13 @@ Woof.prototype.pow = function (a, b) {
   return Math.pow(a, b);
 };
 
-//IN THE MIDDLE OF ADDING CURRENCY FUNCTIONS
-// const getData = (url, callback) => {
-//   fetch(url,{mode:'cors',header:{'Access-Control-Allow-Origin':'*'}}).then(result => {
-//     result.json().then(data => {
-//       callback(data)
-//     })
-//   })
-// }
-
-// function func(data){
-//   return data.rates;
-// }
-
-// Woof.prototype.currencyConversionRate = function(from, to) {
-//   // httpGetAsync("http://samples.openweathermap.org/data/2.5/weather?q=London,uk&appid=b1b15e88fa797225412429c1c50c122a1", "");
-//   var rate = undefined;
-//   var url = "http://api.fixer.io/latest?base=" + from;
-//   getData(url, data => {
-//     rate = data;
-//     console.log(rate);
-//   })
-//   return rate;
-// };
+var getData = function getData(url, callback) {
+  fetch(url, { mode: 'cors', header: { 'Access-Control-Allow-Origin': '*' } }).then(function (result) {
+    result.json().then(function (data) {
+      callback(data);
+    });
+  });
+};
 
 // find the woof.js script tag in the page
 var currentScript = document.currentScript || Array.prototype.slice.call(document.getElementsByTagName('script')).find(function (s) {

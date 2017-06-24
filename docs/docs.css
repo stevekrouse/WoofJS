@@ -401,14 +401,22 @@ h4 {
     background-color: #0BCC9E;
     width:90% !important; 
 }
-
-/*CURRENCY FUNCTIONS STILL IN THE WORKS*/
-/*#Currency{
+#Sunrise{
+    background-color: #FFE53F;
+    width:90% !important; 
+}
+#Get{
+    background-color: #FF9D3F;
+    width:90% !important;   
+}
+#Currency{
     background-color: #00DA1F;
     width:90% !important;    
-}*/
+}
 
-/*#Currency,*/
+#Currency,
+#Get,
+#Sunrise,
 #Local,
 #Firebase {
     height: 8%;
