@@ -47,7 +47,9 @@
     <script src="./docs.js"></script>
     <script id="block-template" type="text/x-template">
         <div class="block">
-            <div v-if="block.integrationDescription" class="alert" :class='block.integrationDescriptionClass' role='alert'>{{ block.integrationDescription }}</div>
+            <div v-if="block.integrationDescription" class="alert" :class='block.integrationDescriptionClass' role='alert'>{{ block.integrationDescription }}<br v-if="block.integrationDocumentationLink"><br v-if="block.integrationDocumentationLink">
+            <a v-if="block.integrationDocumentationLink" target='_blank' class="btn btn-primary" :href="block.integrationDocumentationLink" role="button" style="width:100%;">Click Here For The API's Full Documentation</a>
+            </div>
             <img v-if="block.url" ondragstart="event.dataTransfer.setData('text/plain', event.target.alt)" :alt="block.code" :src="block.url">
             <div v-if="block.description">{{ block.description }}</div>
             <div v-if="block.html" v-html="block.html"></div>
@@ -83,7 +85,8 @@
                         Firebase: [
                             {
                                 integrationDescription:"Firebase is Google's mobile platform that helps you with cloud storage.",
-                                integrationDescriptionClass:"alert-info"
+                                integrationDescriptionClass:"alert-info",
+                                integrationDocumentationLink:"https://firebase.google.com/docs/",
                             },
                             {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                             {
@@ -93,16 +96,16 @@
                             },
                             {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                             {
-                                integrationDescription:"Here is a quick run through of how to use Firebase to store a high score:",
-                                integrationDescriptionClass:"alert-info",
+                                description:"Here is a quick run through of how to use Firebase to store a high score:",
                                 html:"<iframe src='http://coding.space/woof/high_score.html' width='100%' height='500px'></iframe>",
                                 tags:"firebase cloud storage high score"
                             },
                         ],
                         "Local Storage": [
                             {
-                                integrationDescription:"Use Local Storage to keep data for a specific user on a specific device. Local Stroage can help you to keep track of a specific user's high score.",
-                                integrationDescriptionClass:"alert-info"
+                                integrationDescription:"You can use Local Storage to keep data for a specific user on a specific device. Local Stroage can help you to keep track of a specific user's high score.",
+                                integrationDescriptionClass:"alert-info",
+                                integrationDocumentationLink:"https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage"
                             },
                             {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                             {
@@ -129,7 +132,7 @@
                         "Get Requests": [
                             {
                                 integrationDescription:"Use the getData() function to pull data from various APIs. You can see specific examples for several APIs in the Integrations section of the WoofJS documentation.",
-                                integrationDescriptionClass:"alert-info"
+                                integrationDescriptionClass:"alert-info",
                             },
                             {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                             {
@@ -146,8 +149,8 @@
                         "Currency Conversion":[
                             {
                                 integrationDescription:"Use the Currency Conversion API to get current conversion rates.",
-                                html:"<a target='_blank'  href='http://fixer.io/'>Click here for the Currency Conversion API documentation</a>",
-                                integrationDescriptionClass:"alert-info"
+                                integrationDescriptionClass:"alert-info",
+                                integrationDocumentationLink:"http://fixer.io/"
                             },
                             {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                             {
@@ -163,15 +166,17 @@
                             {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                             {
                                 integrationDescription:"For other currencies visit the API's documentation for help.",
-                                html:"<a target='_blank'  href='http://fixer.io/'>Click here for the Currency Conversion API documentation</a>",
-                                integrationDescriptionClass:"alert-info"
+                                integrationDescriptionClass:"alert-info",
+                                integrationDocumentationLink:"http://fixer.io/"
                             },
                         ],
                         "Sunrise and Sunset Data":[
                             {
                                 integrationDescription:"Use the Sunrise-Sunset API to get data about upcoming or past sunrises and sunsets.",
-                                html:"<a target='_blank'  href='https://sunrise-sunset.org/api'>Click here for Sunrise-Sunset API documentation</a><br><a target='_blank'  href='http://www.latlong.net/'>Click here to find latitude and longitude values</a>",
-                                integrationDescriptionClass:"alert-info"
+                                html:"<a target='_blank'  href='http://www.latlong.net/'>Click here to find latitude and longitude values</a>",
+                                integrationDescriptionClass:"alert-info",
+                                integrationDocumentationLink:"https://sunrise-sunset.org/api",
+
                             },
                             {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                             {
@@ -189,8 +194,128 @@
                                 code:'//Instead of data.results.sunrise or data.results.sunset, try:\ndata.results.solar_noon\ndata.results.day_length\ndata.results.civil_twilight_begin\ndata.results.civil_twilight_end\ndata.results.nautical_twilight_begin\ndata.results.nautical_twilight_end\nata.results.astronomical_twilight_begin\nata.results.astronomical_twilight_begin',
                                 tags:"sunrise sunset url"
                             }
+                        ],
+                        //HAVING COORS ISSUE
+                        // "Market Data":[
+                        //     {
+                        //         integrationDescription:"Use the Market Data API to get financial data.",
+                        //         integrationDescriptionClass:"alert-info",
+                        //         integrationDocumentationLink:"https://www.barchartondemand.com/api.php"
+                        //     },
+                        //     {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
+                        //     {
+                        //         description:"Here is a walk through of how to display the current stock price of Apple:",
+                        //         code:'//First set up temporary text that will be replaced\nvar temp = new Text({\n text: "...", \n size: 60, \n color: "white", \nfontFamily: "arial",\n})\n//Then set your variable for the request\nvar symbol = "AAPL"\n//Then set the url for your request\nvar url = "http://marketdata.websol.barchart.com/getQuote.json?key=1767804045c7c86775d9f86a36e06c55&symbols=" + symbol\n//Finaly call the getData() function\ngetData(url, data => {\n //Replace the temporary text\n temp.text = data.results.lastPrice\n})',
+                        //         tags:"stock price financial market data"
+                        //     },
+                        //     {
+                        //         description:"Here is a walk through of how to display the day's low price of Google:",
+                        //         code:'//First set up temporary text that will be replaced\nvar temp = new Text({\n text: "...", \n size: 60, \n color: "white", \nfontFamily: "arial",\n})\n//Then set your variable for the request\nvar symbol = "GOOG"\n//Then set the url for your request\nvar url = "http://marketdata.websol.barchart.com/getQuote.json?key=1767804045c7c86775d9f86a36e06c55&symbols=" + symbol\n//Finaly call the getData() function\ngetData(url, data => {\n //Replace the temporary text\n temp.text = data.results.low\n})',
+                        //         tags:"stock price financial market data"
+                        //     },
+                        //     {
+                        //         description:"There is even more you can do with the Market Data API:",
+                        //         code:'//Instead of data.results.lastPrice or data.results.low, try:\ndata.results.netChange\ndata.results.percentChange\ndata.results.open\ndata.results.high\ndata.results.close\ndata.results.volume',
+                        //         tags:"stock price financial market data"
+                        //     }
+                        // ],
+                        //HAVING COORS ISSUE
+                        // "Quotes":[
+                        //     {
+                        //         integrationDescription:"Use the Quotes API to get random quotes.",
+                        //         integrationDescriptionClass:"alert-info",
+                        //         integrationDocumentationLink:"http://quotesondesign.com/the-api/"
+                        //     },
+                        //     {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
+                        //     {
+                        //         description:"Here is a walk through of how to display a random famous quote:",
+                        //         code:'//First set up temporary text that will be replaced\nvar temp = new Text({\n text: "...", \n size: 60, \n color: "white", \nfontFamily: "arial",\n})\n//Then set the url for your request\nvar url = "http://quotesondesign.com/api/3.0/api-3.0.json"\n//Finaly call the getData() function\ngetData(url, data => {\n //Replace the temporary text\n temp.text = data.quote + " -" + data.author\n})',
+                        //         tags:"quote"
+                        //     },
+                        // ],
+                        //HAVING COORS ISSUE
+                        // "Chuck Norris Jokes":[
+                        //     {
+                        //         integrationDescription:"Use the Chuck Norris API to get random Chuck Norris Jokes.",
+                        //         integrationDescriptionClass:"alert-info",
+                        //         integrationDocumentationLink:"https://api.chucknorris.io/"
+                        //     },
+                        //     {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
+                        //     {
+                        //         description:"Here is a walk through of how to display a Chuck Norris joke:",
+                        //         code:'//First set up temporary text that will be replaced\nvar temp = new Text({\n text: "...", \n size: 15, \n color: "black", \nfontFamily: "arial",\n})\n//Then set the url for your request\nvar url = "https://api.chucknorris.io/jokes/random"\n//Finaly call the getData() function\ngetData(url, data => {\n //Replace the temporary text\n temp.text = data.value\n})',
+                        //         tags:"chuck norris jokes"
+                        //     },
+                        //     {
+                        //         description:"Here is a walk through of how to display a Chuck Norris joke from a specific category:",
+                        //         html:"<a target='_blank'  href='https://api.chucknorris.io/jokes/categories'>Click here to see all the options for categories</a>",
+                        //         code:'//First set up temporary text that will be replaced\nvar temp = new Text({\n text: "...", \n size: 15, \n color: "black", \nfontFamily: "arial",\n})\n//Then set your variable for the request\nvar category = "sport"\n//Then set the url for your request\nvar url = "https://api.chucknorris.io/jokes/random?category=" + category\n//Finaly call the getData() function\ngetData(url, data => {\n //Replace the temporary text\n temp.text = data.value\n})',
+                        //         tags:"chuck norris jokes"
+                        //     },
+                        // ],
+                        "Scientific Calculator":[
+                            {
+                                integrationDescription:"Use Netwon Scientific Calculator API to preform complex calculations.",
+                                integrationDescriptionClass:"alert-info",
+                                integrationDocumentationLink:"https://github.com/aunyks/newton-api"
+                            },
+                            {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
+                            {
+                                description:"Here is a walk through of how to display the derivative of x^2 + 2x:",
+                                code:'//First set up temporary text that will be replaced\nvar temp = new Text({\n text: "...", \n size: 15, \n color: "black", \nfontFamily: "arial",\n})\n//Then set your variables for the request\nvar operation = "derive"\nvar expression = "x^2+2x"\n//Then set the url for your request\nvar url = "https://newton.now.sh/" + operation + "/" + expression\n//Finaly call the getData() function\ngetData(url, data => {\n //Replace the temporary text\n temp.text = data.result\n})',
+                                tags:"math calculations derivative"
+                            },
+                            {
+                                description:"Here is a walk through of how to display the factorization of x^2 + 2x:",
+                                code:'//First set up temporary text that will be replaced\nvar temp = new Text({\n text: "...", \n size: 15, \n color: "black", \nfontFamily: "arial",\n})\n//Then set your variables for the request\nvar operation = "factor"\nvar expression = "x^2+2x"\n//Then set the url for your request\nvar url = "https://newton.now.sh/" + operation + "/" + expression\n//Finaly call the getData() function\ngetData(url, data => {\n //Replace the temporary text\n temp.text = data.result\n})',
+                                tags:"math calculations derivative"
+                            },
+                            {
+                                integrationDescription:"Options for operations include: simplify, factor, derive, integrate, zeroes, tangent, area (area under the curve), cos, sin, tan, arccos, arcsin, arctan, abs, log.",
+                                integrationDescriptionClass:"alert-info"
+                            }
+                        ],
+                        "Trivia":[
+                            {
+                                integrationDescription:"Use the Trivia API to preform generate trivia questions.",
+                                integrationDescriptionClass:"alert-info",
+                                integrationDocumentationLink:"https://opentdb.com/api_config.php"
+                            },
+                            {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
+                            {
+                                description:"Here is a walk through of how to display the a random computer trivia question and its answer:",
+                                code:'//First set up temporary text that will be replaced\nvar temp = new Text({\n text: "...", \n size: 15, \n color: "black", \nfontFamily: "arial",\n})//Then set the url for your request\nvar url = "https://opentdb.com/api.php?amount=1&category=18&type=multiple"\n//Finaly call the getData() function\ngetData(url, data => {\n //Replace the temporary text\n temp.text = data.results[0].question + "Answer:" + data.results[0].correct_answer\n})',
+                                tags:"trivia"
+                            },
+                            {
+                                integrationDescription:"To generate your url visit the Trivia API Documentation.",
+                                integrationDescriptionClass:"alert-info",
+                                integrationDocumentationLink:"https://opentdb.com/api_config.php"
+                            }
+                        ],
+                        "Weather":[
+                            {
+                                integrationDescription:"Use the Yahoo Weather API to get current tempertures and other weather data.",
+                                integrationDescriptionClass:"alert-info",
+                                integrationDocumentationLink:"https://developer.yahoo.com/weather/"
+                            },
+                            {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
+                            {
+                                description:"Here is a walk through of how to display the current temperature and conditions in NYC:",
+                                code:'//First set up temporary text that will be replaced\nvar temp = new Text({\n text: "...", \n size: 30, \n color: "black", \nfontFamily: "arial",\n})\n//Then set your variable for the request\nvar city = "New York, NY"\n//Then set the url for your request\nvar url =  "https://query.yahooapis.com/v1/public/yql?q=select * from weather.forecast where woeid in (select woeid from geo.places(1) where text=\'" + city + "\')&format=json"\n//Finaly call the getData() function\ngetData(url, data => {\n //Replace the temporary text\n temp.text = data.query.results.channel.item.condition.temp + "° | " + data.query.results.channel.item.condition.text\n})',
+                                tags:"weather temperature"
+                            },
+                            {
+                                description:"Here is a walk through of how to display the current wind speed and conditions in NYC:",
+                                code:'//First set up temporary text that will be replaced\nvar temp = new Text({\n text: "...", \n size: 30, \n color: "black", \nfontFamily: "arial",\n})\n//Then set your variable for the request\nvar city = "New York, NY"\n//Then set the url for your request\nvar url =  "https://query.yahooapis.com/v1/public/yql?q=select * from weather.forecast where woeid in (select woeid from geo.places(1) where text=\'" + city + "\')&format=json"\n//Finaly call the getData() function\ngetData(url, data => {\n //Replace the temporary text\n temp.text = data.query.results.channel.wind.speed\n})\n',
+                                tags:"weather temperature"
+                            },
+                            {
+                                description:"There is even more you can do with the Yahoo Weather API:",
+                                code:'//Wind:\ndata.query.results.channel.wind.speed\ndata.query.results.channel.wind.direction\ndata.query.results.channel.wind.chill\n//Atmosphere:\ndata.query.results.channel.atmosphere.humidity\ndata.query.results.channel.atmosphere.pressure\ndata.query.results.channel.atmosphere.rising\n//Current Condtions\ndata.query.results.channel.item.condition.temp\ndata.query.results.channel.item.condition.text\n//Today\'s Forecast\ndata.query.results.channel.item.forecast[0].high\ndata.query.results.channel.item.forecast[0].low\ndata.query.results.channel.item.forecast[0].text\n//Tomorrow\'s Forecast\ndata.query.results.channel.item.forecast[1].high\ndata.query.results.channel.item.forecast[1].low\ndata.query.results.channel.item.forecast[1].text\n',
+                                tags:"weather temperature"
+                            }
                         ]
-
                      },
                     "Sprites & Backgrounds": {
                         Background: [

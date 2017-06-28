@@ -413,7 +413,37 @@ h4 {
     background-color: #00DA1F;
     width:90% !important;    
 }
+#Market{
+    background-color: #6319FF;
+    width:90% !important;      
+}
+#Quotes{
+    background-color: #D719FF;
+    width:90% !important;      
+}
+#Chuck{
+    background-color: #B0853C;
+    width:90% !important;     
+}
+#Scientific{
+    background-color: #2D66E0;
+    width:90% !important;    
+}
+#Trivia{
+    background-color: #48C9C9;
+    width:90% !important;     
+}
+#Weather{
+    background-color: #E02535;
+    width:90% !important;    
+}
 
+#Weather,
+#Trivia,
+#Scientific,
+#Chuck,
+#Quotes,
+#Market,
 #Currency,
 #Get,
 #Sunrise,
