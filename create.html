@@ -266,6 +266,8 @@
             <li><a @click="find()"><span class="fa fa-search"></span> Find</a></li>
             <!-- COPY ISN'T WORKING -->
            <!--  <li><a :data-clipboard-text="copy()" class="btn-clipboard"><span class="fa fa-clipboard"></span> Copy</a></li> -->
+           <li role="separator" class="divider"></li>
+            <li><a><input type="checkbox" id="checkbox" v-model="autoRunChecked"></span> Auto Run</a></li>
             <li role="separator" class="divider" :style="{display: canClean ? 'block' : 'none'}"></li>
             <li><a @click="cleanAll()" :style="{display: canClean ? 'inline-block' : 'none'}"><span class="glyphicon glyphicon-align-left"></span> Clean Code</a></li>
             <li role="separator" class="divider"></li>
@@ -431,6 +433,7 @@
         mouseX: 0,
         mouseY: 0,
         seenError: true,
+        autoRunChecked: true,
       },
       computed: {
         styles : function() { return {
@@ -750,9 +753,11 @@
 
     // run the code (debounced) on every change to the editor 
     editor.on("change", function(){
-      makeDirty()
-      debouncedRunCode()
-      setTimeout(function() {WoofJSLint()}, 1000); 
+      if (app.autoRunChecked){
+        makeDirty()
+        debouncedRunCode()
+        setTimeout(function() {WoofJSLint()}, 1000); 
+      }
     });
     runCode()
     
