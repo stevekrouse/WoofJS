@@ -231,7 +231,7 @@
 <body>
   <div id="page">
     <div id="navbar"> 
-      <button style="background-color: #80CFFF; color: white;  border-radius:4px; border:none; margin:8px" class="btn btn-medium btn-info" type="button" id="login" onclick="window.open('./login.html', 'Sign In', 'width=500,height=500')">Login / Sign Up</button>
+      <button style="background-color: #80CFFF; color: white;  border-radius:4px; border:none; margin:8px" class="btn btn-medium btn-info" type="button" id="login" onclick="$('#loginModal').modal('show');">Login / Sign Up</button>
       <div style="margin-left: 5px" id="logggedin" class="hide dropdown">
         <button class="btn btn-medium btn-info dropdown-toggle" type="button" id="loggedin-name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"></button>
         <ul class="dropdown-menu" aria-labelledby="loggedin-name">
@@ -270,6 +270,108 @@
             <button type="button" id="saveChanges" class="btn btn-primary" :class="{disabled: projectNameRequest != 'NOT LOADING' || projectNameInputValue == ''}" @click="saveName()">{{ projectNameRequest == "LOADING" ? "Loading..." : "Save" }}</button>
           </div>
         </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel">
+      <div class="modal-dialog" role="document">
+
+        <div class="modal-content" :style="{display: loginSignUpView == 'LOGIN' ? 'block' : 'none'}">
+          <div class="modal-header" :class="{animated: loginSignUpView == 'LOGIN', fadeIn: loginSignUpView == 'LOGIN'}">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h1 class="modal-title" id="loginModalLabel">Log In</h1>
+          </div>
+          <div class="modal-body" :class="{animated: loginSignUpView == 'LOGIN', fadeIn: loginSignUpView == 'LOGIN'}">
+            <div class="form-group" :class="{'has-error': loginError == 'ERROR',  animated: loginError == 'ERROR',  shake: loginError == 'ERROR'}">
+              <label for='username'>Username or email</label>
+              <input type="text" class="form-control" id="username" placeholder="Username or email" aria-describedby="usernameHelp">
+              <!-- <span id="usernameHelp" class="help-block">A block of help text that breaks onto a new line and may extend beyond one line.</span> -->
+            </div>
+            <div class="form-group" :class="{'has-error': loginError == 'ERROR',  animated: loginError == 'ERROR',  shake: loginError == 'ERROR'}">
+              <label for='password'>Password</label>
+              <input type="password" class="form-control" id="password" placeholder="Password" aria-describedby="passwordHelp">
+              <span id="passwordHelp" class="help-block" :style="{display: loginError == 'ERROR' ? 'block' : 'none'}">Invalid username and/or password. Please try again.</span>
+            </div>
+            <div class="form-group" style="text-align:center;">
+              <div>
+                <button type="submit" class="btn btn-primary" style="width:100%;">Log In</button>
+                <br>
+                <br>
+                <small style="color:grey;">Don't have an account? <a @click="switchToSignUp()" style="cursor: pointer;text-decoration:none;">Sign Up</a></small>
+                <br>
+                <br>
+                <small style="color:grey;"><a @click="switchToPasswordReset()" style="cursor: pointer;color:grey;">Forgot your password?</a></small>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-content" :style="{display: loginSignUpView == 'SIGNUP' ? 'block' : 'none'}">
+          <div class="modal-header" :class="{animated: loginSignUpView == 'SIGNUP', fadeIn: loginSignUpView == 'SIGNUP'}">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h1 class="modal-title" id="loginModalLabel">Sign Up</h1>
+          </div>
+          <div class="modal-body" :class="{animated: loginSignUpView == 'SIGNUP', fadeIn: loginSignUpView == 'SIGNUP'}">
+            <div class="form-group" :class="{'has-success': usernameValid == 'VALID', 'has-error': usernameValid == 'TAKEN',  animated: usernameValid == 'TAKEN',  shake: usernameValid == 'TAKEN'}">
+              <label for='username'>Username</label>
+              <input onfocus="$('#usernameCreate').tooltip('toggle')" data-placement="top" title="Don't use your real name" type="text" class="form-control" id="usernameCreate" placeholder="Username" aria-describedby="usernameCreateHelp" @input="usernameValidate($event)">
+              <span id="usernameCreateHelp" class="help-block" :style="{display: usernameValid == 'TAKEN' ? 'block' : 'none'}">This username is already taken. Try another username.</span>
+            </div>
+            <div class="form-group" :class="{'has-success': emailValid == 'VALID', 'has-error': emailValid == 'TAKEN' || emailValid == 'NOTEMAIL',  animated: emailValid == 'TAKEN' || emailValid == 'NOTEMAIL',  shake: emailValid == 'TAKEN' || emailValid == 'NOTEMAIL'}">
+              <label for='username'>Email</label>
+              <input onfocus="$('#emailCreate').tooltip('toggle')" data-placement="top" title="Don't have one? helper" type="email" class="form-control" id="emailCreate" placeholder="Email" aria-describedby="emailCreate" @input="emailValidate($event)">
+              <span id="emailCreate" class="help-block" :style="{display: emailValid == 'TAKEN' ? 'block' : 'none'}">An account with this email aready exists. Try to log in rather than sign up.</span>
+              <span id="emailCreate" class="help-block" :style="{display: emailValid == 'NOTEMAIL' ? 'block' : 'none'}">Please enter a valid email.</span>
+            </div>
+            <div class="form-group" :class="{'has-success': passwordValid == 'VALID'}">
+              <label for='username'>Password</label>
+              <input onfocus="$('#passwordCreate').tooltip('toggle')" data-placement="top" title="Remember it" type="password" class="form-control" id="passwordCreate" placeholder="Password" aria-describedby="passwordCreateHelp" @input="passwordValidate($event)">
+            </div>
+            <div class="form-group" :class="{'has-success': passwordMatchValid == 'VALID', 'has-error': passwordMatchValid == 'MATCHERROR',  animated: passwordMatchValid == 'MATCHERROR',  shake: passwordMatchValid == 'MATCHERROR'}">
+              <label for='username'>Confirm Password</label>
+              <input onfocus="$('#passwordCreateConfirm').tooltip('toggle')" data-placement="top" title="Retype your password" type="password" class="form-control" id="passwordCreateConfirm" placeholder="Confirm Password" aria-describedby="passwordCreateConfirmHelp"
+                @input="passwordMatchValidate($event)">
+              <span id="passwordCreateConfirmHelp" class="help-block" :style="{display: passwordMatchValid == 'MATCHERROR' ? 'block' : 'none'}">The passwords entered don't match.</span>
+            </div>
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" checked> I want to recieve updates about WoofJS
+              </label>
+            </div>
+            <div class="form-group" style="text-align:center;">
+              <div>
+                <button type="submit" class="btn btn-primary" style="width:100%;" :class="{disabled: usernameValid != 'VALID' || emailValid != 'VALID' || passwordValid != 'VALID' || passwordMatchValid != 'VALID'}">Sign Up</button>
+                <br>
+                <br>
+                <small style="color:grey;">Already have an account? <a @click="switchToLogin()" style="cursor: pointer;text-decoration:none;">Log In</a></small>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class='modal-content' :style="{display: loginSignUpView == 'RESETPASSWORD' ? 'block' : 'none'}">
+          <div class="modal-header" :class="{animated: loginSignUpView == 'RESETPASSWORD', fadeIn: loginSignUpView == 'RESETPASSWORD'}">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h1 class="modal-title" id="loginModalLabel">Recover Password</h1>
+          </div>
+          <div class="modal-body" :class="{animated: loginSignUpView == 'RESETPASSWORD', fadeIn: loginSignUpView == 'RESETPASSWORD'}">
+            <h5>Get instructions sent to this email that explain how to reset your password.</h5>
+            <div class="form-group">
+              <label for='emailReset'>Email</label>
+              <input type="email" class="form-control" id="emailReset" placeholder="Email">
+            </div>
+            <div class="form-group" style="text-align:center;">
+              <div>
+                <button type="submit" class="btn btn-primary" style="width:100%;">Send</button>
+                <br>
+                <br>
+                <small style="color:grey;">Remember your password? <a @click="switchToLogin()" style="cursor: pointer;text-decoration:none;">Log In</a></small>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
 
@@ -391,6 +493,14 @@
         projectNameRequest: "NOT LOADING", // or "LOADING" or "NAME TAKEN"
         projectNameInputValue: "",
         projectNameLastKeyIllegal: false,
+        loginSignUpView: "LOGIN", //OR SIGNUP OR RESETPASSWORD
+        emailError: false,
+        usernameValid: "EMTPY", //TAKEN or VALID or EMPTY
+        emailValid: "EMTPY", //TAKEN or VALID or NOTEMAIL or EMPTY
+        passwordValid: "EMTPY", //VALID or EMPTY
+        passwordMatchValid: "EMTPY", //VALID or EMPTY or MATCHERROR
+        globalPassword: "",
+        loginError: "NONE", //NONE OR ERROR
       },
       computed: {
         styles : function() { return {
@@ -452,6 +562,60 @@
             if (name) { 
               saveProject(name);
             }
+          }
+        },
+        switchToSignUp: function(){
+          this.loginSignUpView = 'SIGNUP'
+        },
+        switchToLogin: function(){
+          this.loginSignUpView = 'LOGIN'
+        },
+        switchToPasswordReset: function(){
+           this.loginSignUpView = 'RESETPASSWORD'
+        },
+        usernameValidate: function($event){
+          var username = $event.target.value
+          if (username == ''){
+            this.usernameValid = "EMPTY"
+          }
+          //IF TAKEN (toggle tooltip on error so it doesn't get messed up with shake animation)
+            // $('#usernameCreate').tooltip('toggle')
+            // this.usernameValid = "TAKEN"
+          //IF VALID
+            // this.usernameValid = "VALID"
+        },
+        emailValidate: function($event){
+          var email = $event.target.value
+          if (email == ''){
+            this.emailValid = "EMPTY"
+          }
+          //IS INVALID EMAIL FORMAT (toggle tooltip on error so it doesn't get messed up with shake animation)
+            // $('#emailCreate').tooltip('toggle')
+            //this.emailValid = "NOTEMAIL"
+          //IS TAKEN EMAIL (toggle tooltip on error so it doesn't get messed up with shake animation)
+            // $('#emailCreate').tooltip('toggle')
+            //this.emailValid = "TAKEN"
+          //IS VALID EMAIL
+            //this.emailValid = "VALID"
+        },
+        passwordValidate: function($event){
+          var password = $event.target.value
+          globalPassword = password
+          if (password == ''){
+            this.passwordValid = "EMPTY"
+          }else{
+            this.passwordValid = "VALID"
+          }
+        },
+        passwordMatchValidate: function($event){
+          var confirmPassword = $event.target.value
+          if (confirmPassword == ''){
+            this.passwordMatchValid = "EMPTY"
+          }else if (confirmPassword == globalPassword){
+            this.passwordMatchValid = "VALID"
+          }else{
+            this.passwordMatchValid = "MATCHERROR"
+            $('#usernameCreateConfirm').tooltip('toggle')
           }
         },
       },
