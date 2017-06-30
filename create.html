@@ -6,7 +6,7 @@
   <meta name="twitter:title" content="WoofJS">
   <meta name="twitter:description" content="WoofJS is a Scratch-inspired Javascript library for making games.">
   <meta name="twitter:image" content="./images/qIgC8Ae.png">
-    
+
   <meta property="og:image" content="./images/qIgC8Ae.png">
   <meta property="og:title" content="WoofJS">
   <meta property="og:description" content="WoofJS is a Scratch-inspired Javascript library for making games.">
@@ -18,11 +18,11 @@
 
 
   <meta charset="utf-8">
-  
+
   <title>WoofJS</title>
   <link rel="shortcut icon" type="image/png" href="./favicon.png"/>
-      
-      
+
+
   <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
   <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
@@ -53,6 +53,7 @@
   <script src="./vendor/codemirror/comment-fold.js"></script>
   <link rel="stylesheet" href="./vendor/codemirror/dialog.css">
   <link rel="stylesheet" href="./vendor/codemirror/show-hint.css">
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
   <script src="./vendor/codemirror/dialog.js"></script>
   <link rel="stylesheet" href="./vendor/codemirror/lint.css">
   <script src="./vendor/codemirror/jshint.min.js"></script>
@@ -62,14 +63,14 @@
   <script data-presets="es2015" src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.14.0/babel.min.js"></script>
   <script src="https://cdn.rawgit.com/beautify-web/js-beautify/1b52eb1f90daaefa6ff0fa7736f97fbfc58093c1/js/lib/beautify.js"></script>
   <style>
-     
+
      html, body {
       margin: 0;
       padding: 0;
       height: 100%;
       width: 100%;
     }
-    
+
     #page {
       position: relative;
       display: flex;
@@ -78,17 +79,17 @@
       align-content: stretch;
       height: 100%;
     }
-    
+
     body {
       background-color: #fff;
       font-family: sans-serif;
     }
-    
+
     h1 {
       font-weight: normal;
       font-size: 25px;
     }
-    
+
     .CodeMirror {
       font-size: 13px;
       flex: 1 0 auto;
@@ -98,7 +99,7 @@
       align-content: stretch;
       width: 100%;
     }
-    
+
     .CodeMirror-scroll {
       display: flex;
       flex-flow: column wrap;
@@ -109,13 +110,13 @@
       width: 100%;
 
     }
-    
+
     iframe {
         border: none;
         flex: 1 0 auto;
         width: 100%;
     }
-  
+
   #navbar {
       background-color: #6DC0F2;
       position: absolute;
@@ -127,80 +128,80 @@
       align-items: center;
       justify-content: space-between;
     }
-    
+
     #clean-up {
       background-color: #80CFFF;
       border: none;
       color: white;
     }
-    
+
     .btn-default {
       background-color: #49A6DF;
       border: none;
       color: white;
     }
-    
+
     #container {
       width: 100%;
       display: flex;
       flex-direction: row;
       margin-top: 55px;
     }
-    
+
     #previewbar, #docsbar, #projectbar, #codebar {
-       flex-grow: 0.65; 
-       align-items: center; 
-       display: none; 
-       width: 25px; 
-       flex-direction: column; 
-       justify-content: center;  
+       flex-grow: 0.65;
+       align-items: center;
+       display: none;
+       width: 25px;
+       flex-direction: column;
+       justify-content: center;
     }
-    
+
     #output, #docs, #projects, #code {
-      flex-flow: column wrap; 
-      resize: none; 
+      flex-flow: column wrap;
+      resize: none;
       flex: 10 1 25%;
     }
-    
+
     #code {
       word-wrap: break-word;
       width: 25%;
     }
-    
+
     #PreviewNav, #DocsNav, #ProjectsNav, #CodeNav {
       height: 25px;
-      text-align: center; 
-      color: white; 
+      text-align: center;
+      color: white;
       font-size: 1.1em;
-      display: flex; 
+      display: flex;
       justify-content: space-between;
     }
-    
+
     #previewbar, #PreviewNav {
     background-color:#4875D1;
     }
-    
+
     #docsbar, #DocsNav {
       background-color: #7F68D5;
     }
-    
+
     #projectbar, #ProjectsNav {
       background-color: #AD5FC2;
     }
-    
+
     #codebar, #CodeNav {
       background-color: #49A6DF;
     }
-    
+
     @media all and (max-width: 600px) {
       #login {
-        margin-right: 5px; 
+        margin-right: 5px;
       }
       fieldset {
         display: none;
       }
     }
-    
+
     #pop {
       cursor: pointer;
     }
@@ -216,7 +217,7 @@
       color: white;
       margin-right: 5px;
     }
-    
+
     .rotate {
       color: #FFFFFF;
       -webkit-transform: rotate(90deg);
@@ -230,7 +231,7 @@
 </head>
 <body>
   <div id="page">
-    <div id="navbar"> 
+    <div id="navbar">
       <button style="background-color: #80CFFF; color: white;  border-radius:4px; border:none; margin:8px" class="btn btn-medium btn-info" type="button" id="login" onclick="$('#loginModal').modal('show');">Login / Sign Up</button>
       <div style="margin-left: 5px" id="logggedin" class="hide dropdown">
         <button class="btn btn-medium btn-info dropdown-toggle" type="button" id="loggedin-name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"></button>
@@ -282,19 +283,23 @@
             <h1 class="modal-title" id="loginModalLabel">Log In</h1>
           </div>
           <div class="modal-body" :class="{animated: loginSignUpView == 'LOGIN', fadeIn: loginSignUpView == 'LOGIN'}">
-            <div class="form-group" :class="{'has-error': loginError == 'ERROR',  animated: loginError == 'ERROR',  shake: loginError == 'ERROR'}">
-              <label for='username'>Username or email</label>
-              <input type="text" class="form-control" id="username" placeholder="Username or email" aria-describedby="usernameHelp">
-              <!-- <span id="usernameHelp" class="help-block">A block of help text that breaks onto a new line and may extend beyond one line.</span> -->
+            <div class="form-group" :class="{'has-error': loginError == 'USERNOTFOUND' || loginError == 'INVALIDEMAIL',  animated: loginError == 'USERNOTFOUND' || loginError == 'INVALIDEMAIL',  shake: loginError == 'USERNOTFOUND' || loginError == 'INVALIDEMAIL'}">
+              <label for='username'>Email</label>
+              <input type="text" v-model="loginEmail" class="form-control" id="username" placeholder="Email" aria-describedby="usernameHelp">
+              <span id="usernameHelp" class="help-block" :style="{display: loginError == 'USERNOTFOUND' ? 'block' : 'none'}">No account with this email exists. Please try to sign up for an account.</span>
+               <span id="usernameHelp" class="help-block" :style="{display: loginError == 'INVALIDEMAIL' ? 'block' : 'none'}">Invalid email address. Please try again.</span>
             </div>
-            <div class="form-group" :class="{'has-error': loginError == 'ERROR',  animated: loginError == 'ERROR',  shake: loginError == 'ERROR'}">
+            <div class="form-group" :class="{'has-error': loginError == 'WRONGPASSWORD',  animated: loginError == 'WRONGPASSWORD',  shake: loginError == 'WRONGPASSWORD'}">
               <label for='password'>Password</label>
-              <input type="password" class="form-control" id="password" placeholder="Password" aria-describedby="passwordHelp">
-              <span id="passwordHelp" class="help-block" :style="{display: loginError == 'ERROR' ? 'block' : 'none'}">Invalid username and/or password. Please try again.</span>
+              <input type="password" v-model="loginPassword" class="form-control" id="password" placeholder="Password" aria-describedby="passwordHelp">
+              <span id="passwordHelp" class="help-block" :style="{display: loginError == 'WRONGPASSWORD' ? 'block' : 'none'}">Invalid password. Please try again.</span>
             </div>
             <div class="form-group" style="text-align:center;">
               <div>
-                <button type="submit" class="btn btn-primary" style="width:100%;">Log In</button>
+                <button type="submit" class="btn btn-primary" style="width:100%;" :class="{disabled: loginButtonState == 'LOADING'}" onclick="login()">
+                  <i class="fa fa-spinner fa-pulse fa-fw" style="margin:0 auto;" :style="{display: loginButtonState == 'LOADING' ? 'block' : 'none'}"></i>
+                  <span :style="{display: loginButtonState == 'NORMAL' ? 'block' : 'none'}">Log In</span>
+                </button>
                 <br>
                 <br>
                 <small style="color:grey;">Don't have an account? <a @click="switchToSignUp()" style="cursor: pointer;text-decoration:none;">Sign Up</a></small>
@@ -315,24 +320,24 @@
             <div class="form-group" :class="{'has-success': usernameValid == 'VALID', 'has-error': usernameValid == 'TAKEN',  animated: usernameValid == 'TAKEN',  shake: usernameValid == 'TAKEN'}">
               <label for='username'>Username</label>
               <input onfocus="$('#usernameCreate').tooltip('toggle')" data-placement="top" title="Don't use your real name" type="text" class="form-control" id="usernameCreate" placeholder="Username" aria-describedby="usernameCreateHelp" @input="usernameValidate($event)">
-              <span id="usernameCreateHelp" class="help-block" :style="{display: usernameValid == 'TAKEN' ? 'block' : 'none'}">This username is already taken. Try another username.</span>
+              <span id="usernameCreateHelp" class="help-block" :style="{display: usernameValid == 'TAKEN' ? 'block' : 'none'}">This username is already taken. Please try another username.</span>
             </div>
             <div class="form-group" :class="{'has-success': emailValid == 'VALID', 'has-error': emailValid == 'TAKEN' || emailValid == 'NOTEMAIL',  animated: emailValid == 'TAKEN' || emailValid == 'NOTEMAIL',  shake: emailValid == 'TAKEN' || emailValid == 'NOTEMAIL'}">
               <label for='username'>Email</label>
               <input onfocus="$('#emailCreate').tooltip('toggle')" data-placement="top" title="Don't have one? helper" type="email" class="form-control" id="emailCreate" placeholder="Email" aria-describedby="emailCreate" @input="emailValidate($event)">
-              <span id="emailCreate" class="help-block" :style="{display: emailValid == 'TAKEN' ? 'block' : 'none'}">An account with this email aready exists. Try to log in rather than sign up.</span>
+              <span id="emailCreate" class="help-block" :style="{display: emailValid == 'TAKEN' ? 'block' : 'none'}">An account with this email aready exists. Please try to log in rather than sign up.</span>
               <span id="emailCreate" class="help-block" :style="{display: emailValid == 'NOTEMAIL' ? 'block' : 'none'}">Please enter a valid email.</span>
             </div>
             <div class="form-group" :class="{'has-success': passwordValid == 'VALID'}">
               <label for='username'>Password</label>
-              <input onfocus="$('#passwordCreate').tooltip('toggle')" data-placement="top" title="Remember it" type="password" class="form-control" id="passwordCreate" placeholder="Password" aria-describedby="passwordCreateHelp" @input="passwordValidate($event)">
+              <input  onfocus="$('#passwordCreate').tooltip('toggle')" data-placement="top" title="Remember it" type="password" class="form-control" id="passwordCreate" placeholder="Password" aria-describedby="passwordCreateHelp" @input="passwordValidate($event)">
             </div>
-            <div class="form-group" :class="{'has-success': passwordMatchValid == 'VALID', 'has-error': passwordMatchValid == 'MATCHERROR',  animated: passwordMatchValid == 'MATCHERROR',  shake: passwordMatchValid == 'MATCHERROR'}">
+            <!-- <div class="form-group" :class="{'has-success': passwordMatchValid == 'VALID', 'has-error': passwordMatchValid == 'MATCHERROR',  animated: passwordMatchValid == 'MATCHERROR',  shake: passwordMatchValid == 'MATCHERROR'}">
               <label for='username'>Confirm Password</label>
-              <input onfocus="$('#passwordCreateConfirm').tooltip('toggle')" data-placement="top" title="Retype your password" type="password" class="form-control" id="passwordCreateConfirm" placeholder="Confirm Password" aria-describedby="passwordCreateConfirmHelp"
-                @input="passwordMatchValidate($event)">
+              <input v-model="passwordConfirmValue" onfocus="$('#passwordCreateConfirm').tooltip('toggle')" data-placement="top" title="Retype your password" type="password" class="form-control" id="passwordCreateConfirm" placeholder="Confirm Password" aria-describedby="passwordCreateConfirmHelp"
+                >
               <span id="passwordCreateConfirmHelp" class="help-block" :style="{display: passwordMatchValid == 'MATCHERROR' ? 'block' : 'none'}">The passwords entered don't match.</span>
-            </div>
+            </div> -->
             <div class="checkbox">
               <label>
                 <input type="checkbox" checked> I want to recieve updates about WoofJS
@@ -340,7 +345,10 @@
             </div>
             <div class="form-group" style="text-align:center;">
               <div>
-                <button type="submit" class="btn btn-primary" style="width:100%;" :class="{disabled: usernameValid != 'VALID' || emailValid != 'VALID' || passwordValid != 'VALID' || passwordMatchValid != 'VALID'}">Sign Up</button>
+                <button type="submit" class="btn btn-primary" style="width:100%;" :class="{disabled: usernameValid != 'VALID' || emailValid != 'VALID' || passwordValid != 'VALID' || signUpButtonState == 'LOADING'}" @click="signUp()">
+                  <i class="fa fa-spinner fa-pulse fa-fw" style="margin:0 auto;" :style="{display: signUpButtonState == 'LOADING' ? 'block' : 'none'}"></i>
+                  <span :style="{display: signUpButtonState == 'LOADING' ? 'none' : 'block'}">Sign Up</span>
+                </button>
                 <br>
                 <br>
                 <small style="color:grey;">Already have an account? <a @click="switchToLogin()" style="cursor: pointer;text-decoration:none;">Log In</a></small>
@@ -357,13 +365,17 @@
           </div>
           <div class="modal-body" :class="{animated: loginSignUpView == 'RESETPASSWORD', fadeIn: loginSignUpView == 'RESETPASSWORD'}">
             <h5>Get instructions sent to this email that explain how to reset your password.</h5>
-            <div class="form-group">
+            <div class="form-group" :class="{'has-error': resetError == 'ERROR', animated:  resetError == 'ERROR',  shake: resetError == 'ERROR'}">
               <label for='emailReset'>Email</label>
-              <input type="email" class="form-control" id="emailReset" placeholder="Email">
+              <input type="email" v-model="resetEmail" class="form-control" id="emailReset" placeholder="Email">
+              <span id="emailReset" class="help-block" :style="{'display': resetError == 'ERROR' ? 'block' : 'none'}">{{ resetErrorMessage }}</span>
             </div>
             <div class="form-group" style="text-align:center;">
               <div>
-                <button type="submit" class="btn btn-primary" style="width:100%;">Send</button>
+                <button type="submit" class="btn btn-primary" style="width:100%;" onclick="resetPassword()" :class="{disabled: resetButtonState == 'LOADING'}">
+                  <i class="fa fa-spinner fa-pulse fa-fw" style="margin:0 auto;" :style="{display: resetButtonState == 'LOADING' ? 'block' : 'none'}"></i>
+                  <span :style="{display: resetButtonState == 'LOADING' ? 'none' : 'block'}">Send</span>
+                </button>
                 <br>
                 <br>
                 <small style="color:grey;">Remember your password? <a @click="switchToLogin()" style="cursor: pointer;text-decoration:none;">Log In</a></small>
@@ -376,7 +388,7 @@
     </div>
 
     <div id="container">
-    
+
       <div id="previewbar" v-show="previewbar" @click="previewbar= !previewbar" :style="{display: 'flex'}">
         <span class="rotate" style="font-size: 1.65em">Preview</span>
       </div>
@@ -393,8 +405,8 @@
         </div>
         <iframe scrolling="no" id="preview"></iframe>
       </div>
-    
-    
+
+
       <div id="docsbar" v-show="docsbar" @click="docsbar= !docsbar" :style="{display: 'flex'}">
         <span class="rotate" style="font-size: 1.65em">Documentation</span>
       </div>
@@ -407,8 +419,8 @@
         </div>
         <iframe src="./docs/index.html" id="scratch"></iframe>
       </div>
-    
-    
+
+
       <div id="projectbar" v-show="projectbar" @click="projectbar= !projectbar" :style="{display: 'flex'}" @click="projectsPane = !projectsPane">
         <span class="rotate" style="font-size:1.65em">Tutorials</span>
       </div>
@@ -421,8 +433,8 @@
         </div>
         <iframe id="projectsIframe" src="http://coding.space/woof/index.html"></iframe>
       </div>
-    
-      
+
+
       <div id="codebar" v-show="codebar" @click="codebar= !codebar" :style="{display: 'flex'}">
         <span class="rotate" style="font-size:1.65em">Code</span>
       </div>
@@ -434,12 +446,12 @@
           </span>
         </div>
       </div>
-    
+
     </div>
   </div>
   <script>
-    
-    
+
+
     var getID = function() {
       // returns the name of a project, not inlcuding the current revision
       return window.location.hash.substring(1, window.location.hash.length).split("/")[0];
@@ -451,13 +463,13 @@
     var getCurrentRevisionCode = function(revisions) {
       // returns the code that corresponds to the current project and revision
       var revision = parseInt(window.location.hash.substring(1, window.location.hash.length).split("/")[1])
-      
+
       var keys = Object.keys(revisions)
       if (keys.length > 1){
         keys = keys.slice(1, keys.length)
       }
-      
-      
+
+
       var key
       if (!isNaN(revision) && (revision !== 0 && revision !== -1 * keys.length) && Math.abs(revision) < keys.length + 1){
         if (revision < 0){
@@ -470,7 +482,7 @@
       return revisions[key].code
     }
     var currentHash = window.location.hash
-    
+
     var app = new Vue({
       el: '#page',
       data: {
@@ -489,7 +501,7 @@
         mouseX: 0,
         mouseY: 0,
         seenError: true,
-        
+
         projectNameRequest: "NOT LOADING", // or "LOADING" or "NAME TAKEN"
         projectNameInputValue: "",
         projectNameLastKeyIllegal: false,
@@ -498,14 +510,24 @@
         usernameValid: "EMTPY", //TAKEN or VALID or EMPTY
         emailValid: "EMTPY", //TAKEN or VALID or NOTEMAIL or EMPTY
         passwordValid: "EMTPY", //VALID or EMPTY
-        passwordMatchValid: "EMTPY", //VALID or EMPTY or MATCHERROR
-        globalPassword: "",
-        loginError: "NONE", //NONE OR ERROR
+        // passwordMatchValid: "EMTPY", //VALID or EMPTY or MATCHERROR
+        loginError: "NONE", //NONE OR USERNOTFOUND OR WRONGPASSWORD OR INVALIDEMAIL
+        resetError: "NONE", //OR ERROR
+        resetErrorMessage: "",
+        // passwordConfirmValue: "",
+        // passwordCreateValue: "",
+        loginButtonState: "NORMAL", //NORMAL OR LOADING
+        signUpButtonState: "DISABLED", //NORMAL OR DISABLED OR LOADING
+        resetButtonState: "NORMAL", //NORMAL OR LOADING
+        loginPassword: "",
+        loginEmail: "",
+        resetEmail: "",
+
       },
       computed: {
         styles : function() { return {
            // styles for the "Save" button
-          'btn-warning': this.status == 'DIRTY', 
+          'btn-warning': this.status == 'DIRTY',
           'btn-success': this.status == 'SAVED',
           'btn-default': this.status == "NEW"
         } },
@@ -519,10 +541,10 @@
         showError: function(){
           this.seenError = true
           if (this.error.message.includes('Uncaught ReferenceError: sprite1 is not defined')) {
-            var spriteName = prompt("Error on line " + this.error.lineno  + "\n\n" + "You need to rename 'sprite1'. What would you like to name it?", "unicornSprite");    
-            if (spriteName !== null) {   
+            var spriteName = prompt("Error on line " + this.error.lineno  + "\n\n" + "You need to rename 'sprite1'. What would you like to name it?", "unicornSprite");
+            if (spriteName !== null) {
                 editor.setValue(editor.getValue().replace(/sprite1/g, spriteName));
-            }  
+            }
           }
           else if (this.error.message.includes("Uncaught ReferenceError")) {
             var message = this.error.message.replace("Uncaught ReferenceError: ", "")
@@ -538,20 +560,20 @@
         },
         validate: function($event) {
           var newName = $event.target.value
-          
+
           this.projectNameRequest = 'NOT LOADING'  // reset state so that you can hit save after you change the name after you get a NAME TAKEN error
-          
+
           this.projectNameLastKeyIllegal = false // take off the animation
           setTimeout(function() {
-            var lastKeyPressIllegal = newName.length > 0 && newName[newName.length - 1].match(/\.|#|\$|\/|\[|\]/) 
+            var lastKeyPressIllegal = newName.length > 0 && newName[newName.length - 1].match(/\.|#|\$|\/|\[|\]/)
             if (lastKeyPressIllegal) {
               this.projectNameLastKeyIllegal = lastKeyPressIllegal[0]
             } else {
               this.projectNameLastKeyIllegal = false
             }
           }.bind(this), 10)
-          
-          
+
+
           this.projectNameInputValue = newName.replace(" ", "-")
           this.projectNameInputValue = this.projectNameInputValue.replace(/\.|#|\$|\/|\[|\]/g, "")
         },
@@ -559,7 +581,7 @@
           if (app.projectNameRequest == "NOT LOADING"){
             app.projectNameRequest = "LOADING"
             var name = app.projectNameInputValue
-            if (name) { 
+            if (name) {
               saveProject(name);
             }
           }
@@ -576,7 +598,7 @@
         usernameValidate: function($event){
           var username = $event.target.value
           if (username == ''){
-            this.usernameValid = "EMPTY"
+            // this.usernameValid = "EMPTY"
           }
           //IF TAKEN (toggle tooltip on error so it doesn't get messed up with shake animation)
             // $('#usernameCreate').tooltip('toggle')
@@ -596,28 +618,34 @@
             // $('#emailCreate').tooltip('toggle')
             //this.emailValid = "TAKEN"
           //IS VALID EMAIL
-            //this.emailValid = "VALID"
+            // this.emailValid = "VALID"
         },
         passwordValidate: function($event){
           var password = $event.target.value
-          globalPassword = password
           if (password == ''){
             this.passwordValid = "EMPTY"
           }else{
             this.passwordValid = "VALID"
           }
         },
-        passwordMatchValidate: function($event){
-          var confirmPassword = $event.target.value
-          if (confirmPassword == ''){
-            this.passwordMatchValid = "EMPTY"
-          }else if (confirmPassword == globalPassword){
-            this.passwordMatchValid = "VALID"
-          }else{
-            this.passwordMatchValid = "MATCHERROR"
-            $('#usernameCreateConfirm').tooltip('toggle')
+        //CONFIRM PASSWORD VALIDATION (IF WE DECIDE TO USE) --Needs a little more work before usable
+        // passwordMatchValidate: function(){
+        //   if (passwordConfirmValue == passwordCreateValue){
+        //     this.passwordMatchValid = "VALID"
+        //     return true
+        //   }else{
+        //     this.passwordMatchValid = "MATCHERROR"
+        //     $('#passswordCreateConfirm').tooltip('toggle')
+        //     return false
+        //   }
+        // },
+        signUp: function(){
+          if (usernameValid == 'VALID' && emailValid == 'VALID' && passwordValid == 'VALID' && signUpButtonState != 'LOADING'){
+            this.signUpButtonState = "LOADING"
+            //SIGN UP
           }
         },
+        
       },
       watch: {
         error: function(newError) {
@@ -630,7 +658,7 @@
     var myCode = false
     scratch.src = scratch.src // the documentation sometimes doesn't load unless you remind it to here, strange VueJS bug
     projectsIframe.src = projectsIframe.src // ditto for the project's iframe
-    
+
     var config = {
       apiKey: "AIzaSyBYHv7dCiD0bWiHRlcp4VIZCIqzoMnB4yY",
       authDomain: "woofjs-d1b27.firebaseapp.com",
@@ -639,29 +667,70 @@
       messagingSenderId: "397293370524"
     };
     firebase.initializeApp(config);
-      
+
+    function login(){
+      app.loginButtonState = "LOADING"
+      firebase.auth().signInWithEmailAndPassword(app.loginEmail, app.loginPassword)
+      .then(function() {
+        $('#loginModal').modal('hide');
+        app.loginButtonState  = "NORMAL"
+        app.loginError = "NONE"
+        app.loginEmail = ""
+        app.loginPassword = ""
+      })
+      .catch(function(error) {
+        if (error.code === 'auth/wrong-password') {
+          app.loginError = "WRONGPASSWORD"
+          app.loginButtonState = "NORMAL"
+        } else if(error.code === 'auth/invalid-email'){
+          app.loginError = "INVALIDEMAIL"
+          app.loginButtonState = "NORMAL"
+        }else{
+          app.loginError = "USERNOTFOUND"
+          app.loginButtonState = "NORMAL"
+        }
+      })
+    }
+
+    function resetPassword(){
+      app.resetButtonState = "LOADING"
+      firebase.auth().sendPasswordResetEmail(app.resetEmail).then(function() {
+        $('#loginModal').modal('hide');
+        app.resetButtonState = "NORMAL"
+        app.resetError = "NONE"
+        app.resetErrorMessage = ""
+        app.resetEmail = ""
+
+
+      }, function(error) {
+        app.resetError = "ERROR"
+        app.resetErrorMessage = error.message
+        app.resetButtonState = "NORMAL"
+      })
+    }
+
     function handleLogin(userName, uid) {
       $('#loggedin-name').html(userName + ' <span class="caret"></span>')
       $('#login-projects').attr("href", "./user.html#" + uid )
       $('#logggedin').removeClass("hide")
       $('#login').addClass('hide')
     }
-    
+
     function handleLogout() {
       $('#logggedin').addClass("hide")
       $('#login').removeClass("hide")
       myCode = false
     }
-    
+
     var authChanged = false
     firebase.auth().onAuthStateChanged(function(user) {
       if (!authChanged){
         authChanged = true
         if(user){
-          ga('set', 'userId', user.uid); 
-        } 
+          ga('set', 'userId', user.uid);
+        }
       }
-      
+
       if (user){
         handleLogin(user.displayName, user.uid)
         // if the user is logged in, and we don't have their name/email in our database, save it now
@@ -674,7 +743,7 @@
             })
           }
         })
-        
+
         // this puts the user's most recent project under their name
         firebase.database().ref('/code/').orderByChild("--uid").equalTo(user.uid).once('value').then(function(snapshot) {
           if (snapshot.val()){
@@ -704,11 +773,11 @@
       app.status = "SAVED"
       currentHash = window.location.hash
     }
-    
+
     var makeDirty = function() {
       app.status = "DIRTY"
     }
-    
+
     var popout = function() {
       if (app.status == "SAVED"){
         window.open("./full.html#" + getIDWithRevision(), "_blank")
@@ -716,7 +785,7 @@
         alert("You must save your project to open it in a new window.")
       }
     }
-    
+
     // set the text in the editor
     var editorVal = "setBackdropURL('./images/outerspace.jpg')\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
     if (getID() != ''){
@@ -732,7 +801,7 @@
         }
       });
     }
-    
+
     // we add the project name to the hash on save
     // this code prevents that from triggering a page reload
     window.addEventListener("hashchange", function() {
@@ -749,8 +818,8 @@
             $('#saveModal').modal('hide');
             app.projectNameRequest = "NOT LOADING"
             firebase.database().ref().child("/code/" + name).push({
-              code: editor.getValue(), 
-              time: firebase.database.ServerValue.TIMESTAMP, 
+              code: editor.getValue(),
+              time: firebase.database.ServerValue.TIMESTAMP,
               uid: firebase.auth().currentUser && firebase.auth().currentUser.uid
             }).then(function(){
               window.location.hash = name
@@ -766,8 +835,8 @@
           app.projectNameRequest = "NOT LOADING"
           firebase.database().ref().child("/code/" + name + "/--uid").set(firebase.auth().currentUser && firebase.auth().currentUser.uid)
           firebase.database().ref().child("/code/" + name).push({
-            code: editor.getValue(), 
-            time: firebase.database.ServerValue.TIMESTAMP, 
+            code: editor.getValue(),
+            time: firebase.database.ServerValue.TIMESTAMP,
             uid: firebase.auth().currentUser && firebase.auth().currentUser.uid
           }).then(function(){
             window.location.hash = name
@@ -779,14 +848,14 @@
         }
       });
     }
-    
+
     var save = function(){
       if (app.status == "SAVED") { return }
-      
+
       if (editor.getValue().startsWith("// Loading...")){
         return // don't allow students to save projects that haven't loaded
       }
-      
+
       if (myCode && getID()) {
         saveProject(getID())
       } else {
@@ -796,11 +865,11 @@
         $('#saveModal').modal('show')
       }
     }
-    
+
     $('.modal').on('shown.bs.modal', function () {
       $('#projectName').focus() // focus on the project name input box when the modal loads
     })
-    
+
     var autoIncrimentedName = function() {
       var projName = getID();
       var versionNumber = parseInt(projName[projName.length-1])
@@ -811,7 +880,7 @@
         return projName + "-1";
       }
     }
-    
+
     // keyboard shortcuts
     var mac = CodeMirror.keyMap["default"] == CodeMirror.keyMap.macDefault;
     var ctrl = mac ? "Cmd-" : "Ctrl-";
@@ -824,7 +893,7 @@
       var spaces = Array(cm.getOption("indentUnit") + 1).join(" ");
       cm.replaceSelection(spaces, "end", "+input");
     }
-    
+
     var editor = CodeMirror(document.getElementById('code'), {
         mode:  "javascript",
         value: editorVal,
@@ -844,7 +913,7 @@
         gutters: ["CodeMirror-lint-markers", "CodeMirror-foldgutter"],
         extraKeys: keymap,
         lint: {
-          delay: 800, 
+          delay: 800,
           options: {
             "esnext": true,
             "asi": true
@@ -860,11 +929,11 @@
         save();
       }
     }
-    
+
     function WoofJSLint(){
       if (app.error) { return }
       const code = js_beautify(app.code, {space_after_anon_function: true, indent_size: 2, indent_with_tabs: false})
-      const regEx = /  ((\w)*\.)?(ready|onKeyDown|onKeyUp|onMouseDown|onMouseUp|onMouseMove|forever|repeatUntil)/g   // matches any event indented with two spaces 
+      const regEx = /  ((\w)*\.)?(ready|onKeyDown|onKeyUp|onMouseDown|onMouseUp|onMouseMove|forever|repeatUntil)/g   // matches any event indented with two spaces
       var result;
       while ((result = regEx.exec(code)) !== null) {
         var lineNumber = code.substring(0, result.index).split('\n').length
@@ -872,14 +941,14 @@
       }
     }
 
-    // run the code (debounced) on every change to the editor 
+    // run the code (debounced) on every change to the editor
     editor.on("change", function(){
       makeDirty()
       debouncedRunCode()
-      setTimeout(function() {WoofJSLint()}, 1000); 
+      setTimeout(function() {WoofJSLint()}, 1000);
     });
     runCode()
-    
+
     // focus on the preview when refreshed
      function focusPreview() {
        document.getElementById('preview').focus();
@@ -894,20 +963,20 @@
     });
 
     // warns the user when they try to close the page without saving
-    window.onbeforeunload = function(e) {		
-       if (app.status == "DIRTY") {		
-         var dialogText = 'Make sure to copy and paste your work somewhere safe.';		
-         e.returnValue = dialogText;		
-         return dialogText; 		
-       }		
+    window.onbeforeunload = function(e) {
+       if (app.status == "DIRTY") {
+         var dialogText = 'Make sure to copy and paste your work somewhere safe.';
+         e.returnValue = dialogText;
+         return dialogText;
+       }
     };
-    
-    
-    
+
+
+
     function tryRunningCode() {
       app.code = editor.getValue()
       app.error = undefined
-    
+
       try {
         var result = Babel.transform(editor.getValue(), {
           presets: [['es2015', {'modules': false}]], // modules: false to remove strict mode
@@ -923,7 +992,7 @@
             if (app.mouseX <= Math.round(document.getElementById('preview').contentWindow.minX + 1)) {
               app.mouseX += " (minX)"
             }
-            
+
             app.mouseY = Math.round(document.getElementById('preview').contentWindow.mouseY)
             if (app.mouseY >= Math.round(document.getElementById('preview').contentWindow.maxY - 1)) {
               app.mouseY += " (maxY)"
@@ -940,7 +1009,7 @@
             } else {
               app.error = event
             }
-            
+
           });
           var script = document.createElement("script");
           script.type = "text/javascript";
@@ -958,39 +1027,39 @@
         app.error = e
       }
     }
-    
+
     function runCode() {
         var iframe = document.getElementById('preview');
-        
+
         iframe.src = ""; // first, we clear the preview iframe
         setTimeout(function() {
-        
+
             // add doctype to iframe
             iframe.contentWindow.document.open();
             iframe.contentWindow.document.write('<!DOCTYPE html>');
             iframe.contentWindow.document.close();
-            
+
             // add a base tag to the page so it knows where to pull relative image urls
             var base = iframe.contentWindow.document.createElement("base");
             base.href = document.baseURI
             iframe.contentWindow.document.body.appendChild(base);
-          
+
             // then we create a script tag with the woof code and add it to the page
             var script = iframe.contentWindow.document.createElement("script");
             script.type = "text/javascript";
             script.src = "./dist/woof.js";
             iframe.contentWindow.document.body.appendChild(script);
-            
+
             script.onload = function() {
                 // when the woof.js library loads, run the user's code
-                var evt = document.createEvent('Event');  
-                evt.initEvent('load', false, false);  
+                var evt = document.createEvent('Event');
+                evt.initEvent('load', false, false);
                 iframe.contentWindow.dispatchEvent(evt);
                 tryRunningCode();
             }
         }, 10)
     }
-    
+
     function debounce(func, wait, immediate) {
     	var timeout;
     	return function() {
@@ -1014,10 +1083,10 @@
     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
     m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
     })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-  
+
     ga('create', 'UA-82374072-1', 'auto');
     ga('send', 'pageview');
-  
+
   </script>
 <script type="text/javascript">
     window._chatlio = window._chatlio||[];
