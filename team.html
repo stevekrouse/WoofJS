@@ -253,7 +253,7 @@
           <li onclick="firebase.auth().signOut()"><a>Logout</a></li>
           <li role="separator" class="divider"></li>
           <li class="dropdown-header">Recent Projects</li>
-          <li v-for="project in projects.slice(0,10)"><a :href="/create.html'#' + project.key">{{project.key}}</a></li>
+          <li v-for="project in projects.slice(0,10)"><a :href="'/create.html#' + project.key">{{project.key}}</a></li>
         </ul>
       </div>
       <img  style= "width:160px; height: 40px;" src="./images/logowhite.png">
