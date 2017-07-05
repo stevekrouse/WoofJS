@@ -229,7 +229,7 @@ button.highlight:hover {
     background-color: #5A4097;
 }
 
-#Keyboard {
+#Integrations {
     background-color: #E04D4D
 }
 
@@ -393,49 +393,50 @@ h4 {
     border-radius: 10px;
 }
 
-#Firebase {
-    background-color: #ffca27;
-    width:90% !important;
-}
-#Local{
-    background-color: #0BCC9E;
-    width:90% !important; 
-}
-#Sunrise{
-    background-color: #FFE53F;
-    width:90% !important; 
-}
-#Get{
-    background-color: #FF9D3F;
-    width:90% !important;   
-}
-#Currency{
-    background-color: #00DA1F;
+
+#Weather{
+    background-color: #d5d4f0;
     width:90% !important;    
 }
-#Market{
-    background-color: #6319FF;
+#Local{
+    background-color: #b9b8e6;
+    width:90% !important; 
+}
+#Currency{
+    background-color: #9e9ddd;
+    width:90% !important;    
+}
+#Sunrise{
+    background-color: #8381d4;
+    width:90% !important; 
+}
+/*#Market{
+    background-color: #8381d4;
     width:90% !important;      
 }
 #Quotes{
-    background-color: #D719FF;
+    background-color: #48487c;
     width:90% !important;      
-}
+}*/
 #Chuck{
-    background-color: #B0853C;
+    background-color: #48487c;
     width:90% !important;     
 }
 #Scientific{
-    background-color: #2D66E0;
+    background-color: #545390;
     width:90% !important;    
 }
 #Trivia{
-    background-color: #48C9C9;
+    background-color: #3e3d68;
     width:90% !important;     
 }
-#Weather{
-    background-color: #E02535;
-    width:90% !important;    
+#Firebase {
+    background-color: #282840;
+    width:90% !important;
+}
+#Custom{
+    background-color: #101019;
+    width:90% !important;   
 }
 
 #Weather,
@@ -445,7 +446,7 @@ h4 {
 #Quotes,
 #Market,
 #Currency,
-#Get,
+#Custom,
 #Sunrise,
 #Local,
 #Firebase {
