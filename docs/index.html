@@ -178,43 +178,43 @@
                             }
                         ],
                        // HAVING COORS ISSUE
-                        // "Market Data":[
-                        //     {
-                        //         integrationDescription:"Use the Market Data integration to get financial data.",
-                        //         integrationDescriptionClass:"alert-info",
-                        //         integrationDocumentationLink:"https://www.barchartondemand.com/api.php"
-                        //     },
-                        //     {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
-                        //     {
-                        //         description:"Here is a walk through of how to display the current stock price of Apple:",
-                        //         code:'//First set up temporary text that will be replaced\nvar temp = new Text({\n text: "...", \n size: 60, \n color: "white", \nfontFamily: "arial",\n})\n//Then set your variable for the request\nvar symbol = "AAPL"\n//Then set the url for your request\nvar url = "http://marketdata.websol.barchart.com/getQuote.json?key=1767804045c7c86775d9f86a36e06c55&symbols=" + symbol\n//Finaly call the getData() function\ngetData(url, data => {\n //Replace the temporary text\n temp.text = data.results.lastPrice\n})',
-                        //         tags:"stock price financial market data"
-                        //     },
-                        //     {
-                        //         description:"Here is a walk through of how to display the day's low price of Google:",
-                        //         code:'//First set up temporary text that will be replaced\nvar temp = new Text({\n text: "...", \n size: 60, \n color: "white", \nfontFamily: "arial",\n})\n//Then set your variable for the request\nvar symbol = "GOOG"\n//Then set the url for your request\nvar url = "http://marketdata.websol.barchart.com/getQuote.json?key=1767804045c7c86775d9f86a36e06c55&symbols=" + symbol\n//Finaly call the getData() function\ngetData(url, data => {\n //Replace the temporary text\n temp.text = data.results.low\n})',
-                        //         tags:"stock price financial market data"
-                        //     },
-                        //     {
-                        //         description:"There is even more you can do with the Market Data integration:",
-                        //         code:'//Instead of data.results.lastPrice or data.results.low, try:\ndata.results.netChange\ndata.results.percentChange\ndata.results.open\ndata.results.high\ndata.results.close\ndata.results.volume',
-                        //         tags:"stock price financial market data"
-                        //     }
-                        // ],
-                       // HAVING COORS ISSUE
-                        // "Quotes":[
-                        //     {
-                        //         integrationDescription:"Use the Quotes integration to get random quotes.",
-                        //         integrationDescriptionClass:"alert-info",
-                        //         integrationDocumentationLink:"http://quotesondesign.com/the-api/"
-                        //     },
-                        //     {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
-                        //     {
-                        //         description:"Here is a walk through of how to display a random famous quote:",
-                        //         code:'//First set up temporary text that will be replaced\nvar temp = new Text({\n text: "...", \n size: 60, \n color: "white", \nfontFamily: "arial",\n})\n//Then set the url for your request\nvar url = "http://quotesondesign.com/api/3.0/api-3.0.json"\n//Finaly call the getData() function\ngetData(url, data => {\n //Replace the temporary text\n temp.text = data.quote + " -" + data.author\n})',
-                        //         tags:"quote"
-                        //     },
-                        // ],
+                        "Market Data":[
+                            {
+                                integrationDescription:"Use the Market Data integration to get financial data.",
+                                integrationDescriptionClass:"alert-info",
+                                integrationDocumentationLink:"https://www.barchartondemand.com/api.php"
+                            },
+                            {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
+                            {
+                                description:"Here is a walk through of how to display the current stock price of Apple:",
+                                code:'//First set up temporary text that will be replaced\nvar temp = new Text({\n text: "...", \n size: 60, \n color: "white", \nfontFamily: "arial",\n})\n//Then set your variable for the request\nvar symbol = "AAPL"\n//Then set the url for your request\nvar url = "http://marketdata.websol.barchart.com/getQuote.json?key=1767804045c7c86775d9f86a36e06c55&symbols=" + symbol\n//Finaly call the getData() function\ngetData(url, data => {\n //Replace the temporary text\n temp.text = data.results.lastPrice\n})',
+                                tags:"stock price financial market data"
+                            },
+                            {
+                                description:"Here is a walk through of how to display the day's low price of Google:",
+                                code:'//First set up temporary text that will be replaced\nvar temp = new Text({\n text: "...", \n size: 60, \n color: "white", \nfontFamily: "arial",\n})\n//Then set your variable for the request\nvar symbol = "GOOG"\n//Then set the url for your request\nvar url = "http://marketdata.websol.barchart.com/getQuote.json?key=1767804045c7c86775d9f86a36e06c55&symbols=" + symbol\n//Finaly call the getData() function\ngetData(url, data => {\n //Replace the temporary text\n temp.text = data.results.low\n})',
+                                tags:"stock price financial market data"
+                            },
+                            {
+                                description:"There is even more you can do with the Market Data integration:",
+                                code:'//Instead of data.results.lastPrice or data.results.low, try:\ndata.results.netChange\ndata.results.percentChange\ndata.results.open\ndata.results.high\ndata.results.close\ndata.results.volume',
+                                tags:"stock price financial market data"
+                            }
+                        ],
+                       //HAVING COORS ISSUE
+                        "Quotes":[
+                            {
+                                integrationDescription:"Use the Quotes integration to get random quotes.",
+                                integrationDescriptionClass:"alert-info",
+                                integrationDocumentationLink:"http://quotesondesign.com/the-api/"
+                            },
+                            {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
+                            {
+                                description:"Here is a walk through of how to display a random famous quote:",
+                                code:'//First set up temporary text that will be replaced\nvar temp = new Text({\n text: "...", \n size: 60, \n color: "white", \nfontFamily: "arial",\n})\n//Then set the url for your request\nvar url = "http://quotesondesign.com/api/3.0/api-3.0.json"\n//Finaly call the getData() function\ngetData(url, data => {\n //Replace the temporary text\n temp.text = data.quote + " -" + data.author\n})',
+                                tags:"quote"
+                            },
+                        ],
                         "Chuck Norris Jokes":[
                             {
                                 integrationDescription:"Use the Chuck Norris integration to get random Chuck Norris Jokes.",
