@@ -229,7 +229,7 @@ button.highlight:hover {
     background-color: #5A4097;
 }
 
-#Keyboard {
+#Integrations {
     background-color: #E04D4D
 }
 
@@ -388,6 +388,68 @@ h4 {
 #Oval,
 #Background,
 #Line {
+    height: 8%;
+    width: 33%;
+    border-radius: 10px;
+}
+
+
+#Weather{
+    background-color: #d5d4f0;
+    width:90% !important;    
+}
+#Local{
+    background-color: #b9b8e6;
+    width:90% !important; 
+}
+#Currency{
+    background-color: #9e9ddd;
+    width:90% !important;    
+}
+#Sunrise{
+    background-color: #8381d4;
+    width:90% !important; 
+}
+/*#Market{
+    background-color: #8381d4;
+    width:90% !important;      
+}
+#Quotes{
+    background-color: #48487c;
+    width:90% !important;      
+}*/
+#Chuck{
+    background-color: #48487c;
+    width:90% !important;     
+}
+#Scientific{
+    background-color: #545390;
+    width:90% !important;    
+}
+#Trivia{
+    background-color: #3e3d68;
+    width:90% !important;     
+}
+#Firebase {
+    background-color: #282840;
+    width:90% !important;
+}
+#Custom{
+    background-color: #101019;
+    width:90% !important;   
+}
+
+#Weather,
+#Trivia,
+#Scientific,
+#Chuck,
+#Quotes,
+#Market,
+#Currency,
+#Custom,
+#Sunrise,
+#Local,
+#Firebase {
     height: 8%;
     width: 33%;
     border-radius: 10px;
