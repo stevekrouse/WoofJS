@@ -1674,7 +1674,7 @@
                     },
                     {
                         description: "Import JavaScript code from an external URL. The second input happens after the code is imported.",
-                        code: "importCodeURL('https://www.gstatic.com/firebasejs/3.4.0/firebase.js', () => {\n  firebase.initializeApp({\/* credentials here */})\n})",
+                        code: "// import the lodash utility library\n// https://lodash.com/docs/4.17.4\nimportCodeURL('https://cdn.jsdelivr.net/lodash/4.17.4/lodash.min.js', () => {\n _.flatten([1, [2, [3, [4]], 5]])\n})",
                         tags: "import code url require firebase library module"
                     },
                     ]
