@@ -511,12 +511,9 @@
         usernameValid: "EMTPY", //TAKEN or VALID or EMPTY or ILLEGAL
         emailValid: "EMTPY", //TAKEN or VALID or NOTEMAIL or EMPTY
         passwordValid: "EMTPY", //VALID or EMPTY or WEAK
-        // passwordMatchValid: "EMTPY", //VALID or EMPTY or MATCHERROR
         loginError: "NONE", //NONE OR USERNOTFOUND OR WRONGPASSWORD OR INVALIDEMAIL
         resetError: "NONE", //OR ERROR
         resetErrorMessage: "",
-        // passwordConfirmValue: "",
-        // passwordCreateValue: "",
         loginButtonState: "NORMAL", //NORMAL OR LOADING
         signUpButtonState: "DISABLED", //NORMAL OR DISABLED OR LOADING
         resetButtonState: "NORMAL", //NORMAL OR LOADING
@@ -619,12 +616,6 @@
             this.signUpUsername = this.signUpUsername.replace(/\.|#|\$|\/|\[|\]/g, "")
             this.usernameValid = "VALID"
           }
-
-          //IF TAKEN (toggle tooltip on error so it doesn't get messed up with shake animation)
-            // $('#usernameCreate').tooltip('toggle')
-            // this.usernameValid = "TAKEN"
-          //IF VALID
-            // this.usernameValid = "VALID"
         },
         emailValidate: function($event){
           var email = $event.target.value
@@ -635,14 +626,6 @@
           }else if(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email)){
             this.emailValid = "VALID"
           }
-          //IS INVALID EMAIL FORMAT (toggle tooltip on error so it doesn't get messed up with shake animation)
-            // $('#emailCreate').tooltip('toggle')
-            //this.emailValid = "NOTEMAIL"
-          //IS TAKEN EMAIL (toggle tooltip on error so it doesn't get messed up with shake animation)
-            // $('#emailCreate').tooltip('toggle')
-            //this.emailValid = "TAKEN"
-          //IS VALID EMAIL
-            // this.emailValid = "VALID"
         },
         passwordValidate: function($event){
           var password = $event.target.value
@@ -652,12 +635,6 @@
             this.passwordValid = "WEAK"
           }else{
             this.passwordValid = "VALID"
-          }
-        },
-        signUp: function(){
-          if (usernameValid == 'VALID' && emailValid == 'VALID' && passwordValid == 'VALID' && signUpButtonState != 'LOADING'){
-            this.signUpButtonState = "LOADING"
-            //SIGN UP
           }
         },
         
@@ -683,85 +660,107 @@
     };
     firebase.initializeApp(config);
 
-    function login(){
-      app.loginButtonState = "LOADING"
-      firebase.auth().signInWithEmailAndPassword(app.loginEmail, app.loginPassword)
-      .then(function() {
-        $('#loginModal').modal('hide');
-        app.loginButtonState  = "NORMAL"
-        app.loginError = "NONE"
-        app.loginEmail = ""
-        app.loginPassword = ""
-      })
-      .catch(function(error) {
-        if (error.code === 'auth/wrong-password') {
-          app.loginError = "WRONGPASSWORD"
-          app.loginButtonState = "NORMAL"
-        } else if(error.code === 'auth/invalid-email'){
-          app.loginError = "INVALIDEMAIL"
-          app.loginButtonState = "NORMAL"
-        }else{
-          app.loginError = "USERNOTFOUND"
-          app.loginButtonState = "NORMAL"
-        }
-      })
+    function clearLoginSignupModal() {
+      app.emailError = false;
+      app.usernameValid = "EMTPY";
+      app.emailValid = "EMTPY";
+      app.passwordValid = "EMTPY";
+      app.loginError = "NONE";
+      app.resetError = "NONE";
+      app.resetErrorMessage = "";
+      app.loginButtonState = "NORMAL";
+      app.signUpButtonState = "DISABLED";
+      app.resetButtonState = "NORMAL";
+      app.loginPassword = "";
+      app.loginEmail = "";
+      app.resetEmail = "";
+      app.signUpEmail = '';
+      app.signUpPassword = '';
+      app.signUpChecked = true;
+      app.signUpUsername = '';
     }
 
-    function signUp(){
-      if (app.usernameValid == 'VALID' && app.emailValid == 'VALID' && app.passwordValid == 'VALID' && app.signUpButtonState != 'LOADING'){
-            app.signUpButtonState = "LOADING"
+    function login() {
+      app.loginButtonState = "LOADING"
+      firebase.auth().signInWithEmailAndPassword(app.loginEmail, app.loginPassword)
+        .then(function() {
+          $('#loginModal').modal('hide');
+          clearLoginSignupModal();
+        })
+        .catch(function(error) {
+          if (error.code === 'auth/wrong-password') {
+            app.loginError = "WRONGPASSWORD"
+            app.loginButtonState = "NORMAL"
+          } else if (error.code === 'auth/invalid-email') {
+            app.loginError = "INVALIDEMAIL"
+            app.loginButtonState = "NORMAL"
+          } else {
+            app.loginError = "USERNOTFOUND"
+            app.loginButtonState = "NORMAL"
+          }
+        })
+    }
 
+    function signUp() {
+      if (app.usernameValid == 'VALID' && app.emailValid == 'VALID' && app.passwordValid == 'VALID' && app.signUpButtonState != 'LOADING') {
+        app.signUpButtonState = "LOADING"
+
+        var exists
+        var ref = firebase.database().ref("uniqueUsername");
+        ref.child(app.signUpUsername).once('value', function(snapshot) {
+          exists = (snapshot.val() !== null);
+          if (exists) {
+            app.usernameValid = 'TAKEN'
+            app.signUpButtonState = "NORMAL"
+          } else {
             firebase.auth().createUserWithEmailAndPassword(app.signUpEmail, app.signUpPassword)
-            .then(function() {
-              $('#loginModal').modal('hide');
-              var user = firebase.auth().currentUser;
-              user.updateProfile({
-                displayName: app.signUpUsername
-              })
-              console.log(signUpChecked)
-              $('#loggedin-name').html(app.signUpUsername + ' <span class="caret"></span>')
-              firebase.database().ref('/user/' + user.uid).once('value').then(function(snapshot) {
-                if (!snapshot.val()) {
-                  firebase.database().ref("/user/" + user.uid).set({
-                    displayName: app.signUpUsername,
-                    email: user.email,
-                    createdDate: firebase.database.ServerValue.TIMESTAMP,
-                    recieveUpdates: app.signUpChecked,
-                    usernameUnique: true
-                  })
+              .then(function() {
+
+                $('#loginModal').modal('hide');
+
+                var user = firebase.auth().currentUser;
+
+                user.updateProfile({
+                  displayName: app.signUpUsername
+                })
+
+                $('#loggedin-name').html(app.signUpUsername + ' <span class="caret"></span>');
+
+                firebase.database().ref("uniqueUsername/" + app.signUpUsername).set({
+                  username: app.signUpUsername,
+                  uid: user.uid
+                })
+
+                firebase.database().ref('/user/' + user.uid).once('value').then(function(snapshot) {
+                  if (!snapshot.val()) {
+                    firebase.database().ref("/user/" + user.uid).set({
+                      displayName: app.signUpUsername,
+                      email: user.email,
+                      createdDate: firebase.database.ServerValue.TIMESTAMP,
+                      recieveUpdates: app.signUpChecked,
+                      usernameUnique: true
+                    })
+                  }
+                });
+
+              }).catch(function(error) {
+                // Handle EMAIL Errors here.
+                var errorCode = error.code;
+                var errorMessage = error.message;
+                if (error.code === 'auth/email-already-in-use') {
+                  app.emailValid = "TAKEN"
+                  app.signUpButtonState = "auth/invalid-email"
+                } else if (error.code === 'auth/invalid-email') {
+                  app.emailValid = "NOTEMAIL"
+                  app.signUpButtonState = "NORMAL"
+                } else if (error.code === 'auth/weak-password') {
+                  app.passwordValid = "WEAK"
+                  app.signUpButtonState = "NORMAL"
                 }
-              })
-              
-              firebase.database().ref('/usernames/' + app.signUpUsername).set({
-                username: app.signUpUsername
+
               });
-              
-
-      
-            }).catch(function(error) {
-              // Handle EMAIL Errors here.
-              var errorCode = error.code;
-              var errorMessage = error.message;
-              if (error.code === 'auth/email-already-in-use') {
-                app.emailValid = "TAKEN"
-                app.signUpButtonState = "auth/invalid-email"
-              } else if(error.code === 'auth/invalid-email'){
-                app.emailValid = "NOTEMAIL"
-                app.signUpButtonState = "NORMAL"
-              }else if(error.code === 'auth/weak-password'){
-                app.passwordValid = "WEAK"
-                app.signUpButtonState = "NORMAL"
-              }
-            });
-
-            //VALIDATE USERNAME
-
-            //VALIDATE EMAIL
-
-            //SIGNUP
-
-            //SAVE DATA
-
+          }
+        });
       }
     }
 
@@ -769,12 +768,7 @@
       app.resetButtonState = "LOADING"
       firebase.auth().sendPasswordResetEmail(app.resetEmail).then(function() {
         $('#loginModal').modal('hide');
-        app.resetButtonState = "NORMAL"
-        app.resetError = "NONE"
-        app.resetErrorMessage = ""
-        app.resetEmail = ""
-
-
+        clearLoginSignupModal();
       }, function(error) {
         app.resetError = "ERROR"
         app.resetErrorMessage = error.message
@@ -797,6 +791,7 @@
       $('#signup').removeClass("hide")
       $('#loginSingupGroup').removeClass('hide')
       myCode = false
+      clearLoginSignupModal()
     }
 
     var authChanged = false
