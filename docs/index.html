@@ -4,7 +4,7 @@
     <script src="https://cdn.rawgit.com/HubSpot/tether/5693ced3fd13efff97eb0cd2f9a0d4ad8fe0fc22/dist/js/tether.min.js"></script>
     <link href="./docs.css" rel="stylesheet" type="text/css">
     <script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
-    <script src="https://unpkg.com/vue@2.0.1/dist/vue.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.3.0/vue.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/2.5.0/fuse.min.js"></script>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.5.12/clipboard.min.js"></script>
@@ -48,7 +48,7 @@
     <script id="block-template" type="text/x-template">
         <div class="block">
             <div v-if="block.integrationDescription" class="alert" :class='block.integrationDescriptionClass' role='alert'>{{ block.integrationDescription }}<br v-if="block.integrationDocumentationLink"><br v-if="block.integrationDocumentationLink">
-            <a v-if="block.integrationDocumentationLink" target='_blank' class="btn btn-primary" :href="block.integrationDocumentationLink" role="button" style="width:100%;">Full Documentation</a>
+              <a v-if="block.integrationDocumentationLink" target='_blank' class="btn btn-primary" :href="block.integrationDocumentationLink" role="button" style="width:100%;">Full Documentation</a>
             </div>
             <img v-if="block.url" ondragstart="event.dataTransfer.setData('text/plain', event.target.alt)" :alt="block.code" :src="block.url">
             <div v-if="block.description">{{ block.description }}</div>
@@ -219,11 +219,11 @@
                             }
                         ],
                         "Trivia":[
-                            {
-                                integrationDescription:"Use the Trivia integration to preform generate trivia questions.",
-                                integrationDescriptionClass:"alert-info",
-                                integrationDocumentationLink:"https://opentdb.com/api_config.php"
-                            },
+                            // {
+                            //     integrationDescription:"Use the Trivia integration to preform generate trivia questions.",
+                            //     integrationDescriptionClass:"alert-info",
+                            //     integrationDocumentationLink:"https://opentdb.com/api_config.php"
+                            // },
                             {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                             {
                                 description:"Here is a walk through of how to display the a random computer trivia question and its answer:",
@@ -235,11 +235,11 @@
                             }
                         ],
                         Firebase: [
-                            {
-                                integrationDescription:"Firebase is a database that helps you store cloud data.",
-                                integrationDescriptionClass:"alert-info",
-                                integrationDocumentationLink:"https://firebase.google.com/docs/",
-                            },
+                            // {
+                            //     integrationDescription:"Firebase is a database that helps you store cloud data.",
+                            //     integrationDescriptionClass:"alert-info",
+                            //     integrationDocumentationLink:"https://firebase.google.com/docs/",
+                            // },
                             {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                             {   
                                 description:"Firebase is similar to Scratch's cloud data as it allows you to store data in the cloud. Here is a quick run through of how to use Firebase to store a high score:",
