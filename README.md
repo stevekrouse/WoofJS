@@ -84,7 +84,7 @@ window.addEventListener("resize", () => {
 
 ## Reporting a bug
 
-Simply create an issue with a link to the simpliest code you can create that would reproduce the bug, preferably on woofjs.com.
+Simply create an issue with a link to the simpliest code you can create that would reproduce the bug, preferably on [woofjs.com](https://woofjs.com).
 
 
 ## Contributing
