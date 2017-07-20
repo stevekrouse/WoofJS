@@ -6,7 +6,7 @@ WoofJS is a *learnable* JavaScript framework for creating games by [The Coding S
 
 WoofJS was created to be the next step after block-based coding in Scratch. For more details, you can [read our announcement post](https://medium.com/@stevekrouse/woof-d9adf2110fc6).
 
-## Getting Started ([woofjs.com](https://woofjs.com))
+## Getting Started (woofjs.com)
 
 ![screenshot 2017-03-03 at 10 04 05 am](https://cloud.githubusercontent.com/assets/2288939/23556045/1693c70c-fff9-11e6-950b-5e95c7a0112a.png)
 
@@ -20,7 +20,7 @@ We recommend that you get started with WoofJS on [woofjs.com](http://woofjs.com)
   * iterate quickly with live updates to your output as you type
 
 
-## Getting Started (outside [woofjs.com](https://woofjs.com))
+## Getting Started (outside woofjs.com)
 
 ### Installing WoofJS
 
@@ -95,7 +95,7 @@ We'd love your help in making it even more learnable and dependable for them.
 
 ### The WoofJS directory structure
 
-#### [woofjs.com](https://woofjs.com)
+#### woofjs.com
 
 [woofjs.com](https://woofjs.com) is hosted on Github pages from this repository. This means that all of the top-level URLs on [woofjs.com](https://woofjs.com) must be in the top-level of the directory. This includes:
 
@@ -129,7 +129,7 @@ There are two options to do this:
 
 #### WoofJS.com's Tutorials
 
-WoofJS.com's tutorials actually live at an entirely different repo: https://github.com/stevekrouse/coding.space.
+[WoofJS.com](https://woofjs.com)'s tutorials actually live at an entirely different repo: https://github.com/stevekrouse/coding.space.
 
 You can find them there in the `woof/` subdirectory. If you'd like to cotribute to the WoofJS curriculum, head on over to that repo.
 
