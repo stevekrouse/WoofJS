@@ -20,7 +20,7 @@ We recommend that you get started with WoofJS on [woofjs.com](http://woofjs.com)
   * iterate quickly with live updates to your output as you type
 
 
-## Getting Started (outside woofjs.com)
+## Getting Started (outside [woofjs.com](https://woofjs.com))
 
 ### Installing WoofJS
 
