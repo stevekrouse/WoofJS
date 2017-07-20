@@ -95,7 +95,7 @@ We'd love your help in making it even more learnable and dependable for them.
 
 ### The WoofJS directory structure
 
-#### woofjs.com
+#### [woofjs.com](https://woofjs.com)
 
 woofjs.com is hosted on Github pages from this repository. This means that all of the top-level URLs on woofjs.com must be in the top-level of the directory. This includes:
 
