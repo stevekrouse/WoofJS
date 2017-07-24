@@ -230,17 +230,17 @@
   <div id="page">
     <div id="navbar">
 
-    <div class="btn-group" role="group" aria-label="..." id='loginSingupGroup'>
-      <button style="margin-left: 5px;" class="btn btn-medium btn-primary" type="button" id="login" onclick="$('#loginModal').modal('show');" @click="switchToLogin()">Login</button>
-      <button class="btn btn-medium btn-warning" type="button" id="signup" onclick="$('#loginModal').modal('show');" @click="switchToSignUp()">Sign Up</button>
+    <div class="btn-group" role="group" aria-label="..." id='loginSingupGroup' :class='{show: loginState == "LOGGEDOUT", hide: loginState == "LOGGEDIN"}'>
+      <button style="margin-left: 5px;" class="btn btn-medium btn-primary" type="button" id="login" :class='{show: loginState == "LOGGEDOUT", hide: loginState == "LOGGEDIN"}' onclick="$('#loginModal').modal('show');" @click="switchToLogin()">Login</button>
+      <button class="btn btn-medium btn-success" type="button" id="signup" :class='{show: loginState == "LOGGEDOUT", hide: loginState == "LOGGEDIN"}' onclick="$('#loginModal').modal('show');" @click="switchToSignUp()">Sign Up</button>
     </div>
 
-      <div style="margin-left: 5px" id="logggedin" class="hide dropdown">
-        <button class="btn btn-medium btn-info dropdown-toggle" type="button" id="loggedin-name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"></button>
+      <div style="margin-left: 5px" id="logggedin" class="hide dropdown" :class='{hide: loginState == "LOGGEDOUT", show: loginState == "LOGGEDIN"}'>
+        <button class="btn btn-medium btn-info dropdown-toggle" type="button" id="loggedin-name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">{{userNameForMenu}} <span class="caret"></span></button>
         <ul class="dropdown-menu" aria-labelledby="loggedin-name">
           <li><a href="./create.html">New Project</a></li>
           <li><a href="./team.html">New Team Project <span class="label label-success">beta</span></a></li>
-          <li><a target="_blank" id="login-projects">My Projects</a></li>
+          <li><a target="_blank" id="login-projects" :href="uid">My Projects</a></li>
           <li onclick="firebase.auth().signOut()"><a>Logout</a></li>
           <li role="separator" class="divider"></li>
           <li class="dropdown-header">Recent Projects</li>
@@ -323,20 +323,18 @@
               <label for='username'>Username</label>
               <input v-model='signUpUsername' onfocus="$('#usernameCreate').tooltip('toggle')" data-placement="top" title="Don't use your real name" type="text" class="form-control" id="usernameCreate" placeholder="Username" aria-describedby="usernameCreateHelp" @input="usernameValidate($event)">
               <span id="usernameCreateHelp" class="help-block" :style="{display: usernameValid == 'TAKEN' ? 'block' : 'none'}">This username is already taken. Please try another username.</span>
-              <span id="usernameCreateHelp" class="help-block" :style="{display: usernameLastKeyIllegal ? 'block' : 'none'}">You cannot include {{ usernameLastKeyIllegal }} in usernames.</span>
+              <span id="usernameCreateHelp" class="help-block" style='color:#BD362F;' :style="{display: usernameLastKeyIllegal ? 'block' : 'none'}">You cannot include {{ usernameLastKeyIllegal }} in usernames.</span>
             </div>
             <div class="form-group" :class="{'has-success': emailValid == 'VALID', 'has-error': emailValid == 'TAKEN' || emailValid == 'NOTEMAIL',  animated: emailValid == 'TAKEN' || emailValid == 'NOTEMAIL',  shake: emailValid == 'TAKEN' || emailValid == 'NOTEMAIL'}">
               <label for='username'>Email</label>
-              <input type="email" v-model='signUpEmail' class="form-control" id="emailCreate" placeholder="Email" aria-describedby="emailCreate" @input="emailValidate($event)">
-              <!-- <input onfocus="$('#emailCreate').tooltip('toggle')" data-placement="top" title="Don't have one? helper" type="email" class="form-control" id="emailCreate" placeholder="Email" aria-describedby="emailCreate" @input="emailValidate($event)"> -->
+              <input type="email" v-model='signUpEmail' class="form-control" id="emailCreate" placeholder="Email" aria-describedby="emailCreate" @blur="emailValidate($event)" @input="emailSuccessValidate">
               <span id="emailCreate" class="help-block" :style="{display: emailValid == 'TAKEN' ? 'block' : 'none'}">An account with this email aready exists. Please try to <a @click="switchToLogin()" onclick='app.loginEmail = app.signUpEmail'>log in</a>.</span>
               <span id="emailCreate" class="help-block" :style="{display: emailValid == 'NOTEMAIL' ? 'block' : 'none'}">Please enter a valid email.</span>
             </div>
             <div class="form-group" :class="{'has-success': passwordValid == 'VALID', 'has-error': passwordValid == 'WEAK','animated': passwordValid == 'WEAK','shake': passwordValid == 'WEAK'}">
               <label for='username'>Password</label>
-              <input type="password" v-model='signUpPassword' class="form-control" id="passwordCreate" placeholder="Password" aria-describedby="passwordCreateHelp" @input="passwordValidate($event)" onkeydown="if (event.keyCode == 13){signUp()}">
+              <input type="password" v-model='signUpPassword' class="form-control" id="passwordCreate" placeholder="Password" aria-describedby="passwordCreateHelp" @input="passwordSuccessValidate" @blur="passwordValidate($event)" onkeydown="if (event.keyCode == 13){signUp()}">
               <span id="passwordCreateHelp" class="help-block" :style="{display: passwordValid == 'WEAK' ? 'block' : 'none'}">Passwords must have at least 6 characters and a mix of letters and numbers.</span>
-             <!--  <input  onfocus="$('#passwordCreate').tooltip('toggle')" data-placement="top" title="Remember it" type="password" class="form-control" id="passwordCreate" placeholder="Password" aria-describedby="passwordCreateHelp" @input="passwordValidate($event)" onkeydown="if (event.keyCode == 13){signUp()}"> -->
             </div>
             <div class="checkbox">
               <label>
@@ -345,7 +343,7 @@
             </div>
             <div class="form-group" style="text-align:center;">
               <div>
-                <button type="submit" class="btn btn-primary" style="width:100%;" :class="{disabled: usernameValid != 'VALID' || emailValid != 'VALID' || passwordValid != 'VALID' || signUpButtonState == 'LOADING'}" onclick="signUp()">
+                <button type="submit" class="btn btn-primary" style="width:100%;" :class="{disabled: signUpButtonState == 'LOADING'}" onclick="signUp()">
                   <i class="fa fa-spinner fa-pulse fa-fw" style="margin:0 auto;" :style="{display: signUpButtonState == 'LOADING' ? 'block' : 'none'}"></i>
                   <span :style="{display: signUpButtonState == 'LOADING' ? 'none' : 'block'}">Sign Up</span>
                 </button>
@@ -358,23 +356,22 @@
         </div>
 
 
-        <div class='modal-content' :style="{display: loginSignUpView == 'RESETPASSWORD' ? 'block' : 'none'}">
+        <div class='modal-content' :style="{display: loginSignUpView == 'RESETPASSWORD' || loginSignUpView == 'RESETPASSWORDSUCCESS'  ? 'block' : 'none'}">
           <div class="modal-header" :class="{animated: loginSignUpView == 'RESETPASSWORD', fadeIn: loginSignUpView == 'RESETPASSWORD'}">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             <h1 class="modal-title" id="loginModalLabel">Recover Password</h1>
           </div>
-          <div class="modal-body" :class="{animated: loginSignUpView == 'RESETPASSWORD', fadeIn: loginSignUpView == 'RESETPASSWORD'}">
+
+          <div class="modal-body" :style="{display: loginSignUpView == 'RESETPASSWORD' ? 'block' : 'none'}" :class="{animated: loginSignUpView == 'RESETPASSWORD', fadeIn: loginSignUpView == 'RESETPASSWORD'}">
             <h5>Get instructions sent to this email that explain how to reset your password.</h5>
-            <div class="form-group" :class="{'has-error': resetError == 'ERROR', animated:  resetError == 'ERROR',  shake: resetError == 'ERROR'}">
+            <div class="form-group">
               <label for='emailReset'>Email</label>
               <input onkeydown="if (event.keyCode == 13){resetPassword()}" type="email" v-model="resetEmail" class="form-control" id="emailReset" placeholder="Email">
-              <span id="emailReset" class="help-block" :style="{'display': resetError == 'ERROR' ? 'block' : 'none'}">{{ resetErrorMessage }}</span>
             </div>
             <div class="form-group" style="text-align:center;">
               <div>
-                <button type="submit" class="btn btn-primary" style="width:100%;" onclick="resetPassword()" :class="{disabled: resetButtonState == 'LOADING'}">
-                  <i class="fa fa-spinner fa-pulse fa-fw" style="margin:0 auto;" :style="{display: resetButtonState == 'LOADING' ? 'block' : 'none'}"></i>
-                  <span :style="{display: resetButtonState == 'LOADING' ? 'none' : 'block'}">Send</span>
+                <button type="submit" class="btn btn-primary" style="width:100%;" onclick="resetPassword()" >
+                  Send
                 </button>
                 <br>
                 <br>
@@ -382,7 +379,13 @@
               </div>
             </div>
           </div>
+
+          <div class="modal-body" :style="{display: loginSignUpView == 'RESETPASSWORDSUCCESS' ? 'block' : 'none'}" :class="{animated: loginSignUpView == 'RESETPASSWORDSUCCESS', fadeIn: loginSignUpView == 'RESETPASSWORDSUCCESS'}">
+            <h5>If there is an account associated with that email address, we have sent it a password reset email.</h5>   
+          </div>
+
         </div>
+
 
       </div>
     </div>
@@ -506,24 +509,25 @@
         projectNameInputValue: "",
         projectNameLastKeyIllegal: false,
         usernameLastKeyIllegal: false,
-        loginSignUpView: "LOGIN", //OR SIGNUP OR RESETPASSWORD
+        loginSignUpView: "LOGIN", // or SIGNUP or RESETPASSWORD or RESETPASSWORDSUCCESS
         emailError: false,
-        usernameValid: "EMTPY", //TAKEN or VALID or EMPTY or ILLEGAL
-        emailValid: "EMTPY", //TAKEN or VALID or NOTEMAIL or EMPTY
-        passwordValid: "EMTPY", //VALID or EMPTY or WEAK
-        loginError: "NONE", //NONE OR USERNOTFOUND OR WRONGPASSWORD OR INVALIDEMAIL
-        resetError: "NONE", //OR ERROR
-        resetErrorMessage: "",
-        loginButtonState: "NORMAL", //NORMAL OR LOADING
-        signUpButtonState: "DISABLED", //NORMAL OR DISABLED OR LOADING
-        resetButtonState: "NORMAL", //NORMAL OR LOADING
+        usernameValid: "EMTPY", // TAKEN or VALID or EMPTY or ILLEGAL
+        emailValid: "EMTPY", // TAKEN or VALID or NOTEMAIL or EMPTY
+        passwordValid: "EMTPY", // VALID or EMPTY or WEAK
+        loginError: "NONE", // NONE or USERNOTFOUND or WRONGPASSWORD or INVALIDEMAIL
+        loginButtonState: "NORMAL", // NORMAL or LOADING
+        signUpButtonState: "DISABLED", // NORMAL or DISABLED or LOADING
         loginPassword: "",
         loginEmail: "",
         resetEmail: "",
         signUpEmail: '',
         signUpPassword: '',
         signUpChecked: true,
-        signUpUsername: ''
+        signUpUsername: '',
+
+        loginState: "LOGGEDOUT", // or LOGGEDIN
+        userNameForMenu: '',
+        uid: ''
 
       },
       computed: {
@@ -601,7 +605,7 @@
           var username = $event.target.value
           if (username == ''){
             this.usernameValid = "EMPTY"
-          }else{
+          } else {
             this.usernameLastKeyIllegal = false
             setTimeout(function() {
               var lastKeyPressIllegal = username.length > 0 && username[username.length - 1].match(/\.|#|\$|\/|\[|\]/)
@@ -621,9 +625,9 @@
           var email = $event.target.value
           if (email == ''){
             this.emailValid = "EMPTY"
-          }else if(!/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email)){
+          } else if (!/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email)){
             this.emailValid = "NOTEMAIL"
-          }else if(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email)){
+          } else if (/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email)){
             this.emailValid = "VALID"
           }
         },
@@ -631,9 +635,21 @@
           var password = $event.target.value
           if (password == ''){
             this.passwordValid = "EMPTY"
-          }else if(!/(?=.*[a-zA-Z])(?=.*\d)(?=.{6}).*/.test(password)){
+          } else if (!/(?=.*[a-zA-Z])(?=.*\d)(?=.{6}).*/.test(password)){
             this.passwordValid = "WEAK"
-          }else{
+          } else {
+            this.passwordValid = "VALID"
+          }
+        },
+        emailSuccessValidate: function($event){
+          var email = $event.target.value
+          if (/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email)){
+            this.emailValid = "VALID"
+          }
+        },
+        passwordSuccessValidate: function($event){
+          var password = $event.target.value
+          if (/(?=.*[a-zA-Z])(?=.*\d)(?=.{6}).*/.test(password)){
             this.passwordValid = "VALID"
           }
         },
@@ -666,11 +682,8 @@
       app.emailValid = "EMTPY";
       app.passwordValid = "EMTPY";
       app.loginError = "NONE";
-      app.resetError = "NONE";
-      app.resetErrorMessage = "";
       app.loginButtonState = "NORMAL";
       app.signUpButtonState = "DISABLED";
-      app.resetButtonState = "NORMAL";
       app.loginPassword = "";
       app.loginEmail = "";
       app.resetEmail = "";
@@ -702,6 +715,23 @@
     }
 
     function signUp() {
+      var email = app.signUpEmail;
+      var password = app.signUpPassword;
+      if (email == ''){
+        app.emailValid = "EMPTY"
+      } else if (!/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email)){
+        app.emailValid = "NOTEMAIL"
+      } else if (/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email)){
+        app.emailValid = "VALID"
+      } 
+      if (password == ''){
+        app.passwordValid = "EMPTY"
+      } else if (!/(?=.*[a-zA-Z])(?=.*\d)(?=.{6}).*/.test(password)){
+        app.passwordValid = "WEAK"
+      } else {
+        app.passwordValid = "VALID"
+      }
+
       if (app.usernameValid == 'VALID' && app.emailValid == 'VALID' && app.passwordValid == 'VALID' && app.signUpButtonState != 'LOADING') {
         app.signUpButtonState = "LOADING"
 
@@ -724,7 +754,8 @@
                   displayName: app.signUpUsername
                 })
 
-                $('#loggedin-name').html(app.signUpUsername + ' <span class="caret"></span>');
+                
+                app.userNameForMenu = app.signUpUsername
 
                 firebase.database().ref("uniqueUsername/" + app.signUpUsername).set({
                   username: app.signUpUsername,
@@ -767,29 +798,22 @@
     function resetPassword(){
       app.resetButtonState = "LOADING"
       firebase.auth().sendPasswordResetEmail(app.resetEmail).then(function() {
-        $('#loginModal').modal('hide');
+        app.loginSignUpView = "RESETPASSWORDSUCCESS"
         clearLoginSignupModal();
       }, function(error) {
-        app.resetError = "ERROR"
-        app.resetErrorMessage = error.message
-        app.resetButtonState = "NORMAL"
+        app.loginSignUpView = "RESETPASSWORDSUCCESS"
+        clearLoginSignupModal();
       })
     }
 
     function handleLogin(userName, uid) {
-      $('#loggedin-name').html(userName + ' <span class="caret"></span>')
-      $('#login-projects').attr("href", "./user.html#" + uid )
-      $('#logggedin').removeClass("hide")
-      $('#login').addClass('hide')
-      $('#signup').addClass('hide')
-      $('#loginSingupGroup').addClass('hide')
+      app.userNameForMenu = userName
+      app.uid = "./user.html#" + uid
+      app.loginState = "LOGGEDIN"
     }
 
     function handleLogout() {
-      $('#logggedin').addClass("hide")
-      $('#login').removeClass("hide")
-      $('#signup').removeClass("hide")
-      $('#loginSingupGroup').removeClass('hide')
+      app.loginState = "LOGGEDOUT"
       myCode = false
       clearLoginSignupModal()
     }
@@ -798,15 +822,15 @@
     firebase.auth().onAuthStateChanged(function(user) {
       if (!authChanged){
         authChanged = true
-        if(user){
+        if (user){
           ga('set', 'userId', user.uid);
         }
       }
 
       if (user){
-        if(user.displayName){
+        if (user.displayName){
           handleLogin(user.displayName, user.uid)
-        }else if(app.signUpUsername){
+        } else if (app.signUpUsername){
           handleLogin(app.signUpUsername, user.uid)
         }
 
