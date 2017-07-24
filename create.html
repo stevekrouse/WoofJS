@@ -228,6 +228,12 @@
       transform: rotate(90deg);
     }
 
+    kbd{
+      background-color: #ababab;
+    }
+
+
+
   </style>
 </head>
 <body>
@@ -253,19 +259,19 @@
       
         <button id="error" class="btn btn-danger" @click="showError()" :style="{display: error ? 'inline-block' : 'none', animation: seenError ? 'none' : 'glowing 1200ms infinite'}"><span class="glyphicon glyphicon-exclamation-sign"></span> Error</button>
         <div class="dropdown" style="display:inline;">
-          <button class="btn btn-primary btn-medium dropdown-toggle" type="button" id="toolsDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+          <button class="btn btn-primary btn-medium dropdown-toggle" type="button" id="toolsDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style='border:none;'>
             Tools
             <span class="caret"></span>
           </button>
           <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="toolsDropdown" style="margin-top:12px;">
             <li><a @click="undo()"><span class="fa fa-undo"></span> Undo <span><kbd>{{shortcut}}</kbd>+<kbd>Z</kbd></span></a></li>
             <li><a @click="redo()"><span class="fa fa-repeat"></span> Redo <span><kbd>{{shortcut}}</kbd>+<kbd>Shift</kbd>+<kbd>Z</kbd></span></a></li>
-            <li><a @click="selectAll()"><span class="fa fa-bars"></span> Select All</a></li>
-            <li><a @click="find()"><span class="fa fa-search"></span> Find</a></li>
+            <li><a @click="selectAll()"><span class="fa fa-bars"></span> Select All <span><kbd>{{shortcut}}</kbd>+<kbd>A</kbd></span></a></li>
+            <li><a @click="find()"><span class="fa fa-search"></span> Find <span><kbd>{{shortcut}}</kbd>+<kbd>F</kbd></span></a></li>
             <li role="separator" class="divider"></li>
             <li><a><input onclick="autoRunClicked()" type="checkbox" id="checkbox" v-model="autoRunChecked"></span> Auto Run</a></li>
             <li role="separator" class="divider"></li>
-            <li><a @click="cleanAll()" :style="{display: canClean ? 'block' : 'none'}"><span class="glyphicon glyphicon-align-left"></span> Clean Code</a></li>
+            <li><a @click="cleanAll()" :style="{display: canClean ? 'block' : 'none'}"><span class="glyphicon glyphicon-align-left"></span> Clean Code <span><kbd>{{shortcut}}</kbd>+<kbd>B</kbd></span></a></li>
             <li><a @click="cleanAll()" class='disabled' :style="{display: canClean ? 'none' : 'block'}" data-toggle="popover" data-trigger="hover" data-content="You can't clean when there's an error." data-placement="top"><span class="glyphicon glyphicon-align-left"></span> Clean Code</a></li>
             <li role="separator" class="divider"></li>
             <li><a @click="share()"><span class="glyphicon glyphicon-share-alt"></span> Share</a></li>
@@ -493,11 +499,7 @@
         },
         find: function(){
           editor.execCommand("find")
-        },
-        //COPY ISN'T WORKING
-        copy: function(){
-          editor.getSelection()
-        },
+        }
       },
       watch: {
         error: function(newError) {
@@ -743,6 +745,10 @@
         e.preventDefault();
         save();
       }
+    }
+
+    function commentCode(){
+
     }
     
     function WoofJSLint(){
