@@ -334,7 +334,7 @@
             <div class="form-group" :class="{'has-success': passwordValid == 'VALID', 'has-error': passwordValid == 'WEAK','animated': passwordValid == 'WEAK','shake': passwordValid == 'WEAK'}">
               <label for='username'>Password</label>
               <input type="password" v-model='signUpPassword' class="form-control" id="passwordCreate" placeholder="Password" aria-describedby="passwordCreateHelp" @input="passwordSuccessValidate" @blur="passwordValidate($event)" onkeydown="if (event.keyCode == 13){signUp()}">
-              <span id="passwordCreateHelp" class="help-block" :style="{display: passwordValid == 'WEAK' ? 'block' : 'none'}">Passwords must have at least 6 characters and a mix of letters and numbers.</span>
+              <span id="passwordCreateHelp" class="help-block" :style="{display: passwordValid == 'WEAK' ? 'block' : 'none'}">Passwords must be at least 6 characters long.</span>
             </div>
             <div class="checkbox">
               <label>
@@ -635,7 +635,7 @@
           var password = $event.target.value
           if (password == ''){
             this.passwordValid = "EMPTY"
-          } else if (!/(?=.*[a-zA-Z])(?=.*\d)(?=.{6}).*/.test(password)){
+          } else if (!/^.{6,}$/.test(password)){
             this.passwordValid = "WEAK"
           } else {
             this.passwordValid = "VALID"
