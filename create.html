@@ -12,8 +12,8 @@
   <meta property="og:description" content="WoofJS is a Scratch-inspired Javascript library for making games.">
 
   <script src="//load.sumome.com/" data-sumo-site-id="44245233c319d8fe9fb7ce8c7ed64db9381aa56477888a10319261f655cfffe2" async="async"></script>
-  
 
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
 
 
 
@@ -280,7 +280,28 @@
         <button style="display: none" :style="{display: 'inline-block'}" style="margin-right: 5px; background-color:#4390BF !important; ; border:none; color:white; " class="btn btn-medium" :class="styles" onclick="save()">{{ status == "SAVED" ? 'Saved' : 'Save' }}</button> 
       </span>
     </div>
- 
+
+    <div class="modal fade" id="saveModal" tabindex="-1" role="dialog" aria-labelledby="saveModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title" id="saveModalLabel">Choose a name for your project</h4>
+          </div>
+          <div class="modal-body">
+            <div id="projectNameGroup" class="form-group" :class="{'has-info': projectNameInputValue == '', 'has-error': projectNameRequest == 'NAME TAKEN', 'has-success': projectNameInputValue != '' && projectNameRequest != 'NAME TAKEN', animated: projectNameRequest == 'NAME TAKEN' || projectNameLastKeyIllegal, shake: projectNameRequest == 'NAME TAKEN' || projectNameLastKeyIllegal}">
+              <input type="text" class="form-control" id="projectName" placeholder="my-project" :value="projectNameInputValue" @input="validate($event)" @keyDown.enter="saveName(projectNameInputValue)">
+              <span id="nameTaken" :style="{opacity: projectNameRequest == 'NAME TAKEN' ? '1' : '0'}" class="text-danger">That project name has already been taken. Try another one.</span>
+            </div>
+            <span id="illegalCharacter" class="text-danger" :class="{animated: projectNameLastKeyIllegal, shake: projectNameLastKeyIllegal}" style="display: inline-block" :style="{opacity: projectNameLastKeyIllegal ? '1' : '0'}">You cannot include {{ projectNameLastKeyIllegal }} in project names.</span>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="button" id="saveChanges" class="btn btn-primary" :class="{disabled: projectNameRequest != 'NOT LOADING' || projectNameInputValue == ''}" @click="saveName()">{{ projectNameRequest == "LOADING" ? "Loading..." : "Save" }}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div id="container">
     
       <div id="previewbar" v-show="previewbar" @click="previewbar= !previewbar" :style="{display: 'flex'}">
@@ -393,7 +414,7 @@
       return window.location.hash.substring(1, window.location.hash.length).split("/")[0];
     }
     var getIDWithRevision = function() {
-      // returns the name of a project, not inlcuding the current revision
+      // returns the name of a project, inlcuding the current revision
       return window.location.hash.substring(1, window.location.hash.length);
     }
     var getCurrentRevisionCode = function(revisions) {
@@ -438,7 +459,10 @@
         mouseY: 0,
         seenError: true,
         autoRunChecked: true,
-        shortcut: CodeMirror.keyMap["default"] == CodeMirror.keyMap.macDefault ? 'Cmd' : 'Ctrl',
+        shortcut: CodeMirror.keyMap["default"] == CodeMirror.keyMap.macDefault ? 'Cmd' : 'Ctrl',     
+        projectNameRequest: "NOT LOADING", // or "LOADING" or "NAME TAKEN"
+        projectNameInputValue: "",
+        projectNameLastKeyIllegal: false,
       },
       computed: {
         styles : function() { return {
@@ -499,7 +523,39 @@
         },
         find: function(){
           editor.execCommand("find")
-        }
+        },
+        //COPY ISN'T WORKING
+        copy: function(){
+          editor.getSelection()
+        },
+        validate: function($event) {
+          var newName = $event.target.value
+          
+          this.projectNameRequest = 'NOT LOADING'  // reset state so that you can hit save after you change the name after you get a NAME TAKEN error
+          
+          this.projectNameLastKeyIllegal = false // take off the animation
+          setTimeout(function() {
+            var lastKeyPressIllegal = newName.length > 0 && newName[newName.length - 1].match(/\.|#|\$|\/|\[|\]/) 
+            if (lastKeyPressIllegal) {
+              this.projectNameLastKeyIllegal = lastKeyPressIllegal[0]
+            } else {
+              this.projectNameLastKeyIllegal = false
+            }
+          }.bind(this), 10)
+          
+          
+          this.projectNameInputValue = newName.replace(" ", "-")
+          this.projectNameInputValue = this.projectNameInputValue.replace(/\.|#|\$|\/|\[|\]/g, "")
+        },
+        saveName : function() {
+          if (app.projectNameRequest == "NOT LOADING"){
+            app.projectNameRequest = "LOADING"
+            var name = app.projectNameInputValue
+            if (name) { 
+              saveProject(name);
+            }
+          }
+        },
       },
       watch: {
         error: function(newError) {
@@ -643,6 +699,45 @@
         window.location.reload()
       }
     })
+
+    var saveProject = function(name){
+      firebase.database().ref('/code/' + name).limitToLast(1).once('value').then(function(snapshot) {
+        if (snapshot.val()){
+          if (firebase.auth().currentUser && snapshot.val()[Object.keys(snapshot.val())[0]].uid == firebase.auth().currentUser.uid) {
+            // if the project exists and you own it, push the new code as a revision
+            $('#saveModal').modal('hide');
+            app.projectNameRequest = "NOT LOADING"
+            firebase.database().ref().child("/code/" + name).push({
+              code: editor.getValue(), 
+              time: firebase.database.ServerValue.TIMESTAMP, 
+              uid: firebase.auth().currentUser && firebase.auth().currentUser.uid
+            }).then(function(){
+              window.location.hash = name
+              makeClean()
+            }).catch(function(error){
+              alert("Unable to save project: " + error)
+            });
+          } else {
+            app.projectNameRequest = "NAME TAKEN"
+          }
+        } else {
+          $('#saveModal').modal('hide');
+          app.projectNameRequest = "NOT LOADING"
+          firebase.database().ref().child("/code/" + name + "/--uid").set(firebase.auth().currentUser && firebase.auth().currentUser.uid)
+          firebase.database().ref().child("/code/" + name).push({
+            code: editor.getValue(), 
+            time: firebase.database.ServerValue.TIMESTAMP, 
+            uid: firebase.auth().currentUser && firebase.auth().currentUser.uid
+          }).then(function(){
+            window.location.hash = name
+            myCode = firebase.auth().currentUser
+            makeClean()
+          }).catch(function(error){
+            alert("Unable to save project: " + error)
+          });
+        }
+      });
+    }
     
     var save = function(){
       if (app.status == "SAVED") { return }
@@ -651,50 +746,30 @@
         return // don't allow students to save projects that haven't loaded
       }
       
-      var name
-      if (myCode) {
-        name = getID()
+      if (myCode && getID()) {
+        saveProject(getID())
       } else {
-        name = window.prompt('Choose a name for your project. You cannot include ".", "#", "$", "[", "]", or spaces in the name of your project.', "my-project") || '';
+        if (getID()) {
+          app.projectNameInputValue = autoIncrimentedName()
+        }
+        $('#saveModal').modal('show')
       }
-      if (name.includes('.') || name.includes('/') || name.includes('$') || name.includes("#") || name.includes("[") || name.includes("]") || name.includes(" ")){
-        alert('You cannot include ".", "#", "$", "[", "]", or spaces in the name of your project. Try to save again.')
-      } else if (name) { 
-        firebase.database().ref('/code/' + name).limitToLast(1).once('value').then(function(snapshot) {
-          if (snapshot.val()){
-            if (firebase.auth().currentUser && snapshot.val()[Object.keys(snapshot.val())[0]].uid == firebase.auth().currentUser.uid) {
-                // if the project exists and you own it, push the new code as a revision
-                firebase.database().ref().child("/code/" + name).push({
-                  code: editor.getValue(), 
-                  time: firebase.database.ServerValue.TIMESTAMP, 
-                  uid: firebase.auth().currentUser && firebase.auth().currentUser.uid
-                }).then(function(){
-                  window.location.hash = name
-                  makeClean()
-                }).catch(function(error){
-                  alert("Unable to save project: " + error)
-                });
-            } else {
-              alert("That project name has already been taken. Try another one.")
-            }
-          } else {
-            // else create a new project and push this code as the first revision
-            firebase.database().ref().child("/code/" + name + "/--uid").set(firebase.auth().currentUser && firebase.auth().currentUser.uid)
-            firebase.database().ref().child("/code/" + name).push({
-              code: editor.getValue(), 
-              time: firebase.database.ServerValue.TIMESTAMP, 
-              uid: firebase.auth().currentUser && firebase.auth().currentUser.uid
-            }).then(function(){
-              window.location.hash = name
-              myCode = firebase.auth().currentUser
-              makeClean()
-            }).catch(function(error){
-              alert("Unable to save project: " + error)
-            });
-          }
-        });
+    }
+    
+    $('.modal').on('shown.bs.modal', function () {
+      $('#projectName').focus() // focus on the project name input box when the modal loads
+    })
+    
+    var autoIncrimentedName = function() {
+      var projName = getID();
+      var versionNumber = parseInt(projName[projName.length-1])
+      if (!isNaN(versionNumber) && projName[projName.length-2] == "-"){
+        versionNumber += 1;
+        return projName.substring(0, projName.length-1) + versionNumber.toString();
+      } else {
+        return projName + "-1";
       }
-    };
+    }
     
 
     // keyboard shortcuts
@@ -927,6 +1002,5 @@
        c.parentNode.insertBefore(n,c);
     }();
 </script>
-
 </body>
 </html>
