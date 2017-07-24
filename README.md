@@ -84,7 +84,7 @@ window.addEventListener("resize", () => {
 
 ## Reporting a bug
 
-Simply create an issue with a link to the simpliest code you can create that would reproduce the bug, preferably on woofjs.com.
+Simply create an issue with a link to the simpliest code you can create that would reproduce the bug, preferably on [woofjs.com](https://woofjs.com).
 
 
 ## Contributing
@@ -97,7 +97,7 @@ We'd love your help in making it even more learnable and dependable for them.
 
 #### woofjs.com
 
-woofjs.com is hosted on Github pages from this repository. This means that all of the top-level URLs on woofjs.com must be in the top-level of the directory. This includes:
+[woofjs.com](https://woofjs.com) is hosted on Github pages from this repository. This means that all of the top-level URLs on [woofjs.com](https://woofjs.com) must be in the top-level of the directory. This includes:
 
   * index.html
   * create.html
@@ -129,7 +129,7 @@ There are two options to do this:
 
 #### WoofJS.com's Tutorials
 
-WoofJS.com's tutorials actually live at an entirely different repo: https://github.com/stevekrouse/coding.space.
+[WoofJS.com](https://woofjs.com)'s tutorials actually live at an entirely different repo: https://github.com/stevekrouse/coding.space.
 
 You can find them there in the `woof/` subdirectory. If you'd like to cotribute to the WoofJS curriculum, head on over to that repo.
 
