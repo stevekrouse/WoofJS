@@ -58,6 +58,28 @@
   <script src="./vendor/codemirror/jshint.min.js"></script>
   <script src="./vendor/codemirror/lint.js"></script>
   <script src="./vendor/codemirror/scrollpastend.js"></script>
+  <!--new style sheets-->
+  
+
+<link rel="stylesheet" href="https://codemirror.net/theme/3024-day.css">
+<link rel="stylesheet" href="https://codemirror.net/theme/3024-night.css">
+<link rel="stylesheet" href="https://codemirror.net/theme/ambiance.css">
+<link rel="stylesheet" href="https://codemirror.net/theme/base16-dark.css">
+<link rel="stylesheet" href="https://codemirror.net/theme/base16-light.css">
+<link rel="stylesheet" href="https://codemirror.net/theme/blackboard.css">
+<link rel="stylesheet" href="https://codemirror.net/theme/cobalt.css">
+<link rel="stylesheet" href="https://codemirror.net/theme/eclipse.css">
+<link rel="stylesheet" href="https://codemirror.net/theme/elegant.css">
+<link rel="stylesheet" href="https://codemirror.net/theme/erlang-dark.css">
+<link rel="stylesheet" href="https://codemirror.net/theme/lesser-dark.css">
+<link rel="stylesheet" href="https://codemirror.net/theme/midnight.css">
+<link rel="stylesheet" href="https://codemirror.net/theme/monokai.css">
+<link rel="stylesheet" href="https://codemirror.net/theme/neat.css">
+
+<!--end -->
+  
+  
+  
   <script src="https://unpkg.com/vue@2.0.1/dist/vue.js"></script>
   <script data-presets="es2015" src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.14.0/babel.min.js"></script>
   <script src="https://cdn.rawgit.com/beautify-web/js-beautify/1b52eb1f90daaefa6ff0fa7736f97fbfc58093c1/js/lib/beautify.js"></script>
@@ -237,6 +259,7 @@
         <ul class="dropdown-menu" aria-labelledby="loggedin-name">
           <li><a href="./create.html">New Project</a></li>
           <li><a href="./team.html">New Team Project <span class="label label-success">beta</span></a></li>
+          <!--<li><a href="./settings.html">Settings</a></li>-->
           <li><a target="_blank" id="login-projects">My Projects</a></li>
           <li onclick="firebase.auth().signOut()"><a>Logout</a></li>
           <li role="separator" class="divider"></li>
@@ -326,10 +349,29 @@
       </div>
       <div v-show="codePane" :style="{display: !codebar ? 'flex' : 'none'}" id="code">
         <div id="CodeNav">
+          <div>
           <span style="margin-left:8px; margin-top:4px">Code</span>
+               <select v-model="selected"  style="color:#49A6DF; margin-top: 4px; height: 18px; font-size: 12px;">
+                 <option disabled value="" id="select">Select Theme</option>
+              		<option>monokai</option>
+              		<option>cobalt</option>
+              		<option>ambiance</option>
+              		<option>blackboard</option>
+              		<option>erlang-dark</option>
+              		<option>lesser-dark</option>
+              		<option>eclipse</option>
+              		<option>3024-night</option>
+              		<option>base16-dark</option>
+              		<option>elegant</option>
+              		<option>midnight</option>
+              		<option>night</option>
+              	</select>
+              	</div>
+              	<div>
           <span style="margin-right:8px">
             <img @click="codebar = !codebar" style="margin: 5px; width: 16px; height:18px; cursor:pointer" src="./images/minimize.png" title="Minimize">
           </span>
+          </div>
         </div>
       </div>
     
@@ -387,7 +429,7 @@
         mouseX: 0,
         mouseY: 0,
         seenError: true,
-        
+        selected: '',
         projectNameRequest: "NOT LOADING", // or "LOADING" or "NAME TAKEN"
         projectNameInputValue: "",
         projectNameLastKeyIllegal: false,
@@ -454,13 +496,25 @@
             }
           }
         },
+        
+       
+        
+        switchTheme : function(){
+          var selected = this.selected;
+          editor.setOption("theme", selected);
+            firebase.database().ref("/user/" + firebase.auth().currentUser.uid +"/theme").set(selected)
+        }
+        
       },
       watch: {
         error: function(newError) {
           if (newError && newError.lineno) {
             CodeMirror.commands.markGutter(editor, "error", newError.lineno, newError.message)
           }
-        }
+        },
+         selected: function(newSelected) {
+           this.switchTheme()
+         }
       }
     })
     var myCode = false
@@ -491,12 +545,21 @@
     
     var authChanged = false
     firebase.auth().onAuthStateChanged(function(user) {
-      if (!authChanged){
-        authChanged = true
-        if(user){
-          ga('set', 'userId', user.uid); 
-        } 
-      }
+
+          //update user theme when new page loads
+          firebase.database().ref('/user/' + firebase.auth().currentUser.uid + "/theme").once('value').then(function(snapshot) {
+             editor.setOption("theme", snapshot.val());
+            var sel = document.getElementById('select');
+            sel.innerHTML = '<option>'+ snapshot.val() +'</option>';
+           
+          });
+
+          if (!authChanged) {
+            authChanged = true
+            if (user) {
+              ga('set', 'userId', user.uid);
+            }
+          }
       
       if (user){
         handleLogin(user.displayName, user.uid)
@@ -506,9 +569,12 @@
             firebase.database().ref("/user/" + user.uid).set({
               displayName: user.displayName,
               email: user.email,
-              createdDate: firebase.database.ServerValue.TIMESTAMP
+              createdDate: firebase.database.ServerValue.TIMESTAMP,
+            
             })
           }
+          
+          
         })
         
         // this puts the user's most recent project under their name
@@ -661,12 +727,16 @@
       cm.replaceSelection(spaces, "end", "+input");
     }
     
+ 
+    
+    
+    
     var editor = CodeMirror(document.getElementById('code'), {
         mode:  "javascript",
         value: editorVal,
         lineNumbers: true,
         lineWrapping: false,
-        theme: "eclipse",
+        // theme: "eclipse",
         tabSize: 2,
         indentUnit: 2,
         indentWithTabs: false,
@@ -696,7 +766,8 @@
         save();
       }
     }
-    
+  
+
     function WoofJSLint(){
       if (app.error) { return }
       const code = js_beautify(app.code, {space_after_anon_function: true, indent_size: 2, indent_with_tabs: false})
