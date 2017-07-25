@@ -240,7 +240,7 @@
         <ul class="dropdown-menu" aria-labelledby="loggedin-name">
           <li><a href="./create.html">New Project</a></li>
           <li><a href="./team.html">New Team Project <span class="label label-success">beta</span></a></li>
-          <li><a target="_blank" id="login-projects" :href="uid">My Projects</a></li>
+          <li><a target="_blank" id="login-projects" :href="userProjectsLink">My Projects</a></li>
           <li onclick="firebase.auth().signOut()"><a>Logout</a></li>
           <li role="separator" class="divider"></li>
           <li class="dropdown-header">Recent Projects</li>
@@ -527,7 +527,7 @@
 
         loginState: "LOGGEDOUT", // or LOGGEDIN
         userNameForMenu: '',
-        uid: ''
+        userProjectsLink: ''
 
       },
       computed: {
@@ -649,7 +649,7 @@
         },
         passwordSuccessValidate: function($event){
           var password = $event.target.value
-          if (/(?=.*[a-zA-Z])(?=.*\d)(?=.{6}).*/.test(password)){
+          if (/^.{6,}$/.test(password)){
             this.passwordValid = "VALID"
           }
         },
@@ -726,7 +726,7 @@
       } 
       if (password == ''){
         app.passwordValid = "EMPTY"
-      } else if (!/(?=.*[a-zA-Z])(?=.*\d)(?=.{6}).*/.test(password)){
+      } else if (!/^.{6,}$/.test(password)){
         app.passwordValid = "WEAK"
       } else {
         app.passwordValid = "VALID"
@@ -808,7 +808,7 @@
 
     function handleLogin(userName, uid) {
       app.userNameForMenu = userName
-      app.uid = "./user.html#" + uid
+      app.userProjectsLink  = "./user.html#" + uid
       app.loginState = "LOGGEDIN"
     }
 
