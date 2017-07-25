@@ -1,11 +1,12 @@
-# WoofJS
-[![license](https://img.shields.io/github/license/mashape/apistatus.svg)]() [![Code Triagers Badge](https://www.codetriage.com/stevekrouse/woofjs/badges/users.svg)](https://www.codetriage.com/stevekrouse/woofjs)       [![cloud9](https://img.shields.io/badge/cloud9-open-red.svg)](https://c9.io/auth/github?r=https%3A%2F%2Fc9.io%2Fopen%2F%3Fclone_url%3Dhttps%253A%252F%252Fgithub.com%252Fstevekrouse%252FWoofJS)
+# WoofJS [![license](https://img.shields.io/github/license/mashape/apistatus.svg)]() [![Code Triagers Badge](https://www.codetriage.com/stevekrouse/woofjs/badges/users.svg)](https://www.codetriage.com/stevekrouse/woofjs)       [![cloud9](https://img.shields.io/badge/cloud9-open-red.svg)](https://c9.io/auth/github?r=https%3A%2F%2Fc9.io%2Fopen%2F%3Fclone_url%3Dhttps%253A%252F%252Fgithub.com%252Fstevekrouse%252FWoofJS)
+
+<img src="http://woofjs.com/images/logo-dog-text.png" alt="logo-dog-text.png"/>
 
 WoofJS is a *learnable* JavaScript framework for creating games by [The Coding Space](http://thecodingspace.com).
 
 WoofJS was created to be the next step after block-based coding in Scratch. For more details, you can [read our announcement post](https://medium.com/@stevekrouse/woof-d9adf2110fc6).
 
-## Getting Started with WoofJS.com
+## Getting Started (woofjs.com)
 
 ![screenshot 2017-03-03 at 10 04 05 am](https://cloud.githubusercontent.com/assets/2288939/23556045/1693c70c-fff9-11e6-950b-5e95c7a0112a.png)
 
@@ -19,7 +20,7 @@ We recommend that you get started with WoofJS on [woofjs.com](http://woofjs.com)
   * iterate quickly with live updates to your output as you type
 
 
-## Using WoofJS outside of woofjs.com
+## Getting Started (outside woofjs.com)
 
 ### Installing WoofJS
 
@@ -83,7 +84,7 @@ window.addEventListener("resize", () => {
 
 ## Reporting a bug
 
-Simply create an issue with a link to the simpliest code you can create that would reproduce the bug, preferably on woofjs.com.
+Simply create an issue with a link to the simpliest code you can create that would reproduce the bug, preferably on [woofjs.com](https://woofjs.com).
 
 
 ## Contributing
@@ -96,7 +97,7 @@ We'd love your help in making it even more learnable and dependable for them.
 
 #### woofjs.com
 
-woofjs.com is hosted on Github pages from this repository. This means that all of the top-level URLs on woofjs.com must be in the top-level of the directory. This includes:
+[woofjs.com](https://woofjs.com) is hosted on Github pages from this repository. This means that all of the top-level URLs on [woofjs.com](https://woofjs.com) must be in the top-level of the directory. This includes:
 
   * index.html
   * create.html
@@ -107,7 +108,7 @@ woofjs.com is hosted on Github pages from this repository. This means that all o
   * favicon.png
   * etc
 
-The documentation that you find on woofjs.com/create is contained within the docs/ folder.
+The documentation that you find on [woofjs.com/create.html](http://woofjs.com/create.html) is contained within the [docs](https://github.com/stevekrouse/WoofJS/tree/master/docs) folder.
 
 #### woof.js core library
 
@@ -128,7 +129,7 @@ There are two options to do this:
 
 #### WoofJS.com's Tutorials
 
-WoofJS.com's tutorials actually live at an entirely different repo: https://github.com/stevekrouse/coding.space.
+[WoofJS.com](https://woofjs.com)'s tutorials actually live at an entirely different repo: https://github.com/stevekrouse/coding.space.
 
 You can find them there in the `woof/` subdirectory. If you'd like to cotribute to the WoofJS curriculum, head on over to that repo.
 

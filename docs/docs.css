@@ -229,7 +229,7 @@ button.highlight:hover {
     background-color: #5A4097;
 }
 
-#Keyboard {
+#Integrations {
     background-color: #E04D4D
 }
 
@@ -337,8 +337,9 @@ h4 {
     }
 }
 
+
 #Image {
-    background-color: #49A6DF;
+    background-color: #495BDF;
     width:90% !important;
 }
 
@@ -348,7 +349,7 @@ h4 {
 }
 
 #Circle {
-    background-color: #AD5FC2;
+    background-color: #8F4FA1;
     width:90% !important;
 }
 
@@ -358,12 +359,22 @@ h4 {
 }
 
 #Line {
-    background-color: #5A4097;
+    background-color: #221838;
+    width:90% !important;
+}
+
+#Polygon {
+    background-color: #AD5FC2;
+    width:90% !important;
+}
+
+#Oval {
+    background-color: #49347A;
     width:90% !important;
 }
 
 #Background {
-    background-color: #495BDF;
+    background-color: #49A6DF;
     width:90% !important;
 }
 
@@ -373,9 +384,73 @@ h4 {
 #Text,
 #Circle,
 #Rectangle,
+#Polygon,
+#Oval,
 #Background,
 #Line {
-    height: 10%;
+    height: 8%;
+    width: 33%;
+    border-radius: 10px;
+}
+
+
+#Weather{
+    background-color: #d5d4f0;
+    width:90% !important;    
+}
+#Local{
+    background-color: #b9b8e6;
+    width:90% !important; 
+}
+#Currency{
+    background-color: #9e9ddd;
+    width:90% !important;    
+}
+#Sunrise{
+    background-color: #8381d4;
+    width:90% !important; 
+}
+/*#Market{
+    background-color: #8381d4;
+    width:90% !important;      
+}
+#Quotes{
+    background-color: #48487c;
+    width:90% !important;      
+}*/
+#Chuck{
+    background-color: #48487c;
+    width:90% !important;     
+}
+#Scientific{
+    background-color: #545390;
+    width:90% !important;    
+}
+#Trivia{
+    background-color: #3e3d68;
+    width:90% !important;     
+}
+#Firebase {
+    background-color: #282840;
+    width:90% !important;
+}
+#Custom{
+    background-color: #101019;
+    width:90% !important;   
+}
+
+#Weather,
+#Trivia,
+#Scientific,
+#Chuck,
+#Quotes,
+#Market,
+#Currency,
+#Custom,
+#Sunrise,
+#Local,
+#Firebase {
+    height: 8%;
     width: 33%;
     border-radius: 10px;
 }

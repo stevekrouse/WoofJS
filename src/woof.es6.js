@@ -1062,6 +1062,89 @@ Woof.prototype.Rectangle = function({project = undefined, height = 10, width = 1
   };
 };
 
+Woof.prototype.Oval = function({project = undefined, height = 50, width = 20, color = "green"} = {}) {
+  this.type = "oval"
+  Woof.prototype.Sprite.call(this, arguments[0]);
+  this.ovalHeight = Math.abs(height);
+  this.ovalWidth = Math.abs(width);
+  this.color = color;
+  
+  Object.defineProperty(this, 'width', {
+    get: function() {
+      return this.ovalWidth;
+    },
+    set: function(value) {
+      if (typeof value != "number") { throw new TypeError("oval.width can only be set to a number."); }
+      this.ovalWidth = value;
+    }
+  });
+  
+  Object.defineProperty(this, 'height', {
+    get: function() {
+      return this.ovalHeight;
+    },
+    set: function(value) {
+      if (typeof value != "number") { throw new TypeError("oval.height can only be set to a number."); }
+      this.ovalHeight = value;
+    }
+  });  
+  
+  this.render = (context) => {
+    context.fillStyle=this.color;
+    context.beginPath();
+    context.ellipse(0, 0, width/2, height/2, 0, 0,  2*Math.PI);
+    context.fill();
+  };
+};
+
+Woof.prototype.Polygon = function({project = undefined, sides = 3, length = 100, color = "black"} = {}) {
+  this.type = "polygon"
+  Woof.prototype.Sprite.call(this, arguments[0]);
+  this.polygonSides = Math.abs(sides);
+  this.polygonLength = Math.abs(length);
+  this.color = color;
+  
+  Object.defineProperty(this, 'sides', {
+    get: function() {
+      return this.polygonSides;
+    },
+    set: function(value) {
+      if (typeof value != "number" || value < 3) { throw new TypeError("polygon.sides can only be set to a number that is greater than or equal to 3."); }
+      this.polygonSides = sides;
+    }
+  });
+  
+  Object.defineProperty(this, 'length', {
+    get: function() {
+      return this.polygonLength;
+    },
+    set: function(value) {
+      if (typeof value != "number") { throw new TypeError("polygon.length can only be set to a number."); }
+      this.polygonLength = value;
+    }
+  });  
+
+  this.collider = function() {
+    var pos = this.rotatedVector(this.x - this.length, this.y - this.length)
+    var v1 = new SAT.Vector(0, 0)
+    var v2 = this.translatedVector(pos, this.rotatedVector(this.x + this.length, this.y - this.length))
+    var v3 = this.translatedVector(pos, this.rotatedVector(this.x + this.length, this.y + this.length))
+    var v4 = this.translatedVector(pos, this.rotatedVector(this.x - this.length, this.y + this.length))
+    
+    return new SAT.Polygon(pos, [v1, v2, v3, v4])
+  }
+  
+  this.render = (context) => {
+    context.fillStyle=this.color;
+    context.beginPath();
+    context.moveTo(length*1,length*0);
+    for(i = 1; i<sides; i++){
+      context.lineTo(length*Math.cos(i*(2*Math.PI/sides)),length*Math.sin(i*(2*Math.PI/sides)))
+    }
+    context.fill();
+  };
+};
+
 // Creates a 'line' sprite by rendering a rotated rectangle
 Woof.prototype.Line = function({project = undefined, width = 1, x1 = 10, y1 = 10, color = "black"} = {}) {
   this.type = "line"
@@ -1496,6 +1579,80 @@ Woof.prototype.range = function(start, end, incr = 1) {
   }
   return output;
 };
+
+//Math Functions
+Woof.prototype.sqrt = function(a) {
+  if (typeof a != "number" ) { throw new TypeError("sqrt(a) requires one number input."); }
+  return Math.sqrt(a);
+};
+
+Woof.prototype.abs = function(a) {
+  if (typeof a != "number" ) { throw new TypeError("abs(a) requires one number input."); }
+  return Math.abs(a);
+};
+
+Woof.prototype.floor = function(a) {
+  if (typeof a != "number" ) { throw new TypeError("floor(a) requires one number input."); }
+  return Math.floor(a);
+};
+
+Woof.prototype.ceiling = function(a) {
+  if (typeof a != "number" ) { throw new TypeError("ceiling(a) requires one number input."); }
+  return Math.ceil(a);
+};
+
+Woof.prototype.sin = function(a) {
+  if (typeof a != "number" ) { throw new TypeError("sin(a) requires one number input."); }
+  return Math.sin(a*(Math.PI/180));
+};
+
+Woof.prototype.cos = function(a) {
+  if (typeof a != "number" ) { throw new TypeError("cos(a) requires one number input."); }
+  return Math.cos(a*(Math.PI/180));
+};
+
+Woof.prototype.tan = function(a) {
+  if (typeof a != "number" ) { throw new TypeError("tan(a) requires one number input."); }
+  return Math.tan(a*(Math.PI/180));
+};
+
+Woof.prototype.asin = function(a) {
+  if (typeof a != "number" ) { throw new TypeError("asin(a) requires one number input."); }
+  return Math.asin(a)*(180/Math.PI);
+};
+
+Woof.prototype.acos = function(a) {
+  if (typeof a != "number" ) { throw new TypeError("acos(a) requires one number input."); }
+  return Math.acos(a)*(180/Math.PI);
+};
+
+Woof.prototype.atan = function(a) {
+  if (typeof a != "number" ) { throw new TypeError("atan(a) requires one number input."); }
+  return Math.atan(a)*(180/Math.PI);
+};
+
+Woof.prototype.ln = function(a) {
+  if (typeof a != "number" ) { throw new TypeError("ln(a) requires one number input."); }
+  return Math.log(a);
+};
+
+Woof.prototype.log = function(a) {
+  if (typeof a != "number" ) { throw new TypeError("log(a) requires one number input."); }
+  return Math.log(a)/Math.log(10);
+};
+
+Woof.prototype.pow = function(a,b) {
+  if (typeof a != "number" || typeof b != "number") { throw new TypeError("pow(a,b) requires two number inputs."); }
+  return Math.pow(a,b);
+};
+
+const getData = (url, callback) => {
+  fetch(url,{mode:'cors',header:{'Access-Control-Allow-Origin':'*'}}).then(result => {
+    result.json().then(data => {
+      callback(data)
+    })
+  })
+}
 
 // find the woof.js script tag in the page
 var currentScript = document.currentScript || Array.prototype.slice.call(document.getElementsByTagName('script')).find(s => s.src.includes('woof.js'))

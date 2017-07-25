@@ -1504,21 +1504,136 @@ Woof.prototype.Rectangle = function () {
   };
 };
 
-// Creates a 'line' sprite by rendering a rotated rectangle
-Woof.prototype.Line = function () {
+Woof.prototype.Oval = function () {
   var _this7 = this;
 
   var _ref10 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
       _ref10$project = _ref10.project,
       project = _ref10$project === undefined ? undefined : _ref10$project,
+      _ref10$height = _ref10.height,
+      height = _ref10$height === undefined ? 50 : _ref10$height,
       _ref10$width = _ref10.width,
-      width = _ref10$width === undefined ? 1 : _ref10$width,
-      _ref10$x = _ref10.x1,
-      x1 = _ref10$x === undefined ? 10 : _ref10$x,
-      _ref10$y = _ref10.y1,
-      y1 = _ref10$y === undefined ? 10 : _ref10$y,
+      width = _ref10$width === undefined ? 20 : _ref10$width,
       _ref10$color = _ref10.color,
-      color = _ref10$color === undefined ? "black" : _ref10$color;
+      color = _ref10$color === undefined ? "green" : _ref10$color;
+
+  this.type = "oval";
+  Woof.prototype.Sprite.call(this, arguments[0]);
+  this.ovalHeight = Math.abs(height);
+  this.ovalWidth = Math.abs(width);
+  this.color = color;
+
+  Object.defineProperty(this, 'width', {
+    get: function get() {
+      return this.ovalWidth;
+    },
+    set: function set(value) {
+      if (typeof value != "number") {
+        throw new TypeError("oval.width can only be set to a number.");
+      }
+      this.ovalWidth = value;
+    }
+  });
+
+  Object.defineProperty(this, 'height', {
+    get: function get() {
+      return this.ovalHeight;
+    },
+    set: function set(value) {
+      if (typeof value != "number") {
+        throw new TypeError("oval.height can only be set to a number.");
+      }
+      this.ovalHeight = value;
+    }
+  });
+
+  this.render = function (context) {
+    context.fillStyle = _this7.color;
+    context.beginPath();
+    context.ellipse(0, 0, width / 2, height / 2, 0, 0, 2 * Math.PI);
+    context.fill();
+  };
+};
+
+Woof.prototype.Polygon = function () {
+  var _this8 = this;
+
+  var _ref11 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+      _ref11$project = _ref11.project,
+      project = _ref11$project === undefined ? undefined : _ref11$project,
+      _ref11$sides = _ref11.sides,
+      sides = _ref11$sides === undefined ? 3 : _ref11$sides,
+      _ref11$length = _ref11.length,
+      length = _ref11$length === undefined ? 100 : _ref11$length,
+      _ref11$color = _ref11.color,
+      color = _ref11$color === undefined ? "black" : _ref11$color;
+
+  this.type = "polygon";
+  Woof.prototype.Sprite.call(this, arguments[0]);
+  this.polygonSides = Math.abs(sides);
+  this.polygonLength = Math.abs(length);
+  this.color = color;
+
+  Object.defineProperty(this, 'sides', {
+    get: function get() {
+      return this.polygonSides;
+    },
+    set: function set(value) {
+      if (typeof value != "number" || value < 3) {
+        throw new TypeError("polygon.sides can only be set to a number that is greater than or equal to 3.");
+      }
+      this.polygonSides = sides;
+    }
+  });
+
+  Object.defineProperty(this, 'length', {
+    get: function get() {
+      return this.polygonLength;
+    },
+    set: function set(value) {
+      if (typeof value != "number") {
+        throw new TypeError("polygon.length can only be set to a number.");
+      }
+      this.polygonLength = value;
+    }
+  });
+
+  this.collider = function () {
+    var pos = this.rotatedVector(this.x - this.length, this.y - this.length);
+    var v1 = new SAT.Vector(0, 0);
+    var v2 = this.translatedVector(pos, this.rotatedVector(this.x + this.length, this.y - this.length));
+    var v3 = this.translatedVector(pos, this.rotatedVector(this.x + this.length, this.y + this.length));
+    var v4 = this.translatedVector(pos, this.rotatedVector(this.x - this.length, this.y + this.length));
+
+    return new SAT.Polygon(pos, [v1, v2, v3, v4]);
+  };
+
+  this.render = function (context) {
+    context.fillStyle = _this8.color;
+    context.beginPath();
+    context.moveTo(length * 1, length * 0);
+    for (i = 1; i < sides; i++) {
+      context.lineTo(length * Math.cos(i * (2 * Math.PI / sides)), length * Math.sin(i * (2 * Math.PI / sides)));
+    }
+    context.fill();
+  };
+};
+
+// Creates a 'line' sprite by rendering a rotated rectangle
+Woof.prototype.Line = function () {
+  var _this9 = this;
+
+  var _ref12 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+      _ref12$project = _ref12.project,
+      project = _ref12$project === undefined ? undefined : _ref12$project,
+      _ref12$width = _ref12.width,
+      width = _ref12$width === undefined ? 1 : _ref12$width,
+      _ref12$x = _ref12.x1,
+      x1 = _ref12$x === undefined ? 10 : _ref12$x,
+      _ref12$y = _ref12.y1,
+      y1 = _ref12$y === undefined ? 10 : _ref12$y,
+      _ref12$color = _ref12.color,
+      color = _ref12$color === undefined ? "black" : _ref12$color;
 
   this.type = "line";
   Woof.prototype.Sprite.call(this, arguments[0]);
@@ -1571,21 +1686,21 @@ Woof.prototype.Line = function () {
   };
 
   this.render = function (context) {
-    context.fillStyle = _this7.color;
-    context.fillRect(-_this7.width / 2, -_this7.height, _this7.width, _this7.height);
+    context.fillStyle = _this9.color;
+    context.fillRect(-_this9.width / 2, -_this9.height, _this9.width, _this9.height);
   };
 };
 
 Woof.prototype.Image = function () {
-  var _this8 = this;
+  var _this10 = this;
 
-  var _ref11 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-      _ref11$project = _ref11.project,
-      project = _ref11$project === undefined ? undefined : _ref11$project,
-      _ref11$url = _ref11.url,
-      url = _ref11$url === undefined ? "./images/SMJjVCL.png" : _ref11$url,
-      height = _ref11.height,
-      width = _ref11.width;
+  var _ref13 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+      _ref13$project = _ref13.project,
+      project = _ref13$project === undefined ? undefined : _ref13$project,
+      _ref13$url = _ref13.url,
+      url = _ref13$url === undefined ? "./images/SMJjVCL.png" : _ref13$url,
+      height = _ref13.height,
+      width = _ref13.width;
 
   this.type = "image";
   Woof.prototype.Sprite.call(this, arguments[0]);
@@ -1630,8 +1745,8 @@ Woof.prototype.Image = function () {
 
   this.render = function (context) {
     // checking if the image is loaded and not broken via https://stackoverflow.com/a/34726863/2180575
-    if (_this8.image.complete && _this8.image.naturalHeight !== 0) {
-      context.drawImage(_this8.image, -_this8.width / 2, -_this8.height / 2, _this8.width, _this8.height);
+    if (_this10.image.complete && _this10.image.naturalHeight !== 0) {
+      context.drawImage(_this10.image, -_this10.width / 2, -_this10.height / 2, _this10.width, _this10.height);
     }
   };
 };
@@ -1643,9 +1758,9 @@ Woof.prototype.customSprite = function (subClass) {
     throw new TypeError("customSprites must contain a render function");
   } // TODO more errors like these, probably for width and height
   return function () {
-    var _ref12 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-        _ref12$project = _ref12.project,
-        project = _ref12$project === undefined ? undefined : _ref12$project;
+    var _ref14 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+        _ref14$project = _ref14.project,
+        project = _ref14$project === undefined ? undefined : _ref14$project;
 
     Woof.prototype.Sprite.call(this, arguments[0]);
     Woof.prototype.extend(this, subClass);
@@ -1653,31 +1768,31 @@ Woof.prototype.customSprite = function (subClass) {
 };
 
 Woof.prototype.Repeat = function (times, func, after) {
-  var _this9 = this;
+  var _this11 = this;
 
   this.func = func;
   this.times = times;
   this.done = false;
 
   this.next = function () {
-    if (_this9.done) {
+    if (_this11.done) {
       return;
     }
-    if (_this9.times <= 0) {
-      _this9.done = true;
+    if (_this11.times <= 0) {
+      _this11.done = true;
       if (after) {
         after();
       }
       return;
     } else {
-      _this9.func();
-      _this9.times--;
+      _this11.func();
+      _this11.times--;
     }
   };
 };
 
 Woof.prototype.RepeatUntil = function (condition, func, after) {
-  var _this10 = this;
+  var _this12 = this;
 
   // TODO if (typeof condition !== "string") { throw Error("You must give repeatUntil a string condition in quotes. You gave it: " + condition); }
   this.func = func;
@@ -1685,25 +1800,25 @@ Woof.prototype.RepeatUntil = function (condition, func, after) {
   this.done = false;
 
   this.next = function () {
-    if (_this10.done) {
+    if (_this12.done) {
       return;
     }
     var cond;
     try {
-      cond = _this10.condition();
+      cond = _this12.condition();
     } catch (e) {
       console.error("Error in Repeat Until condition");
       throw e;
     }
 
     if (cond) {
-      _this10.done = true;
+      _this12.done = true;
       if (after) {
         after();
       }
       return;
     } else {
-      _this10.func();
+      _this12.func();
     }
   };
 };
@@ -1980,6 +2095,106 @@ Woof.prototype.range = function (start, end) {
     }
   }
   return output;
+};
+
+//Math Functions
+Woof.prototype.sqrt = function (a) {
+  if (typeof a != "number") {
+    throw new TypeError("sqrt(a) requires one number input.");
+  }
+  return Math.sqrt(a);
+};
+
+Woof.prototype.abs = function (a) {
+  if (typeof a != "number") {
+    throw new TypeError("abs(a) requires one number input.");
+  }
+  return Math.abs(a);
+};
+
+Woof.prototype.floor = function (a) {
+  if (typeof a != "number") {
+    throw new TypeError("floor(a) requires one number input.");
+  }
+  return Math.floor(a);
+};
+
+Woof.prototype.ceiling = function (a) {
+  if (typeof a != "number") {
+    throw new TypeError("ceiling(a) requires one number input.");
+  }
+  return Math.ceil(a);
+};
+
+Woof.prototype.sin = function (a) {
+  if (typeof a != "number") {
+    throw new TypeError("sin(a) requires one number input.");
+  }
+  return Math.sin(a * (Math.PI / 180));
+};
+
+Woof.prototype.cos = function (a) {
+  if (typeof a != "number") {
+    throw new TypeError("cos(a) requires one number input.");
+  }
+  return Math.cos(a * (Math.PI / 180));
+};
+
+Woof.prototype.tan = function (a) {
+  if (typeof a != "number") {
+    throw new TypeError("tan(a) requires one number input.");
+  }
+  return Math.tan(a * (Math.PI / 180));
+};
+
+Woof.prototype.asin = function (a) {
+  if (typeof a != "number") {
+    throw new TypeError("asin(a) requires one number input.");
+  }
+  return Math.asin(a) * (180 / Math.PI);
+};
+
+Woof.prototype.acos = function (a) {
+  if (typeof a != "number") {
+    throw new TypeError("acos(a) requires one number input.");
+  }
+  return Math.acos(a) * (180 / Math.PI);
+};
+
+Woof.prototype.atan = function (a) {
+  if (typeof a != "number") {
+    throw new TypeError("atan(a) requires one number input.");
+  }
+  return Math.atan(a) * (180 / Math.PI);
+};
+
+Woof.prototype.ln = function (a) {
+  if (typeof a != "number") {
+    throw new TypeError("ln(a) requires one number input.");
+  }
+  return Math.log(a);
+};
+
+Woof.prototype.log = function (a) {
+  if (typeof a != "number") {
+    throw new TypeError("log(a) requires one number input.");
+  }
+  return Math.log(a) / Math.log(10);
+};
+
+Woof.prototype.pow = function (a, b) {
+  if (typeof a != "number" || typeof b != "number") {
+    throw new TypeError("pow(a,b) requires two number inputs.");
+  }
+  return Math.pow(a, b);
+};
+
+var getData = function getData(url, callback) {
+  fetch(url, { mode: 'cors', header: { 'Access-Control-Allow-Origin': '*' } }).then(function (result) {
+    result.json().then(function (data) {
+      callback(data);
+    });
+  });
 };
 
 // find the woof.js script tag in the page
