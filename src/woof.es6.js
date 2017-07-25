@@ -1478,17 +1478,19 @@ Woof.prototype.mobile = function() {
 };
 
 // generate an array with the given parameters (starting value, ending value, incrementation) default incrementation is 1
-Woof.prototype.makeArray = function(start, end, incr = 1) {
+Woof.prototype.range = function(start, end, incr = 1) {
+  if (arguments.length < 2) { throw new TypeError("range() requires at least two inputs."); }
+  if (incr === 0) { throw new TypeError("the third parameter for range() cannot be 0"); }
   var output = [];
   if (start < end) {
     incr = Math.abs(incr);
-    for (var i = start; i < end + 1; i += incr) {
+    for (let i = start; i <= end; i += incr) {
       output.push(i);
     }
   }
   else if (start > end) {
     incr = -Math.abs(incr);
-    for (var j = start; j > end - 1; j += incr) {
+    for (let j = start; j >= end; j += incr) {
       output.push(j);
     }
   }
