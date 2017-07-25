@@ -108,7 +108,7 @@ We'd love your help in making it even more learnable and dependable for them.
   * favicon.png
   * etc
 
-The documentation that you find on woofjs.com/create is contained within the docs/ folder.
+The documentation that you find on [woofjs.com/create](http://woofjs.com/create.html) is contained within the docs/ folder.
 
 #### woof.js core library
 
