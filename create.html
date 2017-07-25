@@ -272,7 +272,7 @@
             <li><a><input onclick="autoRunClicked()" type="checkbox" id="checkbox" v-model="autoRunChecked"></span> Auto Run</a></li>
             <li role="separator" class="divider"></li>
             <li><a @click="cleanAll()" :style="{display: canClean ? 'block' : 'none'}"><span class="glyphicon glyphicon-align-left"></span> Clean Code <span><kbd>{{shortcut}}</kbd>+<kbd>B</kbd></span></a></li>
-            <li><a @click="cleanAll()" class='disabled' :style="{display: canClean ? 'none' : 'block'}" data-toggle="popover" data-trigger="hover" data-content="You can't clean when there's an error." data-placement="top"><span class="glyphicon glyphicon-align-left"></span> Clean Code</a></li>
+            <li><a @click="cleanAll()" class='disabled' :style="{display: canClean ? 'none' : 'block'}" data-toggle="popover" data-trigger="hover" data-content="You can't clean when there's an error." data-placement="top"><span class="glyphicon glyphicon-align-left"></span> Clean Code <span><kbd>{{shortcut}}</kbd>+<kbd>B</kbd></span></a></li>
             <li role="separator" class="divider"></li>
             <li><a @click="share()"><span class="glyphicon glyphicon-share-alt"></span> Share</a></li>
           </ul>
@@ -472,8 +472,7 @@
           'btn-default': this.status == "NEW"
         } },
         canClean: function(){
-          // whether or not the code can be "cleaned" or if its already pristine
-          return !this.error && this.code != js_beautify(this.code, {space_after_anon_function: true, indent_size: 2, indent_with_tabs: false })
+          return !this.error 
         },
       },
       methods: {
@@ -524,10 +523,6 @@
         find: function(){
           editor.execCommand("find")
         },
-        //COPY ISN'T WORKING
-        copy: function(){
-          editor.getSelection()
-        },
         validate: function($event) {
           var newName = $event.target.value
           
@@ -565,7 +560,8 @@
         }
       }
     })
-
+  
+    //Initalizes the popover for the comment code button in the tools menu
     $(document).ready(function(){
         $('[data-toggle="popover"]').popover();   
     });
@@ -820,10 +816,6 @@
         e.preventDefault();
         save();
       }
-    }
-
-    function commentCode(){
-
     }
     
     function WoofJSLint(){
