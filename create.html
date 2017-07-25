@@ -621,6 +621,7 @@
             this.usernameValid = "VALID"
           }
         },
+        // Checks for success or error on blur
         emailValidate: function($event){
           var email = $event.target.value
           if (email == ''){
@@ -631,6 +632,7 @@
             this.emailValid = "VALID"
           }
         },
+        // Checks for success or error on blur
         passwordValidate: function($event){
           var password = $event.target.value
           if (password == ''){
@@ -641,12 +643,14 @@
             this.passwordValid = "VALID"
           }
         },
+        // Checks for success on every input
         emailSuccessValidate: function($event){
           var email = $event.target.value
           if (/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email)){
             this.emailValid = "VALID"
           }
         },
+        // Checks for success on every input
         passwordSuccessValidate: function($event){
           var password = $event.target.value
           if (/^.{6,}$/.test(password)){
