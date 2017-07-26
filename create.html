@@ -6,7 +6,7 @@
   <meta name="twitter:title" content="WoofJS">
   <meta name="twitter:description" content="WoofJS is a Scratch-inspired Javascript library for making games.">
   <meta name="twitter:image" content="./images/qIgC8Ae.png">
-    
+
   <meta property="og:image" content="./images/qIgC8Ae.png">
   <meta property="og:title" content="WoofJS">
   <meta property="og:description" content="WoofJS is a Scratch-inspired Javascript library for making games.">
@@ -18,11 +18,11 @@
 
 
   <meta charset="utf-8">
-  
+
   <title>WoofJS</title>
   <link rel="shortcut icon" type="image/png" href="./favicon.png"/>
-      
-      
+
+
   <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
   <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
@@ -55,6 +55,7 @@
   <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
   <link rel="stylesheet" href="./vendor/codemirror/dialog.css">
   <link rel="stylesheet" href="./vendor/codemirror/show-hint.css">
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
   <script src="./vendor/codemirror/dialog.js"></script>
   <link rel="stylesheet" href="./vendor/codemirror/lint.css">
   <script src="./vendor/codemirror/jshint.min.js"></script>
@@ -64,14 +65,14 @@
   <script data-presets="es2015" src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.14.0/babel.min.js"></script>
   <script src="https://cdn.rawgit.com/beautify-web/js-beautify/1b52eb1f90daaefa6ff0fa7736f97fbfc58093c1/js/lib/beautify.js"></script>
   <style>
-     
+
      html, body {
       margin: 0;
       padding: 0;
       height: 100%;
       width: 100%;
     }
-    
+
     #page {
       position: relative;
       display: flex;
@@ -80,17 +81,17 @@
       align-content: stretch;
       height: 100%;
     }
-    
+
     body {
       background-color: #fff;
       font-family: sans-serif;
     }
-    
+
     h1 {
       font-weight: normal;
       font-size: 25px;
     }
-    
+
     .CodeMirror {
       font-size: 13px;
       flex: 1 0 auto;
@@ -100,7 +101,7 @@
       align-content: stretch;
       width: 100%;
     }
-    
+
     .CodeMirror-scroll {
       display: flex;
       flex-flow: column wrap;
@@ -111,13 +112,13 @@
       width: 100%;
 
     }
-    
+
     iframe {
         border: none;
         flex: 1 0 auto;
         width: 100%;
     }
-  
+
   #navbar {
       background-color: #6DC0F2;
       position: absolute;
@@ -129,80 +130,77 @@
       align-items: center;
       justify-content: space-between;
     }
-    
+
     #clean-up {
       background-color: #80CFFF;
       border: none;
       color: white;
     }
-    
+
     .btn-default {
       background-color: #49A6DF;
       border: none;
       color: white;
     }
-    
+
     #container {
       width: 100%;
       display: flex;
       flex-direction: row;
       margin-top: 55px;
     }
-    
+
     #previewbar, #docsbar, #projectbar, #codebar {
-       flex-grow: 0.65; 
-       align-items: center; 
-       display: none; 
-       width: 25px; 
-       flex-direction: column; 
-       justify-content: center;  
+       flex-grow: 0.65;
+       align-items: center;
+       display: none;
+       width: 25px;
+       flex-direction: column;
+       justify-content: center;
     }
-    
+
     #output, #docs, #projects, #code {
-      flex-flow: column wrap; 
-      resize: none; 
+      flex-flow: column wrap;
+      resize: none;
       flex: 10 1 25%;
     }
-    
+
     #code {
       word-wrap: break-word;
       width: 25%;
     }
-    
+
     #PreviewNav, #DocsNav, #ProjectsNav, #CodeNav {
       height: 25px;
-      text-align: center; 
-      color: white; 
+      text-align: center;
+      color: white;
       font-size: 1.1em;
-      display: flex; 
+      display: flex;
       justify-content: space-between;
     }
-    
+
     #previewbar, #PreviewNav {
     background-color:#4875D1;
     }
-    
+
     #docsbar, #DocsNav {
       background-color: #7F68D5;
     }
-    
+
     #projectbar, #ProjectsNav {
       background-color: #AD5FC2;
     }
-    
+
     #codebar, #CodeNav {
       background-color: #49A6DF;
     }
-    
+
     @media all and (max-width: 600px) {
-      #login {
-        margin-right: 5px; 
-      }
       fieldset {
         display: none;
       }
     }
-    
+
     #pop {
       cursor: pointer;
     }
@@ -218,7 +216,7 @@
       color: white;
       margin-right: 5px;
     }
-    
+
     .rotate {
       color: #FFFFFF;
       -webkit-transform: rotate(90deg);
@@ -238,14 +236,19 @@
 </head>
 <body>
   <div id="page">
-    <div id="navbar"> 
-      <button style="background-color: #80CFFF; color: white;  border-radius:4px; border:none; margin:8px" class="btn btn-medium btn-info" type="button" id="login" onclick="window.open('./login.html', 'Sign In', 'width=500,height=500')">Login / Sign Up</button>
-      <div style="margin-left: 5px" id="logggedin" class="hide dropdown">
-        <button class="btn btn-medium btn-info dropdown-toggle" type="button" id="loggedin-name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"></button>
+    <div id="navbar">
+
+    <div class="btn-group" role="group" aria-label="..." id='loginSingupGroup' :class='{show: loginState == "LOGGEDOUT", hide: loginState == "LOGGEDIN"}'>
+      <button style="margin-left: 5px;" class="btn btn-medium btn-primary" type="button" id="login" :class='{show: loginState == "LOGGEDOUT", hide: loginState == "LOGGEDIN"}' onclick="$('#loginModal').modal('show');" @click="switchToLogin()">Login</button>
+      <button class="btn btn-medium btn-success" type="button" id="signup" :class='{show: loginState == "LOGGEDOUT", hide: loginState == "LOGGEDIN"}' onclick="$('#loginModal').modal('show');" @click="switchToSignUp()">Sign Up</button>
+    </div>
+
+      <div style="margin-left: 5px" id="logggedin" class="hide dropdown" :class='{hide: loginState == "LOGGEDOUT", show: loginState == "LOGGEDIN"}'>
+        <button class="btn btn-medium btn-info dropdown-toggle" type="button" id="loggedin-name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">{{userNameForMenu}} <span class="caret"></span></button>
         <ul class="dropdown-menu" aria-labelledby="loggedin-name">
           <li><a href="./create.html">New Project</a></li>
           <li><a href="./team.html">New Team Project <span class="label label-success">beta</span></a></li>
-          <li><a target="_blank" id="login-projects">My Projects</a></li>
+          <li><a target="_blank" id="login-projects" :href="userProjectsLink">My Projects</a></li>
           <li onclick="firebase.auth().signOut()"><a>Logout</a></li>
           <li role="separator" class="divider"></li>
           <li class="dropdown-header">Recent Projects</li>
@@ -302,8 +305,122 @@
       </div>
     </div>
 
+    <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel">
+      <div class="modal-dialog" role="document">
+
+        <div class="modal-content" :style="{display: loginSignUpView == 'LOGIN' ? 'block' : 'none'}">
+          <div class="modal-header" :class="{animated: loginSignUpView == 'LOGIN', fadeIn: loginSignUpView == 'LOGIN'}">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h1 class="modal-title" id="loginModalLabel">Log In</h1>
+          </div>
+          <div class="modal-body" :class="{animated: loginSignUpView == 'LOGIN', fadeIn: loginSignUpView == 'LOGIN'}">
+            <div class="form-group" :class="{'has-error': loginError == 'USERNOTFOUND' || loginError == 'INVALIDEMAIL',  animated: loginError == 'USERNOTFOUND' || loginError == 'INVALIDEMAIL',  shake: loginError == 'USERNOTFOUND' || loginError == 'INVALIDEMAIL'}">
+              <label for='username'>Email</label>
+              <input type="text" v-model="loginEmail" class="form-control" id="username" placeholder="Email" aria-describedby="usernameHelp">
+              <span id="usernameHelp" class="help-block" :style="{display: loginError == 'USERNOTFOUND' ? 'block' : 'none'}">No account with this email exists. Please try to sign up for an account.</span>
+               <span id="usernameHelp" class="help-block" :style="{display: loginError == 'INVALIDEMAIL' ? 'block' : 'none'}">Invalid email address. Please try again.</span>
+            </div>
+            <div class="form-group" :class="{'has-error': loginError == 'WRONGPASSWORD',  animated: loginError == 'WRONGPASSWORD',  shake: loginError == 'WRONGPASSWORD'}">
+              <label for='password'>Password</label>
+              <input onkeydown="if (event.keyCode == 13){login()}"  type="password" v-model="loginPassword" class="form-control" id="password" placeholder="Password" aria-describedby="passwordHelp">
+              <span id="passwordHelp" class="help-block" :style="{display: loginError == 'WRONGPASSWORD' ? 'block' : 'none'}">Invalid password. Please try again.</span>
+            </div>
+            <div class="form-group" style="text-align:center;">
+              <div>
+                <button type="submit" class="btn btn-primary" style="width:100%;" :class="{disabled: loginButtonState == 'LOADING'}" onclick="login()">
+                  <i class="fa fa-spinner fa-pulse fa-fw" style="margin:0 auto;" :style="{display: loginButtonState == 'LOADING' ? 'block' : 'none'}"></i>
+                  <span :style="{display: loginButtonState == 'NORMAL' ? 'block' : 'none'}">Log In</span>
+                </button>
+                <br>
+                <br>
+                <small style="color:grey;">Don't have an account? <a @click="switchToSignUp()" style="cursor: pointer;text-decoration:none;">Sign Up</a></small>
+                <br>
+                <br>
+                <small style="color:grey;"><a @click="switchToPasswordReset()" style="cursor: pointer;color:grey;">Forgot your password?</a></small>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-content" :style="{display: loginSignUpView == 'SIGNUP' ? 'block' : 'none'}">
+          <div class="modal-header" :class="{animated: loginSignUpView == 'SIGNUP', fadeIn: loginSignUpView == 'SIGNUP'}">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h1 class="modal-title" id="loginModalLabel">Sign Up</h1>
+          </div>
+          <div class="modal-body" :class="{animated: loginSignUpView == 'SIGNUP', fadeIn: loginSignUpView == 'SIGNUP'}">
+            <div class="form-group" :class="{'has-success': usernameValid == 'VALID', 'has-error': usernameValid == 'TAKEN', animated: usernameValid == 'TAKEN' || usernameLastKeyIllegal,  shake: usernameValid == 'TAKEN' || usernameLastKeyIllegal}">
+              <label for='username'>Username</label>
+              <input v-model='signUpUsername' onfocus="$('#usernameCreate').tooltip('toggle')" data-placement="top" title="Don't use your real name" type="text" class="form-control" id="usernameCreate" placeholder="Username" aria-describedby="usernameCreateHelp" @input="usernameValidate($event)">
+              <span id="usernameCreateHelp" class="help-block" :style="{display: usernameValid == 'TAKEN' ? 'block' : 'none'}">This username is already taken. Please try another username.</span>
+              <span id="usernameCreateHelp" class="help-block" style='color:#BD362F;' :style="{display: usernameLastKeyIllegal ? 'block' : 'none'}">You cannot include {{ usernameLastKeyIllegal }} in usernames.</span>
+            </div>
+            <div class="form-group" :class="{'has-success': emailValid == 'VALID', 'has-error': emailValid == 'TAKEN' || emailValid == 'NOTEMAIL',  animated: emailValid == 'TAKEN' || emailValid == 'NOTEMAIL',  shake: emailValid == 'TAKEN' || emailValid == 'NOTEMAIL'}">
+              <label for='username'>Email</label>
+              <input type="email" v-model='signUpEmail' class="form-control" id="emailCreate" placeholder="Email" aria-describedby="emailCreate" @blur="emailValidate($event)" @input="emailSuccessValidate">
+              <span id="emailCreate" class="help-block" :style="{display: emailValid == 'TAKEN' ? 'block' : 'none'}">An account with this email aready exists. Please try to <a @click="switchToLogin()" onclick='app.loginEmail = app.signUpEmail'>log in</a>.</span>
+              <span id="emailCreate" class="help-block" :style="{display: emailValid == 'NOTEMAIL' ? 'block' : 'none'}">Please enter a valid email.</span>
+            </div>
+            <div class="form-group" :class="{'has-success': passwordValid == 'VALID', 'has-error': passwordValid == 'WEAK','animated': passwordValid == 'WEAK','shake': passwordValid == 'WEAK'}">
+              <label for='username'>Password</label>
+              <input type="password" v-model='signUpPassword' class="form-control" id="passwordCreate" placeholder="Password" aria-describedby="passwordCreateHelp" @input="passwordSuccessValidate" @blur="passwordValidate($event)" onkeydown="if (event.keyCode == 13){signUp()}">
+              <span id="passwordCreateHelp" class="help-block" :style="{display: passwordValid == 'WEAK' ? 'block' : 'none'}">Passwords must be at least 6 characters long.</span>
+            </div>
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" v-model='signUpChecked'> I want to recieve updates about WoofJS
+              </label>
+            </div>
+            <div class="form-group" style="text-align:center;">
+              <div>
+                <button type="submit" class="btn btn-primary" style="width:100%;" :class="{disabled: signUpButtonState == 'LOADING'}" onclick="signUp()">
+                  <i class="fa fa-spinner fa-pulse fa-fw" style="margin:0 auto;" :style="{display: signUpButtonState == 'LOADING' ? 'block' : 'none'}"></i>
+                  <span :style="{display: signUpButtonState == 'LOADING' ? 'none' : 'block'}">Sign Up</span>
+                </button>
+                <br>
+                <br>
+                <small style="color:grey;">Already have an account? <a @click="switchToLogin()" style="cursor: pointer;text-decoration:none;">Log In</a></small>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class='modal-content' :style="{display: loginSignUpView == 'RESETPASSWORD' || loginSignUpView == 'RESETPASSWORDSUCCESS'  ? 'block' : 'none'}">
+          <div class="modal-header" :class="{animated: loginSignUpView == 'RESETPASSWORD', fadeIn: loginSignUpView == 'RESETPASSWORD'}">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h1 class="modal-title" id="loginModalLabel">Recover Password</h1>
+          </div>
+
+          <div class="modal-body" :style="{display: loginSignUpView == 'RESETPASSWORD' ? 'block' : 'none'}" :class="{animated: loginSignUpView == 'RESETPASSWORD', fadeIn: loginSignUpView == 'RESETPASSWORD'}">
+            <h5>Get instructions sent to this email that explain how to reset your password.</h5>
+            <div class="form-group">
+              <label for='emailReset'>Email</label>
+              <input onkeydown="if (event.keyCode == 13){resetPassword()}" type="email" v-model="resetEmail" class="form-control" id="emailReset" placeholder="Email">
+            </div>
+            <div class="form-group" style="text-align:center;">
+              <div>
+                <button type="submit" class="btn btn-primary" style="width:100%;" onclick="resetPassword()" >
+                  Send
+                </button>
+                <br>
+                <br>
+                <small style="color:grey;">Remember your password? <a @click="switchToLogin()" style="cursor: pointer;text-decoration:none;">Log In</a></small>
+              </div>
+            </div>
+          </div>
+
+          <div class="modal-body" :style="{display: loginSignUpView == 'RESETPASSWORDSUCCESS' ? 'block' : 'none'}" :class="{animated: loginSignUpView == 'RESETPASSWORDSUCCESS', fadeIn: loginSignUpView == 'RESETPASSWORDSUCCESS'}">
+            <h5>If there is an account associated with that email address, we have sent it a password reset email.</h5>   
+          </div>
+
+        </div>
+
+
+      </div>
+    </div>
+
     <div id="container">
-    
+
       <div id="previewbar" v-show="previewbar" @click="previewbar= !previewbar" :style="{display: 'flex'}">
         <span class="rotate" style="font-size: 1.65em">Preview</span>
       </div>
@@ -349,7 +466,6 @@
         </div>
       </div>
     
-    
       <div id="docsbar" v-show="docsbar" @click="docsbar= !docsbar" :style="{display: 'flex'}">
         <span class="rotate" style="font-size: 1.65em">Documentation</span>
       </div>
@@ -362,8 +478,8 @@
         </div>
         <iframe src="./docs/index.html" id="scratch"></iframe>
       </div>
-    
-    
+
+
       <div id="projectbar" v-show="projectbar" @click="projectbar= !projectbar" :style="{display: 'flex'}" @click="projectsPane = !projectsPane">
         <span class="rotate" style="font-size:1.65em">Tutorials</span>
       </div>
@@ -376,8 +492,8 @@
         </div>
         <iframe id="projectsIframe" src="http://coding.space/woof/index.html"></iframe>
       </div>
-    
-      
+
+
       <div id="codebar" v-show="codebar" @click="codebar= !codebar" :style="{display: 'flex'}">
         <span class="rotate" style="font-size:1.65em">Code</span>
       </div>
@@ -389,7 +505,7 @@
           </span>
         </div>
       </div>
-    
+
     </div>
   </div>
   <script>
@@ -405,13 +521,13 @@
     var getCurrentRevisionCode = function(revisions) {
       // returns the code that corresponds to the current project and revision
       var revision = parseInt(window.location.hash.substring(1, window.location.hash.length).split("/")[1])
-      
+
       var keys = Object.keys(revisions)
       if (keys.length > 1){
         keys = keys.slice(1, keys.length)
       }
-      
-      
+
+
       var key
       if (!isNaN(revision) && (revision !== 0 && revision !== -1 * keys.length) && Math.abs(revision) < keys.length + 1){
         if (revision < 0){
@@ -424,7 +540,7 @@
       return revisions[key].code
     }
     var currentHash = window.location.hash
-    
+
     var app = new Vue({
       el: '#page',
       data: {
@@ -448,11 +564,32 @@
         projectNameRequest: "NOT LOADING", // or "LOADING" or "NAME TAKEN"
         projectNameInputValue: "",
         projectNameLastKeyIllegal: false,
+        usernameLastKeyIllegal: false,
+        loginSignUpView: "LOGIN", // or SIGNUP or RESETPASSWORD or RESETPASSWORDSUCCESS
+        emailError: false,
+        usernameValid: "EMTPY", // TAKEN or VALID or EMPTY or ILLEGAL
+        emailValid: "EMTPY", // TAKEN or VALID or NOTEMAIL or EMPTY
+        passwordValid: "EMTPY", // VALID or EMPTY or WEAK
+        loginError: "NONE", // NONE or USERNOTFOUND or WRONGPASSWORD or INVALIDEMAIL
+        loginButtonState: "NORMAL", // NORMAL or LOADING
+        signUpButtonState: "DISABLED", // NORMAL or DISABLED or LOADING
+        loginPassword: "",
+        loginEmail: "",
+        resetEmail: "",
+        signUpEmail: '',
+        signUpPassword: '',
+        signUpChecked: true,
+        signUpUsername: '',
+
+        loginState: "LOGGEDOUT", // or LOGGEDIN
+        userNameForMenu: '',
+        userProjectsLink: ''
+
       },
       computed: {
         styles : function() { return {
            // styles for the "Save" button
-          'btn-warning': this.status == 'DIRTY', 
+          'btn-warning': this.status == 'DIRTY',
           'btn-success': this.status == 'SAVED',
           'btn-default': this.status == "NEW"
         } },
@@ -465,10 +602,10 @@
         showError: function(){
           this.seenError = true
           if (this.error.message.includes('Uncaught ReferenceError: sprite1 is not defined')) {
-            var spriteName = prompt("Error on line " + this.error.lineno  + "\n\n" + "You need to rename 'sprite1'. What would you like to name it?", "unicornSprite");    
-            if (spriteName !== null) {   
+            var spriteName = prompt("Error on line " + this.error.lineno  + "\n\n" + "You need to rename 'sprite1'. What would you like to name it?", "unicornSprite");
+            if (spriteName !== null) {
                 editor.setValue(editor.getValue().replace(/sprite1/g, spriteName));
-            }  
+            }
           }
           else if (this.error.message.includes("Uncaught ReferenceError")) {
             var message = this.error.message.replace("Uncaught ReferenceError: ", "")
@@ -510,20 +647,20 @@
         },
         validate: function($event) {
           var newName = $event.target.value
-          
+
           this.projectNameRequest = 'NOT LOADING'  // reset state so that you can hit save after you change the name after you get a NAME TAKEN error
-          
+
           this.projectNameLastKeyIllegal = false // take off the animation
           setTimeout(function() {
-            var lastKeyPressIllegal = newName.length > 0 && newName[newName.length - 1].match(/\.|#|\$|\/|\[|\]/) 
+            var lastKeyPressIllegal = newName.length > 0 && newName[newName.length - 1].match(/\.|#|\$|\/|\[|\]/)
             if (lastKeyPressIllegal) {
               this.projectNameLastKeyIllegal = lastKeyPressIllegal[0]
             } else {
               this.projectNameLastKeyIllegal = false
             }
           }.bind(this), 10)
-          
-          
+
+
           this.projectNameInputValue = newName.replace(" ", "-")
           this.projectNameInputValue = this.projectNameInputValue.replace(/\.|#|\$|\/|\[|\]/g, "")
         },
@@ -531,11 +668,77 @@
           if (app.projectNameRequest == "NOT LOADING"){
             app.projectNameRequest = "LOADING"
             var name = app.projectNameInputValue
-            if (name) { 
+            if (name) {
               saveProject(name);
             }
           }
         },
+        switchToSignUp: function(){
+          this.loginSignUpView = 'SIGNUP'
+        },
+        switchToLogin: function(){
+          this.loginSignUpView = 'LOGIN'
+        },
+        switchToPasswordReset: function(){
+           this.loginSignUpView = 'RESETPASSWORD'
+        },
+        usernameValidate: function($event){
+          var username = $event.target.value
+          if (username == ''){
+            this.usernameValid = "EMPTY"
+          } else {
+            this.usernameLastKeyIllegal = false
+            setTimeout(function() {
+              var lastKeyPressIllegal = username.length > 0 && username[username.length - 1].match(/\.|#|\$|\/|\[|\]/)
+              if (lastKeyPressIllegal) {
+                this.usernameLastKeyIllegal = lastKeyPressIllegal[0]
+              } else {
+                this.usernameLastKeyIllegal = false
+              }
+            }.bind(this), 10)
+
+            this.signUpUsername= username.replace(" ", "-")
+            this.signUpUsername = this.signUpUsername.replace(/\.|#|\$|\/|\[|\]/g, "")
+            this.usernameValid = "VALID"
+          }
+        },
+        // Checks for success or error on blur
+        emailValidate: function($event){
+          var email = $event.target.value
+          if (email == ''){
+            this.emailValid = "EMPTY"
+          } else if (!/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email)){
+            this.emailValid = "NOTEMAIL"
+          } else if (/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email)){
+            this.emailValid = "VALID"
+          }
+        },
+        // Checks for success or error on blur
+        passwordValidate: function($event){
+          var password = $event.target.value
+          if (password == ''){
+            this.passwordValid = "EMPTY"
+          } else if (!/^.{6,}$/.test(password)){
+            this.passwordValid = "WEAK"
+          } else {
+            this.passwordValid = "VALID"
+          }
+        },
+        // Checks for success on every input
+        emailSuccessValidate: function($event){
+          var email = $event.target.value
+          if (/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email)){
+            this.emailValid = "VALID"
+          }
+        },
+        // Checks for success on every input
+        passwordSuccessValidate: function($event){
+          var password = $event.target.value
+          if (/^.{6,}$/.test(password)){
+            this.passwordValid = "VALID"
+          }
+        },
+        
       },
       watch: {
         error: function(newError) {
@@ -570,7 +773,7 @@
     var myCode = false
     scratch.src = scratch.src // the documentation sometimes doesn't load unless you remind it to here, strange VueJS bug
     projectsIframe.src = projectsIframe.src // ditto for the project's iframe
-    
+
     var config = {
       apiKey: "AIzaSyBYHv7dCiD0bWiHRlcp4VIZCIqzoMnB4yY",
       authDomain: "woofjs-d1b27.firebaseapp.com",
@@ -579,42 +782,165 @@
       messagingSenderId: "397293370524"
     };
     firebase.initializeApp(config);
-      
+
+    function clearLoginSignupModal() {
+      app.emailError = false;
+      app.usernameValid = "EMTPY";
+      app.emailValid = "EMTPY";
+      app.passwordValid = "EMTPY";
+      app.loginError = "NONE";
+      app.loginButtonState = "NORMAL";
+      app.signUpButtonState = "DISABLED";
+      app.loginPassword = "";
+      app.loginEmail = "";
+      app.resetEmail = "";
+      app.signUpEmail = '';
+      app.signUpPassword = '';
+      app.signUpChecked = true;
+      app.signUpUsername = '';
+    }
+
+    function login() {
+      app.loginButtonState = "LOADING"
+      firebase.auth().signInWithEmailAndPassword(app.loginEmail, app.loginPassword)
+        .then(function() {
+          $('#loginModal').modal('hide');
+          clearLoginSignupModal();
+        })
+        .catch(function(error) {
+          if (error.code === 'auth/wrong-password') {
+            app.loginError = "WRONGPASSWORD"
+            app.loginButtonState = "NORMAL"
+          } else if (error.code === 'auth/invalid-email') {
+            app.loginError = "INVALIDEMAIL"
+            app.loginButtonState = "NORMAL"
+          } else {
+            app.loginError = "USERNOTFOUND"
+            app.loginButtonState = "NORMAL"
+          }
+        })
+    }
+
+    function signUp() {
+      var email = app.signUpEmail;
+      var password = app.signUpPassword;
+      if (email == ''){
+        app.emailValid = "EMPTY"
+      } else if (!/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email)){
+        app.emailValid = "NOTEMAIL"
+      } else if (/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email)){
+        app.emailValid = "VALID"
+      } 
+      if (password == ''){
+        app.passwordValid = "EMPTY"
+      } else if (!/^.{6,}$/.test(password)){
+        app.passwordValid = "WEAK"
+      } else {
+        app.passwordValid = "VALID"
+      }
+
+      if (app.usernameValid == 'VALID' && app.emailValid == 'VALID' && app.passwordValid == 'VALID' && app.signUpButtonState != 'LOADING') {
+        app.signUpButtonState = "LOADING"
+
+        var exists
+        var ref = firebase.database().ref("uniqueUsername");
+        ref.child(app.signUpUsername).once('value', function(snapshot) {
+          exists = (snapshot.val() !== null);
+          if (exists) {
+            app.usernameValid = 'TAKEN'
+            app.signUpButtonState = "NORMAL"
+          } else {
+            firebase.auth().createUserWithEmailAndPassword(app.signUpEmail, app.signUpPassword)
+              .then(function() {
+
+                $('#loginModal').modal('hide');
+
+                var user = firebase.auth().currentUser;
+
+                user.updateProfile({
+                  displayName: app.signUpUsername
+                })
+
+                
+                app.userNameForMenu = app.signUpUsername
+
+                firebase.database().ref("uniqueUsername/" + app.signUpUsername).set({
+                  username: app.signUpUsername,
+                  uid: user.uid
+                })
+
+                firebase.database().ref('/user/' + user.uid).once('value').then(function(snapshot) {
+                  if (!snapshot.val()) {
+                    firebase.database().ref("/user/" + user.uid).set({
+                      displayName: app.signUpUsername,
+                      email: user.email,
+                      createdDate: firebase.database.ServerValue.TIMESTAMP,
+                      recieveUpdates: app.signUpChecked,
+                      usernameUnique: true
+                    })
+                  }
+                });
+
+              }).catch(function(error) {
+                // Handle EMAIL Errors here.
+                var errorCode = error.code;
+                var errorMessage = error.message;
+                if (error.code === 'auth/email-already-in-use') {
+                  app.emailValid = "TAKEN"
+                  app.signUpButtonState = "auth/invalid-email"
+                } else if (error.code === 'auth/invalid-email') {
+                  app.emailValid = "NOTEMAIL"
+                  app.signUpButtonState = "NORMAL"
+                } else if (error.code === 'auth/weak-password') {
+                  app.passwordValid = "WEAK"
+                  app.signUpButtonState = "NORMAL"
+                }
+
+              });
+          }
+        });
+      }
+    }
+
+    function resetPassword(){
+      app.resetButtonState = "LOADING"
+      firebase.auth().sendPasswordResetEmail(app.resetEmail).then(function() {
+        app.loginSignUpView = "RESETPASSWORDSUCCESS"
+        clearLoginSignupModal();
+      }, function(error) {
+        app.loginSignUpView = "RESETPASSWORDSUCCESS"
+        clearLoginSignupModal();
+      })
+    }
+
     function handleLogin(userName, uid) {
-      $('#loggedin-name').html(userName + ' <span class="caret"></span>')
-      $('#login-projects').attr("href", "./user.html#" + uid )
-      $('#logggedin').removeClass("hide")
-      $('#login').addClass('hide')
+      app.userNameForMenu = userName
+      app.userProjectsLink  = "./user.html#" + uid
+      app.loginState = "LOGGEDIN"
     }
-    
+
     function handleLogout() {
-      $('#logggedin').addClass("hide")
-      $('#login').removeClass("hide")
+      app.loginState = "LOGGEDOUT"
       myCode = false
+      clearLoginSignupModal()
     }
-    
+
     var authChanged = false
     firebase.auth().onAuthStateChanged(function(user) {
       if (!authChanged){
         authChanged = true
-        if(user){
-          ga('set', 'userId', user.uid); 
-        } 
+        if (user){
+          ga('set', 'userId', user.uid);
+        }
       }
-      
+
       if (user){
-        handleLogin(user.displayName, user.uid)
-        // if the user is logged in, and we don't have their name/email in our database, save it now
-        firebase.database().ref('/user/' + user.uid).once('value').then(function(snapshot) {
-          if (!snapshot.val()) {
-            firebase.database().ref("/user/" + user.uid).set({
-              displayName: user.displayName,
-              email: user.email,
-              createdDate: firebase.database.ServerValue.TIMESTAMP
-            })
-          }
-        })
-        
+        if (user.displayName){
+          handleLogin(user.displayName, user.uid)
+        } else if (app.signUpUsername){
+          handleLogin(app.signUpUsername, user.uid)
+        }
+
         // this puts the user's most recent project under their name
         firebase.database().ref('/code/').orderByChild("--uid").equalTo(user.uid).once('value').then(function(snapshot) {
           if (snapshot.val()){
@@ -644,11 +970,11 @@
       app.status = "SAVED"
       currentHash = window.location.hash
     }
-    
+
     var makeDirty = function() {
       app.status = "DIRTY"
     }
-    
+
     var popout = function() {
       if (app.status == "SAVED"){
         window.open("./full.html#" + getIDWithRevision(), "_blank")
@@ -656,7 +982,7 @@
         alert("You must save your project to open it in a new window.")
       }
     }
-    
+
     // set the text in the editor
     var editorVal = "setBackdropURL('./images/outerspace.jpg')\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
     if (getID() != ''){
@@ -672,7 +998,7 @@
         }
       });
     }
-    
+
     // we add the project name to the hash on save
     // this code prevents that from triggering a page reload
     window.addEventListener("hashchange", function() {
@@ -689,8 +1015,8 @@
             $('#saveModal').modal('hide');
             app.projectNameRequest = "NOT LOADING"
             firebase.database().ref().child("/code/" + name).push({
-              code: editor.getValue(), 
-              time: firebase.database.ServerValue.TIMESTAMP, 
+              code: editor.getValue(),
+              time: firebase.database.ServerValue.TIMESTAMP,
               uid: firebase.auth().currentUser && firebase.auth().currentUser.uid
             }).then(function(){
               window.location.hash = name
@@ -706,8 +1032,8 @@
           app.projectNameRequest = "NOT LOADING"
           firebase.database().ref().child("/code/" + name + "/--uid").set(firebase.auth().currentUser && firebase.auth().currentUser.uid)
           firebase.database().ref().child("/code/" + name).push({
-            code: editor.getValue(), 
-            time: firebase.database.ServerValue.TIMESTAMP, 
+            code: editor.getValue(),
+            time: firebase.database.ServerValue.TIMESTAMP,
             uid: firebase.auth().currentUser && firebase.auth().currentUser.uid
           }).then(function(){
             window.location.hash = name
@@ -719,14 +1045,14 @@
         }
       });
     }
-    
+
     var save = function(){
       if (app.status == "SAVED") { return }
-      
+
       if (editor.getValue().startsWith("// Loading...")){
         return // don't allow students to save projects that haven't loaded
       }
-      
+
       if (myCode && getID()) {
         saveProject(getID())
       } else {
@@ -736,11 +1062,11 @@
         $('#saveModal').modal('show')
       }
     }
-    
+
     $('.modal').on('shown.bs.modal', function () {
       $('#projectName').focus() // focus on the project name input box when the modal loads
     })
-    
+
     var autoIncrimentedName = function() {
       var projName = getID();
       var versionNumber = parseInt(projName[projName.length-1])
@@ -751,7 +1077,6 @@
         return projName + "-1";
       }
     }
-    
 
     // keyboard shortcuts
     var mac = CodeMirror.keyMap["default"] == CodeMirror.keyMap.macDefault;
@@ -766,7 +1091,6 @@
       cm.replaceSelection(spaces, "end", "+input");
     }
 
-    
     var editor = CodeMirror(document.getElementById('code'), {
         mode:  "javascript",
         value: editorVal,
@@ -786,7 +1110,7 @@
         gutters: ["CodeMirror-lint-markers", "CodeMirror-foldgutter"],
         extraKeys: keymap,
         lint: {
-          delay: 800, 
+          delay: 800,
           options: {
             "esnext": true,
             "asi": true
@@ -802,18 +1126,17 @@
         save();
       }
     }
-    
+
     function WoofJSLint(){
       if (app.error) { return }
       const code = js_beautify(app.code, {space_after_anon_function: true, indent_size: 2, indent_with_tabs: false})
-      const regEx = /  ((\w)*\.)?(ready|onKeyDown|onKeyUp|onMouseDown|onMouseUp|onMouseMove|forever|repeatUntil)/g   // matches any event indented with two spaces 
+      const regEx = /  ((\w)*\.)?(ready|onKeyDown|onKeyUp|onMouseDown|onMouseUp|onMouseMove|forever|repeatUntil)/g   // matches any event indented with two spaces
       var result;
       while ((result = regEx.exec(code)) !== null) {
         var lineNumber = code.substring(0, result.index).split('\n').length
         CodeMirror.commands.markGutter(editor, "warning", lineNumber, "It's usually a bad idea to have " + result[3] + "'s inside loops and other events.")
       }
     }
-
 
     function autoRunClicked(){
       if (!app.autoRunChecked){
@@ -832,7 +1155,7 @@
       }
     });
     runCode()
-    
+
     // focus on the preview when refreshed
      function focusPreview() {
        document.getElementById('preview').focus();
@@ -847,20 +1170,20 @@
     });
 
     // warns the user when they try to close the page without saving
-    window.onbeforeunload = function(e) {		
-       if (app.status == "DIRTY") {		
-         var dialogText = 'Make sure to copy and paste your work somewhere safe.';		
-         e.returnValue = dialogText;		
-         return dialogText; 		
-       }		
+    window.onbeforeunload = function(e) {
+       if (app.status == "DIRTY") {
+         var dialogText = 'Make sure to copy and paste your work somewhere safe.';
+         e.returnValue = dialogText;
+         return dialogText;
+       }
     };
-    
-    
-    
+
+
+
     function tryRunningCode() {
       app.code = editor.getValue()
       app.error = undefined
-    
+
       try {
         var result = Babel.transform(editor.getValue(), {
           presets: [['es2015', {'modules': false}]], // modules: false to remove strict mode
@@ -876,7 +1199,7 @@
             if (app.mouseX <= Math.round(document.getElementById('preview').contentWindow.minX + 1)) {
               app.mouseX += " (minX)"
             }
-            
+
             app.mouseY = Math.round(document.getElementById('preview').contentWindow.mouseY)
             if (app.mouseY >= Math.round(document.getElementById('preview').contentWindow.maxY - 1)) {
               app.mouseY += " (maxY)"
@@ -893,7 +1216,7 @@
             } else {
               app.error = event
             }
-            
+
           });
           var script = document.createElement("script");
           script.type = "text/javascript";
@@ -911,39 +1234,39 @@
         app.error = e
       }
     }
-    
+
     function runCode() {
         var iframe = document.getElementById('preview');
-        
+
         iframe.src = ""; // first, we clear the preview iframe
         setTimeout(function() {
-        
+
             // add doctype to iframe
             iframe.contentWindow.document.open();
             iframe.contentWindow.document.write('<!DOCTYPE html>');
             iframe.contentWindow.document.close();
-            
+
             // add a base tag to the page so it knows where to pull relative image urls
             var base = iframe.contentWindow.document.createElement("base");
             base.href = document.baseURI
             iframe.contentWindow.document.body.appendChild(base);
-          
+
             // then we create a script tag with the woof code and add it to the page
             var script = iframe.contentWindow.document.createElement("script");
             script.type = "text/javascript";
             script.src = "./dist/woof.js";
             iframe.contentWindow.document.body.appendChild(script);
-            
+
             script.onload = function() {
                 // when the woof.js library loads, run the user's code
-                var evt = document.createEvent('Event');  
-                evt.initEvent('load', false, false);  
+                var evt = document.createEvent('Event');
+                evt.initEvent('load', false, false);
                 iframe.contentWindow.dispatchEvent(evt);
                 tryRunningCode();
             }
         }, 10)
     }
-    
+
     function debounce(func, wait, immediate) {
     	var timeout;
     	return function() {
@@ -967,10 +1290,10 @@
     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
     m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
     })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-  
+
     ga('create', 'UA-82374072-1', 'auto');
     ga('send', 'pageview');
-  
+
   </script>
 <script type="text/javascript">
     window._chatlio = window._chatlio||[];
