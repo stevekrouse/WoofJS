@@ -46,11 +46,13 @@
   <script type="text/javascript" src="./vendor/codemirror/comment.js"></script>
   <script type="text/javascript" src="./vendor/codemirror/sublime.js"></script>
   <script type="text/javascript" src="./vendor/codemirror/foldcode.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.5.12/clipboard.min.js"></script>
   <link rel="stylesheet" href="./vendor/codemirror/foldgutter.css" />
   <script src="./vendor/codemirror/foldcode.js"></script>
   <script src="./vendor/codemirror/foldgutter.js"></script>
   <script src="./vendor/codemirror/brace-fold.js"></script>
   <script src="./vendor/codemirror/comment-fold.js"></script>
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
   <link rel="stylesheet" href="./vendor/codemirror/dialog.css">
   <link rel="stylesheet" href="./vendor/codemirror/show-hint.css">
   <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
@@ -224,6 +226,12 @@
       transform: rotate(90deg);
     }
 
+    kbd{
+      background-color: #ababab;
+    }
+
+
+
   </style>
 </head>
 <body>
@@ -247,11 +255,32 @@
           <li v-for="project in projects.slice(0,10)"><a :href="'#' + project.key">{{project.key}}</a></li>
         </ul>
       </div>
+
       <img  style= "width:160px; height: 40px;" src="./images/logowhite.png">
       <span style="margin:8px" id="save">
-        <button id="clean-up" class="btn btn-medium btn-default" @click="cleanAll()" style="display: none" :style="{display: canClean ? 'inline-block' : 'none'}"><span class="glyphicon glyphicon-align-left"></span> Clean Code</button>
+
+      
         <button id="error" class="btn btn-danger" @click="showError()" :style="{display: error ? 'inline-block' : 'none', animation: seenError ? 'none' : 'glowing 1200ms infinite'}"><span class="glyphicon glyphicon-exclamation-sign"></span> Error</button>
-        <button style="display: none" :style="{display: 'inline-block'}" style="margin-right: 5px; background-color:#4390BF !important; ; border:none; color:white; " class="btn btn-medium" :class="styles" onclick="save()">{{ status == "SAVED" ? 'Saved' : 'Save' }}</button>
+        <div class="dropdown" style="display:inline;">
+          <button class="btn btn-primary btn-medium dropdown-toggle" type="button" id="toolsDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style='border:none;'>
+            Tools
+            <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="toolsDropdown" style="margin-top:12px;">
+            <li><a @click="undo()"><span class="fa fa-undo"></span> Undo <span><kbd>{{shortcut}}</kbd>+<kbd>Z</kbd></span></a></li>
+            <li><a @click="redo()"><span class="fa fa-repeat"></span> Redo <span><kbd>{{shortcut}}</kbd>+<kbd>Shift</kbd>+<kbd>Z</kbd></span></a></li>
+            <li><a @click="selectAll()"><span class="fa fa-bars"></span> Select All <span><kbd>{{shortcut}}</kbd>+<kbd>A</kbd></span></a></li>
+            <li><a @click="find()"><span class="fa fa-search"></span> Find <span><kbd>{{shortcut}}</kbd>+<kbd>F</kbd></span></a></li>
+            <li role="separator" class="divider"></li>
+            <li><a><input onclick="autoRunClicked()" type="checkbox" id="checkbox" v-model="autoRunChecked"></span> Auto Run</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a @click="cleanAll()" :style="{display: canClean ? 'block' : 'none'}"><span class="glyphicon glyphicon-align-left"></span> Clean Code <span><kbd>{{shortcut}}</kbd>+<kbd>B</kbd></span></a></li>
+            <li><a @click="cleanAll()" class='disabled' :style="{display: canClean ? 'none' : 'block'}" data-toggle="popover" data-trigger="hover" data-content="You can't clean when there's an error." data-placement="top"><span class="glyphicon glyphicon-align-left"></span> Clean Code <span><kbd>{{shortcut}}</kbd>+<kbd>B</kbd></span></a></li>
+            <li role="separator" class="divider"></li>
+            <li><a @click="share()"><span class="glyphicon glyphicon-share-alt"></span> Share</a></li>
+          </ul>
+        </div>
+        <button style="display: none" :style="{display: 'inline-block'}" style="margin-right: 5px; background-color:#4390BF !important; ; border:none; color:white; " class="btn btn-medium" :class="styles" onclick="save()">{{ status == "SAVED" ? 'Saved' : 'Save' }}</button> 
       </span>
     </div>
 
@@ -409,7 +438,34 @@
         <iframe scrolling="no" id="preview"></iframe>
       </div>
 
+      <div id="shareModal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title"><span class="glyphicon glyphicon-share-alt"></span> Share this project</h4>
+            </div>
+            <h4 class="modal-body text-danger" :style="{display: !getID() ? 'block' : 'none'}">You must save a project in order to share it.</h4>
+            <div class="modal-body" :style="{display: getID() ? 'block' : 'none'}">
+          
 
+              <div class="form-group">
+                <label for="link">Code & Output</label>
+                <input type="text" class="form-control" id="link"  :value="link()">
+              </div>
+              <div class="form-group">
+                <label for="fullLink">Full Screen Output</label>
+                <input type="text" class="form-control" id="fullLink"  :value="fullLink()">
+              </div>
+              <div class="form-group">
+                <label for="embed">Embed</label>
+                <input type="text" class="form-control" id="embed"  :value="embed()">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    
       <div id="docsbar" v-show="docsbar" @click="docsbar= !docsbar" :style="{display: 'flex'}">
         <span class="rotate" style="font-size: 1.65em">Documentation</span>
       </div>
@@ -453,7 +509,6 @@
     </div>
   </div>
   <script>
-
 
     var getID = function() {
       // returns the name of a project, not inlcuding the current revision
@@ -504,7 +559,8 @@
         mouseX: 0,
         mouseY: 0,
         seenError: true,
-
+        autoRunChecked: true,
+        shortcut: CodeMirror.keyMap["default"] == CodeMirror.keyMap.macDefault ? 'Cmd' : 'Ctrl',     
         projectNameRequest: "NOT LOADING", // or "LOADING" or "NAME TAKEN"
         projectNameInputValue: "",
         projectNameLastKeyIllegal: false,
@@ -538,8 +594,7 @@
           'btn-default': this.status == "NEW"
         } },
         canClean: function(){
-          // whether or not the code can be "cleaned" or if its already pristine
-          return !this.error && this.code != js_beautify(this.code, {space_after_anon_function: true, indent_size: 2, indent_with_tabs: false })
+          return !this.error 
         },
       },
       methods: {
@@ -561,8 +616,34 @@
           }
         },
         cleanAll: function(){
-          var beautiful = js_beautify(editor.getValue(), {space_after_anon_function: true, indent_size: 2, indent_with_tabs: false })
-          editor.setValue(beautiful)
+          if (!this.error && this.code != js_beautify(this.code, {space_after_anon_function: true, indent_size: 2, indent_with_tabs: false })){
+            var beautiful = js_beautify(editor.getValue(), {space_after_anon_function: true, indent_size: 2, indent_with_tabs: false })
+            editor.setValue(beautiful)
+          }
+        },
+        share: function(){
+          $('#shareModal').modal('show')
+        },
+        link: function(){
+          return "http://woofjs.com/create.html#" + getID()
+        },
+        fullLink: function(){
+          return "http://woofjs.com/full.html#" + getID()
+        },
+        embed: function(){
+          return "<iframe src=\"http://woofjs.com/full#" + getID() + "\">\n</iframe>"
+        },
+        selectAll: function(){
+          editor.execCommand("selectAll")
+        },
+        undo: function(){
+          editor.execCommand("undo")
+        },
+        redo: function(){
+          editor.execCommand("redo")
+        },
+        find: function(){
+          editor.execCommand("find")
         },
         validate: function($event) {
           var newName = $event.target.value
@@ -667,6 +748,28 @@
         }
       }
     })
+  
+    //Initalizes the popover for the comment code button in the tools menu
+    $(document).ready(function(){
+        $('[data-toggle="popover"]').popover();   
+    });
+
+    var clipboard = new Clipboard('.btn-clipboard');
+    Vue.nextTick(function() {
+        $('[data-toggle="tooltip"]').tooltip({
+            trigger: 'manual'
+        });
+        clipboard.destroy()
+        clipboard = new Clipboard('.btn-clipboard');
+        clipboard.on('success', function(e) {
+            $(e.trigger).tooltip('show')
+            setTimeout(function() {
+                $(e.trigger).tooltip('hide')
+            }, 1000)
+        });
+
+    })
+
     var myCode = false
     scratch.src = scratch.src // the documentation sometimes doesn't load unless you remind it to here, strange VueJS bug
     projectsIframe.src = projectsIframe.src // ditto for the project's iframe
@@ -1035,11 +1138,21 @@
       }
     }
 
-    // run the code (debounced) on every change to the editor
+    function autoRunClicked(){
+      if (!app.autoRunChecked){
+        makeDirty()
+        debouncedRunCode()
+        setTimeout(function() {WoofJSLint()}, 1000); 
+      }
+    }
+
+    // run the code (debounced) on every change to the editor 
     editor.on("change", function(){
-      makeDirty()
-      debouncedRunCode()
-      setTimeout(function() {WoofJSLint()}, 1000);
+      if (app.autoRunChecked){
+        makeDirty()
+        debouncedRunCode()
+        setTimeout(function() {WoofJSLint()}, 1000); 
+      }
     });
     runCode()
 

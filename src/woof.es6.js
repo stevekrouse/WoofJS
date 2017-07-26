@@ -1627,6 +1627,14 @@ Woof.prototype.pow = function(a,b) {
   return Math.pow(a,b);
 };
 
+const getData = (url, callback) => {
+  fetch(url,{mode:'cors',header:{'Access-Control-Allow-Origin':'*'}}).then(result => {
+    result.json().then(data => {
+      callback(data)
+    })
+  })
+}
+
 // find the woof.js script tag in the page
 var currentScript = document.currentScript || Array.prototype.slice.call(document.getElementsByTagName('script')).find(s => s.src.includes('woof.js'))
 
