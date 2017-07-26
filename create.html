@@ -340,28 +340,28 @@
       </div>
       <div v-show="codePane" :style="{display: !codebar ? 'flex' : 'none'}" id="code">
         <div id="CodeNav">
-          <div>
-          <span style="margin-left:8px; margin-top:4px">Code</span>
+           <div>
+            <span style="margin-left:8px; margin-top:4px">Code</span>
                <select v-model="selectedTheme"  style="color:#49A6DF; margin-top: 4px; height: 18px; font-size: 12px;">
-                <option  placeholder="Select Theme"> {{ selectedTheme }} </option>
-              	<option>monokai</option>
-              	<option>cobalt</option>
-              	<option>ambiance</option>
-              	<option>blackboard</option>
-              	<option>erlang-dark</option>
-              	<option>lesser-dark</option>
-              	<option>eclipse</option>
-              	<option>3024-night</option>
-              	<option>base16-dark</option>
-              	<option>elegant</option>
-              	<option>midnight</option>
-              	<option>night</option>
+                  <option  placeholder="Select Theme"> {{ selectedTheme }} </option>
+                	<option>monokai</option>
+                	<option>cobalt</option>
+                	<option>ambiance</option>
+                	<option>blackboard</option>
+                	<option>erlang-dark</option>
+                	<option>lesser-dark</option>
+                	<option>eclipse</option>
+                	<option>3024-night</option>
+                	<option>base16-dark</option>
+                	<option>elegant</option>
+                	<option>midnight</option>
+                	<option>night</option>
               	</select>
             </div>
             <div>
-          <span style="margin-right:8px">
-            <img @click="codebar = !codebar" style="margin: 5px; width: 16px; height:18px; cursor:pointer" src="./images/minimize.png" title="Minimize">
-          </span>
+              <span style="margin-right:8px">
+                <img @click="codebar = !codebar" style="margin: 5px; width: 16px; height:18px; cursor:pointer" src="./images/minimize.png" title="Minimize">
+              </span>
           </div>
         </div>
       </div>
@@ -486,14 +486,6 @@
               saveProject(name);
             }
           }
-        },
-        
-        tempTheme: function() {
-          var selectedTheme = this.selectedTheme;
-          editor.setOption("theme", this.selectedTheme);
-          if (firebase.auth().onAuthStateChanged) {
-            firebase.database().ref("/user/" + firebase.auth().currentUser.uid + "/theme").set(selectedTheme)
-          }
         }
         
         },
@@ -504,7 +496,11 @@
           }
         },
          selectedTheme: function(newTheme) {
-           this.tempTheme()
+           var selectedTheme = this.selectedTheme;
+           editor.setOption("theme", this.selectedTheme);
+           if (firebase.auth().onAuthStateChanged) {
+             firebase.database().ref("/user/" + firebase.auth().currentUser.uid + "/theme").set(selectedTheme)
+           }
          }
       }
     })
@@ -536,12 +532,12 @@
     
     var authChanged = false
     firebase.auth().onAuthStateChanged(function(user) {
-          if (!authChanged) {
-            authChanged = true
-            if (user) {
-              ga('set', 'userId', user.uid);
-            }
-          }
+      if (!authChanged){
+          authChanged = true
+           if(user){
+            ga('set', 'userId', user.uid); 
+          } 
+        }
       
       if (user){
         handleLogin(user.displayName, user.uid)
@@ -551,23 +547,15 @@
             firebase.database().ref("/user/" + user.uid).set({
               displayName: user.displayName,
               email: user.email,
-              createdDate: firebase.database.ServerValue.TIMESTAMP,
-            
+              createdDate: firebase.database.ServerValue.TIMESTAMP
             })
           }
-          
-          
         })
         
-         // if the user is logged in, load the code theme they last saved
           firebase.database().ref('/user/' + firebase.auth().currentUser.uid + "/theme").once('value').then(function(snapshot) {
              var selectedTheme = snapshot.val() ;
              editor.setOption("theme", snapshot.val());
-             this.selectedTheme = this.selectedTheme;
-            
-            // var sel = document.getElementById('select');
-            // sel.innerHTML = '<option>'+ snapshot.val() +'</option>';
-           
+            // this.selectedTheme = this.selectedTheme;
           });
         
         // this puts the user's most recent project under their name
@@ -719,11 +707,7 @@
       var spaces = Array(cm.getOption("indentUnit") + 1).join(" ");
       cm.replaceSelection(spaces, "end", "+input");
     }
-    
- 
-    
-    
-    
+  
     var editor = CodeMirror(document.getElementById('code'), {
         mode:  "javascript",
         value: editorVal,
@@ -759,7 +743,6 @@
       }
     }
   
-
     function WoofJSLint(){
       if (app.error) { return }
       const code = js_beautify(app.code, {space_after_anon_function: true, indent_size: 2, indent_with_tabs: false})
@@ -784,7 +767,6 @@
        document.getElementById('preview').focus();
      };
 
-
     editor.on('inputRead', function(cm, e){
       if (e.text.length == 1 && e.text[0].length == 1 &&  /^[a-zA-Z\.]/.test(e.text[0])) {
         // constantly show autocomplete suggestions
@@ -800,8 +782,6 @@
          return dialogText; 		
        }		
     };
-    
-    
     
     function tryRunningCode() {
       app.code = editor.getValue()
