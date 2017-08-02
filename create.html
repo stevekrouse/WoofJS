@@ -314,11 +314,12 @@
             <h1 class="modal-title" id="loginModalLabel">Log In</h1>
           </div>
           <div class="modal-body" :class="{animated: loginSignUpView == 'LOGIN', fadeIn: loginSignUpView == 'LOGIN'}">
-            <div class="form-group" :class="{'has-error': loginError == 'USERNOTFOUND' || loginError == 'INVALIDEMAIL',  animated: loginError == 'USERNOTFOUND' || loginError == 'INVALIDEMAIL',  shake: loginError == 'USERNOTFOUND' || loginError == 'INVALIDEMAIL'}">
-              <label for='username'>Email</label>
-              <input type="text" v-model="loginEmail" class="form-control" id="username" placeholder="Email" aria-describedby="usernameHelp">
-              <span id="usernameHelp" class="help-block" :style="{display: loginError == 'USERNOTFOUND' ? 'block' : 'none'}">No account with this email exists. Please try to sign up for an account.</span>
+            <div class="form-group" :class="{'has-error': loginError == 'USERNOTFOUND' || loginError == 'INVALIDEMAIL' || loginError == 'USERNAMENOTUNIQUE',  animated: loginError == 'USERNOTFOUND' || loginError == 'INVALIDEMAIL' || loginError == 'USERNAMENOTUNIQUE',  shake: loginError == 'USERNOTFOUND' || loginError == 'INVALIDEMAIL' || loginError == 'USERNAMENOTUNIQUE'}">
+              <label for='username'>Username or Email</label>
+              <input type="text" v-model="loginEmail" class="form-control" id="username" placeholder="Username or Email" aria-describedby="usernameHelp">
+              <span id="usernameHelp" class="help-block" :style="{display: loginError == 'USERNOTFOUND' ? 'block' : 'none'}">No account with this username or email exists. Please try to sign up for an account.</span>
                <span id="usernameHelp" class="help-block" :style="{display: loginError == 'INVALIDEMAIL' ? 'block' : 'none'}">Invalid email address. Please try again.</span>
+               <span id="usernameHelp" class="help-block" :style="{display: loginError == 'USERNAMENOTUNIQUE' ? 'block' : 'none'}">We have no record of this username.</span>
             </div>
             <div class="form-group" :class="{'has-error': loginError == 'WRONGPASSWORD',  animated: loginError == 'WRONGPASSWORD',  shake: loginError == 'WRONGPASSWORD'}">
               <label for='password'>Password</label>
@@ -800,9 +801,8 @@
       app.signUpUsername = '';
     }
 
-    function login() {
-      app.loginButtonState = "LOADING"
-      firebase.auth().signInWithEmailAndPassword(app.loginEmail, app.loginPassword)
+    function loginWithEmail(email, pass){
+      firebase.auth().signInWithEmailAndPassword(email, pass)
         .then(function() {
           $('#loginModal').modal('hide');
           clearLoginSignupModal();
@@ -819,6 +819,28 @@
             app.loginButtonState = "NORMAL"
           }
         })
+    }
+
+    function login() {
+      app.loginButtonState = "LOADING"
+
+      if (!/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(app.loginEmail)){
+        var ref = firebase.database().ref("user");
+        ref.orderByChild("displayName").equalTo(app.loginEmail).on("value", function(snapshot) {
+          if (snapshot.numChildren()==1){
+            loginWithEmail(snapshot.val()[Object.keys(snapshot.val())[0]].email, app.loginPassword)
+          } else if (snapshot.numChildren()>1){
+            app.loginError = "USERNAMENOTUNIQUE"
+            app.loginButtonState = "NORMAL"
+          }else{
+            app.loginError = "USERNOTFOUND"
+            app.loginButtonState = "NORMAL"
+          }
+        });
+      } else {
+        loginWithEmail(app.loginEmail, app.loginPassword)
+      }
+      
     }
 
     function signUp() {
