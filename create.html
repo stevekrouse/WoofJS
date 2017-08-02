@@ -343,19 +343,19 @@
            <div>
             <span style="margin-left:8px; margin-top:4px">Code</span>
                <select v-model="selectedTheme"  style="color:#49A6DF; margin-top: 4px; height: 18px; font-size: 12px;">
-                  <option  placeholder="Select Theme"> {{ selectedTheme }} </option>
-                	<option>monokai</option>
-                	<option>cobalt</option>
-                	<option>ambiance</option>
-                	<option>blackboard</option>
-                	<option>erlang-dark</option>
-                	<option>lesser-dark</option>
-                	<option>eclipse</option>
-                	<option>3024-night</option>
-                	<option>base16-dark</option>
-                	<option>elegant</option>
-                	<option>midnight</option>
-                	<option>night</option>
+               <option  placeholder="Select Theme"> {{selectedTheme}} </option>
+               <option>monokai</option>
+               <option>cobalt</option>
+               <option>ambiance</option>
+               <option>blackboard</option>
+               <option>erlang-dark</option>
+               <option>lesser-dark</option>
+               <option>eclipse</option>
+               <option>3024-night</option>
+               <option>base16-dark</option>
+               <option>elegant</option>
+               <option>midnight</option>
+               <option>night</option>
               	</select>
             </div>
             <div>
@@ -420,7 +420,7 @@
         mouseX: 0,
         mouseY: 0,
         seenError: true,
-        selectedTheme: 'Choose Theme',
+        selectedTheme: "",
         projectNameRequest: "NOT LOADING", // or "LOADING" or "NAME TAKEN"
         projectNameInputValue: "",
         projectNameLastKeyIllegal: false,
@@ -486,22 +486,23 @@
               saveProject(name);
             }
           }
-        }
-        
         },
+      },
       watch: {
         error: function(newError) {
           if (newError && newError.lineno) {
             CodeMirror.commands.markGutter(editor, "error", newError.lineno, newError.message)
           }
         },
-         selectedTheme: function(newTheme) {
-           var selectedTheme = this.selectedTheme;
-           editor.setOption("theme", this.selectedTheme);
-           if (firebase.auth().onAuthStateChanged) {
-             firebase.database().ref("/user/" + firebase.auth().currentUser.uid + "/theme").set(selectedTheme)
-           }
-         }
+        selectedTheme: function(newTheme) {
+          var selectedTheme = this.selectedTheme;
+          editor.setOption("theme", selectedTheme);
+          firebase.auth().onAuthStateChanged(function(user) {
+            if(user){
+              firebase.database().ref("/user/" + firebase.auth().currentUser.uid + "/theme").set(selectedTheme)
+            } 
+          })
+        }
       }
     })
     var myCode = false
@@ -533,30 +534,26 @@
     var authChanged = false
     firebase.auth().onAuthStateChanged(function(user) {
       if (!authChanged){
-          authChanged = true
-           if(user){
-            ga('set', 'userId', user.uid); 
-          } 
-        }
+        authChanged = true
+          if(user){
+          ga('set', 'userId', user.uid); 
+        } 
+      }
       
       if (user){
         handleLogin(user.displayName, user.uid)
         // if the user is logged in, and we don't have their name/email in our database, save it now
-        firebase.database().ref('/user/' + user.uid).once('value').then(function(snapshot) {
+          firebase.database().ref('/user/' + user.uid + "/theme").once('value').then(function(snapshot) {
+          var selectedTheme = snapshot.val() ;
+          editor.setOption("theme", selectedTheme);
           if (!snapshot.val()) {
             firebase.database().ref("/user/" + user.uid).set({
               displayName: user.displayName,
               email: user.email,
-              createdDate: firebase.database.ServerValue.TIMESTAMP
+              createdDate: firebase.database.ServerValue.TIMESTAMP,
             })
           }
         })
-        
-          firebase.database().ref('/user/' + firebase.auth().currentUser.uid + "/theme").once('value').then(function(snapshot) {
-             var selectedTheme = snapshot.val() ;
-             editor.setOption("theme", snapshot.val());
-            // this.selectedTheme = this.selectedTheme;
-          });
         
         // this puts the user's most recent project under their name
         firebase.database().ref('/code/').orderByChild("--uid").equalTo(user.uid).once('value').then(function(snapshot) {
@@ -582,6 +579,7 @@
         handleLogout()
       }
     });
+    
 
     var makeClean = function() {
       app.status = "SAVED"
