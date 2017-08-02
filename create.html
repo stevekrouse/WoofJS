@@ -319,7 +319,7 @@
               <input type="text" v-model="loginEmail" class="form-control" id="username" placeholder="Username or Email" aria-describedby="usernameHelp">
               <span id="usernameHelp" class="help-block" :style="{display: loginError == 'USERNOTFOUND' ? 'block' : 'none'}">No account with this username or email exists. Please try to sign up for an account.</span>
                <span id="usernameHelp" class="help-block" :style="{display: loginError == 'INVALIDEMAIL' ? 'block' : 'none'}">Invalid email address. Please try again.</span>
-               <span id="usernameHelp" class="help-block" :style="{display: loginError == 'USERNAMENOTUNIQUE' ? 'block' : 'none'}">Multiple users share this username, please login with your email.</span>
+               <span id="usernameHelp" class="help-block" :style="{display: loginError == 'USERNAMENOTUNIQUE' ? 'block' : 'none'}">We have no record of this username.</span>
             </div>
             <div class="form-group" :class="{'has-error': loginError == 'WRONGPASSWORD',  animated: loginError == 'WRONGPASSWORD',  shake: loginError == 'WRONGPASSWORD'}">
               <label for='password'>Password</label>
