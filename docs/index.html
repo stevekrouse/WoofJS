@@ -1005,6 +1005,17 @@
                         code: 'repeat(10, () => {\n  \/* do stuff here */\n})',
                         tags: 'repeat times'
                     }, {
+                        html: "When you use <code>repeat()</code>, your code doesn't repeat as fast as the computer can run it.\
+                        Instead, we slow it down, which makes things like animation and motion work well. But, if you want your code to repeat instantly,\
+                        as fast as the computer can do it, you can combine the <code>range()</code> function with the <code>forEach()</code> function:\
+                        <br><br>Example: Repeat your code instantly 10 times:",
+                        code: "range(0, 10).forEach(i => {\n  \/* something to repeat */\n})",
+                        tags: "repeat range array forEach"
+                    }, {
+                        html: "In the above example, <code>i</code> will start at 0 and go up by 1 every repetition, stopping before it gets to 10.\
+                        <br>If you are familiar with <code>for</code> loops, you might realize that this does the same thing.\
+                        We recommend using <code>range().forEach()</code> instead of <code>for</code>."
+                    }, {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f675a4f6a4c444d2e706e67",
                         code: 'forever(() => {\n  \/* do stuff here */\n})',
                         tags: 'forever loop repeat'
@@ -1621,8 +1632,14 @@
                         code: "var needle = array1.find(thing => thing.touching(sprite1))\nif(needle) {\n  console.log(needle)\n}",
                         tags: "find search list array"
                     }, {
-                        description: "Create an array with a range of numbers. (starting number, ending number, increment)",
-                        code: "var oneToTen = range(1, 10, 1)",
+                        html: "You can automatically generate an array with a range of numbers by using the <code>range()</code> function:"
+                    }, {
+                        html: "<strong>Example 1:</strong> Generate this array: <code>[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]</code><br>It starts at 1, ends <i>before</i> 11, and goes up by 1 every time:",
+                        code: "var oneToTen = range(1, 11, 1)",
+                        tags: "range array list numbers"
+                    }, {
+                        html: "<strong>Example 2:</strong> Generate this array: <code>[15, 10, 5, 0, -5]</code><br>It starts at 15, ends <i>before</i> -10, and goes down by 5 every time:",
+                        code: "var fifteenToZero = range(15, -10, -5)",
                         tags: "range array list numbers"
                     }],
                     "More Blocks": [{
