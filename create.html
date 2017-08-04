@@ -305,6 +305,37 @@
       </div>
     </div>
 
+    <div class="modal fade" id="migrateModal" tabindex="-1" role="dialog" aria-labelledby="migrateModal">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title" id="migrateModalLabel">We are updating our systems and need you to choose a new username. Don't use your real name!</h4>
+          </div>
+          <div class="modal-body">
+            <div class="form-group" :class="{'has-success': migrateUsernameValid == 'VALID', 'has-error': migrateUsernameValid == 'TAKEN', animated: migrateUsernameValid == 'TAKEN' || migrateUsernameKeyIllegal,  shake: migrateUsernameValid == 'TAKEN' || migrateUsernameKeyIllegal}">
+              <label for='username'>Username</label>
+              <input v-model='migrateUsername' onfocus="$('#usernameMigrate').tooltip('toggle')" data-placement="top" title="Don't use your real name" type="text" class="form-control" id="usernameMigrate" placeholder="Username" aria-describedby="usernameMigrateHelp" @input="migrateUsernameVaidate($event)" onkeydown="if (event.keyCode == 13){migrate()}" >
+              <span id="usernameMigrateHelp" class="help-block" :style="{display: migrateUsernameValid == 'TAKEN' ? 'block' : 'none'}">This username is already taken. Please try another username.</span>
+              <span id="usernaemeMigrateHelp" class="help-block" style='color:#BD362F;' :style="{display: migrateUsernameKeyIllegal ? 'block' : 'none'}">You cannot include {{ migrateUsernameKeyIllegal }} in usernames.</span>
+            </div>
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" v-model='migrateChecked'> I want to recieve updates about WoofJS
+              </label>
+            </div>
+            <div class="form-group" style="text-align:center;">
+              <div>
+                <button type="submit" class="btn btn-primary" style="width:100%;" :class="{disabled: migrateButtonState == 'LOADING'}" onclick="migrate()">
+                  <i class="fa fa-spinner fa-pulse fa-fw" style="margin:0 auto;" :style="{display: migrateButtonState == 'LOADING' ? 'block' : 'none'}"></i>
+                  <span :style="{display: migrateButtonState == 'LOADING' ? 'none' : 'block'}">Update</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel">
       <div class="modal-dialog" role="document">
 
@@ -314,11 +345,12 @@
             <h1 class="modal-title" id="loginModalLabel">Log In</h1>
           </div>
           <div class="modal-body" :class="{animated: loginSignUpView == 'LOGIN', fadeIn: loginSignUpView == 'LOGIN'}">
-            <div class="form-group" :class="{'has-error': loginError == 'USERNOTFOUND' || loginError == 'INVALIDEMAIL',  animated: loginError == 'USERNOTFOUND' || loginError == 'INVALIDEMAIL',  shake: loginError == 'USERNOTFOUND' || loginError == 'INVALIDEMAIL'}">
-              <label for='username'>Email</label>
-              <input type="text" v-model="loginEmail" class="form-control" id="username" placeholder="Email" aria-describedby="usernameHelp">
-              <span id="usernameHelp" class="help-block" :style="{display: loginError == 'USERNOTFOUND' ? 'block' : 'none'}">No account with this email exists. Please try to sign up for an account.</span>
+            <div class="form-group" :class="{'has-error': loginError == 'USERNOTFOUND' || loginError == 'INVALIDEMAIL' || loginError == 'USERNAMENOTUNIQUE',  animated: loginError == 'USERNOTFOUND' || loginError == 'INVALIDEMAIL' || loginError == 'USERNAMENOTUNIQUE',  shake: loginError == 'USERNOTFOUND' || loginError == 'INVALIDEMAIL' || loginError == 'USERNAMENOTUNIQUE'}">
+              <label for='username'>Username or Email</label>
+              <input type="text" v-model="loginEmail" class="form-control" id="username" placeholder="Username or Email" aria-describedby="usernameHelp">
+              <span id="usernameHelp" class="help-block" :style="{display: loginError == 'USERNOTFOUND' ? 'block' : 'none'}">No account with this username or email exists. Please try to sign up for an account.</span>
                <span id="usernameHelp" class="help-block" :style="{display: loginError == 'INVALIDEMAIL' ? 'block' : 'none'}">Invalid email address. Please try again.</span>
+               <span id="usernameHelp" class="help-block" :style="{display: loginError == 'USERNAMENOTUNIQUE' ? 'block' : 'none'}">We have no record of this username.</span>
             </div>
             <div class="form-group" :class="{'has-error': loginError == 'WRONGPASSWORD',  animated: loginError == 'WRONGPASSWORD',  shake: loginError == 'WRONGPASSWORD'}">
               <label for='password'>Password</label>
@@ -583,7 +615,13 @@
 
         loginState: "LOGGEDOUT", // or LOGGEDIN
         userNameForMenu: '',
-        userProjectsLink: ''
+        userProjectsLink: '',
+
+        migrateUsernameValid: "EMTPY", // TAKEN or VALID or EMPTY or ILLEGAL
+        migrateUsernameKeyIllegal: false,
+        migrateUsername: '',
+        migrateChecked: true,
+        migrateButtonState: "DISABLED", // NORMAL or DISABLED or LOADING
 
       },
       computed: {
@@ -702,6 +740,26 @@
             this.usernameValid = "VALID"
           }
         },
+        migrateUsernameVaidate: function($event){
+          var username = $event.target.value
+          if (username == ''){
+            this.usernameValid = "EMPTY"
+          } else {
+            this.migrateUsernameKeyIllegal = false
+            setTimeout(function() {
+              var lastKeyPressIllegal = username.length > 0 && username[username.length - 1].match(/\.|#|\$|\/|\[|\]/)
+              if (lastKeyPressIllegal) {
+                this.migrateUsernameKeyIllegal = lastKeyPressIllegal[0]
+              } else {
+                this.migrateUsernameKeyIllegal = false
+              }
+            }.bind(this), 10)
+
+            this.migrateUsername= username.replace(" ", "-")
+            this.migrateUsername = this.migrateUsername.replace(/\.|#|\$|\/|\[|\]/g, "")
+            this.migrateUsernameValid = "VALID"
+          }
+        },
         // Checks for success or error on blur
         emailValidate: function($event){
           var email = $event.target.value
@@ -800,12 +858,13 @@
       app.signUpUsername = '';
     }
 
-    function login() {
-      app.loginButtonState = "LOADING"
-      firebase.auth().signInWithEmailAndPassword(app.loginEmail, app.loginPassword)
+    function loginWithEmail(email, pass){
+      firebase.auth().signInWithEmailAndPassword(email, pass)
         .then(function() {
           $('#loginModal').modal('hide');
           clearLoginSignupModal();
+          app.projects = []
+
         })
         .catch(function(error) {
           if (error.code === 'auth/wrong-password') {
@@ -819,6 +878,85 @@
             app.loginButtonState = "NORMAL"
           }
         })
+    }
+
+    function migrate(){
+      if (app.migrateUsernameValid == 'VALID' && app.migrateButtonState != 'LOADING') {
+        app.migrateButtonState = "LOADING"
+
+        var exists
+        var ref = firebase.database().ref("uniqueUsername");
+
+        ref.child(app.migrateUsername).once('value', function(snapshot) {
+          exists = (snapshot.val() !== null);
+          if (exists) {
+            app.migrateUsernameValid = 'TAKEN'
+            app.migrateButtonState = "NORMAL"
+          } else {
+
+            var user = firebase.auth().currentUser;
+
+            user.updateProfile({
+              displayName: app.migrateUsername,
+              recieveUpdates: app.migrateChecked,
+              usernameUnique: true
+            })
+
+            firebase.database().ref("uniqueUsername/" + app.migrateUsername).set({
+              username: app.migrateUsername,
+              uid: user.uid
+            })
+
+            app.userNameForMenu = app.migrateUsername
+
+            var ref = firebase.database().ref("user");
+            ref.child(user.uid).once('value', function(snapshot) {
+              var createdDateVar = snapshot.val().createdDate;
+              var emailVar = snapshot.val().email;
+
+              var updates = {};
+
+              updates['/user/' + user.uid] = {
+                createdDate: createdDateVar,
+                displayName: app.migrateUsername,
+                email: emailVar,
+                recieveUpdates: app.migrateChecked,
+                usernameUnique: true
+              }
+
+              $('#migrateModal').modal('hide');
+              app.migrateButtonState = "NORMAL"
+              app.migrateUsername = ''
+              app.migrateUsernameValid = 'EMPTY'
+
+              return firebase.database().ref().update(updates);
+            });
+
+          }
+        });
+
+      } 
+    }
+    
+    function login() {
+      app.loginButtonState = "LOADING"
+
+      if (!/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(app.loginEmail)){
+        var ref = firebase.database().ref("user");
+        ref.orderByChild("displayName").equalTo(app.loginEmail).on("value", function(snapshot) {
+          if (snapshot.numChildren()==1){
+            loginWithEmail(snapshot.val()[Object.keys(snapshot.val())[0]].email, app.loginPassword)
+          } else if (snapshot.numChildren()>1){
+            app.loginError = "USERNAMENOTUNIQUE"
+            app.loginButtonState = "NORMAL"
+          }else{
+            app.loginError = "USERNOTFOUND"
+            app.loginButtonState = "NORMAL"
+          }
+        });
+      } else {
+        loginWithEmail(app.loginEmail, app.loginPassword)
+      }
     }
 
     function signUp() {
@@ -863,6 +1001,7 @@
 
                 
                 app.userNameForMenu = app.signUpUsername
+                app.projects = []
 
                 firebase.database().ref("uniqueUsername/" + app.signUpUsername).set({
                   username: app.signUpUsername,
@@ -937,6 +1076,14 @@
       if (user){
         if (user.displayName){
           handleLogin(user.displayName, user.uid)
+
+          var ref = firebase.database().ref("user");
+          ref.child(user.uid).once('value', function(snapshot) {
+            if (!snapshot.val().usernameUnique){
+              app.migrateUsername = ''
+              $('#migrateModal').modal('show')
+            }
+          });
         } else if (app.signUpUsername){
           handleLogin(app.signUpUsername, user.uid)
         }
