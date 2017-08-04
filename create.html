@@ -863,8 +863,6 @@
         .then(function() {
           $('#loginModal').modal('hide');
           clearLoginSignupModal();
-
-          user = firebase.auth().currentUser
           app.projects = []
 
         })
@@ -1003,6 +1001,7 @@
 
                 
                 app.userNameForMenu = app.signUpUsername
+                app.projects = []
 
                 firebase.database().ref("uniqueUsername/" + app.signUpUsername).set({
                   username: app.signUpUsername,
