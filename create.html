@@ -1168,6 +1168,24 @@
             }).then(function(){
               window.location.hash = name
               makeClean()
+
+              //SCREENSHOT
+              var projUrl = 'http://woofjs.com/full.html#' + name
+              var encodedProjUrl = encodeURIComponent(projUrl)
+              var request = "http://api.screenshotlayer.com/api/capture?access_key=501a705ae97e2b4a9a47c66a446cf554&url="+encodedProjUrl+"&viewport=1440x900&delay=5&width=500&format=JPG"
+              // var request = "https://s-media-cache-ak0.pinimg.com/736x/ce/b9/67/ceb9675bbc2b895e99d97d5ddc33bf1d--baby-bulldogs-cute-bulldogs.jpg"
+              var storageRef = firebase.storage().ref();
+              fetch(request,{mode:'no-cors'}).then(function(response) {
+                return response.blob();
+              }).then(function(myBlob) {
+                var metadata = {
+                  contentType: 'image/jpeg'
+                };
+                console.log(myBlob)
+                var uploadTask = storageRef.child('images/' + name+".jpg").put(myBlob, metadata);
+              });
+
+
             }).catch(function(error){
               alert("Unable to save project: " + error)
             });
@@ -1186,6 +1204,7 @@
             window.location.hash = name
             myCode = firebase.auth().currentUser
             makeClean()
+
           }).catch(function(error){
             alert("Unable to save project: " + error)
           });
