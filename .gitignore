@@ -1,2 +1,9 @@
 # Ignore Mac DS_Store files
 .DS_Store
+
+# Ignore any sublime project files
+*.sublime-project
+*.sublime-workspace
+
+# Ignore node_modules folder
+node_modules

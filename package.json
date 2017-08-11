@@ -1,0 +1,33 @@
+{
+  "name": "woofjs",
+  "version": "1.0.0",
+  "description": "Learnable JavaScript",
+  "main": "dist/woof.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stevekrouse/WoofJS.git"
+  },
+  "keywords": [
+    "woof",
+    "games",
+    "animation",
+    "learn",
+    "student",
+    "education"
+  ],
+  "author": "Steve Krouse",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/stevekrouse/WoofJS/issues"
+  },
+  "homepage": "https://github.com/stevekrouse/WoofJS#readme",
+  "devDependencies": {
+    "babel-cli": "^6.24.1"
+  }
+}
