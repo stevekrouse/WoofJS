@@ -5,5 +5,8 @@
 *.sublime-project
 *.sublime-workspace
 
+# Ignore any eslint config files
+.eslintrc.json
+
 # Ignore node_modules folder
 node_modules
