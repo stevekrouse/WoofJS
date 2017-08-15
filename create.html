@@ -60,6 +60,7 @@
   <link rel="stylesheet" href="./vendor/codemirror/lint.css">
   <script src="./vendor/codemirror/jshint.min.js"></script>
   <script src="./vendor/codemirror/lint.js"></script>
+  <script src="./vendor/levenshtein.js"></script>
   <script src="./vendor/codemirror/scrollpastend.js"></script>
   <script src="https://unpkg.com/vue@2.0.1/dist/vue.js"></script>
   <script data-presets="es2015" src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.14.0/babel.min.js"></script>
@@ -229,7 +230,27 @@
     kbd{
       background-color: #ababab;
     }
-
+    
+    #suggestVar {
+      display: none;
+      margin: 0; 
+      border-radius: 0;
+    }
+    
+    #suggestVar ul {
+      list-style: none;
+      margin: 0; 
+      padding: 0;
+    }
+    
+    #suggestVar li {
+      display: inline-block; 
+      margin-top: 10px;
+    }
+    
+    #suggestVar li a {
+      padding-right: 5px; 
+    }  
 
 
   </style>
@@ -504,8 +525,16 @@
             <img @click="codebar = !codebar" style="margin: 5px; width: 16px; height:18px; cursor:pointer" src="./images/minimize.png" title="Minimize">
           </span>
         </div>
-      </div>
+        <div id="suggestVar" v-show="suggestVar" :style="{display: !suggestVar ? 'block' : 'none'}" class="alert alert-danger alert-dismissable fade in">
+          <a href="#" class="close" data-hide="alert" aria-label="close">&times;</a>
+          {{errorMessage}}
+          <ul>
+            <li>Did you mean: <a href="#" v-for="suggestion in suggestions" @click="takeSuggestion(suggestion)">{{suggestion}}</a>
+            </li>
+          </ul>
 
+        </div>
+      </div>
     </div>
   </div>
   <script>
@@ -559,6 +588,10 @@
         mouseX: 0,
         mouseY: 0,
         seenError: true,
+        suggestVar: true,
+        suggestions: [],
+        errorMessage: '',
+        referenceError: '',
         autoRunChecked: true,
         shortcut: CodeMirror.keyMap["default"] == CodeMirror.keyMap.macDefault ? 'Cmd' : 'Ctrl',     
         projectNameRequest: "NOT LOADING", // or "LOADING" or "NAME TAKEN"
@@ -601,19 +634,45 @@
         getID: getID,
         showError: function(){
           this.seenError = true
+          this.suggestions = []
+          this.errorMessage = []
           if (this.error.message.includes('Uncaught ReferenceError: sprite1 is not defined')) {
             var spriteName = prompt("Error on line " + this.error.lineno  + "\n\n" + "You need to rename 'sprite1'. What would you like to name it?", "unicornSprite");
             if (spriteName !== null) {
                 editor.setValue(editor.getValue().replace(/sprite1/g, spriteName));
             }
           }
-          else if (this.error.message.includes("Uncaught ReferenceError")) {
-            var message = this.error.message.replace("Uncaught ReferenceError: ", "")
-            alert("Error on line " + this.error.lineno  + "\n\n" + message + ". Check the spelling of your variable definitions.")
+          else if (this.error.message.includes("Uncaught ReferenceError") ||
+          this.error.message.includes("Uncaught TypeError")) {
+            // Remove 'Uncaught..' from error message
+            var message =  this.error.message.split(" ").slice(2).join(" ");
+            // Isolate the text causing the error
+            this.referenceError = message.split(" ")[0].split(".").pop();
+            // Get alphanumeric user code
+            var userCode = editor.getValue().match(/[a-zA-Z]+/g);
+            // Add Woof methods to the user code 
+            userCode.push("onKeyDown", "onMouseDown", "onMouseUp", "onMouseMove", "penDown", "Image", "Rectangle", "Polygon", "Circle", "Line", "Oval", "move", "turnRight", "turnLeft", "angle", "pointTowards", "setRotationStyle", "show", "hide", "sendToFront", "sendToBack", "play", "Audio", "clearPen", "penUp", "penDown", "Text", "remove", "includes", "forEach", "find", "setBackdropURL", "setBackdropStyle", "after", "every", "repeat", "forever", "if", "else", "mouseX", "mouseY", "repeatUntil", "when", "freeze", "defrost", "delete", "remove", "push", "throttle", "mouseOver", "randomX", "randomY", "touching", "distanceTo", "prompt", "alert", "keysDown", "mouseDown", "pMouseX", "pMouseY", "mouseXSpeed", "mouseYSpeed", "hour", "hourMilitary", "minute", "second", "dayOfMonth", "dayOfWeek", "month", "year", "mobile", "random", "randomColor", "between", "substring", "round", "sqrt", "abs", "floor", "ceiling", "importCodeURL")
+            // Search user code for suggestions 
+            for (var i = 0; i < userCode.length; i++) {
+              var distance = window.Levenshtein.get(this.referenceError, userCode[i]);
+              if (distance < 3 && this.suggestions.indexOf(userCode[i]) == -1) {
+                this.suggestions.push(userCode[i]);
+                if (distance < 1) {
+                  this.suggestions.splice(this.suggestions.indexOf(userCode[i], 1));
+                }
+              }
+            }
+            // If there is a suggestion, display it
+            this.suggestions.length > 0 ? this.errorMessage += "Error on line " + this.error.lineno + ": " + message : alert("Error on line " + this.error.lineno  + "\n\n" + message + "\n\n" + "Check the spelling of your variable definitions.")
           }
           else {
-             alert("Error on line " + this.error.lineno  + "\n\n" + this.error.message)
+            alert("Error on line " + this.error.lineno  + "\n\n" + this.error.message)
           }
+        },
+        // Change the user code if user clicks suggestion
+        takeSuggestion: function(x) {
+          editor.setValue(editor.getValue().replace(new RegExp("\\b" + this.referenceError + "\\b", 'g'), x));
+          document.getElementById("suggestVar").style.display = "none";
         },
         cleanAll: function(){
           if (!this.error && this.code != js_beautify(this.code, {space_after_anon_function: true, indent_size: 2, indent_with_tabs: false })){
@@ -748,7 +807,22 @@
         }
       }
     })
-  
+
+    // Toggle misspelled variable suggestion
+    $(document).ready(function(){
+      $("#error").click(function(){
+        if (app.suggestions.length > 0){
+          $("#suggestVar").show();
+        }
+      });
+    })
+      
+    $(function(){
+      $("[data-hide]").on("click", function(){
+          $(this).closest("." + $(this).attr("data-hide")).hide();
+        });
+    });
+    
     //Initalizes the popover for the comment code button in the tools menu
     $(document).ready(function(){
         $('[data-toggle="popover"]').popover();   
@@ -769,7 +843,7 @@
         });
 
     })
-
+    
     var myCode = false
     scratch.src = scratch.src // the documentation sometimes doesn't load unless you remind it to here, strange VueJS bug
     projectsIframe.src = projectsIframe.src // ditto for the project's iframe
