@@ -649,13 +649,14 @@
             // Isolate the text causing the error
             this.referenceError = message.split(" ")[0].split(".").pop();
             // Get alphanumeric user code
-            var userCode = editor.getValue().match(/[a-zA-Z]+/g);
+            var userCode = editor.getValue().replace(/(?:https?|ftp):\/\/[\n\S]+/g,'').match(/[a-zA-Z0-9]+/g);
+            console.log(userCode)
             // Add Woof methods to the user code 
             userCode.push("onKeyDown", "onMouseDown", "onMouseUp", "onMouseMove", "penDown", "Image", "Rectangle", "Polygon", "Circle", "Line", "Oval", "move", "turnRight", "turnLeft", "angle", "pointTowards", "setRotationStyle", "show", "hide", "sendToFront", "sendToBack", "play", "Audio", "clearPen", "penUp", "penDown", "Text", "remove", "includes", "forEach", "find", "setBackdropURL", "setBackdropStyle", "after", "every", "repeat", "forever", "if", "else", "mouseX", "mouseY", "repeatUntil", "when", "freeze", "defrost", "delete", "remove", "push", "throttle", "mouseOver", "randomX", "randomY", "touching", "distanceTo", "prompt", "alert", "keysDown", "mouseDown", "pMouseX", "pMouseY", "mouseXSpeed", "mouseYSpeed", "hour", "hourMilitary", "minute", "second", "dayOfMonth", "dayOfWeek", "month", "year", "mobile", "random", "randomColor", "between", "substring", "round", "sqrt", "abs", "floor", "ceiling", "importCodeURL")
             // Search user code for suggestions 
             for (var i = 0; i < userCode.length; i++) {
               var distance = window.Levenshtein.get(this.referenceError, userCode[i]);
-              if (distance < 3 && this.suggestions.indexOf(userCode[i]) == -1) {
+              if (distance < 3 && this.suggestions.indexOf(userCode[i]) == -1 && userCode[i].length > 1) {
                 this.suggestions.push(userCode[i]);
                 if (distance < 1) {
                   this.suggestions.splice(this.suggestions.indexOf(userCode[i], 1));
