@@ -699,7 +699,7 @@
           }.bind(this), 10)
 
 
-          this.projectNameInputValue = newName.replace(" ", "-")
+          this.projectNameInputValue = newName.replace(/ /g, "-")
           this.projectNameInputValue = this.projectNameInputValue.replace(/\.|#|\$|\/|\[|\]/g, "")
         },
         saveName : function() {
