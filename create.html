@@ -490,9 +490,7 @@
           var newTheme = event.target.value;
           editor.setOption("theme", newTheme);
           if(firebase.auth().currentUser){
-            if (user){
             firebase.database().ref("/user/" + firebase.auth().currentUser.uid + "/theme").set(newTheme)
-            }
           } 
         },
       },
@@ -539,13 +537,17 @@
         } 
       }
       
+      // if user is logging in
       if (user){
         handleLogin(user.displayName, user.uid)
-        // if the user is logged in, and we don't have their name/email in our database, save it now
-          firebase.database().ref('/user/' + user.uid + "/theme").once('value').then(function(snapshot) {
-            app.selectedTheme = snapshot.val() ;
-            editor.setOption("theme", snapshot.val());
-            if (!snapshot.val()) {
+          firebase.database().ref('/user/' + user.uid).once('value').then(function(snapshot) {
+            if (snapshot.val()) {
+              if (snapshot.val().theme) {
+                app.selectedTheme = snapshot.val().theme;
+                editor.setOption("theme", snapshot.val().theme);
+              }
+            } else {
+              // if we don't have their name/email in our database, save name/email now
               firebase.database().ref("/user/" + user.uid).set({
                 displayName: user.displayName,
                 email: user.email,
