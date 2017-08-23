@@ -61,23 +61,14 @@
   <script src="./vendor/codemirror/jshint.min.js"></script>
   <script src="./vendor/codemirror/lint.js"></script>
   <script src="./vendor/codemirror/scrollpastend.js"></script>
-  <link rel="stylesheet" href="https://codemirror.net/theme/3024-day.css">
-  <link rel="stylesheet" href="https://codemirror.net/theme/3024-night.css">
-  <link rel="stylesheet" href="https://codemirror.net/theme/ambiance.css">
-  <link rel="stylesheet" href="https://codemirror.net/theme/base16-dark.css">
-  <link rel="stylesheet" href="https://codemirror.net/theme/base16-light.css">
-  <link rel="stylesheet" href="https://codemirror.net/theme/blackboard.css">
-  <link rel="stylesheet" href="https://codemirror.net/theme/cobalt.css">
-  <link rel="stylesheet" href="https://codemirror.net/theme/eclipse.css">
-  <link rel="stylesheet" href="https://codemirror.net/theme/elegant.css">
-  <link rel="stylesheet" href="https://codemirror.net/theme/erlang-dark.css">
-  <link rel="stylesheet" href="https://codemirror.net/theme/lesser-dark.css">
-  <link rel="stylesheet" href="https://codemirror.net/theme/midnight.css">
-  <link rel="stylesheet" href="https://codemirror.net/theme/monokai.css">
-  <link rel="stylesheet" href="https://codemirror.net/theme/neat.css">
   <script src="https://unpkg.com/vue@2.0.1/dist/vue.js"></script>
   <script data-presets="es2015" src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.14.0/babel.min.js"></script>
   <script src="https://cdn.rawgit.com/beautify-web/js-beautify/1b52eb1f90daaefa6ff0fa7736f97fbfc58093c1/js/lib/beautify.js"></script>
+  
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/diff_match_patch/20121119/diff_match_patch.js"></script>
+  <link rel=stylesheet href="https://codemirror.net/addon/merge/merge.css">
+  <script src="https://codemirror.net/addon/merge/merge.js"></script>
   <style>
 
      html, body {
@@ -114,6 +105,7 @@
       align-items: stretch;
       align-content: stretch;
       width: 100%;
+      height: 100%;
     }
 
     .CodeMirror-scroll {
@@ -139,7 +131,7 @@
       width: 100%;
       z-index: 1;
       top: 0;
-      height: 55px;
+      height: 150px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -161,7 +153,7 @@
       width: 100%;
       display: flex;
       flex-direction: row;
-      margin-top: 55px;
+      margin-top: 150px;
     }
 
     #previewbar, #docsbar, #projectbar, #codebar {
@@ -180,8 +172,12 @@
     }
 
     #code {
-      word-wrap: break-word;
       width: 25%;
+    }
+    
+    #code-editor {
+      word-wrap: break-word;
+      height: 90%;
     }
 
     #PreviewNav, #DocsNav, #ProjectsNav, #CodeNav {
@@ -243,9 +239,68 @@
     kbd{
       background-color: #ababab;
     }
-
-
-
+    
+    #workflowContainer {
+      height: 135px;
+      width: 600px;
+      background-color: white;
+    }
+    
+    #topworkfLowtaskContainer {
+      overflow-y: scroll;
+      height: 90px;
+      margin-left: 20px;
+    }
+    
+    #workflowBreadcrumbs {
+      padding-bottom: 0px;
+      margin-bottom: 0px;
+      background-color: white;
+    }
+    
+    #workflowContainer > li > a {
+      cursor: pointer;
+    }
+    
+    #workflowHelperMessage{
+      height: 17px;
+      margin-left: 20px;
+    }
+    
+    #workflowHelperMessage > span {
+      color: gray;
+      font-size: 11px;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .workflowTaskBulletInputContainer {
+      width: 100%;
+      background-color: transparent;
+    }
+    .workflowTaskBullet {
+      background-image: url(https://workflowy.com/media/i/bullet.svg);
+      background-color: transparent;
+      display: inline-block;
+      width: 13px;
+      height: 13px;
+      margin-top: 3px;
+    }
+    
+    .workflowTaskBullet:hover {
+      background-color: #aaa;
+      border-radius: 12px;
+    }
+    
+    .workflowTaskInput {
+      border: none;
+      width: 90%;
+      outline: none;
+      background-color: transparent;
+    }
+    
+    .workflowTaskChildren {
+      margin-left: 20px;
+    }
   </style>
 </head>
 <body>
@@ -260,7 +315,7 @@
       <div style="margin-left: 5px" id="logggedin" class="hide dropdown" :class='{hide: loginState == "LOGGEDOUT", show: loginState == "LOGGEDIN"}'>
         <button class="btn btn-medium btn-info dropdown-toggle" type="button" id="loggedin-name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">{{userNameForMenu}} <span class="caret"></span></button>
         <ul class="dropdown-menu" aria-labelledby="loggedin-name">
-          <li><a href="./create.html">New Project</a></li>
+          <li><a href="./workflow.html">New Project</a></li>
           <li><a href="./team.html">New Team Project <span class="label label-success">beta</span></a></li>
           <li><a target="_blank" id="login-projects" :href="userProjectsLink">My Projects</a></li>
           <li onclick="firebase.auth().signOut()"><a>Logout</a></li>
@@ -270,7 +325,26 @@
         </ul>
       </div>
 
-      <img  style= "width:160px; height: 40px;" src="./images/logowhite.png">
+    
+      <div id="workflowContainer">
+        <ol class="breadcrumb" id="workflowBreadcrumbs">
+          <li v-for="task in workflowPathTasks.slice(0, workflowPathTasks.length - 1)" @click="workflowPath = task.parentPath.concat([task.id])"><a>{{ task.name }}</a></li>
+        </ol>
+       
+        <div id="topworkfLowtaskContainer">
+          <div>
+            <h4 style="display: inline-block" :style="{textDecoration: workflowPathTasks[workflowPathTasks.length - 1].done ? 'line-through' : 'none'}">{{ workflowPathTasks[workflowPathTasks.length - 1].name }}</h4>
+            <button class="btn btn-xs btn-success" v-show="(workflowPathTasks[workflowPathTasks.length - 1].parentPath || []).length !== 0 && !workflowMerging" @click="workflowTaskMerge()">Merge <img src="https://cdn4.iconfinder.com/data/icons/mini-arrows-3/16/122-512.png" width="10px"></img></button>
+          </div>
+          <div v-if="!workflowPathTasks[workflowPathTasks.length - 1].subtasks.length" @click="addFirstTask()">+</div>
+          <workflow-task v-for="subtask in (workflowPathTasks[workflowPathTasks.length - 1]).subtasks" :task="subtask" :key="subtask.id"></workflow-task>
+        </div>
+        
+        <div id="workflowHelperMessage">
+          <span :style="{opacity: workflowHelperMessageText ? 1 : 0}">{{ workflowHelperMessageText }}</span>
+        </div>
+     </div>
+    
       <span style="margin:8px" id="save">
 
       
@@ -294,7 +368,6 @@
             <li><a @click="share()"><span class="glyphicon glyphicon-share-alt"></span> Share</a></li>
           </ul>
         </div>
-        <button style="display: none" :style="{display: 'inline-block'}" style="margin-right: 5px; background-color:#4390BF !important; ; border:none; color:white; " class="btn btn-medium" :class="styles" onclick="save()">{{ status == "SAVED" ? 'Saved' : 'Save' }}</button> 
       </span>
     </div>
 
@@ -319,37 +392,6 @@
       </div>
     </div>
 
-    <div class="modal fade" id="migrateModal" tabindex="-1" role="dialog" aria-labelledby="migrateModal">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h4 class="modal-title" id="migrateModalLabel">We are updating our systems and need you to choose a new username. Don't use your real name!</h4>
-          </div>
-          <div class="modal-body">
-            <div class="form-group" :class="{'has-success': migrateUsernameValid == 'VALID', 'has-error': migrateUsernameValid == 'TAKEN', animated: migrateUsernameValid == 'TAKEN' || migrateUsernameKeyIllegal,  shake: migrateUsernameValid == 'TAKEN' || migrateUsernameKeyIllegal}">
-              <label for='username'>Username</label>
-              <input v-model='migrateUsername' onfocus="$('#usernameMigrate').tooltip('toggle')" data-placement="top" title="Don't use your real name" type="text" class="form-control" id="usernameMigrate" placeholder="Username" aria-describedby="usernameMigrateHelp" @input="migrateUsernameVaidate($event)" onkeydown="if (event.keyCode == 13){migrate()}" >
-              <span id="usernameMigrateHelp" class="help-block" :style="{display: migrateUsernameValid == 'TAKEN' ? 'block' : 'none'}">This username is already taken. Please try another username.</span>
-              <span id="usernaemeMigrateHelp" class="help-block" style='color:#BD362F;' :style="{display: migrateUsernameKeyIllegal ? 'block' : 'none'}">You cannot include {{ migrateUsernameKeyIllegal }} in usernames.</span>
-            </div>
-            <div class="checkbox">
-              <label>
-                <input type="checkbox" v-model='migrateChecked'> I want to recieve updates about WoofJS
-              </label>
-            </div>
-            <div class="form-group" style="text-align:center;">
-              <div>
-                <button type="submit" class="btn btn-primary" style="width:100%;" :class="{disabled: migrateButtonState == 'LOADING'}" onclick="migrate()">
-                  <i class="fa fa-spinner fa-pulse fa-fw" style="margin:0 auto;" :style="{display: migrateButtonState == 'LOADING' ? 'block' : 'none'}"></i>
-                  <span :style="{display: migrateButtonState == 'LOADING' ? 'none' : 'block'}">Update</span>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
     <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel">
       <div class="modal-dialog" role="document">
 
@@ -359,12 +401,11 @@
             <h1 class="modal-title" id="loginModalLabel">Log In</h1>
           </div>
           <div class="modal-body" :class="{animated: loginSignUpView == 'LOGIN', fadeIn: loginSignUpView == 'LOGIN'}">
-            <div class="form-group" :class="{'has-error': loginError == 'USERNOTFOUND' || loginError == 'INVALIDEMAIL' || loginError == 'USERNAMENOTUNIQUE',  animated: loginError == 'USERNOTFOUND' || loginError == 'INVALIDEMAIL' || loginError == 'USERNAMENOTUNIQUE',  shake: loginError == 'USERNOTFOUND' || loginError == 'INVALIDEMAIL' || loginError == 'USERNAMENOTUNIQUE'}">
-              <label for='username'>Username or Email</label>
-              <input type="text" v-model="loginEmail" class="form-control" id="username" placeholder="Username or Email" aria-describedby="usernameHelp">
-              <span id="usernameHelp" class="help-block" :style="{display: loginError == 'USERNOTFOUND' ? 'block' : 'none'}">No account with this username or email exists. Please try to sign up for an account.</span>
+            <div class="form-group" :class="{'has-error': loginError == 'USERNOTFOUND' || loginError == 'INVALIDEMAIL',  animated: loginError == 'USERNOTFOUND' || loginError == 'INVALIDEMAIL',  shake: loginError == 'USERNOTFOUND' || loginError == 'INVALIDEMAIL'}">
+              <label for='username'>Email</label>
+              <input type="text" v-model="loginEmail" class="form-control" id="username" placeholder="Email" aria-describedby="usernameHelp">
+              <span id="usernameHelp" class="help-block" :style="{display: loginError == 'USERNOTFOUND' ? 'block' : 'none'}">No account with this email exists. Please try to sign up for an account.</span>
                <span id="usernameHelp" class="help-block" :style="{display: loginError == 'INVALIDEMAIL' ? 'block' : 'none'}">Invalid email address. Please try again.</span>
-               <span id="usernameHelp" class="help-block" :style="{display: loginError == 'USERNAMENOTUNIQUE' ? 'block' : 'none'}">We have no record of this username.</span>
             </div>
             <div class="form-group" :class="{'has-error': loginError == 'WRONGPASSWORD',  animated: loginError == 'WRONGPASSWORD',  shake: loginError == 'WRONGPASSWORD'}">
               <label for='password'>Password</label>
@@ -545,35 +586,79 @@
       </div>
       <div v-show="codePane" :style="{display: !codebar ? 'flex' : 'none'}" id="code">
         <div id="CodeNav">
-          <div>
-            <span style="margin-left:8px; margin-top:4px">Code</span>
-            <select :value ="selectedTheme" style="color:#49A6DF; margin-top: 4px; height: 18px; font-size: 12px;" @change="themeChange($event)">
-              <option>monokai</option>
-              <option>cobalt</option>
-              <option>ambiance</option>
-              <option>blackboard</option>
-              <option>erlang-dark</option>
-              <option>lesser-dark</option>
-              <option>eclipse</option>
-              <option>3024-night</option>
-              <option>base16-dark</option>
-              <option>elegant</option>
-              <option>midnight</option>
-              <option>night</option>
-            </select>
-          </div>
-          <div>
-            <span style="margin-right:8px">
-              <img @click="codebar = !codebar" style="margin: 5px; width: 16px; height:18px; cursor:pointer" src="./images/minimize.png" title="Minimize">
-            </span>
+          <span style="margin-left:8px; margin-top:4px">Code</span>
+          <span style="margin-right:8px">
+            <img @click="codebar = !codebar" style="margin: 5px; width: 16px; height:18px; cursor:pointer" src="./images/minimize.png" title="Minimize">
+          </span>
+        </div>
+        <div v-show="!workflowMerging" id="code-editor"></div>
+        <div v-show="workflowMerging" id="merge-editor">
+          <div style="width:100%">
+            <div>
+              <button class="btn btn-md btn-success" style="width:100%" @click="workflowMergeDone()">Done</button>
+            </div>
+            <div style="display: flex">
+              <div style="width: 50%"><code>{{workflowMergeParentName}}</code></div>
+              <div style="width: 50%"><code>{{workflowMergeChildName}}</code></div>
+            </div>
           </div>
         </div>
       </div>
 
     </div>
   </div>
+  
+  <script type="text/x-template" id="workflowTaskComponentTemplate">
+    <div id="workflowTaskComponent">
+      <div class="workflowTaskBulletInputContainer"
+           draggable="true"
+           @drag="$event.target.tagName =='a' && onBulletTaskDrag($event, task)"
+           @dragenter="onTaskDragEnter($event, task)"
+           @dragover="$event.preventDefault()"
+           @dragleave="onTaskDragLeave($event, task)"
+           @drop="onTaskDrop($event, task)">
+        <a class="workflowTaskBullet" @mousedown="onBulletTaskClick($event, task)"></a>
+        <input class="workflowTaskInput"
+               ref="workflowTaskInput" v-focus-on-creation
+               v-if="true && [].length == 0"
+               @input="workflowTaskInputChange($event, task)"
+               @keydown="workflowTaskInputKeydown($event, task)" 
+               @blur="workflowTaskInputBlur($event, task)" 
+               @keydown.enter="addTaskSibling($event, task)"
+               @keydown.tab="onTaskIndent($event, task)"
+               @keydown.delete="$event.target.value.length == 0 && deleteTask($event, task)" 
+               @keydown.up="$event.target.parentElement.parentElement.previousElementSibling && $event.target.parentElement.parentElement.previousElementSibling.firstElementChild.lastElementChild.focus()"
+               @keydown.down="$event.target.parentElement.parentElement.nextElementSibling && $event.target.parentElement.parentElement.nextElementSibling.firstElementChild.lastElementChild.focus()"
+               type="text" 
+               placeholder="What is one thing you need to accomplish?"
+               :value="task.name"
+               :style="{textDecoration: task.done ? 'line-through' : 'none'}">
+        </input>
+      </div>
+      <div class="workflowTaskChildren">
+        <workflow-task v-for="subtask in task.subtasks" :task="subtask"  :key="subtask.id"></workflow-task>
+      </div>
+    </div>
+  </script>
+  
   <script>
-
+  
+  /* 
+    
+    Things to do eventually
+    
+    up and down keys should go into children, etc and left and right keys should go to parents... or something like that
+    
+    better firebase rules for editing workflow tasks
+    
+    when it's  not  your code, make sure that we keep track of the fork
+      5a. add a "pull request button"
+      5b. add pull request branches to owner's tree with icon
+    
+    ability to close and expand branches
+    
+    undo button! (this may be impossible in workflow tasks the way I built it...)
+  */
     var getID = function() {
       // returns the name of a project, not inlcuding the current revision
       return window.location.hash.substring(1, window.location.hash.length).split("/")[0];
@@ -623,7 +708,6 @@
         mouseX: 0,
         mouseY: 0,
         seenError: true,
-        selectedTheme:'',
         autoRunChecked: true,
         shortcut: CodeMirror.keyMap["default"] == CodeMirror.keyMap.macDefault ? 'Cmd' : 'Ctrl',     
         projectNameRequest: "NOT LOADING", // or "LOADING" or "NAME TAKEN"
@@ -649,13 +733,19 @@
         loginState: "LOGGEDOUT", // or LOGGEDIN
         userNameForMenu: '',
         userProjectsLink: '',
-
-        migrateUsernameValid: "EMTPY", // TAKEN or VALID or EMPTY or ILLEGAL
-        migrateUsernameKeyIllegal: false,
-        migrateUsername: '',
-        migrateChecked: true,
-        migrateButtonState: "DISABLED", // NORMAL or DISABLED or LOADING
-
+        
+        topWorkflowTask: {
+          id: 'temp-id',
+          name: 'Project',
+          order: 0,
+          subtasks: [],
+          done: false
+        },
+        workflowHelperMessageText: "",
+        workflowPath: ['temp-id'],
+        workflowMerging: false,
+        workflowMergeChildName: "",
+        workflowMergeParentName: "",
       },
       computed: {
         styles : function() { return {
@@ -667,6 +757,20 @@
         canClean: function(){
           return !this.error 
         },
+        workflowPathTasks: function () {
+          const pathIds = this.workflowPath.slice()
+          const pathTasks = []
+          if (pathIds.length > 0 && pathIds.shift() == this.topWorkflowTask.id) {
+            pathTasks.push(this.topWorkflowTask)
+          }
+          var task = this.topWorkflowTask
+          while (pathIds.length > 0) {
+            const thisId = pathIds.shift()
+            task = task.subtasks.find(task => task.id == thisId)
+            pathTasks.push(task)
+          }
+          return pathTasks
+        }
       },
       methods: {
         getID: getID,
@@ -732,7 +836,7 @@
           }.bind(this), 10)
 
 
-          this.projectNameInputValue = newName.replace(/ /g, "-")
+          this.projectNameInputValue = newName.replace(" ", "-")
           this.projectNameInputValue = this.projectNameInputValue.replace(/\.|#|\$|\/|\[|\]/g, "")
         },
         saveName : function() {
@@ -743,13 +847,6 @@
               saveProject(name);
             }
           }
-        },
-        themeChange: function (event){
-          var newTheme = event.target.value;
-          editor.setOption("theme", newTheme);
-          if(firebase.auth().currentUser){
-            firebase.database().ref("/user/" + firebase.auth().currentUser.uid + "/theme").set(newTheme)
-          } 
         },
         switchToSignUp: function(){
           this.loginSignUpView = 'SIGNUP'
@@ -778,26 +875,6 @@
             this.signUpUsername= username.replace(" ", "-")
             this.signUpUsername = this.signUpUsername.replace(/\.|#|\$|\/|\[|\]/g, "")
             this.usernameValid = "VALID"
-          }
-        },
-        migrateUsernameVaidate: function($event){
-          var username = $event.target.value
-          if (username == ''){
-            this.usernameValid = "EMPTY"
-          } else {
-            this.migrateUsernameKeyIllegal = false
-            setTimeout(function() {
-              var lastKeyPressIllegal = username.length > 0 && username[username.length - 1].match(/\.|#|\$|\/|\[|\]/)
-              if (lastKeyPressIllegal) {
-                this.migrateUsernameKeyIllegal = lastKeyPressIllegal[0]
-              } else {
-                this.migrateUsernameKeyIllegal = false
-              }
-            }.bind(this), 10)
-
-            this.migrateUsername= username.replace(" ", "-")
-            this.migrateUsername = this.migrateUsername.replace(/\.|#|\$|\/|\[|\]/g, "")
-            this.migrateUsernameValid = "VALID"
           }
         },
         // Checks for success or error on blur
@@ -836,12 +913,225 @@
             this.passwordValid = "VALID"
           }
         },
-        
+        findTask(task, path) {
+          const p = path.slice() // so we don't modify the original
+          if (p.length == 0){
+            return task
+          } else {
+            const firstKey = p.shift() // shift returns firstKey and removes first element in p
+            if (task.id == firstKey) {
+              // if it's the top task
+              return app.findTask(task, p)
+            } else {
+              return app.findTask(task.subtasks.find(subtask => subtask.id == firstKey), p)
+            }
+          }
+        },
+        newWorkflowSibling: function(parentPath) {
+          const newWorkflowSibling = {uid: firebase.auth().currentUser.uid, parentPath: parentPath.slice(), name: '', subtasks: [], edited: false, done: false}
+          firebase.database().ref('workflow/' + app.getID() + '/' + parentPath.join('/')).push(newWorkflowSibling).then(snapshot => newWorkflowSibling.id = snapshot.key)
+          return newWorkflowSibling
+        },
+        addFirstTask: function($event) {
+          if (firebase.auth().currentUser && app.getID()) {
+            const parent = app.findTask(app.topWorkflowTask, this.workflowPath)
+            parent.subtasks.push(this.newWorkflowSibling(this.workflowPath))
+            
+            app.sendWorkflowDataToFirebase()
+          }
+        },
+        subtaskArraytoDict: function(subtasks) {
+          const dict = {}
+          subtasks.filter(subtask => subtask.id !== undefined).forEach((task, index) => {
+            dict[task.id] = {
+              order: index,
+              subtasks: this.subtaskArraytoDict(task.subtasks),
+              name: task.name,
+              parentPath: task.parentPath,
+              uid: task.uid,
+              edited: task.edited,
+              done: task.done || false
+            }
+          })
+          return dict
+        },
+        subtaskDictToArray: function(subtasks) {
+          const array = []
+          Object.keys(subtasks).forEach(id => {
+            const task = subtasks[id]
+            array[task.order] = {
+              id: id,
+              subtasks: this.subtaskDictToArray(task.subtasks || {}),
+              name: task.name,
+              parentPath: task.parentPath,
+              uid: task.uid,
+              edited: task.edited,
+              done: task.done
+            }
+          })
+          return array
+        },
+        sendWorkflowDataToFirebase: debounce(function() {
+          if (firebase.auth().currentUser && this.getID()) {
+            firebase.database().ref('workflow/' + this.getID() + '/' + this.topWorkflowTask.id).set({
+              name: this.topWorkflowTask.name,
+              uid: this.topWorkflowTask.uid,
+              subtasks: this.subtaskArraytoDict(this.topWorkflowTask.subtasks),
+              edited: true,
+              done: false
+            })
+          }
+        }, 1000, false),
+        setWorkflowData: function(data) {
+          const topWorkflowTaskId = Object.keys(data)[0]
+          const topWorkflowTask = data[topWorkflowTaskId]
+          this.workflowPath = [topWorkflowTaskId]
+          this.topWorkflowTask = {
+            subtasks: this.subtaskDictToArray(topWorkflowTask.subtasks || []),
+            name: topWorkflowTask.name,
+            uid: topWorkflowTask.uid,
+            id: topWorkflowTaskId,
+            edited: true,
+            done: false,
+            parentPath: []
+          }
+        },
+        closestEditedWorkflowParent: function(path) {
+          const p = path.slice()
+          var task = this.findTask(this.topWorkflowTask, path)
+          while (!task.edited) {
+            p.pop()
+            task = this.findTask(this.topWorkflowTask, p)
+          }
+          return task
+        },
+        workflowTaskMerge: function() {
+          firebase.database().ref('workflow-code/' + getID() + '/' + this.closestEditedWorkflowParent(this.workflowPath.slice(0, this.workflowPath.length - 1)).id).once('value', function(snapshot) {
+            app.workflowMerging = true
+            setTimeout(function() {
+              mergeEditor.rightOriginal().setValue(editor.getValue())
+              mergeEditor.editor().setValue(snapshot.val().code)
+            }, 100)
+            var path = app.workflowPathTasks.map(task => task.name)
+            app.workflowMergeChildName = path.join('/')
+            app.workflowMergeParentName = path.slice(0, path.length - 1).join('/')
+          })
+        },
+        workflowMergeDone: function() {
+          this.workflowPathTasks[this.workflowPathTasks.length - 1].done = true
+          this.workflowPath = this.workflowPath.slice(0, this.workflowPath.length - 1)
+          editor.setValue(mergeEditor.editor().getValue())
+          saveCode(this.getID())
+          this.sendWorkflowDataToFirebase()
+        }
       },
       watch: {
         error: function(newError) {
           if (newError && newError.lineno) {
             CodeMirror.commands.markGutter(editor, "error", newError.lineno, newError.message)
+          }
+        },
+        workflowPath: function(newPath) {
+          this.workflowMerging = false
+          firebase.database().ref('workflow-code/' + getID() + '/' + this.closestEditedWorkflowParent(newPath).id).once('value', function(snapshot) {
+            editor.setValue((snapshot.val() || {code: editor.getValue()}).code)
+          })
+        }
+      },
+      components: {
+        'workflow-task': {
+          name: 'workflow-task',
+          template: "#workflowTaskComponentTemplate",
+          props: [
+            'task',
+          ],
+          directives: {
+            'focus-on-creation': {
+              inserted: function (el) {
+                el.focus()
+              }
+            }
+          },
+          methods: {
+            workflowTaskInputChange($event, task) {
+              const id = task.id
+              const parentPath = task.parentPath
+              task.name = $event.target.value
+            },
+            workflowTaskInputKeydown: function($event, task) {
+              const id = task.id
+              const parentPath = task.parentPath
+              app.workflowHelperMessageText = ""
+              if ($event.target.value.length > 5) {
+                app.workflowHelperMessageText += "Press Enter to add another task. "
+                
+                const parent = app.findTask(app.topWorkflowTask, parentPath)
+                const taskIndex = parent.subtasks.findIndex(subtask => subtask.id == id)
+                const olderSibling = parent.subtasks[taskIndex - 1]
+                if (olderSibling) {
+                  app.workflowHelperMessageText += "Press Tab to indent this task. "
+                }
+              }
+              app.sendWorkflowDataToFirebase()
+            },
+            workflowTaskInputBlur: function($event, task) {
+              app.workflowHelperMessageText = ""
+            },
+            addTaskSibling: function($event, task) {
+              if (firebase.auth().currentUser && app.getID()) {
+                const parent = app.findTask(app.topWorkflowTask, task.parentPath)
+                const olderSiblingIndex = parent.subtasks.findIndex(subtask => subtask.id == task.id)
+                parent.subtasks.splice(olderSiblingIndex + 1, 0, app.newWorkflowSibling(task.parentPath))
+                
+                app.sendWorkflowDataToFirebase()
+              }
+            },
+            deleteTask: function($event, task) {
+              const id = task.id
+              const parentPath = task.parentPath
+              const parent = app.findTask(app.topWorkflowTask, parentPath)
+              parent.subtasks = parent.subtasks.filter(subtask => subtask.id != id)
+              // TODO move cursor to previous element or to the parent
+              app.sendWorkflowDataToFirebase()
+            },
+            onTaskIndent: function($event, task) {
+              const id = task.id
+              const parentPath = task.parentPath
+              $event.preventDefault()
+              const oldParent = app.findTask(app.topWorkflowTask, parentPath)
+              const taskIndex = oldParent.subtasks.findIndex(subtask => subtask.id == id)
+              const olderSibling = oldParent.subtasks[taskIndex - 1]
+              if (olderSibling) {
+                task.parentPath.push(olderSibling.id)
+                olderSibling.subtasks.push(task)
+                oldParent.subtasks = oldParent.subtasks.filter(subtask => subtask.id != id)
+                app.sendWorkflowDataToFirebase()
+              }
+            },
+            onBulletTaskClick: function($event, task) {
+              const id = task.id
+              const parentPath = task.parentPath
+              app.workflowPath = parentPath.concat([id])
+              // get code from firebase
+              // update editor 
+            },
+            onTaskDrop: function($event, task) {
+              console.log('drag drop')
+              // TODO 
+              app.sendWorkflowDataToFirebase()
+            },
+            onBulletTaskDrag: function($event, task) {
+              console.log('bullet drag')
+              // TODO 
+            },
+            onTaskDragEnter: function($event, task) {
+              console.log('drag enter')
+              // TODO 
+            },
+            onTaskDragLeave: function($event, task) {
+              console.log('drag leave')
+              // TODO 
+            },
           }
         },
       }
@@ -898,13 +1188,12 @@
       app.signUpUsername = '';
     }
 
-    function loginWithEmail(email, pass){
-      firebase.auth().signInWithEmailAndPassword(email, pass)
+    function login() {
+      app.loginButtonState = "LOADING"
+      firebase.auth().signInWithEmailAndPassword(app.loginEmail, app.loginPassword)
         .then(function() {
           $('#loginModal').modal('hide');
           clearLoginSignupModal();
-          app.projects = []
-
         })
         .catch(function(error) {
           if (error.code === 'auth/wrong-password') {
@@ -918,85 +1207,6 @@
             app.loginButtonState = "NORMAL"
           }
         })
-    }
-
-    function migrate(){
-      if (app.migrateUsernameValid == 'VALID' && app.migrateButtonState != 'LOADING') {
-        app.migrateButtonState = "LOADING"
-
-        var exists
-        var ref = firebase.database().ref("uniqueUsername");
-
-        ref.child(app.migrateUsername).once('value', function(snapshot) {
-          exists = (snapshot.val() !== null);
-          if (exists) {
-            app.migrateUsernameValid = 'TAKEN'
-            app.migrateButtonState = "NORMAL"
-          } else {
-
-            var user = firebase.auth().currentUser;
-
-            user.updateProfile({
-              displayName: app.migrateUsername,
-              recieveUpdates: app.migrateChecked,
-              usernameUnique: true
-            })
-
-            firebase.database().ref("uniqueUsername/" + app.migrateUsername).set({
-              username: app.migrateUsername,
-              uid: user.uid
-            })
-
-            app.userNameForMenu = app.migrateUsername
-
-            var ref = firebase.database().ref("user");
-            ref.child(user.uid).once('value', function(snapshot) {
-              var createdDateVar = snapshot.val().createdDate;
-              var emailVar = snapshot.val().email;
-
-              var updates = {};
-
-              updates['/user/' + user.uid] = {
-                createdDate: createdDateVar,
-                displayName: app.migrateUsername,
-                email: emailVar,
-                recieveUpdates: app.migrateChecked,
-                usernameUnique: true
-              }
-
-              $('#migrateModal').modal('hide');
-              app.migrateButtonState = "NORMAL"
-              app.migrateUsername = ''
-              app.migrateUsernameValid = 'EMPTY'
-
-              return firebase.database().ref().update(updates);
-            });
-
-          }
-        });
-
-      } 
-    }
-    
-    function login() {
-      app.loginButtonState = "LOADING"
-
-      if (!/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(app.loginEmail)){
-        var ref = firebase.database().ref("user");
-        ref.orderByChild("displayName").equalTo(app.loginEmail).on("value", function(snapshot) {
-          if (snapshot.numChildren()==1){
-            loginWithEmail(snapshot.val()[Object.keys(snapshot.val())[0]].email, app.loginPassword)
-          } else if (snapshot.numChildren()>1){
-            app.loginError = "USERNAMENOTUNIQUE"
-            app.loginButtonState = "NORMAL"
-          }else{
-            app.loginError = "USERNOTFOUND"
-            app.loginButtonState = "NORMAL"
-          }
-        });
-      } else {
-        loginWithEmail(app.loginEmail, app.loginPassword)
-      }
     }
 
     function signUp() {
@@ -1041,7 +1251,6 @@
 
                 
                 app.userNameForMenu = app.signUpUsername
-                app.projects = []
 
                 firebase.database().ref("uniqueUsername/" + app.signUpUsername).set({
                   username: app.signUpUsername,
@@ -1111,28 +1320,11 @@
         if (user){
           ga('set', 'userId', user.uid);
         }
-      }      
-      
-      // if user is logging in
+      }
+
       if (user){
-        // get and set editor theme
-        firebase.database().ref('/user/' + user.uid + '/theme').once('value').then(function(snapshot) {
-          if (snapshot.val()) {
-            app.selectedTheme = snapshot.val();
-            editor.setOption("theme", snapshot.val());
-          }
-        })
-        
         if (user.displayName){
           handleLogin(user.displayName, user.uid)
-
-          var ref = firebase.database().ref("user");
-          ref.child(user.uid).once('value', function(snapshot) {
-            if (!snapshot.val().usernameUnique){
-              app.migrateUsername = ''
-              $('#migrateModal').modal('show')
-            }
-          });
         } else if (app.signUpUsername){
           handleLogin(app.signUpUsername, user.uid)
         }
@@ -1161,7 +1353,7 @@
         handleLogout()
       }
     });
-    
+
     var makeClean = function() {
       app.status = "SAVED"
       currentHash = window.location.hash
@@ -1183,16 +1375,21 @@
     var editorVal = "setBackdropURL('./images/outerspace.jpg')\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
     if (getID() != ''){
       editorVal = "// Loading..."
-      firebase.database().ref('/code/' + getID()).once('value').then(function(snapshot) {
+      firebase.database().ref('/workflow/' + getID()).once('value').then(function(snapshot) {
         if (snapshot.val()){
-          myCode = firebase.auth().currentUser && snapshot.val()["--uid"] == firebase.auth().currentUser.uid
-          editor.setValue(getCurrentRevisionCode(snapshot.val()))
+          app.setWorkflowData(snapshot.val())
+          myCode = true // TODO 
+          
+          firebase.database().ref('/workflow-code/' + getID() + '/' + app.workflowPath[app.workflowPath.length - 1]).once('value').then(function(snapshot) {
+            editor.setValue((snapshot.val() || {}).code)
+          });
+          
           makeClean()
         } else {
           alert("Could not find a project with the name: " + getID())
           editor.setValue("")
         }
-      });
+      })
     }
 
     // we add the project name to the hash on save
@@ -1202,42 +1399,46 @@
         window.location.reload()
       }
     })
+    
+
+    var saveCode = function(name) {
+      $('#saveModal').modal('hide');
+      app.projectNameRequest = "NOT LOADING"
+      firebase.database().ref().child("/workflow-code/" + name + '/' + app.workflowPath[app.workflowPath.length - 1]).set({
+        code: editor.getValue(),
+        time: firebase.database.ServerValue.TIMESTAMP,
+        uid: firebase.auth().currentUser && firebase.auth().currentUser.uid
+      }).then(function(){
+        window.location.hash = name
+        makeClean()
+        myCode = true
+      }).catch(function(error){
+        alert("Unable to save project: " + error)
+      });
+      app.findTask(app.topWorkflowTask, app.workflowPath).edited = true
+      firebase.database().ref('workflow/' + name + '/' + app.workflowPath.join('/subtasks/') + '/edited').set(true)
+    }
 
     var saveProject = function(name){
-      firebase.database().ref('/code/' + name).limitToLast(1).once('value').then(function(snapshot) {
+      firebase.database().ref('/workflow/' + name + '/').once('value').then(function(snapshot) {
         if (snapshot.val()){
           if (firebase.auth().currentUser && snapshot.val()[Object.keys(snapshot.val())[0]].uid == firebase.auth().currentUser.uid) {
-            // if the project exists and you own it, push the new code as a revision
-            $('#saveModal').modal('hide');
-            app.projectNameRequest = "NOT LOADING"
-            firebase.database().ref().child("/code/" + name).push({
-              code: editor.getValue(),
-              time: firebase.database.ServerValue.TIMESTAMP,
-              uid: firebase.auth().currentUser && firebase.auth().currentUser.uid
-            }).then(function(){
-              window.location.hash = name
-              makeClean()
-            }).catch(function(error){
-              alert("Unable to save project: " + error)
-            });
+            saveCode(name)
           } else {
             app.projectNameRequest = "NAME TAKEN"
           }
         } else {
           $('#saveModal').modal('hide');
           app.projectNameRequest = "NOT LOADING"
-          firebase.database().ref().child("/code/" + name + "/--uid").set(firebase.auth().currentUser && firebase.auth().currentUser.uid)
-          firebase.database().ref().child("/code/" + name).push({
-            code: editor.getValue(),
-            time: firebase.database.ServerValue.TIMESTAMP,
-            uid: firebase.auth().currentUser && firebase.auth().currentUser.uid
-          }).then(function(){
-            window.location.hash = name
-            myCode = firebase.auth().currentUser
-            makeClean()
-          }).catch(function(error){
-            alert("Unable to save project: " + error)
-          });
+          firebase.database().ref('workflow/' + name).push({name: name, uid: firebase.auth().currentUser.uid, subtasks: app.subtaskArraytoDict(app.topWorkflowTask.subtasks), done: false}).then(snapshot => {
+            app.topWorkflowTask.uid = firebase.auth().currentUser.uid
+            app.topWorkflowTask.id = snapshot.key
+            app.topWorkflowTask.parentPath = []
+            app.topWorkflowTask.name = name
+            app.topWorkflowTask.edited = true
+            app.workflowPath = [snapshot.key]
+            saveCode(name)
+          })
         }
       });
     }
@@ -1287,11 +1488,12 @@
       cm.replaceSelection(spaces, "end", "+input");
     }
 
-    var editor = CodeMirror(document.getElementById('code'), {
+    var editor = CodeMirror(document.getElementById('code-editor'), {
         mode:  "javascript",
         value: editorVal,
         lineNumbers: true,
         lineWrapping: false,
+        theme: "eclipse",
         tabSize: 2,
         indentUnit: 2,
         indentWithTabs: false,
@@ -1311,6 +1513,18 @@
             "asi": true
           }
         },
+    });
+    
+    var target = document.getElementById("merge-editor");
+    var mergeEditor = CodeMirror.MergeView(target, {
+      value: "",
+      orig: "",
+      lineNumbers: true,
+      mode: "text/javascript",
+      highlightDifferences: true,
+      connect: true,
+      collapseIdentical: false,
+      revertButtons: true,
     });
     onkeydown = function(e){
       if(e.ctrlKey && e.key == '/'){
@@ -1346,6 +1560,7 @@
       if (app.autoRunChecked){
         makeDirty()
         debouncedRunCode()
+        debouncedSave()
         setTimeout(function() {WoofJSLint()}, 1000); 
       }
     });
@@ -1355,6 +1570,7 @@
      function focusPreview() {
        document.getElementById('preview').focus();
      };
+
 
     editor.on('inputRead', function(cm, e){
       if (e.text.length == 1 && e.text[0].length == 1 &&  /^[a-zA-Z\.]/.test(e.text[0])) {
@@ -1371,6 +1587,8 @@
          return dialogText;
        }
     };
+
+
 
     function tryRunningCode() {
       app.code = editor.getValue()
@@ -1460,21 +1678,22 @@
     }
 
     function debounce(func, wait, immediate) {
-      var timeout;
-      return function() {
-        var context = this, args = arguments;
-        var later = function() {
-          timeout = null;
-          if (!immediate) func.apply(context, args);
-        };
-        var callNow = immediate && !timeout;
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
-        if (callNow) func.apply(context, args);
-      };
+    	var timeout;
+    	return function() {
+    		var context = this, args = arguments;
+    		var later = function() {
+    			timeout = null;
+    			if (!immediate) func.apply(context, args);
+    		};
+    		var callNow = immediate && !timeout;
+    		clearTimeout(timeout);
+    		timeout = setTimeout(later, wait);
+    		if (callNow) func.apply(context, args);
+    	};
     };
     // helper function to prevent runCode from running too often
     var debouncedRunCode = debounce(runCode, 1000, false)
+    var debouncedSave = debounce(save, 1000, false)
 
   </script>
   <script>

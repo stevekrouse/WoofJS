@@ -1560,6 +1560,25 @@ Woof.prototype.mobile = function() {
     return (typeof window.orientation !== "undefined") || (navigator.userAgent.indexOf('IEMobile') !== -1);
 };
 
+// generate an array with the given parameters (starting value, ending value, incrementation) default incrementation is 1
+Woof.prototype.range = function(start, end, incr = 1) {
+  if (arguments.length < 2 || (typeof start != "number" || typeof end != "number" || typeof incr != "number")) { throw new TypeError("range() requires at least two number inputs."); }
+  if (incr === 0) { throw new TypeError("the third parameter for range() cannot be 0"); }
+  var output = [];
+  if (start < end) {
+    incr = Math.abs(incr);
+    for (let i = start; i < end; i += incr) {
+      output.push(i);
+    }
+  }
+  else if (start > end) {
+    incr = -Math.abs(incr);
+    for (let j = start; j > end; j += incr) {
+      output.push(j);
+    }
+  }
+  return output;
+};
 
 //Math Functions
 Woof.prototype.sqrt = function(a) {

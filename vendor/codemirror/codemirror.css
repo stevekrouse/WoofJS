@@ -5,6 +5,7 @@
   font-family: 	Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;;
   height: 300px;
   color: black;
+  z-index: 0;
 }
 
 /* PADDING */
