@@ -340,31 +340,31 @@
       </div>
       <div v-show="codePane" :style="{display: !codebar ? 'flex' : 'none'}" id="code">
         <div id="CodeNav">
-           <div>
+          <div>
             <span style="margin-left:8px; margin-top:4px">Code</span>
-               <select id="themeOptions" style="color:#49A6DF; margin-top: 4px; height: 18px; font-size: 12px;" @change="selectTheme()">
-               <option>monokai</option>
-               <option>cobalt</option>
-               <option>ambiance</option>
-               <option>blackboard</option>
-               <option>erlang-dark</option>
-               <option>lesser-dark</option>
-               <option>eclipse</option>
-               <option>3024-night</option>
-               <option>base16-dark</option>
-               <option>elegant</option>
-               <option>midnight</option>
-               <option>night</option>
-              	</select>
-            </div>
-            <div>
-              <span style="margin-right:8px">
-                <img @click="codebar = !codebar" style="margin: 5px; width: 16px; height:18px; cursor:pointer" src="./images/minimize.png" title="Minimize">
-              </span>
+            <select :value ="selectedTheme" style="color:#49A6DF; margin-top: 4px; height: 18px; font-size: 12px;" @change="themeChange($event)">
+              <option>monokai</option>
+              <option>cobalt</option>
+              <option>ambiance</option>
+              <option>blackboard</option>
+              <option>erlang-dark</option>
+              <option>lesser-dark</option>
+              <option>eclipse</option>
+              <option>3024-night</option>
+              <option>base16-dark</option>
+              <option>elegant</option>
+              <option>midnight</option>
+              <option>night</option>
+            </select>
+          </div>
+          <div>
+            <span style="margin-right:8px">
+              <img @click="codebar = !codebar" style="margin: 5px; width: 16px; height:18px; cursor:pointer" src="./images/minimize.png" title="Minimize">
+            </span>
           </div>
         </div>
       </div>
-    
+
     </div>
   </div>
   <script>
@@ -419,6 +419,7 @@
         mouseX: 0,
         mouseY: 0,
         seenError: true,
+        selectedTheme:'',
         projectNameRequest: "NOT LOADING", // or "LOADING" or "NAME TAKEN"
         projectNameInputValue: "",
         projectNameLastKeyIllegal: false,
@@ -485,12 +486,13 @@
             }
           }
         },
-        selectTheme: function (){
-          var yourSelect = document.getElementById( "themeOptions" );
-          var newTheme = yourSelect.options[ yourSelect.selectedIndex ].value;
+        themeChange: function (event){
+          var newTheme = event.target.value;
           editor.setOption("theme", newTheme);
           if(firebase.auth().currentUser){
+            if (user){
             firebase.database().ref("/user/" + firebase.auth().currentUser.uid + "/theme").set(newTheme)
+            }
           } 
         },
       },
@@ -532,7 +534,7 @@
     firebase.auth().onAuthStateChanged(function(user) {
       if (!authChanged){
         authChanged = true
-          if(user){
+        if(user){
           ga('set', 'userId', user.uid); 
         } 
       }
@@ -541,7 +543,7 @@
         handleLogin(user.displayName, user.uid)
         // if the user is logged in, and we don't have their name/email in our database, save it now
           firebase.database().ref('/user/' + user.uid + "/theme").once('value').then(function(snapshot) {
-            document.getElementById("themeOptions").value = snapshot.val() ;
+            app.selectedTheme = snapshot.val() ;
             editor.setOption("theme", snapshot.val());
             if (!snapshot.val()) {
               firebase.database().ref("/user/" + user.uid).set({
@@ -865,18 +867,18 @@
     }
     
     function debounce(func, wait, immediate) {
-    	var timeout;
-    	return function() {
-    		var context = this, args = arguments;
-    		var later = function() {
-    			timeout = null;
-    			if (!immediate) func.apply(context, args);
-    		};
-    		var callNow = immediate && !timeout;
-    		clearTimeout(timeout);
-    		timeout = setTimeout(later, wait);
-    		if (callNow) func.apply(context, args);
-    	};
+      var timeout;
+      return function() {
+        var context = this, args = arguments;
+        var later = function() {
+          timeout = null;
+          if (!immediate) func.apply(context, args);
+        };
+        var callNow = immediate && !timeout;
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+        if (callNow) func.apply(context, args);
+      };
     };
     // helper function to prevent runCode from running too often
     var debouncedRunCode = debounce(runCode, 1000, false)
