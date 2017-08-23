@@ -9,8 +9,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "compile": "babel src/woof.es6.js --out-file dist/woof.js",
-    "watch": "babel src/woof.es6.js --watch --out-file dist/woof.js",
-    "format": "prettier --no-semi --trailing-comma es5 --no-bracket-spacing --write ./src/woof.es6.js"
+    "watch": "babel src/woof.es6.js --watch --out-file dist/woof.js"
   },
   "repository": {
     "type": "git",

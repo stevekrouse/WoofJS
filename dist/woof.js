@@ -7,146 +7,95 @@ var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = [
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 // We include SAT.js here as our only "external" dependency to help us detect when rotated sprites intersect. It's not really an "external" dependency because we include it here internally.
-// SAT.js - Version 0.6.0 - Copyright 2012 - 2016 - Jim Riecken <jimr@jimr.ca> - released under the MIT License. https://github.com/jriecken/sat-js
+// SAT.js - Version 0.6.0 - Copyright 2012 - 2016 - Jim Riecken <jimr@jimr.ca> - released under the MIT License. https://github.com/jriecken/sat-js 
 function Vector(t, o) {
-  ;this.x = t || 0, this.y = o || 0;
-}
-function Circle(t, o) {
-  ;this.pos = t || new Vector(), this.r = o || 0;
-}
-function Polygon(t, o) {
-  ;this.pos = t || new Vector(), this.angle = 0, this.offset = new Vector(), this.setPoints(o || []);
-}
-function Box(t, o, e) {
-  ;this.pos = t || new Vector(), this.w = o || 0, this.h = e || 0;
-}
-function Response() {
-  ;this.a = null, this.b = null, this.overlapN = new Vector(), this.overlapV = new Vector(), this.clear();
-}
-function flattenPointsOn(t, o, e) {
+  this.x = t || 0, this.y = o || 0;
+}function Circle(t, o) {
+  this.pos = t || new Vector(), this.r = o || 0;
+}function Polygon(t, o) {
+  this.pos = t || new Vector(), this.angle = 0, this.offset = new Vector(), this.setPoints(o || []);
+}function Box(t, o, e) {
+  this.pos = t || new Vector(), this.w = o || 0, this.h = e || 0;
+}function Response() {
+  this.a = null, this.b = null, this.overlapN = new Vector(), this.overlapV = new Vector(), this.clear();
+}function flattenPointsOn(t, o, e) {
   for (var r = Number.MAX_VALUE, n = -Number.MAX_VALUE, s = t.length, i = 0; s > i; i++) {
-    var p = t[i].dot(o);
-    r > p && (r = p), p > n && (n = p);
-  }
-  ;e[0] = r, e[1] = n;
-}
-function isSeparatingAxis(t, o, e, r, n, s) {
+    var p = t[i].dot(o);r > p && (r = p), p > n && (n = p);
+  }e[0] = r, e[1] = n;
+}function isSeparatingAxis(t, o, e, r, n, s) {
   var i = T_ARRAYS.pop(),
       p = T_ARRAYS.pop(),
       c = T_VECTORS.pop().copy(o).sub(t),
-      l = c.dot(n);
-  if (flattenPointsOn(e, n, i), flattenPointsOn(r, n, p), p[0] += l, p[1] += l, i[0] > p[1] || p[0] > i[1]) return T_VECTORS.push(c), T_ARRAYS.push(i), T_ARRAYS.push(p), !0;
-  if (s) {
-    var h = 0;
-    if (i[0] < p[0]) {
+      l = c.dot(n);if (flattenPointsOn(e, n, i), flattenPointsOn(r, n, p), p[0] += l, p[1] += l, i[0] > p[1] || p[0] > i[1]) return T_VECTORS.push(c), T_ARRAYS.push(i), T_ARRAYS.push(p), !0;if (s) {
+    var h = 0;if (i[0] < p[0]) {
       if (s.aInB = !1, i[1] < p[1]) h = i[1] - p[0], s.bInA = !1;else {
         var a = i[1] - p[0],
-            y = p[1] - i[0];
-        h = y > a ? a : -y;
+            y = p[1] - i[0];h = y > a ? a : -y;
       }
     } else if (s.bInA = !1, i[1] > p[1]) h = i[0] - p[1], s.aInB = !1;else {
       var a = i[1] - p[0],
-          y = p[1] - i[0];
-      h = y > a ? a : -y;
-    }
-    var u = Math.abs(h);
-    u < s.overlap && (s.overlap = u, s.overlapN.copy(n), 0 > h && s.overlapN.reverse());
-  }
-  return T_VECTORS.push(c), T_ARRAYS.push(i), T_ARRAYS.push(p), !1;
-}
-function voronoiRegion(t, o) {
+          y = p[1] - i[0];h = y > a ? a : -y;
+    }var u = Math.abs(h);u < s.overlap && (s.overlap = u, s.overlapN.copy(n), 0 > h && s.overlapN.reverse());
+  }return T_VECTORS.push(c), T_ARRAYS.push(i), T_ARRAYS.push(p), !1;
+}function voronoiRegion(t, o) {
   var e = t.len2(),
-      r = o.dot(t);
-  return 0 > r ? LEFT_VORONOI_REGION : r > e ? RIGHT_VORONOI_REGION : MIDDLE_VORONOI_REGION;
-}
-function pointInCircle(t, o) {
+      r = o.dot(t);return 0 > r ? LEFT_VORONOI_REGION : r > e ? RIGHT_VORONOI_REGION : MIDDLE_VORONOI_REGION;
+}function pointInCircle(t, o) {
   var e = T_VECTORS.pop().copy(t).sub(o.pos),
       r = o.r * o.r,
-      n = e.len2();
-  return T_VECTORS.push(e), r >= n;
-}
-function pointInPolygon(t, o) {
-  TEST_POINT.pos.copy(t), T_RESPONSE.clear();
-  var e = testPolygonPolygon(TEST_POINT, o, T_RESPONSE);
-  return e && (e = T_RESPONSE.aInB), e;
-}
-function testCircleCircle(t, o, e) {
+      n = e.len2();return T_VECTORS.push(e), r >= n;
+}function pointInPolygon(t, o) {
+  TEST_POINT.pos.copy(t), T_RESPONSE.clear();var e = testPolygonPolygon(TEST_POINT, o, T_RESPONSE);return e && (e = T_RESPONSE.aInB), e;
+}function testCircleCircle(t, o, e) {
   var r = T_VECTORS.pop().copy(o.pos).sub(t.pos),
       n = t.r + o.r,
       s = n * n,
-      i = r.len2();
-  if (i > s) return T_VECTORS.push(r), !1;
-  if (e) {
+      i = r.len2();if (i > s) return T_VECTORS.push(r), !1;if (e) {
     var p = Math.sqrt(i);e.a = t, e.b = o, e.overlap = n - p, e.overlapN.copy(r.normalize()), e.overlapV.copy(r).scale(e.overlap), e.aInB = t.r <= o.r && p <= o.r - t.r, e.bInA = o.r <= t.r && p <= t.r - o.r;
-  }
-  return T_VECTORS.push(r), !0;
-}
-function testPolygonCircle(t, o, e) {
+  }return T_VECTORS.push(r), !0;
+}function testPolygonCircle(t, o, e) {
   for (var r = T_VECTORS.pop().copy(o.pos).sub(t.pos), n = o.r, s = n * n, i = t.calcPoints, p = i.length, c = T_VECTORS.pop(), l = T_VECTORS.pop(), h = 0; p > h; h++) {
     var a = h === p - 1 ? 0 : h + 1,
         y = 0 === h ? p - 1 : h - 1,
         u = 0,
-        V = null;
-    c.copy(t.edges[h]), l.copy(r).sub(i[h]), e && l.len2() > s && (e.aInB = !1);
-    var T = voronoiRegion(c, l);
-    if (T === LEFT_VORONOI_REGION) {
-      c.copy(t.edges[y]);
-      var f = T_VECTORS.pop().copy(r).sub(i[y]);
-      if (T = voronoiRegion(c, f), T === RIGHT_VORONOI_REGION) {
-        var R = l.len();
-        if (R > n) return T_VECTORS.push(r), T_VECTORS.push(c), T_VECTORS.push(l), T_VECTORS.push(f), !1;
-        e && (e.bInA = !1, V = l.normalize(), u = n - R);
-      }
-      T_VECTORS.push(f);
+        V = null;c.copy(t.edges[h]), l.copy(r).sub(i[h]), e && l.len2() > s && (e.aInB = !1);var T = voronoiRegion(c, l);if (T === LEFT_VORONOI_REGION) {
+      c.copy(t.edges[y]);var f = T_VECTORS.pop().copy(r).sub(i[y]);if (T = voronoiRegion(c, f), T === RIGHT_VORONOI_REGION) {
+        var R = l.len();if (R > n) return T_VECTORS.push(r), T_VECTORS.push(c), T_VECTORS.push(l), T_VECTORS.push(f), !1;e && (e.bInA = !1, V = l.normalize(), u = n - R);
+      }T_VECTORS.push(f);
     } else if (T === RIGHT_VORONOI_REGION) {
       if (c.copy(t.edges[a]), l.copy(r).sub(i[a]), T = voronoiRegion(c, l), T === LEFT_VORONOI_REGION) {
-        var R = l.len();
-        if (R > n) return T_VECTORS.push(r), T_VECTORS.push(c), T_VECTORS.push(l), !1;
-        e && (e.bInA = !1, V = l.normalize(), u = n - R);
+        var R = l.len();if (R > n) return T_VECTORS.push(r), T_VECTORS.push(c), T_VECTORS.push(l), !1;e && (e.bInA = !1, V = l.normalize(), u = n - R);
       }
     } else {
       var O = c.perp().normalize(),
           R = l.dot(O),
-          v = Math.abs(R);
-      if (R > 0 && v > n) return T_VECTORS.push(r), T_VECTORS.push(O), T_VECTORS.push(l), !1;
-      e && (V = O, u = n - R, (R >= 0 || 2 * n > u) && (e.bInA = !1));
-    }
-    V && e && Math.abs(u) < Math.abs(e.overlap) && (e.overlap = u, e.overlapN.copy(V));
-  }
-  return e && (e.a = t, e.b = o, e.overlapV.copy(e.overlapN).scale(e.overlap)), T_VECTORS.push(r), T_VECTORS.push(c), T_VECTORS.push(l), !0;
-}
-function testCirclePolygon(t, o, e) {
-  var r = testPolygonCircle(o, t, e);
-  if (r && e) {
+          v = Math.abs(R);if (R > 0 && v > n) return T_VECTORS.push(r), T_VECTORS.push(O), T_VECTORS.push(l), !1;e && (V = O, u = n - R, (R >= 0 || 2 * n > u) && (e.bInA = !1));
+    }V && e && Math.abs(u) < Math.abs(e.overlap) && (e.overlap = u, e.overlapN.copy(V));
+  }return e && (e.a = t, e.b = o, e.overlapV.copy(e.overlapN).scale(e.overlap)), T_VECTORS.push(r), T_VECTORS.push(c), T_VECTORS.push(l), !0;
+}function testCirclePolygon(t, o, e) {
+  var r = testPolygonCircle(o, t, e);if (r && e) {
     var n = e.a,
-        s = e.aInB;
-    e.overlapN.reverse(), e.overlapV.reverse(), e.a = e.b, e.b = n, e.aInB = e.bInA, e.bInA = s;
-  }
-  return r;
-}
-function testPolygonPolygon(t, o, e) {
+        s = e.aInB;e.overlapN.reverse(), e.overlapV.reverse(), e.a = e.b, e.b = n, e.aInB = e.bInA, e.bInA = s;
+  }return r;
+}function testPolygonPolygon(t, o, e) {
   for (var r = t.calcPoints, n = r.length, s = o.calcPoints, i = s.length, p = 0; n > p; p++) {
     if (isSeparatingAxis(t.pos, o.pos, r, s, t.normals[p], e)) return !1;
   }for (var p = 0; i > p; p++) {
     if (isSeparatingAxis(t.pos, o.pos, r, s, o.normals[p], e)) return !1;
   }return e && (e.a = t, e.b = o, e.overlapV.copy(e.overlapN).scale(e.overlap)), !0;
-}
-var SAT = {};SAT.Vector = Vector, SAT.V = Vector, Vector.prototype.copy = Vector.prototype.copy = function (t) {
+}var SAT = {};SAT.Vector = Vector, SAT.V = Vector, Vector.prototype.copy = Vector.prototype.copy = function (t) {
   return this.x = t.x, this.y = t.y, this;
 }, Vector.prototype.clone = Vector.prototype.clone = function () {
   return new Vector(this.x, this.y);
 }, Vector.prototype.perp = Vector.prototype.perp = function () {
-  var t = this.x;
-  return this.x = this.y, this.y = -t, this;
+  var t = this.x;return this.x = this.y, this.y = -t, this;
 }, Vector.prototype.rotate = Vector.prototype.rotate = function (t) {
   var o = this.x,
-      e = this.y;
-  return this.x = o * Math.cos(t) - e * Math.sin(t), this.y = o * Math.sin(t) + e * Math.cos(t), this;
+      e = this.y;return this.x = o * Math.cos(t) - e * Math.sin(t), this.y = o * Math.sin(t) + e * Math.cos(t), this;
 }, Vector.prototype.reverse = Vector.prototype.reverse = function () {
   return this.x = -this.x, this.y = -this.y, this;
 }, Vector.prototype.normalize = Vector.prototype.normalize = function () {
-  var t = this.len();
-  return t > 0 && (this.x = this.x / t, this.y = this.y / t), this;
+  var t = this.len();return t > 0 && (this.x = this.x / t, this.y = this.y / t), this;
 }, Vector.prototype.add = Vector.prototype.add = function (t) {
   return this.x += t.x, this.y += t.y, this;
 }, Vector.prototype.sub = Vector.prototype.sub = function (t) {
@@ -154,19 +103,15 @@ var SAT = {};SAT.Vector = Vector, SAT.V = Vector, Vector.prototype.copy = Vector
 }, Vector.prototype.scale = Vector.prototype.scale = function (t, o) {
   return this.x *= t, this.y *= o || t, this;
 }, Vector.prototype.project = Vector.prototype.project = function (t) {
-  var o = this.dot(t) / t.len2();
-  return this.x = o * t.x, this.y = o * t.y, this;
+  var o = this.dot(t) / t.len2();return this.x = o * t.x, this.y = o * t.y, this;
 }, Vector.prototype.projectN = Vector.prototype.projectN = function (t) {
-  var o = this.dot(t);
-  return this.x = o * t.x, this.y = o * t.y, this;
+  var o = this.dot(t);return this.x = o * t.x, this.y = o * t.y, this;
 }, Vector.prototype.reflect = Vector.prototype.reflect = function (t) {
   var o = this.x,
-      e = this.y;
-  return this.project(t).scale(2), this.x -= o, this.y -= e, this;
+      e = this.y;return this.project(t).scale(2), this.x -= o, this.y -= e, this;
 }, Vector.prototype.reflectN = Vector.prototype.reflectN = function (t) {
   var o = this.x,
-      e = this.y;
-  return this.projectN(t).scale(2), this.x -= o, this.y -= e, this;
+      e = this.y;return this.projectN(t).scale(2), this.x -= o, this.y -= e, this;
 }, Vector.prototype.dot = Vector.prototype.dot = function (t) {
   return this.x * t.x + this.y * t.y;
 }, Vector.prototype.len2 = Vector.prototype.len2 = function () {
@@ -175,20 +120,16 @@ var SAT = {};SAT.Vector = Vector, SAT.V = Vector, Vector.prototype.copy = Vector
   return Math.sqrt(this.len2());
 }, SAT.Circle = Circle, Circle.prototype.getAABB = Circle.prototype.getAABB = function () {
   var t = this.r,
-      o = this.pos.clone().sub(new Vector(t, t));
-  return new Box(o, 2 * t, 2 * t).toPolygon();
+      o = this.pos.clone().sub(new Vector(t, t));return new Box(o, 2 * t, 2 * t).toPolygon();
 }, SAT.Polygon = Polygon, Polygon.prototype.setPoints = Polygon.prototype.setPoints = function (t) {
-  var o = !this.points || this.points.length !== t.length;
-  if (o) {
+  var o = !this.points || this.points.length !== t.length;if (o) {
     var e,
         r = this.calcPoints = [],
         n = this.edges = [],
-        s = this.normals = [];
-    for (e = 0; e < t.length; e++) {
+        s = this.normals = [];for (e = 0; e < t.length; e++) {
       r.push(new Vector()), n.push(new Vector()), s.push(new Vector());
     }
-  }
-  return this.points = t, this._recalc(), this;
+  }return this.points = t, this._recalc(), this;
 }, Polygon.prototype.setAngle = Polygon.prototype.setAngle = function (t) {
   return this.angle = t, this._recalc(), this;
 }, Polygon.prototype.setOffset = Polygon.prototype.setOffset = function (t) {
@@ -209,39 +150,29 @@ var SAT = {};SAT.Vector = Vector, SAT.V = Vector, Vector.prototype.copy = Vector
       n = this.points,
       s = this.offset,
       i = this.angle,
-      p = n.length;
-  for (t = 0; p > t; t++) {
+      p = n.length;for (t = 0; p > t; t++) {
     var c = o[t].copy(n[t]);c.x += s.x, c.y += s.y, 0 !== i && c.rotate(i);
-  }
-  for (t = 0; p > t; t++) {
+  }for (t = 0; p > t; t++) {
     var l = o[t],
         h = p - 1 > t ? o[t + 1] : o[0],
-        a = e[t].copy(h).sub(l);
-    r[t].copy(a).perp().normalize();
-  }
-  return this;
+        a = e[t].copy(h).sub(l);r[t].copy(a).perp().normalize();
+  }return this;
 }, Polygon.prototype.getAABB = Polygon.prototype.getAABB = function () {
   for (var t = this.calcPoints, o = t.length, e = t[0].x, r = t[0].y, n = t[0].x, s = t[0].y, i = 1; o > i; i++) {
-    var p = t[i];
-    p.x < e ? e = p.x : p.x > n && (n = p.x), p.y < r ? r = p.y : p.y > s && (s = p.y);
-  }
-  return new Box(this.pos.clone().add(new Vector(e, r)), n - e, s - r).toPolygon();
+    var p = t[i];p.x < e ? e = p.x : p.x > n && (n = p.x), p.y < r ? r = p.y : p.y > s && (s = p.y);
+  }return new Box(this.pos.clone().add(new Vector(e, r)), n - e, s - r).toPolygon();
 }, SAT.Box = Box, Box.prototype.toPolygon = Box.prototype.toPolygon = function () {
   var t = this.pos,
       o = this.w,
-      e = this.h;
-  return new Polygon(new Vector(t.x, t.y), [new Vector(), new Vector(o, 0), new Vector(o, e), new Vector(0, e)]);
+      e = this.h;return new Polygon(new Vector(t.x, t.y), [new Vector(), new Vector(o, 0), new Vector(o, e), new Vector(0, e)]);
 }, SAT.Response = Response, Response.prototype.clear = Response.prototype.clear = function () {
   return this.aInB = !0, this.bInA = !0, this.overlap = Number.MAX_VALUE, this;
-};
-for (var T_VECTORS = [], i = 0; 10 > i; i++) {
+};for (var T_VECTORS = [], i = 0; 10 > i; i++) {
   T_VECTORS.push(new Vector());
 }for (var T_ARRAYS = [], i = 0; 5 > i; i++) {
   T_ARRAYS.push([]);
 }var T_RESPONSE = new Response(),
-    TEST_POINT = new Box(new Vector(), 1e-6, 1e-6).toPolygon();
-SAT.isSeparatingAxis = isSeparatingAxis;
-var LEFT_VORONOI_REGION = -1,
+    TEST_POINT = new Box(new Vector(), 1e-6, 1e-6).toPolygon();SAT.isSeparatingAxis = isSeparatingAxis;var LEFT_VORONOI_REGION = -1,
     MIDDLE_VORONOI_REGION = 0,
     RIGHT_VORONOI_REGION = 1;SAT.pointInCircle = pointInCircle, SAT.pointInPolygon = pointInPolygon, SAT.testCircleCircle = testCircleCircle, SAT.testPolygonCircle = testPolygonCircle, SAT.testCirclePolygon = testCirclePolygon, SAT.testPolygonPolygon = testPolygonPolygon;
 function detectCollision(a, b) {
@@ -254,7 +185,7 @@ function detectCollision(a, b) {
   } else if (a instanceof SAT.Polygon && b instanceof SAT.Polygon) {
     return SAT.testPolygonPolygon(a, b);
   } else {
-    throw Error("Unexpected Shape.");
+    throw Error('Unexpected Shape.');
   }
 }
 
@@ -279,20 +210,14 @@ function Woof() {
 
   thisContext.global = global;
   thisContext.sprites = [];
-  thisContext.backdrop = {
-    color: null,
-    type: null,
-    url: null,
-    size: "100% 100%",
-    repeat: "no-repeat"
-  };
+  thisContext.backdrop = { color: null, type: null, url: null, size: "100% 100%", repeat: "no-repeat" };
   thisContext.stopped = true;
   // internally named fullScreen1 because the keyword "fullScreen" on the global scope was wonky in firefox
   thisContext.fullScreen1 = fullScreen;
 
   thisContext._cameraX = 0;
   thisContext._cameraY = 0;
-  Object.defineProperty(thisContext, "cameraX", {
+  Object.defineProperty(thisContext, 'cameraX', {
     get: function get() {
       return thisContext._cameraX;
     },
@@ -304,7 +229,7 @@ function Woof() {
       thisContext._cameraX = value;
     }
   });
-  Object.defineProperty(thisContext, "cameraY", {
+  Object.defineProperty(thisContext, 'cameraY', {
     get: function get() {
       return thisContext._cameraY;
     },
@@ -317,7 +242,7 @@ function Woof() {
     }
   });
 
-  Object.defineProperty(thisContext, "fullScreen", {
+  Object.defineProperty(thisContext, 'fullScreen', {
     get: function get() {
       return thisContext.fullScreen1;
     },
@@ -446,12 +371,7 @@ function Woof() {
   });
 
   thisContext.bounds = function () {
-    return {
-      left: thisContext.minX,
-      right: thisContext.maxX,
-      bottom: thisContext.minYm,
-      top: thisContext.maxY
-    };
+    return { left: thisContext.minX, right: thisContext.maxX, bottom: thisContext.minYm, top: thisContext.maxY };
   };
 
   thisContext.randomX = function () {
@@ -477,7 +397,7 @@ function Woof() {
         repeat = _thisContext$backdrop.repeat;
 
 
-    thisContext._backdropDiv.style.background = type === "url" ? "url('" + url + "')" : color;
+    thisContext._backdropDiv.style.background = type === 'url' ? "url('" + url + "')" : color;
     thisContext._backdropDiv.style.backgroundRepeat = repeat;
     thisContext._backdropDiv.style.backgroundSize = size;
   };
@@ -487,7 +407,7 @@ function Woof() {
       throw new TypeError("setBackDropUrl(url) requires one string input.");
     }
     thisContext.backdrop.url = url;
-    thisContext.backdrop.type = "url";
+    thisContext.backdrop.type = 'url';
 
     var img = new BrowserImage();
     img.onload = function () {
@@ -503,7 +423,7 @@ function Woof() {
   };
 
   thisContext.setBackdropStyle = function (coverOrContain) {
-    coverOrContain = coverOrContain.split(" ");
+    coverOrContain = coverOrContain.split(' ');
     if (coverOrContain.length > 2) {
       throw Error("setBackdropStyle can take one or two arguments, separated by a space.");
     }
@@ -519,13 +439,13 @@ function Woof() {
       throw Error("setBackdropStyle only understands sizes such as 5em, 50px, 50% and the keywords cover, contain, and auto");
     }
 
-    thisContext.backdrop.size = coverOrContain.join(" ");
+    thisContext.backdrop.size = coverOrContain.join(' ');
     thisContext.ready(thisContext._renderBackdrop);
   };
   thisContext.setBackdropRepeat = function (repeatString) {
     var acceptableValues = ["repeat", "no-repeat", "repeat-x", "repeat-y", "space", "round"];
     if (!acceptableValues.includes(repeatString)) {
-      throw Error("setBackdropRepeat can only understand one of the following: " + acceptableValues.join(", "));
+      throw Error("setBackdropRepeat can only understand one of the following: " + acceptableValues.join(', '));
     }
     thisContext.backdrop.repeat = repeatString;
     thisContext.ready(thisContext._renderBackdrop);
@@ -536,7 +456,7 @@ function Woof() {
       throw new TypeError("setBackdropColor(color) takes one string input.");
     }
     thisContext.backdrop.color = color;
-    thisContext.backdrop.type = "color";
+    thisContext.backdrop.type = 'color';
     thisContext.ready(thisContext._renderBackdrop);
   };
 
@@ -567,11 +487,11 @@ function Woof() {
   // the HTML canvas puts (0, 0) in the top-left corner of the screen
   // the x-axis works as you'd expect, with x increasing as you move left-to-right
   // the y-axis works counter-intuitively, decreasing as you move up, and increasing as you move down
-  // translateToCenter maps coordinates from the HTML canvas to the Scratch-world where (0,0) is in the center of the screen
+  // translateToCenter maps coordinates from the HTML canvas to the Scratch-world where (0,0) is in the center of the screen  
   thisContext.translateToCenter = function (x, y) {
     return [x - thisContext.width / 2 + thisContext.cameraX - thisContext._spriteCanvas.offsetLeft, thisContext.height / 2 - y + thisContext.cameraY + thisContext._spriteCanvas.offsetTop];
   };
-  // translateToCanvas (the opposite of translateToCenter) maps coordinates from the Scratch-world to the HTML canvas world with (0,0) in the top-left
+  // translateToCanvas (the opposite of translateToCenter) maps coordinates from the Scratch-world to the HTML canvas world with (0,0) in the top-left  
   thisContext.translateToCanvas = function (x, y) {
     return [x + thisContext.maxX - thisContext._spriteCanvas.offsetLeft, thisContext.maxY - y + thisContext._spriteCanvas.offsetTop];
   };
@@ -627,6 +547,7 @@ function Woof() {
   thisContext.ready(function () {
     thisContext._spriteCanvas.addEventListener("mousedown", function (event) {
       thisContext.mouseDown = true;
+
       var _thisContext$translat = thisContext.translateToCenter(event.clientX, event.clientY);
 
       var _thisContext$translat2 = _slicedToArray(_thisContext$translat, 2);
@@ -636,6 +557,7 @@ function Woof() {
     });
     window.addEventListener("mouseup", function (event) {
       thisContext.mouseDown = false;
+
       var _thisContext$translat3 = thisContext.translateToCenter(event.clientX, event.clientY);
 
       var _thisContext$translat4 = _slicedToArray(_thisContext$translat3, 2);
@@ -645,6 +567,7 @@ function Woof() {
     });
     thisContext._spriteCanvas.addEventListener("touchstart", function (event) {
       thisContext.mouseDown = true;
+
       var _thisContext$translat5 = thisContext.translateToCenter(event.targetTouches[0].clientX, event.targetTouches[0].clientY);
 
       var _thisContext$translat6 = _slicedToArray(_thisContext$translat5, 2);
@@ -662,7 +585,6 @@ function Woof() {
       }, 0);
     });
     thisContext._spriteCanvas.addEventListener("mousemove", function (event) {
-      ;
       var _thisContext$translat7 = thisContext.translateToCenter(event.clientX, event.clientY);
 
       var _thisContext$translat8 = _slicedToArray(_thisContext$translat7, 2);
@@ -671,7 +593,6 @@ function Woof() {
       thisContext.mouseY = _thisContext$translat8[1];
     });
     thisContext._spriteCanvas.addEventListener("touchmove", function (event) {
-      ;
       var _thisContext$translat9 = thisContext.translateToCenter(event.targetTouches[0].clientX, event.targetTouches[0].clientY);
 
       var _thisContext$translat10 = _slicedToArray(_thisContext$translat9, 2);
@@ -845,7 +766,7 @@ function Woof() {
       }
       if (cond) {
         func();
-      }
+      };
     });
   };
 
@@ -899,7 +820,8 @@ function Woof() {
 
   thisContext._calculateMouseSpeed = function () {
     thisContext.mouseXSpeed = thisContext.mouseX - thisContext.pMouseX;
-    thisContext.mouseYSpeed = thisContext.mouseY - thisContext.pMouseY;var _ref2 = [thisContext.mouseX, thisContext.mouseY];
+    thisContext.mouseYSpeed = thisContext.mouseY - thisContext.pMouseY;
+    var _ref2 = [thisContext.mouseX, thisContext.mouseY];
     thisContext.pMouseX = _ref2[0];
     thisContext.pMouseY = _ref2[1];
   };
@@ -914,7 +836,7 @@ function Woof() {
     thisContext._renderSprites();
   };
   thisContext.ready(thisContext._render);
-}
+};
 
 Woof.prototype.Sprite = function () {
   var _this = this;
@@ -954,7 +876,7 @@ Woof.prototype.Sprite = function () {
   }
   this.project.sprites.push(this);
 
-  Object.defineProperty(this, "x", {
+  Object.defineProperty(this, 'x', {
     get: function get() {
       return this.privateX;
     },
@@ -967,7 +889,7 @@ Woof.prototype.Sprite = function () {
     }
   });
 
-  Object.defineProperty(this, "y", {
+  Object.defineProperty(this, 'y', {
     get: function get() {
       return this.privateY;
     },
@@ -993,18 +915,10 @@ Woof.prototype.Sprite = function () {
   this.brightness = brightness;
 
   this.toJSON = function () {
-    return {
-      x: _this.x,
-      y: _this.y,
-      angle: _this.angle,
-      rotationStyle: _this.rotationStyle,
-      showing: _this.showing,
-      penDown: _this._penDown,
-      penColor: _this.penColor,
-      penWidth: _this.penWidth,
-      deleted: _this.deleted
-    };
-  };var _ref4 = [this.x, this.y];
+    return { x: _this.x, y: _this.y, angle: _this.angle, rotationStyle: _this.rotationStyle, showing: _this.showing, penDown: _this._penDown, penColor: _this.penColor, penWidth: _this.penWidth, deleted: _this.deleted };
+  };
+
+  var _ref4 = [this.x, this.y];
   this.lastX = _ref4[0];
   this.lastY = _ref4[1];
 
@@ -1024,7 +938,7 @@ Woof.prototype.Sprite = function () {
         _this.project._penContext.restore();
       }
     }
-    ;var _ref5 = [_this.x, _this.y];
+    var _ref5 = [_this.x, _this.y];
     _this.lastX = _ref5[0];
     _this.lastY = _ref5[1];
   };
@@ -1034,7 +948,7 @@ Woof.prototype.Sprite = function () {
     var rotatedX;
     var rotatedY;
     // If sprite is a line, offsets positioning by half the height as line is drawn from endpoints, not center
-    if (this.type == "line") {
+    if (this.type == 'line') {
       rotatedX = Math.cos(this.radians()) * (x - this.x) - Math.sin(this.radians()) * (y - this.y + this.height / 2) + this.x;
       rotatedY = Math.sin(this.radians()) * (x - this.x) + Math.cos(this.radians()) * (y - this.y + this.height / 2) + this.y;
     } else {
@@ -1060,7 +974,7 @@ Woof.prototype.Sprite = function () {
     return new SAT.Polygon(pos, [v1, v2, v3, v4]);
   };
 
-  // for debugging purposes, this function displays the collider on the screen
+  // for debugging purposes, this function displays the collider on the screen                                     
   this._renderCollider = function (context) {
     var collider = this.collider();
 
@@ -1170,8 +1084,8 @@ Woof.prototype.Sprite = function () {
     return { left: left, right: right, top: top, bottom: bottom };
   };
 
-  this.collisionCanvas = document.createElement("canvas");
-  this.collisionContext = this.collisionCanvas.getContext("2d");
+  this.collisionCanvas = document.createElement('canvas');
+  this.collisionContext = this.collisionCanvas.getContext('2d');
 
   this.touching = function (sprite, precise) {
     if (!((typeof sprite === "undefined" ? "undefined" : _typeof(sprite)) == "object")) {
@@ -1206,7 +1120,7 @@ Woof.prototype.Sprite = function () {
     _this.collisionCanvas.height = _this.project.height;
 
     _this._render(_this.collisionContext);
-    _this.collisionContext.globalCompositeOperation = "source-in";
+    _this.collisionContext.globalCompositeOperation = 'source-in';
     sprite._render(_this.collisionContext);
 
     var _project$translateToC = _this.project.translateToCanvas(left, top),
@@ -1259,7 +1173,7 @@ Woof.prototype.Sprite = function () {
     return belowTop && aboveBottom && rightLeft && leftRight;
   };
 
-  Object.defineProperty(this, "mouseOver", {
+  Object.defineProperty(this, 'mouseOver', {
     get: function get() {
       if (this.deleted || !this.showing) {
         return false;
@@ -1268,7 +1182,7 @@ Woof.prototype.Sprite = function () {
     }
   });
 
-  Object.defineProperty(this, "mouseDown", {
+  Object.defineProperty(this, 'mouseDown', {
     get: function get() {
       if (this.deleted || !this.showing) {
         return false;
@@ -1311,7 +1225,7 @@ Woof.prototype.Sprite = function () {
     sprites.splice(sprites.length, 0, sprites.splice(sprites.indexOf(this), 1)[0]);
   };
 
-  Object.defineProperty(this, "penDown", {
+  Object.defineProperty(this, 'penDown', {
     get: function get() {
       return function () {
         _this._penDown = true;
@@ -1434,7 +1348,7 @@ Woof.prototype.Text = function () {
   // currently, the collider doesn't know about textAlign so things can be quite inaccurate
   this.textAlign = textAlign;
 
-  Object.defineProperty(this, "width", {
+  Object.defineProperty(this, 'width', {
     get: function get() {
       var _this2 = this;
 
@@ -1449,7 +1363,7 @@ Woof.prototype.Text = function () {
     }
   });
 
-  Object.defineProperty(this, "height", {
+  Object.defineProperty(this, 'height', {
     get: function get() {
       var _this3 = this;
 
@@ -1515,7 +1429,7 @@ Woof.prototype.Circle = function () {
   this.radius = Math.abs(radius);
   this.color = color;
 
-  Object.defineProperty(this, "width", {
+  Object.defineProperty(this, 'width', {
     get: function get() {
       return 2 * this.radius;
     },
@@ -1524,7 +1438,7 @@ Woof.prototype.Circle = function () {
     }
   });
 
-  Object.defineProperty(this, "height", {
+  Object.defineProperty(this, 'height', {
     get: function get() {
       return 2 * this.radius;
     },
@@ -1560,7 +1474,7 @@ Woof.prototype.Rectangle = function () {
   this.rectangleWidth = Math.abs(width);
   this.color = color;
 
-  Object.defineProperty(this, "width", {
+  Object.defineProperty(this, 'width', {
     get: function get() {
       return this.rectangleWidth;
     },
@@ -1572,7 +1486,7 @@ Woof.prototype.Rectangle = function () {
     }
   });
 
-  Object.defineProperty(this, "height", {
+  Object.defineProperty(this, 'height', {
     get: function get() {
       return this.rectangleHeight;
     },
@@ -1609,7 +1523,7 @@ Woof.prototype.Oval = function () {
   this.ovalWidth = Math.abs(width);
   this.color = color;
 
-  Object.defineProperty(this, "width", {
+  Object.defineProperty(this, 'width', {
     get: function get() {
       return this.ovalWidth;
     },
@@ -1621,7 +1535,7 @@ Woof.prototype.Oval = function () {
     }
   });
 
-  Object.defineProperty(this, "height", {
+  Object.defineProperty(this, 'height', {
     get: function get() {
       return this.ovalHeight;
     },
@@ -1660,7 +1574,7 @@ Woof.prototype.Polygon = function () {
   this.polygonLength = Math.abs(length);
   this.color = color;
 
-  Object.defineProperty(this, "sides", {
+  Object.defineProperty(this, 'sides', {
     get: function get() {
       return this.polygonSides;
     },
@@ -1672,7 +1586,7 @@ Woof.prototype.Polygon = function () {
     }
   });
 
-  Object.defineProperty(this, "length", {
+  Object.defineProperty(this, 'length', {
     get: function get() {
       return this.polygonLength;
     },
@@ -1728,7 +1642,7 @@ Woof.prototype.Line = function () {
   this.color = color;
   this.lineWidth = Math.abs(width);
 
-  Object.defineProperty(this, "width", {
+  Object.defineProperty(this, 'width', {
     get: function get() {
       return this.lineWidth;
     },
@@ -1741,7 +1655,7 @@ Woof.prototype.Line = function () {
   });
 
   // Sets height property to hypotenuse of triangle created from x and x1 and y and y1 - this is the length of the 'line'
-  Object.defineProperty(this, "height", {
+  Object.defineProperty(this, 'height', {
     get: function get() {
       return Math.sqrt(Math.pow(this.x - this.x1, 2) + Math.pow(this.y - this.y1, 2));
     },
@@ -1752,7 +1666,7 @@ Woof.prototype.Line = function () {
 
   // Rotates rectangle by the angle between x1 and x and y1 and y
   // Add 90 to the angle because "height" and "width" are essentially reversed in comparison to a rectangle sprite
-  Object.defineProperty(this, "angle", {
+  Object.defineProperty(this, 'angle', {
     get: function get() {
       return Math.atan2(-this.x1 + this.x, this.y1 - this.y) * 180 / Math.PI + 90;
     },
@@ -1805,7 +1719,7 @@ Woof.prototype.Image = function () {
   };
   this.setImageURL(url);
 
-  Object.defineProperty(this, "width", {
+  Object.defineProperty(this, 'width', {
     get: function get() {
       return this.imageWidth || this.image.width;
     },
@@ -1817,7 +1731,7 @@ Woof.prototype.Image = function () {
     }
   });
 
-  Object.defineProperty(this, "height", {
+  Object.defineProperty(this, 'height', {
     get: function get() {
       return this.imageHeight || this.image.height;
     },
@@ -1962,10 +1876,11 @@ Woof.prototype.keyCodeToString = function (keyCode) {
     // if it's a number or a letter, return the number/letter as a string
     if (keyCode >= 65 && keyCode <= 90 || keyCode >= 48 && keyCode <= 57) {
       return String.fromCharCode(keyCode);
-    } else {
-      // if it's anything other than what's covered above, return the keycode as a string
-      return keyCode.toString();
     }
+    // if it's anything other than what's covered above, return the keycode as a string
+    else {
+        return keyCode.toString();
+      }
   }
 };
 
@@ -2154,7 +2069,7 @@ Woof.prototype.importCodeURL = function (url, callback) {
 // Detect if the user is on mobile -- return TRUE if on mobile, FALSE otherwise
 // sourced from https://coderwall.com/p/i817wa/one-line-function-to-detect-mobile-devices-with-javascript
 Woof.prototype.mobile = function () {
-  return typeof window.orientation !== "undefined" || navigator.userAgent.indexOf("IEMobile") !== -1;
+  return typeof window.orientation !== "undefined" || navigator.userAgent.indexOf('IEMobile') !== -1;
 };
 
 // generate an array with the given parameters (starting value, ending value, incrementation) default incrementation is 1
@@ -2275,10 +2190,7 @@ Woof.prototype.pow = function (a, b) {
 };
 
 var getData = function getData(url, callback) {
-  fetch(url, {
-    mode: "cors",
-    header: { "Access-Control-Allow-Origin": "*" }
-  }).then(function (result) {
+  fetch(url, { mode: 'cors', header: { 'Access-Control-Allow-Origin': '*' } }).then(function (result) {
     result.json().then(function (data) {
       callback(data);
     });
@@ -2286,11 +2198,11 @@ var getData = function getData(url, callback) {
 };
 
 // find the woof.js script tag in the page
-var currentScript = document.currentScript || Array.prototype.slice.call(document.getElementsByTagName("script")).find(function (s) {
-  return s.src.includes("woof.js");
+var currentScript = document.currentScript || Array.prototype.slice.call(document.getElementsByTagName('script')).find(function (s) {
+  return s.src.includes('woof.js');
 });
 
-if (JSON.parse(currentScript.getAttribute("global")) !== false) {
+if (JSON.parse(currentScript.getAttribute('global')) !== false) {
   // unless the script tag containing Woof has an attribute global="false", start Woof in global mode
   Woof.prototype.extend(window, new Woof({ global: true, fullScreen: true }));
 }
