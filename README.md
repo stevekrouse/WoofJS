@@ -112,20 +112,13 @@ The documentation that you find on [woofjs.com/create.html](http://woofjs.com/cr
 
 #### woof.js core library
 
-If you'd like to contribute to the core WoofJS library, you will edit the code in src/woofjs.es6.js , but these edits need to be compiled to dist/woof.js using babel
+If you'd like to contribute to the core WoofJS library, you will edit the code in src/woof.es6.js , but these edits need to be compiled to dist/woof.js using babel
 
-There are two options to do this:
-
-1. Every time you make changes and want to implement them, enter this command to compile:
-
-    ```
-    ./node_modules/.bin/babel WoofJS/src/woof.es6.js --out-file WoofJS/dist/woof.js
-    ```
-2. Or -- tell babel to always watch for changes and auto-compile (less work for you!). Open a new terminal and run this:
-
-    ```
-    ./node_modules/.bin/babel WoofJS/src/woof.es6.js --watch --out-file WoofJS/dist/woof.js
-    ```
+To do that, make sure you've installed the npm dependencies with `npm install`, then, before you start editing files, run the following command to tell babel to watch for changes and automatically compile:
+   ```
+   npm run compile
+   ```
+You can abort this process at any time by pressing **CTRL+C**
 
 #### WoofJS.com's Tutorials
 
@@ -142,34 +135,29 @@ You can find them there in the `woof/` subdirectory. If you'd like to cotribute 
     ```
     git clone https://github.com/stevekrouse/WoofJS.git
     ```     
-3. Initialize npm (the following command makes this as simple as possible).
+3. Install the npm dependencies.
 
     ```
-    npm init --yes
+    npm install
     ```
-4. Install babel-cli and babel-preset-es2015 (npm may give you some warnings but don't worry).
+4. Take a look at our issues and see if there are any issues that speak to you as good places to tackle first. Pay particular attention to issues labeled "good student projects."
 
-    ```
-    npm install babel-cli babel-preset-es2015 --save-dev
-    ```
-5. Take a look at our issues and see if there are any issues that speak to you as good places to tackle first. Pay particular attention to issues labeled "good student projects."
-
-6. Create a new local branch to work on your issue -- use a descriptive branch name like in this example:
+5. Create a new local branch to work on your issue -- use a descriptive branch name like in this example:
 
     ```
     git checkout -b more-pokemon-sprites
     ```
-7. Once you've  made your changes, commit them to your branch.
+6. Once you've  made your changes, commit them to your branch.
 
     ```
     git commit -m "add more pokemon sprites"
     ```
-8. Push your new branch (not master!) to the GitHub repo.
+7. Push your new branch (not master!) to the GitHub repo.
 
     ```
     git push origin more-pokemon-sprites
     ```
-9. Submit a pull request so your changes can be reviewed.
+8. Submit a pull request so your changes can be reviewed.
 
 If you have any questions, please email steve at thecodingspace.com :)
 
