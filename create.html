@@ -61,6 +61,20 @@
   <script src="./vendor/codemirror/jshint.min.js"></script>
   <script src="./vendor/codemirror/lint.js"></script>
   <script src="./vendor/codemirror/scrollpastend.js"></script>
+  <link rel="stylesheet" href="https://codemirror.net/theme/3024-day.css">
+  <link rel="stylesheet" href="https://codemirror.net/theme/3024-night.css">
+  <link rel="stylesheet" href="https://codemirror.net/theme/ambiance.css">
+  <link rel="stylesheet" href="https://codemirror.net/theme/base16-dark.css">
+  <link rel="stylesheet" href="https://codemirror.net/theme/base16-light.css">
+  <link rel="stylesheet" href="https://codemirror.net/theme/blackboard.css">
+  <link rel="stylesheet" href="https://codemirror.net/theme/cobalt.css">
+  <link rel="stylesheet" href="https://codemirror.net/theme/eclipse.css">
+  <link rel="stylesheet" href="https://codemirror.net/theme/elegant.css">
+  <link rel="stylesheet" href="https://codemirror.net/theme/erlang-dark.css">
+  <link rel="stylesheet" href="https://codemirror.net/theme/lesser-dark.css">
+  <link rel="stylesheet" href="https://codemirror.net/theme/midnight.css">
+  <link rel="stylesheet" href="https://codemirror.net/theme/monokai.css">
+  <link rel="stylesheet" href="https://codemirror.net/theme/neat.css">
   <script src="https://unpkg.com/vue@2.0.1/dist/vue.js"></script>
   <script data-presets="es2015" src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.14.0/babel.min.js"></script>
   <script src="https://cdn.rawgit.com/beautify-web/js-beautify/1b52eb1f90daaefa6ff0fa7736f97fbfc58093c1/js/lib/beautify.js"></script>
@@ -531,10 +545,28 @@
       </div>
       <div v-show="codePane" :style="{display: !codebar ? 'flex' : 'none'}" id="code">
         <div id="CodeNav">
-          <span style="margin-left:8px; margin-top:4px">Code</span>
-          <span style="margin-right:8px">
-            <img @click="codebar = !codebar" style="margin: 5px; width: 16px; height:18px; cursor:pointer" src="./images/minimize.png" title="Minimize">
-          </span>
+          <div>
+            <span style="margin-left:8px; margin-top:4px">Code</span>
+            <select :value ="selectedTheme" style="color: white; margin-top: 4px; background-color: #49a6df; height: 18px; border: 1px solid white; border-radius: 3px;" @change="themeChange($event)">
+              <option>monokai</option>
+              <option>cobalt</option>
+              <option>ambiance</option>
+              <option>blackboard</option>
+              <option>erlang-dark</option>
+              <option>lesser-dark</option>
+              <option>eclipse</option>
+              <option>3024-night</option>
+              <option>base16-dark</option>
+              <option>elegant</option>
+              <option>midnight</option>
+              <option>night</option>
+            </select>
+          </div>
+          <div>
+            <span style="margin-right:8px">
+              <img @click="codebar = !codebar" style="margin: 5px; width: 16px; height:18px; cursor:pointer" src="./images/minimize.png" title="Minimize">
+            </span>
+          </div>
         </div>
       </div>
 
@@ -591,6 +623,7 @@
         mouseX: 0,
         mouseY: 0,
         seenError: true,
+        selectedTheme:'',
         autoRunChecked: true,
         shortcut: CodeMirror.keyMap["default"] == CodeMirror.keyMap.macDefault ? 'Cmd' : 'Ctrl',     
         projectNameRequest: "NOT LOADING", // or "LOADING" or "NAME TAKEN"
@@ -711,6 +744,14 @@
             }
           }
         },
+        themeChange: function (event){
+          var newTheme = event.target.value;
+          app.selectedTheme = newTheme;
+          editor.setOption("theme", newTheme);
+          if(firebase.auth().currentUser){
+            firebase.database().ref("/user/" + firebase.auth().currentUser.uid + "/theme").set(newTheme)
+          } 
+        },
         switchToSignUp: function(){
           this.loginSignUpView = 'SIGNUP'
         },
@@ -803,7 +844,7 @@
           if (newError && newError.lineno) {
             CodeMirror.commands.markGutter(editor, "error", newError.lineno, newError.message)
           }
-        }
+        },
       }
     })
   
@@ -1071,9 +1112,18 @@
         if (user){
           ga('set', 'userId', user.uid);
         }
-      }
-
+      }      
+      
+      // if user is logging in
       if (user){
+        // get and set editor theme
+        firebase.database().ref('/user/' + user.uid + '/theme').once('value').then(function(snapshot) {
+          if (snapshot.val()) {
+            app.selectedTheme = snapshot.val();
+            editor.setOption("theme", snapshot.val());
+          }
+        })
+        
         if (user.displayName){
           handleLogin(user.displayName, user.uid)
 
@@ -1112,7 +1162,7 @@
         handleLogout()
       }
     });
-
+    
     var makeClean = function() {
       app.status = "SAVED"
       currentHash = window.location.hash
@@ -1243,7 +1293,6 @@
         value: editorVal,
         lineNumbers: true,
         lineWrapping: false,
-        theme: "eclipse",
         tabSize: 2,
         indentUnit: 2,
         indentWithTabs: false,
@@ -1308,7 +1357,6 @@
        document.getElementById('preview').focus();
      };
 
-
     editor.on('inputRead', function(cm, e){
       if (e.text.length == 1 && e.text[0].length == 1 &&  /^[a-zA-Z\.]/.test(e.text[0])) {
         // constantly show autocomplete suggestions
@@ -1324,8 +1372,6 @@
          return dialogText;
        }
     };
-
-
 
     function tryRunningCode() {
       app.code = editor.getValue()
@@ -1415,18 +1461,18 @@
     }
 
     function debounce(func, wait, immediate) {
-    	var timeout;
-    	return function() {
-    		var context = this, args = arguments;
-    		var later = function() {
-    			timeout = null;
-    			if (!immediate) func.apply(context, args);
-    		};
-    		var callNow = immediate && !timeout;
-    		clearTimeout(timeout);
-    		timeout = setTimeout(later, wait);
-    		if (callNow) func.apply(context, args);
-    	};
+      var timeout;
+      return function() {
+        var context = this, args = arguments;
+        var later = function() {
+          timeout = null;
+          if (!immediate) func.apply(context, args);
+        };
+        var callNow = immediate && !timeout;
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+        if (callNow) func.apply(context, args);
+      };
     };
     // helper function to prevent runCode from running too often
     var debouncedRunCode = debounce(runCode, 1000, false)
