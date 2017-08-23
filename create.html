@@ -343,7 +343,7 @@
            <div>
             <span style="margin-left:8px; margin-top:4px">Code</span>
                <select v-model="selectedTheme"  style="color:#49A6DF; margin-top: 4px; height: 18px; font-size: 12px;">
-               <option  placeholder="Select Theme"> {{selectedTheme}} </option>
+               <option> {{ selectedTheme }} </option>
                <option>monokai</option>
                <option>cobalt</option>
                <option>ambiance</option>
@@ -420,7 +420,8 @@
         mouseX: 0,
         mouseY: 0,
         seenError: true,
-        selectedTheme: "",
+        selectedTheme: '',
+        // loadTheme: 'Choose Theme',
         projectNameRequest: "NOT LOADING", // or "LOADING" or "NAME TAKEN"
         projectNameInputValue: "",
         projectNameLastKeyIllegal: false,
@@ -580,7 +581,6 @@
       }
     });
     
-
     var makeClean = function() {
       app.status = "SAVED"
       currentHash = window.location.hash
