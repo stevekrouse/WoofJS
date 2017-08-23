@@ -342,8 +342,7 @@
         <div id="CodeNav">
            <div>
             <span style="margin-left:8px; margin-top:4px">Code</span>
-               <select v-model="selectedTheme"  style="color:#49A6DF; margin-top: 4px; height: 18px; font-size: 12px;">
-               <option> {{ selectedTheme }} </option>
+               <select id="themeOptions" style="color:#49A6DF; margin-top: 4px; height: 18px; font-size: 12px;" @change="selectTheme()">
                <option>monokai</option>
                <option>cobalt</option>
                <option>ambiance</option>
@@ -420,8 +419,6 @@
         mouseX: 0,
         mouseY: 0,
         seenError: true,
-        selectedTheme: '',
-        // loadTheme: 'Choose Theme',
         projectNameRequest: "NOT LOADING", // or "LOADING" or "NAME TAKEN"
         projectNameInputValue: "",
         projectNameLastKeyIllegal: false,
@@ -488,6 +485,14 @@
             }
           }
         },
+        selectTheme: function (){
+          var yourSelect = document.getElementById( "themeOptions" );
+          var newTheme = yourSelect.options[ yourSelect.selectedIndex ].value;
+          editor.setOption("theme", newTheme);
+          if(firebase.auth().currentUser){
+            firebase.database().ref("/user/" + firebase.auth().currentUser.uid + "/theme").set(newTheme)
+          } 
+        },
       },
       watch: {
         error: function(newError) {
@@ -495,15 +500,6 @@
             CodeMirror.commands.markGutter(editor, "error", newError.lineno, newError.message)
           }
         },
-        selectedTheme: function(newTheme) {
-          var selectedTheme = this.selectedTheme;
-          editor.setOption("theme", selectedTheme);
-          firebase.auth().onAuthStateChanged(function(user) {
-            if(user){
-              firebase.database().ref("/user/" + firebase.auth().currentUser.uid + "/theme").set(selectedTheme)
-            } 
-          })
-        }
       }
     })
     var myCode = false
@@ -545,16 +541,16 @@
         handleLogin(user.displayName, user.uid)
         // if the user is logged in, and we don't have their name/email in our database, save it now
           firebase.database().ref('/user/' + user.uid + "/theme").once('value').then(function(snapshot) {
-          var selectedTheme = snapshot.val() ;
-          editor.setOption("theme", selectedTheme);
-          if (!snapshot.val()) {
-            firebase.database().ref("/user/" + user.uid).set({
-              displayName: user.displayName,
-              email: user.email,
-              createdDate: firebase.database.ServerValue.TIMESTAMP,
-            })
-          }
-        })
+            document.getElementById("themeOptions").value = snapshot.val() ;
+            editor.setOption("theme", snapshot.val());
+            if (!snapshot.val()) {
+              firebase.database().ref("/user/" + user.uid).set({
+                displayName: user.displayName,
+                email: user.email,
+                createdDate: firebase.database.ServerValue.TIMESTAMP,
+              })
+            }
+          })
         
         // this puts the user's most recent project under their name
         firebase.database().ref('/code/').orderByChild("--uid").equalTo(user.uid).once('value').then(function(snapshot) {
