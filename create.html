@@ -65,6 +65,7 @@
   <script src="https://unpkg.com/vue@2.0.1/dist/vue.js"></script>
   <script data-presets="es2015" src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.14.0/babel.min.js"></script>
   <script src="https://cdn.rawgit.com/beautify-web/js-beautify/1b52eb1f90daaefa6ff0fa7736f97fbfc58093c1/js/lib/beautify.js"></script>
+
   <style>
 
      html, body {
@@ -231,27 +232,44 @@
       background-color: #ababab;
     }
     
-    #suggestVar {
+    #error-block {
       display: none;
       margin: 0; 
       border-radius: 0;
+      white-space: pre-line;
     }
-    
-    #suggestVar ul {
+   
+   #error-block p {
+     margin: 15px 0;
+   }
+   
+   #error-block input {
+     width: 50%;
+     display: inline-block;
+     margin-right: 10px;
+   }
+   
+   #error-block input:focus {
+      outline-style: none;
+      box-shadow: none;
+      border-color: transparent;   
+   }
+   
+   #error-block ul  {
       list-style: none;
       margin: 0; 
       padding: 0;
     }
     
-    #suggestVar li {
-      display: inline-block; 
+    #error-block li {
       margin-top: 10px;
     }
     
-    #suggestVar li a {
+    #error-block li a {
       padding-right: 5px; 
-    }  
-
+      cursor: pointer;
+    }
+    
 
   </style>
 </head>
@@ -280,8 +298,6 @@
       <img  style= "width:160px; height: 40px;" src="./images/logowhite.png">
       <span style="margin:8px" id="save">
 
-      
-        <button id="error" class="btn btn-danger" @click="showError()" :style="{display: error ? 'inline-block' : 'none', animation: seenError ? 'none' : 'glowing 1200ms infinite'}"><span class="glyphicon glyphicon-exclamation-sign"></span> Error</button>
         <div class="dropdown" style="display:inline;">
           <button class="btn btn-primary btn-medium dropdown-toggle" type="button" id="toolsDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style='border:none;'>
             Tools
@@ -525,22 +541,24 @@
             <img @click="codebar = !codebar" style="margin: 5px; width: 16px; height:18px; cursor:pointer" src="./images/minimize.png" title="Minimize">
           </span>
         </div>
-        <div id="suggestVar" v-show="suggestVar" :style="{display: !suggestVar ? 'block' : 'none'}" class="alert alert-danger alert-dismissable fade in">
-          <a href="#" class="close" data-hide="alert" aria-label="close">&times;</a>
-          {{errorMessage}}
-          <ul>
-            <li>Did you mean: <a href="#" v-for="suggestion in suggestions" @click="takeSuggestion(suggestion)">{{suggestion}}</a>
+        <div id="error-block" :style="{display: seenError ? 'block' : 'none'}" class="alert alert-danger fade in">{{errorMessage}}
+          <div :style="{display: renameSprite ? 'block' : 'none'}">
+            <p>You need to rename sprite1. What would you like to name it?</p> 
+            <input @keyup.enter="getSpriteName" class="form-control" type="text" v-model="spriteName" placeholder="Enter sprite name"><button class="btn btn-danger" @click="getSpriteName">Enter</button>
+          </div>
+          <ul :style="{display: suggestions.length > 0 ? 'block' : 'none'}">
+            <li>Did you mean: <a v-for="suggestion in suggestions" @click="takeSuggestion(suggestion)">{{suggestion}}</a>
             </li>
           </ul>
-
         </div>
       </div>
+    
     </div>
   </div>
   <script>
 
     var getID = function() {
-      // returns the name of a project, not inlcuding the current revision
+      // returns the name of a project, not including the current revision
       return window.location.hash.substring(1, window.location.hash.length).split("/")[0];
     }
     var getIDWithRevision = function() {
@@ -587,9 +605,11 @@
         codebar:false,
         mouseX: 0,
         mouseY: 0,
-        seenError: true,
-        suggestVar: true,
+        seenError: false,
+        renameSprite: false,
+        spriteName: '',
         suggestions: [],
+        suggestVar: false,
         errorMessage: '',
         referenceError: '',
         autoRunChecked: true,
@@ -613,11 +633,9 @@
         signUpPassword: '',
         signUpChecked: true,
         signUpUsername: '',
-
         loginState: "LOGGEDOUT", // or LOGGEDIN
         userNameForMenu: '',
         userProjectsLink: ''
-
       },
       computed: {
         styles : function() { return {
@@ -636,43 +654,56 @@
           this.seenError = true
           this.suggestions = []
           this.errorMessage = []
-          if (this.error.message.includes('Uncaught ReferenceError: sprite1 is not defined')) {
-            var spriteName = prompt("Error on line " + this.error.lineno  + "\n\n" + "You need to rename 'sprite1'. What would you like to name it?", "unicornSprite");
-            if (spriteName !== null) {
-                editor.setValue(editor.getValue().replace(/sprite1/g, spriteName));
-            }
+          var errorLineNo;
+          // Show error line number if it is defined
+          if (this.error.lineno != undefined) {
+           errorLineNo = "Error on Line " + this.error.lineno + ": ";
           }
-          else if (this.error.message.includes("Uncaught ReferenceError") ||
-          this.error.message.includes("Uncaught TypeError")) {
+          if (this.error.message.includes("Uncaught ReferenceError") || this.error.message.includes("Uncaught TypeError")) {
             // Remove 'Uncaught..' from error message
-            var message =  this.error.message.split(" ").slice(2).join(" ");
+            var message = this.error.message.split(" ").slice(2).join(" ");
+            // If error message is 'sprite1 not defined', ask user to rename sprite1
+            this.renameSprite = this.error.message.includes('Uncaught ReferenceError: sprite1 is not defined') ? true : false;
             // Isolate the text causing the error
             this.referenceError = message.split(" ")[0].split(".").pop();
             // Get alphanumeric user code
-            var userCode = editor.getValue().replace(/(?:https?|ftp):\/\/[\n\S]+/g,'').match(/[a-zA-Z0-9]+/g);
+            var userCode = editor.getValue().replace(/(?:https?|ftp?|\.\/)[\n\S]+/g,'').match(/[a-zA-Z0-9]+/g);
             // Add Woof methods to the user code 
-            userCode.push("onKeyDown", "onMouseDown", "onMouseUp", "onMouseMove", "penDown", "Image", "Rectangle", "Polygon", "Circle", "Line", "Oval", "move", "turnRight", "turnLeft", "angle", "pointTowards", "setRotationStyle", "show", "hide", "sendToFront", "sendToBack", "play", "Audio", "clearPen", "penUp", "penDown", "Text", "remove", "includes", "forEach", "find", "setBackdropURL", "setBackdropStyle", "after", "every", "repeat", "forever", "if", "else", "mouseX", "mouseY", "repeatUntil", "when", "freeze", "defrost", "delete", "remove", "push", "throttle", "mouseOver", "randomX", "randomY", "touching", "distanceTo", "prompt", "alert", "keysDown", "mouseDown", "pMouseX", "pMouseY", "mouseXSpeed", "mouseYSpeed", "hour", "hourMilitary", "minute", "second", "dayOfMonth", "dayOfWeek", "month", "year", "mobile", "random", "randomColor", "between", "substring", "round", "sqrt", "abs", "floor", "ceiling", "importCodeURL")
-            // Search user code for suggestions 
+            userCode.push("onKeyDown", "onMouseDown", "onMouseUp", "onMouseMove", "penDown", "Image", "Rectangle", "Polygon", "Circle", "Line", "Oval", "move", "turnRight", "turnLeft", "angle", "pointTowards", "setRotationStyle", "show", "hide", "sendToFront", "sendToBack", "play", "Audio", "clearPen", "penUp", "penDown", "Text", "remove", "includes", "forEach", "find", "setBackdropURL", "setBackdropStyle", "after", "every", "repeat", "forever", "if", "else", "mouseX", "mouseY", "repeatUntil", "when", "freeze", "defrost", "delete", "remove", "push", "throttle", "mouseOver", "randomX", "randomY", "touching", "distanceTo", "prompt", "alert", "keysDown", "mouseDown", "pMouseX", "pMousecY", "mouseXSpeed", "mouseYSpeed", "hour", "hourMilitary", "minute", "second", "dayOfMonth", "dayOfWeek", "month", "year", "mobile", "random", "randomColor", "between", "substring", "round", "sqrt", "abs", "floor", "ceiling", "importCodeURL")
+            // Search user code for suggestions
             for (var i = 0; i < userCode.length; i++) {
+              // Measure the difference between error and user code
               var distance = window.Levenshtein.get(this.referenceError, userCode[i]);
-              if (distance < 3 && this.suggestions.indexOf(userCode[i]) == -1 && userCode[i].length > 1) {
+              // Add user code with a distance less than 3 to list of suggestions if it hasn't already been added, it isn't the error, it's longer than a character, and it isn't a numnber
+              if (distance < 3 && distance != 0 && this.suggestions.indexOf(userCode[i]) == -1 && userCode[i].length > 1 && isNaN(userCode[i])) {
                 this.suggestions.push(userCode[i]);
-                if (distance < 1) {
-                  this.suggestions.splice(this.suggestions.indexOf(userCode[i], 1));
-                }
               }
             }
-            // If there is a suggestion, display it
-            this.suggestions.length > 0 ? this.errorMessage += "Error on line " + this.error.lineno + ": " + message : alert("Error on line " + this.error.lineno  + "\n\n" + message + "\n\n" + "Check the spelling of your variable definitions.")
+            // Display the error message
+            this.errorMessage += errorLineNo + message;
+            // If the suggestion list isn't empty, display it
+            this.suggestions.length > 0 ? this.suggestVar = true : false;
           }
           else {
-            alert("Error on line " + this.error.lineno  + "\n\n" + this.error.message)
+            // Split error message by line break
+            var errorDesc = this.error.message.split("\n");
+            // Isolate the line containing the error
+            var errorText = errorDesc.filter(function(n) {
+              return n.indexOf(">") > -1;
+            });
+            // Display the first error message line plus line containing error
+            this.errorMessage += errorDesc[0] + "\n" + errorText;
           }
         },
         // Change the user code if user clicks suggestion
         takeSuggestion: function(x) {
           editor.setValue(editor.getValue().replace(new RegExp("\\b" + this.referenceError + "\\b", 'g'), x));
-          document.getElementById("suggestVar").style.display = "none";
+          this.suggestVar = false;
+        },
+        // Rename sprite1 with user input
+        getSpriteName: function() {
+            editor.setValue(editor.getValue().replace(/sprite1/g, this.spriteName));
+              this.spriteName = '';
         },
         cleanAll: function(){
           if (!this.error && this.code != js_beautify(this.code, {space_after_anon_function: true, indent_size: 2, indent_with_tabs: false })){
@@ -801,29 +832,20 @@
       },
       watch: {
         error: function(newError) {
-          if (newError && newError.lineno) {
-            CodeMirror.commands.markGutter(editor, "error", newError.lineno, newError.message)
+          if (newError) {
+            this.showError()
+            if (newError.lineno) {
+              CodeMirror.commands.markGutter(editor, "error", newError.lineno, newError.message)
+           }
+          }
+          else {
+            this.seenError = false
           }
         }
       }
     })
-
-    // Toggle misspelled variable suggestion
-    $(document).ready(function(){
-      $("#error").click(function(){
-        if (app.suggestions.length > 0){
-          $("#suggestVar").show();
-        }
-      });
-    })
-      
-    $(function(){
-      $("[data-hide]").on("click", function(){
-          $(this).closest("." + $(this).attr("data-hide")).hide();
-        });
-    });
     
-    //Initalizes the popover for the comment code button in the tools menu
+    // Initalizes the popover for the comment code button in the tools menu
     $(document).ready(function(){
         $('[data-toggle="popover"]').popover();   
     });
