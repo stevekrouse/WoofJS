@@ -774,6 +774,7 @@
         getSpriteName: function() {
             editor.setValue(editor.getValue().replace(/sprite1/g, this.spriteName));
               this.spriteName = '';
+              this.renameSprite = false;
         },
         cleanAll: function(){
           if (!this.error && this.code != js_beautify(this.code, {space_after_anon_function: true, indent_size: 2, indent_with_tabs: false })){
