@@ -2072,6 +2072,31 @@ Woof.prototype.mobile = function () {
   return typeof window.orientation !== "undefined" || navigator.userAgent.indexOf('IEMobile') !== -1;
 };
 
+// generate an array with the given parameters (starting value, ending value, incrementation) default incrementation is 1
+Woof.prototype.range = function (start, end) {
+  var incr = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 1;
+
+  if (arguments.length < 2 || typeof start != "number" || typeof end != "number" || typeof incr != "number") {
+    throw new TypeError("range() requires at least two number inputs.");
+  }
+  if (incr === 0) {
+    throw new TypeError("the third parameter for range() cannot be 0");
+  }
+  var output = [];
+  if (start < end) {
+    incr = Math.abs(incr);
+    for (var _i = start; _i < end; _i += incr) {
+      output.push(_i);
+    }
+  } else if (start > end) {
+    incr = -Math.abs(incr);
+    for (var j = start; j > end; j += incr) {
+      output.push(j);
+    }
+  }
+  return output;
+};
+
 //Math Functions
 Woof.prototype.sqrt = function (a) {
   if (typeof a != "number") {
