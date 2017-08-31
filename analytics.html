@@ -38,8 +38,6 @@
 </style>
 <div id="page" style="display: none" :style="{display: authenticated ? 'block' : 'none'}">
     <h1>WoofJS.com Analytics</h1>
-    <div style="height: 350px; width: 100%" id="chart"></div>
-    <div style="width: 100%; text-align: center; margin-bottom: 20px" id="legend"></div>
     <div id="totals" class="tablewrap">
         <h2>Totals</h2>
         <analytics-table
@@ -363,50 +361,8 @@
     accountsCreatedByDay = MGbyDay(app.users, "createdDate")
     
     revisions = _.flatten(_.map(app.projects, "revisions"))
-    
-    revisionsByDay =  MGbyDay(revisions, "time")
-    revisionsByDay.forEach(row => {
-      row.value /= 10
-    })
-    
-    // projectsEditedByDay = _.uniqWith(_.map(revisions, revision => {
-    //   return {
-    //     projectKey: revision.project.key,
-    //     date: new Date(revision.time).toISOString().split("T")[0]
-    //   }
-    // }), _.isEqual)
-    // projectsEditedByDay = MGbyDay(projectsEditedByDay, "date")
-    
-    // usersActiveByDay = _.uniqWith(_.map(revisions, revision => {
-    //   return {
-    //     userKey: revision.project.user && revision.project.user.key,
-    //     date: new Date(revision.time).toISOString().split("T")[0]
-    //   }
-    // }), _.isEqual)
-    // usersActiveByDay = MGbyDay(usersActiveByDay, "date")
-    
-    projectsCreatedByDay = _.filter(_.map(app.projects, project => {
-      return {date: utils.projectFirstRevisionTime(project)}
-    }), "date")
-    projectsCreatedByDay = MGbyDay(projectsCreatedByDay, "date")
-    
-    // Graphs
 
-    // MG.data_graphic({
-    //   data: [accountsCreatedByDay, revisionsByDay, projectsEditedByDay, projectsCreatedByDay, usersActiveByDay],
-    //   full_width: true,
-    //   interpolate: d3.curveLinear,
-    //   full_height: true,
-    //   target: document.getElementById("chart"),
-    //   x_accessor: "date",
-    //   y_accessor: "value",
-    //   aggregate_rollover: true,
-    //   y_extended_ticks: true,
-    //   legend: ['Accounts Created', 'Revisions (10s)', 'Projects Edited', "Projects Created", "Users Active"],
-    //   legend_target: '#legend',
-    //   bottom: 20,
-    //   top: 10,
-    // });
+
 
   });
 </script>
