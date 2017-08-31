@@ -32,7 +32,7 @@ We recommend that you get started with WoofJS on [woofjs.com](http://woofjs.com)
 
 #### For production (which is tied to a specific commit hash):
 
-Go to rawgit.com and type this in:
+Go to [rawgit.com](http://rawgit.com) and type this in:
 
     https://github.com/stevekrouse/WoofJS/blob/master/dist/woof.js
 
