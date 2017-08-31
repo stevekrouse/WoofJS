@@ -136,11 +136,15 @@
   })
   
   var utils = {}
-  utils.projectFirstRevision = function(project){
-      return project.revisions[0]
+  utils.projectFirstRevisionTime = function(project){
+    if (project.revisions.length > 0) {
+      return project.revisions[0].time
+    } else {
+      return project.currentVersionTime
+    }
   }
-  utils.projectLastRevision = function(project){
-      return project.revisions[project.revisions.length - 1]
+  utils.projectLastRevisionTime = function(project){
+    return project.currentVersionTime
   }
   
   var aggregateColumns = [
@@ -148,19 +152,19 @@
     {
       name: "Projects Created Today",
       func: function(row, joins) {
-        return joins.projects.filter(project => new Date().toDateString() == new Date(utils.projectFirstRevision(project).time).toDateString()).length
+        return joins.projects.filter(project => project.currentVersionTime).filter(project => new Date().toDateString() == new Date(utils.projectFirstRevisionTime(project)).toDateString()).length
       }
     },
     {
       name: "Projects Worked On Today",
       func: function(row, joins) {
-        return joins.projects.filter(project => new Date().toDateString() == new Date(utils.projectLastRevision(project).time).toDateString()).length
+        return joins.projects.filter(project => project.currentVersionTime).filter(project => new Date().toDateString() == new Date(utils.projectLastRevisionTime(project)).toDateString()).length
       }
     },
     {
       name: "Users Active Today",
       func: function(row, joins) {
-        return Array.from(new Set(joins.projects.filter(project => new Date().toDateString() == new Date(utils.projectLastRevision(project).time).toDateString()).map(project => project['--uid']))).length
+        return Array.from(new Set(joins.projects.filter(project => project.currentVersionTime).filter(project => new Date().toDateString() == new Date(utils.projectLastRevisionTime(project)).toDateString()).map(project => project['--uid']))).length
       }
     },
     {
@@ -200,21 +204,21 @@
     {
       name: "Last Revision",
       func: function(project, joins) {
-        return utils.projectLastRevision(project).time
+        return utils.projectLastRevisionTime(project)
       },
       type: "DATE"
     },
     {
       name: "Created At",
       func: function(project, joins) {
-        return utils.projectFirstRevision(project).time
+        return utils.projectFirstRevisionTime(project)
       },
       type: "DATE"
     },
     {
       name: "Number of Revisions",
       func: function(project, joins) {
-        return project.revisions.length - 1
+        return project.revisions.length + 1
       }
     }
   ]
@@ -248,7 +252,7 @@
       {
         name: "First Revision",
         func: function(user, joins){
-          return user.projects.map(project => utils.projectFirstRevision(project).time).sort()[0]
+          return user.projects.map(project => utils.projectFirstRevisionTime(project)).sort()[0]
         },
         type: "DATE" 
       },
@@ -257,10 +261,10 @@
         func: function(user, joins){
           if (user.projects.length > 0){
             // last revision
-            return user.projects.map(project => utils.projectLastRevision(project).time).sort().reverse()[0]
+            return user.projects.map(project => utils.projectLastRevisionTime(project)).sort().reverse()[0]
           } else {
             // account created
-            return user.projects.map(project => utils.projectFirstRevision(project).time).sort()[0]
+            return user.projects.map(project => utils.projectFirstRevisionTime(project)).sort()[0]
           }
           
         },
@@ -321,34 +325,26 @@
   
   var accountsCreatedByDay, revisions, revisionsByDay, projectsCreatedByDay, projectsEditedByDay, usersActiveByDay
   
-  firebase.database().ref('/code/').on('value', function(snapshot) {
-    var projects = objectOfObjectsToArray(snapshot.val())
+  firebase.database().ref('/code-meta-data/').on('value', function(snapshot) {
+    app.projects = objectOfObjectsToArray(snapshot.val())
     
-    // nesting revisions under projects
-    app.projects = projects.map(function(project){
-      var keys = Object.keys(project)
-      var revisionKeys = keys.filter(key => key != '--uid' && key != 'key')
-      return {
-        key: project.key,
-        "--uid": project["--uid"],
-        revisions: _.map(revisionKeys, key => {
-          var revision = project[key]
-          revision.key = key
-          revision.project = project
-          return revision
-        })
+    // make revisions objects
+    app.projects.forEach(function(project) {
+      if (project.version) {
+        project.revisions = Object.keys(project.version).map(key => { return {key: key, time: project.version[key], project: project} })  
+      } else {
+        project.revisions = []
       }
     })
     
     // join projects to users and users to projects
     app.projects.forEach(function(project) {
-      project.user = app.users.find(user => user.key == project['--uid']) 
+      project.user = app.users.find(user => user.key == project['uid']) 
       project.revisions.forEach(r => r.project.user = project.user)
       if (project.user){
         project.user.projects.push(project)
       }
     })
-    
     
     // Graph data
     function MGbyDay(rows, date) {
@@ -366,51 +362,51 @@
     
     accountsCreatedByDay = MGbyDay(app.users, "createdDate")
     
-    revisions = _.filter(_.flatten(_.map(app.projects, "revisions")), revision => revision.time)
+    revisions = _.flatten(_.map(app.projects, "revisions"))
     
     revisionsByDay =  MGbyDay(revisions, "time")
     revisionsByDay.forEach(row => {
       row.value /= 10
     })
     
-    projectsEditedByDay = _.uniqWith(_.map(revisions, revision => {
-      return {
-        projectKey: revision.project.key,
-        date: new Date(revision.time).toISOString().split("T")[0]
-      }
-    }), _.isEqual)
-    projectsEditedByDay = MGbyDay(projectsEditedByDay, "date")
+    // projectsEditedByDay = _.uniqWith(_.map(revisions, revision => {
+    //   return {
+    //     projectKey: revision.project.key,
+    //     date: new Date(revision.time).toISOString().split("T")[0]
+    //   }
+    // }), _.isEqual)
+    // projectsEditedByDay = MGbyDay(projectsEditedByDay, "date")
     
-    usersActiveByDay = _.uniqWith(_.map(revisions, revision => {
-      return {
-        userKey: revision.project.user && revision.project.user.key,
-        date: new Date(revision.time).toISOString().split("T")[0]
-      }
-    }), _.isEqual)
-    usersActiveByDay = MGbyDay(usersActiveByDay, "date")
+    // usersActiveByDay = _.uniqWith(_.map(revisions, revision => {
+    //   return {
+    //     userKey: revision.project.user && revision.project.user.key,
+    //     date: new Date(revision.time).toISOString().split("T")[0]
+    //   }
+    // }), _.isEqual)
+    // usersActiveByDay = MGbyDay(usersActiveByDay, "date")
     
     projectsCreatedByDay = _.filter(_.map(app.projects, project => {
-      return {date: project.revisions[0].time}
+      return {date: utils.projectFirstRevisionTime(project)}
     }), "date")
     projectsCreatedByDay = MGbyDay(projectsCreatedByDay, "date")
     
     // Graphs
 
-    MG.data_graphic({
-      data: [accountsCreatedByDay, revisionsByDay, projectsEditedByDay, projectsCreatedByDay, usersActiveByDay],
-      full_width: true,
-      interpolate: d3.curveLinear,
-      full_height: true,
-      target: document.getElementById("chart"),
-      x_accessor: "date",
-      y_accessor: "value",
-      aggregate_rollover: true,
-      y_extended_ticks: true,
-      legend: ['Accounts Created', 'Revisions (10s)', 'Projects Edited', "Projects Created", "Users Active"],
-      legend_target: '#legend',
-      bottom: 20,
-      top: 10,
-    });
+    // MG.data_graphic({
+    //   data: [accountsCreatedByDay, revisionsByDay, projectsEditedByDay, projectsCreatedByDay, usersActiveByDay],
+    //   full_width: true,
+    //   interpolate: d3.curveLinear,
+    //   full_height: true,
+    //   target: document.getElementById("chart"),
+    //   x_accessor: "date",
+    //   y_accessor: "value",
+    //   aggregate_rollover: true,
+    //   y_extended_ticks: true,
+    //   legend: ['Accounts Created', 'Revisions (10s)', 'Projects Edited', "Projects Created", "Users Active"],
+    //   legend_target: '#legend',
+    //   bottom: 20,
+    //   top: 10,
+    // });
 
   });
 </script>
