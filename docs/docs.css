@@ -44,6 +44,9 @@ code ::selection {
 
 
 /* Code blocks */
+img {
+    max-width: 100%;
+}
 
 pre {
     padding-right: 50px !important;
