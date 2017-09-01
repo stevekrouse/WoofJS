@@ -60,6 +60,7 @@
   <link rel="stylesheet" href="./vendor/codemirror/lint.css">
   <script src="./vendor/codemirror/jshint.min.js"></script>
   <script src="./vendor/codemirror/lint.js"></script>
+  <script src="./vendor/levenshtein.js"></script>
   <script src="./vendor/codemirror/scrollpastend.js"></script>
   <link rel="stylesheet" href="https://codemirror.net/theme/3024-day.css">
   <link rel="stylesheet" href="https://codemirror.net/theme/3024-night.css">
@@ -78,6 +79,7 @@
   <script src="https://unpkg.com/vue@2.0.1/dist/vue.js"></script>
   <script data-presets="es2015" src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.14.0/babel.min.js"></script>
   <script src="https://cdn.rawgit.com/beautify-web/js-beautify/1b52eb1f90daaefa6ff0fa7736f97fbfc58093c1/js/lib/beautify.js"></script>
+
   <style>
 
      html, body {
@@ -243,8 +245,45 @@
     kbd{
       background-color: #ababab;
     }
-
-
+    
+    #error-block {
+      display: none;
+      margin: 0; 
+      border-radius: 0;
+      white-space: pre-line;
+    }
+   
+   #error-block p {
+     margin: 15px 0;
+   }
+   
+   #error-block input {
+     width: 50%;
+     display: inline-block;
+     margin-right: 10px;
+   }
+   
+   #error-block input:focus {
+      outline-style: none;
+      box-shadow: none;
+      border-color: transparent;   
+   }
+   
+   #error-block ul  {
+      list-style: none;
+      margin: 0; 
+      padding: 0;
+    }
+    
+    #error-block li {
+      margin-top: 10px;
+    }
+    
+    #error-block li a {
+      padding-right: 5px; 
+      cursor: pointer;
+    }
+    
 
   </style>
 </head>
@@ -273,8 +312,6 @@
       <img  style= "width:160px; height: 40px;" src="./images/logowhite.png">
       <span style="margin:8px" id="save">
 
-      
-        <button id="error" class="btn btn-danger" @click="showError()" :style="{display: error ? 'inline-block' : 'none', animation: seenError ? 'none' : 'glowing 1200ms infinite'}"><span class="glyphicon glyphicon-exclamation-sign"></span> Error</button>
         <div class="dropdown" style="display:inline;">
           <button class="btn btn-primary btn-medium dropdown-toggle" type="button" id="toolsDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style='border:none;'>
             Tools
@@ -568,14 +605,24 @@
             </span>
           </div>
         </div>
+        <div id="error-block" :style="{display: seenError ? 'block' : 'none'}" class="alert alert-danger fade in">{{errorMessage}}
+          <div :style="{display: renameSprite ? 'block' : 'none'}">
+            <p>You need to rename sprite1. What would you like to name it?</p> 
+            <input @keyup.enter="getSpriteName" class="form-control" type="text" v-model="spriteName" placeholder="Enter sprite name"><button class="btn btn-danger" @click="getSpriteName">Enter</button>
+          </div>
+          <ul :style="{display: suggestions.length > 0 ? 'block' : 'none'}">
+            <li>Did you mean: <a v-for="suggestion in suggestions" @click="takeSuggestion(suggestion)">{{suggestion}}</a>
+            </li>
+          </ul>
+        </div>
       </div>
-
+    
     </div>
   </div>
   <script>
 
     var getID = function() {
-      // returns the name of a project, not inlcuding the current revision
+      // returns the name of a project, not including the current revision
       return window.location.hash.substring(1, window.location.hash.length).split("/")[0];
     }
     var getIDWithRevision = function() {
@@ -622,7 +669,13 @@
         codebar:false,
         mouseX: 0,
         mouseY: 0,
-        seenError: true,
+        seenError: false,
+        renameSprite: false,
+        spriteName: '',
+        suggestions: [],
+        suggestVar: false,
+        errorMessage: '',
+        referenceError: '',
         selectedTheme:'eclipse',
         autoRunChecked: true,
         shortcut: CodeMirror.keyMap["default"] == CodeMirror.keyMap.macDefault ? 'Cmd' : 'Ctrl',     
@@ -645,17 +698,14 @@
         signUpPassword: '',
         signUpChecked: true,
         signUpUsername: '',
-
         loginState: "LOGGEDOUT", // or LOGGEDIN
         userNameForMenu: '',
         userProjectsLink: '',
-
         migrateUsernameValid: "EMTPY", // TAKEN or VALID or EMPTY or ILLEGAL
         migrateUsernameKeyIllegal: false,
         migrateUsername: '',
         migrateChecked: true,
         migrateButtonState: "DISABLED", // NORMAL or DISABLED or LOADING
-
       },
       computed: {
         styles : function() { return {
@@ -672,19 +722,59 @@
         getID: getID,
         showError: function(){
           this.seenError = true
-          if (this.error.message.includes('Uncaught ReferenceError: sprite1 is not defined')) {
-            var spriteName = prompt("Error on line " + this.error.lineno  + "\n\n" + "You need to rename 'sprite1'. What would you like to name it?", "unicornSprite");
-            if (spriteName !== null) {
-                editor.setValue(editor.getValue().replace(/sprite1/g, spriteName));
-            }
+          this.suggestions = []
+          this.errorMessage = []
+          var errorLineNo;
+          // Show error line number if it is defined
+          if (this.error.lineno != undefined) {
+           errorLineNo = "Error on Line " + this.error.lineno + ": ";
           }
-          else if (this.error.message.includes("Uncaught ReferenceError")) {
-            var message = this.error.message.replace("Uncaught ReferenceError: ", "")
-            alert("Error on line " + this.error.lineno  + "\n\n" + message + ". Check the spelling of your variable definitions.")
+          if (this.error.message.includes("Uncaught ReferenceError") || this.error.message.includes("Uncaught TypeError")) {
+            // Remove 'Uncaught..' from error message
+            var message = this.error.message.split(" ").slice(2).join(" ");
+            // If error message is 'sprite1 not defined', ask user to rename sprite1
+            this.renameSprite = this.error.message.includes('Uncaught ReferenceError: sprite1 is not defined') ? true : false;
+            // Isolate the text causing the error
+            this.referenceError = message.split(" ")[0].split(".").pop();
+            // Get alphanumeric user code
+            var userCode = editor.getValue().replace(/(?:https?|ftp?|\.\/)[\n\S]+/g,'').match(/[a-zA-Z0-9]+/g);
+            // Add Woof methods to the user code 
+            userCode.push("onKeyDown", "onMouseDown", "onMouseUp", "onMouseMove", "penDown", "Image", "Rectangle", "Polygon", "Circle", "Line", "Oval", "move", "turnRight", "turnLeft", "angle", "pointTowards", "setRotationStyle", "show", "hide", "sendToFront", "sendToBack", "play", "Audio", "clearPen", "penUp", "penDown", "Text", "remove", "includes", "forEach", "find", "setBackdropURL", "setBackdropStyle", "after", "every", "repeat", "forever", "if", "else", "mouseX", "mouseY", "repeatUntil", "when", "freeze", "defrost", "delete", "remove", "push", "throttle", "mouseOver", "randomX", "randomY", "touching", "distanceTo", "prompt", "alert", "keysDown", "mouseDown", "pMouseX", "pMousecY", "mouseXSpeed", "mouseYSpeed", "hour", "hourMilitary", "minute", "second", "dayOfMonth", "dayOfWeek", "month", "year", "mobile", "random", "randomColor", "between", "substring", "round", "sqrt", "abs", "floor", "ceiling", "importCodeURL")
+            // Search user code for suggestions
+            for (var i = 0; i < userCode.length; i++) {
+              // Measure the difference between error and user code
+              var distance = window.Levenshtein.get(this.referenceError, userCode[i]);
+              // Add user code with a distance less than 3 to list of suggestions if it hasn't already been added, it isn't the error, it's longer than a character, and it isn't a numnber
+              if (distance < 3 && distance != 0 && this.suggestions.indexOf(userCode[i]) == -1 && userCode[i].length > 1 && isNaN(userCode[i])) {
+                this.suggestions.push(userCode[i]);
+              }
+            }
+            // Display the error message
+            this.errorMessage += errorLineNo + message;
+            // If the suggestion list isn't empty, display it
+            this.suggestions.length > 0 ? this.suggestVar = true : false;
           }
           else {
-             alert("Error on line " + this.error.lineno  + "\n\n" + this.error.message)
+            // Split error message by line break
+            var errorDesc = this.error.message.split("\n");
+            // Isolate the line containing the error
+            var errorText = errorDesc.filter(function(n) {
+              return n.indexOf(">") > -1;
+            });
+            // Display the first error message line plus line containing error
+            this.errorMessage += errorDesc[0] + "\n" + errorText;
           }
+        },
+        // Change the user code if user clicks suggestion
+        takeSuggestion: function(x) {
+          editor.setValue(editor.getValue().replace(new RegExp("\\b" + this.referenceError + "\\b", 'g'), x));
+          this.suggestVar = false;
+        },
+        // Rename sprite1 with user input
+        getSpriteName: function() {
+            editor.setValue(editor.getValue().replace(/sprite1/g, this.spriteName));
+              this.spriteName = '';
+              this.renameSprite = false;
         },
         cleanAll: function(){
           if (!this.error && this.code != js_beautify(this.code, {space_after_anon_function: true, indent_size: 2, indent_with_tabs: false })){
@@ -841,14 +931,20 @@
       },
       watch: {
         error: function(newError) {
-          if (newError && newError.lineno) {
-            CodeMirror.commands.markGutter(editor, "error", newError.lineno, newError.message)
+          if (newError) {
+            this.showError()
+            if (newError.lineno) {
+              CodeMirror.commands.markGutter(editor, "error", newError.lineno, newError.message)
+           }
+          }
+          else {
+            this.seenError = false
           }
         },
       }
     })
-  
-    //Initalizes the popover for the comment code button in the tools menu
+    
+    // Initalizes the popover for the comment code button in the tools menu
     $(document).ready(function(){
         $('[data-toggle="popover"]').popover();   
     });
@@ -868,7 +964,7 @@
         });
 
     })
-
+    
     var myCode = false
     scratch.src = scratch.src // the documentation sometimes doesn't load unless you remind it to here, strange VueJS bug
     projectsIframe.src = projectsIframe.src // ditto for the project's iframe
