@@ -16,7 +16,7 @@ We recommend that you get started with WoofJS on [woofjs.com](http://woofjs.com)
   * use our [interactive and searchable documentation](http://woofjs.com/docs)
   * get access to [our WoofJS curriculum](http://coding.space/woof)
   * create an account to save your work
-  * use our text-editor fine-tunned for use with WoofJS, including code-hints and type-a-head
+  * use our text-editor fine-tuned for use with WoofJS, including code-hints and type-a-head
   * iterate quickly with live updates to your output as you type
 
 
@@ -32,7 +32,7 @@ We recommend that you get started with WoofJS on [woofjs.com](http://woofjs.com)
 
 #### For production (which is tied to a specific commit hash):
 
-Go to rawgit.com and type this in:
+Go to [rawgit.com](http://rawgit.com) and type this in:
 
     https://github.com/stevekrouse/WoofJS/blob/master/dist/woof.js
 
@@ -59,7 +59,7 @@ Then in your JavaScript, you'd need to create your project manually:
 ```javascript
 var project = new Woof({global: false, width: 300, height: 400})
 
-var IMAGE_NAME = new Woof.Image({project: project, url: "./images/SMJjVCL.png"})
+var IMAGE_NAME = new project.Image({project: project, url: "./images/SMJjVCL.png"})
 ```
 
 ### Full Screen
@@ -84,7 +84,7 @@ window.addEventListener("resize", () => {
 
 ## Reporting a bug
 
-Simply create an issue with a link to the simpliest code you can create that would reproduce the bug, preferably on [woofjs.com](https://woofjs.com).
+Simply create an issue with a link to the simplest code you can create that would reproduce the bug, preferably on [woofjs.com](http://woofjs.com).
 
 
 ## Contributing
@@ -97,7 +97,7 @@ We'd love your help in making it even more learnable and dependable for them.
 
 #### woofjs.com
 
-[woofjs.com](https://woofjs.com) is hosted on Github pages from this repository. This means that all of the top-level URLs on [woofjs.com](https://woofjs.com) must be in the top-level of the directory. This includes:
+[woofjs.com](http://woofjs.com) is hosted on Github pages from this repository. This means that all of the top-level URLs on [woofjs.com](http://woofjs.com) must be in the top-level of the directory. This includes:
 
   * index.html
   * create.html
@@ -112,26 +112,19 @@ The documentation that you find on [woofjs.com/create.html](http://woofjs.com/cr
 
 #### woof.js core library
 
-If you'd like to contribute to the core WoofJS library, you will edit the code in src/woofjs.es6.js , but these edits need to be compiled to dist/woof.js using babel
+If you'd like to contribute to the core WoofJS library, you will edit the code in src/woof.es6.js, but these edits need to be compiled to dist/woof.js using babel.
 
-There are two options to do this:
-
-1. Every time you make changes and want to implement them, enter this command to compile:
-
-    ```
-    ./node_modules/.bin/babel WoofJS/src/woof.es6.js --out-file WoofJS/dist/woof.js
-    ```
-2. Or -- tell babel to always watch for changes and auto-compile (less work for you!). Open a new terminal and run this:
-
-    ```
-    ./node_modules/.bin/babel WoofJS/src/woof.es6.js --watch --out-file WoofJS/dist/woof.js
-    ```
+To do that, make sure you've installed the npm dependencies with `npm install`, then, before you start editing files, run the following command to tell babel to watch for changes and automatically compile:
+   ```
+   npm run compile
+   ```
+You can abort this process at any time by pressing **CTRL+C**
 
 #### WoofJS.com's Tutorials
 
-[WoofJS.com](https://woofjs.com)'s tutorials actually live at an entirely different repo: https://github.com/stevekrouse/coding.space.
+[WoofJS.com](http://woofjs.com)'s tutorials actually live at an entirely different repo: https://github.com/stevekrouse/coding.space.
 
-You can find them there in the `woof/` subdirectory. If you'd like to cotribute to the WoofJS curriculum, head on over to that repo.
+You can find them there in the `woof/` subdirectory. If you'd like to contribute to the WoofJS curriculum, head on over to that repo.
 
 ### Getting started
 
@@ -142,34 +135,32 @@ You can find them there in the `woof/` subdirectory. If you'd like to cotribute 
     ```
     git clone https://github.com/stevekrouse/WoofJS.git
     ```     
-3. Initialize npm (the following command makes this as simple as possible).
+3. Install the npm dependencies.
 
     ```
-    npm init --yes
+    npm install
     ```
-4. Install babel-cli and babel-preset-es2015 (npm may give you some warnings but don't worry).
 
-    ```
-    npm install babel-cli babel-preset-es2015 --save-dev
-    ```
-5. Take a look at our issues and see if there are any issues that speak to you as good places to tackle first. Pay particular attention to issues labeled "good student projects."
+4. Take a look at our issues and see if there are any issues that speak to you as good places to tackle first. Pay particular attention to issues labeled "good for beginners."
 
-6. Create a new local branch to work on your issue -- use a descriptive branch name like in this example:
+
+5. Create a new local branch to work on your issue -- use a descriptive branch name like in this example:
 
     ```
     git checkout -b more-pokemon-sprites
     ```
-7. Once you've  made your changes, commit them to your branch.
+
+6. Once you've made your changes, commit them to your branch.
 
     ```
     git commit -m "add more pokemon sprites"
     ```
-8. Push your new branch (not master!) to the GitHub repo.
+7. Push your new branch (not master!) to the GitHub repo.
 
     ```
     git push origin more-pokemon-sprites
     ```
-9. Submit a pull request so your changes can be reviewed.
+8. Submit a pull request so your changes can be reviewed.
 
 If you have any questions, please email steve at thecodingspace.com :)
 
