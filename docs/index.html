@@ -92,12 +92,12 @@
                             {
                                 description:"Here is a walk through of how to display the current temperature and conditions in NYC:",
                                 code:'// First set up temporary text that will be replaced\nvar temp = new Text({\n text: "...", \n size: 30, \n color: "black", \nfontFamily: "arial",\n})\n// Then set your variable for the request\nvar city = "New York, NY"\n// Then set the url for your request\nvar url =  "https://query.yahooapis.com/v1/public/yql?q=select * from weather.forecast where woeid in (select woeid from geo.places(1) where text=\'" + city + "\')&format=json"\n// Finaly call the getData() function\ngetData(url, data => {\n // Replace the temporary text\n temp.text = data.query.results.channel.item.condition.temp + "° | " + data.query.results.channel.item.condition.text\n})',
-                                tags:"weather temperature"
+                                tags:"weather temperature integration"
                             },
                             {
                                 description:"There is even more you can do with the Yahoo Weather integration:",
                                 code:'// Wind:\ndata.query.results.channel.wind.speed\ndata.query.results.channel.wind.direction\ndata.query.results.channel.wind.chill\n// Atmosphere:\ndata.query.results.channel.atmosphere.humidity\ndata.query.results.channel.atmosphere.pressure\ndata.query.results.channel.atmosphere.rising\n// Current Condtions\ndata.query.results.channel.item.condition.temp\ndata.query.results.channel.item.condition.text\n// Today\'s Forecast\ndata.query.results.channel.item.forecast[0].high\ndata.query.results.channel.item.forecast[0].low\ndata.query.results.channel.item.forecast[0].text\n// Tomorrow\'s Forecast\ndata.query.results.channel.item.forecast[1].high\ndata.query.results.channel.item.forecast[1].low\ndata.query.results.channel.item.forecast[1].text\n',
-                                tags:"weather temperature"
+                                tags:"weather temperature integration"
                             }
                         ],
                         "Local Storage": [
@@ -110,22 +110,22 @@
                             {
                                 description:"First, you want to check if local storage for a specific variable exists. If it doesn't, then create it.",
                                 code:'if (!localStorage.highscore) {\n localStorage.setItem("highscore", 0)\n}',
-                                tags:"local storage high score"
+                                tags:"local storage high score storage"
                             },
                             {
                                 description:"Retrieve your local storage.",
                                 code:'localStorage.highscore',
-                                tags:"local storage high score"
+                                tags:"local storage high score storage integration"
                             },
                             {
                                 description:"Set your local storage.",
                                 code:'// At the end of the game\nlocalStorage.highscore = 50',
-                                tags:"local storage high score"
+                                tags:"local storage high score storage integration"
                             },
                             {
                                 description:"Display your local storage.",
                                 code:'var textSprite = new Text({\n  text: () => localStorage.highscore, \n  size: 12, \n  color: "rgb(100, 50, 240)", \n  fontFamily: "arial", \n  textAlign: "left"\n})',
-                                tags:"local storage high score" 
+                                tags:"local storage high score storage integration" 
                             }
                         ],
                         "Currency Conversion":[
@@ -138,12 +138,12 @@
                             {
                                 description:"Here is a walk through of a program shows how much $5 is currently worth in EUR.",
                                 code:'// First set up temporary text that will be replaced\nvar temp = new Text({\n text: "...", \n size: 60, \n color: "white", \n fontFamily: "arial",\n})\n// Then set your variables for the request\nvar base = "USD"\n// Then set the url for your request\nvar url = "http://api.fixer.io/latest?base=" + base\n// Finaly call the getData() function\ngetData(url, data => {\n // Replace the temporary text with the converted amoung\n temp.text = Math.round(5 * data.rates.EUR * 100) / 100 + " EUR"\n}) ',
-                                tags:"currency conversion"
+                                tags:"currency conversion integration"
                             },
                             {
                                 description:"Here is a walk through of a program shows how much 10 GBP is currently worth in USD.",
                                 code:'// First set up temporary text that will be replaced\nvar temp = new Text({\n text: "...", \n size: 60, \n color: "white", \n fontFamily: "arial",\n})\n// Then set your variables for the request\nvar base = "GBP"\n// Then set the url for your request\nvar url = "http://api.fixer.io/latest?base=" + base\n// Finaly call the getData() function\ngetData(url, data => {\n // Replace the temporary text with the converted amoung\n temp.text = Math.round(10 * data.rates.USD * 100) / 100 + " USD"\n}) ',
-                                tags:"currency conversion"
+                                tags:"currency conversion integration"
                             },
                             {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                             {
@@ -164,17 +164,17 @@
                             {
                                 description:"Here is a walk through of how to display today's sunrise time in NYC:",
                                 code:'// First set up temporary text that will be replaced\nvar temp = new Text({\n text: "...", \n size: 60, \n color: "white", \nfontFamily: "arial",\n})\n// Then set your variables for the request\nvar lat = 40.7128\nvar lng = -74.0059 \n// Then set the url for your request\nvar url = "https://api.sunrise-sunset.org/json?lat=" + lat + "&lng=" + lng\n// Finaly call the getData() function\ngetData(url, data => {\n // Replace the temporary text\n temp.text = data.results.sunrise\n}) ',
-                                tags:"sunrise sunrise url"
+                                tags:"sunrise sunset url integration"
                             },
                             {
                                 description:"Here is a walk through of how to display today's sunset time in NYC:",
                                 code:'// First set up temporary text that will be replaced\nvar temp = new Text({\n text: "...", \n size: 60, \n color: "white", \nfontFamily: "arial",\n})\n// Then set your variables for the request\nvar lat = 40.7128\nvar lng = -74.0059 \n// Then set the url for your request\nvar url = "https://api.sunrise-sunset.org/json?lat=" + lat + "&lng=" + lng\n// Finaly call the getData() function\ngetData(url, data => {\n // Replace the temporary text\n temp.text = data.results.sunset\n}) ',
-                                tags:"sunrise sunset url"
+                                tags:"sunrise sunset url integration"
                             },
                             {
                                 description:"There is even more you can do with the Sunrise-Sunset integration:",
                                 code:'// Instead of data.results.sunrise or data.results.sunset, try:\ndata.results.solar_noon\ndata.results.day_length\ndata.results.civil_twilight_begin\ndata.results.civil_twilight_end\ndata.results.nautical_twilight_begin\ndata.results.nautical_twilight_end\nata.results.astronomical_twilight_begin\nata.results.astronomical_twilight_begin',
-                                tags:"sunrise sunset url"
+                                tags:"sunrise sunset url integration"
                             }
                         ],
                         "Chuck Norris Jokes":[
@@ -187,13 +187,13 @@
                             {
                                 description:"Here is a walk through of how to display a Chuck Norris joke:",
                                 code:'//First set up temporary text that will be replaced\nvar temp = new Text({\n text: "...", \n size: 15, \n color: "black", \nfontFamily: "arial",\n})\n//Then set the url for your request\nvar url = "https://api.chucknorris.io/jokes/random"\n//Finaly call the getData() function\ngetData(url, data => {\n //Replace the temporary text\n temp.text = data.value\n})',
-                                tags:"chuck norris jokes"
+                                tags:"chuck norris jokes integration"
                             },
                             {
                                 description:"Here is a walk through of how to display a Chuck Norris joke from a specific category:",
                                 html:"<a target='_blank'  href='https://api.chucknorris.io/jokes/categories'>Click here to see all the options for categories</a>",
                                 code:'//First set up temporary text that will be replaced\nvar temp = new Text({\n text: "...", \n size: 15, \n color: "black", \nfontFamily: "arial",\n})\n//Then set your variable for the request\nvar category = "sport"\n//Then set the url for your request\nvar url = "https://api.chucknorris.io/jokes/random?category=" + category\n//Finaly call the getData() function\ngetData(url, data => {\n //Replace the temporary text\n temp.text = data.value\n})',
-                                tags:"chuck norris jokes"
+                                tags:"chuck norris jokes integration"
                             },
                         ],
                         "Scientific Calculator":[
@@ -206,12 +206,12 @@
                             {
                                 description:"Here is a walk through of how to display the derivative of x^2 + 2x:",
                                 code:'// First set up temporary text that will be replaced\nvar temp = new Text({\n text: "...", \n size: 15, \n color: "black", \nfontFamily: "arial",\n})\n// Then set your variables for the request\nvar operation = "derive"\nvar expression = "x^2+2x"\n// Then set the url for your request\nvar url = "https://newton.now.sh/" + operation + "/" + expression\n// Finaly call the getData() function\ngetData(url, data => {\n // Replace the temporary text\n temp.text = data.result\n})',
-                                tags:"math calculations derivative"
+                                tags:"math calculations derivative calculator scientific integration"
                             },
                             {
                                 description:"Here is a walk through of how to display the factorization of x^2 + 2x:",
                                 code:'// First set up temporary text that will be replaced\nvar temp = new Text({\n text: "...", \n size: 15, \n color: "black", \nfontFamily: "arial",\n})\n// Then set your variables for the request\nvar operation = "factor"\nvar expression = "x^2+2x"\n// Then set the url for your request\nvar url = "https://newton.now.sh/" + operation + "/" + expression\n// Finaly call the getData() function\ngetData(url, data => {\n // Replace the temporary text\n temp.text = data.result\n})',
-                                tags:"math calculations derivative"
+                                tags:"math calculations derivative factorization integration"
                             },
                             {
                                 integrationDescription:"Options for operations include: simplify, factor, derive, integrate, zeroes, tangent, area (area under the curve), cos, sin, tan, arccos, arcsin, arctan, abs, log.",
@@ -228,23 +228,23 @@
                             {
                                 description:"Here is a walk through of how to display the a random computer trivia question and its answer:",
                                 code:'// First set up temporary text that will be replaced\nvar temp = new Text({\n text: "...", \n size: 15, \n color: "black", \nfontFamily: "arial",\n})\n// Then set the url for your request\nvar url = "https://opentdb.com/api.php?amount=1&category=18&type=multiple"\n// Finaly call the getData() function\ngetData(url, data => {\n // Replace the temporary text\n temp.text = data.results[0].question + "Answer:" + data.results[0].correct_answer\n})',
-                                tags:"trivia"
+                                tags:"trivia integration"
                             },
                             {
                                 html:"You can customize the category and number of questions retrieve <a target='_blank'  href='https://opentdb.com/api_config.php'>here</a>."
                             }
                         ],
                         Firebase: [
-                            // {
-                            //     integrationDescription:"Firebase is a database that helps you store cloud data.",
-                            //     integrationDescriptionClass:"alert-info",
-                            //     integrationDocumentationLink:"https://firebase.google.com/docs/",
-                            // },
+                            {
+                                integrationDescription:"Firebase is a database that helps you store cloud data.",
+                                integrationDescriptionClass:"alert-info",
+                                integrationDocumentationLink:"https://firebase.google.com/docs/",
+                            },
                             {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                             {   
                                 description:"Firebase is similar to Scratch's cloud data as it allows you to store data in the cloud. Here is a quick run through of how to use Firebase to store a high score:",
                                 html:"<iframe src='http://coding.space/woof/high_score.html' width='100%' height='500px' style='border:none;shadow:none;'></iframe>",
-                                tags:"firebase cloud storage high score"
+                                tags:"firebase cloud storage high score integration"
                             },
                         ],
                         "Custom Integrations": [
@@ -256,7 +256,7 @@
                             {
                                 description:"getData() works by taking an url and a function to do with the returned data. This is an example using the Sunrise-Sunset integration.",
                                  code:'// First set up temporary text that will be replaced\nvar temp = new Text({\n text: "...", \n size: 60, \n color: "white", \nfontFamily: "arial",\n})\n// Then set your variables for the request\nvar lat = 40.7128\nvar lng = -74.0059 \n// Then set the url for your request\nvar url = "https://api.sunrise-sunset.org/json?lat=" + lat + "&lng=" + lng\n// Finaly call the getData() function\ngetData(url, data => {\n // Replace the temporary text\n temp.text = data.results.sunset\n}) ',
-                                tags:"get request json http"
+                                tags:"get request json http custom integration"
                             },
                             {
                                  html:"<a target='_blank'  href='https://joebeachjoebeach.github.io/json-path-finder/'>Use this Path Finder to help you find the correct path for the data you are looking to retreive.</a>",
@@ -269,25 +269,25 @@
                             {
                                 description: "Set the backdrop to a color:",
                                 code: 'setBackdropColor("blue")',
-                                tags: "backdrop"
+                                tags: "backdrop background",
                             },
 
                             {
                                 url: "./images/beach.jpg",
                                 code: 'setBackdropURL("./docs/images/beach.jpg")\nsetBackdropStyle("cover")',
-                                tags: "beach",
+                                tags: "beach backdrop background",
                             },
 
                             {
                                 url: "./images/nyc.jpg",
                                 code: 'setBackdropURL("./docs/images/nyc.jpg")\nsetBackdropStyle("cover")',
-                                tags: "new york",
+                                tags: "new york city backdrop background",
                             },
 
                             {
                                 url: "./images/candyland.jpg",
                                 code: 'setBackdropURL("./docs/images/candyland.jpg")\nsetBackdropStyle("cover")',
-                                tags: "candy land",
+                                tags: "candy land backdrop background",
                             },
                             
                             {
@@ -299,23 +299,23 @@
                             {
                                 url: "./images/minecraft.jpg",
                                 code: 'setBackdropURL("./docs/images/minecraft.jpg")\nsetBackdropStyle("cover")',
-                                tags: "minecraft",
+                                tags: "minecraft backdrop background",
                             },
-
+                          
                             {
                                 url: "./images/snow.jpg",
                                 code: 'setBackdropURL("./docs/images/snow.jpg")\nsetBackdropStyle("cover")',
-                                tags: "snow mountain",
+                                tags: "snow mountain backdrop background",
                             }, {
                                 url: "./images/outerspace.jpg",
                                 code: 'setBackdropURL("./docs/images/outerspace.jpg")\nsetBackdropStyle("cover")',
-                                tags: "outer space mountain",
+                                tags: "outer space mountain backdrop background",
                             },
 
                             {
                                 url: "./images/ocean.jpg",
                                 code: 'setBackdropURL("./docs/images/ocean.jpg")\nsetBackdropStyle("cover")',
-                                tags: "ocean",
+                                tags: "ocean backdrop background sea",
                             }, 
                             
                             {
@@ -363,55 +363,55 @@
                             {
                                 url: "./images/emojibackground.jpg",
                                 code: 'setBackdropURL("./docs/images/emojibackground.jpg")\nsetBackdropStyle("cover")',
-                                tags: "emoji",
+                                tags: "emoji backdrop background",
                             },
 
                             {
                                 url: "./images/galaxy.jpg",
                                 code: 'setBackdropURL("./docs/images/galaxy.jpg")\nsetBackdropStyle("cover")',
-                                tags: "galaxy",
+                                tags: "galaxy outer space backdrop background",
                             },
 
                             {
                                 url: "./images/harrypotter.jpg",
                                 code: 'setBackdropURL("./docs/images/harrypotter.jpg")\nsetBackdropStyle("cover")',
-                                tags: "harry potter",
+                                tags: "harry potter backdrop background",
                             },
 
                             {
                                 url: "./images/starwars.jpg",
                                 code: 'setBackdropURL("./docs/images/starwars.jpg")\nsetBackdropStyle("cover")',
-                                tags: "star wars",
+                                tags: "star wars backdrop background",
                             },
 
                             {
                                 url: "./images/marioback.jpg",
                                 code: 'setBackdropURL("./docs/images/marioback.jpg")\nsetBackdropStyle("cover")',
-                                tags: "mario background",
+                                tags: "mario background backdrop",
                             },
 
                             {
                                 url: "./images/soccer.jpg",
                                 code: 'setBackdropURL("./docs/images/soccer.jpg")\nsetBackdropStyle("cover")',
-                                tags: "soccer background",
+                                tags: "soccer background backdrop",
                             },
 
                             {
                                 url: "./images/flappyback.png",
                                 code: 'setBackdropURL("./docs/images/flappyback.png")\nsetBackdropStyle("cover")',
-                                tags: "flappy bird background",
+                                tags: "flappy bird background backdrop",
                             },
 
                             {
                                 url: "./images/desert.jpg",
                                 code: 'setBackdropURL("./docs/images/desert.jpg")\nsetBackdropStyle("cover")',
-                                tags: "desert background",
+                                tags: "desert background backdrop",
                             },
 
                             {
                                 url: "./images/grass.jpg",
                                 code: 'setBackdropURL("./docs/images/grass.jpg")\nsetBackdropStyle("cover")',
-                                tags: "golf grass background",
+                                tags: "golf grass background backdrop",
                             },
 
                         ],
@@ -453,7 +453,7 @@
                             {
                                 url: "./images/kpU9y5M.png",
                                 code: 'var unicorn = new Image({\n  url: "./docs/images/unicorn.png",\n  width: 120, \n  height: 80,\n})',
-                                tags: "unicorn sprite",
+                                tags: "unicorn sprite animal",
                             },
 
                             {
@@ -471,7 +471,7 @@
                              {
                                 url: "./images/zp0zzaG.png",
                                 code: 'var nyanCat = new Image({\n  url: "./docs/images/nyancat.png",\n  width: 160, \n  height: 80,\n})',
-                                tags: "cat sprite",
+                                tags: "cat sprite rainbow animal",
                             },
                             
                              {
@@ -483,37 +483,37 @@
                             {
                                 url: "./images/Q4zxvEN.png",
                                 code: 'var pikachu = new Image({\n  url: "./docs/images/pikachu.png",\n  width: 120, \n  height: 100,\n})',
-                                tags: "pikachu sprite",
+                                tags: "pikachu sprite animal",
                             },
 
                             {
                                 url: "./images/G7PpFgz.png",
                                 code: 'var taco = new Image({\n  url: "./docs/images/taco.png",\n  width: 300, \n  height: 170,\n})',
-                                tags: "taco sprite",
+                                tags: "taco sprite food",
                             },
                             
                             {
                                 url: "./images/ajkO60k.png",
                                 code: 'var iceCream = new Image({\n  url: "./docs/images/icecream.png",\n  width: 130, \n  height: 170,\n})',
-                                tags: "ice cream sprite",
+                                tags: "ice cream sprite food",
                             },
 
                             {
                                 url: "./images/mZnRmHr.png",
                                 code: 'var minecraft = new Image({\n  url: "./docs/images/minecraft.png",\n  width: 120, \n  height: 100,\n})',
-                                tags: "minecraft sprite",
+                                tags: "minecraft sprite person",
                             },
 
                             {
                                 url: "./images/614de0J.jpg",
                                 code: 'var mario = new Image({\n  url: "./docs/images/mario.png",\n  width: 150, \n  height: 200,\n})',
-                                tags: "mario sprite",
+                                tags: "mario sprite person",
                             },
 
                             {
                                 url: "./images/0ioLJsk.jpg",
                                 code: 'var cupcake = new Image({\n  url: "./docs/images/cupcake.png",\n  width: 170, \n  height: 170,\n})',
-                                tags: "cupcake sprite",
+                                tags: "cupcake sprite food",
                             },
 
                             {
@@ -525,31 +525,31 @@
                             {
                                 url: "./images/Gf0MwWP.png",
                                 code: 'var bird = new Image({\n  url: "./docs/images/bird.png",\n  width: 120, \n  height: 80,\n})',
-                                tags: "flappy bird sprite",
+                                tags: "flappy bird sprite animal",
                             },
 
                             {
                                 url: "./images/SepKsyn.png",
                                 code: 'var puppy = new Image({\n  url: "./docs/images/puppy.png",\n  width: 150, \n  height: 210,\n})',
-                                tags: "puppy  sprite",
+                                tags: "puppy dog animal sprite",
                             },
 
                             {
                                 url: "./images/fnKpvEY.png",
                                 code: 'var pusheen = new Image({\n  url: "./docs/images/pusheen.png",\n  width: 120, \n  height: 80,\n})',
-                                tags: "pusheen sprite",
+                                tags: "pusheen cat animal sprite",
                             },
 
                             {
                                 url: "./images/GfYgZJo.png",
                                 code: 'var spiderman = new Image({\n  url: "./docs/images/spiderman.png",\n  width: 150, \n  height: 170,\n})',
-                                tags: "spiderman sprite",
+                                tags: "spiderman person sprite",
                             },
 
                             {
                                 url: "./images/50LlixQ.png",
                                 code: 'var apple = new Image({\n  url: "./docs/images/apple.png",\n  width: 150, \n  height: 170,\n})',
-                                tags: "apple sprite",
+                                tags: "apple food sprite",
                             },
 
                             {
@@ -567,43 +567,43 @@
                             {
                                 url: "./images/9BTkkuc.png",
                                 code: 'var emoji = new Image({\n  url: "./docs/images/emoji.png",\n  width: 120, \n  height: 120,\n})',
-                                tags: "emoji sprite",
+                                tags: "emoji heart eyes sprite",
                             },
                                                       
                              {
                                 url: "./images/rGnUiWC.png",
                                 code: 'var sadEmoji = new Image({\n  url: "./docs/images/emojilaugh.png",\n  width: 120, \n  height: 120,\n})',
-                                tags: "sad emoji sprite",
+                                tags: "sad laugh emoji sprite",
                             },
                             
                              {
                                 url: "./images/B9v5lZJ.png",
                                 code: 'var partyEmoji = new Image({\n  url: "./docs/images/emoji-party.png",\n  width: 120, \n  height: 120,\n})',
-                                tags: "party emoji sprite",
+                                tags: "party hat emoji sprite",
                             },
                             
                               {
                                 url: "./images/ZU8UBCM.png",
                                 code: 'var puppyEmoji = new Image({\n  url: "./docs/images/emojipuppy.png",\n  width: 120, \n  height: 120,\n})',
-                                tags: "sad emoji sprite",
+                                tags: "dog puppy animal emoji sprite",
                             },
                             
                                {
                                 url: "./images/zzNfW5S.png",
                                 code: 'var sillyEmoji = new Image({\n  url: "./docs/images/emojieyes.jpg",\n  width: 120, \n  height: 120,\n})',
-                                tags: "silly emoji sprite",
+                                tags: "silly tongue emoji sprite",
                             },
 
                             {
                                 url: "./images/8rBZ8cu.png",
                                 code: 'var dragon = new Image({\n  url: "./docs/images/dragon.png",\n  width: 300, \n  height: 170,\n})',
-                                tags: "dragon sprite",
+                                tags: "dragon animal sprite",
                             },
 
                             {
                                 url: "./images/tt5zoZq.png",
                                 code: 'var elephant = new Image({\n  url: "./docs/images/elephant.png",\n  width: 200, \n  height: 170,\n})',
-                                tags: "elephant sprite",
+                                tags: "elephant animal sprite",
                             },
 
                             {
@@ -619,12 +619,12 @@
                             {
                                 url: "./images/crab.png",
                                 code: 'var crab = new Image({\n  url: "./docs/images/crab.png",\n  width: 150, \n  height: 100,\n})',
-                                tags: "crab sprite",
+                                tags: "crab animal sprite",
                             },
                             {
                                 url: "./images/fish.png",
                                 code: 'var fish = new Image({\n  url: "./docs/images/fish.png",\n  width: 70, \n  height: 30,\n})',
-                                tags: "fish sprite",
+                                tags: "fish animal sprite",
                             },
                             {
                                 url: "./images/bottomPipe.png",
@@ -987,110 +987,110 @@
                     Motion: [{
                             url: "./images/moveSteps.png",
                             code: "sprite1.move(10)",
-                            tags: "move forward glide animate"
+                            tags: "motion move forward glide animate steps"
                         }, {
                             url: "./images/turnRight.png",
                             code: "sprite1.turnRight(15)",
-                            tags: "turn angle point in direction orientation"
+                            tags: "turn angle point direction orientation right motion"
                         }, {
                             url: "./images/turnLeft.png",
                             code: "sprite1.turnLeft(15)",
-                            tags: "turn angle point in direction orientation"
+                            tags: "turn angle point direction orientation left motion"
                         }, 
                         {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                         {
                             url: "./images/point90.png",
                             code: "sprite1.angle = LEFT  \nsprite1.angle = RIGHT \nsprite1.angle = UP \nsprite1.angle = DOWN \nsprite1.angle = 45",
-                            tags: "angle turn point in direction right left up down orientation"
+                            tags: "angle turn point direction right left up down orientation motion"
                         }, {
                             url: "./images/pointTowardsSprite.png",
                             code: "sprite1.pointTowards(sprite2)",
-                            tags: "turn point in direction angle sprite character mouse"
+                            tags: "turn point direction angle sprite character towards mouse motion"
                         }, {
                             url: "./images/pointTowardsMouse.png",
                             code: "sprite1.pointTowards(mouseX, mouseY)",
-                            tags: "turn point in direction angle sprite character mouse"
+                            tags: "motion turn point direction towards angle sprite character mouse"
                         }, 
                         {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                         {
                             url: "./images/goToXY.png",
                             code: "sprite1.x = 0 \nsprite1.y = 0",
-                            tags: "teleport move location set x y"
+                            tags: "teleport move location set x y go motion"
                         }, {
                             url: "./images/goToRandom.png",
                             code: "sprite1.x = randomX() \nsprite1.y = randomY()",
-                            tags: "teleport move location set x y random go to"
+                            tags: "teleport move location set x y random position go motion"
                         }, {
                             url: "./images/goToMouse.png",
                             code: "sprite1.x = mouseX\nsprite1.y = mouseY",
-                            tags: "teleport location move to mouse"
+                            tags: "teleport location move mouse go pointer motion"
                         }, {
                             url: "./images/goToSprite2.png",
                             code: "sprite1.x = sprite2.x \nsprite1.y = sprite2.y",
-                            tags: "teleport location other move"
+                            tags: "teleport location other move go motion"
                         }, 
                         {
                             url: "./images/glide.png",
                             description: "This block does not exist in WoofJS, but you can use other Motion blocks to achieve this. For example:",
                             code: "sprite1.pointTowards(166, -136)\nrepeat(100, () => {\n sprite1.move(1)\n})",
-                            tags:"glide"
+                            tags:"glide go move motion"
                         },
                         {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                         {
                             url: "./images/changeX.png",
                             code: 'sprite1.x += 10',
-                            tags: "increase decrease change x move right left"
+                            tags: "increase decrease change x move right left motion"
                         }, 
                         {
                             url: "./images/setX.png",
                             code: 'sprite1.x = 0',
-                            tags: "set x"
+                            tags: "set x motion"
                         },
                         {
                             url: "./images/changeY.png",
                             code: 'sprite1.y += -10',
-                            tags: "increase decrease change y move up down"
+                            tags: "increase decrease change y move up down motion"
                         }, {
                             url: "./images/setY.png",
                             code: 'sprite1.y = 0',
-                            tags: "set y"
+                            tags: "set y motion"
                         }, 
                         {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                         {
                             url: "./images/ifOnEdge.png",
                             description:"This block does not exist in WoofJS, but there are other ways you can do the same thing. Here is an example:",
                             code: 'if(sprite1.x > maxX) {sprite1.turnRight(180)}',
-                            tags: "rotate bounce turn edge on"
+                            tags: "rotate bounce turn edge on motion"
                         }, 
                         {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                         {
                             url: "./images/68747470733a2f2f692e696d6775722e636f6d2f4c576c5874444c2e706e67",
                             code: 'sprite1.setRotationStyle("ROTATE LEFT RIGHT")',
-                            tags: "rotation style no turn flip"
+                            tags: "rotation style turn flip set rotate left right motion"
                         }, {
                             url: "./images/setRotate.png",
                             code: 'sprite1.setRotationStyle("ROTATE")',
-                            tags: "rotation style no turn flip"
+                            tags: "rotation style turn all around flip motion"
                         }, {
                             url: "./images/68747470733a2f2f692e696d6775722e636f6d2f433337716439682e706e67",
                             code: 'sprite1.setRotationStyle("NO ROTATE")',
-                            tags: "rotation style no turn flip"
+                            tags: "rotation style no don\'t turn flip motion"
                         },
                         {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                         {
                             url:"./images/xpos.png",
                             code:"sprite1.x",
-                            tags:"x position coordinate"
+                            tags:"x position coordinate motion"
                         },
                         {
                             url:"./images/ypos.png",
                             code:"sprite1.y",
-                            tags:"y position coordinate"
+                            tags:"y position coordinate motion"
                         },
                         {
                             url:"./images/direction.png",
                             code:"sprite1.angle",
-                            tags:"direction angle"
+                            tags:"direction angle motion"
                         },
                     ],
                     Events: [{
@@ -1101,75 +1101,75 @@
                         url: "./images/whenGreenFlag.png",
                         description: "Note: Unlike in Scratch, using ready() is reccomended but not always required.",
                         code: "ready(() => {\n  \/* do something here */\n})",
-                        tags: "on onclick when flag clicked page loaded start ready"
+                        tags: "on onclick when green flag clicked page loaded event start ready"
                     }, 
                     {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f436f58573132422e706e67",
                         code: "onKeyDown(() => {\n  \/* do something here */\n})",
-                        tags: "on when key keyboard press down any"
+                        tags: "on when key keyboard press down any event"
                     }, {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f5444436c756c4f2e706e67",
                         code: "onKeyDown(() => {\n if (keysDown.includes('A')) {\n   \/* do something here */\n  }\n})",
-                        tags: "on when key keyboard press down"
+                        tags: "on when key keyboard press down event"
                     }, {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f556175544e77752e706e67",
                         code: "onKeyDown(() => {\n if (keysDown.includes('UP')) {\n   \/* do something here */\n  }\n})",
-                        tags: "on when key keyboard press down"
+                        tags: "on when key up keyboard press down event"
                     },
                     {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f5875506972634f2e706e67",
                         code: "onMouseDown(() => {\n  \/* do something here */\n})",
-                        tags: "on onclick when click mouse down"
+                        tags: "on onclick when click mouse down event stage event"
                     }, 
                     {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                     {
                         description: "On mouse up",
                         code: "onMouseUp(() => {\n  \/* do something here */\n})",
-                        tags: "on when click mouse up"
+                        tags: "on when click mouse up event"
                     }, {
                         description: "On mouse move",
                         code: "onMouseMove(() => {\n  \/* do something here */\n})",
-                        tags: "on when mouse move"
+                        tags: "on when mouse move event"
                     }, 
                     {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f7a31356d6e506a2e706e67",
                         code: "sprite1.onMouseDown(() => {\n  \/* do something here */\n})",
-                        tags: "on onclick when click mouse down"
+                        tags: "on onclick sprite when click mouse down event"
                     }, {
                         description: "On mouse up",
                         code: "sprite1.onMouseUp(() => {\n  \/* do something here */\n})",
-                        tags: "on when click mouse up"
+                        tags: "on when click mouse up sprite event"
                     }, 
                     {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                     {
                         url:"./images/backdropSwitch.png",
                         description:"This block does not exist in WoofJS.",
-                        tags:"backdrop switches when"
+                        tags:"backdrop switches when event"
                     },
                     {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                     {
                         url:"./images/loudness.png",
                         description:"This block does not exist in WoofJS.",
-                        tags:"loudness when"
+                        tags:"loudness when event"
                     },
                     {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                     {
                         url:"./images/broadcast.png",
                         description:"These blocks do not exist in WoofJS. Scratch is first-person programming so if you want one sprite to communicate with another, you need to send messages. However, WoofJS is third-person so you can coordinate things between sprites without them talking to each other. You can use varaiables to hold \"messages\".",
-                        tags:"broadcast receive"
+                        tags:"broadcast receive event message wait"
                     }
                     ],
                     Looks: [ {
                         description: "Pick a color:",
                         html: '<input value="#409cbc" style="width:100%; height: 50px" type="color" onchange="updateColor(event)"></input>',
-                        tags: "color hex pick colour red blue green yellow orange pink",
+                        tags: "looks color hex pick colour red blue green yellow orange pink",
                         code: '#409cbc'
                     }, {
                         description: "Create a color with red, green and blue values between 0 and 255",
-                        tags: "color rgb colour red blue green yellow orange pink",
+                        tags: "looks color rgb colour red blue green yellow orange pink",
                         code: 'rgb(255, 100, 0)'
                     },
                     {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
@@ -1177,148 +1177,148 @@
                         url:"./images/sayAndThink.png",
                         description:"These blocks do not exist in WoofJS, but you can use text for a similar effect. Here is an example:",
                         code:'// First create your speech bubble image sprite\nvar speechBubble = new Image({\n  url: "./docs/images/speechBubble.png",\n  width: 150, \n  height: 75,\n})\n// Then create text\nvar text = new Text({\n text: () => "Hello!", \n size: 25\n})\nforever(() => {\n // Align the speech bubble with your sprite\n // uncomment the following lines and change sprite1 to the name of your sprite:\n // speechBubble.x = sprite1.x + (speechBubble.width / 2) + (sprite1.width / 2)\n // speechBubble.y = sprite1.y + (speechBubble.height / 2) + (sprite1.height / 2)\n // Keep the text aligned with the bubble \n text.x = speechBubble.x\n text.y = speechBubble.y + 10\n})',
-                        tags:"say think"
+                        tags:"looks say think hello seconds"
                     },
                     {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f653650393552302e706e67",
                         code: "sprite1.show()",
-                        tags: "show appear"
+                        tags: "show appear looks"
                     }, 
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f323355617446352e706e67",
                         code: "sprite1.hide()",
-                        tags: "hide disappear"
+                        tags: "looks hide disappear"
                     },
                     {
                         code: "if(sprite1.showing){\n /* then do stuff here */\n}",
                         html:"Use the <code>.showing</code> attribute to check if your sprite is showing.",
-                        tags: "showing hiding"
+                        tags: "showing hiding if when"
                     },
                     {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f513078533746662e706e67",
                         code: "imageSprite1.setImageURL('./images/SMJjVCL.png')",
-                        tags: "costume image url picture"
+                        tags: "costume image url picture switch looks"
                     }, {
                         description: "You can only setImageURL() for Images.\nChange the color for rectangles, text, lines and circles:",
-                        tags: "change color"
+                        tags: "change color looks"
                     }, {
                         code: 'rectangleSprite1.color = "purple"',
-                        tags: "change color"
+                        tags: "change color looks rectangle"
                     }, {
                         code: 'textSprite1.color = "rgb(10, 150, 30)"',
-                        tags: "change color"
+                        tags: "change color looks text"
                     }, {
                         code: 'lineSprite1.color = "#ff20ff"',
-                        tags: "change color"
+                        tags: "change color line looks"
                     }, {
                         code: 'circleSprite1.color = "green"',
-                        tags: "change color"
+                        tags: "change color circle looks"
                     }, 
                     {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f7a616a30706c302e706e67",
                         description: "Set the backdrop to an image URL:",
                         code: 'setBackdropURL("./images/RkP7fcR.jpg")',
-                        tags: "background backdrop picture"
+                        tags: "background backdrop picture image URL switch looks"
                     }, {
                         description: "Set the backdrop to a color:",
                         code: 'setBackdropColor("blue")',
-                        tags: "backdrop background picture"
+                        tags: "backdrop background color looks set"
                     }, {
                         description: "Set a backdrop image so that it resizes to fill the screen without stretching or compressing",
                         code: 'setBackdropStyle("cover")',
-                        tags: "backdrop background picture cover style"
+                        tags: "backdrop background set picture cover style looks"
                     }, {
                         description: "Set the backdrop image's width and height via pixel values.",
                         code: 'setBackdropStyle("200px 300px")',
-                        tags: "backdrop background picture pixel size style"
+                        tags: "backdrop background picture pixel size set style width looks"
                     }, {
                         description: "Set the backdrop image to percentages of the screen's width and height. (The default is 100% 100%.)",
                         code: 'setBackdropStyle("100% 100%")',
-                        tags: "backdrop background picture default style"
+                        tags: "backdrop background picture default set style percent width height looks"
                     }, {
                         description: "Set the backdrop image to repeat in the x-direction and not the y-direction. (This is useful if you set the backdrop style to pixels.)",
                         code: 'setBackdropRepeat("repeat-x")',
-                        tags: "backdrop background picture repeat style x"
+                        tags: "backdrop background picture repeat style x looks set"
                     }, {
                         description: "Set the backdrop image to repeat in the y-direction and not the x-direction. (This is useful if you set the backdrop style to pixels.)",
                         code: 'setBackdropRepeat("repeat-y")',
-                        tags: "backdrop background picture repeat style y"
+                        tags: "backdrop background picture repeat style y looks"
                     }, {
                         description: "Set the backdrop image to not repeat in either direction. (no-repeat is the default.)",
                         code: 'setBackdropRepeat("no-repeat")',
-                        tags: "backdrop background picture no repeat style "
+                        tags: "backdrop background picture no repeat style looks"
                     },
                     {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                     {
                         url:"./images/colorEffect.png",
                         description:"These blocks do not exist in WoofJS, but you can change the colors of rectangle, text, lines, and circle sprites.",
-                        tags:"color effect"
+                        tags:"color effect clear graphic looks"
                     },{
                         description: "Set the brightness percentage between 0-100 (also known as transparency or opacity)",
                         url: "./images/brightness.png",
                         code: "sprite1.brightness = 50",
-                        tags: "brightness opacity opaqueness transparency"
+                        tags: "brightness opacity opaqueness transparency looks"
                     },
                     {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                      {
                         url: "./images/changeSetSize.png",
                         description: "You set and change the size in different ways for each type of sprite:",
-                        tags: "size width height radius"
+                        tags: "size width height radius looks"
                     }, {
                         code: 'imageSprite1.height = 20\nimageSprite1.width = 20',
-                        tags: "size height width length image"
+                        tags: "size height width length image looks"
                     }, {
                         code: 'rectangleSprite1.height = 20\nrectangleSprite1.width = 20',
-                        tags: "size height rectangle width length"
+                        tags: "size height rectangle width length looks"
                     }, {
                         code: 'circleSprite1.radius = 20',
-                        tags: "size circle radius"
+                        tags: "size circle radius looks"
                     }, {
                         code: 'lineSprite1.x1 = 20\nlineSprite1.y1 = 20\nlineSprite1.width = 20',
-                        tags: "size line width length height"
+                        tags: "size line width length height looks"
                     }, {
                         code: 'textSprite1.size = 20',
-                        tags: "size font text"
+                        tags: "size font text looks"
                     },
                     {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"}, {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f4b756d707167532e706e67",
                         code: "sprite1.sendToFront()",
-                        tags: "layer in front"
+                        tags: "layer send in front looks"
                     },
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f5870676c764a502e706e67",
                         code: "sprite1.sendToBack()",
-                        tags: "layer back behind"
+                        tags: "layer back send behind looks"
                     }],
                     Control: [{
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f723677595838632e706e67",
                         code: 'after(4, "seconds", () => {\n  \/* do something here */\n})',
                         description: 'There is no wait block in JavaScript. Instead, you can use after():',
-                        tags: "wait after seconds"
+                        tags: "wait after seconds control"
                     }, {
                         code: 'every(3, "seconds", () => {\n  \/* do something here */\n})',
                         description: 'If you want to wait at regular intervals, use every():',
-                        tags: "wait every seconds"
+                        tags: "wait every seconds control"
                     }, {
                         code: 'every(() => random(1, 5), "seconds", () => {\n \/* do something here */\n})',
                         description: 'If you want to wait at changing intervals, use every() with a function instead of a number.',
-                        tags: "wait every seconds random"
+                        tags: "wait every seconds random control"
                     },
                      {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                      {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f6a77653133626d2e706e67",
                         code: 'repeat(10, () => {\n  \/* do stuff here */\n})',
-                        tags: 'repeat times'
+                        tags: "repeat times control"
                     }, {
                         html: "When you use <code>repeat()</code>, your code doesn't repeat as fast as the computer can run it.\
                         Instead, we slow it down, which makes things like animation and motion work well. But, if you want your code to repeat instantly,\
                         as fast as the computer can do it, you can combine the <code>range()</code> function with the <code>forEach()</code> function:\
                         <br><br>Example: Repeat your code instantly 10 times:",
                         code: "range(0, 10).forEach(i => {\n  \/* something to repeat */\n})",
-                        tags: "repeat range array forEach"
+                        tags: "repeat range array forEach control"
                     }, {
                         html: "In the above example, <code>i</code> will start at 0 and go up by 1 every repetition, stopping before it gets to 10.\
                         <br>If you are familiar with <code>for</code> loops, you might realize that this does the same thing.\
@@ -1326,30 +1326,30 @@
                     }, {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f675a4f6a4c444d2e706e67",
                         code: 'forever(() => {\n  \/* do stuff here */\n})',
-                        tags: 'forever loop repeat'
+                        tags: 'forever loop repeat control'
                     },
                      {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                      {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f7535724b4133362e706e67",
                         code: 'if(\/* condition */) {\n  \/* then do stuff here */\n}',
-                        tags: 'if when condition'
+                        tags: 'if then when condition control'
                     }, {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f52594f705361712e706e67",
                         code: 'if(\/* condition */) {\n  \/* then do stuff here */\n} else {\n  \/* otherwise do other stuff here */. \n}',
-                        tags: 'if else when condition'
+                        tags: 'if else when condition control'
                     }, {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f615139694a4e772e706e67",
                         code: 'repeatUntil(() => \/* condition */, () => {\n  \/* something to repeat */\n})',
-                        tags: 'repeat until'
+                        tags: 'repeat until control'
                     }, {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f615139694a4e772e706e67",
                         code: 'repeatUntil(() => \/* condition */, () => {}, () => {\n  \/* something to do after condition is true, once */\n})',
-                        tags: "wait until",
+                        tags: "wait until repeat control",
                         description: 'There is no wait-until in JavaScript. You can simulate a wait-until block by specifying a third function to a repeatUntil. Refer to the "Control Flow" section below for more details.'
                     }, {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f4f586c704b394a2e706e67",
                         code: 'when(() => \/* condition */, () => {\n  \/* do stuff here */\n})',
-                        tags: "forever if when",
+                        tags: "forever if when control",
                         description: 'when() is a short-hand for a forever-if statement:'
                     },
                      {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
@@ -1357,26 +1357,26 @@
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f5357537864566d2e706e67",
                         code: 'freeze()',
                         description: 'Freeze the screen. You can reanimate the screen with defrost()',
-                        tags: 'freeze stop all frost'
+                        tags: 'freeze stop all frost control'
                     }, {
                         description: 'Un-freezes the screen. Use this after you use freeze()',
                         code: 'defrost()',
-                        tags: 'freeze stop start defrost'
+                        tags: 'freeze stop start defrost control'
                     },
                      {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                      {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f674e7a547053302e706e67",
                         html:"Cloning in WoofJS is very difficult. We reccomend starting with the <a href='http://coding.space/woof/cloning-tutorial.html' target='_blank'>Cloning Tutorial</a>. You can also find it in the Tutorials tab.",
                         code: '// create a list to store all of the clones\nvar clones = []\nevery(4, "seconds", () => {\n  // create a clone every 4 seconds\n  var clone = new Circle({radius: 10, color: "pink", x:\nrandomX(), y: randomY()})\n  // add each clone to the list\n  clones.push(clone)\n})\n\nforever(() => {\n  // forever, for each clone in clones\n  clones.forEach(clone => {\n    // move it to the right\n    clone.x++\n    if (clone.x > maxX) {\n      // delete it if it goes off the screen\n      clone.delete()\n      // remove it from the list\n      clones.remove(clone)\n    }\n  })\n})',
-                        tags: 'clone copy'
+                        tags: 'clone copy control'
                     }, {
                         code: 'sprite1.delete()',
                         description: "Delete an object. (Note: This only deletes it from the screen. To truly delete it, you may need to remove it from any arrays it is in.)",
-                        tags: ' delete remove destroy clones copy'
+                        tags: ' delete remove destroy clones copy control'
                     }, {
                         code: '// after a mousedown, you won\'t be able to trigger this event again for 1000 milliseconds\nonMouseDown(throttle(() => score++, 1000))',
                         description: 'Only allow something to happen once every X miliseconds:',
-                        tags: "debounce throttle"
+                        tags: "debounce throttle control"
                     },
                     ],
                     Sound: [{
@@ -1427,7 +1427,7 @@
                      {
                         url: "./images/playlevel.png",
                         code: "var levelUp = new Audio('./docs/sounds/mario-coin.wav')\nlevelUp.play()",
-                        tags: "mario music play sounds audio"
+                        tags: "mario music level play sounds audio"
                     }, 
                     
                     {
@@ -1439,7 +1439,7 @@
                      {
                         url: "./images/playtext.png",
                         code: "var textAlert = new Audio('./docs/sounds/text-alert.mp3')\ntextAlert.play()",
-                        tags: "music play sounds audio"
+                        tags: "music play sounds audio text alert"
                     }, 
                     
                      {
@@ -1490,173 +1490,181 @@
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f58396b6b3679572e706e67",
                         code: "mario.pause()",
-                        tags: "pause music sounds"
+                        tags: "pause music stop sounds audio"
                     }, 
                     {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                     {
                         url:"./images/soundFeatures.png",
                         description:"These blocks do not exist in WoofJS.",
-                        tags:"drum note volume play tempo"
+                        tags:"drum note volume play tempo instrument beats rest audio sounds"
                     },
                     {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f7439584b4f706e2e706e67",
                         code: "intitle:index.of?mp3 NAME-OF-SONG",
                         description: "To get the URL of an mp3, Google search:",
-                        tags: "mp3 sound file"
+                        tags: "mp3 sound file audio URL"
                     }],
                     Sensing: [{
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f515470574f78562e706e67",
                         code: "sprite1.mouseOver",
-                        tags: "mouse over"
+                        tags: "mouse over sensing"
                     }, {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f794558496e4b692e706e67",
                         description: "If you want to see if the center of your sprite is outside of a boundary, here are some expressions that could be helpful:",
                         code: "sprite1.x > maxX\nsprite1.x < minX\nsprite1.y > maxY\nsprite1.y < minY",
-                        tags: "boundary edge off outside"
+                        tags: "boundary touching edge off outside sensing"
                     }, {
                         html: "<b>Cropping images will make <code>touching()</code> more accurate.</b>",
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f733236773670632e706e67",
                         code: "sprite1.touching(sprite2)",
-                        tags: "touching intersecting overlap"
+                        tags: "touching intersecting overlap sensing"
                     }, 
                      {
                         html: "<b>For circular sprites, <code>distanceTo()</code> will be more accurate than <code>touching()</code>.",
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f733236773670632e706e67",
                         code: "sprite1.distanceTo(sprite2) < 100",
-                        tags: "touching"
+                        tags: "touching sensing distance"
                     },
                     {
                         url:"./images/touchingColor.png",
                         description:"These blocks do not exist in WoofJS.",
-                        tags:"touching color"
+                        tags:"touching color sensing"
                     },
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f634959335359792e706e67",
                         code: "sprite1.distanceTo(mouseX, mouseY)",
-                        tags: "distance"
+                        tags: "distance sensing mouse pointer"
                     }, {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f7936735847544b2e706e67",
                         code: "sprite1.distanceTo(sprite2)",
-                        tags: "distance"
+                        tags: "distance sensing"
                     }, 
                       {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                     {
                         url:"./images/ask.png",
                         description:"These blocks do not exist in WoofJS, but you can achieve a similar effect by doing the following:",
                         code:"var answer = prompt(\"Please enter your name\", \"\")",
-                        tags:"ask answer prompt input"
+                        tags:"ask answer prompt input sensing"
 
                     },
                       {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f625a6e7a524b482e706e67",
                         code: "keysDown.includes('SPACE')",
-                        tags: "key keyboard down pressed"
+                        tags: "key keyboard down pressed sensing"
                     }, {
                         description: "List of keys currently pressed:",
                         code: "keysDown",
-                        tags: "keys keyboard pressed down"
+                        tags: "keys keyboard pressed down sensing"
                     }, {
                         url: "./images/mousedown.png",
                         code: "mouseDown",
-                        tags: "mouse down clicked pressed"
+                        tags: "mouse down clicked pressed sensing"
                     }, {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f4a634b4c6631722e706e67",
                         code: "mouseX",
-                        tags: "mouse x position"
+                        tags: "mouse x position sensing"
                     }, {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f6a3843467155742e706e67",
                         code: "mouseY",
-                        tags: "mouse Y position"
+                        tags: "mouse Y position sensing"
                     }, 
                      {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                      {
                         url:"./images/loudnessLevel.png",
                         description:"This block does not exist in WoofJS.",
-                        tags: "loudness"
+                        tags: "loudness sensing"
                      },
                       {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                       {
                         url:"./images/video.png",
                         description:"These blocks do not exist in WoofJS.",
-                        tags: "video"
+                        tags: "video sensing"
                      },
                      {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                      {
                         url:"./images/timer.png",
                         description:"These blocks do not exist in WoofJS.",
-                        tags: "timer"
+                        tags: "timer sensing"
                      },
                      {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f61664c6474384b2e706e67",
                         code: "sprite1.x",
-                        tags: "x position"
+                        tags: "x position sensing"
                     }, {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f42377644686a322e706e67",
                         code: "sprite1.y",
-                        tags: "y position"
+                        tags: "y position sensing"
                     }, {
                         description: "Previous mouse X:",
-                        code: "pMouseX"
+                        code: "pMouseX previous mouse sensing"
                     }, {
                         description: "Previous mouse Y:",
-                        code: "pMouseY"
+                        code: "pMouseY previous mouse sensing"
                     }, {
                         description: "Mouse X speed:",
-                        code: "mouseXSpeed"
+                        code: "mouse speed x sensing"
                     }, {
                         description: "Mouse Y speed:",
-                        code: "mouseYSpeed "
+                        code: "mouse speed sensing y "
                     }, {
                         description: "Right edge of the screen:",
                         code: "maxX",
-                        tags: "edge right screen"
+                        tags: "edge right screen sensing maxX"
                     }, {
                         description: "Left edge of the screen:",
                         code: "minX",
-                        tags: "edge left screen"
+                        tags: "edge left screen minX sensing"
                     }, {
                         description: "Top edge of the screen:",
                         code: "maxY",
-                        tags: "edge top screen"
+                        tags: "edge top screen maxY sensing"
                     }, {
                         description: "Bottom edge of the screen:",
                         code: "minY",
-                        tags: "edge bottom screen"
+                        tags: "edge bottom screen minY sensing"
                     }, {
                         description: "Width of the screen:",
-                        code: "width "
+                        code: "width screen sensing"
                     }, {
                         description: "Height of the screen:",
-                        code: "height"
+                        code: "height screen sensing"
                     },
                     {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                      {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f316b4f4852797a2e706e67",
-                        code: "hour()"
+                        code: "hour()",
+                        tags: "hour time sensing"
                     }, {
                         description: "Hour in military time:",
-                        code: "hourMilitary()"
+                        code: "hourMilitary()",
+                        tags: "hour military time sensing"
                     }, {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f37696e366966412e706e67",
-                        code: "minute()"
+                        code: "minute()",
+                        tags: "minute sensing current"
                     }, {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f685749394354722e706e67",
-                        code: "second()"
+                        code: "second()",
+                        tags: "current second time sensing"
                     }, {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f5768735166316d2e706e67",
-                        code: "dayOfMonth()"
+                        code: "dayOfMonth()",
+                        tags: "current date day month sensing"
                     }, {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f674c35786b62652e706e67",
-                        code: "dayOfWeek()"
+                        code: "dayOfWeek()",
+                        tags: "current day of week time sensing"
                     }, {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f7735634a3561742e706e67",
-                        code: "month()"
+                        code: "month()",
+                        tags: "current month time sensing"
                     }, {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f697357785538432e706e67",
-                        code: "year()"
+                        code: "year()",
+                        tags: "current year time sensing"
                     }, 
                     {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                     {
@@ -1672,12 +1680,13 @@
                     Pen: [{
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f6241636d366a482e706e67",
                         code: 'clearPen()',
-                        tags: "pen clear"
+                        tags: "pen clear draw"
                     }, 
                     {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                     {
                         url:"./images/stamp.png",
-                        description:"This block does not exist in WoofJS."
+                        description:"This block does not exist in WoofJS.",
+                        tags: "pen stamp"
                     },
                     {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                     {
@@ -1687,13 +1696,13 @@
                     }, {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f354837696a42772e706e67",
                         code: 'sprite1.penUp()',
-                        tags: "pen up"
+                        tags: "pen up draw"
                     },
                     {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                      {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f504c744b5663762e706e67",
                         code: 'sprite1.penColor = "blue"\nsprite1.penColor = "#ff20ff"\nsprite1.penColor = "rgb(10, 100, 20)"',
-                        tags: "pen color"
+                        tags: "pen color set"
                     }, 
                     {
                         url:"./images/penColor.png",
@@ -1721,278 +1730,290 @@
                     Operations: [{
                             url: "./images/68747470733a2f2f692e696d6775722e636f6d2f6e73446b436b742e706e67",
                             code: "sprite1.x + 4",
-                            tags: "addition add"
+                            tags: "addition add plus operations"
                         }, {
                             url: "./images/68747470733a2f2f692e696d6775722e636f6d2f585341415449502e706e67",
                             code: "sprite1.y - 10",
-                            tags: "minus subtraction"
+                            tags: "minus subtraction operations"
                         }, {
                             url: "./images/68747470733a2f2f692e696d6775722e636f6d2f756a6e477045362e706e67",
                             code: "sprite1.radius * 2",
-                            tags: "times multiply multiplication"
+                            tags: "times multiply multiplication operations"
                         }, {
                             url: "./images/68747470733a2f2f692e696d6775722e636f6d2f423042476b434a2e706e67",
                             code: "maxX / 2",
-                            tags: "divide division"
+                            tags: "divide division operations fraction"
                         }, 
                         {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                         {
                             url: "./images/68747470733a2f2f692e696d6775722e636f6d2f664148754477792e706e67",
                             code: "random(1, 10)",
-                            tags: "random"
+                            tags: "random pick operations"
                         }, {
                             description: "Random X value on the screen between minX and maxX:",
-                            code: "randomX()"
+                            code: "randomX()",
+                            tags: "operations random x"
                         }, {
                             description: "Random Y value on the screen between minY and maxY:",
-                            code: "randomY()"
+                            code: "randomY()",
+                            tags: "operations random y"
+
                         }, {
                             description: "Random color:",
-                            code: "randomColor()"
+                            code: "randomColor()",
+                            tags: "random color operations"
                         }, 
                         {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                         {
                             url: "./images/68747470733a2f2f692e696d6775722e636f6d2f3268716f4866682e706e67",
                             code: "sprite1.x < minX",
-                            tags: "less than compare"
+                            tags: "less than compare operations"
                         }, {
                             url: "./images/68747470733a2f2f692e696d6775722e636f6d2f715837646d77742e706e67",
                             code: "sprite1.y > maxY",
-                            tags: "greater than compare"
+                            tags: "greater than compare operations"
                         }, {
                             url: "./images/68747470733a2f2f692e696d6775722e636f6d2f3766384652625a2e706e67",
                             code: "timer === 0",
-                            tags: "equal to same as"
+                            tags: "equal to same as operations"
                         },
 
                         {
                             description: "Less Than or Equal To:",
-                            code: "sprite1.y <= minY"
+                            code: "sprite1.y <= minY",
+                            tags: "less than equal operations"
                         }, {
                             description: "Greater Than or Equal To:",
-                            code: "sprite1.x >= maxX"
+                            code: "sprite1.x >= maxX",
+                            tags: "greater than equal operations"
                         }, {
                             description: "Not Equals:",
-                            code: "timer !== 0"
+                            code: "timer !== 0",
+                            tags: "not equals operations"
                         }, {
                             description: "Between Two Numbers :",
-                            code: "sprite1.x.between(minX, maxX)"
+                            code: "sprite1.x.between(minX, maxX)",
+                            tags: "between two numbers operations"
                         }, 
                         {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                         {
                             url: "./images/68747470733a2f2f692e696d6775722e636f6d2f5559684d3574702e706e67",
                             code: "mouseDown && sprite1.mouseOver",
-                            tags: "and"
+                            tags: "and operations"
                         }, {
                             url: "./images/68747470733a2f2f692e696d6775722e636f6d2f505433496c6e302e706e67",
                             code: "sprite1.mouseOver || sprite2.mouseOver",
-                            tags: "or"
+                            tags: "or operations"
                         }, {
                             url: "./images/68747470733a2f2f692e696d6775722e636f6d2f66487253395a4b2e706e67",
                             code: '!(mouseDown)',
-                            tags: "not"
+                            tags: "not operations"
                         }, 
                         {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                         {
                             url: "./images/68747470733a2f2f692e696d6775722e636f6d2f5671674c32696f2e706e67",
                             code: '"hello " + "world"',
-                            tags: "combine string add append join"
+                            tags: "combine string add append join operations"
                         }, {
                             url: "./images/68747470733a2f2f692e696d6775722e636f6d2f684952693678512e706e67",
                             code: '"world".substring(0,1)',
-                            tags: "cut string"
+                            tags: "cut string operations substring letter"
                         }, {
                             url: "./images/68747470733a2f2f692e696d6775722e636f6d2f717354526143782e706e67",
-                            code: '"world".length'
+                            code: '"world".length',
+                            tags: "operations length"
                         }, 
                         {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                         {
                             url: "./images/68747470733a2f2f692e696d6775722e636f6d2f4e466f59396c382e706e67",
                             code: "sprite1.x % 2",
-                            tags: "reminder modulus"
+                            tags: "reminder modulus mod operations"
                         }, {
                             url: "./images/68747470733a2f2f692e696d6775722e636f6d2f746b76796a52542e706e67",
                             code: "Math.round(5.763)",
-                            tags: 'round'
+                            tags: 'round operations math'
                         },
                         {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                          {
                             url:"./images/sqrt.png",
                             code:"sqrt(9)",
-                            tags:"sqrt root square"
+                            tags:"sqrt root square operations"
                         },
                         {
                             url:"./images/abs.png",
                             code:"abs(-9)",
-                            tags:"abs absolute value"
+                            tags:"abs absolute value operations"
                         },
                         {
                             url:"./images/floor.png",
                             code:"floor(9.8)",
-                            tags:"floor round"
+                            tags:"floor round operations"
                         },
                         {
                             url:"./images/ceiling.png",
                             code:"ceiling(9.8)",
-                            tags:"ceiling round"
+                            tags:"ceiling round operations"
                         },
                         {
                             url:"./images/sin.png",
                             code:"sin(90)",
                             description: "This function takes an input in degrees.",
-                            tags:"sin sine"
+                            tags:"sin sine degrees operations"
                         },
                         {
                             url:"./images/cos.png",
                             code:"cos(90)",
                             description: "This function takes an input in degrees.",
-                            tags:"cos cosine"
+                            tags:"cos cosine degrees operations"
                         },
                         {
                             url:"./images/tan.png",
                             code:"tan(90)",
                             description: "This function takes an input in degrees.",
-                            tags:"tan  tangent"
+                            tags:"tan tangent degrees operations"
                         },
                         {
                             url:"./images/asin.png",
                             code:"asin(1)",
                             description: "This function takes an input in degrees.",
-                            tags:"asin arcsin inverse"
+                            tags:"asin arcsin inverse degrees operations"
                         },
                         {
                             url:"./images/acos.png",
                             code:"acos(0)",
                             description: "This function takes an input in degrees.",
-                            tags:"acos arccos inverse"
+                            tags:"acos arccos inverse degrees operations"
                         },
                         {
                             url:"./images/atan.png",
                             code:"atan(1)",
                             description: "This function takes an input in degrees.",
-                            tags:"atan arctan inverse"
+                            tags:"atan arctan inverse degrees operations"
                         },
                         {
                             url:"./images/ln.png",
                             code:"ln(4)",
-                            tags:"ln natural log"
+                            tags:"ln natural log operations"
                         },
                         {
                             url:"./images/log.png",
                             code:"log(100)",
                             description: "This function is log base 10.",
-                            tags:"log logarithm"
+                            tags:"log logarithm operations"
                         },
                         {
                             url:"./images/e.png",
                             code:"pow(Math.E,1)",
-                            tags:"e to the power"
+                            tags:"e to the power operations"
                         },
                         {
                             url:"./images/10.png",
                             code:"pow(10,2)",
-                            tags:"10 to the power"
+                            tags:"10 to the power operations"
                         },
                     ],
                     Data: [{
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f656963593537492e706e67",
                         code: "var variable1",
-                        tags: "variable"
+                        tags: "variable make create data"
                     }, {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f4859415458584c2e706e67",
                         code: "variable1 = 0",
-                        tags: "variable set"
+                        tags: "variable set data equals"
                     }, {
                         description: "You can combine creating/naming a variable with setting it:",
                         code: "var variable1 = 0",
-                        tags: "variable"
+                        tags: "variable data set equals create"
                     }, {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f704b4e46794d772e706e67",
                         code: "variable1 += 1",
-                        tags: "increase change decrease"
+                        tags: "increase add plus change by data change decrease"
                     }, {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f4447323649634e2e706e67",
                         code: 'new Text({\n  text: () => "variable1: " + variable1,\n  x: 0,\n  y: 0,\n  size: 30\n})',
                         description: '"Showing a variable" works by giving a Text Sprite a function instead of a "string in quotes" as its text attribute. The Text Sprite constantly reevaluates the function which keeps the value on the screen in sync with the value of the variable.',
-                        tags: "show variable text"
+                        tags: "show variable text data"
                     }, 
                     {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f7366536d6f44542e706e67",
                         code: "var array1 = []",
-                        tags: "array list"
+                        tags: "array list make data"
                     }, {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f304b306e5144332e706e67",
                         code: "array1.push('thing')",
                         description: "You can add anything to an array in JavaScript, including numbers, strings, but even Sprites, functions, and other arrays.",
-                        tags: "add array list"
+                        tags: "add array list push data"
                     }, {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f516754647978652e706e67",
                         code: "array1.length",
-                        tags: "array list length size"
+                        tags: "array list length size data"
                     }, {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f6a587479364c542e706e67",
                         code: "array1[0]",
-                        tags: "array list get element"
+                        tags: "array list get item data element"
                     }, {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f6a6170377166522e706e67",
                         code: "array1.remove(thing)",
-                        tags: "array list remove delete",
+                        tags: "array list remove delete data",
                         description: "Note: this only removes things from a list. It doesn't delete them from the screen (use sprite1.delete() for that)."
                     }, {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f49625a4846706d2e706e67",
                         code: "array1.includes(thing)",
-                        tags: "contains includes array list"
+                        tags: "contains includes array list data"
                     }, {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f5949473973746c2e706e67",
                         code: 'new Text({text: () => "array1: " + array1})',
+                        tags: "show list data"
                     }, {
                         description: 'Do something for each thing in an array:',
                         code: "array1.forEach(thing => {\n  console.log(thing)\n})",
-                        tags: "for each loop list array"
+                        tags: "for each loop list array data"
                     }, {
                         description: 'Check if a condition holds for at least one thing in an array:',
                         code: "if (array1.some(thing => thing.over(mouseX, mouseY))) {\n  \/* do something here */\n}",
-                        tags: "reduce some any list array"
+                        tags: "reduce some any list array data overcheck  if condition"
                     }, {
                         description: 'Check if a condition holds for everything in an array:',
                         code: "if(array1.every(thing => thing.touching(sprite1))) {\n  \/* do something here */\n}",
-                        tags: "every list arry reduce"
+                        tags: "every list arry reduce if check data"
                     }, {
                         description: "Find something in an array:",
                         code: "var needle = array1.find(thing => thing.touching(sprite1))\nif(needle) {\n  console.log(needle)\n}",
-                        tags: "find search list array"
+                        tags: "find search list array data"
                     }, {
                         html: "You can automatically generate an array with a range of numbers by using the <code>range()</code> function:"
                     }, {
                         html: "<strong>Example 1:</strong> Generate this array: <code>[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]</code><br>It starts at 1, ends <i>before</i> 11, and goes up by 1 every time:",
                         code: "var oneToTen = range(1, 11, 1)",
-                        tags: "range array list numbers"
+                        tags: "range array list numbers data"
                     }, {
                         html: "<strong>Example 2:</strong> Generate this array: <code>[15, 10, 5, 0, -5]</code><br>It starts at 15, ends <i>before</i> -10, and goes down by 5 every time:",
                         code: "var fifteenToZero = range(15, -10, -5)",
-                        tags: "range array list numbers"
+                        tags: "range array list numbers data"
                     }],
                     "More Blocks": [{
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f415a6c526236682e706e67",
                         description: "You can create a function with a name:",
                         code: "var namedFunction = (input1, input2) => {\n// do stuff here with input1 and input2\n}",
-                        tags: "block function method input"
+                        tags: "block function method input more blocks"
                     }, {
                         description: "You can run a function by putting parentheses next to its name:",
-                        code: "namedFunction(1, 2)"
+                        code: "namedFunction(1, 2)",
+                        tags: "run more blocks function"
                     }, {
                         description: "You need to do this even if the function takes no parameters:",
-                        code: "namedFunctionWithoutParameters()"
+                        code: "namedFunctionWithoutParameters()",
+                        tags: "more blocks parameters"
                     }, {
                         description: "But you can also create a function without a name, which is called an anonymous function:",
                         code: "forever(() => {\n  sprite.x++\n})",
-                        tags: "anonymous function"
+                        tags: "anonymous function more blocks"
                     },
                     {
                         description: "Import JavaScript code from an external URL. The second input happens after the code is imported.",
                         code: "// import the lodash utility library\n// https://lodash.com/docs/4.17.4\nimportCodeURL('https://cdn.jsdelivr.net/lodash/4.17.4/lodash.min.js', () => {\n _.flatten([1, [2, [3, [4]], 5]])\n})",
-                        tags: "import code url require firebase library module"
+                        tags: "import code url require firebase library module more blocks"
                     },
                     
                     {
@@ -2050,18 +2071,17 @@
                     }
                     var options = {
                         shouldSort: true,
-                        threshold: 0.3,
+                        tokenize: true,
+                        threshold: 0.0,
+                        includeMatches: true,
+                        findAllMatches: true,
+                        matchAllTokens: true,
                         maxPatternLength: 15,
                         keys: [{
                             name: 'tags',
-                            weight: 0.8
-                        }, {
-                            name: 'description',
-                            weight: 0.1
-                        }, {
-                            name: 'code',
-                            weight: 0.1
-                        }]
+                            weight: 1.0
+                        }, 
+                        ]
                     }
                     var fuse = new Fuse(menu, options)
                     return fuse.search(this.search)
