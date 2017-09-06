@@ -629,27 +629,6 @@
       // returns the name of a project, inlcuding the current revision
       return window.location.hash.substring(1, window.location.hash.length);
     }
-    var getCurrentRevisionCode = function(revisions) {
-      // returns the code that corresponds to the current project and revision
-      var revision = parseInt(window.location.hash.substring(1, window.location.hash.length).split("/")[1])
-
-      var keys = Object.keys(revisions)
-      if (keys.length > 1){
-        keys = keys.slice(1, keys.length)
-      }
-
-
-      var key
-      if (!isNaN(revision) && (revision !== 0 && revision !== -1 * keys.length) && Math.abs(revision) < keys.length + 1){
-        if (revision < 0){
-          revision = keys.length + revision // -1 gives the previous revision
-        }
-        key = keys[revision - 1]
-      } else {
-        key = keys[keys.length - 1]
-      }
-      return revisions[key].code
-    }
     var currentHash = window.location.hash
 
     var app = new Vue({
@@ -1233,15 +1212,14 @@
         } else if (app.signUpUsername){
           handleLogin(app.signUpUsername, user.uid)
         }
-
+        
         // this puts the user's most recent project under their name
-        firebase.database().ref('/code/').orderByChild("--uid").equalTo(user.uid).once('value').then(function(snapshot) {
+        firebase.database().ref('/code-meta-data/').orderByChild("uid").equalTo(user.uid).once('value').then(function(snapshot) {
           if (snapshot.val()){
             app.projects = []
             for (var key in snapshot.val()) {
               var project = snapshot.val()[key]
-              var versions = Object.keys(project)
-              var t = project[versions[versions.length-1]].time
+              var t = project.currentVersionTime
               app.projects.push({key: key, time: t, code: project.code})
             }
           }
@@ -1280,10 +1258,25 @@
     var editorVal = "setBackdropURL('./images/outerspace.jpg')\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
     if (getID() != ''){
       editorVal = "// Loading..."
-      firebase.database().ref('/code/' + getID()).once('value').then(function(snapshot) {
+      firebase.database().ref('/code-meta-data/' + getID()).once('value').then(function(snapshot) {
         if (snapshot.val()){
-          myCode = firebase.auth().currentUser && snapshot.val()["--uid"] == firebase.auth().currentUser.uid
-          editor.setValue(getCurrentRevisionCode(snapshot.val()))
+          myCode = firebase.auth().currentUser && snapshot.val()["uid"] == firebase.auth().currentUser.uid
+          
+          var revision = parseInt(window.location.hash.substring(1, window.location.hash.length).split("/")[1])
+          var keys = Object.keys(snapshot.val()["version"])
+          if (!isNaN(revision) && (revision !== 0 && revision !== -1 * keys.length) && Math.abs(revision) < keys.length + 1){
+            if (revision < 0){
+              revision = keys.length + revision // -1 gives the previous revision
+            }
+            var key = keys[revision - 1] // 1-indexed, so the first version is 1
+            
+            firebase.database().ref('/code/' + getID() + '/' + key).once('value').then(function(snapshot) {
+              editor.setValue(snapshot.val().code)
+            })
+          } else {
+            myCode = firebase.auth().currentUser && snapshot.val()["uid"] == firebase.auth().currentUser.uid
+            editor.setValue(snapshot.val().currentVersionText)
+          }
           makeClean()
         } else {
           alert("Could not find a project with the name: " + getID())
@@ -1307,35 +1300,44 @@
             // if the project exists and you own it, push the new code as a revision
             $('#saveModal').modal('hide');
             app.projectNameRequest = "NOT LOADING"
-            firebase.database().ref().child("/code/" + name).push({
-              code: editor.getValue(),
-              time: firebase.database.ServerValue.TIMESTAMP,
-              uid: firebase.auth().currentUser && firebase.auth().currentUser.uid
-            }).then(function(){
-              window.location.hash = name
-              makeClean()
-            }).catch(function(error){
-              alert("Unable to save project: " + error)
-            });
+            saveProjectFirebase({name: name, saveUser: false, newProject: true})
           } else {
             app.projectNameRequest = "NAME TAKEN"
           }
         } else {
           $('#saveModal').modal('hide');
           app.projectNameRequest = "NOT LOADING"
-          firebase.database().ref().child("/code/" + name + "/--uid").set(firebase.auth().currentUser && firebase.auth().currentUser.uid)
-          firebase.database().ref().child("/code/" + name).push({
-            code: editor.getValue(),
-            time: firebase.database.ServerValue.TIMESTAMP,
-            uid: firebase.auth().currentUser && firebase.auth().currentUser.uid
-          }).then(function(){
-            window.location.hash = name
-            myCode = firebase.auth().currentUser
-            makeClean()
-          }).catch(function(error){
-            alert("Unable to save project: " + error)
-          });
+          saveProjectFirebase({name: name, saveUser: true, newProject: false})
         }
+      });
+    }
+    
+    function saveProjectFirebase({name, saveUser, newProject}) {
+      var updates = {}
+      if (saveUser) {
+        updates["/code/" + name + "/--uid"] = firebase.auth().currentUser && firebase.auth().currentUser.uid
+      }
+
+      var revisionId = firebase.database().ref().child("/code/" + name).push().key
+      updates["/code/" + name + "/" + revisionId] = {
+        code: editor.getValue(),
+        time: firebase.database.ServerValue.TIMESTAMP,
+        uid: firebase.auth().currentUser && firebase.auth().currentUser.uid
+      }
+      if (newProject) {
+        updates["/code-meta-data/"+ name + "/projectCreatedTime"] = firebase.database.ServerValue.TIMESTAMP
+      }
+      updates["/code-meta-data/"+ name + "/currentVersionText"] = editor.getValue()
+      updates["/code-meta-data/"+ name + "/currentVersionTime"] = firebase.database.ServerValue.TIMESTAMP
+      updates["/code-meta-data/"+ name + "/uid"] = firebase.auth().currentUser && firebase.auth().currentUser.uid
+      updates["/code-meta-data/"+ name + "/version/" + revisionId] = firebase.database.ServerValue.TIMESTAMP
+      
+      firebase.database().ref().update(updates).then(function(){
+        window.location.hash = name
+        myCode = firebase.auth().currentUser
+        makeClean()
+      }).catch(function(error){
+        alert("Unable to save project: " + error)
       });
     }
 
