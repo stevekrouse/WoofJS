@@ -35,13 +35,15 @@ firebase.database().ref('/code/').on('value', function(snapshot) {
     
 
   _.map(projectsArrayWithRevisionsArray, project => {
-
+    const firstRevision = project.revisions[0]
     const lastRevision = project.revisions[project.revisions.length - 1]
     if (project.name && !project.name.startsWith('-K')) {
+      if (firstRevision.time) {
+        updates["/code-meta-data/"+ project.name + "/projectCreatedTime"] = firstRevision.time
+      }
       if (lastRevision.code) {
         updates["/code-meta-data/"+ project.name + "/currentVersionText"] = lastRevision.code
       }
-      
       if (lastRevision.time) {
         updates["/code-meta-data/"+ project.name + "/currentVersionTime"] = lastRevision.time
       }

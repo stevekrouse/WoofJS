@@ -133,36 +133,24 @@
     }
   })
   
-  var utils = {}
-  utils.projectFirstRevisionTime = function(project){
-    if (project.revisions.length > 0) {
-      return project.revisions[0].time
-    } else {
-      return project.currentVersionTime
-    }
-  }
-  utils.projectLastRevisionTime = function(project){
-    return project.currentVersionTime
-  }
-  
   var aggregateColumns = [
   
     {
       name: "Projects Created Today",
       func: function(row, joins) {
-        return joins.projects.filter(project => project.currentVersionTime).filter(project => new Date().toDateString() == new Date(utils.projectFirstRevisionTime(project)).toDateString()).length
+        return joins.projects.filter(project => project.currentVersionTime).filter(project => new Date().toDateString() == new Date(project.projectCreatedTime).toDateString()).length
       }
     },
     {
       name: "Projects Worked On Today",
       func: function(row, joins) {
-        return joins.projects.filter(project => project.currentVersionTime).filter(project => new Date().toDateString() == new Date(utils.projectLastRevisionTime(project)).toDateString()).length
+        return joins.projects.filter(project => project.currentVersionTime).filter(project => new Date().toDateString() == new Date(project.currentVersionTime).toDateString()).length
       }
     },
     {
       name: "Users Active Today",
       func: function(row, joins) {
-        return Array.from(new Set(joins.projects.filter(project => project.currentVersionTime).filter(project => new Date().toDateString() == new Date(utils.projectLastRevisionTime(project)).toDateString()).map(project => project['--uid']))).length
+        return Array.from(new Set(joins.projects.filter(project => project.currentVersionTime).filter(project => new Date().toDateString() == new Date(project.currentVersionTime).toDateString()).map(project => project['--uid']))).length
       }
     },
     {
@@ -202,14 +190,14 @@
     {
       name: "Last Revision",
       func: function(project, joins) {
-        return utils.projectLastRevisionTime(project)
+        return project.currentVersionTime      
       },
       type: "DATE"
     },
     {
       name: "Created At",
       func: function(project, joins) {
-        return utils.projectFirstRevisionTime(project)
+        return project.projectCreatedTime
       },
       type: "DATE"
     },
@@ -250,7 +238,7 @@
       {
         name: "First Revision",
         func: function(user, joins){
-          return user.projects.map(project => utils.projectFirstRevisionTime(project)).sort()[0]
+          return user.projects.map(project => project.projectCreatedTime).sort()[0]
         },
         type: "DATE" 
       },
@@ -259,10 +247,10 @@
         func: function(user, joins){
           if (user.projects.length > 0){
             // last revision
-            return user.projects.map(project => utils.projectLastRevisionTime(project)).sort().reverse()[0]
+            return user.projects.map(project => project.currentVersionTime).sort().reverse()[0]
           } else {
             // account created
-            return user.projects.map(project => utils.projectFirstRevisionTime(project)).sort()[0]
+            return user.projects.map(project => project.projectCreatedTime).sort()[0]
           }
           
         },
@@ -292,9 +280,8 @@
         projectColumns: projectColumns,
         aggregateColumns: aggregateColumns,
         authenticated: false,
-      },
-      methods: utils
-    })
+      }
+  })
     
   app.authenticated = prompt("Password") == 'codingspace'
     
