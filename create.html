@@ -79,7 +79,6 @@
   <script src="https://unpkg.com/vue@2.0.1/dist/vue.js"></script>
   <script data-presets="es2015" src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.14.0/babel.min.js"></script>
   <script src="https://cdn.rawgit.com/beautify-web/js-beautify/1b52eb1f90daaefa6ff0fa7736f97fbfc58093c1/js/lib/beautify.js"></script>
-
   <style>
 
      html, body {
@@ -269,21 +268,27 @@
       border-color: transparent;   
    }
    
-   #error-block ul  {
+   #error-block div  {
       list-style: none;
-      margin: 0; 
-      padding: 0;
-    }
-    
-    #error-block li {
       margin-top: 10px;
+      padding: 0;
+      font-style: italic;
     }
     
-    #error-block li a {
-      padding-right: 5px; 
+    #error-block a {
+      padding-right: 7px;
       cursor: pointer;
+      text-decoration: underline;
     }
     
+    #error-block div a {
+      padding: 0 7px 0 3px;
+    }
+    
+    .highlight {
+      color: #f2dede;
+      background-color: #a94442;
+    }
 
   </style>
 </head>
@@ -605,15 +610,12 @@
             </span>
           </div>
         </div>
-        <div id="error-block" :style="{display: seenError ? 'block' : 'none'}" class="alert alert-danger fade in">{{errorMessage}}
+        <div id="error-block" :style="{display: seenError ? 'block' : 'none'}" class="alert alert-danger fade in"><a :style="{display: knowErrorLineNo ? 'inline' : 'none'}" @click="goToErrorLine">{{errorLineInfo}}</a>{{errorMessage}}
           <div :style="{display: renameSprite ? 'block' : 'none'}">
             <p>You need to rename sprite1. What would you like to name it?</p> 
             <input @keyup.enter="getSpriteName" class="form-control" type="text" v-model="spriteName" placeholder="Enter sprite name"><button class="btn btn-danger" @click="getSpriteName">Enter</button>
           </div>
-          <ul :style="{display: suggestions.length > 0 ? 'block' : 'none'}">
-            <li>Did you mean: <a v-for="suggestion in suggestions" @click="takeSuggestion(suggestion)">{{suggestion}}</a>
-            </li>
-          </ul>
+          <div :style="{display: suggestions.length > 0 ? 'block' : 'none'}">Did you mean: <a v-for="suggestion in suggestions" @click="takeSuggestion(suggestion)">{{suggestion}}</a></div>
         </div>
       </div>
     
@@ -654,6 +656,9 @@
         suggestions: [],
         suggestVar: false,
         errorMessage: '',
+        errorLineInfo: '',
+        currErrorLineNo: '',
+        knowErrorLineNo: false,
         referenceError: '',
         selectedTheme:'eclipse',
         autoRunChecked: true,
@@ -701,13 +706,10 @@
         getID: getID,
         showError: function(){
           this.seenError = true
+          // Remove error line highlight each time function called
+          editor.removeLineClass(this.currErrorLineNo, 'background', 'highlight');
           this.suggestions = []
           this.errorMessage = []
-          var errorLineNo;
-          // Show error line number if it is defined
-          if (this.error.lineno != undefined) {
-           errorLineNo = "Error on Line " + this.error.lineno + ": ";
-          }
           if (this.error.message.includes("Uncaught ReferenceError") || this.error.message.includes("Uncaught TypeError")) {
             // Remove 'Uncaught..' from error message
             var message = this.error.message.split(" ").slice(2).join(" ");
@@ -729,19 +731,28 @@
               }
             }
             // Display the error message
-            this.errorMessage += errorLineNo + message;
+            this.errorMessage += message;
             // If the suggestion list isn't empty, display it
             this.suggestions.length > 0 ? this.suggestVar = true : false;
           }
           else {
             // Split error message by line break
             var errorDesc = this.error.message.split("\n");
-            // Isolate the line containing the error
-            var errorText = errorDesc.filter(function(n) {
-              return n.indexOf(">") > -1;
-            });
-            // Display the first error message line plus line containing error
-            this.errorMessage += errorDesc[0] + "\n" + errorText;
+            // Display first line of error message
+            this.errorMessage += errorDesc[0];
+            // Find error line number if it is undefined
+            if (this.error.lineno == undefined) {
+              var x = errorDesc[0].slice(errorDesc[0].indexOf(":") + 2);
+              this.error.lineno = x.slice(x.indexOf("(") + 1, x.indexOf(":"));
+            }
+          }
+          // Show error line number if it is defined and line number is accurate
+          if (this.error.lineno != undefined && this.error.lineno <= editor.lineCount()) {
+            this.knowErrorLineNo = true
+            this.errorLineInfo = "Error on Line " + this.error.lineno + ":";
+          }
+          else {
+            this.knowErrorLineNo = false
           }
         },
         // Change the user code if user clicks suggestion
@@ -754,6 +765,13 @@
             editor.setValue(editor.getValue().replace(/sprite1/g, this.spriteName));
               this.spriteName = '';
               this.renameSprite = false;
+        },
+        // Go to error line
+        goToErrorLine: function() {
+          this.currErrorLineNo = this.error.lineno - 1;
+          editor.scrollIntoView({line: this.currErrorLineNo, ch:0}, editor.getScrollInfo().clientHeight / 2);
+          // Highlight line when user goes to error
+          editor.addLineClass(this.currErrorLineNo, 'background', 'highlight');
         },
         cleanAll: function(){
           if (!this.error && this.code != js_beautify(this.code, {space_after_anon_function: true, indent_size: 2, indent_with_tabs: false })){
@@ -906,7 +924,6 @@
             this.passwordValid = "VALID"
           }
         },
-        
       },
       watch: {
         error: function(newError) {
@@ -914,10 +931,12 @@
             this.showError()
             if (newError.lineno) {
               CodeMirror.commands.markGutter(editor, "error", newError.lineno, newError.message)
-           }
+            }
           }
           else {
             this.seenError = false
+            // Remove highlight from line when error resolved
+            editor.removeLineClass(this.currErrorLineNo, 'background', 'highlight');
           }
         },
       }
@@ -1411,6 +1430,7 @@
           }
         },
     });
+    
     onkeydown = function(e){
       if(e.ctrlKey && e.key == '/'){
         e.preventDefault();
