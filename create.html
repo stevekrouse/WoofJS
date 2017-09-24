@@ -881,6 +881,9 @@
       messagingSenderId: "397293370524"
     };
     firebase.initializeApp(config);
+    
+    console.log(firebase.auth().currentUser)
+        
 
     function clearLoginSignupModal() {
       app.emailError = false;
