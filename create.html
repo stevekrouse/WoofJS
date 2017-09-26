@@ -281,7 +281,6 @@
     }
     
     #error-block a {
-      padding-right: 7px;
       cursor: pointer;
       color: #a94442;;
       text-decoration: underline;
@@ -634,7 +633,7 @@
             </span>
           </div>
         </div>
-        <div id="error-block" :style="{display: seenError ? 'block' : 'none'}" class="alert alert-danger fade in"><img width="25" height="auto" :src="randomEmoji()"> There's a problem on <a v-if="errorLineNumber != undefined" @click="goToErrorLine">line {{errorLineNumber}}</a>
+        <div id="error-block" :style="{display: seenError ? 'block' : 'none'}" class="alert alert-danger fade in"><img width="25" height="auto" :src="randomEmoji()"> There's a problem<span v-if="errorLineNumber != undefined"> on <a @click="goToErrorLine">line {{errorLineNumber}}</a></span>.
           <p><code>{{errorMessage}}</code></p>
           <div v-if="renameSprite"><p>You need to rename sprite1. What would you like to name it?</p><input @keyup.enter="getSpriteName" class="form-control" type="text" v-model="spriteName" placeholder="Enter sprite name"><button class="btn btn-danger" @click="getSpriteName">Enter</button>
           </div>
@@ -962,13 +961,17 @@
               CodeMirror.commands.markGutter(editor, "error", newError.lineno, newError.message)
             }
             // Add highlight class to text containing error
-            editor.addLineClass(this.errorLineNumber - 1, 'text', 'error-highlight');
+            if (this.errorLineNumber != undefined) {
+              editor.addLineClass(this.errorLineNumber - 1, 'text', 'error-highlight');
+            }
           }
           else {
             this.seenError = false
             // Remove highlight from line when error resolved
-           editor.removeLineClass(this.errorLineNumber - 1, 'text', 'error-highlight');
-           this.errorLineNumber = undefined
+            if (this.errorLineNumber != undefined) {
+              editor.removeLineClass(this.errorLineNumber - 1, 'text', 'error-highlight');
+              this.errorLineNumber = undefined
+            }
           }
         }
       }
