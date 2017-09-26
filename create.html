@@ -1466,14 +1466,18 @@
     
     // Track Codemirror cursor activity
     editor.on('cursorActivity', function(){
-      var activeLine =  editor.getCursor().line + 1;
+      var activeLine = editor.getCursor().line + 1;
       // If cursor is on error line, change cursor style
       if (app.errorLineNumber != undefined) {
         if (app.errorLineNumber == activeLine) {
-         app.changeCursor =  true;
+         app.changeCursor = true;
         }
-      } else {
-         app.changeCursor =  true;
+        else {
+         app.changeCursor = false;
+        }
+      } 
+      else {
+        app.changeCursor = false;
       }
     });
 
