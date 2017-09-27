@@ -964,7 +964,6 @@
             // Remove highlight from line when error resolved
             if (this.errorLineNumber != undefined) {
               editor.removeLineClass(this.errorLineNumber - 1, 'text', 'error-highlight');
-              this.errorLineNumber = undefined
             }
           }
         }
@@ -1465,7 +1464,7 @@
     editor.on('cursorActivity', function(){
       var activeLine = editor.getCursor().line + 1;
       // If cursor is on error line, change cursor style
-      if (app.errorLineNumber != undefined) {
+      if (app.errorLineNumber != undefined && app.seenError) {
         if (app.errorLineNumber == activeLine) {
          app.changeCursor = true;
         }
