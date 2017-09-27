@@ -608,7 +608,7 @@
       <div id="codebar" v-show="codebar" @click="codebar= !codebar" :style="{display: 'flex'}">
         <span class="rotate" style="font-size:1.65em">Code</span>
       </div>
-      <div v-show="codePane" :style="{display: !codebar ? 'flex' : 'none'}" id="code" :class="classObject">
+      <div v-show="codePane" :style="{display: !codebar ? 'flex' : 'none'}" id="code" :class="{errorCursorStyle : changeCursor}">
         <div id="CodeNav">
           <div>
             <span style="margin-left:8px; margin-top:4px">Code</span>
@@ -724,11 +724,6 @@
         canClean: function(){
           return !this.error 
         },
-        classObject: function() {
-          return {
-            errorCursorStyle: this.changeCursor
-          }
-        }
       },
       methods: {
         getID: getID,
