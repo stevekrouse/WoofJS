@@ -633,7 +633,7 @@
             </span>
           </div>
         </div>
-        <div id="error-block" :style="{display: seenError ? 'block' : 'none'}" class="alert alert-danger fade in"><img width="25" height="auto" :src="randomEmoji()"> There's a problem<span v-if="errorLineNumber != undefined"> on <a @click="goToErrorLine">line {{errorLineNumber}}</a></span>.
+        <div id="error-block" :style="{display: seenError ? 'block' : 'none'}" class="alert alert-danger fade in"><img width="25" height="auto" :src="randomEmoji"> There's a problem<span v-if="errorLineNumber != undefined"> on <a @click="goToErrorLine">line {{errorLineNumber}}</a></span>.
           <p><code>{{errorMessage}}</code></p>
           <div v-if="renameSprite"><p>You need to rename sprite1. What would you like to name it?</p><input @keyup.enter="getSpriteName" class="form-control" type="text" v-model="spriteName" placeholder="Enter sprite name"><button class="btn btn-danger" @click="getSpriteName">Enter</button>
           </div>
@@ -680,6 +680,7 @@
         errorMessage: '',
         changeCursor: false,
         emojis: ['sad', 'persevering', 'thinking', 'unamused', 'frowning', 'slightly-frowning', 'astonished', 'anguished', 'crying', 'pouting', 'angry', 'confounded', 'grimacing', 'tired', 'worried', 'disappointed', 'steaming', 'weary'],
+        randomEmoji: undefined,
         errorLineNumber: undefined,
         referenceError: '',
         selectedTheme:'eclipse',
@@ -736,6 +737,8 @@
           this.suggestions = []
           this.errorMessage = []
           this.suggestVar = false
+          // Choose random emoji from emojis array
+          this.randomEmoji = './images/' + this.emojis[Math.floor(Math.random() * this.emojis.length)] + '.svg'
           // Remove error line highlight each time function called
           if (this.errorLineNumber != undefined) {
             editor.removeLineClass(this.errorLineNumber - 1, 'text', 'error-highlight');
@@ -796,10 +799,6 @@
         // Go to error line
         goToErrorLine: function() {
           editor.scrollIntoView({line: this.errorLineNumber, ch:0}, editor.getScrollInfo().clientHeight / 2);
-        },
-        // Choose random emoji from emojis array
-        randomEmoji: function() {
-          return './images/' + this.emojis[Math.floor(Math.random() * this.emojis.length)] + '.svg'
         },
         cleanAll: function(){
           if (!this.error && this.code != js_beautify(this.code, {space_after_anon_function: true, indent_size: 2, indent_with_tabs: false })){
