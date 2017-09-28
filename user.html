@@ -40,6 +40,7 @@
   <script id="project-template" type="text/x-template">
     <a class="list-group-item list-group-item-action">{{ project.key }}
       <span class="pull-right">
+        <button class="btn btn-info" style="margin-right: 5px; background-color:#4390BF !important; ; border:none; color:white; " onclick="renameModal()">Rename</button>
         <button class="btn btn-info"     @click="codeClick($event)"       style="margin-right: 5px">View Version<input type="number" min="1" :max="project.revisions.length" :value="project.revisions.length" style="text-align: right; width: 3em"></input></button>
       </span>
     </a>
@@ -51,6 +52,28 @@
       </span>
     </a>
   </script>
+   <div class="modal fade" id="renameModal" tabindex="-1" role="dialog" aria-labelledby="renameeModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title" id="renameeModalLabel">Choose a new name for your project</h4>
+          </div>
+          <div class="modal-body">
+            <!--<div id="projectNameGroup" class="form-group" :class="{'has-info': projectNameInputValue == '', 'has-error': projectNameRequest == 'NAME TAKEN', 'has-success': projectNameInputValue != '' && projectNameRequest != 'NAME TAKEN', animated: projectNameRequest == 'NAME TAKEN' || projectNameLastKeyIllegal, shake: projectNameRequest == 'NAME TAKEN' || projectNameLastKeyIllegal}">-->
+              <input type="text" class="form-control" id="projectName" placeholder="my-project" :value="projectNameInputValue" @input="validate($event)" @keyDown.enter="saveName(projectNameInputValue)">
+            <!--  <span id="nameTaken" :style="{opacity: projectNameRequest == 'NAME TAKEN' ? '1' : '0'}" class="text-danger">That project name has already been taken. Try another one.</span>-->
+            <!--</div>-->
+            <!--<span id="illegalCharacter" class="text-danger" :class="{animated: projectNameLastKeyIllegal, shake: projectNameLastKeyIllegal}" style="display: inline-block" :style="{opacity: projectNameLastKeyIllegal ? '1' : '0'}">You cannot include {{ projectNameLastKeyIllegal }} in project names.</span>-->
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="button" id="saveChanges" class="btn btn-primary" :class="{disabled: projectNameRequest != 'NOT LOADING' || projectNameInputValue == ''}" @click="rename()">Rename Project</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+  
   <script>
   Vue.component('woof-project', {
     template: "#project-template",
@@ -118,7 +141,19 @@
 
   firebase.database().ref('/code/').orderByChild("--uid").equalTo(getUID()).once('value').then(function(snapshot) {
     var projects = objectOfObjectsToArray(snapshot.val())
-  
+    // if rename function is clicked, then run this
+    var rename = function() {
+      var renameRef = firebase.database().ref('code');
+      renameRef.child(oldTitle).once('value').then(function(snap) {
+        var data = snap.val();
+        data.project.key = newTitle;
+        var update = {};
+        update[oldTitle] = null;
+        update[newTitle] = data;
+        return renameRef.update(update);
+        console.log('hello');
+    });
+  }
     // nesting revisions under projects
     app.projects = projects.map(function(project){
       var keys = Object.keys(project)
@@ -135,6 +170,12 @@
       }
     })
   })
+  
+   var renameModal = function(){
+        $('#renameModal').modal('show')
+   }
+   
+   
 </script>
     <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
