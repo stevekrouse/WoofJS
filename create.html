@@ -1300,23 +1300,22 @@
             // if the project exists and you own it, push the new code as a revision
             $('#saveModal').modal('hide');
             app.projectNameRequest = "NOT LOADING"
-            saveProjectFirebase({name: name, saveUser: false, newProject: true})
+            saveProjectFirebase({name: name, newProject: false})
           } else {
+            // if the project exists and you don't own it
             app.projectNameRequest = "NAME TAKEN"
           }
         } else {
+          // if the project doesn't exist, save a new project
           $('#saveModal').modal('hide');
           app.projectNameRequest = "NOT LOADING"
-          saveProjectFirebase({name: name, saveUser: true, newProject: false})
+          saveProjectFirebase({name: name, newProject: true})
         }
       });
     }
     
-    function saveProjectFirebase({name, saveUser, newProject}) {
+    function saveProjectFirebase({name, newProject}) {
       var updates = {}
-      if (saveUser) {
-        updates["/code/" + name + "/--uid"] = firebase.auth().currentUser && firebase.auth().currentUser.uid
-      }
 
       var revisionId = firebase.database().ref().child("/code/" + name).push().key
       updates["/code/" + name + "/" + revisionId] = {
@@ -1324,7 +1323,11 @@
         time: firebase.database.ServerValue.TIMESTAMP,
         uid: firebase.auth().currentUser && firebase.auth().currentUser.uid
       }
+      
       if (newProject) {
+        if (firebase.auth().currentUser) {
+          updates["/code/" + name + "/--uid"] = firebase.auth().currentUser.uid
+        }
         updates["/code-meta-data/"+ name + "/projectCreatedTime"] = firebase.database.ServerValue.TIMESTAMP
       }
       updates["/code-meta-data/"+ name + "/currentVersionText"] = editor.getValue()
