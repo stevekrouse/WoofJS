@@ -63,3 +63,30 @@ firebase.database().ref('/code/').on('value', function(snapshot) {
 
 
 
+// fix the code-meta-data cache by updating projectCreatedTime to the first revision's time
+var objectOfObjectsToArray = function(obj, keyName = "key"){
+  return Object.keys(obj).map(function(key) {
+    var child = obj[key]
+    child[keyName] = key
+    return child;
+  })
+}
+
+require('lodash')
+var _
+setTimeout(() => _ = lodash, 500)
+var updates = {}
+firebase.database().ref('/code-meta-data').on('value', function(snapshot) {
+  const projectsArray = objectOfObjectsToArray(snapshot.val())
+  _.map(projectsArray, project => {
+    if (project.version) {
+      const firstRevisionKey = Object.keys(project.version)[0]
+      const firstRevisionTime = project.version[firstRevisionKey]
+      if (firstRevisionTime) {
+        updates["/code-meta-data/"+ project.key + "/projectCreatedTime"] = firstRevisionTime
+      }
+    }
+  })
+    
+  firebase.database().ref().update(updates)
+})
