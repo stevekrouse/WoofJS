@@ -727,6 +727,7 @@
         showError: function(){
           this.suggestions = []
           this.errorMessage = []
+          this.renameSprite = false
           // Choose random emoji from emojis array
           this.randomEmoji = './images/' + this.emojis[Math.floor(Math.random() * this.emojis.length)] + '.png'
           if (this.error.message.includes("Uncaught ReferenceError") || this.error.message.includes("Uncaught TypeError")) {
