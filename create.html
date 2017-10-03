@@ -678,7 +678,7 @@
         suggestions: [],
         errorMessage: '',
         cursorOnErrorLine: false,
-        emojis: ['angry', 'brain-freeze', 'cold-sweat', 'confused', 'crying', 'disappointed', 'flushed', 'persevering', 'pretty-sad', 'really-sad', 'red-faced', 'tired', 'unamused', 'worried'],
+        emojis: ['angry', 'brain-freeze', 'cold-sweat', 'confused', 'crying', 'disappointed', 'flushed', 'persevering', 'pretty-sad', 'really-sad', 'tired', 'unamused', 'worried'],
         randomEmoji: undefined,
         selectedTheme:'eclipse',
         autoRunChecked: true,
@@ -728,6 +728,10 @@
           this.suggestions = []
           this.errorMessage = []
           this.renameSprite = false
+          // Remove error line highlight
+          if (this.errorLineNumber) {
+            editor.removeLineClass(this.errorLineNumber - 1, 'text', 'error-highlight');
+          }
           // Choose random emoji from emojis array
           this.randomEmoji = './images/' + this.emojis[Math.floor(Math.random() * this.emojis.length)] + '.png'
           if (this.error.message.includes("Uncaught ReferenceError") || this.error.message.includes("Uncaught TypeError")) {
@@ -1518,7 +1522,7 @@
       app.error = undefined
       if (app.errorLineNumber) {
         editor.removeLineClass(app.errorLineNumber - 1, 'text', 'error-highlight');
-      }      
+      }
       try {
         var result = Babel.transform(editor.getValue(), {
           presets: [['es2015', {'modules': false}]], // modules: false to remove strict mode
@@ -1526,32 +1530,30 @@
         })
         var code = result.code
         document.getElementById('preview').contentWindow.addEventListener("mousemove", function(event) {
-            app.mouseX = Math.round(document.getElementById('preview').contentWindow.mouseX)
-            if (app.mouseX >= Math.round(document.getElementById('preview').contentWindow.maxX - 2)) {
-              app.mouseX += " (maxX)"
-            }
-            if (app.mouseX <= Math.round(document.getElementById('preview').contentWindow.minX + 1)) {
-              app.mouseX += " (minX)"
-            }
-            app.mouseY = Math.round(document.getElementById('preview').contentWindow.mouseY)
-            if (app.mouseY >= Math.round(document.getElementById('preview').contentWindow.maxY - 1)) {
-              app.mouseY += " (maxY)"
-            }
-            if (app.mouseY <= Math.round(document.getElementById('preview').contentWindow.minY + 3)) {
-              app.mouseY += " (minY)"
-            }
-          })
-          document.getElementById('preview').contentWindow.addEventListener("error", function(event) {
-            var error = event.error
-            if (error.type == "ImageLoadError") {
-              app.error = {message: "There is a problem with your image URL: " + error.url, lineno: code.substring(0, code.indexOf(error.url)).split('\n').length}
-              app.showError()
-              CodeMirror.commands.markGutter(editor, "error", app.error.lineno, app.error.message)
-            } else {
+          app.mouseX = Math.round(document.getElementById('preview').contentWindow.mouseX)
+          if (app.mouseX >= Math.round(document.getElementById('preview').contentWindow.maxX - 2)) {
+            app.mouseX += " (maxX)"
+          }
+          if (app.mouseX <= Math.round(document.getElementById('preview').contentWindow.minX + 1)) {
+            app.mouseX += " (minX)"
+          }
+          app.mouseY = Math.round(document.getElementById('preview').contentWindow.mouseY)
+          if (app.mouseY >= Math.round(document.getElementById('preview').contentWindow.maxY - 1)) {
+            app.mouseY += " (maxY)"
+          }
+          if (app.mouseY <= Math.round(document.getElementById('preview').contentWindow.minY + 3)) {
+            app.mouseY += " (minY)"
+          }
+        })
+        document.getElementById('preview').contentWindow.addEventListener("error", function(event) {
+          var error = event.error
+          if (error.type == "ImageLoadError") {
+            app.error = {message: "There is a problem with your image URL: " + error.url, lineno: code.substring(0, code.indexOf(error.url)).split('\n').length}
+          } else {
               app.error = event
-              app.showError()
-              CodeMirror.commands.markGutter(editor, "error", app.error.lineno, app.error.message)
             }
+          app.showError()
+          CodeMirror.commands.markGutter(editor, "error", app.error.lineno, app.error.message)
           });
           var script = document.createElement("script");
           script.type = "text/javascript";
