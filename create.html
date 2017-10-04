@@ -46,6 +46,7 @@
   <script type="text/javascript" src="./vendor/codemirror/comment.js"></script>
   <script type="text/javascript" src="./vendor/codemirror/sublime.js"></script>
   <script type="text/javascript" src="./vendor/codemirror/foldcode.js"></script>
+  <script type="text/javascript" src="./vendor/codemirror/mark-selection.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.5.12/clipboard.min.js"></script>
   <link rel="stylesheet" href="./vendor/codemirror/foldgutter.css" />
   <script src="./vendor/codemirror/foldcode.js"></script>
@@ -79,10 +80,9 @@
   <script src="https://unpkg.com/vue@2.0.1/dist/vue.js"></script>
   <script data-presets="es2015" src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.14.0/babel.min.js"></script>
   <script src="https://cdn.rawgit.com/beautify-web/js-beautify/1b52eb1f90daaefa6ff0fa7736f97fbfc58093c1/js/lib/beautify.js"></script>
-
   <style>
 
-     html, body {
+    html, body {
       margin: 0;
       padding: 0;
       height: 100%;
@@ -126,16 +126,15 @@
       flex: 1 0 auto;
       overflow: auto;
       width: 100%;
-
     }
 
     iframe {
-        border: none;
-        flex: 1 0 auto;
-        width: 100%;
+      border: none;
+      flex: 1 0 auto;
+      width: 100%;
     }
 
-  #navbar {
+    #navbar {
       background-color: #6DC0F2;
       position: absolute;
       width: 100%;
@@ -196,7 +195,7 @@
     }
 
     #previewbar, #PreviewNav {
-    background-color:#4875D1;
+      background-color:#4875D1;
     }
 
     #docsbar, #DocsNav {
@@ -253,37 +252,66 @@
       white-space: pre-line;
     }
    
-   #error-block p {
-     margin: 15px 0;
-   }
+    #error-block p {
+      margin: 10px 0 0;
+    }
    
-   #error-block input {
-     width: 50%;
-     display: inline-block;
-     margin-right: 10px;
-   }
+    #error-block input {
+      width: 50%;
+      display: inline-block;
+      margin: 10px 10px 0 0;
+      height: 26px;
+    }
    
-   #error-block input:focus {
+    #error-block .btn {
+      padding: 2px 6px;
+    }
+   
+    #error-block input:focus {
       outline-style: none;
       box-shadow: none;
       border-color: transparent;   
-   }
+    }
    
-   #error-block ul  {
+    #error-block div  {
       list-style: none;
-      margin: 0; 
-      padding: 0;
-    }
-    
-    #error-block li {
       margin-top: 10px;
+      padding: 0;
+      font-style: italic;
     }
     
-    #error-block li a {
-      padding-right: 5px; 
+    #error-block a {
       cursor: pointer;
+      color: #a94442;;
+      text-decoration: underline;
     }
     
+    #error-block div a {
+      padding: 0 7px 0 3px;
+    }
+    
+    .error-highlight  {
+      padding: 4px 0;
+      background-color: #f2dede !important;
+    }
+    
+    .error-highlight span {
+      color: #a94442 !important;
+    }
+        
+    .error-highlight .CodeMirror-selectedtext  {
+      color: #000 !important;
+      background-color: #ebe6e6 !important;
+    }
+    
+    .errorCursorStyle .CodeMirror-cursor {
+      border-left: 1px solid #000;
+    }
+    
+    .errorCursorStyle .CodeMirror-matchingbracket {
+      color: #a94442 !important;
+      background-color: #f2dede !important;
+    }
 
   </style>
 </head>
@@ -580,7 +608,7 @@
       <div id="codebar" v-show="codebar" @click="codebar= !codebar" :style="{display: 'flex'}">
         <span class="rotate" style="font-size:1.65em">Code</span>
       </div>
-      <div v-show="codePane" :style="{display: !codebar ? 'flex' : 'none'}" id="code">
+      <div v-show="codePane" :style="{display: !codebar ? 'flex' : 'none'}" id="code" :class="{errorCursorStyle : cursorOnErrorLine}">
         <div id="CodeNav">
           <div>
             <span style="margin-left:8px; margin-top:4px">Code</span>
@@ -605,15 +633,11 @@
             </span>
           </div>
         </div>
-        <div id="error-block" :style="{display: seenError ? 'block' : 'none'}" class="alert alert-danger fade in">{{errorMessage}}
-          <div :style="{display: renameSprite ? 'block' : 'none'}">
-            <p>You need to rename sprite1. What would you like to name it?</p> 
-            <input @keyup.enter="getSpriteName" class="form-control" type="text" v-model="spriteName" placeholder="Enter sprite name"><button class="btn btn-danger" @click="getSpriteName">Enter</button>
+        <div id="error-block" :style="{display: error ? 'block' : 'none'}" class="alert alert-danger fade in"><img width="25" height="auto" :src="randomEmoji"> There's a problem<span v-if="errorLineNumber"> on <a @click="goToErrorLine">line {{errorLineNumber}}</a></span>.
+          <p><code>{{errorMessage}}</code></p>
+          <div v-if="renameSprite"><p>You need to rename sprite1. What would you like to name it?</p><input @keyup.enter="getSpriteName" class="form-control" type="text" v-model="spriteName" placeholder="Enter sprite name"><button class="btn btn-danger" @click="getSpriteName">Enter</button>
           </div>
-          <ul :style="{display: suggestions.length > 0 ? 'block' : 'none'}">
-            <li>Did you mean: <a v-for="suggestion in suggestions" @click="takeSuggestion(suggestion)">{{suggestion}}</a>
-            </li>
-          </ul>
+          <div v-if="suggestions.length > 0">You may be looking for: <a v-for="suggestion in suggestions" @click="replaceMisspelledWord(suggestion)"><code>{{suggestion}}</code></a></div>
         </div>
       </div>
     
@@ -648,13 +672,14 @@
         codebar:false,
         mouseX: 0,
         mouseY: 0,
-        seenError: false,
+        errorLineNumber: undefined,
         renameSprite: false,
         spriteName: '',
         suggestions: [],
-        suggestVar: false,
         errorMessage: '',
-        referenceError: '',
+        cursorOnErrorLine: false,
+        emojis: ['angry', 'brain-freeze', 'cold-sweat', 'confused', 'crying', 'disappointed', 'flushed', 'persevering', 'pretty-sad', 'really-sad', 'tired', 'unamused', 'worried'],
+        randomEmoji: undefined,
         selectedTheme:'eclipse',
         autoRunChecked: true,
         shortcut: CodeMirror.keyMap["default"] == CodeMirror.keyMap.macDefault ? 'Cmd' : 'Ctrl',     
@@ -699,22 +724,21 @@
       },
       methods: {
         getID: getID,
-        showError: function(){
-          this.seenError = true
+        processError: function() {
           this.suggestions = []
           this.errorMessage = []
-          var errorLineNo;
-          // Show error line number if it is defined
-          if (this.error.lineno != undefined) {
-           errorLineNo = "Error on Line " + this.error.lineno + ": ";
+          this.renameSprite = false
+          // Remove error line highlight
+          if (this.errorLineNumber) {
+            editor.removeLineClass(this.errorLineNumber - 1, 'text', 'error-highlight');
           }
+          // Choose random emoji from emojis array
+          this.randomEmoji = './images/' + this.emojis[Math.floor(Math.random() * this.emojis.length)] + '.png'
           if (this.error.message.includes("Uncaught ReferenceError") || this.error.message.includes("Uncaught TypeError")) {
             // Remove 'Uncaught..' from error message
-            var message = this.error.message.split(" ").slice(2).join(" ");
+            this.errorMessage = this.error.message.split(" ").slice(2).join(" ");
             // If error message is 'sprite1 not defined', ask user to rename sprite1
             this.renameSprite = this.error.message.includes('Uncaught ReferenceError: sprite1 is not defined') ? true : false;
-            // Isolate the text causing the error
-            this.referenceError = message.split(" ")[0].split(".").pop();
             // Get alphanumeric user code
             var userCode = editor.getValue().replace(/(?:https?|ftp?|\.\/)[\n\S]+/g,'').match(/[a-zA-Z0-9]+/g);
             // Add Woof methods to the user code 
@@ -722,38 +746,52 @@
             // Search user code for suggestions
             for (var i = 0; i < userCode.length; i++) {
               // Measure the difference between error and user code
-              var distance = window.Levenshtein.get(this.referenceError, userCode[i]);
+              var distance = window.Levenshtein.get(this.findMisspelledWord(this.errorMessage), userCode[i]);
               // Add user code with a distance less than 3 to list of suggestions if it hasn't already been added, it isn't the error, it's longer than a character, and it isn't a numnber
               if (distance < 3 && distance != 0 && this.suggestions.indexOf(userCode[i]) == -1 && userCode[i].length > 1 && isNaN(userCode[i])) {
                 this.suggestions.push(userCode[i]);
               }
             }
-            // Display the error message
-            this.errorMessage += errorLineNo + message;
-            // If the suggestion list isn't empty, display it
-            this.suggestions.length > 0 ? this.suggestVar = true : false;
           }
           else {
             // Split error message by line break
             var errorDesc = this.error.message.split("\n");
-            // Isolate the line containing the error
-            var errorText = errorDesc.filter(function(n) {
-              return n.indexOf(">") > -1;
-            });
-            // Display the first error message line plus line containing error
-            this.errorMessage += errorDesc[0] + "\n" + errorText;
+            // Display first line of error message
+            // Remove 'unknown' from first line if it exists
+            var t = errorDesc[0].split(" ");
+            this.errorMessage += t[0] == "unknown:" ? t.slice(1, t.length - 1).join(" ") : this.errorMessage += errorDesc[0];
+            // Find error line number if it is undefined
+            if (!this.error.lineno) {
+              var x = errorDesc[0].slice(errorDesc[0].indexOf(":") + 2);
+              this.error.lineno = x.slice(x.indexOf("(") + 1, x.indexOf(":"));
+            }
+          }
+          // Show error line number if it is accurate
+          if (this.error.lineno <= editor.lineCount()) {
+            this.errorLineNumber = this.error.lineno;
+            // Add highlight to error line
+            editor.addLineClass(this.errorLineNumber - 1, 'text', 'error-highlight');
+          } else {
+            this.errorLineNumber = undefined
           }
         },
-        // Change the user code if user clicks suggestion
-        takeSuggestion: function(x) {
-          editor.setValue(editor.getValue().replace(new RegExp("\\b" + this.referenceError + "\\b", 'g'), x));
-          this.suggestVar = false;
+        // Find misspelling in user code
+        findMisspelledWord: function(typo) {
+          return typo.split(" ")[0].split(".").pop();
+        },
+        // Change user code if user clicks suggestion
+        replaceMisspelledWord: function(x) {
+          editor.setValue(editor.getValue().replace(new RegExp("\\b" + this.findMisspelledWord(this.errorMessage) + "\\b", 'g'), x));
         },
         // Rename sprite1 with user input
         getSpriteName: function() {
-            editor.setValue(editor.getValue().replace(/sprite1/g, this.spriteName));
-              this.spriteName = '';
-              this.renameSprite = false;
+          editor.setValue(editor.getValue().replace(/sprite1/g, this.spriteName));
+          this.spriteName = '';
+          this.renameSprite = false;
+        },
+        // Go to error line
+        goToErrorLine: function() {
+          editor.scrollIntoView({line: this.errorLineNumber, ch:0}, editor.getScrollInfo().clientHeight / 2);
         },
         cleanAll: function(){
           if (!this.error && this.code != js_beautify(this.code, {space_after_anon_function: true, indent_size: 2, indent_with_tabs: false })){
@@ -904,20 +942,6 @@
           var password = $event.target.value
           if (/^.{6,}$/.test(password)){
             this.passwordValid = "VALID"
-          }
-        },
-        
-      },
-      watch: {
-        error: function(newError) {
-          if (newError) {
-            this.showError()
-            if (newError.lineno) {
-              CodeMirror.commands.markGutter(editor, "error", newError.lineno, newError.message)
-           }
-          }
-          else {
-            this.seenError = false
           }
         },
       }
@@ -1413,7 +1437,29 @@
             "asi": true
           }
         },
+        // Added to allow users to see if highlighted error line is selected.
+        styleSelectedText: true
     });
+    
+    // Track Codemirror cursor activity
+    editor.on('cursorActivity', function(){
+      var activeLine = editor.getCursor().line + 1;
+      // If cursor is on error line, change cursor style
+      if (app.errorLineNumber && app.error) {
+        if (app.errorLineNumber == activeLine) {
+         app.cursorOnErrorLine = true;
+        }
+        else {
+         app.cursorOnErrorLine = false;
+        }
+      } 
+      else {
+        app.cursorOnErrorLine = false;
+      }
+    });
+
+
+
     onkeydown = function(e){
       if(e.ctrlKey && e.key == '/'){
         e.preventDefault();
@@ -1477,55 +1523,51 @@
     function tryRunningCode() {
       app.code = editor.getValue()
       app.error = undefined
-
+      if (app.errorLineNumber) {
+        editor.removeLineClass(app.errorLineNumber - 1, 'text', 'error-highlight');
+      }
       try {
         var result = Babel.transform(editor.getValue(), {
           presets: [['es2015', {'modules': false}]], // modules: false to remove strict mode
           retainLines: true
         })
         var code = result.code
-        try {
-          document.getElementById('preview').contentWindow.addEventListener("mousemove", function(event) {
-            app.mouseX = Math.round(document.getElementById('preview').contentWindow.mouseX)
-            if (app.mouseX >= Math.round(document.getElementById('preview').contentWindow.maxX - 2)) {
-              app.mouseX += " (maxX)"
-            }
-            if (app.mouseX <= Math.round(document.getElementById('preview').contentWindow.minX + 1)) {
-              app.mouseX += " (minX)"
-            }
-
-            app.mouseY = Math.round(document.getElementById('preview').contentWindow.mouseY)
-            if (app.mouseY >= Math.round(document.getElementById('preview').contentWindow.maxY - 1)) {
-              app.mouseY += " (maxY)"
-            }
-            if (app.mouseY <= Math.round(document.getElementById('preview').contentWindow.minY + 3)) {
-              app.mouseY += " (minY)"
-            }
-          })
-          document.getElementById('preview').contentWindow.addEventListener("error", function(event) {
-            var error = event.error
-            app.seenError = false
-            if (error.type == "ImageLoadError") {
-              app.error = {message: "There is a problem with your image URL: " + error.url, lineno: code.substring(0, code.indexOf(error.url)).split('\n').length}
-            } else {
-              app.error = event
-            }
-
-          });
-          var script = document.createElement("script");
-          script.type = "text/javascript";
-          script.crossorigin = "anonymous"
-          script.text = code
-          document.getElementById('preview').contentDocument.body.appendChild(script)
-        }
-        catch (e) {
-          app.seenError = false
-          app.error = e;
-        }
+        document.getElementById('preview').contentWindow.addEventListener("mousemove", function(event) {
+          app.mouseX = Math.round(document.getElementById('preview').contentWindow.mouseX)
+          if (app.mouseX >= Math.round(document.getElementById('preview').contentWindow.maxX - 2)) {
+            app.mouseX += " (maxX)"
+          }
+          if (app.mouseX <= Math.round(document.getElementById('preview').contentWindow.minX + 1)) {
+            app.mouseX += " (minX)"
+          }
+          app.mouseY = Math.round(document.getElementById('preview').contentWindow.mouseY)
+          if (app.mouseY >= Math.round(document.getElementById('preview').contentWindow.maxY - 1)) {
+            app.mouseY += " (maxY)"
+          }
+          if (app.mouseY <= Math.round(document.getElementById('preview').contentWindow.minY + 3)) {
+            app.mouseY += " (minY)"
+          }
+        })
+        document.getElementById('preview').contentWindow.addEventListener("error", function(event) {
+          var error = event.error
+          if (error.type == "ImageLoadError") {
+            app.error = {message: "There is a problem with your image URL: " + error.url, lineno: code.substring(0, code.indexOf(error.url)).split('\n').length}
+          }
+          else {
+            app.error = event
+          }
+          app.processError()
+          CodeMirror.commands.markGutter(editor, "error", app.error.lineno, app.error.message)
+        });
+        var script = document.createElement("script");
+        script.type = "text/javascript";
+        script.crossorigin = "anonymous"
+        script.text = code
+        document.getElementById('preview').contentDocument.body.appendChild(script)
       }
       catch (e) {
-        app.seenError = false
         app.error = e
+        app.processError()
       }
     }
 
