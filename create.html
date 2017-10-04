@@ -637,7 +637,7 @@
           <p><code>{{errorMessage}}</code></p>
           <div v-if="renameSprite"><p>You need to rename sprite1. What would you like to name it?</p><input @keyup.enter="getSpriteName" class="form-control" type="text" v-model="spriteName" placeholder="Enter sprite name"><button class="btn btn-danger" @click="getSpriteName">Enter</button>
           </div>
-          <div v-if="suggestions.length > 0">You may be looking for: <a v-for="suggestion in suggestions" @click="takeSuggestion(suggestion)"><code>{{suggestion}}</code></a></div>
+          <div v-if="suggestions.length > 0">You may be looking for: <a v-for="suggestion in suggestions" @click="replaceMisspelledWord(suggestion)"><code>{{suggestion}}</code></a></div>
         </div>
       </div>
     
@@ -724,7 +724,7 @@
       },
       methods: {
         getID: getID,
-        showError: function(){
+        processError: function(){
           this.suggestions = []
           this.errorMessage = []
           this.renameSprite = false
@@ -780,7 +780,7 @@
           return typo.split(" ")[0].split(".").pop();
         },
         // Change user code if user clicks suggestion
-        takeSuggestion: function(x) {
+        replaceMisspelledWord: function(x) {
           editor.setValue(editor.getValue().replace(new RegExp("\\b" + this.findMisspelledWord(this.errorMessage) + "\\b", 'g'), x));
         },
         // Rename sprite1 with user input
@@ -1549,21 +1549,22 @@
           var error = event.error
           if (error.type == "ImageLoadError") {
             app.error = {message: "There is a problem with your image URL: " + error.url, lineno: code.substring(0, code.indexOf(error.url)).split('\n').length}
-          } else {
-              app.error = event
-            }
-          app.showError()
+          }
+          else {
+            app.error = event
+          }
+          app.processError()
           CodeMirror.commands.markGutter(editor, "error", app.error.lineno, app.error.message)
-          });
-          var script = document.createElement("script");
-          script.type = "text/javascript";
-          script.crossorigin = "anonymous"
-          script.text = code
-          document.getElementById('preview').contentDocument.body.appendChild(script)
+        });
+        var script = document.createElement("script");
+        script.type = "text/javascript";
+        script.crossorigin = "anonymous"
+        script.text = code
+        document.getElementById('preview').contentDocument.body.appendChild(script)
       }
       catch (e) {
         app.error = e
-        app.showError()
+        app.processError()
       }
     }
 
