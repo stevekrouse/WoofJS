@@ -232,6 +232,12 @@
       startLinting(cm);
     }
   });
+  
+  CodeMirror.commands.markGutter = function(cm, severity, line, message) {
+    var tipLabel = document.createDocumentFragment();
+    tipLabel.appendChild(annotationTooltip({severity: severity, message: message}));
+    cm.setGutterMarker(line - 1, GUTTER_ID, makeMarker(tipLabel, severity, false, cm.state.lint.options.tooltips));
+  }
 
   CodeMirror.defineExtension("performLint", function() {
     if (this.state.lint) startLinting(this);

@@ -106,12 +106,14 @@
     "if in instanceof isnt new no not null of off on or return switch then throw true try typeof until void while with yes").split(" ");
   
   
-  var spriteProps = ["brightness = 50", "width", "height",  "x", "y", "angle", "x = 10", "y = 10", "angle = UP", "rotationStyle", "showing", "penColor", "penWidth", "deleted", "showCollider", "toJSON", "lastX", "lastY", "distanceTo(sprite1)", "move(10)", "setRotationStyle('NO ROTATE')", "touching", "over", "turnLeft", "turnRight", "sendToBack()", "sendToFront()", "penUp()", "show()", "hide()", "pointTowards(sprite1)", "onMouseDown(() => {\n  \n})", "onMouseUp(() => {\n  \n})", "delete()"]
+  var spriteProps = ["brightness = 50", "width", "height",  "x", "y", "angle", "x = 10", "y = 10", "angle = UP", "rotationStyle", "showing", "penColor", "penWidth", "deleted", "showCollider", "toJSON", "lastX", "lastY", "distanceTo(sprite1)", "move(10)", "setRotationStyle('NO ROTATE')", "touching", "over", "turnLeft", "turnRight", "sendToBack()", "sendToFront()", "penUp()", "penDown()", "show()", "hide()", "pointTowards(sprite1)", "onMouseDown(() => {\n  \n})", "onMouseUp(() => {\n  \n})", "delete()"]
   var imageProps = spriteProps.concat(["setImageURL('./images/SMJjVCL.png)", "width = 100", "height = 10"])
   var rectangleProps = spriteProps.concat(["width = 10", "height = 10", "color", "color = 'blue'"])
   var circleProps = spriteProps.concat(["width = 10", "height = 10", "color", "color = 'blue'"])
   var lineProps = spriteProps.concat(["width = 5", "x1 = 100", "y1 = 100", "color = 'red'"])
   var textProps = spriteProps.concat(["text = 'Hello!'", "size = 10", "color = 'green'"])
+  var regularpolygonProps = spriteProps.concat(["sides = 6", "length = 100", "color", "color = 'orange'"])
+  var ovalProps = spriteProps.concat(["width = 20", "height = 55", "color", "color = 'green'"])
 
   function getCompletions(token, context, keywords, options) {
     var found = [],
@@ -128,6 +130,8 @@
       else if (obj.type == "rectangle") forEach(rectangleProps, maybeAdd);
       else if (obj.type == "circle") forEach(circleProps, maybeAdd);
       else if (obj.type == "line") forEach(lineProps, maybeAdd);
+      else if (obj.type == "oval") forEach(ovalProps, maybeAdd);
+      else if (obj.type == "regularpolygon") forEach(regularpolygonProps, maybeAdd);
       else if (obj.type == "text") forEach(textProps, maybeAdd);
       else if (obj instanceof Array) forEach(arrayProps, maybeAdd);
       else if (typeof obj == "object") for (var name in obj) maybeAdd(name);
@@ -166,10 +170,12 @@
       var txt = 'var textSprite1 = new Text({\n  text: () => "Hello world!", \n  size: 16, \n  color: "rgb(100, 50, 240)", \n  fontFamily: "arial"\n})'
       var clc = 'var circleSprite1 = new Circle({\n  radius: 10, \n  color: "blue", \n  x: 0, \n  y: 0\n})'
       var rct = 'var rectangleSprite1 = new Rectangle({\n  width: 20, \n  height: 55, \n  color: "pink"\n})'
-      var lne = 'var lineSprite1 = new Line({\n  color: "pink", \n  lineWidth: 10, \n  x: -100, \n  y: 100, \n  x1: 10, \n  y1: 20\n})'
+      var ovl = 'var ovalSprite1 = new Oval({\n  width: 20, \n  height: 55, \n  color: "green"\n})'
+      var pol = 'var polygonSprite1 = new Polygon({\n  sides: 6, \n  length: 100, \n  color: "orange"\n})'
+      var lne = 'var lineSprite1 = new Line({\n  color: "pink", \n  width: 10, \n  x: -100, \n  y: 100, \n  x1: 10, \n  y1: 20\n})'
       var iff = 'if () {\n  \n}'
       var elsee = 'else {\n  \n}'
-      var woof = [iff, elsee, 'randomColor()', 'when(() => mouseDown, () => {\n  \n})', 'random(0, 10)', "var variable1 = 0", img, txt, clc, rct, lne, "new Image({})", "new Rectangle({})", "new Line({})", "new Text({})", "new Circle({})", "cameraX", "cameraY", "ready", "height", "width", "minX", "maxX", "minY", "maxY", "randomX()", "randomY()","freeze()", "defrost()", "mouseDown", "mouseX", "mouseY", "pMouseX", "pMouseY", "mouseXSpeed", "mouseYSpeed", "keysDown.includes('UP')", "onMouseMove(() => {\n  \n})", "onMouseDown(() => {\n  \n})", "onMouseUp(() => {\n  \n})", "onKeyDown(() => {\n  \n})", "onKeyUp(() => {\n  \n})", "every(1, 'second', () => {\n  \n})", "forever(() => {\n  \n})", "when(() => mouseDown, () => {\n  \n})", "repeat(10, () => {\n  \n})", "repeatUntil(() => mouseDown, () => {\n  \n})", "after(1, 'second', () => {\n  \n})", "clearPen()", "mobile()"]
+      var woof = [iff, elsee, 'randomColor()', 'when(() => mouseDown, () => {\n  \n})', 'random(0, 10)', "var variable1 = 0", img, txt, clc, rct, ovl, lne, pol, "new Image({})", "new Rectangle({})", "new Line({})", "new Text({})", "new Circle({})","new Polygon({})","new Oval({})", "cameraX", "cameraY", "ready", "height", "width", "minX", "maxX", "minY", "maxY", "randomX()", "randomY()","freeze()", "defrost()", "mouseDown", "mouseX", "mouseY", "pMouseX", "pMouseY", "mouseXSpeed", "mouseYSpeed", "keysDown.includes('UP')", "onMouseMove(() => {\n  \n})", "onMouseDown(() => {\n  \n})", "onMouseUp(() => {\n  \n})", "onKeyDown(() => {\n  \n})", "onKeyUp(() => {\n  \n})", "every(1, 'second', () => {\n  \n})", "forever(() => {\n  \n})", "when(() => mouseDown, () => {\n  \n})", "repeat(10, () => {\n  \n})", "repeatUntil(() => mouseDown, () => {\n  \n})", "after(1, 'second', () => {\n  \n})", "clearPen()", "mobile()",'sqrt(9)','abs(-9)','floor(9.8)','ceiling(9.8)','sin(90)','cos(90)','tan(45)','asin(1)','acos(0)','atan(1)','ln(4)','log(100)','pow(10,2)']
       
       var backdropMethods = ["setBackdropURL('./images/q6Bqraw.jpg')", 
                              "setBackdropColor('blue')", 

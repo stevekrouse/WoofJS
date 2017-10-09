@@ -1,0 +1,1717 @@
+<!DOCTYPE html>
+<html style="height:100%">
+<head>
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="http://woofjs.com/create">
+  <meta name="twitter:title" content="WoofJS">
+  <meta name="twitter:description" content="WoofJS is a Scratch-inspired Javascript library for making games.">
+  <meta name="twitter:image" content="./images/qIgC8Ae.png">
+
+  <meta property="og:image" content="./images/qIgC8Ae.png">
+  <meta property="og:title" content="WoofJS">
+  <meta property="og:description" content="WoofJS is a Scratch-inspired Javascript library for making games.">
+
+  <script src="//load.sumome.com/" data-sumo-site-id="44245233c319d8fe9fb7ce8c7ed64db9381aa56477888a10319261f655cfffe2" async="async"></script>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+
+
+
+  <meta charset="utf-8">
+
+  <title>WoofJS</title>
+  <link rel="shortcut icon" type="image/png" href="./favicon.png"/>
+
+
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/3.4.0/firebase.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/ui/live/0.5/firebase-ui-auth.js"></script>
+  <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/live/0.5/firebase-ui-auth.css" />
+  <script type="text/javascript" src="https://cdn.rawgit.com/showdownjs/showdown/984942e239c9bda522b9c5544aba72647983b3f1/dist/showdown.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.js"></script>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="./vendor/codemirror/codemirror.css">
+  <script type="text/javascript" src="./vendor/codemirror/codemirror.js"></script>
+  <script type="text/javascript" src="./vendor/codemirror/javascript.js"></script>
+  <script type="text/javascript" src="./vendor/codemirror/closebrackets.js"></script>
+  <script type="text/javascript" src="./vendor/codemirror/javascript-hint.js"></script>
+  <script type="text/javascript" src="./vendor/codemirror/javascript-lint.js"></script>
+  <script type="text/javascript" src="./vendor/codemirror/matchbrackets.js"></script>
+  <script type="text/javascript" src="./vendor/codemirror/search.js"></script>
+  <script type="text/javascript" src="./vendor/codemirror/searchcursor.js"></script>
+  <script type="text/javascript" src="./vendor/codemirror/show-hint.js"></script>
+  <script type="text/javascript" src="./vendor/codemirror/comment.js"></script>
+  <script type="text/javascript" src="./vendor/codemirror/sublime.js"></script>
+  <script type="text/javascript" src="./vendor/codemirror/foldcode.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.5.12/clipboard.min.js"></script>
+  <link rel="stylesheet" href="./vendor/codemirror/foldgutter.css" />
+  <script src="./vendor/codemirror/foldcode.js"></script>
+  <script src="./vendor/codemirror/foldgutter.js"></script>
+  <script src="./vendor/codemirror/brace-fold.js"></script>
+  <script src="./vendor/codemirror/comment-fold.js"></script>
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+  <link rel="stylesheet" href="./vendor/codemirror/dialog.css">
+  <link rel="stylesheet" href="./vendor/codemirror/show-hint.css">
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+  <script src="./vendor/codemirror/dialog.js"></script>
+  <link rel="stylesheet" href="./vendor/codemirror/lint.css">
+  <script src="./vendor/codemirror/jshint.min.js"></script>
+  <script src="./vendor/codemirror/lint.js"></script>
+  <script src="./vendor/codemirror/scrollpastend.js"></script>
+  <script src="https://unpkg.com/vue@2.0.1/dist/vue.js"></script>
+  <script data-presets="es2015" src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.14.0/babel.min.js"></script>
+  <script src="https://cdn.rawgit.com/beautify-web/js-beautify/1b52eb1f90daaefa6ff0fa7736f97fbfc58093c1/js/lib/beautify.js"></script>
+  
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/diff_match_patch/20121119/diff_match_patch.js"></script>
+  <link rel=stylesheet href="https://codemirror.net/addon/merge/merge.css">
+  <script src="https://codemirror.net/addon/merge/merge.js"></script>
+  <style>
+
+     html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      width: 100%;
+    }
+
+    #page {
+      position: relative;
+      display: flex;
+      flex-flow: row wrap;
+      align-items: stretch;
+      align-content: stretch;
+      height: 100%;
+    }
+
+    body {
+      background-color: #fff;
+      font-family: sans-serif;
+    }
+
+    h1 {
+      font-weight: normal;
+      font-size: 25px;
+    }
+
+    .CodeMirror {
+      font-size: 13px;
+      flex: 1 0 auto;
+      display: flex;
+      flex-flow: column wrap;
+      align-items: stretch;
+      align-content: stretch;
+      width: 100%;
+      height: 100%;
+    }
+
+    .CodeMirror-scroll {
+      display: flex;
+      flex-flow: column wrap;
+      align-items: stretch;
+      align-content: stretch;
+      flex: 1 0 auto;
+      overflow: auto;
+      width: 100%;
+
+    }
+
+    iframe {
+        border: none;
+        flex: 1 0 auto;
+        width: 100%;
+    }
+
+  #navbar {
+      background-color: #6DC0F2;
+      position: absolute;
+      width: 100%;
+      z-index: 1;
+      top: 0;
+      height: 150px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    #clean-up {
+      background-color: #80CFFF;
+      border: none;
+      color: white;
+    }
+
+    .btn-default {
+      background-color: #49A6DF;
+      border: none;
+      color: white;
+    }
+
+    #container {
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      margin-top: 150px;
+    }
+
+    #previewbar, #docsbar, #projectbar, #codebar {
+       flex-grow: 0.65;
+       align-items: center;
+       display: none;
+       width: 25px;
+       flex-direction: column;
+       justify-content: center;
+    }
+
+    #output, #docs, #projects, #code {
+      flex-flow: column wrap;
+      resize: none;
+      flex: 10 1 25%;
+    }
+
+    #code {
+      width: 25%;
+    }
+    
+    #code-editor {
+      word-wrap: break-word;
+      height: 90%;
+    }
+
+    #PreviewNav, #DocsNav, #ProjectsNav, #CodeNav {
+      height: 25px;
+      text-align: center;
+      color: white;
+      font-size: 1.1em;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    #previewbar, #PreviewNav {
+    background-color:#4875D1;
+    }
+
+    #docsbar, #DocsNav {
+      background-color: #7F68D5;
+    }
+
+    #projectbar, #ProjectsNav {
+      background-color: #AD5FC2;
+    }
+
+    #codebar, #CodeNav {
+      background-color: #49A6DF;
+    }
+
+    @media all and (max-width: 600px) {
+      fieldset {
+        display: none;
+      }
+    }
+
+    #pop {
+      cursor: pointer;
+    }
+
+    @keyframes glowing {
+      0% { background-color: #B20000; box-shadow: 0 0 1px #c9302c; }
+      50% { background-color: #FF0000; box-shadow: 0 0 2px #FF0000; }
+      100% { background-color: #B20000; box-shadow: 0 0 1px #c9302c; }
+    }
+
+    #error {
+      display: none;
+      color: white;
+      margin-right: 5px;
+    }
+
+    .rotate {
+      color: #FFFFFF;
+      -webkit-transform: rotate(90deg);
+      -moz-transform: rotate(90deg);
+      -ms-transform: rotate(90deg);
+      -o-transform: rotate(90deg);
+      transform: rotate(90deg);
+    }
+
+    kbd{
+      background-color: #ababab;
+    }
+    
+    #workflowContainer {
+      height: 135px;
+      width: 600px;
+      background-color: white;
+    }
+    
+    #topworkfLowtaskContainer {
+      overflow-y: scroll;
+      height: 90px;
+      margin-left: 20px;
+    }
+    
+    #workflowBreadcrumbs {
+      padding-bottom: 0px;
+      margin-bottom: 0px;
+      background-color: white;
+    }
+    
+    #workflowContainer > li > a {
+      cursor: pointer;
+    }
+    
+    #workflowHelperMessage{
+      height: 17px;
+      margin-left: 20px;
+    }
+    
+    #workflowHelperMessage > span {
+      color: gray;
+      font-size: 11px;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .workflowTaskBulletInputContainer {
+      width: 100%;
+      background-color: transparent;
+    }
+    .workflowTaskBullet {
+      background-image: url(https://workflowy.com/media/i/bullet.svg);
+      background-color: transparent;
+      display: inline-block;
+      width: 13px;
+      height: 13px;
+      margin-top: 3px;
+    }
+    
+    .workflowTaskBullet:hover {
+      background-color: #aaa;
+      border-radius: 12px;
+    }
+    
+    .workflowTaskInput {
+      border: none;
+      width: 90%;
+      outline: none;
+      background-color: transparent;
+    }
+    
+    .workflowTaskChildren {
+      margin-left: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div id="page">
+    <div id="navbar">
+
+    <div class="btn-group" role="group" aria-label="..." id='loginSingupGroup' :class='{show: loginState == "LOGGEDOUT", hide: loginState == "LOGGEDIN"}'>
+      <button style="margin-left: 5px;" class="btn btn-medium btn-primary" type="button" id="login" :class='{show: loginState == "LOGGEDOUT", hide: loginState == "LOGGEDIN"}' onclick="$('#loginModal').modal('show');" @click="switchToLogin()">Login</button>
+      <button class="btn btn-medium btn-success" type="button" id="signup" :class='{show: loginState == "LOGGEDOUT", hide: loginState == "LOGGEDIN"}' onclick="$('#loginModal').modal('show');" @click="switchToSignUp()">Sign Up</button>
+    </div>
+
+      <div style="margin-left: 5px" id="logggedin" class="hide dropdown" :class='{hide: loginState == "LOGGEDOUT", show: loginState == "LOGGEDIN"}'>
+        <button class="btn btn-medium btn-info dropdown-toggle" type="button" id="loggedin-name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">{{userNameForMenu}} <span class="caret"></span></button>
+        <ul class="dropdown-menu" aria-labelledby="loggedin-name">
+          <li><a href="./workflow.html">New Project</a></li>
+          <li><a href="./team.html">New Team Project <span class="label label-success">beta</span></a></li>
+          <li><a target="_blank" id="login-projects" :href="userProjectsLink">My Projects</a></li>
+          <li onclick="firebase.auth().signOut()"><a>Logout</a></li>
+          <li role="separator" class="divider"></li>
+          <li class="dropdown-header">Recent Projects</li>
+          <li v-for="project in projects.slice(0,10)"><a :href="'#' + project.key">{{project.key}}</a></li>
+        </ul>
+      </div>
+
+    
+      <div id="workflowContainer">
+        <ol class="breadcrumb" id="workflowBreadcrumbs">
+          <li v-for="task in workflowPathTasks.slice(0, workflowPathTasks.length - 1)" @click="workflowPath = task.parentPath.concat([task.id])"><a>{{ task.name }}</a></li>
+        </ol>
+       
+        <div id="topworkfLowtaskContainer">
+          <div>
+            <h4 style="display: inline-block" :style="{textDecoration: workflowPathTasks[workflowPathTasks.length - 1].done ? 'line-through' : 'none'}">{{ workflowPathTasks[workflowPathTasks.length - 1].name }}</h4>
+            <button class="btn btn-xs btn-success" v-show="(workflowPathTasks[workflowPathTasks.length - 1].parentPath || []).length !== 0 && !workflowMerging" @click="workflowTaskMerge()">Merge <img src="https://cdn4.iconfinder.com/data/icons/mini-arrows-3/16/122-512.png" width="10px"></img></button>
+          </div>
+          <div v-if="!workflowPathTasks[workflowPathTasks.length - 1].subtasks.length" @click="addFirstTask()">+</div>
+          <workflow-task v-for="subtask in (workflowPathTasks[workflowPathTasks.length - 1]).subtasks" :task="subtask" :key="subtask.id"></workflow-task>
+        </div>
+        
+        <div id="workflowHelperMessage">
+          <span :style="{opacity: workflowHelperMessageText ? 1 : 0}">{{ workflowHelperMessageText }}</span>
+        </div>
+     </div>
+    
+      <span style="margin:8px" id="save">
+
+      
+        <button id="error" class="btn btn-danger" @click="showError()" :style="{display: error ? 'inline-block' : 'none', animation: seenError ? 'none' : 'glowing 1200ms infinite'}"><span class="glyphicon glyphicon-exclamation-sign"></span> Error</button>
+        <div class="dropdown" style="display:inline;">
+          <button class="btn btn-primary btn-medium dropdown-toggle" type="button" id="toolsDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style='border:none;'>
+            Tools
+            <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="toolsDropdown" style="margin-top:12px;">
+            <li><a @click="undo()"><span class="fa fa-undo"></span> Undo <span><kbd>{{shortcut}}</kbd>+<kbd>Z</kbd></span></a></li>
+            <li><a @click="redo()"><span class="fa fa-repeat"></span> Redo <span><kbd>{{shortcut}}</kbd>+<kbd>Shift</kbd>+<kbd>Z</kbd></span></a></li>
+            <li><a @click="selectAll()"><span class="fa fa-bars"></span> Select All <span><kbd>{{shortcut}}</kbd>+<kbd>A</kbd></span></a></li>
+            <li><a @click="find()"><span class="fa fa-search"></span> Find <span><kbd>{{shortcut}}</kbd>+<kbd>F</kbd></span></a></li>
+            <li role="separator" class="divider"></li>
+            <li><a><input onclick="autoRunClicked()" type="checkbox" id="checkbox" v-model="autoRunChecked"></span> Auto Run</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a @click="cleanAll()" :style="{display: canClean ? 'block' : 'none'}"><span class="glyphicon glyphicon-align-left"></span> Clean Code <span><kbd>{{shortcut}}</kbd>+<kbd>B</kbd></span></a></li>
+            <li><a @click="cleanAll()" class='disabled' :style="{display: canClean ? 'none' : 'block'}" data-toggle="popover" data-trigger="hover" data-content="You can't clean when there's an error." data-placement="top"><span class="glyphicon glyphicon-align-left"></span> Clean Code <span><kbd>{{shortcut}}</kbd>+<kbd>B</kbd></span></a></li>
+            <li role="separator" class="divider"></li>
+            <li><a @click="share()"><span class="glyphicon glyphicon-share-alt"></span> Share</a></li>
+          </ul>
+        </div>
+      </span>
+    </div>
+
+    <div class="modal fade" id="saveModal" tabindex="-1" role="dialog" aria-labelledby="saveModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title" id="saveModalLabel">Choose a name for your project</h4>
+          </div>
+          <div class="modal-body">
+            <div id="projectNameGroup" class="form-group" :class="{'has-info': projectNameInputValue == '', 'has-error': projectNameRequest == 'NAME TAKEN', 'has-success': projectNameInputValue != '' && projectNameRequest != 'NAME TAKEN', animated: projectNameRequest == 'NAME TAKEN' || projectNameLastKeyIllegal, shake: projectNameRequest == 'NAME TAKEN' || projectNameLastKeyIllegal}">
+              <input type="text" class="form-control" id="projectName" placeholder="my-project" :value="projectNameInputValue" @input="validate($event)" @keyDown.enter="saveName(projectNameInputValue)">
+              <span id="nameTaken" :style="{opacity: projectNameRequest == 'NAME TAKEN' ? '1' : '0'}" class="text-danger">That project name has already been taken. Try another one.</span>
+            </div>
+            <span id="illegalCharacter" class="text-danger" :class="{animated: projectNameLastKeyIllegal, shake: projectNameLastKeyIllegal}" style="display: inline-block" :style="{opacity: projectNameLastKeyIllegal ? '1' : '0'}">You cannot include {{ projectNameLastKeyIllegal }} in project names.</span>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="button" id="saveChanges" class="btn btn-primary" :class="{disabled: projectNameRequest != 'NOT LOADING' || projectNameInputValue == ''}" @click="saveName()">{{ projectNameRequest == "LOADING" ? "Loading..." : "Save" }}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel">
+      <div class="modal-dialog" role="document">
+
+        <div class="modal-content" :style="{display: loginSignUpView == 'LOGIN' ? 'block' : 'none'}">
+          <div class="modal-header" :class="{animated: loginSignUpView == 'LOGIN', fadeIn: loginSignUpView == 'LOGIN'}">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h1 class="modal-title" id="loginModalLabel">Log In</h1>
+          </div>
+          <div class="modal-body" :class="{animated: loginSignUpView == 'LOGIN', fadeIn: loginSignUpView == 'LOGIN'}">
+            <div class="form-group" :class="{'has-error': loginError == 'USERNOTFOUND' || loginError == 'INVALIDEMAIL',  animated: loginError == 'USERNOTFOUND' || loginError == 'INVALIDEMAIL',  shake: loginError == 'USERNOTFOUND' || loginError == 'INVALIDEMAIL'}">
+              <label for='username'>Email</label>
+              <input type="text" v-model="loginEmail" class="form-control" id="username" placeholder="Email" aria-describedby="usernameHelp">
+              <span id="usernameHelp" class="help-block" :style="{display: loginError == 'USERNOTFOUND' ? 'block' : 'none'}">No account with this email exists. Please try to sign up for an account.</span>
+               <span id="usernameHelp" class="help-block" :style="{display: loginError == 'INVALIDEMAIL' ? 'block' : 'none'}">Invalid email address. Please try again.</span>
+            </div>
+            <div class="form-group" :class="{'has-error': loginError == 'WRONGPASSWORD',  animated: loginError == 'WRONGPASSWORD',  shake: loginError == 'WRONGPASSWORD'}">
+              <label for='password'>Password</label>
+              <input onkeydown="if (event.keyCode == 13){login()}"  type="password" v-model="loginPassword" class="form-control" id="password" placeholder="Password" aria-describedby="passwordHelp">
+              <span id="passwordHelp" class="help-block" :style="{display: loginError == 'WRONGPASSWORD' ? 'block' : 'none'}">Invalid password. Please try again.</span>
+            </div>
+            <div class="form-group" style="text-align:center;">
+              <div>
+                <button type="submit" class="btn btn-primary" style="width:100%;" :class="{disabled: loginButtonState == 'LOADING'}" onclick="login()">
+                  <i class="fa fa-spinner fa-pulse fa-fw" style="margin:0 auto;" :style="{display: loginButtonState == 'LOADING' ? 'block' : 'none'}"></i>
+                  <span :style="{display: loginButtonState == 'NORMAL' ? 'block' : 'none'}">Log In</span>
+                </button>
+                <br>
+                <br>
+                <small style="color:grey;">Don't have an account? <a @click="switchToSignUp()" style="cursor: pointer;text-decoration:none;">Sign Up</a></small>
+                <br>
+                <br>
+                <small style="color:grey;"><a @click="switchToPasswordReset()" style="cursor: pointer;color:grey;">Forgot your password?</a></small>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-content" :style="{display: loginSignUpView == 'SIGNUP' ? 'block' : 'none'}">
+          <div class="modal-header" :class="{animated: loginSignUpView == 'SIGNUP', fadeIn: loginSignUpView == 'SIGNUP'}">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h1 class="modal-title" id="loginModalLabel">Sign Up</h1>
+          </div>
+          <div class="modal-body" :class="{animated: loginSignUpView == 'SIGNUP', fadeIn: loginSignUpView == 'SIGNUP'}">
+            <div class="form-group" :class="{'has-success': usernameValid == 'VALID', 'has-error': usernameValid == 'TAKEN', animated: usernameValid == 'TAKEN' || usernameLastKeyIllegal,  shake: usernameValid == 'TAKEN' || usernameLastKeyIllegal}">
+              <label for='username'>Username</label>
+              <input v-model='signUpUsername' onfocus="$('#usernameCreate').tooltip('toggle')" data-placement="top" title="Don't use your real name" type="text" class="form-control" id="usernameCreate" placeholder="Username" aria-describedby="usernameCreateHelp" @input="usernameValidate($event)">
+              <span id="usernameCreateHelp" class="help-block" :style="{display: usernameValid == 'TAKEN' ? 'block' : 'none'}">This username is already taken. Please try another username.</span>
+              <span id="usernameCreateHelp" class="help-block" style='color:#BD362F;' :style="{display: usernameLastKeyIllegal ? 'block' : 'none'}">You cannot include {{ usernameLastKeyIllegal }} in usernames.</span>
+            </div>
+            <div class="form-group" :class="{'has-success': emailValid == 'VALID', 'has-error': emailValid == 'TAKEN' || emailValid == 'NOTEMAIL',  animated: emailValid == 'TAKEN' || emailValid == 'NOTEMAIL',  shake: emailValid == 'TAKEN' || emailValid == 'NOTEMAIL'}">
+              <label for='username'>Email</label>
+              <input type="email" v-model='signUpEmail' class="form-control" id="emailCreate" placeholder="Email" aria-describedby="emailCreate" @blur="emailValidate($event)" @input="emailSuccessValidate">
+              <span id="emailCreate" class="help-block" :style="{display: emailValid == 'TAKEN' ? 'block' : 'none'}">An account with this email aready exists. Please try to <a @click="switchToLogin()" onclick='app.loginEmail = app.signUpEmail'>log in</a>.</span>
+              <span id="emailCreate" class="help-block" :style="{display: emailValid == 'NOTEMAIL' ? 'block' : 'none'}">Please enter a valid email.</span>
+            </div>
+            <div class="form-group" :class="{'has-success': passwordValid == 'VALID', 'has-error': passwordValid == 'WEAK','animated': passwordValid == 'WEAK','shake': passwordValid == 'WEAK'}">
+              <label for='username'>Password</label>
+              <input type="password" v-model='signUpPassword' class="form-control" id="passwordCreate" placeholder="Password" aria-describedby="passwordCreateHelp" @input="passwordSuccessValidate" @blur="passwordValidate($event)" onkeydown="if (event.keyCode == 13){signUp()}">
+              <span id="passwordCreateHelp" class="help-block" :style="{display: passwordValid == 'WEAK' ? 'block' : 'none'}">Passwords must be at least 6 characters long.</span>
+            </div>
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" v-model='signUpChecked'> I want to recieve updates about WoofJS
+              </label>
+            </div>
+            <div class="form-group" style="text-align:center;">
+              <div>
+                <button type="submit" class="btn btn-primary" style="width:100%;" :class="{disabled: signUpButtonState == 'LOADING'}" onclick="signUp()">
+                  <i class="fa fa-spinner fa-pulse fa-fw" style="margin:0 auto;" :style="{display: signUpButtonState == 'LOADING' ? 'block' : 'none'}"></i>
+                  <span :style="{display: signUpButtonState == 'LOADING' ? 'none' : 'block'}">Sign Up</span>
+                </button>
+                <br>
+                <br>
+                <small style="color:grey;">Already have an account? <a @click="switchToLogin()" style="cursor: pointer;text-decoration:none;">Log In</a></small>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class='modal-content' :style="{display: loginSignUpView == 'RESETPASSWORD' || loginSignUpView == 'RESETPASSWORDSUCCESS'  ? 'block' : 'none'}">
+          <div class="modal-header" :class="{animated: loginSignUpView == 'RESETPASSWORD', fadeIn: loginSignUpView == 'RESETPASSWORD'}">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h1 class="modal-title" id="loginModalLabel">Recover Password</h1>
+          </div>
+
+          <div class="modal-body" :style="{display: loginSignUpView == 'RESETPASSWORD' ? 'block' : 'none'}" :class="{animated: loginSignUpView == 'RESETPASSWORD', fadeIn: loginSignUpView == 'RESETPASSWORD'}">
+            <h5>Get instructions sent to this email that explain how to reset your password.</h5>
+            <div class="form-group">
+              <label for='emailReset'>Email</label>
+              <input onkeydown="if (event.keyCode == 13){resetPassword()}" type="email" v-model="resetEmail" class="form-control" id="emailReset" placeholder="Email">
+            </div>
+            <div class="form-group" style="text-align:center;">
+              <div>
+                <button type="submit" class="btn btn-primary" style="width:100%;" onclick="resetPassword()" >
+                  Send
+                </button>
+                <br>
+                <br>
+                <small style="color:grey;">Remember your password? <a @click="switchToLogin()" style="cursor: pointer;text-decoration:none;">Log In</a></small>
+              </div>
+            </div>
+          </div>
+
+          <div class="modal-body" :style="{display: loginSignUpView == 'RESETPASSWORDSUCCESS' ? 'block' : 'none'}" :class="{animated: loginSignUpView == 'RESETPASSWORDSUCCESS', fadeIn: loginSignUpView == 'RESETPASSWORDSUCCESS'}">
+            <h5>If there is an account associated with that email address, we have sent it a password reset email.</h5>   
+          </div>
+
+        </div>
+
+
+      </div>
+    </div>
+
+    <div id="container">
+
+      <div id="previewbar" v-show="previewbar" @click="previewbar= !previewbar" :style="{display: 'flex'}">
+        <span class="rotate" style="font-size: 1.65em">Preview</span>
+      </div>
+      <div v-show="outputPane" :style="{display: !previewbar ? 'flex' : 'none'}" id="output">
+        <div id="PreviewNav">
+          <span style="margin-left:8px; margin-top:4px">Preview</span>
+          <span style="margin-right:8px">
+            <span style="display: none; font-family: monospace; font-size: 11px" :style="{display: status ? 'inline-block' : 'none'}">mouseX: {{mouseX}}</span>
+            <span style="display: none; font-family: monospace; font-size: 11px" :style="{display: status ? 'inline-block' : 'none'}">mouseY: {{mouseY}}</span>
+            <img onclick="runCode(); focusPreview()" id="pop" style="margin: 2px; width: 17px; height:17px" src="./images/refresh.png" title="Reload">
+            <img  onclick="popout()" id="pop" style="margin: 2px; width: 17px; height:17px" src="./images/pop.png" title="Open in new tab">
+            <img  @click="previewbar = !previewbar"  style="margin: 5px; width: 16px; height:18px; cursor:pointer" src="./images/minimize.png" title="Minimize">
+          </span>
+        </div>
+        <iframe scrolling="no" id="preview"></iframe>
+      </div>
+
+      <div id="shareModal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title"><span class="glyphicon glyphicon-share-alt"></span> Share this project</h4>
+            </div>
+            <h4 class="modal-body text-danger" :style="{display: !getID() ? 'block' : 'none'}">You must save a project in order to share it.</h4>
+            <div class="modal-body" :style="{display: getID() ? 'block' : 'none'}">
+          
+
+              <div class="form-group">
+                <label for="link">Code & Output</label>
+                <input type="text" class="form-control" id="link"  :value="link()">
+              </div>
+              <div class="form-group">
+                <label for="fullLink">Full Screen Output</label>
+                <input type="text" class="form-control" id="fullLink"  :value="fullLink()">
+              </div>
+              <div class="form-group">
+                <label for="embed">Embed</label>
+                <input type="text" class="form-control" id="embed"  :value="embed()">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div id="docsbar" v-show="docsbar" @click="docsbar= !docsbar" :style="{display: 'flex'}">
+        <span class="rotate" style="font-size: 1.65em">Documentation</span>
+      </div>
+      <div v-show="docsPane" :style="{display: !docsbar ? 'flex' : 'none'}" id="docs">
+        <div id="DocsNav">
+          <span style="margin-left:8px;  margin-top:4px">Documentation</span>
+          <span style="margin-right:8px">
+            <img   @click="docsbar = !docsbar"  style="margin-left:5px; width: 16px; height:18px; cursor:pointer" src="./images/minimize.png"  title="Minimize">
+          </span>
+        </div>
+        <iframe src="./docs/index.html" id="scratch"></iframe>
+      </div>
+
+
+      <div id="projectbar" v-show="projectbar" @click="projectbar= !projectbar" :style="{display: 'flex'}" @click="projectsPane = !projectsPane">
+        <span class="rotate" style="font-size:1.65em">Tutorials</span>
+      </div>
+      <div v-show="projectsPane" :style="{display: !projectbar ? 'flex' : 'none'}"  :style="{display: 'flex'}" id="projects">
+        <div id="ProjectsNav">
+          <span style="margin-left:8px; margin-top:4px">Tutorials</span>
+          <span style="margin-right:8px">
+            <img @click="projectbar = !projectbar" style="margin: 5px; width: 16px; height:18px; cursor:pointer" src="./images/minimize.png" title="Minimize">
+          </span>
+        </div>
+        <iframe id="projectsIframe" src="http://coding.space/woof/index.html"></iframe>
+      </div>
+
+
+      <div id="codebar" v-show="codebar" @click="codebar= !codebar" :style="{display: 'flex'}">
+        <span class="rotate" style="font-size:1.65em">Code</span>
+      </div>
+      <div v-show="codePane" :style="{display: !codebar ? 'flex' : 'none'}" id="code">
+        <div id="CodeNav">
+          <span style="margin-left:8px; margin-top:4px">Code</span>
+          <span style="margin-right:8px">
+            <img @click="codebar = !codebar" style="margin: 5px; width: 16px; height:18px; cursor:pointer" src="./images/minimize.png" title="Minimize">
+          </span>
+        </div>
+        <div v-show="!workflowMerging" id="code-editor"></div>
+        <div v-show="workflowMerging" id="merge-editor">
+          <div style="width:100%">
+            <div>
+              <button class="btn btn-md btn-success" style="width:100%" @click="workflowMergeDone()">Done</button>
+            </div>
+            <div style="display: flex">
+              <div style="width: 50%"><code>{{workflowMergeParentName}}</code></div>
+              <div style="width: 50%"><code>{{workflowMergeChildName}}</code></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  
+  <script type="text/x-template" id="workflowTaskComponentTemplate">
+    <div id="workflowTaskComponent">
+      <div class="workflowTaskBulletInputContainer"
+           draggable="true"
+           @drag="$event.target.tagName =='a' && onBulletTaskDrag($event, task)"
+           @dragenter="onTaskDragEnter($event, task)"
+           @dragover="$event.preventDefault()"
+           @dragleave="onTaskDragLeave($event, task)"
+           @drop="onTaskDrop($event, task)">
+        <a class="workflowTaskBullet" @mousedown="onBulletTaskClick($event, task)"></a>
+        <input class="workflowTaskInput"
+               ref="workflowTaskInput" v-focus-on-creation
+               v-if="true && [].length == 0"
+               @input="workflowTaskInputChange($event, task)"
+               @keydown="workflowTaskInputKeydown($event, task)" 
+               @blur="workflowTaskInputBlur($event, task)" 
+               @keydown.enter="addTaskSibling($event, task)"
+               @keydown.tab="onTaskIndent($event, task)"
+               @keydown.delete="$event.target.value.length == 0 && deleteTask($event, task)" 
+               @keydown.up="$event.target.parentElement.parentElement.previousElementSibling && $event.target.parentElement.parentElement.previousElementSibling.firstElementChild.lastElementChild.focus()"
+               @keydown.down="$event.target.parentElement.parentElement.nextElementSibling && $event.target.parentElement.parentElement.nextElementSibling.firstElementChild.lastElementChild.focus()"
+               type="text" 
+               placeholder="What is one thing you need to accomplish?"
+               :value="task.name"
+               :style="{textDecoration: task.done ? 'line-through' : 'none'}">
+        </input>
+      </div>
+      <div class="workflowTaskChildren">
+        <workflow-task v-for="subtask in task.subtasks" :task="subtask"  :key="subtask.id"></workflow-task>
+      </div>
+    </div>
+  </script>
+  
+  <script>
+  
+  /* 
+    
+    Things to do eventually
+    
+    up and down keys should go into children, etc and left and right keys should go to parents... or something like that
+    
+    better firebase rules for editing workflow tasks
+    
+    when it's  not  your code, make sure that we keep track of the fork
+      5a. add a "pull request button"
+      5b. add pull request branches to owner's tree with icon
+    
+    ability to close and expand branches
+    
+    undo button! (this may be impossible in workflow tasks the way I built it...)
+  */
+    var getID = function() {
+      // returns the name of a project, not inlcuding the current revision
+      return window.location.hash.substring(1, window.location.hash.length).split("/")[0];
+    }
+    var getIDWithRevision = function() {
+      // returns the name of a project, inlcuding the current revision
+      return window.location.hash.substring(1, window.location.hash.length);
+    }
+    var getCurrentRevisionCode = function(revisions) {
+      // returns the code that corresponds to the current project and revision
+      var revision = parseInt(window.location.hash.substring(1, window.location.hash.length).split("/")[1])
+
+      var keys = Object.keys(revisions)
+      if (keys.length > 1){
+        keys = keys.slice(1, keys.length)
+      }
+
+
+      var key
+      if (!isNaN(revision) && (revision !== 0 && revision !== -1 * keys.length) && Math.abs(revision) < keys.length + 1){
+        if (revision < 0){
+          revision = keys.length + revision // -1 gives the previous revision
+        }
+        key = keys[revision - 1]
+      } else {
+        key = keys[keys.length - 1]
+      }
+      return revisions[key].code
+    }
+    var currentHash = window.location.hash
+
+    var app = new Vue({
+      el: '#page',
+      data: {
+        code: "",
+        status: "NEW",
+        error: undefined,
+        projects: [],
+        codePane: true,
+        outputPane: true,
+        projectsPane: false,
+        docsPane: true,
+        projectbar: true,
+        previewbar: false,
+        docsbar:false,
+        codebar:false,
+        mouseX: 0,
+        mouseY: 0,
+        seenError: true,
+        autoRunChecked: true,
+        shortcut: CodeMirror.keyMap["default"] == CodeMirror.keyMap.macDefault ? 'Cmd' : 'Ctrl',     
+        projectNameRequest: "NOT LOADING", // or "LOADING" or "NAME TAKEN"
+        projectNameInputValue: "",
+        projectNameLastKeyIllegal: false,
+        usernameLastKeyIllegal: false,
+        loginSignUpView: "LOGIN", // or SIGNUP or RESETPASSWORD or RESETPASSWORDSUCCESS
+        emailError: false,
+        usernameValid: "EMTPY", // TAKEN or VALID or EMPTY or ILLEGAL
+        emailValid: "EMTPY", // TAKEN or VALID or NOTEMAIL or EMPTY
+        passwordValid: "EMTPY", // VALID or EMPTY or WEAK
+        loginError: "NONE", // NONE or USERNOTFOUND or WRONGPASSWORD or INVALIDEMAIL
+        loginButtonState: "NORMAL", // NORMAL or LOADING
+        signUpButtonState: "DISABLED", // NORMAL or DISABLED or LOADING
+        loginPassword: "",
+        loginEmail: "",
+        resetEmail: "",
+        signUpEmail: '',
+        signUpPassword: '',
+        signUpChecked: true,
+        signUpUsername: '',
+
+        loginState: "LOGGEDOUT", // or LOGGEDIN
+        userNameForMenu: '',
+        userProjectsLink: '',
+        
+        topWorkflowTask: {
+          id: 'temp-id',
+          name: 'Project',
+          order: 0,
+          subtasks: [],
+          done: false
+        },
+        workflowHelperMessageText: "",
+        workflowPath: ['temp-id'],
+        workflowMerging: false,
+        workflowMergeChildName: "",
+        workflowMergeParentName: "",
+      },
+      computed: {
+        styles : function() { return {
+           // styles for the "Save" button
+          'btn-warning': this.status == 'DIRTY',
+          'btn-success': this.status == 'SAVED',
+          'btn-default': this.status == "NEW"
+        } },
+        canClean: function(){
+          return !this.error 
+        },
+        workflowPathTasks: function () {
+          const pathIds = this.workflowPath.slice()
+          const pathTasks = []
+          if (pathIds.length > 0 && pathIds.shift() == this.topWorkflowTask.id) {
+            pathTasks.push(this.topWorkflowTask)
+          }
+          var task = this.topWorkflowTask
+          while (pathIds.length > 0) {
+            const thisId = pathIds.shift()
+            task = task.subtasks.find(task => task.id == thisId)
+            pathTasks.push(task)
+          }
+          return pathTasks
+        }
+      },
+      methods: {
+        getID: getID,
+        showError: function(){
+          this.seenError = true
+          if (this.error.message.includes('Uncaught ReferenceError: sprite1 is not defined')) {
+            var spriteName = prompt("Error on line " + this.error.lineno  + "\n\n" + "You need to rename 'sprite1'. What would you like to name it?", "unicornSprite");
+            if (spriteName !== null) {
+                editor.setValue(editor.getValue().replace(/sprite1/g, spriteName));
+            }
+          }
+          else if (this.error.message.includes("Uncaught ReferenceError")) {
+            var message = this.error.message.replace("Uncaught ReferenceError: ", "")
+            alert("Error on line " + this.error.lineno  + "\n\n" + message + ". Check the spelling of your variable definitions.")
+          }
+          else {
+             alert("Error on line " + this.error.lineno  + "\n\n" + this.error.message)
+          }
+        },
+        cleanAll: function(){
+          if (!this.error && this.code != js_beautify(this.code, {space_after_anon_function: true, indent_size: 2, indent_with_tabs: false })){
+            var beautiful = js_beautify(editor.getValue(), {space_after_anon_function: true, indent_size: 2, indent_with_tabs: false })
+            editor.setValue(beautiful)
+          }
+        },
+        share: function(){
+          $('#shareModal').modal('show')
+        },
+        link: function(){
+          return "http://woofjs.com/create.html#" + getID()
+        },
+        fullLink: function(){
+          return "http://woofjs.com/full.html#" + getID()
+        },
+        embed: function(){
+          return "<iframe src=\"http://woofjs.com/full#" + getID() + "\">\n</iframe>"
+        },
+        selectAll: function(){
+          editor.execCommand("selectAll")
+        },
+        undo: function(){
+          editor.execCommand("undo")
+        },
+        redo: function(){
+          editor.execCommand("redo")
+        },
+        find: function(){
+          editor.execCommand("find")
+        },
+        validate: function($event) {
+          var newName = $event.target.value
+
+          this.projectNameRequest = 'NOT LOADING'  // reset state so that you can hit save after you change the name after you get a NAME TAKEN error
+
+          this.projectNameLastKeyIllegal = false // take off the animation
+          setTimeout(function() {
+            var lastKeyPressIllegal = newName.length > 0 && newName[newName.length - 1].match(/\.|#|\$|\/|\[|\]/)
+            if (lastKeyPressIllegal) {
+              this.projectNameLastKeyIllegal = lastKeyPressIllegal[0]
+            } else {
+              this.projectNameLastKeyIllegal = false
+            }
+          }.bind(this), 10)
+
+
+          this.projectNameInputValue = newName.replace(" ", "-")
+          this.projectNameInputValue = this.projectNameInputValue.replace(/\.|#|\$|\/|\[|\]/g, "")
+        },
+        saveName : function() {
+          if (app.projectNameRequest == "NOT LOADING"){
+            app.projectNameRequest = "LOADING"
+            var name = app.projectNameInputValue
+            if (name) {
+              saveProject(name);
+            }
+          }
+        },
+        switchToSignUp: function(){
+          this.loginSignUpView = 'SIGNUP'
+        },
+        switchToLogin: function(){
+          this.loginSignUpView = 'LOGIN'
+        },
+        switchToPasswordReset: function(){
+           this.loginSignUpView = 'RESETPASSWORD'
+        },
+        usernameValidate: function($event){
+          var username = $event.target.value
+          if (username == ''){
+            this.usernameValid = "EMPTY"
+          } else {
+            this.usernameLastKeyIllegal = false
+            setTimeout(function() {
+              var lastKeyPressIllegal = username.length > 0 && username[username.length - 1].match(/\.|#|\$|\/|\[|\]/)
+              if (lastKeyPressIllegal) {
+                this.usernameLastKeyIllegal = lastKeyPressIllegal[0]
+              } else {
+                this.usernameLastKeyIllegal = false
+              }
+            }.bind(this), 10)
+
+            this.signUpUsername= username.replace(" ", "-")
+            this.signUpUsername = this.signUpUsername.replace(/\.|#|\$|\/|\[|\]/g, "")
+            this.usernameValid = "VALID"
+          }
+        },
+        // Checks for success or error on blur
+        emailValidate: function($event){
+          var email = $event.target.value
+          if (email == ''){
+            this.emailValid = "EMPTY"
+          } else if (!/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email)){
+            this.emailValid = "NOTEMAIL"
+          } else if (/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email)){
+            this.emailValid = "VALID"
+          }
+        },
+        // Checks for success or error on blur
+        passwordValidate: function($event){
+          var password = $event.target.value
+          if (password == ''){
+            this.passwordValid = "EMPTY"
+          } else if (!/^.{6,}$/.test(password)){
+            this.passwordValid = "WEAK"
+          } else {
+            this.passwordValid = "VALID"
+          }
+        },
+        // Checks for success on every input
+        emailSuccessValidate: function($event){
+          var email = $event.target.value
+          if (/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email)){
+            this.emailValid = "VALID"
+          }
+        },
+        // Checks for success on every input
+        passwordSuccessValidate: function($event){
+          var password = $event.target.value
+          if (/^.{6,}$/.test(password)){
+            this.passwordValid = "VALID"
+          }
+        },
+        findTask(task, path) {
+          const p = path.slice() // so we don't modify the original
+          if (p.length == 0){
+            return task
+          } else {
+            const firstKey = p.shift() // shift returns firstKey and removes first element in p
+            if (task.id == firstKey) {
+              // if it's the top task
+              return app.findTask(task, p)
+            } else {
+              return app.findTask(task.subtasks.find(subtask => subtask.id == firstKey), p)
+            }
+          }
+        },
+        newWorkflowSibling: function(parentPath) {
+          const newWorkflowSibling = {uid: firebase.auth().currentUser.uid, parentPath: parentPath.slice(), name: '', subtasks: [], edited: false, done: false}
+          firebase.database().ref('workflow/' + app.getID() + '/' + parentPath.join('/')).push(newWorkflowSibling).then(snapshot => newWorkflowSibling.id = snapshot.key)
+          return newWorkflowSibling
+        },
+        addFirstTask: function($event) {
+          if (firebase.auth().currentUser && app.getID()) {
+            const parent = app.findTask(app.topWorkflowTask, this.workflowPath)
+            parent.subtasks.push(this.newWorkflowSibling(this.workflowPath))
+            
+            app.sendWorkflowDataToFirebase()
+          }
+        },
+        subtaskArraytoDict: function(subtasks) {
+          const dict = {}
+          subtasks.filter(subtask => subtask.id !== undefined).forEach((task, index) => {
+            dict[task.id] = {
+              order: index,
+              subtasks: this.subtaskArraytoDict(task.subtasks),
+              name: task.name,
+              parentPath: task.parentPath,
+              uid: task.uid,
+              edited: task.edited,
+              done: task.done || false
+            }
+          })
+          return dict
+        },
+        subtaskDictToArray: function(subtasks) {
+          const array = []
+          Object.keys(subtasks).forEach(id => {
+            const task = subtasks[id]
+            array[task.order] = {
+              id: id,
+              subtasks: this.subtaskDictToArray(task.subtasks || {}),
+              name: task.name,
+              parentPath: task.parentPath,
+              uid: task.uid,
+              edited: task.edited,
+              done: task.done
+            }
+          })
+          return array
+        },
+        sendWorkflowDataToFirebase: debounce(function() {
+          if (firebase.auth().currentUser && this.getID()) {
+            firebase.database().ref('workflow/' + this.getID() + '/' + this.topWorkflowTask.id).set({
+              name: this.topWorkflowTask.name,
+              uid: this.topWorkflowTask.uid,
+              subtasks: this.subtaskArraytoDict(this.topWorkflowTask.subtasks),
+              edited: true,
+              done: false
+            })
+          }
+        }, 1000, false),
+        setWorkflowData: function(data) {
+          const topWorkflowTaskId = Object.keys(data)[0]
+          const topWorkflowTask = data[topWorkflowTaskId]
+          this.workflowPath = [topWorkflowTaskId]
+          this.topWorkflowTask = {
+            subtasks: this.subtaskDictToArray(topWorkflowTask.subtasks || []),
+            name: topWorkflowTask.name,
+            uid: topWorkflowTask.uid,
+            id: topWorkflowTaskId,
+            edited: true,
+            done: false,
+            parentPath: []
+          }
+        },
+        closestEditedWorkflowParent: function(path) {
+          const p = path.slice()
+          var task = this.findTask(this.topWorkflowTask, path)
+          while (!task.edited) {
+            p.pop()
+            task = this.findTask(this.topWorkflowTask, p)
+          }
+          return task
+        },
+        workflowTaskMerge: function() {
+          firebase.database().ref('workflow-code/' + getID() + '/' + this.closestEditedWorkflowParent(this.workflowPath.slice(0, this.workflowPath.length - 1)).id).once('value', function(snapshot) {
+            app.workflowMerging = true
+            setTimeout(function() {
+              mergeEditor.rightOriginal().setValue(editor.getValue())
+              mergeEditor.editor().setValue(snapshot.val().code)
+            }, 100)
+            var path = app.workflowPathTasks.map(task => task.name)
+            app.workflowMergeChildName = path.join('/')
+            app.workflowMergeParentName = path.slice(0, path.length - 1).join('/')
+          })
+        },
+        workflowMergeDone: function() {
+          this.workflowPathTasks[this.workflowPathTasks.length - 1].done = true
+          this.workflowPath = this.workflowPath.slice(0, this.workflowPath.length - 1)
+          editor.setValue(mergeEditor.editor().getValue())
+          saveCode(this.getID())
+          this.sendWorkflowDataToFirebase()
+        }
+      },
+      watch: {
+        error: function(newError) {
+          if (newError && newError.lineno) {
+            CodeMirror.commands.markGutter(editor, "error", newError.lineno, newError.message)
+          }
+        },
+        workflowPath: function(newPath) {
+          this.workflowMerging = false
+          firebase.database().ref('workflow-code/' + getID() + '/' + this.closestEditedWorkflowParent(newPath).id).once('value', function(snapshot) {
+            editor.setValue((snapshot.val() || {code: editor.getValue()}).code)
+          })
+        }
+      },
+      components: {
+        'workflow-task': {
+          name: 'workflow-task',
+          template: "#workflowTaskComponentTemplate",
+          props: [
+            'task',
+          ],
+          directives: {
+            'focus-on-creation': {
+              inserted: function (el) {
+                el.focus()
+              }
+            }
+          },
+          methods: {
+            workflowTaskInputChange($event, task) {
+              const id = task.id
+              const parentPath = task.parentPath
+              task.name = $event.target.value
+            },
+            workflowTaskInputKeydown: function($event, task) {
+              const id = task.id
+              const parentPath = task.parentPath
+              app.workflowHelperMessageText = ""
+              if ($event.target.value.length > 5) {
+                app.workflowHelperMessageText += "Press Enter to add another task. "
+                
+                const parent = app.findTask(app.topWorkflowTask, parentPath)
+                const taskIndex = parent.subtasks.findIndex(subtask => subtask.id == id)
+                const olderSibling = parent.subtasks[taskIndex - 1]
+                if (olderSibling) {
+                  app.workflowHelperMessageText += "Press Tab to indent this task. "
+                }
+              }
+              app.sendWorkflowDataToFirebase()
+            },
+            workflowTaskInputBlur: function($event, task) {
+              app.workflowHelperMessageText = ""
+            },
+            addTaskSibling: function($event, task) {
+              if (firebase.auth().currentUser && app.getID()) {
+                const parent = app.findTask(app.topWorkflowTask, task.parentPath)
+                const olderSiblingIndex = parent.subtasks.findIndex(subtask => subtask.id == task.id)
+                parent.subtasks.splice(olderSiblingIndex + 1, 0, app.newWorkflowSibling(task.parentPath))
+                
+                app.sendWorkflowDataToFirebase()
+              }
+            },
+            deleteTask: function($event, task) {
+              const id = task.id
+              const parentPath = task.parentPath
+              const parent = app.findTask(app.topWorkflowTask, parentPath)
+              parent.subtasks = parent.subtasks.filter(subtask => subtask.id != id)
+              // TODO move cursor to previous element or to the parent
+              app.sendWorkflowDataToFirebase()
+            },
+            onTaskIndent: function($event, task) {
+              const id = task.id
+              const parentPath = task.parentPath
+              $event.preventDefault()
+              const oldParent = app.findTask(app.topWorkflowTask, parentPath)
+              const taskIndex = oldParent.subtasks.findIndex(subtask => subtask.id == id)
+              const olderSibling = oldParent.subtasks[taskIndex - 1]
+              if (olderSibling) {
+                task.parentPath.push(olderSibling.id)
+                olderSibling.subtasks.push(task)
+                oldParent.subtasks = oldParent.subtasks.filter(subtask => subtask.id != id)
+                app.sendWorkflowDataToFirebase()
+              }
+            },
+            onBulletTaskClick: function($event, task) {
+              const id = task.id
+              const parentPath = task.parentPath
+              app.workflowPath = parentPath.concat([id])
+              // get code from firebase
+              // update editor 
+            },
+            onTaskDrop: function($event, task) {
+              console.log('drag drop')
+              // TODO 
+              app.sendWorkflowDataToFirebase()
+            },
+            onBulletTaskDrag: function($event, task) {
+              console.log('bullet drag')
+              // TODO 
+            },
+            onTaskDragEnter: function($event, task) {
+              console.log('drag enter')
+              // TODO 
+            },
+            onTaskDragLeave: function($event, task) {
+              console.log('drag leave')
+              // TODO 
+            },
+          }
+        },
+      }
+    })
+  
+    //Initalizes the popover for the comment code button in the tools menu
+    $(document).ready(function(){
+        $('[data-toggle="popover"]').popover();   
+    });
+
+    var clipboard = new Clipboard('.btn-clipboard');
+    Vue.nextTick(function() {
+        $('[data-toggle="tooltip"]').tooltip({
+            trigger: 'manual'
+        });
+        clipboard.destroy()
+        clipboard = new Clipboard('.btn-clipboard');
+        clipboard.on('success', function(e) {
+            $(e.trigger).tooltip('show')
+            setTimeout(function() {
+                $(e.trigger).tooltip('hide')
+            }, 1000)
+        });
+
+    })
+
+    var myCode = false
+    scratch.src = scratch.src // the documentation sometimes doesn't load unless you remind it to here, strange VueJS bug
+    projectsIframe.src = projectsIframe.src // ditto for the project's iframe
+
+    var config = {
+      apiKey: "AIzaSyBYHv7dCiD0bWiHRlcp4VIZCIqzoMnB4yY",
+      authDomain: "woofjs-d1b27.firebaseapp.com",
+      databaseURL: "https://woofjs-d1b27.firebaseio.com",
+      storageBucket: "woofjs-d1b27.appspot.com",
+      messagingSenderId: "397293370524"
+    };
+    firebase.initializeApp(config);
+
+    function clearLoginSignupModal() {
+      app.emailError = false;
+      app.usernameValid = "EMTPY";
+      app.emailValid = "EMTPY";
+      app.passwordValid = "EMTPY";
+      app.loginError = "NONE";
+      app.loginButtonState = "NORMAL";
+      app.signUpButtonState = "DISABLED";
+      app.loginPassword = "";
+      app.loginEmail = "";
+      app.resetEmail = "";
+      app.signUpEmail = '';
+      app.signUpPassword = '';
+      app.signUpChecked = true;
+      app.signUpUsername = '';
+    }
+
+    function login() {
+      app.loginButtonState = "LOADING"
+      firebase.auth().signInWithEmailAndPassword(app.loginEmail, app.loginPassword)
+        .then(function() {
+          $('#loginModal').modal('hide');
+          clearLoginSignupModal();
+        })
+        .catch(function(error) {
+          if (error.code === 'auth/wrong-password') {
+            app.loginError = "WRONGPASSWORD"
+            app.loginButtonState = "NORMAL"
+          } else if (error.code === 'auth/invalid-email') {
+            app.loginError = "INVALIDEMAIL"
+            app.loginButtonState = "NORMAL"
+          } else {
+            app.loginError = "USERNOTFOUND"
+            app.loginButtonState = "NORMAL"
+          }
+        })
+    }
+
+    function signUp() {
+      var email = app.signUpEmail;
+      var password = app.signUpPassword;
+      if (email == ''){
+        app.emailValid = "EMPTY"
+      } else if (!/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email)){
+        app.emailValid = "NOTEMAIL"
+      } else if (/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email)){
+        app.emailValid = "VALID"
+      } 
+      if (password == ''){
+        app.passwordValid = "EMPTY"
+      } else if (!/^.{6,}$/.test(password)){
+        app.passwordValid = "WEAK"
+      } else {
+        app.passwordValid = "VALID"
+      }
+
+      if (app.usernameValid == 'VALID' && app.emailValid == 'VALID' && app.passwordValid == 'VALID' && app.signUpButtonState != 'LOADING') {
+        app.signUpButtonState = "LOADING"
+
+        var exists
+        var ref = firebase.database().ref("uniqueUsername");
+        ref.child(app.signUpUsername).once('value', function(snapshot) {
+          exists = (snapshot.val() !== null);
+          if (exists) {
+            app.usernameValid = 'TAKEN'
+            app.signUpButtonState = "NORMAL"
+          } else {
+            firebase.auth().createUserWithEmailAndPassword(app.signUpEmail, app.signUpPassword)
+              .then(function() {
+
+                $('#loginModal').modal('hide');
+
+                var user = firebase.auth().currentUser;
+
+                user.updateProfile({
+                  displayName: app.signUpUsername
+                })
+
+                
+                app.userNameForMenu = app.signUpUsername
+
+                firebase.database().ref("uniqueUsername/" + app.signUpUsername).set({
+                  username: app.signUpUsername,
+                  uid: user.uid
+                })
+
+                firebase.database().ref('/user/' + user.uid).once('value').then(function(snapshot) {
+                  if (!snapshot.val()) {
+                    firebase.database().ref("/user/" + user.uid).set({
+                      displayName: app.signUpUsername,
+                      email: user.email,
+                      createdDate: firebase.database.ServerValue.TIMESTAMP,
+                      recieveUpdates: app.signUpChecked,
+                      usernameUnique: true
+                    })
+                  }
+                });
+
+              }).catch(function(error) {
+                // Handle EMAIL Errors here.
+                var errorCode = error.code;
+                var errorMessage = error.message;
+                if (error.code === 'auth/email-already-in-use') {
+                  app.emailValid = "TAKEN"
+                  app.signUpButtonState = "auth/invalid-email"
+                } else if (error.code === 'auth/invalid-email') {
+                  app.emailValid = "NOTEMAIL"
+                  app.signUpButtonState = "NORMAL"
+                } else if (error.code === 'auth/weak-password') {
+                  app.passwordValid = "WEAK"
+                  app.signUpButtonState = "NORMAL"
+                }
+
+              });
+          }
+        });
+      }
+    }
+
+    function resetPassword(){
+      app.resetButtonState = "LOADING"
+      firebase.auth().sendPasswordResetEmail(app.resetEmail).then(function() {
+        app.loginSignUpView = "RESETPASSWORDSUCCESS"
+        clearLoginSignupModal();
+      }, function(error) {
+        app.loginSignUpView = "RESETPASSWORDSUCCESS"
+        clearLoginSignupModal();
+      })
+    }
+
+    function handleLogin(userName, uid) {
+      app.userNameForMenu = userName
+      app.userProjectsLink  = "./user.html#" + uid
+      app.loginState = "LOGGEDIN"
+    }
+
+    function handleLogout() {
+      app.loginState = "LOGGEDOUT"
+      myCode = false
+      clearLoginSignupModal()
+    }
+
+    var authChanged = false
+    firebase.auth().onAuthStateChanged(function(user) {
+      if (!authChanged){
+        authChanged = true
+        if (user){
+          ga('set', 'userId', user.uid);
+        }
+      }
+
+      if (user){
+        if (user.displayName){
+          handleLogin(user.displayName, user.uid)
+        } else if (app.signUpUsername){
+          handleLogin(app.signUpUsername, user.uid)
+        }
+
+        // this puts the user's most recent project under their name
+        firebase.database().ref('/code/').orderByChild("--uid").equalTo(user.uid).once('value').then(function(snapshot) {
+          if (snapshot.val()){
+            app.projects = []
+            for (var key in snapshot.val()) {
+              var project = snapshot.val()[key]
+              var versions = Object.keys(project)
+              var t = project[versions[versions.length-1]].time
+              app.projects.push({key: key, time: t, code: project.code})
+            }
+          }
+          // sort the proejcts by most recently touched
+          app.projects.sort(function(a,b) {
+            if (a.time < b.time)
+              return 1;
+            if (a.time > b.time)
+              return -1;
+            return 0;
+          })
+        });
+      } else {
+        handleLogout()
+      }
+    });
+
+    var makeClean = function() {
+      app.status = "SAVED"
+      currentHash = window.location.hash
+    }
+
+    var makeDirty = function() {
+      app.status = "DIRTY"
+    }
+
+    var popout = function() {
+      if (app.status == "SAVED"){
+        window.open("./full.html#" + getIDWithRevision(), "_blank")
+      } else {
+        alert("You must save your project to open it in a new window.")
+      }
+    }
+
+    // set the text in the editor
+    var editorVal = "setBackdropURL('./images/outerspace.jpg')\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
+    if (getID() != ''){
+      editorVal = "// Loading..."
+      firebase.database().ref('/workflow/' + getID()).once('value').then(function(snapshot) {
+        if (snapshot.val()){
+          app.setWorkflowData(snapshot.val())
+          myCode = true // TODO 
+          
+          firebase.database().ref('/workflow-code/' + getID() + '/' + app.workflowPath[app.workflowPath.length - 1]).once('value').then(function(snapshot) {
+            editor.setValue((snapshot.val() || {}).code)
+          });
+          
+          makeClean()
+        } else {
+          alert("Could not find a project with the name: " + getID())
+          editor.setValue("")
+        }
+      })
+    }
+
+    // we add the project name to the hash on save
+    // this code prevents that from triggering a page reload
+    window.addEventListener("hashchange", function() {
+      if (currentHash != window.location.hash) {
+        window.location.reload()
+      }
+    })
+    
+
+    var saveCode = function(name) {
+      $('#saveModal').modal('hide');
+      app.projectNameRequest = "NOT LOADING"
+      firebase.database().ref().child("/workflow-code/" + name + '/' + app.workflowPath[app.workflowPath.length - 1]).set({
+        code: editor.getValue(),
+        time: firebase.database.ServerValue.TIMESTAMP,
+        uid: firebase.auth().currentUser && firebase.auth().currentUser.uid
+      }).then(function(){
+        window.location.hash = name
+        makeClean()
+        myCode = true
+      }).catch(function(error){
+        alert("Unable to save project: " + error)
+      });
+      app.findTask(app.topWorkflowTask, app.workflowPath).edited = true
+      firebase.database().ref('workflow/' + name + '/' + app.workflowPath.join('/subtasks/') + '/edited').set(true)
+    }
+
+    var saveProject = function(name){
+      firebase.database().ref('/workflow/' + name + '/').once('value').then(function(snapshot) {
+        if (snapshot.val()){
+          if (firebase.auth().currentUser && snapshot.val()[Object.keys(snapshot.val())[0]].uid == firebase.auth().currentUser.uid) {
+            saveCode(name)
+          } else {
+            app.projectNameRequest = "NAME TAKEN"
+          }
+        } else {
+          $('#saveModal').modal('hide');
+          app.projectNameRequest = "NOT LOADING"
+          firebase.database().ref('workflow/' + name).push({name: name, uid: firebase.auth().currentUser.uid, subtasks: app.subtaskArraytoDict(app.topWorkflowTask.subtasks), done: false}).then(snapshot => {
+            app.topWorkflowTask.uid = firebase.auth().currentUser.uid
+            app.topWorkflowTask.id = snapshot.key
+            app.topWorkflowTask.parentPath = []
+            app.topWorkflowTask.name = name
+            app.topWorkflowTask.edited = true
+            app.workflowPath = [snapshot.key]
+            saveCode(name)
+          })
+        }
+      });
+    }
+
+    var save = function(){
+      if (app.status == "SAVED") { return }
+
+      if (editor.getValue().startsWith("// Loading...")){
+        return // don't allow students to save projects that haven't loaded
+      }
+
+      if (myCode && getID()) {
+        saveProject(getID())
+      } else {
+        if (getID()) {
+          app.projectNameInputValue = autoIncrimentedName()
+        }
+        $('#saveModal').modal('show')
+      }
+    }
+
+    $('.modal').on('shown.bs.modal', function () {
+      $('#projectName').focus() // focus on the project name input box when the modal loads
+    })
+
+    var autoIncrimentedName = function() {
+      var projName = getID();
+      var versionNumber = parseInt(projName[projName.length-1])
+      if (!isNaN(versionNumber) && projName[projName.length-2] == "-"){
+        versionNumber += 1;
+        return projName.substring(0, projName.length-1) + versionNumber.toString();
+      } else {
+        return projName + "-1";
+      }
+    }
+
+    // keyboard shortcuts
+    var mac = CodeMirror.keyMap["default"] == CodeMirror.keyMap.macDefault;
+    var ctrl = mac ? "Cmd-" : "Ctrl-";
+    var keymap = {}
+    keymap[ctrl + "B"] = function(cm) {
+      var beautiful = js_beautify(cm.getSelection(), {space_after_anon_function: true, indent_size: 2, indent_with_tabs: false })
+      cm.replaceSelection(beautiful)
+    }
+    keymap.Tab = function(cm) {
+      var spaces = Array(cm.getOption("indentUnit") + 1).join(" ");
+      cm.replaceSelection(spaces, "end", "+input");
+    }
+
+    var editor = CodeMirror(document.getElementById('code-editor'), {
+        mode:  "javascript",
+        value: editorVal,
+        lineNumbers: true,
+        lineWrapping: false,
+        theme: "eclipse",
+        tabSize: 2,
+        indentUnit: 2,
+        indentWithTabs: false,
+        electricChars: true,
+        keyMap: "sublime",
+        autoCloseBrackets: true,
+        matchBrackets: true,
+        autofocus: true,
+        smartIndent: true,
+        foldGutter: true,
+        gutters: ["CodeMirror-lint-markers", "CodeMirror-foldgutter"],
+        extraKeys: keymap,
+        lint: {
+          delay: 800,
+          options: {
+            "esnext": true,
+            "asi": true
+          }
+        },
+    });
+    
+    var target = document.getElementById("merge-editor");
+    var mergeEditor = CodeMirror.MergeView(target, {
+      value: "",
+      orig: "",
+      lineNumbers: true,
+      mode: "text/javascript",
+      highlightDifferences: true,
+      connect: true,
+      collapseIdentical: false,
+      revertButtons: true,
+    });
+    onkeydown = function(e){
+      if(e.ctrlKey && e.key == '/'){
+        e.preventDefault();
+      }
+      if((e.metaKey || e.ctrlKey) && e.keyCode == 'S'.charCodeAt(0)){
+        e.preventDefault();
+        save();
+      }
+    }
+
+    function WoofJSLint(){
+      if (app.error) { return }
+      const code = js_beautify(app.code, {space_after_anon_function: true, indent_size: 2, indent_with_tabs: false})
+      const regEx = /  ((\w)*\.)?(ready|onKeyDown|onKeyUp|onMouseDown|onMouseUp|onMouseMove|forever|repeatUntil)/g   // matches any event indented with two spaces
+      var result;
+      while ((result = regEx.exec(code)) !== null) {
+        var lineNumber = code.substring(0, result.index).split('\n').length
+        CodeMirror.commands.markGutter(editor, "warning", lineNumber, "It's usually a bad idea to have " + result[3] + "'s inside loops and other events.")
+      }
+    }
+
+    function autoRunClicked(){
+      if (!app.autoRunChecked){
+        makeDirty()
+        debouncedRunCode()
+        setTimeout(function() {WoofJSLint()}, 1000); 
+      }
+    }
+
+    // run the code (debounced) on every change to the editor 
+    editor.on("change", function(){
+      if (app.autoRunChecked){
+        makeDirty()
+        debouncedRunCode()
+        debouncedSave()
+        setTimeout(function() {WoofJSLint()}, 1000); 
+      }
+    });
+    runCode()
+
+    // focus on the preview when refreshed
+     function focusPreview() {
+       document.getElementById('preview').focus();
+     };
+
+
+    editor.on('inputRead', function(cm, e){
+      if (e.text.length == 1 && e.text[0].length == 1 &&  /^[a-zA-Z\.]/.test(e.text[0])) {
+        // constantly show autocomplete suggestions
+        CodeMirror.commands.autocomplete(editor);
+      }
+    });
+
+    // warns the user when they try to close the page without saving
+    window.onbeforeunload = function(e) {
+       if (app.status == "DIRTY") {
+         var dialogText = 'Make sure to copy and paste your work somewhere safe.';
+         e.returnValue = dialogText;
+         return dialogText;
+       }
+    };
+
+
+
+    function tryRunningCode() {
+      app.code = editor.getValue()
+      app.error = undefined
+
+      try {
+        var result = Babel.transform(editor.getValue(), {
+          presets: [['es2015', {'modules': false}]], // modules: false to remove strict mode
+          retainLines: true
+        })
+        var code = result.code
+        try {
+          document.getElementById('preview').contentWindow.addEventListener("mousemove", function(event) {
+            app.mouseX = Math.round(document.getElementById('preview').contentWindow.mouseX)
+            if (app.mouseX >= Math.round(document.getElementById('preview').contentWindow.maxX - 2)) {
+              app.mouseX += " (maxX)"
+            }
+            if (app.mouseX <= Math.round(document.getElementById('preview').contentWindow.minX + 1)) {
+              app.mouseX += " (minX)"
+            }
+
+            app.mouseY = Math.round(document.getElementById('preview').contentWindow.mouseY)
+            if (app.mouseY >= Math.round(document.getElementById('preview').contentWindow.maxY - 1)) {
+              app.mouseY += " (maxY)"
+            }
+            if (app.mouseY <= Math.round(document.getElementById('preview').contentWindow.minY + 3)) {
+              app.mouseY += " (minY)"
+            }
+          })
+          document.getElementById('preview').contentWindow.addEventListener("error", function(event) {
+            var error = event.error
+            app.seenError = false
+            if (error.type == "ImageLoadError") {
+              app.error = {message: "There is a problem with your image URL: " + error.url, lineno: code.substring(0, code.indexOf(error.url)).split('\n').length}
+            } else {
+              app.error = event
+            }
+
+          });
+          var script = document.createElement("script");
+          script.type = "text/javascript";
+          script.crossorigin = "anonymous"
+          script.text = code
+          document.getElementById('preview').contentDocument.body.appendChild(script)
+        }
+        catch (e) {
+          app.seenError = false
+          app.error = e;
+        }
+      }
+      catch (e) {
+        app.seenError = false
+        app.error = e
+      }
+    }
+
+    function runCode() {
+        var iframe = document.getElementById('preview');
+
+        iframe.src = ""; // first, we clear the preview iframe
+        setTimeout(function() {
+
+            // add doctype to iframe
+            iframe.contentWindow.document.open();
+            iframe.contentWindow.document.write('<!DOCTYPE html>');
+            iframe.contentWindow.document.close();
+
+            // add a base tag to the page so it knows where to pull relative image urls
+            var base = iframe.contentWindow.document.createElement("base");
+            base.href = document.baseURI
+            iframe.contentWindow.document.body.appendChild(base);
+
+            // then we create a script tag with the woof code and add it to the page
+            var script = iframe.contentWindow.document.createElement("script");
+            script.type = "text/javascript";
+            script.src = "./dist/woof.js";
+            iframe.contentWindow.document.body.appendChild(script);
+
+            script.onload = function() {
+                // when the woof.js library loads, run the user's code
+                var evt = document.createEvent('Event');
+                evt.initEvent('load', false, false);
+                iframe.contentWindow.dispatchEvent(evt);
+                tryRunningCode();
+            }
+        }, 10)
+    }
+
+    function debounce(func, wait, immediate) {
+    	var timeout;
+    	return function() {
+    		var context = this, args = arguments;
+    		var later = function() {
+    			timeout = null;
+    			if (!immediate) func.apply(context, args);
+    		};
+    		var callNow = immediate && !timeout;
+    		clearTimeout(timeout);
+    		timeout = setTimeout(later, wait);
+    		if (callNow) func.apply(context, args);
+    	};
+    };
+    // helper function to prevent runCode from running too often
+    var debouncedRunCode = debounce(runCode, 1000, false)
+    var debouncedSave = debounce(save, 1000, false)
+
+  </script>
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-82374072-1', 'auto');
+    ga('send', 'pageview');
+
+  </script>
+<script type="text/javascript">
+    window._chatlio = window._chatlio||[];
+    !function(){ var t=document.getElementById("chatlio-widget-embed");if(t&&window.ChatlioReact&&_chatlio.init)return void _chatlio.init(t,ChatlioReact);for(var e=function(t){return function(){_chatlio.push([t].concat(arguments)) }},i=["configure","identify","track","show","hide","isShown","isOnline"],a=0;a<i.length;a++)_chatlio[i[a]]||(_chatlio[i[a]]=e(i[a]));var n=document.createElement("script"),c=document.getElementsByTagName("script")[0];n.id="chatlio-widget-embed",n.src="https://w.chatlio.com/w.chatlio-widget.js",n.async=!0,n.setAttribute("data-embed-version","2.1");
+       n.setAttribute('data-widget-id','1d14bee6-57d0-40e3-4768-8cc33e8abf47');
+       c.parentNode.insertBefore(n,c);
+    }();
+</script>
+</body>
+</html>

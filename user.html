@@ -30,11 +30,24 @@
     <ul id="list" class="list-group">
       <woof-project v-for="project in projects" :project="project"></woof-project>
     </ul>
+    <div style="display:none" :style="{display: teamProjects.length ? 'block' : 'none'}">
+      <h1 id="title">Team Projects</h1>
+      <ul id="list" class="list-group">
+        <woof-team-project v-for="project in teamProjects" :project="project"></woof-team-project>
+      </ul>
+    </div>
   </div>
   <script id="project-template" type="text/x-template">
     <a class="list-group-item list-group-item-action">{{ project.key }}
       <span class="pull-right">
         <button class="btn btn-info"     @click="codeClick($event)"       style="margin-right: 5px">View Version<input type="number" min="1" :max="project.revisions.length" :value="project.revisions.length" style="text-align: right; width: 3em"></input></button>
+      </span>
+    </a>
+  </script>
+  <script id="team-project-template" type="text/x-template">
+    <a class="list-group-item list-group-item-action">{{ project }}
+      <span class="pull-right">
+        <button class="btn btn-info" @click="codeClick($event)" style="margin-right: 5px">Open</button>
       </span>
     </a>
   </script>
@@ -50,12 +63,22 @@
       },
     }
   })
+  Vue.component('woof-team-project', {
+    template: "#team-project-template",
+    props: ["project"],
+    methods: {
+      codeClick: function($event) {
+        window.open('./team.html#' + this.project, '_blank')
+      },
+    }
+  })
   
   var app = new Vue({
     el: '#page',
     data: {
       name: "Loading...",
-      projects: []
+      projects: [],
+      teamProjects: [],
     }
   })
   var config = {
@@ -75,7 +98,13 @@
   firebase.database().ref('/user/' + getUID() + "/displayName").once('value', function(snap) {
     if (snap.val()){
       app.name = snap.val() 
-      document.title = snap.val()
+      document.title = "Projects - " + snap.val()
+    }
+  });
+  
+  firebase.database().ref('/user/' + getUID() + "/team").once('value', function(snap) {
+    if (snap.val()){
+      app.teamProjects = Object.values(snap.val())
     }
   });
   

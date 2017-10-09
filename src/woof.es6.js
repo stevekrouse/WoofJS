@@ -94,12 +94,19 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
   };
   
   window.addEventListener("load", () => {
+    document.documentElement.style.width = "100%";
+    document.documentElement.style.height = "100%";
+    document.body.style.width = "100%";
+    document.body.style.height = "100%";
+    
     // create the main div that Woof lives in
     thisContext._mainDiv = document.createElement("div");
     document.body.appendChild(thisContext._mainDiv);
     thisContext._mainDiv.id = "project";
     thisContext._mainDiv.style.position = "relative";
-    
+    thisContext._mainDiv.style.width = "100%";
+    thisContext._mainDiv.style.height = "100%";
+
     // create the canvas where we will draw sprites
     thisContext._spriteCanvas = document.createElement("canvas");
     thisContext._mainDiv.appendChild(thisContext._spriteCanvas);
@@ -126,7 +133,9 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
     thisContext._backdropDiv.height = height;
     thisContext._backdropDiv.style.zIndex = 1;
     thisContext._backdropDiv.style.position = "absolute";
-  
+    thisContext._backdropDiv.style.width = "100%";
+    thisContext._backdropDiv.style.height = "100%";
+
     thisContext._spriteContext = thisContext._spriteCanvas.getContext("2d");
     thisContext._penContext = thisContext._penCanvas.getContext("2d");
     
@@ -204,6 +213,12 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
     img.onload = function(){
        thisContext.ready(thisContext._renderBackdrop);
     };
+    img.onerror = function(e){
+      var error = new Error()
+      error.type = "ImageLoadError"
+      error.url = url
+      throw error
+    }
     img.src = url;
   };
   
@@ -427,11 +442,42 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
 
   thisContext._everys = [];
   thisContext.every = (time, units, func) => {
-    var milis = Woof.prototype.unitsToMiliseconds(time, units);
-    if (typeof func != "function" || typeof time != "number") { throw new TypeError("every(time, units, function) requires a number, unit and function input."); }
-    func();
-    thisContext._everys.push(setInterval(func, milis));
+    if (typeof func != "function" || (typeof time != "number" && typeof time != "function")) { throw new TypeError("every(time, units, function) requires a number/function, time unit and function input."); }
+    // if the user inputs something like () => random(1, 10) for the time parameter, re-evaluate the function every time it's run, and update the frequency
+    if (typeof time == "function") {
+      if (typeof time() != "number") { throw new TypeError("every(time, units, function) requires a time function that returns a number")}
+      
+      // create a variable that will be used to store the value of the previous setTimeout()
+      var theFunction = function(timeoutValue) {
+        var ms = Woof.prototype.unitsToMiliseconds(time(), units);
+        func();
+        // if the previous setTimeout() value is in the ._everys array, remove it
+        if (timeoutValue && thisContext._everys.includes(timeoutValue)) {
+          thisContext._everys.splice(thisContext._everys.indexOf(timeoutValue), 1)
+        }
+        // use setTimeout() here instead of setInterval() because the interval has to be able to change
+        // pass an anonymous function so we can pass the argument lastTimeout to theFunction()
+        var lastTimeout = setTimeout(function() {
+          theFunction(lastTimeout)
+        }, ms)
+        thisContext._everys.push(lastTimeout);
+      }
+      theFunction()
+    }
+    else {
+      var milis = Woof.prototype.unitsToMiliseconds(time, units);
+      func();
+      thisContext._everys.push(setInterval(func, milis));
+    }
   };
+  
+  // thisContext.every = (time, units, func) => {
+  //   var milis = Woof.prototype.unitsToMiliseconds(time, units);
+  //   if (typeof func != "function" || typeof time != "number") { throw new TypeError("every(time, units, function) requires a number, unit and function input."); }
+  //   func();
+  //   thisContext._everys.push(setInterval(func, milis));
+  // };
+  
   thisContext.forever = (func) => {
     if (typeof func != "function") { throw new TypeError("forever(function) requires one function input."); }
     thisContext.repeatUntil(() => false, func);
@@ -577,15 +623,26 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
   
   // SAT collision for touching, works with rotated sprites
   this.rotatedVector = function(x, y){
-    var rotatedX = Math.cos(this.radians()) * (x - this.x) - Math.sin(this.radians()) * (y - this.y) + this.x
-    var rotatedY =  Math.sin(this.radians()) * (x - this.x) + Math.cos(this.radians()) * (y - this.y) + this.y
+    var rotatedX;
+    var rotatedY;
+    // If sprite is a line, offsets positioning by half the height as line is drawn from endpoints, not center
+    if (this.type == 'line') {
+      rotatedX = Math.cos(this.radians()) * (x - this.x) - Math.sin(this.radians()) * (y - this.y + this.height / 2) + this.x;
+      rotatedY =  Math.sin(this.radians()) * (x - this.x) + Math.cos(this.radians()) * (y - this.y + this.height / 2) + this.y;
+    }
+    else {
+      rotatedX = Math.cos(this.radians()) * (x - this.x) - Math.sin(this.radians()) * (y - this.y) + this.x;
+      rotatedY =  Math.sin(this.radians()) * (x - this.x) + Math.cos(this.radians()) * (y - this.y) + this.y;
+    }
     return new SAT.Vector(rotatedX, rotatedY);
   }
   
+  // Makes collider vector vertices relative to the point 'pos'
   this.translatedVector = function(pos, v){
     return new SAT.Vector(v.x - pos.x, v.y - pos.y); 
   }
   
+  // Creates collider polygon from vector vertices
   this.collider = function() {
     var pos = this.rotatedVector(this.x - this.width / 2, this.y - this.height / 2)
     var v1 = new SAT.Vector(0, 0)
@@ -1005,11 +1062,91 @@ Woof.prototype.Rectangle = function({project = undefined, height = 10, width = 1
   };
 };
 
-Woof.prototype.Line = function({project = undefined, width = 1, x1 = 10, y1 = 10, color = "black"} = {}) {
-  // currently the line collider and collision detection is wonky
-  // because a line is really a rectangle that's defined from it's endpoints...
-  // TODO make this a helper function to create a rectangle 
+Woof.prototype.Oval = function({project = undefined, height = 50, width = 20, color = "green"} = {}) {
+  this.type = "oval"
+  Woof.prototype.Sprite.call(this, arguments[0]);
+  this.ovalHeight = Math.abs(height);
+  this.ovalWidth = Math.abs(width);
+  this.color = color;
   
+  Object.defineProperty(this, 'width', {
+    get: function() {
+      return this.ovalWidth;
+    },
+    set: function(value) {
+      if (typeof value != "number") { throw new TypeError("oval.width can only be set to a number."); }
+      this.ovalWidth = value;
+    }
+  });
+  
+  Object.defineProperty(this, 'height', {
+    get: function() {
+      return this.ovalHeight;
+    },
+    set: function(value) {
+      if (typeof value != "number") { throw new TypeError("oval.height can only be set to a number."); }
+      this.ovalHeight = value;
+    }
+  });  
+  
+  this.render = (context) => {
+    context.fillStyle=this.color;
+    context.beginPath();
+    context.ellipse(0, 0, width/2, height/2, 0, 0,  2*Math.PI);
+    context.fill();
+  };
+};
+
+Woof.prototype.Polygon = function({project = undefined, sides = 3, length = 100, color = "black"} = {}) {
+  this.type = "polygon"
+  Woof.prototype.Sprite.call(this, arguments[0]);
+  this.polygonSides = Math.abs(sides);
+  this.polygonLength = Math.abs(length);
+  this.color = color;
+  
+  Object.defineProperty(this, 'sides', {
+    get: function() {
+      return this.polygonSides;
+    },
+    set: function(value) {
+      if (typeof value != "number" || value < 3) { throw new TypeError("polygon.sides can only be set to a number that is greater than or equal to 3."); }
+      this.polygonSides = sides;
+    }
+  });
+  
+  Object.defineProperty(this, 'length', {
+    get: function() {
+      return this.polygonLength;
+    },
+    set: function(value) {
+      if (typeof value != "number") { throw new TypeError("polygon.length can only be set to a number."); }
+      this.polygonLength = value;
+    }
+  });  
+
+  this.collider = function() {
+    var pos = this.rotatedVector(this.x - this.length, this.y - this.length)
+    var v1 = new SAT.Vector(0, 0)
+    var v2 = this.translatedVector(pos, this.rotatedVector(this.x + this.length, this.y - this.length))
+    var v3 = this.translatedVector(pos, this.rotatedVector(this.x + this.length, this.y + this.length))
+    var v4 = this.translatedVector(pos, this.rotatedVector(this.x - this.length, this.y + this.length))
+    
+    return new SAT.Polygon(pos, [v1, v2, v3, v4])
+  }
+  
+  this.render = (context) => {
+    context.fillStyle=this.color;
+    context.beginPath();
+    context.moveTo(length*1,length*0);
+    for(i = 1; i<sides; i++){
+      context.lineTo(length*Math.cos(i*(2*Math.PI/sides)),length*Math.sin(i*(2*Math.PI/sides)))
+    }
+    context.fill();
+  };
+};
+
+// Creates a 'line' sprite by rendering a rotated rectangle
+Woof.prototype.Line = function({project = undefined, width = 1, x1 = 10, y1 = 10, color = "black"} = {}) {
   this.type = "line"
   Woof.prototype.Sprite.call(this, arguments[0]);
   this.x1 = x1;
@@ -1027,6 +1164,7 @@ Woof.prototype.Line = function({project = undefined, width = 1, x1 = 10, y1 = 10
     }
   });
   
+  // Sets height property to hypotenuse of triangle created from x and x1 and y and y1 - this is the length of the 'line'
   Object.defineProperty(this, 'height', {
     get: function() {
       return Math.sqrt((Math.pow((this.x - this.x1), 2)) + (Math.pow((this.y - this.y1), 2)));
@@ -1036,14 +1174,28 @@ Woof.prototype.Line = function({project = undefined, width = 1, x1 = 10, y1 = 10
     }
   }); 
   
+  // Rotates rectangle by the angle between x1 and x and y1 and y
+  // Add 90 to the angle because "height" and "width" are essentially reversed in comparison to a rectangle sprite
+  Object.defineProperty(this, 'angle', {
+    get: function() {
+      return (Math.atan2(-this.x1 + this.x, this.y1 - this.y) * 180 / Math.PI) + 90;
+    },
+    set: function(value) {
+      throw new TypeError("You cannot set line.angle directly. You can only modify line.angle by changing the position of the line's points."); 
+    }
+  }); 
+  
+  // using move() with lines is tricky, so throw an error (should probably be fixed at some point)
+  this.move = function() { throw new TypeError("You cannot move lines with move() unfortunately! Change the x, y, x1, and y1 values instead."); };
+  
+  // subtract 90 from the angle of a line before calculating radians (undoing the correction in line.angle above)
+  this.radians = function() {
+    return (this.angle - 90) * Math.PI / 180;
+  };
   
   this.render = (context) => {
-    context.beginPath();
-    context.moveTo(0, 0);
-    context.lineTo(this.x1 - this.x, -this.y1 + this.y);
-    context.strokeStyle = this.color;
-    context.lineWidth = this.lineWidth;
-    context.stroke();
+    context.fillStyle=this.color;
+    context.fillRect(-this.width / 2, -this.height, this.width, this.height);
   };
 };
 
@@ -1055,16 +1207,13 @@ Woof.prototype.Image = function({project = undefined, url = "./images/SMJjVCL.pn
   
   this.setImageURL = function(url){    
     this.image = new window.BrowserImage();
-    // the code in comments below were designed to allow CORS for bad images
-    // this caused more problems then it solved so it's currently removed but should be revisited eventually
-    // https://github.com/stevekrouse/WoofJS/issues/161
-    // this.image.crossOrigin = "Anonymous"
     this.image.src = url;
-    // this.image.`EventListener('error', e => {
-    //     e.preventDefault(); 
-    //     this.image = new window.BrowserImage();
-    //     this.image.src = url;
-    // });
+    this.image.onerror = function(e){
+      var error = new Error()
+      error.type = "ImageLoadError"
+      error.url = url
+      throw error
+    }
   };
   this.setImageURL(url);
 
@@ -1089,7 +1238,10 @@ Woof.prototype.Image = function({project = undefined, url = "./images/SMJjVCL.pn
   }); 
   
   this.render = (context) => {
-    context.drawImage(this.image, -this.width / 2, -this.height / 2, this.width, this.height);
+    // checking if the image is loaded and not broken via https://stackoverflow.com/a/34726863/2180575
+    if (this.image.complete && this.image.naturalHeight !== 0) {
+      context.drawImage(this.image, -this.width / 2, -this.height / 2, this.width, this.height);
+    }
   };
 };
 
@@ -1407,6 +1559,100 @@ Woof.prototype.importCodeURL = function(url, callback) {
 Woof.prototype.mobile = function() {
     return (typeof window.orientation !== "undefined") || (navigator.userAgent.indexOf('IEMobile') !== -1);
 };
+
+// generate an array with the given parameters (starting value, ending value, incrementation) default incrementation is 1
+Woof.prototype.range = function(start, end, incr = 1) {
+  if (arguments.length < 2 || (typeof start != "number" || typeof end != "number" || typeof incr != "number")) { throw new TypeError("range() requires at least two number inputs."); }
+  if (incr === 0) { throw new TypeError("the third parameter for range() cannot be 0"); }
+  var output = [];
+  if (start < end) {
+    incr = Math.abs(incr);
+    for (let i = start; i < end; i += incr) {
+      output.push(i);
+    }
+  }
+  else if (start > end) {
+    incr = -Math.abs(incr);
+    for (let j = start; j > end; j += incr) {
+      output.push(j);
+    }
+  }
+  return output;
+};
+
+//Math Functions
+Woof.prototype.sqrt = function(a) {
+  if (typeof a != "number" ) { throw new TypeError("sqrt(a) requires one number input."); }
+  return Math.sqrt(a);
+};
+
+Woof.prototype.abs = function(a) {
+  if (typeof a != "number" ) { throw new TypeError("abs(a) requires one number input."); }
+  return Math.abs(a);
+};
+
+Woof.prototype.floor = function(a) {
+  if (typeof a != "number" ) { throw new TypeError("floor(a) requires one number input."); }
+  return Math.floor(a);
+};
+
+Woof.prototype.ceiling = function(a) {
+  if (typeof a != "number" ) { throw new TypeError("ceiling(a) requires one number input."); }
+  return Math.ceil(a);
+};
+
+Woof.prototype.sin = function(a) {
+  if (typeof a != "number" ) { throw new TypeError("sin(a) requires one number input."); }
+  return Math.sin(a*(Math.PI/180));
+};
+
+Woof.prototype.cos = function(a) {
+  if (typeof a != "number" ) { throw new TypeError("cos(a) requires one number input."); }
+  return Math.cos(a*(Math.PI/180));
+};
+
+Woof.prototype.tan = function(a) {
+  if (typeof a != "number" ) { throw new TypeError("tan(a) requires one number input."); }
+  return Math.tan(a*(Math.PI/180));
+};
+
+Woof.prototype.asin = function(a) {
+  if (typeof a != "number" ) { throw new TypeError("asin(a) requires one number input."); }
+  return Math.asin(a)*(180/Math.PI);
+};
+
+Woof.prototype.acos = function(a) {
+  if (typeof a != "number" ) { throw new TypeError("acos(a) requires one number input."); }
+  return Math.acos(a)*(180/Math.PI);
+};
+
+Woof.prototype.atan = function(a) {
+  if (typeof a != "number" ) { throw new TypeError("atan(a) requires one number input."); }
+  return Math.atan(a)*(180/Math.PI);
+};
+
+Woof.prototype.ln = function(a) {
+  if (typeof a != "number" ) { throw new TypeError("ln(a) requires one number input."); }
+  return Math.log(a);
+};
+
+Woof.prototype.log = function(a) {
+  if (typeof a != "number" ) { throw new TypeError("log(a) requires one number input."); }
+  return Math.log(a)/Math.log(10);
+};
+
+Woof.prototype.pow = function(a,b) {
+  if (typeof a != "number" || typeof b != "number") { throw new TypeError("pow(a,b) requires two number inputs."); }
+  return Math.pow(a,b);
+};
+
+const getData = (url, callback) => {
+  fetch(url,{mode:'cors',header:{'Access-Control-Allow-Origin':'*'}}).then(result => {
+    result.json().then(data => {
+      callback(data)
+    })
+  })
+}
 
 // find the woof.js script tag in the page
 var currentScript = document.currentScript || Array.prototype.slice.call(document.getElementsByTagName('script')).find(s => s.src.includes('woof.js'))
