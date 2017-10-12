@@ -1274,7 +1274,8 @@
       if (app.status == "SAVED"){
         window.open("./full.html#" + getIDWithRevision(), "_blank")
       } else {
-        alert("You must save your project to open it in a new window.")
+        save()
+        window.open("./full.html#" + getIDWithRevision(), "_blank")
       }
     }
 
