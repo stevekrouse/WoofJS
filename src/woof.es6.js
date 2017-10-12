@@ -1766,32 +1766,3 @@ if (JSON.parse(currentScript.getAttribute('global')) !== false) {
   // unless the script tag containing Woof has an attribute global="false", start Woof in global mode
   Woof.prototype.extend(window, new Woof({global: true, fullScreen: true}));
 }
-
-// Add methods to JS audio prototype
-Audio.prototype.startPlaying = function() {
-  this.play();  
-}
-
-Audio.prototype.stopPlaying = function() {
-  this.pause();
-  this.currentTime = 0.0;
-}
-
-Audio.prototype.enableLoop = function () { 
-  this.loop = true;
-}
-
-Audio.prototype.neverPlayed = function() {
-  if (this.played.length === 0) {
-    return true;
-  }
-}
-
-Audio.prototype.changeSpeed = function (speed) { 
-  this.playbackRate = speed;
-}
-
-Audio.prototype.changeVolume = function (vol) {
-  this.volume = vol;
-}
-
