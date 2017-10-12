@@ -1751,6 +1751,123 @@ Woof.prototype.Image = function () {
   };
 };
 
+Woof.prototype.Sound = function () {
+  var _ref14 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+      _ref14$project = _ref14.project,
+      project = _ref14$project === undefined ? undefined : _ref14$project,
+      _ref14$url = _ref14.url,
+      url = _ref14$url === undefined ? '' : _ref14$url,
+      _ref14$loop = _ref14.loop,
+      loop = _ref14$loop === undefined ? false : _ref14$loop,
+      _ref14$speed = _ref14.speed,
+      speed = _ref14$speed === undefined ? "normal" : _ref14$speed,
+      _ref14$volume = _ref14.volume,
+      volume = _ref14$volume === undefined ? "normal" : _ref14$volume;
+
+  this.url = url;
+  // Create new audio object with given url
+  var sound = new Audio(url);
+  // Define loop, speed, and volume properties
+  this.soundLoop = loop;
+  this.soundSpeed = speed;
+  this.soundVolume = volume;
+
+  // These functions are wrappers that allow the native audio functions to execute
+  setLoop(loop);
+  setSpeed(speed);
+  setVolume(volume);
+
+  // Allow user to get and set speed
+  Object.defineProperty(this, 'speed', {
+    get: function get() {
+      return this.soundSpeed;
+    },
+    set: function set(value) {
+      if (value != "slow" && value != "fast" && value != "normal") {
+        throw new Error("Speed can only be set to normal, slow, or fast.");
+      }
+      this.soundSpeed = value;
+      setSpeed(value);
+    }
+  });
+
+  // Allow user to get and set volume
+  Object.defineProperty(this, 'volume', {
+    get: function get() {
+      return this.soundVolume;
+    },
+    set: function set(value) {
+      if (value != "low" && value != "mute" && value != "normal") {
+        throw new Error("Volume can only be set to normal, low, or mute.");
+      }
+      this.soundVolume = value;
+      setVolume(value);
+    }
+  });
+
+  // Allow user to get and set loop
+  Object.defineProperty(this, 'loop', {
+    get: function get() {
+      return this.soundLoop;
+    },
+    set: function set(value) {
+      if (typeof value != "boolean") {
+        throw new Error("Loop must be set to true or false.");
+      }
+      this.soundLoop = value;
+      setLoop(value);
+    }
+  });
+
+  // Set loop to true or false
+  function setLoop(val) {
+    sound.loop = val ? true : false;
+  }
+
+  // Set speed to slow, normal, or fast
+  function setSpeed(val) {
+    if (val == "slow") {
+      sound.playbackRate = 0.5;
+    }
+    if (val == "normal") {
+      sound.playbackRate = 1;
+    }
+    if (val == "fast") {
+      sound.playbackRate = 2;
+    }
+  }
+
+  // Set volume to low, normal, or mute
+  function setVolume(val) {
+    if (val == "low") {
+      sound.volume = 0.5;
+    }
+    if (val == "mute") {
+      sound.volume = 0;
+    }
+    if (val == "normal") {
+      sound.volume = 1;
+    }
+  }
+
+  // Play the sound
+  this.startPlaying = function () {
+    sound.play();
+  };
+
+  // Stop the sound
+  this.stopPlaying = function () {
+    sound.pause();
+  };
+
+  // Check if the sound has been played
+  this.neverPlayed = function () {
+    if (sound.played.length === 0) {
+      return true;
+    }
+  };
+};
+
 // this function allows a user a custom sprite with its own render method
 // this is new and not really used so probably needs to be fleshed out
 Woof.prototype.customSprite = function (subClass) {
@@ -1758,9 +1875,9 @@ Woof.prototype.customSprite = function (subClass) {
     throw new TypeError("customSprites must contain a render function");
   } // TODO more errors like these, probably for width and height
   return function () {
-    var _ref14 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-        _ref14$project = _ref14.project,
-        project = _ref14$project === undefined ? undefined : _ref14$project;
+    var _ref15 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+        _ref15$project = _ref15.project,
+        project = _ref15$project === undefined ? undefined : _ref15$project;
 
     Woof.prototype.Sprite.call(this, arguments[0]);
     Woof.prototype.extend(this, subClass);

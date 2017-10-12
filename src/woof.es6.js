@@ -1245,6 +1245,111 @@ Woof.prototype.Image = function({project = undefined, url = "./images/SMJjVCL.pn
   };
 };
 
+Woof.prototype.Sound = function({project = undefined, url = '', loop = false, speed = "normal", volume = "normal"} = {}) {
+  this.url = url;
+  // Create new audio object with given url
+  var sound = new Audio(url);
+  // Define loop, speed, and volume properties
+  this.soundLoop = loop;
+  this.soundSpeed = speed;
+  this.soundVolume = volume;
+  
+  // These functions are wrappers that allow the native audio functions to execute
+  setLoop(loop);
+  setSpeed(speed);
+  setVolume(volume);
+  
+  // Allow user to get and set speed
+  Object.defineProperty(this, 'speed', {
+    get: function() {
+      return this.soundSpeed;
+    },
+    set: function(value) {
+    if (value != "slow" && value != "fast" && value != "normal") {
+      throw new Error("Speed can only be set to normal, slow, or fast."); 
+    }
+    this.soundSpeed = value;
+    setSpeed(value);
+    }
+  });
+  
+  // Allow user to get and set volume
+  Object.defineProperty(this, 'volume', {
+    get: function() {
+      return this.soundVolume;
+    },
+    set: function(value) {
+      if (value != "low" && value != "mute" && value != "normal") {
+        throw new Error("Volume can only be set to normal, low, or mute.");
+      }
+      this.soundVolume = value;
+      setVolume(value);
+    }
+  });
+  
+  // Allow user to get and set loop
+  Object.defineProperty(this, 'loop', {
+    get: function() {
+      return this.soundLoop;
+    },
+    set: function(value) {
+      if (typeof value != "boolean") {
+        throw new Error("Loop must be set to true or false."); 
+      }
+      this.soundLoop = value;
+      setLoop(value);
+    }
+  });
+  
+  // Set loop to true or false
+  function setLoop(val) {
+    sound.loop = val ? true: false;
+  }
+
+  // Set speed to slow, normal, or fast
+  function setSpeed(val) {
+    if (val == "slow") {
+       sound.playbackRate = 0.5;
+    }
+    if (val == "normal") {
+       sound.playbackRate = 1;
+    }
+    if (val == "fast") {
+       sound.playbackRate = 2;
+    }
+  }
+  
+  // Set volume to low, normal, or mute
+  function setVolume(val) {
+    if (val == "low") {
+      sound.volume = 0.5;
+    }
+    if (val == "mute") {
+      sound.volume = 0
+    }
+    if (val == "normal") {
+      sound.volume = 1
+    }
+  }
+  
+  // Play the sound
+  this.startPlaying = function() {
+    sound.play();
+  };
+  
+  // Stop the sound
+  this.stopPlaying = function() {
+    sound.pause();
+  };
+  
+  // Check if the sound has been played
+  this.neverPlayed = function() {
+    if (sound.played.length === 0) {
+      return true;
+   }
+  }
+};
+
 // this function allows a user a custom sprite with its own render method
 // this is new and not really used so probably needs to be fleshed out
 Woof.prototype.customSprite = function(subClass) {
