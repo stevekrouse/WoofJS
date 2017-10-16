@@ -147,7 +147,12 @@ div.search {
     width: 98%; 
     margin-left: 1%;
     margin-right: 1%;
-    margin-top: 5px;
+    margin-top: 0px;
+    padding-top: 0px;
+    height: 45px;
+    z-index: 9999;
+    position: fixed;
+    background-color: #FFFFFF;
 }
 
 #searchbar {
@@ -167,7 +172,7 @@ div.search {
     font-family: "Open Sans", sans-serif;
     font-size: 20px;
     box-shadow: none;
-    display: block;
+    display: inline-block;
     padding: 10px;
     width: 100%;
 }
