@@ -150,7 +150,7 @@
     {
       name: "Users Active Today",
       func: function(row, joins) {
-        return Array.from(new Set(joins.projects.filter(project => project.currentVersionTime).filter(project => new Date().toDateString() == new Date(project.currentVersionTime).toDateString()).map(project => project['--uid']))).length
+        return Array.from(new Set(joins.projects.filter(project => project.currentVersionTime).filter(project => new Date().toDateString() == new Date(project.currentVersionTime).toDateString()).map(project => project.uid))).length
       }
     },
     {
