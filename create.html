@@ -1523,8 +1523,9 @@
     function tryRunningCode() {
       app.code = editor.getValue()
       app.error = undefined
-      if (app.errorLineNumber) {
-        editor.removeLineClass(app.errorLineNumber - 1, 'text', 'error-highlight');
+      var count = editor.lineCount(), i;
+      for (i = 0; i < count; i++) {
+        editor.removeLineClass(i, 'text', 'error-highlight');
       }
       try {
         var result = Babel.transform(editor.getValue(), {
