@@ -1523,8 +1523,7 @@
     function tryRunningCode() {
       app.code = editor.getValue()
       app.error = undefined
-      var count = editor.lineCount(), i;
-      for (i = 0; i < count; i++) {
+      for (var i = 0; i < editor.lineCount(); i++) {
         editor.removeLineClass(i, 'text', 'error-highlight');
       }
       try {
