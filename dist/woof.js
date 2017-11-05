@@ -1753,118 +1753,95 @@ Woof.prototype.Image = function () {
 
 Woof.prototype.Sound = function () {
   var _ref14 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-      _ref14$project = _ref14.project,
-      project = _ref14$project === undefined ? undefined : _ref14$project,
       _ref14$url = _ref14.url,
       url = _ref14$url === undefined ? '' : _ref14$url,
       _ref14$loop = _ref14.loop,
-      loop = _ref14$loop === undefined ? false : _ref14$loop,
-      _ref14$speed = _ref14.speed,
-      speed = _ref14$speed === undefined ? "normal" : _ref14$speed,
+      loop = _ref14$loop === undefined ? "false" : _ref14$loop,
       _ref14$volume = _ref14.volume,
-      volume = _ref14$volume === undefined ? "normal" : _ref14$volume;
+      volume = _ref14$volume === undefined ? "normal" : _ref14$volume,
+      _ref14$speed = _ref14.speed,
+      speed = _ref14$speed === undefined ? "normal" : _ref14$speed;
 
-  this.url = url;
   // Create new audio object with given url
-  var sound = new Audio(url);
-  // Define loop, speed, and volume properties
-  this.soundLoop = loop;
-  this.soundSpeed = speed;
-  this.soundVolume = volume;
+  this.audio = new Audio(url);
+  this.audio.loop = loop;
 
-  // These functions are wrappers that allow the native audio functions to execute
-  setLoop(loop);
-  setSpeed(speed);
-  setVolume(volume);
+  // Store allowed audio speed and volume values
+  this.audioSettings = {
+    Speed: {
+      slow: [0.5, "slow"],
+      normal: [1, "normal"],
+      fast: [2, "fast"]
+    },
+    Volume: {
+      mute: [0, "mute"],
+      low: [0.5, "low"],
+      normal: [1, "normal"]
+    }
+  };
+
+  // Convert given value to corresponding audio object value
+  // Throw error if given value not found in allowed values
+  function convertAudioSettings(propName, prop, val) {
+    var props = [];
+    for (var key in prop) {
+      if (prop[key].indexOf(val) != -1) {
+        return prop[key][0];
+      }
+      props.push(prop[key].join(", "));
+    }
+    throw new Error(propName + " can only be set to one of the following: " + props.join(", ") + ".");
+  };
+
+  this.audio.playbackRate = convertAudioSettings("Speed", this.audioSettings.Speed, speed);
+  this.audio.volume = convertAudioSettings("Volume", this.audioSettings.Volume, volume);
 
   // Allow user to get and set speed
   Object.defineProperty(this, 'speed', {
     get: function get() {
-      return this.soundSpeed;
+      return this.audio.playbackRate;
     },
     set: function set(value) {
-      if (value != "slow" && value != "fast" && value != "normal") {
-        throw new Error("Speed can only be set to normal, slow, or fast.");
-      }
-      this.soundSpeed = value;
-      setSpeed(value);
+      this.audio.playbackRate = convertAudioSettings("Speed", this.audioSettings.Speed, value);
     }
   });
 
   // Allow user to get and set volume
   Object.defineProperty(this, 'volume', {
     get: function get() {
-      return this.soundVolume;
+      return this.audio.volume;
     },
     set: function set(value) {
-      if (value != "low" && value != "mute" && value != "normal") {
-        throw new Error("Volume can only be set to normal, low, or mute.");
-      }
-      this.soundVolume = value;
-      setVolume(value);
+      this.audio.volume = convertAudioSettings("Volume", this.audioSettings.Volume, value);
     }
   });
 
   // Allow user to get and set loop
   Object.defineProperty(this, 'loop', {
     get: function get() {
-      return this.soundLoop;
+      return this.audio.loop;
     },
     set: function set(value) {
       if (typeof value != "boolean") {
         throw new Error("Loop must be set to true or false.");
       }
-      this.soundLoop = value;
-      setLoop(value);
+      this.audio.loop = value;
     }
   });
 
-  // Set loop to true or false
-  function setLoop(val) {
-    sound.loop = val ? true : false;
-  }
-
-  // Set speed to slow, normal, or fast
-  function setSpeed(val) {
-    if (val == "slow") {
-      sound.playbackRate = 0.5;
-    }
-    if (val == "normal") {
-      sound.playbackRate = 1;
-    }
-    if (val == "fast") {
-      sound.playbackRate = 2;
-    }
-  }
-
-  // Set volume to low, normal, or mute
-  function setVolume(val) {
-    if (val == "low") {
-      sound.volume = 0.5;
-    }
-    if (val == "mute") {
-      sound.volume = 0;
-    }
-    if (val == "normal") {
-      sound.volume = 1;
-    }
-  }
-
   // Play the sound
   this.startPlaying = function () {
-    sound.play();
+    this.audio.play();
   };
 
   // Stop the sound
   this.stopPlaying = function () {
-    sound.pause();
+    this.audio.pause();
   };
 
   // Check if the sound has been played
   this.neverPlayed = function () {
-    if (sound.played.length === 0) {
-      return true;
-    }
+    return this.audio.played.length === 0;
   };
 };
 

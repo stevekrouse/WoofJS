@@ -1028,7 +1028,6 @@ Woof.prototype.Circle = function({project = undefined, radius = 10, color = "bla
   };
 };
 
-
 Woof.prototype.Rectangle = function({project = undefined, height = 10, width = 10, color = "black"} = {}) {
   this.type = "rectangle"
   Woof.prototype.Sprite.call(this, arguments[0]);
@@ -1245,110 +1244,90 @@ Woof.prototype.Image = function({project = undefined, url = "./images/SMJjVCL.pn
   };
 };
 
-Woof.prototype.Sound = function({project = undefined, url = '', loop = false, speed = "normal", volume = "normal"} = {}) {
-  this.url = url;
+Woof.prototype.Sound = function({url = '', loop = "false", volume = "normal", speed = "normal"} = {}) {
+  
   // Create new audio object with given url
-  var sound = new Audio(url);
-  // Define loop, speed, and volume properties
-  this.soundLoop = loop;
-  this.soundSpeed = speed;
-  this.soundVolume = volume;
+  this.audio = new Audio(url);
+  this.audio.loop = loop;
+
+  // Store allowed audio speed and volume values
+  this.audioSettings = {
+    Speed: {
+      slow: [0.5, "slow"],
+      normal: [1, "normal"],
+      fast: [2, "fast"]
+     },
+    Volume: {
+      mute: [0, "mute"],
+      low: [0.5, "low"],
+      normal: [1, "normal"]
+    }
+  }
   
-  // These functions are wrappers that allow the native audio functions to execute
-  setLoop(loop);
-  setSpeed(speed);
-  setVolume(volume);
+  // Convert given value to corresponding audio object value
+  // Throw error if given value not found in allowed values
+  function convertAudioSettings(propName, prop, val) {
+    var props = [];
+    for (var key in prop) {
+      if (prop[key].indexOf(val) != -1) {
+        return prop[key][0];
+      }
+      props.push(prop[key].join(", "));
+    }
+    throw new Error(propName + " can only be set to one of the following: " +  props.join(", ") + ".")
+  };
   
+  this.audio.playbackRate = convertAudioSettings("Speed", this.audioSettings.Speed, speed);
+  this.audio.volume = convertAudioSettings("Volume", this.audioSettings.Volume, volume);
+
   // Allow user to get and set speed
   Object.defineProperty(this, 'speed', {
     get: function() {
-      return this.soundSpeed;
+      return this.audio.playbackRate;
     },
     set: function(value) {
-    if (value != "slow" && value != "fast" && value != "normal") {
-      throw new Error("Speed can only be set to normal, slow, or fast."); 
-    }
-    this.soundSpeed = value;
-    setSpeed(value);
+      this.audio.playbackRate = convertAudioSettings("Speed", this.audioSettings.Speed, value);
     }
   });
   
   // Allow user to get and set volume
   Object.defineProperty(this, 'volume', {
     get: function() {
-      return this.soundVolume;
+      return this.audio.volume;
     },
     set: function(value) {
-      if (value != "low" && value != "mute" && value != "normal") {
-        throw new Error("Volume can only be set to normal, low, or mute.");
-      }
-      this.soundVolume = value;
-      setVolume(value);
+      this.audio.volume = convertAudioSettings("Volume", this.audioSettings.Volume, value);
     }
   });
   
   // Allow user to get and set loop
   Object.defineProperty(this, 'loop', {
     get: function() {
-      return this.soundLoop;
+      return this.audio.loop;
     },
     set: function(value) {
       if (typeof value != "boolean") {
         throw new Error("Loop must be set to true or false."); 
       }
-      this.soundLoop = value;
-      setLoop(value);
+      this.audio.loop = value;
     }
   });
   
-  // Set loop to true or false
-  function setLoop(val) {
-    sound.loop = val ? true: false;
-  }
-
-  // Set speed to slow, normal, or fast
-  function setSpeed(val) {
-    if (val == "slow") {
-       sound.playbackRate = 0.5;
-    }
-    if (val == "normal") {
-       sound.playbackRate = 1;
-    }
-    if (val == "fast") {
-       sound.playbackRate = 2;
-    }
-  }
-  
-  // Set volume to low, normal, or mute
-  function setVolume(val) {
-    if (val == "low") {
-      sound.volume = 0.5;
-    }
-    if (val == "mute") {
-      sound.volume = 0
-    }
-    if (val == "normal") {
-      sound.volume = 1
-    }
-  }
-  
   // Play the sound
   this.startPlaying = function() {
-    sound.play();
+    this.audio.play();
   };
   
   // Stop the sound
   this.stopPlaying = function() {
-    sound.pause();
+    this.audio.pause();
   };
   
   // Check if the sound has been played
   this.neverPlayed = function() {
-    if (sound.played.length === 0) {
-      return true;
-   }
-  }
-};
+    return this.audio.played.length === 0;
+  };
+}
 
 // this function allows a user a custom sprite with its own render method
 // this is new and not really used so probably needs to be fleshed out
@@ -1380,8 +1359,6 @@ Woof.prototype.Repeat = function(times, func, after) {
   };
 };
   
-
-
 Woof.prototype.RepeatUntil = function(condition, func, after){
   // TODO if (typeof condition !== "string") { throw Error("You must give repeatUntil a string condition in quotes. You gave it: " + condition); }
   this.func = func;

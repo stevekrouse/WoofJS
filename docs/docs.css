@@ -505,11 +505,11 @@ h4 {
 
 .play-sound {
   display: inline;
-  padding-left: 5px;
+  cursor: pointer;
 }
 
 .glyphicon-play-circle, .glyphicon-pause {
     font-size: 32px;
-    color: #563d7c;
+    color: #cc00c2;
     vertical-align: middle;
 }
