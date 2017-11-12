@@ -1266,14 +1266,14 @@ Woof.prototype.Sound = function({url = '', loop = "false", volume = "normal", sp
   
   // Convert given value to corresponding audio object value
   // Throw error if given value not found in allowed values
-  function convertAudioSettings(obj, prop, objName) {
+  function convertAudioSettings(obj, val, objName) {
     var values = Object.values(obj);
     var keys = Object.keys(obj);
-    if (values.indexOf(prop) != -1) {
-      return prop;
+    if (values.indexOf(val) != -1) {
+      return val;
     }
-    if (keys.indexOf(prop) != -1) {
-      return values[keys.indexOf(prop)];
+    if (keys.indexOf(val) != -1) {
+      return values[keys.indexOf(val)];
     }
     throw new Error(objName + " can only be set to one of the following: " +  values.join(", ") + ".");
   };
