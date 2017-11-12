@@ -1252,33 +1252,34 @@ Woof.prototype.Sound = function({url = '', loop = "false", volume = "normal", sp
 
   // Store allowed audio speed and volume values
   this.audioSettings = {
-    Speed: {
-      slow: [0.5, "slow"],
-      normal: [1, "normal"],
-      fast: [2, "fast"]
+    speed: {
+      slow: 0.5,
+      normal: 1,
+      fast: 2
      },
-    Volume: {
-      mute: [0, "mute"],
-      low: [0.5, "low"],
-      normal: [1, "normal"]
+    volume: {
+      mute: 0,
+      low: 0.5,
+      normal: 1
     }
   }
   
   // Convert given value to corresponding audio object value
   // Throw error if given value not found in allowed values
-  function convertAudioSettings(propName, prop, val) {
-    var props = [];
-    for (var key in prop) {
-      if (prop[key].indexOf(val) != -1) {
-        return prop[key][0];
-      }
-      props.push(prop[key].join(", "));
+  function convertAudioSettings(obj, prop, objName) {
+    var values = Object.values(obj);
+    var keys = Object.keys(obj);
+    if (values.indexOf(prop) != -1) {
+      return prop;
     }
-    throw new Error(propName + " can only be set to one of the following: " +  props.join(", ") + ".")
+    if (keys.indexOf(prop) != -1) {
+      return values[keys.indexOf(prop)];
+    }
+    throw new Error(objName + " can only be set to one of the following: " +  values.join(", ") + ".");
   };
   
-  this.audio.playbackRate = convertAudioSettings("Speed", this.audioSettings.Speed, speed);
-  this.audio.volume = convertAudioSettings("Volume", this.audioSettings.Volume, volume);
+  this.audio.playbackRate = convertAudioSettings(this.audioSettings.speed, speed, "Speed");
+  this.audio.volume = convertAudioSettings(this.audioSettings.volume, volume, "Volume");
 
   // Allow user to get and set speed
   Object.defineProperty(this, 'speed', {
@@ -1286,7 +1287,7 @@ Woof.prototype.Sound = function({url = '', loop = "false", volume = "normal", sp
       return this.audio.playbackRate;
     },
     set: function(value) {
-      this.audio.playbackRate = convertAudioSettings("Speed", this.audioSettings.Speed, value);
+      this.audio.playbackRate = convertAudioSettings(this.audioSettings.speed, value, "Speed");
     }
   });
   
@@ -1296,7 +1297,7 @@ Woof.prototype.Sound = function({url = '', loop = "false", volume = "normal", sp
       return this.audio.volume;
     },
     set: function(value) {
-      this.audio.volume = convertAudioSettings("Volume", this.audioSettings.Volume, value);
+      this.audio.volume = convertAudioSettings(this.audioSettings.volume, value, "Volume");
     }
   });
   
