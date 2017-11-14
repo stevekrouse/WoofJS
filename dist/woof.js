@@ -1751,6 +1751,133 @@ Woof.prototype.Image = function () {
   };
 };
 
+Woof.prototype.Sound = function () {
+  var _ref14 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+      _ref14$url = _ref14.url,
+      url = _ref14$url === undefined ? '' : _ref14$url,
+      _ref14$loop = _ref14.loop,
+      loop = _ref14$loop === undefined ? "false" : _ref14$loop,
+      _ref14$volume = _ref14.volume,
+      volume = _ref14$volume === undefined ? "normal" : _ref14$volume,
+      _ref14$speed = _ref14.speed,
+      speed = _ref14$speed === undefined ? "normal" : _ref14$speed;
+
+  // Create new audio object with given url
+  this.audio = new Audio(url);
+  this.audio.loop = loop;
+
+  // Store allowed audio speed and volume values
+  this.audioSettings = {
+    speed: {
+      slow: 0.5,
+      normal: 1,
+      fast: 2
+    },
+    volume: {
+      mute: 0,
+      low: 0.5,
+      normal: 1
+    }
+  };
+
+  // Convert given value to corresponding audio object value
+  // Throw error if given value not found in allowed values
+  var soundVolumeToAudioVolume = function soundVolumeToAudioVolume(val) {
+    if (typeof val == "number") {
+      if (val >= 0 && val <= 1) {
+        return val;
+      } else {
+        throw Error("Volume can only be set to a number value between 0 and 1.");
+      }
+    } else if (typeof val == "string") {
+      if (val == "mute") {
+        return 0;
+      } else if (val == "low") {
+        return 0.5;
+      } else if (val == "normal") {
+        return 1;
+      } else {
+        throw Error('Volume can only be set to a string value of "mute", "low", or "normal".');
+      }
+    } else {
+      throw Error(val + " is not an accepted value for volume.");
+    }
+  };
+
+  var soundSpeedToAudioSpeed = function soundSpeedToAudioSpeed(val) {
+    if (typeof val == "number") {
+      if (val >= 0.5 && val <= 2) {
+        return val;
+      } else {
+        throw Error("Speed can only be set to a number value between 0.5 and 2.");
+      }
+    } else if (typeof val == "string") {
+      if (val == "slow") {
+        return 0.5;
+      } else if (val == "normal") {
+        return 1;
+      } else if (val == "fast") {
+        return 2;
+      } else {
+        throw Error('Speed can only be set to a string value of "slow", "normal", or "fast".');
+      }
+    } else {
+      throw Error(val + " is not an accepted value for speed.");
+    }
+  };
+
+  this.audio.playbackRate = soundSpeedToAudioSpeed(speed);
+  this.audio.volume = soundVolumeToAudioVolume(volume);
+
+  // Allow user to get and set speed
+  Object.defineProperty(this, 'speed', {
+    get: function get() {
+      return this.audio.playbackRate;
+    },
+    set: function set(value) {
+      this.audio.playbackRate = soundSpeedToAudioSpeed(value);
+    }
+  });
+
+  // Allow user to get and set volume
+  Object.defineProperty(this, 'volume', {
+    get: function get() {
+      return this.audio.volume;
+    },
+    set: function set(value) {
+      this.audio.volume = soundVolumeToAudioVolume(value);
+    }
+  });
+
+  // Allow user to get and set loop
+  Object.defineProperty(this, 'loop', {
+    get: function get() {
+      return this.audio.loop;
+    },
+    set: function set(value) {
+      if (typeof value != "boolean") {
+        throw new Error("Loop must be set to true or false.");
+      }
+      this.audio.loop = value;
+    }
+  });
+
+  // Play the sound
+  this.startPlaying = function () {
+    this.audio.play();
+  };
+
+  // Stop the sound
+  this.stopPlaying = function () {
+    this.audio.pause();
+  };
+
+  // Check if the sound has been played
+  this.neverPlayed = function () {
+    return this.audio.played.length === 0;
+  };
+};
+
 // this function allows a user a custom sprite with its own render method
 // this is new and not really used so probably needs to be fleshed out
 Woof.prototype.customSprite = function (subClass) {
@@ -1758,9 +1885,9 @@ Woof.prototype.customSprite = function (subClass) {
     throw new TypeError("customSprites must contain a render function");
   } // TODO more errors like these, probably for width and height
   return function () {
-    var _ref14 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-        _ref14$project = _ref14.project,
-        project = _ref14$project === undefined ? undefined : _ref14$project;
+    var _ref15 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+        _ref15$project = _ref15.project,
+        project = _ref15$project === undefined ? undefined : _ref15$project;
 
     Woof.prototype.Sprite.call(this, arguments[0]);
     Woof.prototype.extend(this, subClass);

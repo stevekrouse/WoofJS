@@ -51,6 +51,10 @@
               <a v-if="block.integrationDocumentationLink" target='_blank' class="btn btn-primary" :href="block.integrationDocumentationLink" role="button" style="width:100%;">Full Documentation</a>
             </div>
             <img v-if="block.url" ondragstart="event.dataTransfer.setData('text/plain', event.target.alt)" :alt="block.code" :src="block.url">
+            <div v-if="block.sound" class="play-sound">
+              <img v-if="!playing" src="./images/play.png" width="30" @click="playSound(block.sound)">
+              <img v-else src="./images/pause.png" width="30" @click="stopSound(block.sound)">
+            </div>
             <div v-if="block.description">{{ block.description }}</div>
             <div v-if="block.html" v-html="block.html"></div>
             <div v-if="block.code">
@@ -68,9 +72,28 @@
         Vue.component('vue-block', {
             template: "#block-template",
             props: ["block"],
+            data: function() {
+             return {
+               sound: '',
+               playing: false
+             }
+            },
             methods: {
                 highlight: function(code) {
                     return Prism.highlight(code, Prism.languages.javascript);
+                },
+                playSound: function(url) {
+                 this.audio = new Audio(url);
+                 this.playing = true
+                 this.audio.play();
+                 var self = this;
+                 this.audio.addEventListener("ended", function(){
+                  self.playing = false
+                 });
+                },
+                stopSound: function() {
+                  this.audio.pause();
+                  this.playing = false
                 }
             }
         })
@@ -1380,126 +1403,115 @@
                     },
                     ],
                     Sound: [{
+                        sound: "./sounds/mario-jump.wav",
                         url: "./images/playmario.png",
-                        code: "var mario = new Audio('./docs/sounds/mario-jump.wav')\nmario.play()",
+                        code: 'var mario = new Sound({\n  url: "./docs/sounds/mario-jump.wav",\n  loop: false,\n  speed: "normal",\n  volume: "normal"\n})\n\nmario.startPlaying()',
                         tags: "music play sounds audio"
-                    }, 
-                    {
-                        url: "./images/asteroids-bang.png",
-                        code: "var bang = new Audio('./docs/sounds/asteroids-bang.wav')\nbang.play()",
-                        tags: "music play sounds audio bang"
-                    }, 
-                     {
-                        url: "./images/asteroids-shoot.png",
-                        code: "var ping = new Audio('./docs/sounds/asteroids-shoot.wav')\nping.play()",
-                        tags: "music play sounds audio"
-                    }, 
-                
-                    {
+                    }, {
+                        sound: "./sounds/asteroids-saucer.wav",
                         url: "./images/asteroids-saucer.png",
-                        code: "var saucer = new Audio('./docs/sounds/asteroids-saucer.wav')\nsaucer.play()",
+                        code: 'var saucer = new Sound({\n  url: "./docs/sounds/asteroids-saucer.wav",\n  loop: false,\n  speed: "normal",\n  volume: "normal"\n})\n\nsaucer.startPlaying()',
                         tags: "music play sounds audio"
-                    }, 
-                     {
+                    }, {
+                        sound: "./sounds/alien.mp3",
                         url: "./images/playalien.png",
-                        code: "var alien = new Audio('./docs/sounds/alien.mp3')\nalien.play()",
+                        code:  'var alien = new Sound({\n  url: "./docs/sounds/alien.mp3",\n  loop: false,\n  speed: "normal",\n  volume: "normal"\n})\n\nalien.startPlaying()',
                         tags: "music play sounds audio"
-                    }, 
-                    
-                      {
+                    }, {
+                        sound: "./sounds/applause.mp3",
                         url: "./images/playapplause.png",
-                        code: "var applause = new Audio('./docs/sounds/applause.mp3')\napplause.play()",
+                        code: 'var applause = new Sound({\n  url: "./docs/sounds/applause.mp3",\n  loop: false,\n  speed: "normal",\n  volume: "normal"\n})\n\napplause.startPlaying()',
                         tags: "applause music play sounds audio"
-                    }, 
-                    
-                     {
+                    }, {
+                        sound: "./sounds/bark.mp3",
                         url: "./images/playbark.png",
-                        code: "var bark = new Audio('./docs/sounds/bark.mp3')\nbark.play()",
+                        code: 'var bark = new Sound({\n  url: "./docs/sounds/bark.mp3",\n  loop: false,\n  speed: "normal",\n  volume: "normal"\n})\n\nbark.startPlaying()',
                         tags: "bark dog music play sounds audio"
-                    }, 
-                    
-                    {
+                    }, {
+                        sound: "./sounds/switch.mp3",
                         url: "./images/playswitch.png",
-                        code: "var switchSound = new Audio('./docs/sounds/switch.mp3')\nswitchSound.play()",
+                        code: 'var switchSound = new Sound({\n  url: "./docs/sounds/switch.mp3",\n  loop: false,\n  speed: "normal",\n  volume: "normal"\n})\n\nswitchSound.startPlaying()',
                         tags: "switch music play sounds audio"
-                    }, 
-                   
-                     {
+                    }, {
+                        sound: "./sounds/mario-coin.wav",
                         url: "./images/playlevel.png",
-                        code: "var levelUp = new Audio('./docs/sounds/mario-coin.wav')\nlevelUp.play()",
+                        code: 'var levelUp = new Sound({\n  url: "./docs/sounds/mario-coin.wav",\n  loop: false,\n  speed: "normal",\n  volume: "normal"\n})\n\nlevelUp.startPlaying()',
                         tags: "mario music level play sounds audio"
-                    }, 
-                    
-                    {
+                    }, {
+                        sound: "./sounds/meow.mp3",
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f4c387a6e6d4f622e706e67",
-                        code: "var meow = new Audio('./docs/sounds/meow.mp3')\nmeow.play()",
+                        code: 'var meow = new Sound({\n  url: "./docs/sounds/meow.mp3",\n  loop: false,\n  speed: "normal",\n  volume: "normal"\n})\n\nmeow.startPlaying()',
                         tags: "meow cat music play sounds audio"
-                    },
-                    
-                     {
+                    }, {
+                        sound: "./sounds/text-alert.mp3",
                         url: "./images/playtext.png",
-                        code: "var textAlert = new Audio('./docs/sounds/text-alert.mp3')\ntextAlert.play()",
+                        code: 'var textAlert = new Sound({\n  url: "./docs/sounds/text-alert.mp3",\n  loop: false,\n  speed: "normal",\n  volume: "normal"\n})\n\ntextAlert.startPlaying()',
                         tags: "music play sounds audio text alert"
-                    }, 
-                    
-                     {
+                    }, {
+                        sound: "./sounds/fart.wav",
                         url: "./images/playfart.png",
-                        code: "var fart = new Audio('./docs/sounds/fart.wav')\nfart.play()",
+                        code: 'var fart = new Sound({\n  url: "./docs/sounds/fart.wav",\n  loop: false,\n  speed: "normal",\n  volume: "normal"\n})\n\nfart.startPlaying()',
                         tags: "fart music play sounds audio"
-                    }, 
-                    {
+                    }, {
+                        sound: "./sounds/river-ride.mp3",
                         url: "./images/river-ride.png",
-                        code: "var riverRide = new Audio('./docs/sounds/river-ride.wav')\nriverRide.play()",
+                        code: 'var riverRide = new Sound({\n  url: "./docs/sounds/river-ride.mp3",\n  loop: false,\n  speed: "normal",\n  volume: "normal"\n})\n\nriverRide.startPlaying()',
                         tags: "music play sounds audio"
-                    }, 
-                     {
+                    }, {
+                        sound: "./sounds/star-wars.mp3",
                         url: "./images/playstarwars.png",
-                        code: "var starWars = new Audio('./docs/sounds/star-wars.mp3')\nstarWars.play()",
+                        code: 'var starWars = new Sound({\n  url: "./docs/sounds/star-wars.mp3",\n  loop: false,\n  speed: "normal",\n  volume: "normal"\n})\n\nstarWars.startPlaying()',
                         tags: "star wards music play sounds audio"
-                    }, 
-                    
-                    {
+                    }, {
+                        sound: "./sounds/round_new.mp3",
                         url: "./images/playround.png",
-                        code: "var newRound = new Audio('./docs/sounds/new-round.mp3')\nnewRound.play()",
+                        code: 'var newRound = new Sound({\n  url: "./docs/sounds/round_new.mp3",\n  loop: false,\n  speed: "normal",\n  volume: "normal"\n})\n\nnewRound.startPlaying()',
                         tags: "level up music play sounds audio"
-                    }, 
-                    
-                    {
+                    }, {
+                        sound: "./sounds/pop.wav",
                         url: "./images/pop.png",
-                        code: "var pop = new Audio('./docs/sounds/pop.wav')\npop.play()",
+                        code: 'var pop = new Sound({\n  url: "./docs/sounds/pop.wav",\n  loop: false,\n  speed: "normal",\n  volume: "normal"\n})\n\npop.startPlaying()',
                         tags: "pop music play sounds audio"
-                    }, 
-                    
-                    {
+                    }, {
+                        sound: "./sounds/bang.wav",
                         url: "./images/bang.png",
-                        code: "var bang = new Audio('./docs/sounds/bang.wav')\nbang.play()",
+                        code: 'var bang = new Sound({\n  url: "./docs/sounds/bang.wav",\n  loop: false,\n  speed: "normal",\n  volume: "normal"\n})\n\nbang.startPlaying()',
                         tags: "bang music play sounds audio"
-                    }, 
-
-                    {
+                    }, {
+                        sound: "./sounds/shoot.wav",
                         url: "./images/shoot.png",
-                        code: "var shoot = new Audio('./docs/sounds/shoot.wav')\nshoot.play()",
+                        code: 'var shoot = new Sound({\n  url: "./docs/sounds/shoot.wav",\n  loop: false,\n  speed: "normal",\n  volume: "normal"\n})\n\nshoot.startPlaying()',
                         tags: "shoot music play sounds audio"
-                    }, 
-                    {
-                        url: "./images/starcatcher-pop.png",
-                        code: "var starcatcher = new Audio('./docs/sounds/starcatcher-pop.wav')\nstarcatcher.play()",
-                        tags: " music play sounds audio"
-                    },
-                    
-                    {
+                    }, {
+                        description: "Loop:",
+                        code: 'loop: "false"\nloop: "true"',
+                        tags: "sound sounds audio loop"
+                    }, {
+                        description: "Speed: (use string or number value)",
+                        code: '// Slow\nspeed: "slow"\nspeed: 0.5\n\n// Normal\nspeed: "normal"\nspeed: 1\n\n// Fast\nspeed: "fast"\nspeed: 2',
+                        tags: "sound sounds audio speed"
+                    }, {
+                        url: "./images/set-volume.png",
+                        description: "(use string or number value)",
+                        code: '// Mute\nvolume: "mute"\nvolume: 0\n\n// Low\nvolume: "low"\nvolume: 0.5\n\n// Normal\nvolume: "normal"\nvolume: 1',
+                        tags: "sound audio volume"
+                    }, {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f58396b6b3679572e706e67",
-                        code: "mario.pause()",
+                        code: "mario.stopPlaying()",
                         tags: "pause music stop sounds audio"
-                    }, 
-                    {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
-                    {
-                        url:"./images/soundFeatures.png",
-                        description:"These blocks do not exist in WoofJS.",
+                    }, {
+                        code: "if (mario.neverPlayed()){\n /* then do stuff here */\n}",
+                        html: "Use the <code>.neverPlayed()</code> function to check if your sound has been played:",
+                        tags: "sound play played"
+                    }, {
+                        html: "<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"
+                    }, {
+                        description: "These blocks do not exist in WoofJS:",
+                        html: "<img style='margin-top: 5px' src='./images/soundFeatures.png'>",
                         tags:"drum note volume play tempo instrument beats rest audio sounds"
-                    },
-                    {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
-                    {
+                    }, {
+                        html: "<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"
+                    }, {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f7439584b4f706e2e706e67",
                         code: "intitle:index.of?mp3 NAME-OF-SONG",
                         description: "To get the URL of an mp3, Google search:",
@@ -2121,7 +2133,7 @@
                 }
             }
         })
-
+        
         var clipboard = new Clipboard('.btn-clipboard');
         Vue.nextTick(function() {
             $('[data-toggle="tooltip"]').tooltip({

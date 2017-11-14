@@ -502,3 +502,14 @@ h4 {
     background-color: #563d7c;
     border-color: #563d7c;
 }
+
+.play-sound {
+  display: inline;
+  cursor: pointer;
+}
+
+.glyphicon-play-circle, .glyphicon-pause {
+    font-size: 32px;
+    color: #cc00c2;
+    vertical-align: middle;
+}
