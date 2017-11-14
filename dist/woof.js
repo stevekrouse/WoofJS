@@ -1782,20 +1782,52 @@ Woof.prototype.Sound = function () {
 
   // Convert given value to corresponding audio object value
   // Throw error if given value not found in allowed values
-  function convertAudioSettings(obj, val, objName) {
-    var values = Object.values(obj);
-    var keys = Object.keys(obj);
-    if (values.indexOf(val) != -1) {
-      return val;
+  var soundVolumeToAudioVolume = function soundVolumeToAudioVolume(val) {
+    if (typeof val == "number") {
+      if (val >= 0 && val <= 1) {
+        return val;
+      } else {
+        throw Error("Volume can only be set to a number value between 0 and 1.");
+      }
+    } else if (typeof val == "string") {
+      if (val == "mute") {
+        return 0;
+      } else if (val == "low") {
+        return 0.5;
+      } else if (val == "normal") {
+        return 1;
+      } else {
+        throw Error('Volume can only be set to a string value of "mute", "low", or "normal".');
+      }
+    } else {
+      throw Error(val + " is not an accepted value for volume.");
     }
-    if (keys.indexOf(val) != -1) {
-      return values[keys.indexOf(val)];
-    }
-    throw new Error(objName + " can only be set to one of the following: " + values.join(", ") + ".");
   };
 
-  this.audio.playbackRate = convertAudioSettings(this.audioSettings.speed, speed, "Speed");
-  this.audio.volume = convertAudioSettings(this.audioSettings.volume, volume, "Volume");
+  var soundSpeedToAudioSpeed = function soundSpeedToAudioSpeed(val) {
+    if (typeof val == "number") {
+      if (val >= 0.5 && val <= 2) {
+        return val;
+      } else {
+        throw Error("Speed can only be set to a number value between 0.5 and 2.");
+      }
+    } else if (typeof val == "string") {
+      if (val == "slow") {
+        return 0.5;
+      } else if (val == "normal") {
+        return 1;
+      } else if (val == "fast") {
+        return 2;
+      } else {
+        throw Error('Speed can only be set to a string value of "slow", "normal", or "fast".');
+      }
+    } else {
+      throw Error(val + " is not an accepted value for speed.");
+    }
+  };
+
+  this.audio.playbackRate = soundSpeedToAudioSpeed(speed);
+  this.audio.volume = soundVolumeToAudioVolume(volume);
 
   // Allow user to get and set speed
   Object.defineProperty(this, 'speed', {
@@ -1803,7 +1835,7 @@ Woof.prototype.Sound = function () {
       return this.audio.playbackRate;
     },
     set: function set(value) {
-      this.audio.playbackRate = convertAudioSettings(this.audioSettings.speed, value, "Speed");
+      this.audio.playbackRate = soundSpeedToAudioSpeed(value);
     }
   });
 
@@ -1813,7 +1845,7 @@ Woof.prototype.Sound = function () {
       return this.audio.volume;
     },
     set: function set(value) {
-      this.audio.volume = convertAudioSettings(this.audioSettings.volume, value, "Volume");
+      this.audio.volume = soundVolumeToAudioVolume(value);
     }
   });
 

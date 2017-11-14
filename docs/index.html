@@ -52,8 +52,8 @@
             </div>
             <img v-if="block.url" ondragstart="event.dataTransfer.setData('text/plain', event.target.alt)" :alt="block.code" :src="block.url">
             <div v-if="block.sound" class="play-sound">
-              <img v-if="!playing" src="./images/play.svg" width="30" @click="playSound(block.sound)">
-              <span v-else @click="stopSound(block.sound)" class="glyphicon glyphicon-pause" aria-hidden="true"></span>
+              <img v-if="!playing" src="./images/play.png" width="30" @click="playSound(block.sound)">
+              <img v-else src="./images/pause.png" width="30" @click="stopSound(block.sound)">
             </div>
             <div v-if="block.description">{{ block.description }}</div>
             <div v-if="block.html" v-html="block.html"></div>
