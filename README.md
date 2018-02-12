@@ -59,7 +59,7 @@ Then in your JavaScript, you'd need to create your project manually:
 ```javascript
 var project = new Woof({global: false, width: 300, height: 400})
 
-var IMAGE_NAME = new project.Image({project: project, url: "./images/SMJjVCL.png"})
+var IMAGE_NAME = new project.Image({project: project, url: "http://woofjs.com/images/SMJjVCL.png"})
 ```
 
 ### Full Screen
