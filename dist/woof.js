@@ -2324,12 +2324,14 @@ var getData = function getData(url, callback) {
   });
 };
 
-// find the woof.js script tag in the page
-var currentScript = document.currentScript || Array.prototype.slice.call(document.getElementsByTagName('script')).find(function (s) {
-  return s.src.includes('woof.js');
-});
+// global mode code removed:
 
-if (JSON.parse(currentScript.getAttribute('global')) !== false) {
-  // unless the script tag containing Woof has an attribute global="false", start Woof in global mode
-  Woof.prototype.extend(window, new Woof({ global: true, fullScreen: true }));
-}
+// find the woof.js script tag in the page
+// var currentScript = document.currentScript || Array.prototype.slice.call(document.getElementsByTagName('script')).find(function (s) {
+//   return s.src.includes('woof.js');
+// });
+
+// if (JSON.parse(currentScript.getAttribute('global')) !== false) {
+//   // unless the script tag containing Woof has an attribute global="false", start Woof in global mode
+//   Woof.prototype.extend(window, new Woof({ global: true, fullScreen: true }));
+// }
