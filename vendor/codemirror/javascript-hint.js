@@ -31,7 +31,8 @@
   function scriptHint(editor, keywords, getToken, options) {
     // Find the token at the cursor
     var cur = editor.getCursor(),
-      token = getToken(editor, cur);
+      token = getToken(editor, cur),
+      editorContents = editor.getValue();
     if (/\b(?:string|comment)\b/.test(token.type)) return;
     token.state = CodeMirror.innerMode(editor.getMode(), token.state).state;
 
@@ -60,7 +61,7 @@
       context.push(tprop);
     }
     return {
-      list: getCompletions(token, context, keywords, options),
+      list: getCompletions(token, context, keywords, options, editorContents),
       from: Pos(cur.line, token.start),
       to: Pos(cur.line, token.end)
     };
@@ -115,7 +116,7 @@
   var regularpolygonProps = spriteProps.concat(["sides = 6", "length = 100", "color", "color = 'orange'"])
   var ovalProps = spriteProps.concat(["width = 20", "height = 55", "color", "color = 'green'"])
 
-  function getCompletions(token, context, keywords, options) {
+  function getCompletions(token, context, keywords, options, editorContents) {
     var found = [],
       start = token.string,
       global = document.getElementById("preview").contentWindow;
@@ -123,7 +124,18 @@
     function maybeAdd(str) {
       if (str.lastIndexOf(start, 0) == 0 && !arrayContains(found, str)) found.push(str);
     }
-
+    
+    function flatMap(list, func) {
+      return list.map(func).reduce((accumulator, currentValue) => accumulator.concat(currentValue))
+    }
+    
+    // add all words in the editor to the list
+    var editorTokens = editorContents.match(/\w+/g)
+    // minus words between quotation marks
+    var betweenQuotes = flatMap(editorContents.match(/"(.*?)"|'(.*?)'/g), quoted => quoted.match(/\w+/g))
+    // minus the word currently being typed
+    editorTokens = editorTokens.filter(t => !betweenQuotes.includes(t) && t != token.string)
+    
     function gatherCompletions(obj){
       if (typeof obj == "string") forEach(stringProps, maybeAdd);
       else if (obj.type == "image") forEach(imageProps, maybeAdd);
@@ -187,12 +199,7 @@
       woof = woof.concat(backdropMethods)
       forEach(woof, maybeAdd)
       
-      // If not, just look in the global object and any local scope
-      // (reading into JS mode internals to get at the local and global variables)
-      
-      
-      //for (var v = token.state.localVars; v; v = v.next) maybeAdd(v.name);
-      // for (var v = token.state.globalVars; v; v = v.next) maybeAdd(v.name);
+      forEach(editorTokens, maybeAdd)
       
       forEach(keywords, maybeAdd);
     }
