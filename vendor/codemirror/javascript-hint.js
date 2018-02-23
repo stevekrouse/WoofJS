@@ -33,7 +33,7 @@
     var cur = editor.getCursor(),
       token = getToken(editor, cur),
       editorContents = editor.getValue();
-    if (/\b(?:string|comment)\b/.test(token.type)) return;
+    if (/\b(?:string|comment|number)\b/.test(token.type)) return;
     token.state = CodeMirror.innerMode(editor.getMode(), token.state).state;
 
     // If it's not a 'word-style' token, ignore the token.
