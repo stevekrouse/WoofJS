@@ -1778,11 +1778,10 @@ Woof.prototype.Sound = function () {
       low: 0.5,
       normal: 1
     }
-  };
 
-  // Convert given value to corresponding audio object value
-  // Throw error if given value not found in allowed values
-  var soundVolumeToAudioVolume = function soundVolumeToAudioVolume(val) {
+    // Convert given value to corresponding audio object value
+    // Throw error if given value not found in allowed values
+  };var soundVolumeToAudioVolume = function soundVolumeToAudioVolume(val) {
     if (typeof val == "number") {
       if (val >= 0 && val <= 1) {
         return val;
@@ -2324,14 +2323,16 @@ var getData = function getData(url, callback) {
   });
 };
 
-// global mode code removed:
-
 // find the woof.js script tag in the page
-// var currentScript = document.currentScript || Array.prototype.slice.call(document.getElementsByTagName('script')).find(function (s) {
-//   return s.src.includes('woof.js');
-// });
+var currentScript = document.currentScript || Array.prototype.slice.call(document.getElementsByTagName('script')).find(function (s) {
+  return s.src.includes('woof.js');
+});
+// the script tag containing Woof has an attribute global="false"
+var falseGlobalAttribute = currentScript.getAttribute('global') === 'false';
+// WOOF_GLOBAL_MODE = false was set before this script was loaded
+var falseConstant = typeof window.WOOF_GLOBAL_MODE !== 'undefined' && window.WOOF_GLOBAL_MODE === false;
+var globalMode = !falseGlobalAttribute && !falseConstant;
 
-// if (JSON.parse(currentScript.getAttribute('global')) !== false) {
-//   // unless the script tag containing Woof has an attribute global="false", start Woof in global mode
-//   Woof.prototype.extend(window, new Woof({ global: true, fullScreen: true }));
-// }
+if (globalMode) {
+  Woof.prototype.extend(window, new Woof({ global: true, fullScreen: true }));
+}
