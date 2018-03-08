@@ -513,3 +513,18 @@ h4 {
     color: #cc00c2;
     vertical-align: middle;
 }
+
+.example button {
+    background-color: #131d93;
+    width: auto;
+    padding: 5px !important;
+    height: 40px;
+    border-radius: 8px;
+    color: #fff;
+    border: 0;
+    border: 1px solid #1f2ee0;
+}
+
+.example button:focus {
+    outline: 0;
+}

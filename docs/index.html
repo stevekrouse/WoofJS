@@ -61,6 +61,14 @@
                 <span data-toggle="tooltip" title="Copied!" :data-clipboard-text="block.code" class="btn-clipboard">Copy</span>
                 <pre><code v-html="highlight(block.code)"></code></pre>
             </div>
+            <div class="example">
+              <button v-if="block.example" @click="example=!example">{{block.button}}</button>
+              <div v-if="example">
+                <span data-toggle="tooltip" title="Copied!" :data-clipboard-text="block.example" class="btn-clipboard">Copy</span>
+                <pre><code v-html="highlight(block.example)"></code></pre>
+                <p v-html="block.exampleDesc"></p>
+            </div>
+            </div>
         </div>
     </script>
     <script>
@@ -75,7 +83,8 @@
             data: function() {
              return {
                sound: '',
-               playing: false
+               playing: false,
+               example: false,
              }
             },
             methods: {
@@ -1338,42 +1347,54 @@
                     }, {
                         html: "When you use <code>repeat()</code>, your code doesn't repeat as fast as the computer can run it.\
                         Instead, we slow it down, which makes things like animation and motion work well. But, if you want your code to repeat instantly,\
-                        as fast as the computer can do it, you can combine the <code>range()</code> function with the <code>forEach()</code> function:\
-                        <br><br>Example: Repeat your code instantly 10 times:",
-                        code: "range(0, 10).forEach(i => {\n  \/* something to repeat */\n})",
+                        as fast as the computer can do it, you can combine the <code>range()</code> function with the <code>forEach()</code> function.<br><br>",
+                        example: "range(0, 10).forEach(i => {\n  \/* something to repeat */\n})",
+                        exampleDesc: "In the above example, <code>i</code> will start at 0 and go up by 1 every repetition, stopping before it gets to 10. (If you're familiar with <code>for</code> loops, you might realize that this does the same thing. We recommend using <code>range().forEach()</code> instead of <code>for</code>.",
+                        button: "Example: repeat instantly 10 times",
                         tags: "repeat range array forEach control"
-                    }, {
-                        html: "In the above example, <code>i</code> will start at 0 and go up by 1 every repetition, stopping before it gets to 10.\
-                        <br>If you are familiar with <code>for</code> loops, you might realize that this does the same thing.\
-                        We recommend using <code>range().forEach()</code> instead of <code>for</code>."
                     }, {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f675a4f6a4c444d2e706e67",
                         code: 'forever(() => {\n  \/* do stuff here */\n})',
                         tags: 'forever loop repeat control'
                     },
                      {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
-                     {
+                    {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f7535724b4133362e706e67",
-                        code: 'if(\/* condition */) {\n  \/* then do stuff here */\n}',
+                        code: 'if(/* something is */ true) {\n  \/* then do stuff here */\n}',
+                        example: 'if(mouseDown) {\n  sprite1.move(5)\n}',
+                        button: 'Example: if conditional statement',
+                        exampleDesc: "In the above example, sprite1 will move by 5 if the screen is clicked.",
                         tags: 'if then when condition control'
                     }, {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f52594f705361712e706e67",
-                        code: 'if(\/* condition */) {\n  \/* then do stuff here */\n} else {\n  \/* otherwise do other stuff here */. \n}',
+                        code: 'if(/* something is */ true) {\n  \/* then do stuff here */\n} else {\n  \/* otherwise do other stuff here */. \n}',
+                        example: 'if(sprite1.x > maxX) {\n  freeze()\n} else {\n  sprite1.move(5)\n}\n',
+                        button: 'Example: if/else conditional statement',
+                        exampleDesc: "In the above example, the game will stop if sprite1 moves beyond the right edge of the screen. Otherwise, sprite1 will move by 5.",
                         tags: 'if else when condition control'
                     }, {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f615139694a4e772e706e67",
-                        code: 'repeatUntil(() => \/* condition */, () => {\n  \/* something to repeat */\n})',
+                        code: 'repeatUntil(() => /* something is */ true, () => {\n  \/* something to repeat */\n})',
+                        example: 'repeatUntil(() => timer === 0, () => {\n  sprite1.move(5)\n})',
+                        button: 'Example: repeat until a condition is met',
+                        exampleDesc: "In the above example, sprite1 will move by 5 until timer reaches 0.",
                         tags: 'repeat until control'
                     }, {
-                        url: "./images/68747470733a2f2f692e696d6775722e636f6d2f615139694a4e772e706e67",
-                        code: 'repeatUntil(() => \/* condition */, () => {}, () => {\n  \/* something to do after condition is true, once */\n})',
-                        tags: "wait until repeat control",
-                        description: 'There is no wait-until in JavaScript. You can simulate a wait-until block by specifying a third function to a repeatUntil. Refer to the "Control Flow" section below for more details.'
+                        url: "./images/wait-until.png",
+                        code: 'repeatUntil(() => /* something is */ true, () => {}, () => {\n  \/* something to do after condition is true, once */\n})',
+                        description: 'There is no wait-until in JavaScript. You can simulate a wait-until block by specifying a third function to a repeatUntil.',
+                        example: 'repeatUntil(() => timer === 0, () => {}, () => {\n  sprite1.move(5)\n})',
+                        button: 'Example: wait until a condition is met',
+                        exampleDesc: "In the above example, sprite1 will wait until timer reaches 0 to move by 5.",
+                        tags: "wait until repeat control"
                     }, {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f4f586c704b394a2e706e67",
-                        code: 'when(() => \/* condition */, () => {\n  \/* do stuff here */\n})',
+                        code: 'when(() => /* something is */ true, () => {\n  \/* do stuff here */\n})',
+                        button: 'Example: when statement',
+                        description: 'when() is a short-hand for a forever-if statement:',
+                        example: 'when(() => mouseDown, () => {\n  sprite1.move(5)\n})',
+                        exampleDesc: 'In the above example, sprite1 will move by 5 when the screen is clicked.',
                         tags: "forever if when control",
-                        description: 'when() is a short-hand for a forever-if statement:'
                     },
                      {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                      {
