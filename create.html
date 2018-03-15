@@ -1361,7 +1361,7 @@
       
       firebase.database().ref().update(updates).then(function(){
         window.location.hash = name
-        setUserUploadImageListener()
+        setUserUploadImageListener() // sync user-uploaded photos for this project name
         myCode = firebase.auth().currentUser
         makeClean()
       }).catch(function(error){
