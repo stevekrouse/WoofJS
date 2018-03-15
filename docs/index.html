@@ -68,6 +68,16 @@
             e.target.parentElement.nextElementSibling.childNodes[2].childNodes[0].innerHTML = e.target.value
             e.target.parentElement.nextElementSibling.childNodes[0].setAttribute("data-clipboard-text", e.target.value)
         }
+        
+        var browseImages = function() {
+          document.getElementById("uploadInput").click()
+        }
+        
+        var uploadFile = function(files) {
+          if (files.length === 1) {
+            window.top.postMessage(files[0], '*')
+          }
+        }
 
         Vue.component('vue-block', {
             template: "#block-template",
@@ -472,7 +482,11 @@
                          }
                         ],
                         Image: [
-                            
+                            {
+                              html: '<button class="btn btn-medium btn-info" onclick="browseImages()">Upload Image</button>' + 
+                                    '<input id="uploadInput" onchange="uploadFile(this.files)" style="display:none" type="file" name="pic" accept="image/*">',
+                              tags: "picture image custom external upload sprite"
+                            },
                             {
                                 url: "./images/kpU9y5M.png",
                                 code: 'var unicorn = new Image({\n  url: "./docs/images/unicorn.png",\n  width: 120, \n  height: 80,\n})',
@@ -2077,6 +2091,21 @@
                 },
             },
             methods: {
+                setUserUploadImages: function(images) {
+                    var newImages = this.menus['Sprites & Backgrounds']['Image'].filter(
+                        block => !block.userUploadImage
+                    )
+                    images.reverse() // show the newest first
+                    newImages.splice(1, 0, ...images.map(imageURL => {
+                        return {
+                            url: imageURL,
+                            code: 'var sprite1 = new Image({url: "' + imageURL + '"})',
+                            tags: "upload image picture",
+                            userUploadImage: true
+                        }
+                    }))
+                    this.menus['Sprites & Backgrounds']['Image'] = newImages
+                },
                 searchMenu: function(menu) {
                     if (this.search == '') {
                         return menu

@@ -1361,6 +1361,7 @@
       
       firebase.database().ref().update(updates).then(function(){
         window.location.hash = name
+        setUserUploadImageListener() // sync user-uploaded photos for this project name
         myCode = firebase.auth().currentUser
         makeClean()
       }).catch(function(error){
@@ -1602,7 +1603,67 @@
             }
         }, 10)
     }
+    
+    window.onmessage = function(e){
+      if (!(e.data instanceof File)){
+        return
+      }
+      if (!firebase.auth().currentUser) {
+        alert('Please login to upload images.')
+        return
+      }
+      if (!getID()) {
+        alert('Please save your project to upload images.')
+        return
+      }
+      if (!myCode) {
+        alert('Please save this project to your account to upload images.')
+      }
+      
+      var uniqueId = Math.random().toString(36).substring(2) 
+               + (new Date()).getTime().toString(36);
+      
+      var ref = firebase.storage().ref()
+        .child('UserImageUpload')
+        .child(firebase.auth().currentUser.uid)
+        .child(getID())
+        .child(uniqueId)
 
+      var file = e.data
+      ref.put(file)
+        .then(function(snapshot){
+          if (getID()) {
+            firebase.database().ref()
+              .child('code-image-uploads')
+              .child(getID())
+              .child(uniqueId)
+              .set(snapshot.downloadURL)
+          }
+        }).catch(function(error){
+          alert('There was an error uploading your image: ' + error.message)
+        })
+    };
+    
+    var ref
+    setUserUploadImageListener = function() {
+      ref && ref.off() 
+      ref = firebase.database().ref()
+        .child('code-image-uploads')
+        .child(getID())
+      ref.on('value', function(snapshot) {
+        var addImagesFunc = () => {
+          var images = snapshot.val() || {}
+          scratch.contentWindow.app.setUserUploadImages(Object.values(images))
+        }
+        if (scratch.contentWindow.app){
+          addImagesFunc()
+        } else {
+          scratch.contentDocument.addEventListener('DOMContentLoaded', addImagesFunc, false);
+        }
+      })  
+    }
+    getID() && setUserUploadImageListener()
+    
     function debounce(func, wait, immediate) {
       var timeout;
       return function() {
