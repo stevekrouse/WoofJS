@@ -18,6 +18,8 @@ function detectCollision(a, b){
 
 // alias Image to BrowserImage because we will overwrite Image with Woof.Image
 window.BrowserImage = Image;
+// For timer function which, to copy Scratch, begins when Woof is loaded
+window.woofEpoch = new Date();
 
 function Woof({global = false, fullScreen = false, height = 500, width = 350} = {}) {
   if(window.global) throw new Error("You must turn off global mode in the Woof script tag if you want to create your own Woof object.")
@@ -542,8 +544,18 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
     thisContext.mouseYSpeed = thisContext.mouseY - thisContext.pMouseY;
     [thisContext.pMouseX, thisContext.pMouseY] = [thisContext.mouseX, thisContext.mouseY];
   };
-  
-  thisContext._render = () => {
+
+   thisContext.timer = function(){
+        if (arguments.length > 0) { throw new TypeError("timer() requires no inputs."  ); }
+        let date = new Date();
+        return Math.round( ( date - window.woofEpoch ) / 100 ) / 10;
+    };
+    thisContext.resetTimer = function(){
+        if (arguments.length > 0) { throw new TypeError("resetTimer() requires no inputs."); }
+        window.woofEpoch = new Date();
+    };
+
+    thisContext._render = () => {
     thisContext._runRepeats(); // we need to run the repeats even if stopped because the defrost() code likely lives in a repeat
     thisContext._calculateMouseSpeed();
     thisContext.renderInterval = window.requestAnimationFrame(thisContext._render); // WARNING this line makes render recursive. Only call is once and it will continue to call itself ~30fps.
