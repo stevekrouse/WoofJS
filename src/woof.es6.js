@@ -18,8 +18,6 @@ function detectCollision(a, b){
 
 // alias Image to BrowserImage because we will overwrite Image with Woof.Image
 window.BrowserImage = Image;
-// For timer function which, to copy Scratch, begins when Woof is loaded
-window.woofEpoch = new Date();
 
 function Woof({global = false, fullScreen = false, height = 500, width = 350} = {}) {
   if(window.global) throw new Error("You must turn off global mode in the Woof script tag if you want to create your own Woof object.")
@@ -545,6 +543,8 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
     [thisContext.pMouseX, thisContext.pMouseY] = [thisContext.mouseX, thisContext.mouseY];
   };
 
+   // The timer begins when Woof is loaded
+   thisContext.woofEpoch = new Date();
    thisContext.timer = function(){
         if (arguments.length > 0) { throw new TypeError("timer() requires no inputs."  ); }
         let date = new Date();
