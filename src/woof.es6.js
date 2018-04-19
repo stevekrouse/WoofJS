@@ -542,8 +542,20 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
     thisContext.mouseYSpeed = thisContext.mouseY - thisContext.pMouseY;
     [thisContext.pMouseX, thisContext.pMouseY] = [thisContext.mouseX, thisContext.mouseY];
   };
-  
-  thisContext._render = () => {
+
+   // The timer begins when Woof is loaded
+   thisContext.woofEpoch = new Date();
+   thisContext.timer = function(){
+        if (arguments.length > 0) { throw new TypeError("timer() requires no inputs."  ); }
+        let date = new Date();
+        return ( date - thisContext.woofEpoch ) / 1000;
+    };
+    thisContext.resetTimer = function(){
+        if (arguments.length > 0) { throw new TypeError("resetTimer() requires no inputs."); }
+        thisContext.woofEpoch = new Date();
+    };
+
+    thisContext._render = () => {
     thisContext._runRepeats(); // we need to run the repeats even if stopped because the defrost() code likely lives in a repeat
     thisContext._calculateMouseSpeed();
     thisContext.renderInterval = window.requestAnimationFrame(thisContext._render); // WARNING this line makes render recursive. Only call is once and it will continue to call itself ~30fps.

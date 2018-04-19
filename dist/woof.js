@@ -826,6 +826,22 @@ function Woof() {
     thisContext.pMouseY = _ref2[1];
   };
 
+  // The timer begins when Woof is loaded
+  thisContext.woofEpoch = new Date();
+  thisContext.timer = function () {
+    if (arguments.length > 0) {
+      throw new TypeError("timer() requires no inputs.");
+    }
+    var date = new Date();
+    return (date - thisContext.woofEpoch) / 1000;
+  };
+  thisContext.resetTimer = function () {
+    if (arguments.length > 0) {
+      throw new TypeError("resetTimer() requires no inputs.");
+    }
+    thisContext.woofEpoch = new Date();
+  };
+
   thisContext._render = function () {
     thisContext._runRepeats(); // we need to run the repeats even if stopped because the defrost() code likely lives in a repeat
     thisContext._calculateMouseSpeed();
@@ -1778,11 +1794,10 @@ Woof.prototype.Sound = function () {
       low: 0.5,
       normal: 1
     }
-  };
 
-  // Convert given value to corresponding audio object value
-  // Throw error if given value not found in allowed values
-  var soundVolumeToAudioVolume = function soundVolumeToAudioVolume(val) {
+    // Convert given value to corresponding audio object value
+    // Throw error if given value not found in allowed values
+  };var soundVolumeToAudioVolume = function soundVolumeToAudioVolume(val) {
     if (typeof val == "number") {
       if (val >= 0 && val <= 1) {
         return val;
