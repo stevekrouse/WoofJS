@@ -833,7 +833,7 @@ function Woof() {
       throw new TypeError("timer() requires no inputs.");
     }
     var date = new Date();
-    return Math.round((date - thisContext.woofEpoch) / 100) / 10;
+    return (date - thisContext.woofEpoch) / 1000;
   };
   thisContext.resetTimer = function () {
     if (arguments.length > 0) {
