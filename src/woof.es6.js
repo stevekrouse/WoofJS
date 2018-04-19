@@ -548,7 +548,7 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
    thisContext.timer = function(){
         if (arguments.length > 0) { throw new TypeError("timer() requires no inputs."  ); }
         let date = new Date();
-        return Math.round( ( date - thisContext.woofEpoch ) / 100 ) / 10;
+        return ( date - thisContext.woofEpoch ) / 1000;
     };
     thisContext.resetTimer = function(){
         if (arguments.length > 0) { throw new TypeError("resetTimer() requires no inputs."); }
