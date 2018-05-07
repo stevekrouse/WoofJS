@@ -1368,24 +1368,24 @@
                      {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                      {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f7535724b4133362e706e67",
-                        code: 'if(\/* something is */ true) {\n  \/* then do stuff here */\n}',
+                        code: 'if(\/* something is true*/ ) {\n  \/* then do stuff here */\n}',
                         tags: 'if then when condition control'
                     }, {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f52594f705361712e706e67",
-                        code: 'if(\/* something is */ true) {\n  \/* then do stuff here */\n} else {\n  \/* otherwise do other stuff here */ \n}',
+                        code: 'if(\/* something is true*/ ) {\n  \/* then do stuff here */\n} else {\n  \/* otherwise do other stuff here */ \n}',
                         tags: 'if else when condition control'
                     }, {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f615139694a4e772e706e67",
-                        code: 'repeatUntil(() => \/* something is */ true, () => {\n  \/* something to repeat */\n})',
+                        code: 'repeatUntil(() => \/* something is true*/ , () => {\n  \/* something to repeat */\n})',
                         tags: 'repeat until control'
                     }, {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f615139694a4e772e706e67",
-                        code: 'repeatUntil(() => \/* something is */ true, () => {}, () => {\n  \/* something to do after condition is true, once */\n})',
+                        code: 'repeatUntil(() => \/* something is true*/, () => {}, () => {\n  \/* something to do after condition is true, once */\n})',
                         tags: "wait until repeat control",
                         description: 'There is no wait-until in JavaScript. You can simulate a wait-until block by specifying a third function to a repeatUntil. Refer to the "Control Flow" section below for more details.'
                     }, {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f4f586c704b394a2e706e67",
-                        code: 'when(() => \/* something is */ true, () => {\n  \/* do stuff here */\n})',
+                        code: 'when(() => \/* something is true*/, () => {\n  \/* do stuff here */\n})',
                         tags: "forever if when control",
                         description: 'when() is a short-hand for a forever-if statement:'
                     },
