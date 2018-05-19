@@ -710,6 +710,7 @@
         migrateUsername: '',
         migrateChecked: true,
         migrateButtonState: "DISABLED", // NORMAL or DISABLED or LOADING
+        requestFullScreen:false
       },
       computed: {
         styles : function() { return {
@@ -1264,6 +1265,10 @@
     var makeClean = function() {
       app.status = "SAVED"
       currentHash = window.location.hash
+      //request fullscreen after save if requestfullscreen variable is true
+      if(app.requestFullScreen){
+        popout();
+      }
     }
 
     var makeDirty = function() {
@@ -1272,9 +1277,13 @@
 
     var popout = function() {
       if (app.status == "SAVED"){
+        //change fullscreen request to false
+        app.requestFullScreen=false;
         window.open("./full.html#" + getIDWithRevision(), "_blank")
       } else {
-        alert("You must save your project to open it in a new window.")
+        //change requestfullscreen to true and run save()
+        app.requestFullScreen=true;
+        save();
       }
     }
 
