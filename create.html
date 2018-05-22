@@ -377,7 +377,7 @@
             <span id="illegalCharacter" class="text-danger" :class="{animated: projectNameLastKeyIllegal, shake: projectNameLastKeyIllegal}" style="display: inline-block" :style="{opacity: projectNameLastKeyIllegal ? '1' : '0'}">You cannot include {{ projectNameLastKeyIllegal }} in project names.</span>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal" onclick="app.popoutAfterSave=false">Close</button>
             <button type="button" id="saveChanges" class="btn btn-primary" :class="{disabled: projectNameRequest != 'NOT LOADING' || projectNameInputValue == ''}" @click="saveName()">{{ projectNameRequest == "LOADING" ? "Loading..." : "Save" }}</button>
           </div>
         </div>
@@ -710,7 +710,7 @@
         migrateUsername: '',
         migrateChecked: true,
         migrateButtonState: "DISABLED", // NORMAL or DISABLED or LOADING
-        requestFullScreen:false
+        popoutAfterSave:false
       },
       computed: {
         styles : function() { return {
@@ -1265,10 +1265,6 @@
     var makeClean = function() {
       app.status = "SAVED"
       currentHash = window.location.hash
-      //request fullscreen after save if requestfullscreen variable is true
-      if(app.requestFullScreen){
-        popout();
-      }
     }
 
     var makeDirty = function() {
@@ -1277,12 +1273,10 @@
 
     var popout = function() {
       if (app.status == "SAVED"){
-        //change fullscreen request to false
-        app.requestFullScreen=false;
         window.open("./full.html#" + getIDWithRevision(), "_blank")
       } else {
-        //change requestfullscreen to true and run save()
-        app.requestFullScreen=true;
+        //when project is not in saved state, must set popoutAfterSave=true to run conditional popout() nested within save()>saveProjectFirebase
+        app.popoutAfterSave=true;
         save();
       }
     }
@@ -1372,6 +1366,13 @@
         window.location.hash = name
         setUserUploadImageListener() // sync user-uploaded photos for this project name
         myCode = firebase.auth().currentUser
+        // This save was initiated by the user clicked the popout button
+        // Now that the project is saved, popout the project in a new window
+        if(app.popoutAfterSave){
+          //popoutAfterSave is set, to prevent popout in all circumstances project is saved
+          app.popoutAfterSave=false;
+          popout();
+        }
         makeClean()
       }).catch(function(error){
         alert("Unable to save project: " + error)
