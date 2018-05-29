@@ -377,7 +377,7 @@
             <span id="illegalCharacter" class="text-danger" :class="{animated: projectNameLastKeyIllegal, shake: projectNameLastKeyIllegal}" style="display: inline-block" :style="{opacity: projectNameLastKeyIllegal ? '1' : '0'}">You cannot include {{ projectNameLastKeyIllegal }} in project names.</span>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal" @click="app.popoutAfterSave=false">Close</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal" @click="popoutAfterSave=false">Close</button>
             <button type="button" id="saveChanges" class="btn btn-primary" :class="{disabled: projectNameRequest != 'NOT LOADING' || projectNameInputValue == ''}" @click="saveName()">{{ projectNameRequest == "LOADING" ? "Loading..." : "Save" }}</button>
           </div>
         </div>
