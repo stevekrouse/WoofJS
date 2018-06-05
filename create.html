@@ -576,6 +576,18 @@
           </div>
         </div>
       </div>
+
+      <div id="chromeModal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title"><span class="glyphicon glyphicon-share-alt"></span> Chrome Browser Not Detected!</h4>
+            </div>
+            <h4 class="modal-body text-danger" :style="{display: !getID() ? 'block' : 'none'}">The Chrome Browser is recommended. You may experience technical difficulties with other browsers.</h4>
+          </div>
+        </div>
+      </div>
     
       <div id="docsbar" v-show="docsbar" @click="docsbar= !docsbar" :style="{display: 'flex'}">
         <span class="rotate" style="font-size: 1.65em">Documentation</span>
@@ -1689,6 +1701,16 @@
     };
     // helper function to prevent runCode from running too often
     var debouncedRunCode = debounce(runCode, 1000, false)
+
+      function checkChrome() {
+        
+        var str = window.navigator.userAgent;
+        if (!(str.indexOf("Edge") == -1 && str.indexOf("OPR") == -1 && str.indexOf("Firefox") == -1 && str.indexOf("Trident") == -1)) {
+          $("#chromeModal").modal("show");
+        }
+        
+      };
+      checkChrome();
 
   </script>
   <script>
