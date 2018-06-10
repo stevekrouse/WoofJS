@@ -277,6 +277,12 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
   // the y-axis works counter-intuitively, decreasing as you move up, and increasing as you move down
   // translateToCenter maps coordinates from the HTML canvas to the Scratch-world where (0,0) is in the center of the screen  
   thisContext.translateToCenter = (x, y) => {
+    // If sprite is a path, do not translate to center
+    if (thisContext.sprites.length > 0) {
+      if (thisContext.sprites[0].type == "polygon" || thisContext.sprites[0].type == "line") {
+        return [x, y]
+      }
+    }
     return [(x - (thisContext.width / 2) + thisContext.cameraX) - thisContext._spriteCanvas.offsetLeft, (((thisContext.height / 2) - y) + thisContext.cameraY) + thisContext._spriteCanvas.offsetTop];
   };
   // translateToCanvas (the opposite of translateToCenter) maps coordinates from the Scratch-world to the HTML canvas world with (0,0) in the top-left  
@@ -828,6 +834,13 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
     if (typeof x != "number" || typeof y != "number") { throw new TypeError("over(x, y) requires two number inputs."); }
     if (this.deleted || !this.showing) { return false; }
     
+    // If sprite is a path, check if x and y values are in the path
+    if (this.project.sprites != null) {
+      if (this.project.sprites[0].type == "polygon" || this.project.sprites[0].type == "line") {
+        return this.project._spriteContext.isPointInPath(x, y);
+      }
+    }
+    
     var r1 = this.bounds();
     var belowTop = y <= r1.top
     var aboveBottom = y >= r1.bottom;
@@ -908,7 +921,7 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
   };
   this._onMouseDownHandler = event => {
     var [mouseX, mouseY] = this.project.translateToCenter(event.clientX, event.clientY);
-    if (this.showing && this.over(mouseX, mouseY)){
+    if (this.showing && this.over(mouseX, mouseY)) {
       this._onMouseDowns.forEach((func) => {func(mouseX, mouseY)});
     }
   };

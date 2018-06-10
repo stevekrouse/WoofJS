@@ -489,6 +489,12 @@ function Woof() {
   // the y-axis works counter-intuitively, decreasing as you move up, and increasing as you move down
   // translateToCenter maps coordinates from the HTML canvas to the Scratch-world where (0,0) is in the center of the screen  
   thisContext.translateToCenter = function (x, y) {
+    // If sprite is a path, do not translate to center
+    if (thisContext.sprites.length > 0) {
+      if (thisContext.sprites[0].type == "polygon" || thisContext.sprites[0].type == "line") {
+        return [x, y];
+      }
+    }
     return [x - thisContext.width / 2 + thisContext.cameraX - thisContext._spriteCanvas.offsetLeft, thisContext.height / 2 - y + thisContext.cameraY + thisContext._spriteCanvas.offsetTop];
   };
   // translateToCanvas (the opposite of translateToCenter) maps coordinates from the Scratch-world to the HTML canvas world with (0,0) in the top-left  
@@ -1181,6 +1187,13 @@ Woof.prototype.Sprite = function () {
       return false;
     }
 
+    // If sprite is a path, check if x and y values are in the path
+    if (_this.project.sprites != null) {
+      if (_this.project.sprites[0].type == "polygon" || _this.project.sprites[0].type == "line") {
+        return _this.project._spriteContext.isPointInPath(x, y);
+      }
+    }
+
     var r1 = _this.bounds();
     var belowTop = y <= r1.top;
     var aboveBottom = y >= r1.bottom;
@@ -1794,10 +1807,11 @@ Woof.prototype.Sound = function () {
       low: 0.5,
       normal: 1
     }
+  };
 
-    // Convert given value to corresponding audio object value
-    // Throw error if given value not found in allowed values
-  };var soundVolumeToAudioVolume = function soundVolumeToAudioVolume(val) {
+  // Convert given value to corresponding audio object value
+  // Throw error if given value not found in allowed values
+  var soundVolumeToAudioVolume = function soundVolumeToAudioVolume(val) {
     if (typeof val == "number") {
       if (val >= 0 && val <= 1) {
         return val;
