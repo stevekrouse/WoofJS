@@ -277,7 +277,7 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
   // the y-axis works counter-intuitively, decreasing as you move up, and increasing as you move down
   // translateToCenter maps coordinates from the HTML canvas to the Scratch-world where (0,0) is in the center of the screen  
   thisContext.translateToCenter = (x, y) => {
-    // If sprite is a path, do not translate to center
+    // If sprite is a polygon, do not translate to center
     if (thisContext.sprites.length > 0) {
       if (thisContext.sprites[0].type == "polygon") {
         return [x, y]
@@ -834,7 +834,7 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
     if (typeof x != "number" || typeof y != "number") { throw new TypeError("over(x, y) requires two number inputs."); }
     if (this.deleted || !this.showing) { return false; }
     
-    // If sprite is a path, check if x and y values are in the path
+    // If sprite is a polygon, check if x and y values are in the shape's path
     if (this.project.sprites != null) {
       if (this.project.sprites[0].type == "polygon") {
         return this.project._spriteContext.isPointInPath(x, y);
