@@ -279,7 +279,7 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
   thisContext.translateToCenter = (x, y) => {
     // If sprite is a path, do not translate to center
     if (thisContext.sprites.length > 0) {
-      if (thisContext.sprites[0].type == "polygon" || thisContext.sprites[0].type == "line") {
+      if (thisContext.sprites[0].type == "polygon") {
         return [x, y]
       }
     }
@@ -836,7 +836,7 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
     
     // If sprite is a path, check if x and y values are in the path
     if (this.project.sprites != null) {
-      if (this.project.sprites[0].type == "polygon" || this.project.sprites[0].type == "line") {
+      if (this.project.sprites[0].type == "polygon") {
         return this.project._spriteContext.isPointInPath(x, y);
       }
     }
