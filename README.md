@@ -1,4 +1,4 @@
-# WoofJS [![license](https://img.shields.io/github/license/mashape/apistatus.svg)]() [![Code Triagers Badge](https://www.codetriage.com/stevekrouse/woofjs/badges/users.svg)](https://www.codetriage.com/stevekrouse/woofjs)       [![cloud9](https://img.shields.io/badge/cloud9-open-red.svg)](https://c9.io/auth/github?r=https%3A%2F%2Fc9.io%2Fopen%2F%3Fclone_url%3Dhttps%253A%252F%252Fgithub.com%252Fstevekrouse%252FWoofJS)
+# WoofJS [![license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/stevekrouse/WoofJS/blob/master/LICENSE.md) [![Code Triagers Badge](https://www.codetriage.com/stevekrouse/woofjs/badges/users.svg)](https://www.codetriage.com/stevekrouse/woofjs)       [![cloud9](https://img.shields.io/badge/cloud9-open-red.svg)](https://c9.io/auth/github?r=https%3A%2F%2Fc9.io%2Fopen%2F%3Fclone_url%3Dhttps%253A%252F%252Fgithub.com%252Fstevekrouse%252FWoofJS)
 
 <img src="http://woofjs.com/images/logo-dog-text.png" alt="logo-dog-text.png"/>
 
@@ -149,18 +149,23 @@ You can find them there in the `woof/` subdirectory. If you'd like to contribute
     ```
     git checkout -b more-pokemon-sprites
     ```
+    
+6. Stage your changes to be committed.
+    ```
+    git add .
+    ```
 
-6. Once you've made your changes, commit them to your branch.
+7. Once you've made and staged your changes, commit them to your branch.
 
     ```
     git commit -m "add more pokemon sprites"
     ```
-7. Push your new branch (not master!) to the GitHub repo.
+8. Push your new branch (not master!) to the GitHub repo.
 
     ```
     git push origin more-pokemon-sprites
     ```
-8. Submit a pull request so your changes can be reviewed.
+9. Submit a pull request so your changes can be reviewed.
 
 If you have any questions, please email steve at thecodingspace.com :)
 
