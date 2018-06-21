@@ -1,249 +1,1095 @@
-<script>
-    var getID = function() {
-      return window.location.hash.substring(1, window.location.hash.length);
-    }
-    if (getID() != '') {
-        window.location = './create.html#' + getID()
-    }
-</script>
-<link rel="shortcut icon" type="image/png" href="./favicon.png"/>
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:url" content="http://woofjs.com">
-   <meta name="twitter:title" content="WoofJS">
-<meta name="twitter:description" content="WoofJS is a Scratch-inspired Javascript library for making games.">
-<meta name="twitter:image" content="./images/qIgC8Ae.png">
-    
-   
-    <meta property="og:image" content="./images/qIgC8Ae.png">
-    <meta property="og:title" content="WoofJS">
-<meta property="og:description" content="WoofJS is a Scratch-inspired Javascript library for making games.">
+<!DOCTYPE html>
+<html style="height:100%">
 
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="./vendor/codemirror/codemirror.css">
-<script src="//load.sumome.com/" data-sumo-site-id="44245233c319d8fe9fb7ce8c7ed64db9381aa56477888a10319261f655cfffe2" async="async"></script>
-<script type="text/javascript" src="./vendor/codemirror/codemirror.js"></script>
-<script type="text/javascript" src="./vendor/codemirror/javascript.js"></script>
-<script type="text/javascript" src="./vendor/codemirror/closebrackets.js"></script>
-<script type="text/javascript" src="./vendor/codemirror/javascript-hint.js"></script>
-<script type="text/javascript" src="./vendor/codemirror/javascript-lint.js"></script>
-<script type="text/javascript" src="./vendor/codemirror/matchbrackets.js"></script>
-<script type="text/javascript" src="./vendor/codemirror/search.js"></script>
-<script type="text/javascript" src="./vendor/codemirror/searchcursor.js"></script>
-<script type="text/javascript" src="./vendor/codemirror/show-hint.js"></script>
-<script type="text/javascript" src="./vendor/codemirror/comment.js"></script>
-<script type="text/javascript" src="./vendor/codemirror/sublime.js"></script>
-<script type="text/javascript" src="./vendor/codemirror/foldcode.js"></script>
-<link rel="stylesheet" href="./vendor/codemirror/foldgutter.css" />
-<script src="./vendor/codemirror/foldcode.js"></script>
-<script src="./vendor/codemirror/foldgutter.js"></script>
-<script src="./vendor/codemirror/brace-fold.js"></script>
-<script src="./vendor/codemirror/comment-fold.js"></script>
-<link rel="stylesheet" href="./vendor/codemirror/dialog.css">
-<link rel="stylesheet" href="./vendor/codemirror/show-hint.css">
-<script src="./vendor/codemirror/dialog.js"></script>
-<link rel="stylesheet" href="./vendor/codemirror/lint.css">
-<script src="./vendor/codemirror/jshint.min.js"></script>
-<script src="./vendor/codemirror/lint.js"></script>
+<head>
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="http://woofjs.com/create">
+  <meta name="twitter:title" content="WoofJS">
+  <meta name="twitter:description" content="WoofJS is a Scratch-inspired Javascript library for making games.">
+  <meta name="twitter:image" content="./images/qIgC8Ae.png">
 
-<style type="text/css">
-    @media (max-width: 600px) {
-        #all {
-            width: 95% !important;
-            height: 60% !important;
-        }
-        button {
-            width: 100% !important;
-        }
-        
-        #start{display:none;}
+  <meta property="og:image" content="./images/qIgC8Ae.png">
+  <meta property="og:title" content="WoofJS">
+  <meta property="og:description" content="WoofJS is a Scratch-inspired Javascript library for making games.">
+
+  <script src="//load.sumome.com/" data-sumo-site-id="44245233c319d8fe9fb7ce8c7ed64db9381aa56477888a10319261f655cfffe2" async="async"></script>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+
+  <meta charset="utf-8">
+
+  <title>WoofJS</title>
+  <link rel="shortcut icon" type="image/png" href="./favicon.png" />
+
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/3.4.0/firebase.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/ui/live/0.5/firebase-ui-auth.js"></script>
+  <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/live/0.5/firebase-ui-auth.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.2/lodash.min.js"></script>
+  <script type="text/javascript" src="https://cdn.rawgit.com/showdownjs/showdown/984942e239c9bda522b9c5544aba72647983b3f1/dist/showdown.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.js"></script>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="./vendor/codemirror/codemirror.css">
+  <script type="text/javascript" src="./vendor/codemirror/codemirror.js"></script>
+  <script type="text/javascript" src="./vendor/codemirror/javascript.js"></script>
+  <script type="text/javascript" src="./vendor/codemirror/closebrackets.js"></script>
+  <script type="text/javascript" src="./vendor/codemirror/javascript-hint.js"></script>
+  <script type="text/javascript" src="./vendor/codemirror/javascript-lint.js"></script>
+  <script type="text/javascript" src="./vendor/codemirror/matchbrackets.js"></script>
+  <script type="text/javascript" src="./vendor/codemirror/search.js"></script>
+  <script type="text/javascript" src="./vendor/codemirror/searchcursor.js"></script>
+  <script type="text/javascript" src="./vendor/codemirror/show-hint.js"></script>
+  <script type="text/javascript" src="./vendor/codemirror/comment.js"></script>
+  <script type="text/javascript" src="./vendor/codemirror/sublime.js"></script>
+  <script type="text/javascript" src="./vendor/codemirror/foldcode.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.5.12/clipboard.min.js"></script>
+  <link rel="stylesheet" href="./vendor/codemirror/foldgutter.css" />
+  <script src="./vendor/codemirror/foldcode.js"></script>
+  <script src="./vendor/codemirror/foldgutter.js"></script>
+  <script src="./vendor/codemirror/brace-fold.js"></script>
+  <script src="./vendor/codemirror/comment-fold.js"></script>
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+  <link rel="stylesheet" href="./vendor/codemirror/dialog.css">
+  <link rel="stylesheet" href="./vendor/codemirror/show-hint.css">
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+  <script src="./vendor/codemirror/dialog.js"></script>
+  <link rel="stylesheet" href="./vendor/codemirror/lint.css">
+  <script src="./vendor/codemirror/jshint.min.js"></script>
+  <script src="./vendor/codemirror/lint.js"></script>
+  <script src="./vendor/codemirror/scrollpastend.js"></script>
+  <link rel="stylesheet" href="https://codemirror.net/theme/3024-day.css">
+  <link rel="stylesheet" href="https://codemirror.net/theme/3024-night.css">
+  <link rel="stylesheet" href="https://codemirror.net/theme/ambiance.css">
+  <link rel="stylesheet" href="https://codemirror.net/theme/base16-dark.css">
+  <link rel="stylesheet" href="https://codemirror.net/theme/base16-light.css">
+  <link rel="stylesheet" href="https://codemirror.net/theme/blackboard.css">
+  <link rel="stylesheet" href="https://codemirror.net/theme/cobalt.css">
+  <link rel="stylesheet" href="https://codemirror.net/theme/eclipse.css">
+  <link rel="stylesheet" href="https://codemirror.net/theme/elegant.css">
+  <link rel="stylesheet" href="https://codemirror.net/theme/erlang-dark.css">
+  <link rel="stylesheet" href="https://codemirror.net/theme/lesser-dark.css">
+  <link rel="stylesheet" href="https://codemirror.net/theme/midnight.css">
+  <link rel="stylesheet" href="https://codemirror.net/theme/monokai.css">
+  <link rel="stylesheet" href="https://codemirror.net/theme/neat.css">
+  <script src="https://unpkg.com/vue@2.0.1/dist/vue.js"></script>
+  <script data-presets="es2015" src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.14.0/babel.min.js"></script>
+  <script src="https://cdn.rawgit.com/beautify-web/js-beautify/1b52eb1f90daaefa6ff0fa7736f97fbfc58093c1/js/lib/beautify.js"></script>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.11.8/semantic.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.11.8/semantic.min.js"></script>
+
+  <script src="https://unpkg.com/vue@2.0.1/dist/vue.js"></script>
+
+  <style>
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      width: 100%;
     }
-    
-    #all {
-        margin: auto;
-        z-index: 100;
-        position: absolute;
-        /* left: 45%; */
-        top: 30px;
-        left: 0;
-        right: 0;
-        height: 75%;
-        width: 60%;
-        background: rgba(255, 255, 255, 0.5);
+
+    #page {
+      position: relative;
+      display: flex;
+      flex-flow: row wrap;
+      align-items: stretch;
+      align-content: stretch;
+      height: 100%;
     }
-    
-    .CodeMirror {
-        height: 100%;
-        background: rgba(255, 255, 255, 0.5);
-        font-size: 1.4em;
+
+    h1 {
+      font-weight: normal;
+      font-size: 25px;
     }
-    
-    iframe {
+
+
+
+    #navbar {
+      background-color: #6DC0F2;
+      position: absolute;
+      width: 100%;
+      z-index: 1;
+      top: 0;
+      height: 55px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    #clean-up {
+      background-color: #80CFFF;
+      border: none;
+      color: white;
+    }
+
+    .btn-default {
+      background-color: #49A6DF;
+      border: none;
+      color: white;
+    }
+
+    #container {
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      margin-top: 55px;
+    }
+
+    *,
+    *:after,
+    *:before {
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #f0f0f0;
+    }
+
+    img {
+      max-width: 100%;
+    }
+
+    .card-grid {
+      width: 90%;
+      margin: 0 auto;
+    }
+
+    .card-grid:after {
+      content: "";
+      display: table;
+      clear: both;
+    }
+
+    .card-grid-1 {
+      width: 90%;
+      margin: 0 auto;
+      margin-top: 60px;
+    }
+
+    .card-grid-1:after {
+      content: "";
+      display: table;
+      clear: both;
+    }
+
+    .card-wrap {
+      float: left;
+      width: 100%;
+      padding: 5px;
+    }
+    /* Custom, iPhone Retina */
+
+    @media only screen and (min-width: 320px) {
+      .card-wrap {
         width: 100%;
-        height: 97%;
-        border: none;
-        overflow: hidden;
-        z-index: -100;
+      }
     }
-    
-    button {
-        z-index: 200;
-        width: 375px;
-        height: 80px;
-        border: none;
-        margin-left: auto;
-        margin-right: auto;
-        margin: 10px;
-        background-color: #AD5FC2;
-        border-radius: 20px;
-        color: white;
-        font-size: 150%;
-    }
-    
-    #start {
-        background-color: #6FCF97;
-    }
-    
-    #educator {
-        background-color: #56CCF2;
-    }
-    
-    #click {
-        display: flex;
+    /* Extra Small Devices, Phones */
+
+    @media only screen and (min-width: 480px) {
+      .card-wrap {
         width: 100%;
-        margin-left: auto;
-        margin-right: auto;
+      }
     }
-</style>
-<div id="all">
-    <div id="editor"></div>
-    <div id="click" style="display: flex; flex-direction: row; flex-wrap: wrap; justify-content: center; align-content: center; align-items: center;">
-        <a href="./create.html"><button id="start">Start Coding</button></a>
-        <a href="./teach.html"><button id="educator">For Educators</button></a>
+    /* Small Devices, Tablets */
+
+    @media only screen and (min-width: 768px) {
+      .card-wrap {
+        width: 50%;
+      }
+    }
+    /* Medium Devices, Desktops */
+
+    @media only screen and (min-width: 992px) {
+      .card-wrap {
+        width: 50%;
+      }
+    }
+    /* Large Devices, Wide Screens */
+
+    @media only screen and (min-width: 1200px) {
+      .card-wrap {
+        width: 25%;
+      }
+    }
+    /*==========  Non-Mobile First Method  ==========*/
+    /* Large Devices, Wide Screens */
+
+    @media only screen and (max-width: 1200px) {
+      .card-wrap {
+        width: 25%;
+      }
+    }
+    /* Medium Devices, Desktops */
+
+    @media only screen and (max-width: 992px) {
+      .card-wrap {
+        width: 50%;
+      }
+    }
+    /* Small Devices, Tablets */
+
+    @media only screen and (max-width: 768px) {
+      .card-wrap {
+        width: 50%;
+      }
+    }
+    /* Extra Small Devices, Phones */
+
+    @media only screen and (max-width: 480px) {
+      .card-wrap {
+        width: 100%;
+      }
+    }
+    /* Custom, iPhone Retina */
+
+    @media only screen and (max-width: 320px) {
+      .card-wrap {
+        width: 100%;
+      }
+    }
+
+    .card {
+      min-height: 1000px;
+    }
+
+    .card>div {
+      padding: 0 1em;
+    }
+
+    .divider-link {
+      color: black;
+    }
+
+    .divider-link:hover {
+      text-decoration: none;
+      color: black;
+      cursor: default;
+    }
+
+
+    .liked {
+      color: red;
+    }
+
+    .unliked:hover {
+      color: red;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="page">
+    <div id="navbar">
+
+
+
+      <div class="ui buttons" :style="{display: loginState == 'LOGGEDOUT' ? 'block' : 'none'}">
+        <button class="ui button" style='margin-left:10px;' onclick='$("#loginModal").modal("show")' v-on:click='loginSignUpView = "LOGIN"'>Login</button>
+        <div class="or"></div>
+        <button class="ui button" onclick='$("#loginModal").modal("show")' v-on:click='loginSignUpView = "SIGNUP"'>Sign Up</button>
+      </div>
+
+
+      <button class="ui button" style='margin-left:10px;' :style="{display: loginState == 'LOGGEDOUT' ? 'none' : 'block'}" onclick="firebase.auth().signOut()">Logout</button>
+
+
+      <a href='./index.html'><img  style= "width:160px; height: 40px;" src="./images/logowhite.png"></a>
+
+      <div class="ui buttons">
+        <a href='./teach.html'><button class="ui button green" style='margin-right:3px;' :style="{display: loginState == 'LOGGEDOUT' ? 'block' : 'none'}">For Educators</button></a>
+        <a href='./create.html'><button class="ui button blue" style='margin-right:10px;'>Start Coding</button></a>
+      </div>
+
+      <div class="ui basic modal" id='loginModal'>
+        <div class="modal-header" style='background-color:white;color:black;'>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h1 class="modal-title" id="loginModalLabel" :style="{display: loginSignUpView == 'LOGIN' ? 'block' : 'none'}">Log In</h1>
+          <h1 class="modal-title" id="loginModalLabel" :style="{display: loginSignUpView == 'SIGNUP' ? 'block' : 'none'}">Sign Up</h1>
+          <h1 class="modal-title" id="loginModalLabel" :style="{display: loginSignUpView == 'RESETPASSWORD' ? 'block' : 'none'}">Recover Password</h1>
+          <h1 class="modal-title" id="loginModalLabel" :style="{display: loginSignUpView == 'RESETPASSWORDSUCCESS' ? 'block' : 'none'}">Email Sent</h1>
+        </div>
+        <div class="content" style='background-color:lightgrey;color:black;'>
+          <div class="modal-body" :class="{animated: loginSignUpView == 'SIGNUP', fadeIn: loginSignUpView == 'SIGNUP'}" :style="{display: loginSignUpView == 'SIGNUP' ? 'block' : 'none'}" style='margin-top: -25px;'>
+            <div class="form-group" :class="{'has-success': usernameValid == 'VALID', 'has-error': usernameValid == 'TAKEN', animated: usernameValid == 'TAKEN' || usernameLastKeyIllegal,  shake: usernameValid == 'TAKEN' || usernameLastKeyIllegal}">
+              <label for='username'>Username</label>
+              <input v-model='signUpUsername' onfocus="$('#usernameCreate').tooltip('toggle')" data-placement="top" title="Don't use your real name" type="text" class="form-control" id="usernameCreate" placeholder="Username" aria-describedby="usernameCreateHelp" @input="usernameValidate($event)">
+              <span id="usernameCreateHelp" class="help-block" :style="{display: usernameValid == 'TAKEN' ? 'block' : 'none'}">This username is already taken. Please try another username.</span>
+              <span id="usernameCreateHelp" class="help-block" style='color:#BD362F;' :style="{display: usernameLastKeyIllegal ? 'block' : 'none'}">You cannot include {{ usernameLastKeyIllegal }} in usernames.</span>
+            </div>
+            <div class="form-group" :class="{'has-success': emailValid == 'VALID', 'has-error': emailValid == 'TAKEN' || emailValid == 'NOTEMAIL',  animated: emailValid == 'TAKEN' || emailValid == 'NOTEMAIL',  shake: emailValid == 'TAKEN' || emailValid == 'NOTEMAIL'}">
+              <label for='username'>Email</label>
+              <input type="email" v-model='signUpEmail' class="form-control" id="emailCreate" placeholder="Email" aria-describedby="emailCreate" @blur="emailValidate($event)" @input="emailSuccessValidate">
+              <span id="emailCreate" class="help-block" :style="{display: emailValid == 'TAKEN' ? 'block' : 'none'}">An account with this email aready exists. Please try to <a @click="switchToLogin()" onclick='app.loginEmail = app.signUpEmail'>log in</a>.</span>
+              <span id="emailCreate" class="help-block" :style="{display: emailValid == 'NOTEMAIL' ? 'block' : 'none'}">Please enter a valid email.</span>
+            </div>
+            <div class="form-group" :class="{'has-success': passwordValid == 'VALID', 'has-error': passwordValid == 'WEAK','animated': passwordValid == 'WEAK','shake': passwordValid == 'WEAK'}">
+              <label for='username'>Password</label>
+              <input type="password" v-model='signUpPassword' class="form-control" id="passwordCreate" placeholder="Password" aria-describedby="passwordCreateHelp" @input="passwordSuccessValidate" @blur="passwordValidate($event)" onkeydown="if (event.keyCode == 13){signUp()}">
+              <span id="passwordCreateHelp" class="help-block" :style="{display: passwordValid == 'WEAK' ? 'block' : 'none'}">Passwords must be at least 6 characters long.</span>
+            </div>
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" v-model='signUpChecked'> I want to recieve updates about WoofJS
+              </label>
+            </div>
+            <div class="form-group" style="text-align:center;">
+              <div>
+                <button type="submit" class="btn btn-primary" style="width:100%;" :class="{disabled: signUpButtonState == 'LOADING'}" onclick="signUp()">
+                  <i class="fa fa-spinner fa-pulse fa-fw" style="margin:0 auto;" :style="{display: signUpButtonState == 'LOADING' ? 'block' : 'none'}"></i>
+                  <span :style="{display: signUpButtonState == 'LOADING' ? 'none' : 'block'}">Sign Up</span>
+                </button>
+                <br>
+                <br>
+                <small style="color:black;">Already have an account? <a @click="switchToLogin()" style="cursor: pointer;text-decoration:none;"> Log In</a></small>
+              </div>
+            </div>
+          </div>
+          <div class="modal-body" :style="{display: loginSignUpView == 'RESETPASSWORD' ? 'block' : 'none'}" :class="{animated: loginSignUpView == 'RESETPASSWORD', fadeIn: loginSignUpView == 'RESETPASSWORD'}">
+            <h5>Get instructions sent to this email that explain how to reset your password.</h5>
+            <div class="form-group">
+              <label for='emailReset'>Email</label>
+              <input onkeydown="if (event.keyCode == 13){resetPassword()}" type="email" v-model="resetEmail" class="form-control" id="emailReset" placeholder="Email">
+            </div>
+            <div class="form-group" style="text-align:center;">
+              <div>
+                <button type="submit" class="btn btn-primary" style="width:100%;" onclick="resetPassword()">
+                  Send
+                </button>
+                <br>
+                <br>
+                <small style="color:black;">Remember your password? <a @click="switchToLogin()" style="cursor: pointer;text-decoration:none;">Log In</a></small>
+              </div>
+            </div>
+          </div>
+          <div class="modal-body" :style="{display: loginSignUpView == 'RESETPASSWORDSUCCESS' ? 'block' : 'none'}" :class="{animated: loginSignUpView == 'RESETPASSWORDSUCCESS', fadeIn: loginSignUpView == 'RESETPASSWORDSUCCESS'}">
+            <h5>If there is an account associated with that email address, we have sent it a password reset email.</h5>
+          </div>
+          <div class="modal-body" style='margin-top:-50px;' :style="{display: loginSignUpView == 'LOGIN' ? 'block' : 'none'}" :class="{animated: loginSignUpView == 'LOGIN', fadeIn: loginSignUpView == 'LOGIN'}">
+            <br>
+            <div class="form-group" :class="{'has-error': loginError == 'USERNOTFOUND' || loginError == 'INVALIDEMAIL' || loginError == 'USERNAMENOTUNIQUE',  animated: loginError == 'USERNOTFOUND' || loginError == 'INVALIDEMAIL' || loginError == 'USERNAMENOTUNIQUE',  shake: loginError == 'USERNOTFOUND' || loginError == 'INVALIDEMAIL' || loginError == 'USERNAMENOTUNIQUE'}">
+              <label for='username'>Username or Email</label>
+              <input type="text" v-model="loginEmail" class="form-control" id="username" placeholder="Username or Email" aria-describedby="usernameHelp">
+              <span id="usernameHelp" class="help-block" :style="{display: loginError == 'USERNOTFOUND' ? 'block' : 'none'}">No account with this username or email exists. Please try to sign up for an account.</span>
+              <span id="usernameHelp" class="help-block" :style="{display: loginError == 'INVALIDEMAIL' ? 'block' : 'none'}">Invalid email address. Please try again.</span>
+              <span id="usernameHelp" class="help-block" :style="{display: loginError == 'USERNAMENOTUNIQUE' ? 'block' : 'none'}">We have no record of this username.</span>
+            </div>
+            <div class="form-group" :class="{'has-error': loginError == 'WRONGPASSWORD',  animated: loginError == 'WRONGPASSWORD',  shake: loginError == 'WRONGPASSWORD'}">
+              <label for='password'>Password</label>
+              <input onkeydown="if (event.keyCode == 13){login()}" type="password" v-model="loginPassword" class="form-control" id="password" placeholder="Password" aria-describedby="passwordHelp">
+              <span id="passwordHelp" class="help-block" :style="{display: loginError == 'WRONGPASSWORD' ? 'block' : 'none'}">Invalid password. Please try again.</span>
+            </div>
+            <div class="form-group" style="text-align:center;">
+              <div>
+                <button type="submit" class="btn btn-primary" style="width:100%;" :class="{disabled: loginButtonState == 'LOADING'}" onclick="login()">
+                  <i class="fa fa-spinner fa-pulse fa-fw" style="margin:0 auto;" :style="{display: loginButtonState == 'LOADING' ? 'block' : 'none'}"></i>
+                  <span :style="{display: loginButtonState == 'NORMAL' ? 'block' : 'none'}">Log In</span>
+                </button>
+                <br>
+                <br>
+                <small style="color:black;">Don't have an account? <a @click="switchToSignUp()" style="cursor: pointer;text-decoration:none;"> Sign Up</a></small>
+                <br>
+                <br>
+                <small style="color:black;"><a @click="switchToPasswordReset()" style="cursor: pointer;color:black;">Forgot your password?</a></small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
     </div>
-</div>
-<iframe id="output"></iframe>
 
+
+    <div style="margin: 0 auto; padding: 0 15px;text-align: center;">
+      <h3 class="ui header" style='margin: 0 auto;margin-top:100px;'>WoofJS is a <i>learnable</i> JavaScript framework for creating games by <a href="http://thecodingspace.com">The Coding Space</a>.</h3>
+      <h3 class="ui header" style='margin: 0 auto;margin-top: 10px;'>WoofJS was created to be the next step after block-based coding in Scratch. For more details, you can <a href="https://medium.com/@stevekrouse/woof-d9adf2110fc6">read our announcement post</a>.</h3>
+    </div>
+
+    <div class="card-grid">
+
+      <br>
+      <p style='opacity: 0'>f</p>
+      <div class="ui horizontal divider">
+        <a class='divider-link'>Recently Saved Projects</a>
+      </div>
+      <template> 
+          <div v-for="project in recentlysaved">
+              <div class="card-wrap">
+              <div class="ui fluid card">
+                <a class="image" :href="project.link">
+                  <div class="ui inverted dimmer" :class='{active: project.title == "..."}'>
+                    <div class="ui text loader">Loading</div>
+                  </div>
+                  <img :src="project.url">
+                </a>
+                <div class="content">
+                  <a class="header" :href="project.link">{{ project.title }}</a>
+                  <div class="meta">
+                    <span class="description">{{ project.username }}</span>
+                  </div>
+                </div>
+                <div class="extra content">
+                  <span class="right floated">
+                    {{ project.prettyTime }}
+                  </span>
+                  {{ project.likes }}
+                    <i class="heart icon link" :class="{outline: project.liked == 'unliked' ||  loginState == 'LOGGEDOUT', unliked: project.liked == 'unliked' ||  loginState == 'LOGGEDOUT', liked: project.liked == 'liked' &&  loginState != 'LOGGEDOUT'}" v-on:click='like(project)'></i>
+                </div>
+              </div>
+            </div>
+          </div>
+      </template>
+
+    </div>
+
+  </div>
+
+
+  </div>
+
+</body>
+
+</html>
 <script>
-   var readOnly = true
-    var cm = CodeMirror(document.getElementById('editor'), {
-        value: "",
-        mode: "javascript",
-        theme: "eclipse",
-        keyMap: "sublime",
-        lineWrapping: true,
-        scrollbarStyle: "null",
-        autofocus: false,
-        readOnly: readOnly
-    });
-    
-    cm.on("mousedown", function(e) {
-      if (readOnly) {
-        e.preventDefault()  
-      }
-    })
-    
-    cm.on("touchstart", function(e) {
-      if (readOnly) {
-        e.preventDefault()  
-      }
-    })
-    
-    var pos = 0
-    var code = "// Hey there, welcome to WoofJS! WoofJS is a Scratch-inspired JavaScript library for making games.\n" +
-        "\n" +
-        "// Want to code something together? :-)\n" +
-        "every(.001, 'seconds', () => {" +
-        "  var circle = new Circle()\n" +
-        "\n" +
-        "  // Go, little circles, go!\n" +
-        "  forever(() => {\n" +
-        "    circle.move(5)\n" +
-        "  })\n\n" +
-        "  // Let's randomize size\n" +
-        "  circle.radius = random(5, 20)\n\n" +
-        "  // Colors are fun!\n" +
-        "  circle.color = randomColor()\n" +
-        "\n" +
-        "  // I say scatter!\n" +
-        "  circle.angle = random(0, 360)\n\n" +
-        "  // Now it's your turn. Play with this code by changing any of the numbers above.";
+  var app = new Vue({
+    el: '#page',
+    data: {
+      tempuser: '',
+      projects: [],
+      temprecentlysavedprojects: [],
+      recentlysaved: [{
+          url: "https://s26.postimg.org/7135l6qeh/placeholder.jpg",
+          title: "...",
+          time: "",
+          username: "...",
+          likes: '...',
+          prettyTime: '...',
+          liked: 'unliked',
+        },
+        {
+          url: "https://s26.postimg.org/7135l6qeh/placeholder.jpg",
+          title: "...",
+          time: "",
+          username: "...",
+          likes: '...',
+          prettyTime: '...',
+          liked: 'unliked',
+        },
+        {
+          url: "https://s26.postimg.org/7135l6qeh/placeholder.jpg",
+          title: "...",
+          time: "",
+          username: "...",
+          likes: '...',
+          prettyTime: '...',
+          liked: 'unliked',
+        },
+        {
+          url: "https://s26.postimg.org/7135l6qeh/placeholder.jpg",
+          title: "...",
+          time: "",
+          username: "...",
+          likes: '...',
+          prettyTime: '...',
+          liked: 'unliked',
+        },
+        {
+          url: "https://s26.postimg.org/7135l6qeh/placeholder.jpg",
+          title: "...",
+          time: "",
+          username: "...",
+          likes: '...',
+          prettyTime: '...',
+          liked: 'unliked',
+        },
+        {
+          url: "https://s26.postimg.org/7135l6qeh/placeholder.jpg",
+          title: "...",
+          time: "",
+          username: "...",
+          likes: '...',
+          prettyTime: '...',
+          liked: 'unliked',
+        },
+        {
+          url: "https://s26.postimg.org/7135l6qeh/placeholder.jpg",
+          title: "...",
+          time: "",
+          username: "...",
+          likes: '...',
+          prettyTime: '...',
+          liked: 'unliked',
+        },
+        {
+          url: "https://s26.postimg.org/7135l6qeh/placeholder.jpg",
+          title: "...",
+          time: "",
+          username: "...",
+          likes: '...',
+          prettyTime: '...',
+          liked: 'unliked',
+        },
+      ],
+      usernameLastKeyIllegal: false,
+      loginSignUpView: "LOGIN", // or SIGNUP or RESETPASSWORD or RESETPASSWORDSUCCESS
+      emailError: false,
+      usernameValid: "EMTPY", // TAKEN or VALID or EMPTY or ILLEGAL
+      emailValid: "EMTPY", // TAKEN or VALID or NOTEMAIL or EMPTY
+      passwordValid: "EMTPY", // VALID or EMPTY or WEAK
+      loginError: "NONE", // NONE or USERNOTFOUND or WRONGPASSWORD or INVALIDEMAIL
+      loginButtonState: "NORMAL", // NORMAL or LOADING
+      signUpButtonState: "DISABLED", // NORMAL or DISABLED or LOADING
+      loginPassword: "",
+      loginEmail: "",
+      resetEmail: "",
+      signUpEmail: '',
+      signUpPassword: '',
+      signUpChecked: true,
+      signUpUsername: '',
 
+      loginState: "LOGGEDOUT", // or LOGGEDIN
+      userNameForMenu: '',
+      userProjectsLink: '',
 
-    function runCode() {
-        var iframe = document.getElementById('output');
+      migrateUsernameValid: "EMTPY", // TAKEN or VALID or EMPTY or ILLEGAL
+      migrateUsernameKeyIllegal: false,
+      migrateUsername: '',
+      migrateChecked: true,
+      migrateButtonState: "DISABLED", // NORMAL or DISABLED or LOADING
 
-
-        iframe.src = "";
-        setTimeout(function() {
-            var script = iframe.contentWindow.document.createElement("script");
-            script.type = "text/javascript";
-            script.src = "./dist/woof.js";
-            iframe.contentWindow.document.body.appendChild(script);
-            iframe.contentWindow.document.body.style.overflow = "hidden"
-
-            script.onload = function() {
-                var evt = document.createEvent('Event');
-                evt.initEvent('load', false, false);
-                iframe.contentWindow.dispatchEvent(evt);
-                document.getElementById('output').contentWindow.eval(cm.getValue());
+    },
+    computed: {},
+    methods: {
+      switchToSignUp: function() {
+        this.loginSignUpView = 'SIGNUP'
+      },
+      switchToLogin: function() {
+        this.loginSignUpView = 'LOGIN'
+      },
+      switchToPasswordReset: function() {
+        this.loginSignUpView = 'RESETPASSWORD'
+      },
+      usernameValidate: function($event) {
+        var username = $event.target.value
+        if (username == '') {
+          this.usernameValid = "EMPTY"
+        } else {
+          this.usernameLastKeyIllegal = false
+          setTimeout(function() {
+            var lastKeyPressIllegal = username.length > 0 && username[username.length - 1].match(/\.|#|\$|\/|\[|\]/)
+            if (lastKeyPressIllegal) {
+              this.usernameLastKeyIllegal = lastKeyPressIllegal[0]
+            } else {
+              this.usernameLastKeyIllegal = false
             }
-        }, 10)
-    }
-    function debounce(func, wait, immediate) {
-    	var timeout;
-    	return function() {
-    		var context = this, args = arguments;
-    		var later = function() {
-    			timeout = null;
-    			if (!immediate) func.apply(context, args);
-    		};
-    		var callNow = immediate && !timeout;
-    		clearTimeout(timeout);
-    		timeout = setTimeout(later, wait);
-    		if (callNow) func.apply(context, args);
-    	};
-    };
-    var debouncedRunCode = debounce(runCode, 1000, false)
+          }.bind(this), 10)
 
-    var doc = cm.getDoc()
-    setInterval(function() {
-        if (pos < code.length) {
-            doc.replaceSelection(code[pos])
-            pos++
-            if (code.substring(pos - 9, pos) == ", () => {") {
-                doc.replaceSelection("\n\n\n")
-                doc.replaceSelection("})")
-                doc.setCursor({
-                    line: doc.getCursor().line - 2,
-                    ch: 1
-                })
-            }
-            cm.scrollIntoView({
-                line: doc.getCursor().line + 2
-            })
-            if (code[pos] == "\n" && !doc.getLine(doc.getCursor().line).startsWith('//')) {
-                runCode()
-            }
+          this.signUpUsername = username.replace(" ", "-")
+          this.signUpUsername = this.signUpUsername.replace(/\.|#|\$|\/|\[|\]/g, "")
+          this.usernameValid = "VALID"
         }
-        else if (pos == code.length) {
-            runCode()
-            pos++
-            cm.setOption("readOnly", false)
-            readOnly = false
-            cm.on("change", function(){
-              debouncedRunCode()
+      },
+      migrateUsernameVaidate: function($event) {
+        var username = $event.target.value
+        if (username == '') {
+          this.usernameValid = "EMPTY"
+        } else {
+          this.migrateUsernameKeyIllegal = false
+          setTimeout(function() {
+            var lastKeyPressIllegal = username.length > 0 && username[username.length - 1].match(/\.|#|\$|\/|\[|\]/)
+            if (lastKeyPressIllegal) {
+              this.migrateUsernameKeyIllegal = lastKeyPressIllegal[0]
+            } else {
+              this.migrateUsernameKeyIllegal = false
+            }
+          }.bind(this), 10)
+
+          this.migrateUsername = username.replace(" ", "-")
+          this.migrateUsername = this.migrateUsername.replace(/\.|#|\$|\/|\[|\]/g, "")
+          this.migrateUsernameValid = "VALID"
+        }
+      },
+      // Checks for success or error on blur
+      emailValidate: function($event) {
+        var email = $event.target.value
+        if (email == '') {
+          this.emailValid = "EMPTY"
+        } else if (!/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email)) {
+          this.emailValid = "NOTEMAIL"
+        } else if (/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email)) {
+          this.emailValid = "VALID"
+        }
+      },
+      // Checks for success or error on blur
+      passwordValidate: function($event) {
+        var password = $event.target.value
+        if (password == '') {
+          this.passwordValid = "EMPTY"
+        } else if (!/^.{6,}$/.test(password)) {
+          this.passwordValid = "WEAK"
+        } else {
+          this.passwordValid = "VALID"
+        }
+      },
+      // Checks for success on every input
+      emailSuccessValidate: function($event) {
+        var email = $event.target.value
+        if (/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email)) {
+          this.emailValid = "VALID"
+        }
+      },
+      // Checks for success on every input
+      passwordSuccessValidate: function($event) {
+        var password = $event.target.value
+        if (/^.{6,}$/.test(password)) {
+          this.passwordValid = "VALID"
+        }
+      },
+
+      like: function(project) {
+        likeFunction(project)
+      },
+
+    },
+  })
+
+
+  var config = {
+    apiKey: "AIzaSyBYHv7dCiD0bWiHRlcp4VIZCIqzoMnB4yY",
+    authDomain: "woofjs-d1b27.firebaseapp.com",
+    databaseURL: "https://woofjs-d1b27.firebaseio.com",
+    storageBucket: "woofjs-d1b27.appspot.com",
+    messagingSenderId: "397293370524"
+  };
+  firebase.initializeApp(config);
+
+  var authChanged = false
+  firebase.auth().onAuthStateChanged(function(user) {
+    if (!authChanged) {
+      authChanged = true
+    }
+
+    if (user) {
+      ga('set', 'userId', user.uid);
+      firepad.setUserId(user.uid)
+
+      handleLogin(user.displayName, user.uid)
+
+      firebase.database().ref('/user/' + user.uid).once('value').then(function(snapshot) {
+        var userVal = snapshot.val()
+
+        // if the user is logged in, and we don't have their name/email in our database, save it now
+        if (!userVal) {
+          firebase.database().ref("/user/" + user.uid).set({
+            displayName: user.displayName,
+            email: user.email,
+            createdDate: firebase.database.ServerValue.TIMESTAMP
+          })
+        }
+      })
+
+      // // this puts the user's most recent project under their name
+      firebase.database().ref('/code/').orderByChild("--uid").equalTo(user.uid).once('value').then(function(snapshot) {
+        if (snapshot.val()) {
+          app.projects = []
+          for (var key in snapshot.val()) {
+            var project = snapshot.val()[key]
+            var versions = Object.keys(project)
+            var t = project[versions[versions.length - 1]].time
+            app.projects.push({
+              key: key,
+              time: t,
+              code: project.code
+            })
+          }
+        }
+        // sort the proejcts by most recently touched
+        app.projects.sort(function(a, b) {
+          if (a.time < b.time)
+            return 1;
+          if (a.time > b.time)
+            return -1;
+          return 0;
+        })
+      });
+    } else {
+      handleLogout()
+    }
+  });
+
+  function timeSince(date) {
+    date = new Date(date);
+    var seconds = Math.floor((new Date() - date) / 1000);
+    var interval = Math.floor(seconds / 31536000);
+    if (interval > 1) {
+      return interval + " years";
+    }
+    interval = Math.floor(seconds / 2592000);
+    if (interval > 1) {
+      return interval + " months";
+    }
+    interval = Math.floor(seconds / 86400);
+    if (interval > 1) {
+      return interval + " days";
+    }
+    interval = Math.floor(seconds / 3600);
+    if (interval > 1) {
+      return interval + " hours";
+    }
+    interval = Math.floor(seconds / 60);
+    if (interval > 1) {
+      return interval + " minutes";
+    }
+    return Math.floor(seconds) + " seconds";
+  }
+
+  function addRecentlySavedProject(project, counter) {
+    app.temprecentlysavedprojects.push(project)
+    app.temprecentlysavedprojects.sort(function(a, b) {
+      return b.time - a.time;
+    });
+    if (app.temprecentlysavedprojects.length >= 20) {
+      app.temprecentlysavedprojects = app.temprecentlysavedprojects.slice(0, 19)
+    }
+  }
+
+  firebase.database().ref("code-meta-data").orderByChild("currentVersionTime").limitToLast(35).once('value', function(datasnapshot) {
+    _.forEach(datasnapshot.val(), function(value, key) {
+      if (value['latestScreenshot']) {
+        if (value['uid']) {
+          firebase.database().ref("user/" + value['uid']).once('value').then(function(userSnapshot) {
+            firebase.database().ref("like").orderByChild('project').equalTo(key).once('value').then(function(likeSnapshot) {
+              addRecentlySavedProject({
+                url: value['latestScreenshot'],
+                title: key,
+                link: './full.html#' + key,
+                time: value['currentVersionTime'],
+                username: userSnapshot.val()['displayName'],
+                likes: likeSnapshot.val() ? (Object.keys(likeSnapshot.val()).length) : (0),
+                prettyTime: timeSince(value['currentVersionTime']) + " ago",
+                liked: (likeSnapshot.val() && firebase.auth().currentUser) ? (_.filter(likeSnapshot.val(), {
+                  'uid': firebase.auth().currentUser.uid
+                }).length != 0 ? ('liked') : ('unliked')) : ('unliked'),
+              })
+            });
+          });
+        } else {
+          firebase.database().ref("like").orderByChild('project').equalTo(key).once('value').then(function(likeSnapshot) {
+            addRecentlySavedProject({
+              url: value['latestScreenshot'],
+              title: key,
+              link: './full.html#' + key,
+              time: value['currentVersionTime'],
+              username: 'anonymous',
+              likes: likeSnapshot.val() ? (Object.keys(likeSnapshot.val()).length) : (0),
+              prettyTime: timeSince(value['currentVersionTime']) + " ago",
+              liked: (likeSnapshot.val() && firebase.auth().currentUser) ? (_.filter(likeSnapshot.val(), {
+                'uid': firebase.auth().currentUser.uid
+              }).length != 0 ? ('liked') : ('unliked')) : ('unliked'),
+            })
+          });
+        }
+
+      }
+    });
+    app.recentlysaved = app.temprecentlysavedprojects
+  });
+
+
+
+  function likeFunction(project) {
+    if (project.title != '...') {
+      if (firebase.auth().currentUser) {
+        if (project.liked == "liked") {
+          //Unlike project
+          firebase.database().ref().child("/like/" + project.title + '-' + firebase.auth().currentUser.uid).remove().then(function() {
+            project.liked = 'unliked'
+            project.likes--
+          }).catch(function(error) {
+            alert("Unable to unlike project: " + error)
+          });
+        } else {
+          //Like project
+          firebase.database().ref().child("/like/" + project.title + '-' + firebase.auth().currentUser.uid).set({
+            project: project.title,
+            uid: firebase.auth().currentUser && firebase.auth().currentUser.uid,
+            displayName: firebase.auth().currentUser && firebase.auth().currentUser.displayName,
+            time: firebase.database.ServerValue.TIMESTAMP,
+          }).then(function() {
+            project.liked = 'liked'
+            project.likes++
+          }).catch(function(error) {
+            alert("Unable to like project: " + error)
+          });
+        }
+      } else {
+        //Request login/signup
+        $('#loginModal').modal('show')
+      }
+    }
+  }
+
+  function clearLoginSignupModal() {
+    app.emailError = false;
+    app.usernameValid = "EMTPY";
+    app.emailValid = "EMTPY";
+    app.passwordValid = "EMTPY";
+    app.loginError = "NONE";
+    app.loginButtonState = "NORMAL";
+    app.signUpButtonState = "DISABLED";
+    app.loginPassword = "";
+    app.loginEmail = "";
+    app.resetEmail = "";
+    app.signUpEmail = '';
+    app.signUpPassword = '';
+    app.signUpChecked = true;
+    app.signUpUsername = '';
+  }
+
+  function loginWithEmail(email, pass) {
+    firebase.auth().signInWithEmailAndPassword(email, pass)
+      .then(function() {
+        $('#loginModal').modal('hide');
+        clearLoginSignupModal();
+        location.reload();
+      })
+      .catch(function(error) {
+        if (error.code === 'auth/wrong-password') {
+          app.loginError = "WRONGPASSWORD"
+          app.loginButtonState = "NORMAL"
+        } else if (error.code === 'auth/invalid-email') {
+          app.loginError = "INVALIDEMAIL"
+          app.loginButtonState = "NORMAL"
+        } else {
+          app.loginError = "USERNOTFOUND"
+          app.loginButtonState = "NORMAL"
+        }
+      })
+  }
+
+  function migrate() {
+    if (app.migrateUsernameValid == 'VALID' && app.migrateButtonState != 'LOADING') {
+      app.migrateButtonState = "LOADING"
+
+      var exists
+      var ref = firebase.database().ref("uniqueUsername");
+
+      ref.child(app.migrateUsername).once('value', function(snapshot) {
+        exists = (snapshot.val() !== null);
+        if (exists) {
+          app.migrateUsernameValid = 'TAKEN'
+          app.migrateButtonState = "NORMAL"
+        } else {
+
+          var user = firebase.auth().currentUser;
+
+          user.updateProfile({
+            displayName: app.migrateUsername,
+            recieveUpdates: app.migrateChecked,
+            usernameUnique: true
+          })
+
+          firebase.database().ref("uniqueUsername/" + app.migrateUsername).set({
+            username: app.migrateUsername,
+            uid: user.uid
+          })
+
+          app.userNameForMenu = app.migrateUsername
+
+          var ref = firebase.database().ref("user");
+          ref.child(user.uid).once('value', function(snapshot) {
+            var createdDateVar = snapshot.val().createdDate;
+            var emailVar = snapshot.val().email;
+
+            var updates = {};
+
+            updates['/user/' + user.uid] = {
+              createdDate: createdDateVar,
+              displayName: app.migrateUsername,
+              email: emailVar,
+              recieveUpdates: app.migrateChecked,
+              usernameUnique: true
+            }
+
+            $('#migrateModal').modal('hide');
+            app.migrateButtonState = "NORMAL"
+            app.migrateUsername = ''
+            app.migrateUsernameValid = 'EMPTY'
+
+            return firebase.database().ref().update(updates);
+          });
+
+        }
+      });
+
+    }
+  }
+
+  function login() {
+    app.loginButtonState = "LOADING"
+
+    if (!/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(app.loginEmail)) {
+      var ref = firebase.database().ref("user");
+      ref.orderByChild("displayName").equalTo(app.loginEmail).on("value", function(snapshot) {
+        if (snapshot.numChildren() == 1) {
+          loginWithEmail(snapshot.val()[Object.keys(snapshot.val())[0]].email, app.loginPassword)
+        } else if (snapshot.numChildren() > 1) {
+          app.loginError = "USERNAMENOTUNIQUE"
+          app.loginButtonState = "NORMAL"
+        } else {
+          app.loginError = "USERNOTFOUND"
+          app.loginButtonState = "NORMAL"
+        }
+      });
+    } else {
+      loginWithEmail(app.loginEmail, app.loginPassword)
+    }
+  }
+
+  function signUp() {
+    var email = app.signUpEmail;
+    var password = app.signUpPassword;
+    if (email == '') {
+      app.emailValid = "EMPTY"
+    } else if (!/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email)) {
+      app.emailValid = "NOTEMAIL"
+    } else if (/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email)) {
+      app.emailValid = "VALID"
+    }
+    if (password == '') {
+      app.passwordValid = "EMPTY"
+    } else if (!/^.{6,}$/.test(password)) {
+      app.passwordValid = "WEAK"
+    } else {
+      app.passwordValid = "VALID"
+    }
+
+    if (app.usernameValid == 'VALID' && app.emailValid == 'VALID' && app.passwordValid == 'VALID' && app.signUpButtonState != 'LOADING') {
+      app.signUpButtonState = "LOADING"
+
+      var exists
+      var ref = firebase.database().ref("uniqueUsername");
+      ref.child(app.signUpUsername).once('value', function(snapshot) {
+        exists = (snapshot.val() !== null);
+        if (exists) {
+          app.usernameValid = 'TAKEN'
+          app.signUpButtonState = "NORMAL"
+        } else {
+          firebase.auth().createUserWithEmailAndPassword(app.signUpEmail, app.signUpPassword)
+            .then(function() {
+
+              $('#loginModal').modal('hide');
+
+              var user = firebase.auth().currentUser;
+
+              user.updateProfile({
+                displayName: app.signUpUsername
+              })
+
+
+              app.userNameForMenu = app.signUpUsername
+              app.projects = []
+
+              firebase.database().ref("uniqueUsername/" + app.signUpUsername).set({
+                username: app.signUpUsername,
+                uid: user.uid
+              })
+
+              firebase.database().ref('/user/' + user.uid).once('value').then(function(snapshot) {
+                if (!snapshot.val()) {
+                  firebase.database().ref("/user/" + user.uid).set({
+                    displayName: app.signUpUsername,
+                    email: user.email,
+                    createdDate: firebase.database.ServerValue.TIMESTAMP,
+                    recieveUpdates: app.signUpChecked,
+                    usernameUnique: true
+                  })
+                }
+              });
+
+              location.reload();
+
+            }).catch(function(error) {
+              // Handle EMAIL Errors here.
+              var errorCode = error.code;
+              var errorMessage = error.message;
+              if (error.code === 'auth/email-already-in-use') {
+                app.emailValid = "TAKEN"
+                app.signUpButtonState = "auth/invalid-email"
+              } else if (error.code === 'auth/invalid-email') {
+                app.emailValid = "NOTEMAIL"
+                app.signUpButtonState = "NORMAL"
+              } else if (error.code === 'auth/weak-password') {
+                app.passwordValid = "WEAK"
+                app.signUpButtonState = "NORMAL"
+              }
+
             });
         }
-    }, 50)
-</script>
+      });
+    }
+  }
 
-<script>
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-  
-    ga('create', 'UA-82374072-1', 'auto');
-    ga('send', 'pageview');
-  
-  </script>
+  function resetPassword() {
+    app.resetButtonState = "LOADING"
+    firebase.auth().sendPasswordResetEmail(app.resetEmail).then(function() {
+      app.loginSignUpView = "RESETPASSWORDSUCCESS"
+      clearLoginSignupModal();
+    }, function(error) {
+      app.loginSignUpView = "RESETPASSWORDSUCCESS"
+      clearLoginSignupModal();
+    })
+  }
+
+  function handleLogin(userName, uid) {
+    app.userNameForMenu = userName
+    app.userProjectsLink = "./user.html#" + uid
+    app.loginState = "LOGGEDIN"
+  }
+
+  function handleLogout() {
+    app.loginState = "LOGGEDOUT"
+    myCode = false
+    clearLoginSignupModal()
+  }
+
+  var authChanged = false
+  firebase.auth().onAuthStateChanged(function(user) {
+    if (!authChanged) {
+      authChanged = true
+      if (user) {
+        ga('set', 'userId', user.uid);
+      }
+    }
+
+    // if user is logging in
+    if (user) {
+
+      if (user.displayName) {
+        handleLogin(user.displayName, user.uid)
+
+        var ref = firebase.database().ref("user");
+        ref.child(user.uid).once('value', function(snapshot) {
+          if (!snapshot.val().usernameUnique) {
+            app.migrateUsername = ''
+            $('#migrateModal').modal('show')
+          }
+        });
+      } else if (app.signUpUsername) {
+        handleLogin(app.signUpUsername, user.uid)
+      }
+
+    } else {
+      handleLogout()
+    }
+  });
+</script>
