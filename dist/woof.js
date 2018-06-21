@@ -1913,7 +1913,7 @@ Woof.prototype.Repeat = function (times, func, after) {
   var _this11 = this;
 
   this.func = func;
-  this.times = times;
+  this.times = Math.floor(times);
   this.done = false;
 
   this.next = function () {
