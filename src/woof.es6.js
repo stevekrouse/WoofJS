@@ -1393,7 +1393,7 @@ Woof.prototype.customSprite = function(subClass) {
 
 Woof.prototype.Repeat = function(times, func, after) {
   this.func = func;
-  this.times = times;
+  this.times = Math.floor(times);
   this.done = false;
   
   this.next = () => {
