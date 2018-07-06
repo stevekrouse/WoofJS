@@ -182,7 +182,7 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
   });
   
   thisContext.bounds = () => {
-    return {left: thisContext.minX, right: thisContext.maxX, bottom: thisContext.minYm, top: thisContext.maxY}
+    return {left: thisContext.minX, right: thisContext.maxX, bottom: thisContext.minY, top: thisContext.maxY}
   };
   
   thisContext.randomX = function() {
@@ -654,28 +654,50 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
     return new SAT.Vector(v.x - pos.x, v.y - pos.y); 
   }
   
-  // Creates collider polygon from vector vertices
+  // Creates collider from vector vertices
   this.collider = function() {
-    var pos = this.rotatedVector(this.x - this.width / 2, this.y - this.height / 2)
-    var v1 = new SAT.Vector(0, 0)
-    var v2 = this.translatedVector(pos, this.rotatedVector(this.x + this.width / 2, this.y - this.height / 2))
-    var v3 = this.translatedVector(pos, this.rotatedVector(this.x + this.width / 2, this.y + this.height / 2))
-    var v4 = this.translatedVector(pos, this.rotatedVector(this.x - this.width / 2, this.y + this.height / 2))
-    
-    return new SAT.Polygon(pos, [v1, v2, v3, v4])
+    // If sprite is a circle, create circle collider
+    if (this.type == "circle") {
+      return new SAT.Circle(new SAT.Vector(this.x,this.y), this.radius);
+    }
+    // If sprite is a polygon, create polygon collider
+    else if (this.type == "polygon") {
+      var pos = this.rotatedVector(this.x, this.y)
+      var vs = [new SAT.Vector(this.length*1, this.length*0)];
+      for (var i = 1; i < this.sides; i++) {
+        vs.push(new SAT.Vector(this.length*Math.cos(i*(2*Math.PI/this.sides)),this.length*Math.sin(i*(2*Math.PI/this.sides))));
+      }
+      return new SAT.Polygon(pos, vs).rotate(this.radians());
+    }
+    // Otherwise, create 4-sided collider around sprite
+    else {
+      var pos = this.rotatedVector(this.x - this.width / 2, this.y - this.height / 2)
+      var v1 = new SAT.Vector(0, 0)
+      var v2 = this.translatedVector(pos, this.rotatedVector(this.x + this.width / 2, this.y - this.height / 2))
+      var v3 = this.translatedVector(pos, this.rotatedVector(this.x + this.width / 2, this.y + this.height / 2))
+      var v4 = this.translatedVector(pos, this.rotatedVector(this.x - this.width / 2, this.y + this.height / 2))
+      return new SAT.Polygon(pos, [v1, v2, v3, v4])
+    }
   }
    
-  // for debugging purposes, this function displays the collider on the screen                                     
+  // for debugging purposes, this function displays the collider on the screen according to type of sprite
   this._renderCollider = function(context){
     var collider = this.collider()
     
     context.save();
     context.beginPath();
+    
+    if (collider.constructor.name == "Circle") {
+      context.arc(...this.project.translateToCanvas(collider.pos.x, collider.pos.y), collider.r, 0, 2*Math.PI);
+    } else {
     context.moveTo(...this.project.translateToCanvas(collider.calcPoints[0].x + collider.pos.x, collider.calcPoints[0].y + collider.pos.y));
-    context.lineTo(...this.project.translateToCanvas(collider.calcPoints[1].x + collider.pos.x, collider.calcPoints[1].y + collider.pos.y));
-    context.lineTo(...this.project.translateToCanvas(collider.calcPoints[2].x + collider.pos.x, collider.calcPoints[2].y + collider.pos.y));
-    context.lineTo(...this.project.translateToCanvas(collider.calcPoints[3].x + collider.pos.x, collider.calcPoints[3].y + collider.pos.y));
+    
+    for (var i = 1; i < this.collider().edges.length; i++) {
+        context.lineTo(...this.project.translateToCanvas(collider.calcPoints[i].x + collider.pos.x, collider.calcPoints[i].y + collider.pos.y));
+    }
     context.lineTo(...this.project.translateToCanvas(collider.calcPoints[0].x + collider.pos.x, collider.calcPoints[0].y + collider.pos.y));
+    }
+
     context.strokeStyle = "green";
     context.lineWidth = 4;
     context.stroke();
@@ -820,20 +842,58 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
   };
   
   this.overlap = ({left, right, top, bottom}) => {
-    var r1 = this.bounds();
-    return !(left > r1.right || right < r1.left || top < r1.bottom || bottom > r1.top);
+    
+    var collider = this.collider();
+    
+    // If collider is a circle, make sure it is inside canvas
+    if (collider.constructor.name == "Circle") {
+      return !(left > collider.pos.x + collider.r || right < collider.pos.x - collider.r || top < collider.pos.y - collider.r || bottom > collider.pos.y + collider.r);
+    }
+    
+    // Otherwise, collider is a polygon. Find out if it's inside canvas by finding min and max points
+    // Create array for x coordinates of collider polygon
+    var xs = []
+    for (var i = 0; i < collider.calcPoints.length; i++) {
+      xs.push(collider.calcPoints[i].x)
+    }
+    // Create array for y coordinates of collider polygon
+    var ys = []
+    for (var i = 0; i < collider.calcPoints.length; i++) {
+      ys.push(collider.calcPoints[i].y)
+    }
+    // Sort array to find max/min x coordinates
+    var sortedX = xs.sort(function(a,b) {
+      return a - b;
+    })
+    // Sort array to find max/min y coordinates
+    var sortedY = ys.sort(function(a,b) {
+      return a - b;
+    })
+    
+    var maxX = sortedX.length-1;
+    var maxY = sortedY.length-1;
+    return !(left > sortedX[maxX] + collider.pos.x || top < sortedY[0] + collider.pos.y || right < sortedX[0] + collider.pos.x || bottom > sortedY[maxY] + collider.pos.y);
   }
   
   this.over = (x, y) => {
     if (typeof x != "number" || typeof y != "number") { throw new TypeError("over(x, y) requires two number inputs."); }
     if (this.deleted || !this.showing) { return false; }
     
-    var r1 = this.bounds();
-    var belowTop = y <= r1.top
-    var aboveBottom = y >= r1.bottom;
-    var rightLeft = x >= r1.left;
-    var leftRight = x <= r1.right;
-    return belowTop && aboveBottom && rightLeft && leftRight;
+    var collider = this.collider();
+    
+    // If shape is an oval, find point in oval. SAT.js does not include this in library. 
+    // This is more exact than a collider polygon drawn around it.
+    if (this.type == "oval") {
+      return Math.pow(x-this.x, 2) / Math.pow(this.width/2, 2) + Math.pow(y-this.y, 2) / Math.pow(this.height/2, 2) <= 1;
+    }
+    // If collider is a circle, find point in circle
+    else if (collider.constructor.name == "Circle") {
+      return SAT.pointInCircle(new SAT.Vector(x,y), this.collider());
+    }
+    // Otherwise look for point in polygon
+    else {
+      return SAT.pointInPolygon(new SAT.Vector(x,y), this.collider())
+    }
   };
   
   Object.defineProperty(this, 'mouseOver', {
@@ -1134,16 +1194,6 @@ Woof.prototype.Polygon = function({project = undefined, sides = 3, length = 100,
       this.polygonLength = value;
     }
   });  
-
-  this.collider = function() {
-    var pos = this.rotatedVector(this.x - this.length, this.y - this.length)
-    var v1 = new SAT.Vector(0, 0)
-    var v2 = this.translatedVector(pos, this.rotatedVector(this.x + this.length, this.y - this.length))
-    var v3 = this.translatedVector(pos, this.rotatedVector(this.x + this.length, this.y + this.length))
-    var v4 = this.translatedVector(pos, this.rotatedVector(this.x - this.length, this.y + this.length))
-    
-    return new SAT.Polygon(pos, [v1, v2, v3, v4])
-  }
   
   this.render = (context) => {
     context.fillStyle=this.color;
