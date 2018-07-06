@@ -489,6 +489,12 @@ function Woof() {
   // the y-axis works counter-intuitively, decreasing as you move up, and increasing as you move down
   // translateToCenter maps coordinates from the HTML canvas to the Scratch-world where (0,0) is in the center of the screen  
   thisContext.translateToCenter = function (x, y) {
+    // If sprite is a polygon, do not translate to center
+    if (thisContext.sprites.length > 0) {
+      if (thisContext.sprites[0].type == "polygon") {
+        return [x, y];
+      }
+    }
     return [x - thisContext.width / 2 + thisContext.cameraX - thisContext._spriteCanvas.offsetLeft, thisContext.height / 2 - y + thisContext.cameraY + thisContext._spriteCanvas.offsetTop];
   };
   // translateToCanvas (the opposite of translateToCenter) maps coordinates from the Scratch-world to the HTML canvas world with (0,0) in the top-left  
