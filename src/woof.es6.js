@@ -855,11 +855,9 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
   this.overlap = ({left, right, top, bottom}) => {
   
     if (this.collider().constructor.name == "Circle") {
-      console.log(SAT.testPolygonCircle(this.project.collider(), this.collider(), new SAT.Response()))
       return SAT.testPolygonCircle(this.project.collider(), this.collider(),  new SAT.Response())
     }
-        console.log(SAT.testPolygonPolygon(this.project.collider(), this.collider(), new SAT.Response()))
-      return SAT.testPolygonPolygon(this.project.collider(), this.collider(), new SAT.Response())
+    return SAT.testPolygonPolygon(this.project.collider(), this.collider(), new SAT.Response())
     
   }
   

@@ -1197,10 +1197,8 @@ Woof.prototype.Sprite = function () {
 
 
     if (_this.collider().constructor.name == "Circle") {
-      console.log(SAT.testPolygonCircle(_this.project.collider(), _this.collider(), new SAT.Response()));
       return SAT.testPolygonCircle(_this.project.collider(), _this.collider(), new SAT.Response());
     }
-    console.log(SAT.testPolygonPolygon(_this.project.collider(), _this.collider(), new SAT.Response()));
     return SAT.testPolygonPolygon(_this.project.collider(), _this.collider(), new SAT.Response());
   };
 
