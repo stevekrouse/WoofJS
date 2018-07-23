@@ -852,6 +852,10 @@ function Woof() {
     thisContext._renderSprites();
   };
   thisContext.ready(thisContext._render);
+
+  thisContext.collider = function () {
+    return new SAT.Polygon(new SAT.Vector(), [new SAT.Vector(-thisContext.width / 2, thisContext.height / 2), new SAT.Vector(-thisContext.width / 2, -thisContext.height / 2), new SAT.Vector(thisContext.width / 2, -thisContext.height / 2), new SAT.Vector(thisContext.width / 2, thisContext.height / 2)]);
+  };
 };
 
 Woof.prototype.Sprite = function () {
@@ -1192,36 +1196,12 @@ Woof.prototype.Sprite = function () {
         bottom = _ref6.bottom;
 
 
-    var collider = _this.collider();
-
-    // If collider is a circle, make sure it is inside canvas
-    if (collider.constructor.name == "Circle") {
-      return !(left > collider.pos.x + collider.r || right < collider.pos.x - collider.r || top < collider.pos.y - collider.r || bottom > collider.pos.y + collider.r);
+    if (_this.collider().constructor.name == "Circle") {
+      console.log(SAT.testPolygonCircle(_this.project.collider(), _this.collider(), new SAT.Response()));
+      return SAT.testPolygonCircle(_this.project.collider(), _this.collider(), new SAT.Response());
     }
-
-    // Otherwise, collider is a polygon. Find out if it's inside canvas by finding min and max points
-    // Create array for x coordinates of collider polygon
-    var xs = [];
-    for (var i = 0; i < collider.calcPoints.length; i++) {
-      xs.push(collider.calcPoints[i].x);
-    }
-    // Create array for y coordinates of collider polygon
-    var ys = [];
-    for (var i = 0; i < collider.calcPoints.length; i++) {
-      ys.push(collider.calcPoints[i].y);
-    }
-    // Sort array to find max/min x coordinates
-    var sortedX = xs.sort(function (a, b) {
-      return a - b;
-    });
-    // Sort array to find max/min y coordinates
-    var sortedY = ys.sort(function (a, b) {
-      return a - b;
-    });
-
-    var maxX = sortedX.length - 1;
-    var maxY = sortedY.length - 1;
-    return !(left > sortedX[maxX] + collider.pos.x || top < sortedY[0] + collider.pos.y || right < sortedX[0] + collider.pos.x || bottom > sortedY[maxY] + collider.pos.y);
+    console.log(SAT.testPolygonPolygon(_this.project.collider(), _this.collider(), new SAT.Response()));
+    return SAT.testPolygonPolygon(_this.project.collider(), _this.collider(), new SAT.Response());
   };
 
   this.over = function (x, y) {

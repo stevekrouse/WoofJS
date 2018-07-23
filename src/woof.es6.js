@@ -563,6 +563,17 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
     thisContext._renderSprites();
   };
   thisContext.ready(thisContext._render);
+  
+  thisContext.collider = () => {
+    return new SAT.Polygon(new SAT.Vector(), [
+    new SAT.Vector(-thisContext.width/2, thisContext.height/2),
+    new SAT.Vector(-thisContext.width/2, -thisContext.height/2),
+    new SAT.Vector(thisContext.width/2, -thisContext.height/2),
+    new SAT.Vector(thisContext.width/2, thisContext.height/2)
+  ]);
+}
+
+  
 };
 
 Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, rotationStyle = "ROTATE", showing = true, penColor = "black", penWidth = 1, penDown = false, showCollider = false, brightness = 100} = {}) {
@@ -842,37 +853,14 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
   };
   
   this.overlap = ({left, right, top, bottom}) => {
-    
-    var collider = this.collider();
-    
-    // If collider is a circle, make sure it is inside canvas
-    if (collider.constructor.name == "Circle") {
-      return !(left > collider.pos.x + collider.r || right < collider.pos.x - collider.r || top < collider.pos.y - collider.r || bottom > collider.pos.y + collider.r);
+  
+    if (this.collider().constructor.name == "Circle") {
+      console.log(SAT.testPolygonCircle(this.project.collider(), this.collider(), new SAT.Response()))
+      return SAT.testPolygonCircle(this.project.collider(), this.collider(),  new SAT.Response())
     }
+        console.log(SAT.testPolygonPolygon(this.project.collider(), this.collider(), new SAT.Response()))
+      return SAT.testPolygonPolygon(this.project.collider(), this.collider(), new SAT.Response())
     
-    // Otherwise, collider is a polygon. Find out if it's inside canvas by finding min and max points
-    // Create array for x coordinates of collider polygon
-    var xs = []
-    for (var i = 0; i < collider.calcPoints.length; i++) {
-      xs.push(collider.calcPoints[i].x)
-    }
-    // Create array for y coordinates of collider polygon
-    var ys = []
-    for (var i = 0; i < collider.calcPoints.length; i++) {
-      ys.push(collider.calcPoints[i].y)
-    }
-    // Sort array to find max/min x coordinates
-    var sortedX = xs.sort(function(a,b) {
-      return a - b;
-    })
-    // Sort array to find max/min y coordinates
-    var sortedY = ys.sort(function(a,b) {
-      return a - b;
-    })
-    
-    var maxX = sortedX.length-1;
-    var maxY = sortedY.length-1;
-    return !(left > sortedX[maxX] + collider.pos.x || top < sortedY[0] + collider.pos.y || right < sortedX[0] + collider.pos.x || bottom > sortedY[maxY] + collider.pos.y);
   }
   
   this.over = (x, y) => {
