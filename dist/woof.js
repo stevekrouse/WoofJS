@@ -1604,7 +1604,7 @@ Woof.prototype.Oval = function () {
   this.render = function (context) {
     context.fillStyle = _this7.color;
     context.beginPath();
-    context.ellipse(0, 0, width / 2, height / 2, 0, 0, 2 * Math.PI);
+    context.ellipse(0, 0, this.ovalWidth/2, this.ovalHeight/2, 0, 0,  2*Math.PI);
     context.fill();
   };
 };
