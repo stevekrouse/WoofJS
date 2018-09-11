@@ -210,25 +210,6 @@
                                 tags:"sunrise sunset url integration"
                             }
                         ],
-                        "Chuck Norris Jokes":[
-                            {
-                                integrationDescription:"Use the Chuck Norris integration to get random Chuck Norris Jokes.",
-                                integrationDescriptionClass:"alert-info",
-                                integrationDocumentationLink:"https://api.chucknorris.io/"
-                            },
-                            {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
-                            {
-                                description:"Here is a walk through of how to display a Chuck Norris joke:",
-                                code:'//First set up temporary text that will be replaced\nvar temp = new Text({\n text: "...", \n size: 15, \n color: "black", \nfontFamily: "arial",\n})\n//Then set the url for your request\nvar url = "https://api.chucknorris.io/jokes/random"\n//Finaly call the getData() function\ngetData(url, data => {\n //Replace the temporary text\n temp.text = data.value\n})',
-                                tags:"chuck norris jokes integration"
-                            },
-                            {
-                                description:"Here is a walk through of how to display a Chuck Norris joke from a specific category:",
-                                html:"<a target='_blank'  href='https://api.chucknorris.io/jokes/categories'>Click here to see all the options for categories</a>",
-                                code:'//First set up temporary text that will be replaced\nvar temp = new Text({\n text: "...", \n size: 15, \n color: "black", \nfontFamily: "arial",\n})\n//Then set your variable for the request\nvar category = "sport"\n//Then set the url for your request\nvar url = "https://api.chucknorris.io/jokes/random?category=" + category\n//Finaly call the getData() function\ngetData(url, data => {\n //Replace the temporary text\n temp.text = data.value\n})',
-                                tags:"chuck norris jokes integration"
-                            },
-                        ],
                         "Scientific Calculator":[
                             {
                                 integrationDescription:"Use Netwon Scientific Calculator integration to preform complex calculations.",
