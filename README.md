@@ -135,37 +135,47 @@ You can find them there in the `woof/` subdirectory. If you'd like to contribute
     ```
     git clone https://github.com/stevekrouse/WoofJS.git
     ```     
-3. Install the npm dependencies.
+
+3. Set your git username: https://help.github.com/articles/setting-your-username-in-git/
+4. Install the npm dependencies.
 
     ```
     npm install
     ```
 
-4. Take a look at our issues and see if there are any issues that speak to you as good places to tackle first. Pay particular attention to issues labeled "good for beginners."
+5. Take a look at our issues and see if there are any issues that speak to you as good places to tackle first. Pay particular attention to issues labeled "good for beginners."
 
+6. Make sure that you are branching from a clean master.
+    ```
+    git checkout master
+    ```
+and
+    ```
+    git pull
+    ```
 
-5. Create a new local branch to work on your issue -- use a descriptive branch name like in this example:
+7. Create a new local branch to work on your issue -- use a descriptive branch name like in this example:
 
     ```
     git checkout -b more-pokemon-sprites
     ```
     
-6. Stage your changes to be committed.
+8. Stage your changes to be committed.
     ```
     git add .
     ```
 
-7. Once you've made and staged your changes, commit them to your branch.
-
+9. Once you've made and staged your changes, commit them to your branch.
     ```
     git commit -m "add more pokemon sprites"
     ```
-8. Push your new branch (not master!) to the GitHub repo.
-
+    
+10. Push your new branch (not master!) to the GitHub repo.
     ```
     git push origin more-pokemon-sprites
     ```
-9. Submit a pull request so your changes can be reviewed.
+    
+11. Submit a pull request so your changes can be reviewed.
 
 If you have any questions, please email steve at thecodingspace.com :)
 
