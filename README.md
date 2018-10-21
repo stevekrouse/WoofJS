@@ -39,7 +39,7 @@ Go to [rawgit.com](http://rawgit.com) and type this in:
 And grab the link on the left, which should look like:
 
 ```html
-<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/b41555bf/dist/woof.js"></script>
+<script src="https://rawcdn.githack.com/stevekrouse/WoofJS/b41555bf/dist/woof.js"></script>
 ```
 
 ### Global mode
@@ -51,7 +51,7 @@ We find not having to type "Woof." over and over again makes a huge difference f
 However, if you'd like to turn off this mode, simply add `global="false"` in your HTML script tag:
 
 ```html
-<script src="https://cdn.rawgit.com/stevekrouse/WoofJS/b41555bf/dist/woof.js" global="false"></script>
+<script src="https://rawcdn.githack.com/stevekrouse/WoofJS/b41555bf/dist/woof.js" global="false"></script>
 ```
 
 Then in your JavaScript, you'd need to create your project manually:
