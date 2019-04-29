@@ -1582,9 +1582,12 @@
     }
 
     function runCode() {
-        var iframe = document.getElementById('preview');
+        
+        document.getElementById("preview").remove();
+        var iframe = document.createElement("iframe");
+        iframe.id = "preview";
+        document.getElementById("output").appendChild(iframe);
 
-        iframe.src = ""; // first, we clear the preview iframe
         setTimeout(function() {
 
             // add doctype to iframe
