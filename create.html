@@ -734,8 +734,6 @@
           if (this.errorLineNumber) {
             editor.removeLineClass(this.errorLineNumber - 1, 'text', 'error-highlight');
           }
-          // Choose random emoji from emojis array
-          //this.randomEmoji = './images/error_emojis/' + this.emojis[Math.floor(Math.random() * this.emojis.length)] + '.svg'
           if (this.error.message.includes("Uncaught ReferenceError") || this.error.message.includes("Uncaught TypeError")) {
             // Remove 'Uncaught..' from error message
             this.errorMessage = this.error.message.split(" ").slice(2).join(" ");
