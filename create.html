@@ -636,7 +636,7 @@
             </span>
           </div>
         </div>
-        <div id="error-block" :style="{display: error ? 'block' : 'none'}" class="alert alert-danger fade in"><img width="25" height="auto" :src="randomEmoji"> There's a problem<span v-if="errorLineNumber"> on <a @click="goToErrorLine">line {{errorLineNumber}}</a></span>.
+        <div id="error-block" :style="{display: error ? 'block' : 'none'}" class="alert alert-danger fade in">There's a problem<span v-if="errorLineNumber"> on <a @click="goToErrorLine">line {{errorLineNumber}}</a></span>.
           <p><code>{{errorMessage}}</code></p>
           <div v-if="renameSprite"><p>You need to rename sprite1. What would you like to name it?</p><input @keyup.enter="getSpriteName" class="form-control" type="text" v-model="spriteName" placeholder="Enter sprite name"><button class="btn btn-danger" @click="getSpriteName">Enter</button>
           </div>
@@ -681,8 +681,6 @@
         suggestions: [],
         errorMessage: '',
         cursorOnErrorLine: false,
-        emojis: ['1f3cb', '1f3cb-1f3fb', '1f3cb-1f3fc', '1f3cb-1f3fd', '1f3cb-1f3fe', '1f3cb-1f3ff', '1f60e', '1f61c', '1f63a', '1f466', '1f466-1f3fb', '1f466-1f3fc', '1f466-1f3fd', '1f466-1f3fe', '1f466-1f3ff', '1f469', '1f469-1f3fb', '1f469-1f3fc', '1f469-1f3fd', '1f469-1f3fe', '1f469-1f3ff', '1f473', '1f473-1f3fb', '1f473-1f3fc', '1f473-1f3fd', '1f473-1f3fe', '1f473-1f3ff', '1f481', '1f481-1f3fb', '1f481-1f3fc', '1f481-1f3fd', '1f481-1f3fe', '1f481-1f3ff', '1f483', '1f483-1f3fb', '1f483-1f3fc', '1f483-1f3fd', '1f483-1f3fe', '1f483-1f3ff', '1f643', '1f917', '1f981', '1f983', '1f984' ],
-        randomEmoji: undefined,
         selectedTheme:'eclipse',
         autoRunChecked: true,
         shortcut: CodeMirror.keyMap["default"] == CodeMirror.keyMap.macDefault ? 'Cmd' : 'Ctrl',     
@@ -737,7 +735,7 @@
             editor.removeLineClass(this.errorLineNumber - 1, 'text', 'error-highlight');
           }
           // Choose random emoji from emojis array
-          this.randomEmoji = './images/error_emojis/' + this.emojis[Math.floor(Math.random() * this.emojis.length)] + '.svg'
+          //this.randomEmoji = './images/error_emojis/' + this.emojis[Math.floor(Math.random() * this.emojis.length)] + '.svg'
           if (this.error.message.includes("Uncaught ReferenceError") || this.error.message.includes("Uncaught TypeError")) {
             // Remove 'Uncaught..' from error message
             this.errorMessage = this.error.message.split(" ").slice(2).join(" ");
