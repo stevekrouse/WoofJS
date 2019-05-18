@@ -250,6 +250,9 @@
       margin: 0; 
       border-radius: 0;
       white-space: pre-line;
+      color: #000000;
+      background-color: #f9efc0;
+      border-color: #f2f4f4;
     }
    
     #error-block p {
@@ -633,7 +636,7 @@
             </span>
           </div>
         </div>
-        <div id="error-block" :style="{display: error ? 'block' : 'none'}" class="alert alert-danger fade in"><img width="25" height="auto" :src="randomEmoji"> There's a problem<span v-if="errorLineNumber"> on <a @click="goToErrorLine">line {{errorLineNumber}}</a></span>.
+        <div id="error-block" :style="{display: error ? 'block' : 'none'}" class="alert alert-danger fade in">There's a problem<span v-if="errorLineNumber"> on <a @click="goToErrorLine">line {{errorLineNumber}}</a></span>.
           <p><code>{{errorMessage}}</code></p>
           <div v-if="renameSprite"><p>You need to rename sprite1. What would you like to name it?</p><input @keyup.enter="getSpriteName" class="form-control" type="text" v-model="spriteName" placeholder="Enter sprite name"><button class="btn btn-danger" @click="getSpriteName">Enter</button>
           </div>
@@ -678,8 +681,6 @@
         suggestions: [],
         errorMessage: '',
         cursorOnErrorLine: false,
-        emojis: ['angry', 'brain-freeze', 'cold-sweat', 'confused', 'crying', 'disappointed', 'flushed', 'persevering', 'pretty-sad', 'really-sad', 'tired', 'unamused', 'worried'],
-        randomEmoji: undefined,
         selectedTheme:'eclipse',
         autoRunChecked: true,
         shortcut: CodeMirror.keyMap["default"] == CodeMirror.keyMap.macDefault ? 'Cmd' : 'Ctrl',     
@@ -733,8 +734,6 @@
           if (this.errorLineNumber) {
             editor.removeLineClass(this.errorLineNumber - 1, 'text', 'error-highlight');
           }
-          // Choose random emoji from emojis array
-          this.randomEmoji = './images/' + this.emojis[Math.floor(Math.random() * this.emojis.length)] + '.png'
           if (this.error.message.includes("Uncaught ReferenceError") || this.error.message.includes("Uncaught TypeError")) {
             // Remove 'Uncaught..' from error message
             this.errorMessage = this.error.message.split(" ").slice(2).join(" ");
