@@ -1569,7 +1569,7 @@
             } else if (error.url === "" && (code.indexOf("url: ''"))!= -1) {
               app.error = {message: "You forgot to include an image or background URL.", lineno: code.substring(0, code.indexOf("url: ''")).split('\n').length}
             } else {
-            app.error = {message: "Your image URL (" + error.url +") is not correct or misspelled.", lineno: code.substring(0, code.indexOf(error.url)).split('\n').length}
+            app.error = {message: "Your image URL (" + error.url +") is misspelled or not correct.", lineno: code.substring(0, code.indexOf(error.url)).split('\n').length}
             }
           }
           else {
