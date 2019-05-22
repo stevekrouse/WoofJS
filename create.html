@@ -1560,13 +1560,16 @@
         document.getElementById('preview').contentWindow.addEventListener("error", function(event) {
           var error = event.error
           if (error.type == "ImageLoadError") {
-              if (error.url === "") {
-                function findErrorType(type){
-                return (code.indexOf(type) != -1)
-              }
-              var emptyURLTypes = ["setBackdropURL('')", 'setBackdropURL("")', 'url: ""', "url: ''"]
-              var emptyURLType = emptyURLTypes.find(findErrorType);
-              app.error = {message: "You forgot to include an image or background URL.", lineno: code.substring(0, code.indexOf(emptyURLType)).split('\n').length}
+            if (error.url === "") {
+                var emptyURLTypes = ["setBackdropURL('')", 'setBackdropURL("")', 'url: ""', "url: ''"]
+                var emptyURLType = emptyURLTypes.find(t => code.includes(t))
+                if (emptyURLType) {
+                  app.error = {message: "You forgot to include an image or background URL.", lineno: code.substring(0, code.indexOf(emptyURLType)).split('\n').length}
+                } else {
+                  // We can't figure out the lineno if it's set to an empty string variable
+                  // https://woofjs.com/create#image-url-issue
+                  app.error = {message: "You forgot to include an image or background URL.", lineno: null}
+                }
               } else {
               app.error = {message: "Your image URL (" + error.url +") is misspelled or not correct.", lineno: code.substring(0, code.indexOf(error.url)).split('\n').length}
               }
