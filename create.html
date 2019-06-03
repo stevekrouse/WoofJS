@@ -351,14 +351,20 @@
           <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="toolsDropdown" style="margin-top:12px;">
             <li><a @click="undo()"><span class="fa fa-undo"></span> Undo <span><kbd>{{shortcut}}</kbd>+<kbd>Z</kbd></span></a></li>
             <li><a @click="redo()"><span class="fa fa-repeat"></span> Redo <span><kbd>{{shortcut}}</kbd>+<kbd>Shift</kbd>+<kbd>Z</kbd></span></a></li>
+            <li role="separator" class="divider"></li>
+            <li><a @click="copy()"><span class="fa fa-clone"></span> Copy <span><kbd>{{shortcut}}</kbd>+<kbd>C</kbd></span></a></li>
+            <li><a @click="cut()"><span class="fa fa-sticky-note-o"></span> Cut <span><kbd>{{shortcut}}</kbd>+<kbd>X</kbd></span></a></li>
+            <li><a @click="paste()"><span class="fa fa-sign-in"></span> Paste <span><kbd>{{shortcut}}</kbd>+<kbd>V</kbd></span></a></li>
+            <li role="separator" class="divider"></li>
             <li><a @click="selectAll()"><span class="fa fa-bars"></span> Select All <span><kbd>{{shortcut}}</kbd>+<kbd>A</kbd></span></a></li>
             <li><a @click="find()"><span class="fa fa-search"></span> Find <span><kbd>{{shortcut}}</kbd>+<kbd>F</kbd></span></a></li>
-            <li role="separator" class="divider"></li>
-            <li><a><input onclick="autoRunClicked()" type="checkbox" id="checkbox" v-model="autoRunChecked"></span> Auto Run</a></li>
+            <li><a @click="replace()"><span class="fa fa-search-plus"></span> Replace <span><kbd>{{shortcut}}</kbd>+<kbd>H</kbd></span></a></li>
             <li role="separator" class="divider"></li>
             <li><a @click="cleanAll()" :style="{display: canClean ? 'block' : 'none'}"><span class="glyphicon glyphicon-align-left"></span> Clean Code <span><kbd>{{shortcut}}</kbd>+<kbd>B</kbd></span></a></li>
-            <li><a @click="cleanAll()" class='disabled' :style="{display: canClean ? 'none' : 'block'}" data-toggle="popover" data-trigger="hover" data-content="You can't clean when there's an error." data-placement="top"><span class="glyphicon glyphicon-align-left"></span> Clean Code <span><kbd>{{shortcut}}</kbd>+<kbd>B</kbd></span></a></li>
+            <li class='disabled'><a @click="cleanAll()"  :style="{display: canClean ? 'none' : 'block'}" data-toggle="popover" data-trigger="hover" data-content="You can't clean when there's an error." data-placement="top"><span class="glyphicon glyphicon-align-left"></span> Clean Code <span><kbd>{{shortcut}}</kbd>+<kbd>B</kbd></span></a></li>
+            <li><a @click="comment()"><span class="fa fa-code"></span> Comment Code <span><kbd>{{shortcut}}</kbd>+<kbd>/</kbd></span></a></li>
             <li role="separator" class="divider"></li>
+            <li><a><input onclick="autoRunClicked()" type="checkbox" id="checkbox" v-model="autoRunChecked"></span> Auto Run</a></li>
             <li><a @click="share()"><span class="glyphicon glyphicon-share-alt"></span> Share</a></li>
           </ul>
         </div>
@@ -711,7 +717,8 @@
         migrateUsername: '',
         migrateChecked: true,
         migrateButtonState: "DISABLED", // NORMAL or DISABLED or LOADING
-        popoutAfterSave: false
+        popoutAfterSave: false,
+        copiedText: "",
       },
       computed: {
         styles : function() { return {
@@ -808,6 +815,23 @@
         fullLink: function(){
           return "https://woofjs.com/full.html#" + getID()
         },
+        copyStringToClipboard: function(str) {
+          // Create new element
+          this.copiedText = str;
+          var el = document.createElement('textarea');
+          // Set value (string to be copied)
+          el.value = str;
+          // Set non-editable to avoid focus and move outside of view
+          el.setAttribute('readonly', '');
+          el.style = {position: 'absolute', left: '-9999px'};
+          document.body.appendChild(el);
+          // Select text inside element
+          el.select();
+          // Copy text to clipboard
+          document.execCommand('copy');
+          // Remove temporary element
+          document.body.removeChild(el);
+        },
         embed: function(){
           return "<iframe src=\"https://woofjs.com/full#" + getID() + "\">\n</iframe>"
         },
@@ -822,6 +846,22 @@
         },
         find: function(){
           editor.execCommand("find")
+        },
+        replace: function(){
+          editor.execCommand("replace")
+        },
+        comment: function(){
+          editor.toggleComment()
+        },
+        copy: function(){
+          this.copyStringToClipboard(editor.getSelection())
+        },
+        cut: function(){
+          this.copyStringToClipboard(editor.getSelection())
+          editor.replaceSelection("")
+        },
+        paste: function(){
+          editor.replaceSelection(this.copiedText)
         },
         validate: function($event) {
           var newName = $event.target.value
@@ -1246,7 +1286,7 @@
               var t = project.currentVersionTime
               app.projects.push({key: key, time: t, code: project.code})
             }
-          }
+          } 
           // sort the proejcts by most recently touched
           app.projects.sort(function(a,b) {
             if (a.time < b.time)
@@ -1414,6 +1454,9 @@
     var ctrl = mac ? "Cmd-" : "Ctrl-";
     var keymap = {}
     keymap[ctrl + "B"] = function(cm) {
+       if (cm.getSelection() == ""){
+        cm.execCommand("selectAll");
+       }
       var beautiful = js_beautify(cm.getSelection(), {space_after_anon_function: true, indent_size: 2, indent_with_tabs: false })
       cm.replaceSelection(beautiful)
     }
