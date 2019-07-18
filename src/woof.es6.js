@@ -1826,8 +1826,12 @@ const getData = (url, callback) => {
 
 // find the woof.js script tag in the page
 var currentScript = document.currentScript || Array.prototype.slice.call(document.getElementsByTagName('script')).find(s => s.src.includes('woof.js'))
+// the script tag containing Woof has an attribute global="false"
+var falseGlobalAttribute = currentScript.getAttribute('global') === 'false' 
+// WOOF_GLOBAL_MODE = false was set before this script was loaded
+var falseConstant = typeof window.WOOF_GLOBAL_MODE !== 'undefined' && window.WOOF_GLOBAL_MODE === false 
+var globalMode = !falseGlobalAttribute && !falseConstant
 
-if (JSON.parse(currentScript.getAttribute('global')) !== false) { 
-  // unless the script tag containing Woof has an attribute global="false", start Woof in global mode
+if (globalMode) { 
   Woof.prototype.extend(window, new Woof({global: true, fullScreen: true}));
 }
