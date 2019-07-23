@@ -27,14 +27,14 @@ We recommend that you get started with WoofJS on [woofjs.com](https://woofjs.com
 #### For development (which always grabs the latest version):
 
 ```html
-<script src="https://rawgit.com/stevekrouse/WoofJS/master/dist/woof.js"></script>
+<script src="https://rawgit.com/stevekrouse/WoofJS/master/woof.js"></script>
 ```
 
 #### For production (which is tied to a specific commit hash):
 
 Go to [rawgit.com](http://rawgit.com) and type this in:
 
-    https://github.com/stevekrouse/WoofJS/blob/master/dist/woof.js
+    https://github.com/stevekrouse/WoofJS/blob/master/woof.js
 
 And grab the link on the left, which should look like:
 
@@ -109,16 +109,6 @@ We'd love your help in making it even more learnable and dependable for them.
   * etc
 
 The documentation that you find on [woofjs.com/create.html](https://woofjs.com/create.html) is contained within the [docs](https://github.com/stevekrouse/WoofJS/tree/master/docs) folder.
-
-#### woof.js core library
-
-If you'd like to contribute to the core WoofJS library, you will edit the code in src/woof.es6.js, but these edits need to be compiled to dist/woof.js using babel.
-
-To do that, make sure you've installed the npm dependencies with `npm install`, then, before you start editing files, run the following command to tell babel to watch for changes and automatically compile:
-   ```
-   npm run compile
-   ```
-You can abort this process at any time by pressing **CTRL+C**
 
 #### WoofJS.com's Tutorials
 
