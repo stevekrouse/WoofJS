@@ -27,19 +27,19 @@ We recommend that you get started with WoofJS on [woofjs.com](https://woofjs.com
 #### For development (which always grabs the latest version):
 
 ```html
-<script src="https://rawgit.com/stevekrouse/WoofJS/master/woof.js"></script>
+<script src="https://raw.githack.com/stevekrouse/WoofJS/master/woof.js"></script>
 ```
 
 #### For production (which is tied to a specific commit hash):
 
-Go to [rawgit.com](http://rawgit.com) and type this in:
+Go to [raw.githack.com](https://raw.githack.com/) and type this in:
 
     https://github.com/stevekrouse/WoofJS/blob/master/woof.js
 
 And grab the link on the left, which should look like:
 
 ```html
-<script src="https://rawcdn.githack.com/stevekrouse/WoofJS/b41555bf/dist/woof.js"></script>
+<script src="https://rawcdn.githack.com/stevekrouse/WoofJS/8f46930383acf6e7bc6db6a9084014bd3cbdd44a/woof.js"></script>
 ```
 
 ### Global mode
