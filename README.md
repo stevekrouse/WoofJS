@@ -167,7 +167,7 @@ and
     
 11. Submit a pull request so your changes can be reviewed.
 
-If you have any questions, please email steve at thecodingspace.com :)
+If you have any questions, please email steve at futureofcoding.org :)
 
 
 ## License
