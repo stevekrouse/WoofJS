@@ -89,7 +89,7 @@ Simply create an issue with a link to the simplest code you can create that woul
 
 ## Contributing
 
-WoofJS is used by hundreds of students all over the world to build games and animations.
+WoofJS is used by hundreds of students from all over the world to build games and animations.
 
 We'd love your help in making it even more learnable and dependable for them.
 
