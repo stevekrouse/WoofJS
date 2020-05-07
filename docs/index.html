@@ -65,7 +65,7 @@
     </script>
     <script>
         var updateColor = function(e) {
-            e.target.parentElement.nextElementSibling.childNodes[2].childNodes[0].innerHTML = '"' + e.target.value + '"'
+            e.target.parentElement.nextElementSibling.childNodes[2].childNodes[0].innerHTML = '<span class="token string">"' + e.target.value + '"</span>'
             e.target.parentElement.nextElementSibling.childNodes[0].setAttribute("data-clipboard-text", e.target.value)
         }
         
