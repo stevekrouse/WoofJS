@@ -1416,7 +1416,12 @@ Woof.prototype.Sound = function({url = '', loop = "false", volume = "normal", sp
     this.audio.pause();
   };
   
-  // Check if the sound has been played
+  // Check if the sound is at the beginning
+  this.atStart = function() {
+    return this.audio.played.length === 0;
+  };
+    
+  // this is the same as this.atStart() and included for backwards compatibility, but no longer mentioned in the documentation
   this.neverPlayed = function() {
     return this.audio.played.length === 0;
   };
