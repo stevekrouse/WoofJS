@@ -1408,6 +1408,11 @@ Woof.prototype.Sound = function({url = '', loop = "false", volume = "normal", sp
   
   // Stop the sound
   this.stopPlaying = function() {
+    this.audio.load();
+  };
+
+  // Pause the sound
+  this.pausePlaying = function() {
     this.audio.pause();
   };
   
