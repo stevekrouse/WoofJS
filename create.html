@@ -644,7 +644,7 @@
         </div>
         <div id="error-block" :style="{display: error ? 'block' : 'none'}" class="alert alert-danger fade in">There's a problem<span v-if="errorLineNumber"> on <a @click="goToErrorLine">line {{errorLineNumber}}</a></span>.
           <p><code>{{errorMessage}}</code></p>
-          <div v-if="renameSprite"><p>You need to rename sprite1. What would you like to name it?</p><input @keyup.enter="getSpriteName" class="form-control" type="text" v-model="spriteName" placeholder="Enter sprite name"><button class="btn btn-danger" @click="getSpriteName">Enter</button>
+          <div v-if="renameSprite"><p>You need to rename {{oldSpriteName}}. What would you like to name it?</p><input @keyup.enter="getSpriteName" class="form-control" type="text" v-model="spriteName" placeholder="Enter sprite name"><button class="btn btn-danger" @click="getSpriteName">Enter</button>
           </div>
           <div v-if="suggestions.length > 0">You may be looking for: <a v-for="suggestion in suggestions" @click="replaceMisspelledWord(suggestion)"><code>{{suggestion}}</code></a></div>
         </div>
@@ -683,6 +683,7 @@
         mouseY: 0,
         errorLineNumber: undefined,
         renameSprite: false,
+        oldSpriteName: '',
         spriteName: '',
         suggestions: [],
         errorMessage: '',
@@ -744,8 +745,14 @@
           if (this.error.message.includes("Uncaught ReferenceError") || this.error.message.includes("Uncaught TypeError")) {
             // Remove 'Uncaught..' from error message
             this.errorMessage = this.error.message.split(" ").slice(2).join(" ");
-            // If error message is 'sprite1 not defined', ask user to rename sprite1
-            this.renameSprite = this.error.message.includes('Uncaught ReferenceError: sprite1 is not defined') ? true : false;
+            // If error message is 'VAR not defined', ask user to rename VAR
+            this.renameSprite = /^Uncaught ReferenceError: ([a-zA-Z_$][a-zA-Z0-9_$]*) is not defined$/.exec(this.error.message)
+            if (this.renameSprite != null) {
+              this.oldSpriteName = this.renameSprite[1]
+              this.renameSprite = true
+            } else {
+              this.renameSprite = false
+            }
             // Get alphanumeric user code
             var userCode = editor.getValue().replace(/(?:https?|ftp?|\.\/)[\n\S]+/g,'').match(/[a-zA-Z0-9]+/g);
             // Add Woof methods to the user code 
@@ -790,9 +797,11 @@
         replaceMisspelledWord: function(x) {
           editor.setValue(editor.getValue().replace(new RegExp("\\b" + this.findMisspelledWord(this.errorMessage) + "\\b", 'g'), x));
         },
-        // Rename sprite1 with user input
+        // Rename unrecognize var name with user input
         getSpriteName: function() {
-          editor.setValue(editor.getValue().replace(/sprite1/g, this.spriteName));
+	  // Make a regex that finds all instances of the variable to replace
+	  let re = new RegExp(`\\b${this.oldSpriteName}\\b`, 'g');
+          editor.setValue(editor.getValue().replace(re, this.spriteName));
           this.spriteName = '';
           this.renameSprite = false;
         },
