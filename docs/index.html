@@ -1496,12 +1496,12 @@
                         code: "mario.stopPlaying()",
                         tags: "pause music stop sounds audio"
 		    }, {
-			html: "Pause this sound. If you <code>.startPlaying()</code> after this, it will resume where it was paused."
+			html: "Pause this sound. If you <code>.startPlaying()</code> after this, it will resume where it was paused.",
 			code: "mario.pausePlaying()",
 			tags: "pause music stop sounds audio"
 		    }, {
-                        code: "if (mario.atStart()){\n /* then do stuff here */\n}",
-                        html: "Use the <code>.atStart()</code> function to check if your sound will play from the beginning if you <code>.startPlaying()</code>:",
+                        code: "if (mario.neverPlayed()){\n /* then do stuff here */\n}",
+                        html: "Use the <code>.neverPlayed()</code> function to check if your sound has been played before:",
                         tags: "sound play played"
                     }, {
                         html: "<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"
