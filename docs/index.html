@@ -1481,13 +1481,13 @@
                         description: "Loop:",
                         code: 'loop: "false"\nloop: "true"',
                         tags: "sound sounds audio loop"
-                    }, {
+		    }, {
                         description: "Speed: (use string or number value)",
                         code: '// Slow\nspeed: "slow"\nspeed: 0.5\n\n// Normal\nspeed: "normal"\nspeed: 1\n\n// Fast\nspeed: "fast"\nspeed: 2',
                         tags: "sound sounds audio speed"
                     }, {
                         url: "./images/set-volume.png",
-                        description: "(use string or number value)",
+                        description: "(use string or number value between 0 and 1)",
                         code: '// Mute\nvolume: "mute"\nvolume: 0\n\n// Low\nvolume: "low"\nvolume: 0.5\n\n// Normal\nvolume: "normal"\nvolume: 1',
                         tags: "sound audio volume"
                     }, {
@@ -1500,9 +1500,21 @@
 			code: "mario.pausePlaying()",
 			tags: "pause music stop sounds audio"
 		    }, {
+			description: "The time (in seconds) that a sound is playing:",
+                        code: '// Get the current time of a sound\nmario.currentTime\n\n// Go back to the start of a sound\nmario.currentTime = 0',
+                        tags: "sound sounds music audio time current"
+		    }, {
+			description: "The duration of a sound (in seconds):",
+                        code: 'mario.duration',
+                        tags: "sound sounds music audio time duration"
+                    }, {
                         code: "if (mario.neverPlayed()){\n /* then do stuff here */\n}",
                         html: "Use the <code>.neverPlayed()</code> function to check if your sound has been played before:",
-                        tags: "sound play played"
+                        tags: "sound play music played audio"
+		    }, {
+                        code: "if (mario.isPlaying){\n /* then do stuff here */\n}",
+                        html: "Use the <code>.isPlaying</code> attribute to check if your sound is playing:",
+                        tags: "sound play music played pause stop audio"
                     }, {
                         html: "<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"
                     }, {

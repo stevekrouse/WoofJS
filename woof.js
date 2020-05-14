@@ -1293,7 +1293,9 @@ Woof.prototype.Image = function({project = undefined, url = "./images/SMJjVCL.pn
 };
 
 Woof.prototype.Sound = function({url = '', loop = "false", volume = "normal", speed = "normal"} = {}) {
-  
+
+  this.isPlaying = false
+    
   // Create new audio object with given url
   this.audio = new Audio(url);
   this.audio.loop = loop;
@@ -1400,20 +1402,49 @@ Woof.prototype.Sound = function({url = '', loop = "false", volume = "normal", sp
       this.audio.loop = value;
     }
   });
+
+  // allow the user to access the length of the sound
+  Object.defineProperty(this, 'duration', {
+    get: function() {
+      return this.audio.duration;
+    },
+    set: function(value) {
+      throw new TypeError("You can't set the duration of a sound!");
+    }
+  });
   
+  // allow the user to get and set the time
+  Object.defineProperty(this, 'currentTime', {
+    get: function() {
+      return this.audio.currentTime;
+    },
+    set: function(value) {
+      if (typeof value != "number") {
+	throw new TypeError("The currentTime of a Sound can only be set to a number!");
+      }
+      if (value < 0 || value > this.audio.duration) {
+        throw new Error("The currentTime of a Sound must be between 0 and the duration of the sound");
+      }
+      this.audio.currentTime = value;
+    }
+  });
+
   // Play the sound
   this.startPlaying = function() {
     this.audio.play();
+    this.isPlaying = true;
   };
   
   // Stop the sound
   this.stopPlaying = function() {
     this.audio.pause();
-    this.audio.currentTime = 0
+    this.isPlaying = false;  
+    this.currentTime = 0
   };
 
   // Pause the sound
   this.pausePlaying = function() {
+    this.isPlaying = false;
     this.audio.pause();
   };
   
