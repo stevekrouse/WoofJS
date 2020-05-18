@@ -1331,6 +1331,10 @@
                         code: 'repeat(10, () => {\n  \/* do stuff here */\n})',
                         tags: "repeat times control"
                     }, {
+	                html: "If you want your code to depend on how many times its been repeated so far, you can use a variable like:",
+                        code: 'repeat(10, timesSoFar => {\n  sprite1.move(timesSoFar)\n})',
+                        tags: "repeat times control"
+                    }, {
                         html: "When you use <code>repeat()</code>, your code doesn't repeat as fast as the computer can run it.\
                         Instead, we slow it down, which makes things like animation and motion work well. But, if you want your code to repeat instantly,\
                         as fast as the computer can do it, you can combine the <code>range()</code> function with the <code>forEach()</code> function:\
@@ -1359,11 +1363,15 @@
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f615139694a4e772e706e67",
                         code: 'repeatUntil(() => \/* something is */ true, () => {\n  \/* something to repeat */\n})',
                         tags: 'repeat until control'
-                    }, {
+		    }, {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f615139694a4e772e706e67",
                         code: 'repeatUntil(() => \/* something is */ true, () => {}, () => {\n  \/* something to do after condition is true, once */\n})',
                         tags: "wait until repeat control",
-                        description: 'There is no wait-until in JavaScript. You can simulate a wait-until block by specifying a third function to a repeatUntil. Refer to the "Control Flow" section below for more details.'
+                        description: 'There is no wait-until in JavaScript. You can simulate a wait-until block by specifying a third function to a repeatUntil.'
+                    }, {
+			html: "Similarly to <code>repeat()</code>, you can ask <code>repeatUntil()</code> how many times it has been repeated:",
+                        code: 'repeatUntil(() => \/* something is */ true, timesRepeatedSoFar => {\n  sprite1.move(timesRepeatedSoFar)\n}, totalTimesRepeated => {\n  sprite1.turnRight(totalTimesRepeated)\n})',
+                        tags: 'repeat until control'
                     }, {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f4f586c704b394a2e706e67",
                         code: 'when(() => \/* something is */ true, () => {\n  \/* do stuff here */\n})',

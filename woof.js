@@ -1466,6 +1466,7 @@ Woof.prototype.customSprite = function(subClass) {
 
 Woof.prototype.Repeat = function(times, func, after) {
   this.func = func;
+  this.curTimes = 0;
   this.times = Math.floor(times);
   this.done = false;
   
@@ -1473,13 +1474,23 @@ Woof.prototype.Repeat = function(times, func, after) {
     if (this.done){
       return;
     }
-    if (this.times <= 0){
+    if (this.curTimes >= this.times){
       this.done = true;
-      if (after) { after(); }
+      if (after) {
+        if (after.length) {
+	  after(this.curTimes);
+	} else {
+	  after();
+	}
+      }
       return;
     } else {
-      this.func();
-      this.times--;
+      this.curTimes++;
+      if (this.func.length) {
+        this.func(this.curTimes);
+      } else {
+        this.func();
+      }
     }
   };
 };
@@ -1487,6 +1498,8 @@ Woof.prototype.Repeat = function(times, func, after) {
 Woof.prototype.RepeatUntil = function(condition, func, after){
   // TODO if (typeof condition !== "string") { throw Error("You must give repeatUntil a string condition in quotes. You gave it: " + condition); }
   this.func = func;
+  this.curTimes = 0;
+  // the number of times it's been repeated. Only gets used if the functions func or after have an argument
   this.condition = condition;
   this.done = false;
   
@@ -1504,10 +1517,22 @@ Woof.prototype.RepeatUntil = function(condition, func, after){
     
     if (cond){
       this.done = true;
-      if (after) { after(); }
+      if (after) {
+        if (after.length) {
+	  after(this.curTimes);
+	} else {
+	  after();
+	}
+      }
       return;
     } else {
-      this.func();
+      // increment even if func doesn't expect argument in case after does
+      this.curTimes++; 
+      if (this.func.length) {
+        this.func(this.curTimes);
+      } else {
+        this.func();
+      }
     }
   };
 };
