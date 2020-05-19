@@ -1470,8 +1470,12 @@
       cm.replaceSelection(beautiful)
     }
     keymap.Tab = function(cm) {
-      var spaces = Array(cm.getOption("indentUnit") + 1).join(" ");
-      cm.replaceSelection(spaces, "end", "+input");
+      if (cm.somethingSelected()) {
+        cm.indentSelection("add")
+      } else {
+        var spaces = Array(cm.getOption("indentUnit") + 1).join(" ");
+        cm.replaceSelection(spaces, "end", "+input");
+      }
     }
 
     var editor = CodeMirror(document.getElementById('code'), {
