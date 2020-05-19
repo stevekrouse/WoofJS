@@ -285,7 +285,7 @@
     
     #error-block a {
       cursor: pointer;
-      color: #a94442;;
+      color: #a94442;
       text-decoration: underline;
     }
     
@@ -642,12 +642,14 @@
             </span>
           </div>
         </div>
-        <div id="error-block" :style="{display: error ? 'block' : 'none'}" class="alert alert-danger fade in">There's a problem<span v-if="errorLineNumber"> on <a @click="goToErrorLine">line {{errorLineNumber}}</a></span>.
+        <div id="error-block" :style="{display: 'block'}" class="alert alert-danger fade in">There's a problem<span v-if="errorLineNumber"> on <a @click="goToErrorLine">line {{errorLineNumber}}</a></span>.
           <p><code>{{errorMessage}}</code></p>
-          <div v-if="renameSprite"><p>You need to rename {{oldSpriteName}}. What would you like to name it?</p><input @keyup.enter="getSpriteName" class="form-control" type="text" v-model="spriteName" placeholder="Enter sprite name"><button class="btn btn-danger" @click="getSpriteName">Enter</button>
+	  <div :style="{display: error ? 'block' : 'none'}">
+            <div v-if="renameSprite"><p>You need to rename {{oldSpriteName}}. What would you like to name it?</p><input @keyup.enter="getSpriteName" class="form-control" type="text" v-model="spriteName" placeholder="Enter sprite name"><button class="btn btn-danger" @click="getSpriteName">Enter</button>
+            </div>
+            <div v-if="suggestions.length > 0">You may be looking for: <a v-for="suggestion in suggestions" @click="replaceMisspelledWord(suggestion)"><code>{{suggestion}}</code></a></div>
           </div>
-          <div v-if="suggestions.length > 0">You may be looking for: <a v-for="suggestion in suggestions" @click="replaceMisspelledWord(suggestion)"><code>{{suggestion}}</code></a></div>
-        </div>
+	</div>
       </div>
     
     </div>
