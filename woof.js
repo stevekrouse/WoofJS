@@ -517,8 +517,11 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
     });
     thisContext._repeats = thisContext._repeats.filter(repeat => {return !repeat.done});
   };
-  
-  thisContext._afters = [];
+    
+  // thisContext._afters isn't read from as of commit 967, and only contains the IDs returned by setTimeout()
+  // These IDs could conceivably be used by clearTimeout() to cancel things in the future,
+  //   but could get cleaned up (though this is low priority)
+  thisContext._afters = []; 
   thisContext.after = (time, units, func) => {
     var milis = Woof.prototype.unitsToMiliseconds(time, units);
     if (typeof func != "function" || typeof time != "number") { throw new TypeError("after(time, units, function) requires a number, unit and function input."); }
