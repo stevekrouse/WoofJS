@@ -1331,19 +1331,18 @@
                         code: 'repeat(10, () => {\n  \/* do stuff here */\n})',
                         tags: "repeat times control"
                     }, {
-	                html: "If you want your code to depend on how many times its been repeated so far, you can use a variable like:",
+	                html: "If you want your code to depend on how many times it's been repeated so far, you can use a variable like:",
                         code: 'repeat(8, timesSoFar => {\n  new Polygon({\n    \/\/ we don\'t want polygons with 1 or 2 sides\n    sides: timesSoFar + 2,\n    length: 20,\n    color: "red",\n    x: minX + (timesSoFar * 50)\n  })\n})',
-                        tags: "repeat times control"
+                        tags: "repeat times control for index"
                     }, {
                         html: "When you use <code>repeat()</code>, your code doesn't repeat as fast as the computer can run it.\
                         Instead, we slow it down, which makes things like animation and motion work well. But, if you want your code to repeat instantly,\
                         as fast as the computer can do it, you can combine the <code>range()</code> function with the <code>forEach()</code> function:\
-                        <br><br>Example: Repeat your code instantly 10 times:",
-                        code: "range(0, 10).forEach(i => {\n  \/* something to repeat */\n})",
-                        tags: "repeat range array forEach control"
+                        <br><br>Example: Repeat your code instantly 10 times, starting <code>counter</code> at 0 and going up by one each repetition, stopping before it gets to 10:",
+                        code: "range(0, 10).forEach(counter => {\n  \/* something to repeat */\n})",
+                        tags: "repeat range array forEach control for index"
                     }, {
-                        html: "In the above example, <code>i</code> will start at 0 and go up by 1 every repetition, stopping before it gets to 10.\
-                        <br>If you are familiar with <code>for</code> loops, you might realize that this does the same thing.\
+                        html: "If you are familiar with <code>for</code> loops, you might realize that this does the same thing.\
                         We recommend using <code>range().forEach()</code> instead of <code>for</code>."
                     }, {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f675a4f6a4c444d2e706e67",
@@ -1371,7 +1370,7 @@
                     }, {
 			html: "Similarly to <code>repeat()</code>, you can ask <code>repeatUntil()</code> how many times it has been repeated:",
                         code: 'repeatUntil(() => \/* something is */ true, timesRepeatedSoFar => {\n  sprite1.move(timesRepeatedSoFar)\n}, totalTimesRepeated => {\n  sprite1.turnRight(totalTimesRepeated)\n})',
-                        tags: 'repeat until control'
+                        tags: 'repeat until control for index'
                     }, {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f4f586c704b394a2e706e67",
                         code: 'when(() => \/* something is */ true, () => {\n  \/* do stuff here */\n})',
