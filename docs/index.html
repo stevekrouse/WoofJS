@@ -1332,7 +1332,7 @@
                         tags: "repeat times control"
                     }, {
 	                html: "If you want your code to depend on how many times its been repeated so far, you can use a variable like:",
-                        code: 'repeat(10, timesSoFar => {\n  sprite1.move(timesSoFar)\n})',
+                        code: 'repeat(8, timesSoFar => {\n  new Polygon({\n    \/\/ we don\'t want polygons with 1 or 2 sides\n    sides: timesSoFar + 2,\n    length: 20,\n    color: "red",\n    x: minX + (timesSoFar * 50)\n  })\n})',
                         tags: "repeat times control"
                     }, {
                         html: "When you use <code>repeat()</code>, your code doesn't repeat as fast as the computer can run it.\
