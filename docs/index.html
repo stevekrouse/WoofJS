@@ -1331,7 +1331,7 @@
                         code: 'repeat(10, () => {\n  \/* do stuff here */\n})',
                         tags: "repeat times control"
                     }, {
-	                html: "If you want your code to depend on how many times it's been repeated so far, you can use a variable like:",
+	                html: "If you want your code to depend on how many times it's been repeated so far, you can use a variable in the <code>repeat()</code>, which counts up from 1:",
                         code: 'repeat(8, timesSoFar => {\n  new Polygon({\n    \/\/ we don\'t want polygons with 1 or 2 sides\n    sides: timesSoFar + 2,\n    length: 20,\n    color: "red",\n    x: minX + (timesSoFar * 50)\n  })\n})',
                         tags: "repeat times control for index"
                     }, {
