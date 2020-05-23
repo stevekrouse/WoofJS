@@ -145,9 +145,29 @@ div.search {
     align-content: center; 
     align-items: center; 
     width: 98%; 
-    margin-left: 1%;
-    margin-right: 1%;
-    margin-top: 5px;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    background-color: #ffffff;
+    border-style: solid;
+    border-width: 2px;
+    border-color: #ffffff;
+    position: fixed;
+    z-index: 11;
+}
+
+div.space-holder {
+    display: flex; 
+    flex-direction: row; 
+    align-content: center; 
+    align-items: center; 
+    width: 98%; 
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    border-style: none;
+    border-width: 2px;
+    visibility: hidden;
 }
 
 #searchbar {
