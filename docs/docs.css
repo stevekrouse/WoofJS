@@ -144,14 +144,15 @@ div.search {
     flex-direction: row; 
     align-content: center; 
     align-items: center; 
-    width: 98%; 
-    margin-left: 0;
-    margin-right: 0;
-    margin-top: 0;
-    background-color: #ffffff;
+    width: 100%;
+    left: 0px;
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-top: 0px;
+    background-color: #7f68d5;
     border-style: solid;
     border-width: 2px;
-    border-color: #ffffff;
+    border-color: #7f68d5;
     position: fixed;
     z-index: 11;
 }
@@ -161,10 +162,11 @@ div.space-holder {
     flex-direction: row; 
     align-content: center; 
     align-items: center; 
-    width: 98%; 
-    margin-left: 0;
-    margin-right: 0;
-    margin-top: 0;
+    width: 100%;
+    left: 0px;
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-top: 0px;
     border-style: none;
     border-width: 2px;
     visibility: hidden;
