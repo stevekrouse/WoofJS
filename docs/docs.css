@@ -149,8 +149,9 @@ div.search {
     margin-left: 0px;
     margin-right: 0px;
     margin-top: 0px;
-    background-color: #7f68d5;
-    border-style: solid;
+    padding: 2px;
+    background-color: #ffffff;
+    border-bottom-style: solid;
     border-width: 2px;
     border-color: #7f68d5;
     position: fixed;
@@ -167,6 +168,7 @@ div.space-holder {
     margin-left: 0px;
     margin-right: 0px;
     margin-top: 0px;
+    padding: 2px;
     border-style: none;
     border-width: 2px;
     visibility: hidden;
