@@ -254,7 +254,7 @@
     #code-status {
       background-color: #4390bf;
       padding: 0px 4px;
-      border-radius: 6px;
+      border-radius: 3px;
     }
 
     #error-block {
@@ -649,9 +649,9 @@
             </select>
           </div>
 	  <div>
-	    <button id="code-status" class="btn" :style="{animation: error ? 'glowing 1200ms infinite' : 'none'}" @click="errorReport = !errorReport">{{error ? "Error " : "Running "}}<span class="caret" v-if="errorReport"></span><span class="caret caret-right" v-else></span></button>
-	  </div>
-          <div>
+	    <span>
+	      <button id="code-status" class="btn" :style="{animation: error ? 'glowing 1200ms infinite' : 'none'}" @click="errorReport = !errorReport">{{error ? "Error " : "Running "}}<span class="caret" v-if="errorReport"></span><span class="caret caret-right" v-else></span></button>
+	    </span>
             <span style="margin-right:8px">
               <img @click="codebar = !codebar" style="margin: 5px; width: 16px; height:18px; cursor:pointer" src="./images/minimize.png" title="Minimize">
             </span>
