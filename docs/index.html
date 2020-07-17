@@ -18,7 +18,10 @@
             <div class="btn-group search">
                 <button v-show="open != undefined || search != ''" @click="search = ''; open = undefined" id="back" class="highlight btn btn-medium btn-info">Back</button>
                 <input  id="searchbar" type="search" class="form-control" placeholder="Search blocks..." v-model="search"></input>
-        </div>
+            </div>
+	    <div class="btn-group space-holder" :style="{height: (open != undefined || search != '') ? '38px' : '0px'}">
+                <input  id="searchbar-space-holder" type="search" class="form-control" placeholder="Search blocks..." v-model="search" style="visibility: hidden"></input>
+	    </div>
         <div :style="menuItem" v-for="(blocks, menu) in searched(menus)">
             <template v-if="menu != 'Sprites & Backgrounds' && menu != 'Integrations' "> 
                 <button v-show="open == undefined || open == menu || search" :class="{highlight: !search}" class="all" :id="menu.split(' ')[0]" @click="toggle(menu)">{{ menu }}</button>
@@ -1117,7 +1120,7 @@
                     {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                     {
                         url: "./images/whenGreenFlag.png",
-                        description: "Note: Unlike in Scratch, using ready() is reccomended but not always required.",
+                        description: "Note: Unlike in Scratch, using ready() is recommended but not always required.",
                         code: "ready(() => {\n  \/* do something here */\n})",
                         tags: "on onclick when green flag clicked page loaded event start ready"
                     }, 
@@ -1497,6 +1500,8 @@
                         description: "(use string or number value between 0 and 1)",
                         code: '// Mute\nvolume: "mute"\nvolume: 0\n\n// Low\nvolume: "low"\nvolume: 0.5\n\n// Normal\nvolume: "normal"\nvolume: 1',
                         tags: "sound audio volume"
+		    }, {
+                        html: "<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"
                     }, {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f58396b6b3679572e706e67",
 			description: "Stop this sound playing.",
@@ -1637,16 +1642,20 @@
                         tags: "y position sensing"
                     }, {
                         description: "Previous mouse X:",
-                        code: "pMouseX previous mouse sensing"
+			code: "pMouseX",
+		        tags: "x previous mouse sensing"
                     }, {
                         description: "Previous mouse Y:",
-                        code: "pMouseY previous mouse sensing"
+			code: "pMouseY",
+		        tags: "y previous mouse sensing"
                     }, {
                         description: "Mouse X speed:",
-                        code: "mouse speed x sensing"
+			code: "mouseXSpeed",
+                        tags: "mouse speed x sensing"
                     }, {
                         description: "Mouse Y speed:",
-                        code: "mouse speed sensing y "
+			code: "mouseYSpeed",
+                        tags: "mouse speed y sensing"
                     }, {
                         description: "Right edge of the screen:",
                         code: "maxX",
@@ -1665,10 +1674,12 @@
                         tags: "edge bottom screen minY sensing"
                     }, {
                         description: "Width of the screen:",
-                        code: "width screen sensing"
+			code: "width",
+                        tags: "width x screen sensing"
                     }, {
                         description: "Height of the screen:",
-                        code: "height screen sensing"
+		        code: "height",
+		        tags: "heigth y screen sensing"
                     },
                     {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                      {
