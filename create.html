@@ -1741,7 +1741,8 @@
           alert('There was an error uploading your image: ' + error.message)
         })
     };
-    
+
+    // load user images and watch for new uploads
     var ref
     setUserUploadImageListener = function() {
       ref && ref.off() 

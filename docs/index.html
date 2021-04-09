@@ -36,6 +36,11 @@
                     <div class="list" v-for="(blocks2, submenu) in blocks">
                         <button v-show="open == menu || open == submenu || search" :class="{highlight: !search}" class="all" :id="submenu.split(' ')[0]" @click="toggle(submenu)">{{ submenu }}
                         </button>
+                        <div v-if="open == submenu && submenu == 'Image'" class="upload-image-form">
+                            <button v-if="isUploadingImage" disabled>Uploading...</button>
+                            <button v-else class="btn btn-medium btn-info" @click="browseImages">Upload Image</button>
+                            <input ref="uploadImageInput" @change="uploadFile" style="display:none" type="file" name="pic" accept="image/*">
+                        </div>
                         <div v-show="open == submenu || search" class="list">
                             <div class="list" v-for="block2 in blocks2">
                                 <vue-block :block="block2"></vue-block>
@@ -70,16 +75,6 @@
         var updateColor = function(e) {
             e.target.parentElement.nextElementSibling.childNodes[2].childNodes[0].innerHTML = '<span class="token string">"' + e.target.value + '"</span>'
             e.target.parentElement.nextElementSibling.childNodes[0].setAttribute("data-clipboard-text", '"' + e.target.value + '"')
-        }
-        
-        var browseImages = function() {
-          document.getElementById("uploadInput").click()
-        }
-        
-        var uploadFile = function(files) {
-          if (files.length === 1) {
-            window.top.postMessage(files[0], '*')
-          }
         }
 
         Vue.component('vue-block', {
@@ -116,6 +111,7 @@
             data: {
                 search: "",
                 open: undefined,
+                isUploadingImage: false,
                 menus: {
                     "Integrations": {
                         "Weather":[
@@ -466,11 +462,6 @@
                          }
                         ],
                         Image: [
-                            {
-                              html: '<button class="btn btn-medium btn-info" onclick="browseImages()">Upload Image</button>' + 
-                                    '<input id="uploadInput" onchange="uploadFile(this.files)" style="display:none" type="file" name="pic" accept="image/*">',
-                              tags: "picture image custom external upload sprite"
-                            },
                             {
                                 url: "./images/kpU9y5M.png",
                                 code: 'var unicorn = new Image({\n  url: "./docs/images/unicorn.png",\n  width: 120, \n  height: 80,\n})',
@@ -2114,20 +2105,31 @@
                 },
             },
             methods: {
+                browseImages: function() {
+                    this.$refs.uploadImageInput[0].click()
+                },
+                uploadFile: function(event) {
+                    var files = event.target.files;
+                    if (files.length === 1) {
+                        this.isUploadingImage = true;
+                        window.top.postMessage(files[0], '*') // send to firebase via window.onmessage in create
+                    }
+                },
                 setUserUploadImages: function(images) {
-                    var newImages = this.menus['Sprites & Backgrounds']['Image'].filter(
-                        block => !block.userUploadImage
+                    // get standard images
+                    var standardSprites = this.menus['Sprites & Backgrounds']['Image'].filter(
+                        block => !block.userUploadImage && !block.uploadImageForm
                     )
-                    images.reverse() // show the newest first
-                    newImages.splice(1, 0, ...images.map(imageURL => {
-                        return {
-                            url: imageURL,
-                            code: 'var sprite1 = new Image({url: "' + imageURL + '"})',
-                            tags: "upload image picture",
-                            userUploadImage: true
-                        }
+                    // build user images, newest first
+                    images.reverse()
+                    var newImages = images.map(imageURL => ({
+                        url: imageURL,
+                        code: 'var sprite1 = new Image({url: "' + imageURL + '"})',
+                        tags: "upload image picture",
+                        userUploadImage: true
                     }))
-                    this.menus['Sprites & Backgrounds']['Image'] = newImages
+                    this.menus['Sprites & Backgrounds']['Image'] = [...newImages, ...standardSprites];
+                    this.isUploadingImage = false;
                 },
                 searchMenu: function(menu) {
                     if (this.search == '') {
