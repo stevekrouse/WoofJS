@@ -600,6 +600,18 @@
           </div>
         </div>
       </div>
+
+      <div id="chromeModal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title">WoofJS is Optimized for Chrome!</h4>
+            </div>
+            <h4 class="modal-body text-danger">WoofJS.com works best with the Chrome web browser. We're a small team, so we can't test new features on all browsers. If you are having difficulties with WoofJS.com, consider<a href="https://www.google.com/chrome/"> downloading Chrome here</a>.</h4>
+          </div>
+        </div>
+      </div>
     
       <div id="docsbar" v-show="docsbar" @click="docsbar= !docsbar" :style="{display: 'flex'}">
         <span class="rotate" style="font-size: 1.65em">Documentation</span>
@@ -1778,6 +1790,21 @@
     };
     // helper function to prevent runCode from running too often
     var debouncedRunCode = debounce(runCode, 1000, false)
+
+      function isChromeBrowser() {
+        const userAgent = window.navigator.userAgent;
+        if (userAgent.indexOf("Edge") == -1 && userAgent.indexOf("OPR") == -1 && userAgent.indexOf("Firefox") == -1 && userAgent.indexOf("Trident") == -1) {
+          return true;
+        }
+        else{
+          return false;
+        }
+        
+      };
+    if (!(isChromeBrowser())&&((document.cookie).indexOf("notChrome")==-1)) {
+      document.cookie="notChrome"
+      $("#chromeModal").modal("show");
+    };
 
   </script>
   <script>
