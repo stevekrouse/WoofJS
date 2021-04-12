@@ -2121,13 +2121,12 @@
                         block => !block.userUploadImage && !block.uploadImageForm
                     )
                     // build user images, newest first
-                    images.reverse()
-                    var newImages = images.map(imageURL => ({
+                    var newImages = images.map((imageURL, imageIndex) => ({
                         url: imageURL,
-                        code: 'var sprite1 = new Image({url: "' + imageURL + '"})',
+                        code: 'var sprite' + (imageIndex + 1) + ' = new Image({url: "' + imageURL + '"})',
                         tags: "upload image picture",
                         userUploadImage: true
-                    }))
+                    })).reverse()
                     this.menus['Sprites & Backgrounds']['Image'] = [...newImages, ...standardSprites];
                     this.isUploadingImage = false;
                 },
