@@ -13,25 +13,25 @@
     storageBucket: "woofjs-d1b27.appspot.com",
     messagingSenderId: "397293370524"
   };
-  
+
   firebase.initializeApp(config);
-  
+
   window.onhashchange = function() {
     window.location.reload()
   }
-  
+
   var getID = function() {
     return window.location.hash.substring(1, window.location.hash.length).split("/")[0];
   }
   var getCurrentRevisionCode = function(revisions) {
     var revision = parseInt(window.location.hash.substring(1, window.location.hash.length).split("/")[1])
-    
+
     var keys = Object.keys(revisions)
     if (keys.length > 1){
       keys = keys.slice(1, keys.length)
     }
-    
-    
+
+
     var key
     if (!isNaN(revision) && (revision !== 0 && revision !== -1 * keys.length) && Math.abs(revision) < keys.length + 1){
       if (revision < 0){
@@ -43,7 +43,7 @@
     }
     return revisions[key].code
   }
-  
+
   firebase.database().ref('/code/' + getID()).once('value').then(function(snapshot) {
     if (snapshot.val()){
       document.title = getID()

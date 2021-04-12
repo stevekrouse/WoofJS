@@ -72,7 +72,7 @@
       },
     }
   })
-  
+
   var app = new Vue({
     el: '#page',
     data: {
@@ -88,26 +88,26 @@
     storageBucket: "woofjs-d1b27.appspot.com",
     messagingSenderId: "397293370524"
   };
-  
+
   firebase.initializeApp(config);
 
   var getUID = function() {
       return window.location.hash.substring(1, window.location.hash.length);
   }
-  
+
   firebase.database().ref('/user/' + getUID() + "/displayName").once('value', function(snap) {
     if (snap.val()){
-      app.name = snap.val() 
+      app.name = snap.val()
       document.title = "Projects - " + snap.val()
     }
   });
-  
+
   firebase.database().ref('/user/' + getUID() + "/team").once('value', function(snap) {
     if (snap.val()){
       app.teamProjects = Object.values(snap.val())
     }
   });
-  
+
   var objectOfObjectsToArray = function(obj, keyName = "key"){
     return Object.keys(obj).map(function(key) {
       var child = obj[key]
@@ -118,7 +118,7 @@
 
   firebase.database().ref('/code/').orderByChild("--uid").equalTo(getUID()).once('value').then(function(snapshot) {
     var projects = objectOfObjectsToArray(snapshot.val())
-  
+
     // nesting revisions under projects
     app.projects = projects.map(function(project){
       var keys = Object.keys(project)
@@ -141,9 +141,9 @@
     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
     m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
     })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-  
+
     ga('create', 'UA-82374072-1', 'auto');
     ga('send', 'pageview');
-  
+
   </script>
 </body>

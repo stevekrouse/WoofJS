@@ -23,7 +23,7 @@
                 <input  id="searchbar-space-holder" type="search" class="form-control" placeholder="Search blocks..." v-model="search" style="visibility: hidden"></input>
 	    </div>
         <div :style="menuItem" v-for="(blocks, menu) in searched(menus)">
-            <template v-if="menu != 'Sprites & Backgrounds' && menu != 'Integrations' "> 
+            <template v-if="menu != 'Sprites & Backgrounds' && menu != 'Integrations' ">
                 <button v-show="open == undefined || open == menu || search" :class="{highlight: !search}" class="all" :id="menu.split(' ')[0]" @click="toggle(menu)">{{ menu }}</button>
                 <div v-show="open == menu || search" class="list" v-for="block in blocks">
                       <vue-block :block="block"></vue-block>
@@ -46,8 +46,8 @@
                                 <vue-block :block="block2"></vue-block>
                             </div>
                         </div>
-                    </div>    
-                </div>    
+                    </div>
+                </div>
             </template>
             </div>
         </div>
@@ -157,7 +157,7 @@
                             {
                                 description:"Display your local storage.",
                                 code:'var textSprite = new Text({\n  text: () => localStorage.highscore, \n  size: 12, \n  color: "rgb(100, 50, 240)", \n  fontFamily: "arial", \n  textAlign: "left"\n})',
-                                tags:"local storage high score storage integration" 
+                                tags:"local storage high score storage integration"
                             }
                         ],
                         "Currency Conversion":[
@@ -254,7 +254,7 @@
                                 integrationDocumentationLink:"https://firebase.google.com/docs/",
                             },
                             {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
-                            {   
+                            {
                                 description:"Firebase is similar to Scratch's cloud data as it allows you to store data in the cloud. Here is a quick run through of how to use Firebase to store a high score:",
                                 html:"<iframe src='//coding.space/woof/high_score.html' width='100%' height='500px' style='border:none;shadow:none;'></iframe>",
                                 tags:"firebase cloud storage high score integration"
@@ -302,19 +302,19 @@
                                 code: 'setBackdropURL("./docs/images/candyland.jpg")\nsetBackdropStyle("cover")',
                                 tags: "candy land backdrop background",
                             },
-                            
+
                             {
                                 url: "./images/boss-backdrop.jpg",
                                 code: 'setBackdropURL("./docs/images/boss-backdrop.jpg")\nsetBackdropStyle("cover")',
                                 tags: "boss space",
                             },
-                            
+
                             {
                                 url: "./images/minecraft.jpg",
                                 code: 'setBackdropURL("./docs/images/minecraft.jpg")\nsetBackdropStyle("cover")',
                                 tags: "minecraft backdrop background",
                             },
-                          
+
                             {
                                 url: "./images/snow.jpg",
                                 code: 'setBackdropURL("./docs/images/snow.jpg")\nsetBackdropStyle("cover")',
@@ -329,50 +329,50 @@
                                 url: "./images/ocean.jpg",
                                 code: 'setBackdropURL("./docs/images/ocean.jpg")\nsetBackdropStyle("cover")',
                                 tags: "ocean backdrop background sea",
-                            }, 
-                            
+                            },
+
                             {
                                 url: "./images/bubbles-backdrop.jpeg",
                                 code: 'setBackdropURL("./docs/images/bubbles-backdrop.jpeg")\nsetBackdropStyle("cover")',
                                 tags: "bubble",
-                            }, 
-                            
+                            },
+
                             {
                                 url: "./images/rr-backdrop.jpg",
                                 code: 'setBackdropURL("./docs/images/rr-backdrop.jpg")\nsetBackdropStyle("cover")',
                                 tags: "grass",
-                            }, 
-                            
+                            },
+
                             {
                                 url: "./images/tomato-attack-backdrop.jpg",
                                 code: 'setBackdropURL("./docs/images/tomato-attack-backdrop.jpg")\nsetBackdropStyle("cover")',
                                 tags: "tomato outdoors",
                             },
-                            
+
                             {
                                 url: "./images/war-backdrop.png",
                                 code: 'setBackdropURL("./docs/images/war-backdrop.png")\nsetBackdropStyle("cover")',
                                 tags: "blue",
-                            }, 
-                            
+                            },
+
                             {
                                 url: "./images/hungrycrab-backdrop.jpg",
                                 code: 'setBackdropURL("./docs/images/hungrycrab-backdrop.jpg")\nsetBackdropStyle("cover")',
                                 tags: "ocean water",
-                            }, 
-                            
+                            },
+
                             {
                                 url: "./images/platformer-backdrop1.png",
                                 code: 'setBackdropURL("./docs/images/platformer-backdrop1.png")\nsetBackdropStyle("cover")',
                                 tags: "platform mountain",
-                            }, 
-                            
+                            },
+
                             {
                                 url: "./images/platformer-backdrop2.png",
                                 code: 'setBackdropURL("./docs/images/platformer-backdrop2.png")\nsetBackdropStyle("cover")',
                                 tags: "tree mountain outside",
-                            }, 
-                            
+                            },
+
                             {
                                 url: "./images/emojibackground.jpg",
                                 code: 'setBackdropURL("./docs/images/emojibackground.jpg")\nsetBackdropStyle("cover")',
@@ -428,7 +428,7 @@
                             },
 
                         ],
-                        Text: [ 
+                        Text: [
                         {
                            description: "Create new text:",
                            code: 'var textSprite1 = new Text({\n  text: () => "Hello world!", \n  size: 12, \n  color: "rgb(100, 50, 240)", \n  fontFamily: "arial", \n  textAlign: "left"\n})',
@@ -448,7 +448,7 @@
                              description: "Set font:",
                              code: "fontFamily: 'arial'",
                              tags: "text words string font family"
-                         }, 
+                         },
                          {
                              description: "Text alignment:",
                              html: "<img src=\"./images/textAlign.png\"><p>The red line is where the x value of the text is.</p>",
@@ -473,19 +473,19 @@
                                 code: 'var bb8 = new Image({\n  url: "./docs/images/BB8.png",\n  width: 150, \n  height: 220,\n})',
                                 tags: "bb8 star wars sprite",
                             },
-                            
+
                              {
                                 url: "./images/2lhEgxT.png",
                                 code: 'var sushi = new Image({\n  url: "./docs/images/sushi.png",\n  width: 110, \n  height: 80,\n})',
                                 tags: "sushi sprite",
                             },
-                            
+
                              {
                                 url: "./images/zp0zzaG.png",
                                 code: 'var nyanCat = new Image({\n  url: "./docs/images/nyancat.png",\n  width: 160, \n  height: 80,\n})',
                                 tags: "cat sprite rainbow animal",
                             },
-                            
+
                              {
                                 url: "./images/4B3ex6S.png",
                                 code: 'var car = new Image({\n  url: "./docs/images/car.png",\n  width: 250, \n  height: 80,\n})',
@@ -503,7 +503,7 @@
                                 code: 'var taco = new Image({\n  url: "./docs/images/taco.png",\n  width: 300, \n  height: 170,\n})',
                                 tags: "taco sprite food",
                             },
-                            
+
                             {
                                 url: "./images/ajkO60k.png",
                                 code: 'var iceCream = new Image({\n  url: "./docs/images/icecream.png",\n  width: 130, \n  height: 170,\n})',
@@ -533,7 +533,7 @@
                                 code: 'var snitch = new Image({\n  url: "./docs/images/snitch.png",\n  width: 250, \n  height: 150,\n})',
                                 tags: "snitch harry potter sprite",
                             },
-                            
+
                             {
                                 url: "./images/Gf0MwWP.png",
                                 code: 'var bird = new Image({\n  url: "./docs/images/bird.png",\n  width: 120, \n  height: 80,\n})',
@@ -569,37 +569,37 @@
                                 code: 'var spaceShip = new Image({\n  url: "./docs/images/space_ship.png",\n  width: 300, \n  height: 170,\n})',
                                 tags: "space ship sprite",
                             },
-                            
+
                             {
                                 url: "./images/9EkQfhM.png",
                                 code: 'var coolEmoji = new Image({\n  url: "./docs/images/emoji-glasses.png",\n  width: 120, \n  height: 120,\n})',
                                 tags: "glasses emoji sprite",
                             },
-                            
+
                             {
                                 url: "./images/9BTkkuc.png",
                                 code: 'var emoji = new Image({\n  url: "./docs/images/emoji.png",\n  width: 120, \n  height: 120,\n})',
                                 tags: "emoji heart eyes sprite",
                             },
-                                                      
+
                              {
                                 url: "./images/rGnUiWC.png",
                                 code: 'var sadEmoji = new Image({\n  url: "./docs/images/emojilaugh.png",\n  width: 120, \n  height: 120,\n})',
                                 tags: "sad laugh emoji sprite",
                             },
-                            
+
                              {
                                 url: "./images/B9v5lZJ.png",
                                 code: 'var partyEmoji = new Image({\n  url: "./docs/images/emoji-party.png",\n  width: 120, \n  height: 120,\n})',
                                 tags: "party hat emoji sprite",
                             },
-                            
+
                               {
                                 url: "./images/ZU8UBCM.png",
                                 code: 'var puppyEmoji = new Image({\n  url: "./docs/images/emojipuppy.png",\n  width: 120, \n  height: 120,\n})',
                                 tags: "dog puppy animal emoji sprite",
                             },
-                            
+
                                {
                                 url: "./images/zzNfW5S.png",
                                 code: 'var sillyEmoji = new Image({\n  url: "./docs/images/emojieyes.jpg",\n  width: 120, \n  height: 120,\n})',
@@ -648,271 +648,271 @@
                                 code: 'var topPipe = new Image({\n  url: "./docs/images/topPipe.png",\n  width: 100, \n  height: 500,\n})',
                                 tags: "top pipe flappy bird sprite",
                             },
-                            
+
                             {
                                 url: "./images/explosion.png",
                                 code: 'var explosion = new Image({\n  url: "./docs/images/explosion.png",\n  width: 100, \n  height: 100,\n})',
                                 tags: "explosion sprite",
                             },
-                            
+
                             {
                                 url: "./images/boss-bomb.png",
                                 code: 'var bomb = new Image({\n  url: "./docs/images/boss-bomb.png",\n  width: 100, \n  height: 100,\n})',
                                 tags: "bomb sprite",
                             },
-                            
+
                             {
                                 url: "./images/boss-blaser.png",
                                 code: 'var bossLaser = new Image({\n  url: "./docs/images/boss-blaser.png",\n  width: 120, \n  height: 80,\n})',
                                 tags: "laser sprite",
                             },
-                            
+
                             {
                                 url: "./images/boss-boss.png",
                                 code: 'var bossShip = new Image({\n  url: "./docs/images/boss-boss.png",\n  width: 100, \n  height: 100,\n})',
                                 tags: "boss ship sprite",
                             },
-                            
+
                             {
                                 url: "./images/boss-laser.png",
                                 code: 'var laser2 = new Image({\n  url: "./docs/images/boss-laser.png",\n  width: 100, \n  height: 100,\n})',
                                 tags: "laser sprite",
                             },
-                            
+
                             {
                                 url: "./images/boss-ship.png",
                                 code: 'var bossShip2 = new Image({\n  url: "./docs/images/boss-ship.png",\n  width: 100, \n  height: 100,\n})',
                                 tags: "ship sprite",
                             },
-                            
+
                             {
                                 url: "./images/boss-warning.jpg",
                                 code: 'var warning = new Image({\n  url: "./docs/images/boss-warning.jpg",\n  width: 100, \n  height: 80,\n})',
                                 tags: "warning sprite",
                             },
-                            
+
                             {
                                 url: "./images/bubbles-bowl.png",
                                 code: 'var candyBowl = new Image({\n  url: "./docs/images/bubbles-bowl.png",\n  width: 100, \n  height: 100,\n})',
                                 tags: "candy bowl sprite",
                             },
-                            
+
                             {
                                 url: "./images/bubbles-candy.png",
                                 code: 'var candy = new Image({\n  url: "./docs/images/bubbles-candy.png",\n  width: 100, \n  height: 60,\n})',
                                 tags: "candy sprite",
                             },
-                            
+
                             {
                                 url: "./images/bubbles-girl.png",
                                 code: 'var girl = new Image({\n  url: "./docs/images/bubbles-girl.png",\n  width: 70, \n  height: 100,\n})',
                                 tags: "girl sprite",
                             },
-                            
+
                             {
                                 url: "./images/bubbles-wand.png",
                                 code: 'var bubbleWand = new Image({\n  url: "./docs/images/bubbles-wand.png",\n  width: 70, \n  height: 100,\n})',
                                 tags: "wand sprite",
                             },
-                            
+
                             {
                                 url: "./images/candyland-mint.png",
                                 code: 'var mint = new Image({\n  url: "./docs/images/candyland-mint.png",\n  width: 100, \n  height: 100,\n})',
                                 tags: "mint food sprite",
                             },
-                            
+
                             {
                                 url: "./images/candyland-obstacle.png",
                                 code: 'var lollipop = new Image({\n  url: "./docs/images/candyland-obstacle.png",\n  width: 100, \n  height: 100,\n})',
                                 tags: "lollipop food sprite",
                             },
-                            
+
                             {
                                 url: "./images/fly-fly.png",
                                 code: 'var fly = new Image({\n  url: "./docs/images/fly-fly.png",\n  width: 100, \n  height: 100,\n})',
                                 tags: "fly animal sprite",
                             },
-                            
+
                             {
                                 url: "./images/fly-frog.png",
                                 code: 'var frog = new Image({\n  url: "./docs/images/fly-frog.png",\n  width: 120, \n  height: 90,\n})',
                                 tags: "frog animal sprite",
                             },
-                            
+
                             {
                                 url: "./images/fly-lilypad.png",
                                 code: 'var lilypad = new Image({\n  url: "./docs/images/fly-lilypad.png",\n  width: 100, \n  height: 85,\n})',
                                 tags: "lilypad sprite",
                             },
-                            
+
                             {
                                 url: "./images/magic-dove.jpg",
                                 code: 'var dove = new Image({\n  url: "./docs/images/magic-dove.jpg",\n  width: 100, \n  height: 105,\n})',
                                 tags: "dove animal sprite",
                             },
-                            
+
                             {
                                 url: "./images/magic-hat.png",
                                 code: 'var hat = new Image({\n  url: "./docs/images/magic-hat.png",\n  width: 100, \n  height: 90,\n})',
                                 tags: "hat clothing sprite",
                             },
-                            
+
                             {
                                 url: "./images/picnic-basket.png",
                                 code: 'var picnicBasket = new Image({\n  url: "./docs/images/picnic-basket.png",\n  width: 110, \n  height: 80,\n})',
                                 tags: "picnic basket sprite",
                             },
-                            
+
                             {
                                 url: "./images/picnic-cheese.png",
                                 code: 'var cheese = new Image({\n  url: "./docs/images/picnic-cheese.png",\n  width: 100, \n  height: 60,\n})',
                                 tags: "cheese food sprite",
                             },
-                            
+
                             {
                                 url: "./images/picnic-eat.png",
                                 code: 'var picnic = new Image({\n  url: "./docs/images/picnic-eat.png",\n  width: 110, \n  height: 110,\n})',
                                 tags: "picnic people sprite",
                             },
-                            
+
                             {
                                 url: "./images/picnic-milk.png",
                                 code: 'var milk = new Image({\n  url: "./docs/images/picnic-milk.png",\n  width: 100, \n  height: 100,\n})',
                                 tags: "picnic milk food sprite",
                             },
-                            
+
                             {
                                 url: "./images/picnic-sandwich.png",
                                 code: 'var sandwich = new Image({\n  url: "./docs/images/picnic-sandwich.png",\n  width: 100, \n  height: 100,\n})',
                                 tags: "sandwich food sprite",
                             },
-                            
+
                             {
                                 url: "./images/picnic-watermelon.png",
                                 code: 'var watermelon = new Image({\n  url: "./docs/images/picnic-watermelon.png",\n  width: 100, \n  height: 100,\n})',
                                 tags: "watermelon food sprite",
                             },
-                            
+
                             {
                                 url: "./images/platformer-boss.png",
                                 code: 'var boss1 = new Image({\n  url: "./docs/images/platformer-boss.png",\n  width: 90, \n  height: 90,\n})',
                                 tags: "platformer boss animal sprite",
                             },
-                            
+
                             {
                                 url: "./images/platformer-boss2.png",
                                 code: 'var boss2 = new Image({\n  url: "./docs/images/platformer-boss.png",\n  width: 100, \n  height: 100,\n})',
                                 tags: "platformer boss animal sprite",
                             },
-                            
+
                             {
                                 url: "./images/platformer-enemy.png",
                                 code: 'var enemy = new Image({\n  url: "./docs/images/platformer-enemy.png",\n  width: 100, \n  height: 100,\n})',
                                 tags: "platformer boss animal sprite",
                             },
-                            
+
                             {
                                 url: "./images/platformer-enemy2.png",
                                 code: 'var enemy2 = new Image({\n  url: "./docs/images/platformer-enemy2.png",\n  width: 100, \n  height: 100,\n})',
                                 tags: "platformer boss animal sprite",
                             },
-                            
+
                             {
                                 url: "./images/platformer-game-over.png",
                                 code: 'var gameOver = new Image({\n  url: "./docs/images/platformer-game-over.png",\n  width: 100, \n  height: 90,\n})',
                                 tags: "game over sprite",
                             },
-                            
+
                             {
                                 url: "./images/platformer-heart.png",
                                 code: 'var pixelHeart = new Image({\n  url: "./docs/images/platformer-heart.png",\n  width: 100, \n  height: 100,\n})',
                                 tags: "heart shape sprite",
                             },
-                            
+
                             {
                                 url: "./images/platformer-next-level.png",
                                 code: 'var nextLevel = new Image({\n  url: "./docs/images/platformer-next-level.png",\n  width: 130, \n  height: 120,\n})',
                                 tags: "next level sprite",
                             },
-                            
+
                             {
                                 url: "./images/platformer-player.png",
                                 code: 'var player = new Image({\n  url: "./docs/images/platformer-player.png",\n  width: 100, \n  height: 100,\n})',
                                 tags: "player sprite",
                             },
-                            
+
                              {
                                 url: "./images/platformer-you-win.png",
                                 code: 'var youWin = new Image({\n  url: "./docs/images/platformer-you-win.png",\n  width: 110, \n  height: 110,\n})',
                                 tags: "you win sprite",
                             },
-                            
+
                             {
                                 url: "./images/river-canoe1.png",
                                 code: 'var canoe = new Image({\n  url: "./docs/images/river-canoe1.png",\n  width: 30, \n  height: 130,\n})',
                                 tags: "canoe boat river sprite",
                             },
-                            
+
                             {
                                 url: "./images/river-coconut.png",
                                 code: 'var coconut = new Image({\n  url: "./docs/images/river-coconut.png",\n  width: 100, \n  height: 100,\n})',
                                 tags: "coconut food sprite",
                             },
-                            
+
                             {
                                 url: "./images/river-gator.png",
                                 code: 'var gator = new Image({\n  url: "./docs/images/river-gator.png",\n  width: 130, \n  height: 80,\n})',
                                 tags: "gator animal sprite",
                             },
-                            
+
                             {
                                 url: "./images/river-tree.png",
                                 code: 'var tree = new Image({\n  url: "./docs/images/river-tree.png",\n  width: 90, \n  height: 130,\n})',
                                 tags: "tree sprite",
                             },
-                            
+
                             {
                                 url: "./images/rr-gameover.png",
                                 code: 'var gameOver2 = new Image({\n  url: "./docs/images/rr-gameover.png",\n  width: 140, \n  height: 90,\n})',
                                 tags: "game over sprite",
                             },
-                            
+
                             {
                                 url: "./images/rr-planet.png",
                                 code: 'var planet = new Image({\n  url: "./docs/images/rr-planet.png",\n  width: 100, \n  height: 100,\n})',
                                 tags: "planet sprite",
                             },
-                            
+
                             {
                                 url: "./images/rr-star.png",
                                 code: 'var star = new Image({\n  url: "./docs/images/rr-star.png",\n  width: 100, \n  height: 100,\n})',
                                 tags: "star sprite",
                             },
-                            
+
                             {
                                 url: "./images/squidchase-fish.png",
                                 code: 'var fish = new Image({\n  url: "./docs/images/squidchase-fish.png",\n  width: 100, \n  height: 115,\n})',
                                 tags: "fish sprite",
                             },
-                            
+
                             {
                                 url: "./images/squidchase-squid.png",
                                 code: 'var squid = new Image({\n  url: "./docs/images/squidchase-squid.png",\n  width: 100, \n  height: 115,\n})',
                                 tags: "squid animal sprite",
                             },
-                            
+
                             {
                                 url: "./images/tomato-attack-splat.png",
                                 code: 'var splat = new Image({\n  url: "./docs/images/tomato-attack-splat.png",\n  width: 110, \n  height: 100,\n})',
                                 tags: "splat sprite",
                             },
-                            
+
                             {
                                 url: "./images/tomato-attack-tomato.png",
                                 code: 'var tomato = new Image({\n  url: "./docs/images/tomato-attack-tomato.png",\n  width: 110, \n  height: 100,\n})',
                                 tags: "tomato food sprite",
                             },
-                        
+
                         ],
                         Rectangle: [{
                             description: "Create new rectangle:",
@@ -929,7 +929,7 @@
                             description: "Set width and height:",
                             code: "width: 30, height: 30"
                         }],
-                       
+
                          Polygon: [{
                             description: "Create new polygon:",
                             code: 'var polygonSprite1 = new Polygon({\n  sides: 6, \n  length: 100, \n  color: "orange"\n})',
@@ -945,7 +945,7 @@
                             description: "Set sides and length:",
                             code: "sides: 12, length: 120"
                         }],
-                        
+
                         Circle: [{
                             description: "Create new circle:",
                             code: 'var circleSprite1 = new Circle({\n  radius: 10, \n  color: "#ffffff", \n  x: 0, \n  y: 0\n})',
@@ -963,7 +963,7 @@
                             code: "radius: 12",
                             tags: "circle size radius"
                         }],
-                        
+
                          Oval: [{
                             description: "Create new oval:",
                             code: 'var ovalSprite1 = new Oval({\n  width: 20, \n  height: 55, \n  color: "green"\n})',
@@ -1008,7 +1008,7 @@
                             url: "./images/turnLeft.png",
                             code: "sprite1.turnLeft(15)",
                             tags: "turn angle point direction orientation left motion"
-                        }, 
+                        },
                         {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                         {
                             url: "./images/point90.png",
@@ -1022,7 +1022,7 @@
                             url: "./images/pointTowardsMouse.png",
                             code: "sprite1.pointTowards(mouseX, mouseY)",
                             tags: "motion turn point direction towards angle sprite character mouse"
-                        }, 
+                        },
                         {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                         {
                             url: "./images/goToXY.png",
@@ -1040,7 +1040,7 @@
                             url: "./images/goToSprite2.png",
                             code: "sprite1.x = sprite2.x \nsprite1.y = sprite2.y",
                             tags: "teleport location other move go motion"
-                        }, 
+                        },
                         {
                             url: "./images/glide.png",
                             description: "This block does not exist in WoofJS, but you can use other Motion blocks to achieve this. For example:",
@@ -1052,7 +1052,7 @@
                             url: "./images/changeX.png",
                             code: 'sprite1.x += 10',
                             tags: "increase decrease change x move right left motion"
-                        }, 
+                        },
                         {
                             url: "./images/setX.png",
                             code: 'sprite1.x = 0',
@@ -1066,14 +1066,14 @@
                             url: "./images/setY.png",
                             code: 'sprite1.y = 0',
                             tags: "set y motion"
-                        }, 
+                        },
                         {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                         {
                             url: "./images/ifOnEdge.png",
                             description:"This block does not exist in WoofJS, but there are other ways you can do the same thing. Here is an example:",
                             code: 'if(sprite1.x > maxX) {sprite1.turnRight(180)}',
                             tags: "rotate bounce turn edge on motion"
-                        }, 
+                        },
                         {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                         {
                             url: "./images/68747470733a2f2f692e696d6775722e636f6d2f4c576c5874444c2e706e67",
@@ -1107,14 +1107,14 @@
                     ],
                     Events: [{
                         description: "Warning: The shape of events in Scratch prevent you from putting an event inside other blocks.\nAlthough JavaScript doesn't prevent you from putting events insideother blocks, you should avoid it.\nFor example, don't place an onMouseDown() event inside a forever() block."
-                    }, 
+                    },
                     {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                     {
                         url: "./images/whenGreenFlag.png",
                         description: "Note: Unlike in Scratch, using ready() is recommended but not always required.",
                         code: "ready(() => {\n  \/* do something here */\n})",
                         tags: "on onclick when green flag clicked page loaded event start ready"
-                    }, 
+                    },
                     {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f436f58573132422e706e67",
@@ -1134,7 +1134,7 @@
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f5875506972634f2e706e67",
                         code: "onMouseDown(() => {\n  \/* do something here */\n})",
                         tags: "on onclick when click mouse down event stage event"
-                    }, 
+                    },
                     {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                     {
                         description: "On mouse up",
@@ -1144,7 +1144,7 @@
                         description: "On mouse move",
                         code: "onMouseMove(() => {\n  \/* do something here */\n})",
                         tags: "on when mouse move event"
-                    }, 
+                    },
                     {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f7a31356d6e506a2e706e67",
@@ -1154,7 +1154,7 @@
                         description: "On mouse up",
                         code: "sprite1.onMouseUp(() => {\n  \/* do something here */\n})",
                         tags: "on when click mouse up sprite event"
-                    }, 
+                    },
                     {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                     {
                         url:"./images/backdropSwitch.png",
@@ -1196,7 +1196,7 @@
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f653650393552302e706e67",
                         code: "sprite1.show()",
                         tags: "show appear looks"
-                    }, 
+                    },
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f323355617446352e706e67",
                         code: "sprite1.hide()",
@@ -1227,7 +1227,7 @@
                     }, {
                         code: 'circleSprite1.color = "green"',
                         tags: "change color circle looks"
-                    }, 
+                    },
                     {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f7a616a30706c302e706e67",
@@ -1546,7 +1546,7 @@
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f733236773670632e706e67",
                         code: "sprite1.touching(sprite2)",
                         tags: "touching intersecting overlap sensing"
-                    }, 
+                    },
                      {
                         html: "<b>For some sprites, <code>distanceTo()</code> will be more accurate than <code>touching()</code>.",
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f733236773670632e706e67",
@@ -1566,7 +1566,7 @@
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f7936735847544b2e706e67",
                         code: "sprite1.distanceTo(sprite2)",
                         tags: "distance sensing"
-                    }, 
+                    },
                       {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                     {
                         url:"./images/ask.png",
@@ -1596,7 +1596,7 @@
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f6a3843467155742e706e67",
                         code: "mouseY",
                         tags: "mouse Y position sensing"
-                    }, 
+                    },
                      {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                      {
                         url:"./images/loudnessLevel.png",
@@ -1721,7 +1721,7 @@
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f6241636d366a482e706e67",
                         code: 'clearPen()',
                         tags: "pen clear draw"
-                    }, 
+                    },
                     {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                     {
                         url:"./images/stamp.png",
@@ -1743,7 +1743,7 @@
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f504c744b5663762e706e67",
                         code: 'sprite1.penColor = "blue"\nsprite1.penColor = "#ff20ff"\nsprite1.penColor = "rgb(10, 100, 20)"',
                         tags: "pen color set"
-                    }, 
+                    },
                     {
                         url:"./images/penColor.png",
                         description:"These blocks do not exist in WoofJS.",
@@ -1783,7 +1783,7 @@
                             url: "./images/68747470733a2f2f692e696d6775722e636f6d2f423042476b434a2e706e67",
                             code: "maxX / 2",
                             tags: "divide division operations fraction"
-                        }, 
+                        },
                         {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                         {
                             url: "./images/68747470733a2f2f692e696d6775722e636f6d2f664148754477792e706e67",
@@ -1802,7 +1802,7 @@
                             description: "Random color:",
                             code: "randomColor()",
                             tags: "random color operations"
-                        }, 
+                        },
                         {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                         {
                             url: "./images/68747470733a2f2f692e696d6775722e636f6d2f3268716f4866682e706e67",
@@ -1834,7 +1834,7 @@
                             description: "Between Two Numbers :",
                             code: "sprite1.x.between(minX, maxX)",
                             tags: "between two numbers operations"
-                        }, 
+                        },
                         {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                         {
                             url: "./images/68747470733a2f2f692e696d6775722e636f6d2f5559684d3574702e706e67",
@@ -1848,7 +1848,7 @@
                             url: "./images/68747470733a2f2f692e696d6775722e636f6d2f66487253395a4b2e706e67",
                             code: '!(mouseDown)',
                             tags: "not operations"
-                        }, 
+                        },
                         {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                         {
                             url: "./images/68747470733a2f2f692e696d6775722e636f6d2f5671674c32696f2e706e67",
@@ -1862,7 +1862,7 @@
                             url: "./images/68747470733a2f2f692e696d6775722e636f6d2f717354526143782e706e67",
                             code: '"world".length',
                             tags: "operations length"
-                        }, 
+                        },
                         {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                         {
                             url: "./images/68747470733a2f2f692e696d6775722e636f6d2f4e466f59396c382e706e67",
@@ -1973,7 +1973,7 @@
                         code: 'new Text({\n  text: () => "variable1: " + variable1,\n  x: 0,\n  y: 0,\n  size: 30\n})',
                         description: '"Showing a variable" works by giving a Text Sprite a function instead of a "string in quotes" as its text attribute. The Text Sprite constantly reevaluates the function which keeps the value on the screen in sync with the value of the variable.',
                         tags: "show variable text data"
-                    }, 
+                    },
                     {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f7366536d6f44542e706e67",
@@ -2055,7 +2055,7 @@
                         code: "// import the lodash utility library\n// https://lodash.com/docs/4.17.4\nimportCodeURL('https://cdn.jsdelivr.net/lodash/4.17.4/lodash.min.js', () => {\n _.flatten([1, [2, [3, [4]], 5]])\n})",
                         tags: "import code url require firebase library module more blocks"
                     },
-                    
+
                     {
                         description: "A comment is a piece of code that is ignored by your browser. You can use it to separate long code into sections, making it easier to read through and edit. Add a comment block like \"Instructions\" or \"Create Sprites\" to your code.",
                         code: "//------------------------------------------\n//------Instruction Screen Sprites----------\n//------------------------------------------",
@@ -2071,7 +2071,7 @@
                             width: "98%",
                             marginLeft: "1%",
                             marginBottom: "5px"
-                            
+
                         }
                     }
                     else {
@@ -2111,8 +2111,10 @@
                 uploadFile: function(event) {
                     var files = event.target.files;
                     if (files.length === 1) {
-                        this.isUploadingImage = true;
-                        window.top.postMessage(files[0], '*') // send to firebase via window.onmessage in create
+                        var uploadRes = window.top.postMessage(files[0], '*') // send to firebase via window.onmessage in create
+                        if (uploadRes !== 'error') {
+                            this.isUploadingImage = true;
+                        }
                     }
                 },
                 setUserUploadImages: function(images) {
@@ -2145,7 +2147,7 @@
                         keys: [{
                             name: 'tags',
                             weight: 1.0
-                        }, 
+                        },
                         ]
                     }
                     var fuse = new Fuse(menu, options)
@@ -2186,7 +2188,7 @@
                 }
             }
         })
-        
+
         var clipboard = new Clipboard('.btn-clipboard');
         Vue.nextTick(function() {
             $('[data-toggle="tooltip"]').tooltip({

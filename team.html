@@ -6,23 +6,23 @@
   <meta name="twitter:title" content="WoofJS">
   <meta name="twitter:description" content="WoofJS is a Scratch-inspired Javascript library for making games.">
   <meta name="twitter:image" content="./images/qIgC8Ae.png">
-    
+
   <meta property="og:image" content="./images/qIgC8Ae.png">
   <meta property="og:title" content="WoofJS">
   <meta property="og:description" content="WoofJS is a Scratch-inspired Javascript library for making games.">
 
   <script src="//load.sumome.com/" data-sumo-site-id="44245233c319d8fe9fb7ce8c7ed64db9381aa56477888a10319261f655cfffe2" async="async"></script>
-  
+
 
 
 
 
   <meta charset="utf-8">
-  
+
   <title>WoofJS</title>
   <link rel="shortcut icon" type="image/png" href="./favicon.png"/>
-      
-      
+
+
   <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
   <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
@@ -61,19 +61,19 @@
   <script src="https://unpkg.com/vue@2.0.1/dist/vue.js"></script>
   <script data-presets="es2015" src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.14.0/babel.min.js"></script>
   <script src="https://rawcdn.githack.com/beautify-web/js-beautify/1b52eb1f90daaefa6ff0fa7736f97fbfc58093c1/js/lib/beautify.js"></script>
- 
+
    <!-- Firepad -->
 <link rel="stylesheet" href="https://cdn.firebase.com/libs/firepad/1.4.0/firepad.css" />
 <script src="https://cdn.firebase.com/libs/firepad/1.4.0/firepad.min.js"></script>
    <style>
-     
+
      html, body {
       margin: 0;
       padding: 0;
       height: 100%;
       width: 100%;
     }
-    
+
     #page {
       position: relative;
       display: flex;
@@ -82,17 +82,17 @@
       align-content: stretch;
       height: 100%;
     }
-    
+
     body {
       background-color: #fff;
       font-family: sans-serif;
     }
-    
+
     h1 {
       font-weight: normal;
       font-size: 25px;
     }
-    
+
     .CodeMirror {
       font-size: 13px;
       flex: 1 0 auto;
@@ -102,7 +102,7 @@
       align-content: stretch;
       width: 100%;
     }
-    
+
     .CodeMirror-scroll {
       display: flex;
       flex-flow: column wrap;
@@ -113,13 +113,13 @@
       width: 100%;
 
     }
-    
+
     iframe {
         border: none;
         flex: 1 0 auto;
         width: 100%;
     }
-  
+
   #navbar {
       background-color: #6DC0F2;
       position: absolute;
@@ -131,80 +131,80 @@
       align-items: center;
       justify-content: space-between;
     }
-    
+
     #clean-up {
       background-color: #80CFFF;
       border: none;
       color: white;
     }
-    
+
     .btn-default {
       background-color: #49A6DF;
       border: none;
       color: white;
     }
-    
+
     #container {
       width: 100%;
       display: flex;
       flex-direction: row;
       margin-top: 55px;
     }
-    
+
     #previewbar, #docsbar, #projectbar, #codebar {
-       flex-grow: 0.65; 
-       align-items: center; 
-       display: none; 
-       width: 25px; 
-       flex-direction: column; 
-       justify-content: center;  
+       flex-grow: 0.65;
+       align-items: center;
+       display: none;
+       width: 25px;
+       flex-direction: column;
+       justify-content: center;
     }
-    
+
     #output, #docs, #projects, #code {
-      flex-flow: column; 
-      resize: none; 
+      flex-flow: column;
+      resize: none;
       flex: 10 1 25%;
     }
-    
+
     #code {
       word-wrap: break-word;
       width: 25%;
     }
-    
+
     #PreviewNav, #DocsNav, #ProjectsNav, #CodeNav {
       height: 25px;
-      text-align: center; 
-      color: white; 
+      text-align: center;
+      color: white;
       font-size: 1.1em;
-      display: flex; 
+      display: flex;
       justify-content: space-between;
     }
-    
+
     #previewbar, #PreviewNav {
     background-color:#4875D1;
     }
-    
+
     #docsbar, #DocsNav {
       background-color: #7F68D5;
     }
-    
+
     #projectbar, #ProjectsNav {
       background-color: #AD5FC2;
     }
-    
+
     #codebar, #CodeNav {
       background-color: #49A6DF;
     }
-    
+
     @media all and (max-width: 600px) {
       #login {
-        margin-right: 5px; 
+        margin-right: 5px;
       }
       fieldset {
         display: none;
       }
     }
-    
+
     #pop {
       cursor: pointer;
     }
@@ -220,7 +220,7 @@
       color: white;
       margin-right: 5px;
     }
-    
+
     .rotate {
       color: #FFFFFF;
       -webkit-transform: rotate(90deg);
@@ -229,11 +229,11 @@
       -o-transform: rotate(90deg);
       transform: rotate(90deg);
     }
-    
+
     a.powered-by-firepad {
       display: none;
     }
-    
+
     #saveStatus {
       transition: color 2s;
     }
@@ -242,7 +242,7 @@
 </head>
 <body>
   <div id="page">
-    <div id="navbar"> 
+    <div id="navbar">
       <button style="background-color: #80CFFF; color: white;  border-radius:4px; border:none; margin:8px" class="btn btn-medium btn-info" type="button" id="login" onclick="window.open('./login.html', 'Sign In', 'width=500,height=500')">Login / Sign Up</button>
       <div style="margin-left: 5px" id="logggedin" class="hide dropdown">
         <button class="btn btn-medium btn-info dropdown-toggle" type="button" id="loggedin-name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"></button>
@@ -264,9 +264,9 @@
         <!--<button style="display: none" :style="{display: 'inline-block'}" style="margin-right: 5px; background-color: purple !important; ; border:none; color:white; " class="btn btn-medium" :class="styles" onclick="save()"><span class="glyphicon glyphicon-upload"></span> Publish</button>-->
       </span>
     </div>
- 
+
     <div id="container">
-    
+
       <div id="previewbar" v-show="previewbar" @click="previewbar= !previewbar" :style="{display: 'flex'}">
         <span class="rotate" style="font-size: 1.65em">Preview</span>
       </div>
@@ -283,8 +283,8 @@
         </div>
         <iframe scrolling="no" id="preview"></iframe>
       </div>
-    
-    
+
+
       <div id="docsbar" v-show="docsbar" @click="docsbar= !docsbar" :style="{display: 'flex'}">
         <span class="rotate" style="font-size: 1.65em">Documentation</span>
       </div>
@@ -297,8 +297,8 @@
         </div>
         <iframe src="./docs/index.html" id="scratch"></iframe>
       </div>
-    
-    
+
+
       <div id="projectbar" v-show="projectbar" @click="projectbar= !projectbar" :style="{display: 'flex'}" @click="projectsPane = !projectsPane">
         <span class="rotate" style="font-size:1.65em">Tutorials</span>
       </div>
@@ -311,8 +311,8 @@
         </div>
         <iframe id="projectsIframe" src="//coding.space/woof/index.html"></iframe>
       </div>
-    
-      
+
+
       <div id="codebar" v-show="codebar" @click="codebar= !codebar" :style="{display: 'flex'}">
         <span class="rotate" style="font-size:1.65em">Code</span>
       </div>
@@ -324,19 +324,19 @@
           </span>
         </div>
       </div>
-    
+
     </div>
   </div>
   <script>
 
-  
+
   // TODO check if the name exists on creating new project
 
   // TODO backwards / forwards in edits
-  
+
   // TODO blog post
-  
-    
+
+
     var getID = function() {
       // returns the name of a project, not inlcuding the current revision
       return window.location.hash.substring(1, window.location.hash.length).split("/")[0];
@@ -348,13 +348,13 @@
     var getCurrentRevisionCode = function(revisions) {
       // returns the code that corresponds to the current project and revision
       var revision = parseInt(window.location.hash.substring(1, window.location.hash.length).split("/")[1])
-      
+
       var keys = Object.keys(revisions)
       if (keys.length > 1){
         keys = keys.slice(1, keys.length)
       }
-      
-      
+
+
       var key
       if (!isNaN(revision) && (revision !== 0 && revision !== -1 * keys.length) && Math.abs(revision) < keys.length + 1){
         if (revision < 0){
@@ -367,7 +367,7 @@
       return revisions[key].code
     }
     var currentHash = window.location.hash
-    
+
     var app = new Vue({
       el: '#page',
       data: {
@@ -390,7 +390,7 @@
       computed: {
         styles : function() { return {
            // styles for the "Save" icon
-          'glyphicon-floppy-remove': this.status == 'DIRTY', 
+          'glyphicon-floppy-remove': this.status == 'DIRTY',
           'glyphicon-floppy-saved': this.status == 'SAVED' || this.status == "NEW"
         } },
         canClean: function(){
@@ -403,10 +403,10 @@
         showError: function(){
           this.seenError = true
           if (this.error.message.includes('Uncaught ReferenceError: sprite1 is not defined')) {
-            var spriteName = prompt("Error on line " + this.error.lineno  + "\n\n" + "You need to rename 'sprite1'. What would you like to name it?", "unicornSprite");    
-            if (spriteName !== null) {   
+            var spriteName = prompt("Error on line " + this.error.lineno  + "\n\n" + "You need to rename 'sprite1'. What would you like to name it?", "unicornSprite");
+            if (spriteName !== null) {
                 editor.setValue(editor.getValue().replace(/sprite1/g, spriteName));
-            }  
+            }
           }
           else if (this.error.message.includes("Uncaught ReferenceError")) {
             var message = this.error.message.replace("Uncaught ReferenceError: ", "")
@@ -432,7 +432,7 @@
     var myCode = false
     scratch.src = scratch.src // the documentation sometimes doesn't load unless you remind it to here, strange VueJS bug
     projectsIframe.src = projectsIframe.src // ditto for the project's iframe
-    
+
     var config = {
       apiKey: "AIzaSyBYHv7dCiD0bWiHRlcp4VIZCIqzoMnB4yY",
       authDomain: "woofjs-d1b27.firebaseapp.com",
@@ -441,35 +441,35 @@
       messagingSenderId: "397293370524"
     };
     firebase.initializeApp(config);
-      
+
     function handleLogin(userName, uid) {
       $('#loggedin-name').html(userName + ' <span class="caret"></span>')
       $('#login-projects').attr("href", "./user.html#" + uid )
       $('#logggedin').removeClass("hide")
       $('#login').addClass('hide')
     }
-    
+
     function handleLogout() {
       $('#logggedin').addClass("hide")
       $('#login').removeClass("hide")
       myCode = false
     }
-    
+
     var authChanged = false
     firebase.auth().onAuthStateChanged(function(user) {
       if (!authChanged){
         authChanged = true
       }
-      
+
       if (user){
-        ga('set', 'userId', user.uid); 
+        ga('set', 'userId', user.uid);
         firepad.setUserId(user.uid)
-        
+
         handleLogin(user.displayName, user.uid)
-        
+
         firebase.database().ref('/user/' + user.uid).once('value').then(function(snapshot) {
           var userVal = snapshot.val()
-          
+
           // if the user is logged in, and we don't have their name/email in our database, save it now
           if (!userVal) {
             firebase.database().ref("/user/" + user.uid).set({
@@ -478,14 +478,14 @@
               createdDate: firebase.database.ServerValue.TIMESTAMP
             })
           }
-         
+
           if (userVal && userVal.team && Object.values(userVal.team).includes(getID())) {
             // do nothing because we've already added this project to the user
           } else {
             firebase.database().ref("/user/" + user.uid + "/team/").push(getID())
           }
         })
-        
+
         // this puts the user's most recent project under their name
         firebase.database().ref('/code/').orderByChild("--uid").equalTo(user.uid).once('value').then(function(snapshot) {
           if (snapshot.val()){
@@ -515,11 +515,11 @@
       app.status = "SAVED"
       currentHash = window.location.hash
     }
-    
+
     var makeDirty = function() {
       app.status = "DIRTY"
     }
-    
+
     var popout = function() {
       if (app.status != "DIRTY"){
         window.open("./team-full.html#" + getIDWithRevision(), "_blank")
@@ -527,7 +527,7 @@
         alert("You must save your project to open it in a new window.")
       }
     }
-    
+
     // we add the project name to the hash on save
     // this code prevents that from triggering a page reload
     window.addEventListener("hashchange", function() {
@@ -535,14 +535,14 @@
         window.location.reload()
       }
     })
-    
+
     var save = function(){
       if (app.status == "SAVED") { return }
-      
+
       if (editor.getValue().startsWith("// Loading...")){
         return // don't allow students to save projects that haven't loaded
       }
-      
+
       var name
       if (myCode) {
         name = getID()
@@ -551,14 +551,14 @@
       }
       if (name.includes('.') || name.includes('/') || name.includes('$') || name.includes("#") || name.includes("[") || name.includes("]") || name.includes(" ")){
         alert('You cannot include ".", "#", "$", "[", "]", or spaces in the name of your project. Try to save again.')
-      } else if (name) { 
+      } else if (name) {
         firebase.database().ref('/code/' + name).limitToLast(1).once('value').then(function(snapshot) {
           if (snapshot.val()){
             if (firebase.auth().currentUser && snapshot.val()[Object.keys(snapshot.val())[0]].uid == firebase.auth().currentUser.uid) {
                 // if the project exists and you own it, push the new code as a revision
                 firebase.database().ref().child("/code/" + name).push({
-                  code: editor.getValue(), 
-                  time: firebase.database.ServerValue.TIMESTAMP, 
+                  code: editor.getValue(),
+                  time: firebase.database.ServerValue.TIMESTAMP,
                   uid: firebase.auth().currentUser && firebase.auth().currentUser.uid
                 }).then(function(){
                   window.location.hash = name
@@ -573,8 +573,8 @@
             // else create a new project and push this code as the first revision
             firebase.database().ref().child("/code/" + name + "/--uid").set(firebase.auth().currentUser && firebase.auth().currentUser.uid)
             firebase.database().ref().child("/code/" + name).push({
-              code: editor.getValue(), 
-              time: firebase.database.ServerValue.TIMESTAMP, 
+              code: editor.getValue(),
+              time: firebase.database.ServerValue.TIMESTAMP,
               uid: firebase.auth().currentUser && firebase.auth().currentUser.uid
             }).then(function(){
               window.location.hash = name
@@ -587,7 +587,7 @@
         });
       }
     };
-    
+
     // keyboard shortcuts
     var mac = CodeMirror.keyMap["default"] == CodeMirror.keyMap.macDefault;
     var ctrl = mac ? "Cmd-" : "Ctrl-";
@@ -600,7 +600,7 @@
       var spaces = Array(cm.getOption("indentUnit") + 1).join(" ");
       cm.replaceSelection(spaces, "end", "+input");
     }
-    
+
     var editor = CodeMirror(document.getElementById('code'), {
         mode:  "javascript",
         //value: editorVal,
@@ -620,14 +620,14 @@
         gutters: ["CodeMirror-lint-markers", "CodeMirror-foldgutter"],
         extraKeys: keymap,
         lint: {
-          delay: 800, 
+          delay: 800,
           options: {
             "esnext": true,
             "asi": true
           }
         },
     });
-    
+
     // It's probably a bad idea to have a super large data structure like this in JS
     // One bad side effect is that it turns off syntax highlighting in the code below it
     const adjs = ["adorable","beautiful","clean","drab","elegant","fancy","glamorous","handsome","long","magnificent","old-fashioned","plain","quaint","sparkling","ugliest","unsightly","wide-eyed","red","orange","yellow","green","blue","purple","gray","black","white","alive","better","careful","clever","dead","easy","famous","gifted","helpful","important","inexpensive","mushy","odd","powerful","rich","shy","tender","uninterested","vast","wrong","angry","clumsy","defeated","embarrassed","fierce","grumpy","helpless","jealous","lazy","mysterious","nervous","obnoxious","panicky","repulsive","scary","thoughtless","uptight","worried","agreeable","brave","calm","delightful","eager","faithful","gentle","happy","jolly","kind","lively","nice","obedient","proud","relieved","silly","thankful","victorious","witty","zealous","broad","chubby","crooked","curved","deep","flat","high","hollow","low","narrow","round","shallow","skinny","square","steep","straight","wide","big","colossal","fat","gigantic","great","huge","immense","large","little","mammoth","massive","miniature","petite","puny","scrawny","short","small","tall","teeny","teeny-tiny","tiny","cooing","deafening","faint","hissing","loud","melodic","noisy","purring","quiet","raspy","screeching","thundering","voiceless","whispering","ancient","brief","early","fast","late","long","modern","old","old-fashioned","quick","rapid","short","slow","swift","young","bitter","delicious","fresh","greasy","juicy","hot","icy","loose","melted","nutritious","prickly","rainy","rotten","salty","sticky","strong","sweet","tart","tasteless","uneven","weak","wet","wooden","yummy","boiling","breeze","broken","bumpy","chilly","cold","cool","creepy","crooked","cuddly","curly","damaged","damp","dirty","dry","dusty","filthy","flaky","fluffy","freezing","hot","warm","wet","abundant","empty","few","full","heavy","light","many","numerous","sparse","substantial"]
@@ -637,7 +637,7 @@
     function randomName(){
       const randomAdj = adjs[Math.floor(Math.random()*adjLength)]
       const randomNoun = nouns[Math.floor(Math.random()*nounLength)]
-      
+
       return randomAdj + "-" + randomNoun
     }
 
@@ -646,19 +646,19 @@
       const name = randomName()
       window.location.hash = name
       makeClean() // prevents page reload
-      
+
       editorVal += "// Welcome to team " + name + "!\n//\n"
       editorVal += "// Share this link to collaborate:\n//\n"
       editorVal += "// woofjs.com/team#" + name + "\n\n"
       // editorVal += "// Press the Publish button to create a private project that nobody else can edit"
       editorVal += "setBackdropURL('./docs/images/nyc.jpg')\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
-    } 
-    
-    var firepadRef = firebase.database().ref('/team/' + getID()); 
+    }
+
+    var firepadRef = firebase.database().ref('/team/' + getID());
     var firepad = Firepad.fromCodeMirror(firepadRef, editor, {
       defaultText: editorVal,
     });
-    
+
     onkeydown = function(e){
       if(e.ctrlKey && e.key == '/'){
         e.preventDefault();
@@ -668,18 +668,18 @@
         save();
       }
     }
-    
+
     function WoofJSLint(){
       if (app.error) { return }
       const code = js_beautify(app.code, {space_after_anon_function: true, indent_size: 2, indent_with_tabs: false})
-      const regEx = /  ((\w)*\.)?(ready|onKeyDown|onKeyUp|onMouseDown|onMouseUp|onMouseMove)/g   // matches any event indented with two spaces 
+      const regEx = /  ((\w)*\.)?(ready|onKeyDown|onKeyUp|onMouseDown|onMouseUp|onMouseMove)/g   // matches any event indented with two spaces
       var result;
       while ((result = regEx.exec(code)) !== null) {
         var lineNumber = code.substring(0, result.index).split('\n').length
         CodeMirror.commands.markGutter(editor, "warning", lineNumber, "We reccomend moving this " + result[3] + " event outside all loops and other events.")
       }
     }
-    
+
     firepad.on('synced', function(isSynced) {
       // isSynced will be false immediately after the user edits the pad,
       // and true when their edit has been saved to Firebase.
@@ -687,17 +687,17 @@
         makeClean()
       }
       else {
-        makeDirty() 
+        makeDirty()
       }
     });
 
-    // run the code (debounced) on every change to the editor 
+    // run the code (debounced) on every change to the editor
     editor.on("change", function(){
       debouncedRunCode()
-      setTimeout(function() {WoofJSLint()}, 1000); 
+      setTimeout(function() {WoofJSLint()}, 1000);
     });
     runCode()
-    
+
     // focus on the preview when refreshed
      function focusPreview() {
        document.getElementById('preview').focus();
@@ -712,20 +712,20 @@
     });
 
     // warns the user when they try to close the page without saving
-    window.onbeforeunload = function(e) {		
-       if (app.status == "DIRTY") {		
-         var dialogText = 'Make sure to copy and paste your work somewhere safe.';		
-         e.returnValue = dialogText;		
-         return dialogText; 		
-       }		
+    window.onbeforeunload = function(e) {
+       if (app.status == "DIRTY") {
+         var dialogText = 'Make sure to copy and paste your work somewhere safe.';
+         e.returnValue = dialogText;
+         return dialogText;
+       }
     };
-    
-    
-    
+
+
+
     function tryRunningCode() {
       app.code = editor.getValue()
       app.error = undefined
-    
+
       try {
         var result = Babel.transform(editor.getValue(), {
           presets: [['es2015', {'modules': false}]], // modules: false to remove strict mode
@@ -741,7 +741,7 @@
             if (app.mouseX <= Math.round(document.getElementById('preview').contentWindow.minX + 1)) {
               app.mouseX += " (minX)"
             }
-            
+
             app.mouseY = Math.round(document.getElementById('preview').contentWindow.mouseY)
             if (app.mouseY >= Math.round(document.getElementById('preview').contentWindow.maxY - 1)) {
               app.mouseY += " (maxY)"
@@ -758,7 +758,7 @@
             } else {
               app.error = event
             }
-            
+
           });
           var script = document.createElement("script");
           script.type = "text/javascript";
@@ -776,42 +776,42 @@
         app.error = e
       }
     }
-    
+
     function runCode() {
-        
+
         document.getElementById("preview").remove();
         var iframe = document.createElement("iframe");
         iframe.id = "preview";
         document.getElementById("output").appendChild(iframe);
-        
+
         setTimeout(function() {
-        
+
             // add doctype to iframe
             iframe.contentWindow.document.open();
             iframe.contentWindow.document.write('<!DOCTYPE html>');
             iframe.contentWindow.document.close();
-            
+
             // add a base tag to the page so it knows where to pull relative image urls
             var base = iframe.contentWindow.document.createElement("base");
             base.href = document.baseURI
             iframe.contentWindow.document.body.appendChild(base);
-          
+
             // then we create a script tag with the woof code and add it to the page
             var script = iframe.contentWindow.document.createElement("script");
             script.type = "text/javascript";
             script.src = "./woof.js";
             iframe.contentWindow.document.body.appendChild(script);
-            
+
             script.onload = function() {
                 // when the woof.js library loads, run the user's code
-                var evt = document.createEvent('Event');  
-                evt.initEvent('load', false, false);  
+                var evt = document.createEvent('Event');
+                evt.initEvent('load', false, false);
                 iframe.contentWindow.dispatchEvent(evt);
                 tryRunningCode();
             }
         }, 10)
     }
-    
+
     function debounce(func, wait, immediate) {
     	var timeout;
     	return function() {
@@ -835,10 +835,10 @@
     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
     m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
     })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-  
+
     ga('create', 'UA-82374072-1', 'auto');
     ga('send', 'pageview');
-  
+
   </script>
 
 

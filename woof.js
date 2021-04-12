@@ -1,5 +1,5 @@
 // We include SAT.js here as our only "external" dependency to help us detect when rotated sprites intersect. It's not really an "external" dependency because we include it here internally.
-// SAT.js - Version 0.6.0 - Copyright 2012 - 2016 - Jim Riecken <jimr@jimr.ca> - released under the MIT License. https://github.com/jriecken/sat-js 
+// SAT.js - Version 0.6.0 - Copyright 2012 - 2016 - Jim Riecken <jimr@jimr.ca> - released under the MIT License. https://github.com/jriecken/sat-js
 function Vector(t,o){this.x=t||0,this.y=o||0}function Circle(t,o){this.pos=t||new Vector,this.r=o||0}function Polygon(t,o){this.pos=t||new Vector,this.angle=0,this.offset=new Vector,this.setPoints(o||[])}function Box(t,o,e){this.pos=t||new Vector,this.w=o||0,this.h=e||0}function Response(){this.a=null,this.b=null,this.overlapN=new Vector,this.overlapV=new Vector,this.clear()}function flattenPointsOn(t,o,e){for(var r=Number.MAX_VALUE,n=-Number.MAX_VALUE,s=t.length,i=0;s>i;i++){var p=t[i].dot(o);r>p&&(r=p),p>n&&(n=p)}e[0]=r,e[1]=n}function isSeparatingAxis(t,o,e,r,n,s){var i=T_ARRAYS.pop(),p=T_ARRAYS.pop(),c=T_VECTORS.pop().copy(o).sub(t),l=c.dot(n);if(flattenPointsOn(e,n,i),flattenPointsOn(r,n,p),p[0]+=l,p[1]+=l,i[0]>p[1]||p[0]>i[1])return T_VECTORS.push(c),T_ARRAYS.push(i),T_ARRAYS.push(p),!0;if(s){var h=0;if(i[0]<p[0])if(s.aInB=!1,i[1]<p[1])h=i[1]-p[0],s.bInA=!1;else{var a=i[1]-p[0],y=p[1]-i[0];h=y>a?a:-y}else if(s.bInA=!1,i[1]>p[1])h=i[0]-p[1],s.aInB=!1;else{var a=i[1]-p[0],y=p[1]-i[0];h=y>a?a:-y}var u=Math.abs(h);u<s.overlap&&(s.overlap=u,s.overlapN.copy(n),0>h&&s.overlapN.reverse())}return T_VECTORS.push(c),T_ARRAYS.push(i),T_ARRAYS.push(p),!1}function voronoiRegion(t,o){var e=t.len2(),r=o.dot(t);return 0>r?LEFT_VORONOI_REGION:r>e?RIGHT_VORONOI_REGION:MIDDLE_VORONOI_REGION}function pointInCircle(t,o){var e=T_VECTORS.pop().copy(t).sub(o.pos),r=o.r*o.r,n=e.len2();return T_VECTORS.push(e),r>=n}function pointInPolygon(t,o){TEST_POINT.pos.copy(t),T_RESPONSE.clear();var e=testPolygonPolygon(TEST_POINT,o,T_RESPONSE);return e&&(e=T_RESPONSE.aInB),e}function testCircleCircle(t,o,e){var r=T_VECTORS.pop().copy(o.pos).sub(t.pos),n=t.r+o.r,s=n*n,i=r.len2();if(i>s)return T_VECTORS.push(r),!1;if(e){var p=Math.sqrt(i);e.a=t,e.b=o,e.overlap=n-p,e.overlapN.copy(r.normalize()),e.overlapV.copy(r).scale(e.overlap),e.aInB=t.r<=o.r&&p<=o.r-t.r,e.bInA=o.r<=t.r&&p<=t.r-o.r}return T_VECTORS.push(r),!0}function testPolygonCircle(t,o,e){for(var r=T_VECTORS.pop().copy(o.pos).sub(t.pos),n=o.r,s=n*n,i=t.calcPoints,p=i.length,c=T_VECTORS.pop(),l=T_VECTORS.pop(),h=0;p>h;h++){var a=h===p-1?0:h+1,y=0===h?p-1:h-1,u=0,V=null;c.copy(t.edges[h]),l.copy(r).sub(i[h]),e&&l.len2()>s&&(e.aInB=!1);var T=voronoiRegion(c,l);if(T===LEFT_VORONOI_REGION){c.copy(t.edges[y]);var f=T_VECTORS.pop().copy(r).sub(i[y]);if(T=voronoiRegion(c,f),T===RIGHT_VORONOI_REGION){var R=l.len();if(R>n)return T_VECTORS.push(r),T_VECTORS.push(c),T_VECTORS.push(l),T_VECTORS.push(f),!1;e&&(e.bInA=!1,V=l.normalize(),u=n-R)}T_VECTORS.push(f)}else if(T===RIGHT_VORONOI_REGION){if(c.copy(t.edges[a]),l.copy(r).sub(i[a]),T=voronoiRegion(c,l),T===LEFT_VORONOI_REGION){var R=l.len();if(R>n)return T_VECTORS.push(r),T_VECTORS.push(c),T_VECTORS.push(l),!1;e&&(e.bInA=!1,V=l.normalize(),u=n-R)}}else{var O=c.perp().normalize(),R=l.dot(O),v=Math.abs(R);if(R>0&&v>n)return T_VECTORS.push(r),T_VECTORS.push(O),T_VECTORS.push(l),!1;e&&(V=O,u=n-R,(R>=0||2*n>u)&&(e.bInA=!1))}V&&e&&Math.abs(u)<Math.abs(e.overlap)&&(e.overlap=u,e.overlapN.copy(V))}return e&&(e.a=t,e.b=o,e.overlapV.copy(e.overlapN).scale(e.overlap)),T_VECTORS.push(r),T_VECTORS.push(c),T_VECTORS.push(l),!0}function testCirclePolygon(t,o,e){var r=testPolygonCircle(o,t,e);if(r&&e){var n=e.a,s=e.aInB;e.overlapN.reverse(),e.overlapV.reverse(),e.a=e.b,e.b=n,e.aInB=e.bInA,e.bInA=s}return r}function testPolygonPolygon(t,o,e){for(var r=t.calcPoints,n=r.length,s=o.calcPoints,i=s.length,p=0;n>p;p++)if(isSeparatingAxis(t.pos,o.pos,r,s,t.normals[p],e))return!1;for(var p=0;i>p;p++)if(isSeparatingAxis(t.pos,o.pos,r,s,o.normals[p],e))return!1;return e&&(e.a=t,e.b=o,e.overlapV.copy(e.overlapN).scale(e.overlap)),!0}var SAT={};SAT.Vector=Vector,SAT.V=Vector,Vector.prototype.copy=Vector.prototype.copy=function(t){return this.x=t.x,this.y=t.y,this},Vector.prototype.clone=Vector.prototype.clone=function(){return new Vector(this.x,this.y)},Vector.prototype.perp=Vector.prototype.perp=function(){var t=this.x;return this.x=this.y,this.y=-t,this},Vector.prototype.rotate=Vector.prototype.rotate=function(t){var o=this.x,e=this.y;return this.x=o*Math.cos(t)-e*Math.sin(t),this.y=o*Math.sin(t)+e*Math.cos(t),this},Vector.prototype.reverse=Vector.prototype.reverse=function(){return this.x=-this.x,this.y=-this.y,this},Vector.prototype.normalize=Vector.prototype.normalize=function(){var t=this.len();return t>0&&(this.x=this.x/t,this.y=this.y/t),this},Vector.prototype.add=Vector.prototype.add=function(t){return this.x+=t.x,this.y+=t.y,this},Vector.prototype.sub=Vector.prototype.sub=function(t){return this.x-=t.x,this.y-=t.y,this},Vector.prototype.scale=Vector.prototype.scale=function(t,o){return this.x*=t,this.y*=o||t,this},Vector.prototype.project=Vector.prototype.project=function(t){var o=this.dot(t)/t.len2();return this.x=o*t.x,this.y=o*t.y,this},Vector.prototype.projectN=Vector.prototype.projectN=function(t){var o=this.dot(t);return this.x=o*t.x,this.y=o*t.y,this},Vector.prototype.reflect=Vector.prototype.reflect=function(t){var o=this.x,e=this.y;return this.project(t).scale(2),this.x-=o,this.y-=e,this},Vector.prototype.reflectN=Vector.prototype.reflectN=function(t){var o=this.x,e=this.y;return this.projectN(t).scale(2),this.x-=o,this.y-=e,this},Vector.prototype.dot=Vector.prototype.dot=function(t){return this.x*t.x+this.y*t.y},Vector.prototype.len2=Vector.prototype.len2=function(){return this.dot(this)},Vector.prototype.len=Vector.prototype.len=function(){return Math.sqrt(this.len2())},SAT.Circle=Circle,Circle.prototype.getAABB=Circle.prototype.getAABB=function(){var t=this.r,o=this.pos.clone().sub(new Vector(t,t));return new Box(o,2*t,2*t).toPolygon()},SAT.Polygon=Polygon,Polygon.prototype.setPoints=Polygon.prototype.setPoints=function(t){var o=!this.points||this.points.length!==t.length;if(o){var e,r=this.calcPoints=[],n=this.edges=[],s=this.normals=[];for(e=0;e<t.length;e++)r.push(new Vector),n.push(new Vector),s.push(new Vector)}return this.points=t,this._recalc(),this},Polygon.prototype.setAngle=Polygon.prototype.setAngle=function(t){return this.angle=t,this._recalc(),this},Polygon.prototype.setOffset=Polygon.prototype.setOffset=function(t){return this.offset=t,this._recalc(),this},Polygon.prototype.rotate=Polygon.prototype.rotate=function(t){for(var o=this.points,e=o.length,r=0;e>r;r++)o[r].rotate(t);return this._recalc(),this},Polygon.prototype.translate=Polygon.prototype.translate=function(t,o){for(var e=this.points,r=e.length,n=0;r>n;n++)e[n].x+=t,e[n].y+=o;return this._recalc(),this},Polygon.prototype._recalc=function(){var t,o=this.calcPoints,e=this.edges,r=this.normals,n=this.points,s=this.offset,i=this.angle,p=n.length;for(t=0;p>t;t++){var c=o[t].copy(n[t]);c.x+=s.x,c.y+=s.y,0!==i&&c.rotate(i)}for(t=0;p>t;t++){var l=o[t],h=p-1>t?o[t+1]:o[0],a=e[t].copy(h).sub(l);r[t].copy(a).perp().normalize()}return this},Polygon.prototype.getAABB=Polygon.prototype.getAABB=function(){for(var t=this.calcPoints,o=t.length,e=t[0].x,r=t[0].y,n=t[0].x,s=t[0].y,i=1;o>i;i++){var p=t[i];p.x<e?e=p.x:p.x>n&&(n=p.x),p.y<r?r=p.y:p.y>s&&(s=p.y)}return new Box(this.pos.clone().add(new Vector(e,r)),n-e,s-r).toPolygon()},SAT.Box=Box,Box.prototype.toPolygon=Box.prototype.toPolygon=function(){var t=this.pos,o=this.w,e=this.h;return new Polygon(new Vector(t.x,t.y),[new Vector,new Vector(o,0),new Vector(o,e),new Vector(0,e)])},SAT.Response=Response,Response.prototype.clear=Response.prototype.clear=function(){return this.aInB=!0,this.bInA=!0,this.overlap=Number.MAX_VALUE,this};for(var T_VECTORS=[],i=0;10>i;i++)T_VECTORS.push(new Vector);for(var T_ARRAYS=[],i=0;5>i;i++)T_ARRAYS.push([]);var T_RESPONSE=new Response,TEST_POINT=new Box(new Vector,1e-6,1e-6).toPolygon();SAT.isSeparatingAxis=isSeparatingAxis;var LEFT_VORONOI_REGION=-1,MIDDLE_VORONOI_REGION=0,RIGHT_VORONOI_REGION=1;SAT.pointInCircle=pointInCircle,SAT.pointInPolygon=pointInPolygon,SAT.testCircleCircle=testCircleCircle,SAT.testPolygonCircle=testPolygonCircle,SAT.testCirclePolygon=testCirclePolygon,SAT.testPolygonPolygon=testPolygonPolygon;
 function detectCollision(a, b){
   if (a instanceof SAT.Circle && b instanceof SAT.Circle) {
@@ -31,7 +31,7 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
   thisContext.stopped = true;
   // internally named fullScreen1 because the keyword "fullScreen" on the global scope was wonky in firefox
   thisContext.fullScreen1 = fullScreen;
-  
+
   thisContext._cameraX = 0;
   thisContext._cameraY = 0;
   Object.defineProperty(thisContext, 'cameraX', {
@@ -58,7 +58,7 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
       thisContext._cameraY = value;
     }
   });
-  
+
   Object.defineProperty(thisContext, 'fullScreen', {
     get: function() {
       return thisContext.fullScreen1;
@@ -67,20 +67,20 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
       thisContext.fullScreen1 = value;
     }
   });
-  
+
   if (thisContext.fullScreen1) {
     width = window.innerWidth;
     height = window.innerHeight;
     window.addEventListener("load", () => {
       document.body.style.margin = 0;
-      document.body.style.padding = 0; 
+      document.body.style.padding = 0;
     });
-  } 
-  
+  }
+
   thisContext._readys = [];
   thisContext.ready = (func) => {
     if (typeof func != "function") { throw new TypeError("ready(function) requires one function input."); }
-    
+
     if (thisContext.stopped) {
       thisContext._readys.push(func);
     } else {
@@ -92,13 +92,13 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
     thisContext._readys.forEach(func => { func() });
     thisContext._readys = [];
   };
-  
+
   window.addEventListener("load", () => {
     document.documentElement.style.width = "100%";
     document.documentElement.style.height = "100%";
     document.body.style.width = "100%";
     document.body.style.height = "100%";
-    
+
     // create the main div that Woof lives in
     thisContext._mainDiv = document.createElement("div");
     document.body.appendChild(thisContext._mainDiv);
@@ -115,7 +115,7 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
     thisContext._spriteCanvas.height = height;
     thisContext._spriteCanvas.style.zIndex = 3;
     thisContext._spriteCanvas.style.position = "absolute";
-    
+
     // create the canvas where we will draw the pen
     thisContext._penCanvas = document.createElement("canvas");
     thisContext._mainDiv.appendChild(thisContext._penCanvas);
@@ -124,7 +124,7 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
     thisContext._penCanvas.height = height;
     thisContext._penCanvas.style.zIndex = 2;
     thisContext._penCanvas.style.position = "absolute";
-    
+
     // create the div where we show the backdrop using CSS
     thisContext._backdropDiv = document.createElement("div");
     thisContext._mainDiv.appendChild(thisContext._backdropDiv);
@@ -138,19 +138,19 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
 
     thisContext._spriteContext = thisContext._spriteCanvas.getContext("2d");
     thisContext._penContext = thisContext._penCanvas.getContext("2d");
-    
+
     thisContext._runReadys();
   });
-  
+
   thisContext.setBackdropSize = (width, height) => {
     if (typeof width != "number" || typeof height != "number") { throw new TypeError("setBackdropSize(width, height) requires two number inputs."); }
     if (thisContext.fullScreen1) {
       throw Error("You cannot manually set the backdrop size in full-screen mode. You can full-screen mode off with: fullScreen = false.")
     } else {
-     thisContext._setCanvasSize(width, height); 
+     thisContext._setCanvasSize(width, height);
     }
   }
-  
+
   thisContext._setCanvasSize = (width, height) => {
     thisContext.height = height;
     thisContext.width = width;
@@ -158,17 +158,17 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
     thisContext.maxX = thisContext.cameraX + thisContext.width / 2;
     thisContext.minY = thisContext.cameraY - thisContext.height / 2;
     thisContext.maxY = thisContext.cameraY + thisContext.height / 2;
-    
+
     thisContext.ready(() => {
       thisContext._spriteCanvas.width = thisContext.width;
       thisContext._spriteCanvas.height = thisContext.height;
-      
+
       // when you change the canvas size, you have to copy the pen data onto the newly-sized canvas
       var penData = thisContext._penContext.getImageData(0, 0, width, height);
       thisContext._penCanvas.width = thisContext.width;
       thisContext._penCanvas.height = thisContext.height;
       thisContext._penContext.putImageData(penData, 0, 0);
-      
+
       thisContext._backdropDiv.style.width = thisContext.width;
       thisContext._backdropDiv.style.height = thisContext.height;
       setTimeout(thisContext._renderBackdrop);
@@ -180,35 +180,35 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
       thisContext._setCanvasSize(window.innerWidth,  window.innerHeight);
     }
   });
-  
+
   thisContext.bounds = () => {
     return {left: thisContext.minX, right: thisContext.maxX, bottom: thisContext.minY, top: thisContext.maxY}
   };
-  
+
   thisContext.randomX = function() {
     if (arguments.length > 0) { throw new TypeError("randomX() requires no inputs."); }
     return Woof.prototype.random(thisContext.minX, thisContext.maxX);
   };
-  
+
   thisContext.randomY = function() {
     if (arguments.length > 0) { throw new TypeError("randomY() requires no inputs."); }
     return Woof.prototype.random(thisContext.minY, thisContext.maxY);
   };
-  
+
   thisContext._renderBackdrop = () => {
     var {size, type, url, color, repeat} = thisContext.backdrop;
-    
+
     thisContext._backdropDiv.style.background = (type === 'url' ) ? `url('${url}')` : color
     thisContext._backdropDiv.style.backgroundRepeat = repeat;
     thisContext._backdropDiv.style.backgroundSize = size;
   };
-  
+
 
   thisContext.setBackdropURL = function(url){
     if (typeof url != "string") { throw new TypeError("setBackDropUrl(url) requires one string input."); }
     thisContext.backdrop.url =  url;
     thisContext.backdrop.type = 'url'
-    
+
     var img = new BrowserImage()
     img.onload = function(){
        thisContext.ready(thisContext._renderBackdrop);
@@ -221,7 +221,7 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
     }
     img.src = url;
   };
-  
+
   thisContext.setBackdropStyle = function(coverOrContain){
     coverOrContain = coverOrContain.split(' ')
     if(coverOrContain.length > 2){
@@ -229,7 +229,7 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
     }
     //match each part of the input, maybe it looks like '50% 50px' or 'auto auto' or just '3em'
     //regex translates to: the word cover on its own, the word contain on its own, at least one digit followed by 'em', at least on digit followed by 'px', at least one digit followed by '%'
-    let acceptableSizes = [/^cover$/,/^contain$/,/^\d+em$/,/^\d+px$/,/^\d+%$/,/^auto$/] 
+    let acceptableSizes = [/^cover$/,/^contain$/,/^\d+em$/,/^\d+px$/,/^\d+%$/,/^auto$/]
 
     if(!coverOrContain.every(prop => acceptableSizes.some(each => prop.match(each)))){
       throw Error("setBackdropStyle only understands sizes such as 5em, 50px, 50% and the keywords cover, contain, and auto")
@@ -246,14 +246,14 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
     thisContext.backdrop.repeat = repeatString;
     thisContext.ready(thisContext._renderBackdrop);
   }
-  
+
   thisContext.setBackdropColor = function(color){
     if (typeof color != "string") { throw new TypeError("setBackdropColor(color) takes one string input."); }
     thisContext.backdrop.color = color;
     thisContext.backdrop.type = 'color'
     thisContext.ready(thisContext._renderBackdrop);
   };
-  
+
   // WARNING - freeze is notoriously difficult to get right
   // Any change you make to it will have unintended consequenses.
   // Only change this code if absolutely neccesary and after rigerous testing.
@@ -271,20 +271,20 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
     if (arguments.length > 0) { throw new TypeError("defrost() requires no inputs."); }
     thisContext.stopped = false;
   };
-  
+
   // the HTML canvas puts (0, 0) in the top-left corner of the screen
   // the x-axis works as you'd expect, with x increasing as you move left-to-right
   // the y-axis works counter-intuitively, decreasing as you move up, and increasing as you move down
-  // translateToCenter maps coordinates from the HTML canvas to the Scratch-world where (0,0) is in the center of the screen  
+  // translateToCenter maps coordinates from the HTML canvas to the Scratch-world where (0,0) is in the center of the screen
   thisContext.translateToCenter = (x, y) => {
     return [(x - (thisContext.width / 2) + thisContext.cameraX) - thisContext._spriteCanvas.offsetLeft, (((thisContext.height / 2) - y) + thisContext.cameraY) + thisContext._spriteCanvas.offsetTop];
   };
-  // translateToCanvas (the opposite of translateToCenter) maps coordinates from the Scratch-world to the HTML canvas world with (0,0) in the top-left  
+  // translateToCanvas (the opposite of translateToCenter) maps coordinates from the Scratch-world to the HTML canvas world with (0,0) in the top-left
   thisContext.translateToCanvas = (x, y) => {
     return [(x + thisContext.maxX) - thisContext._spriteCanvas.offsetLeft, (thisContext.maxY - y) + thisContext._spriteCanvas.offsetTop];
   };
-  
-  
+
+
   // Below is where we handle mouse and keyboard events
   // The strategy is:
   // 1. Listen to all mouse and keyboard events
@@ -298,12 +298,12 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
   thisContext.mouseXSpeed = 0;
   thisContext.mouseYSpeed = 0;
   thisContext.keysDown = [];
-  
+
   //modify keysDown.includes() to not be case-sensitive and to accept more user input possibilities
   thisContext.keysDown.oldIncludes = thisContext.keysDown.includes
   thisContext.keysDown.includes = function(arg) {
     var key = arg.toUpperCase()
-    
+
     if (key === "UP ARROW") {
       key = "UP"
     }
@@ -340,10 +340,10 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
     else if (key === "CMD" || key === "WINDOWS" || key === "SEARCH") {
       key = "COMMAND"
     }
-    
+
     return this.oldIncludes(key)
   }
-  
+
   thisContext.ready(() => {
     thisContext._spriteCanvas.addEventListener("mousedown", (event) => {
       thisContext.mouseDown = true;
@@ -364,7 +364,7 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
       // touch events mirror mouse events
       setTimeout(() => {thisContext.mouseDown = false;}, 0);
     });
-    thisContext._spriteCanvas.addEventListener("mousemove", (event) => { 
+    thisContext._spriteCanvas.addEventListener("mousemove", (event) => {
       [thisContext.mouseX, thisContext.mouseY] = thisContext.translateToCenter(event.clientX, event.clientY);
     });
     thisContext._spriteCanvas.addEventListener("touchmove", event => {
@@ -374,7 +374,7 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
     document.body.addEventListener("keydown", event => {
       var key = Woof.prototype.keyCodeToString(event.keyCode);
       if (!thisContext.keysDown.includes(key)){
-       thisContext.keysDown.push(key); 
+       thisContext.keysDown.push(key);
       }
     });
     document.body.addEventListener("keyup", event => {
@@ -383,7 +383,7 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
         thisContext.keysDown.splice(thisContext.keysDown.indexOf(key), 1);
       }
     });
-    
+
     thisContext._onMouseMoveHandler = event => {
       var [mouseX, mouseY] = thisContext.translateToCenter(event.clientX, event.clientY);
       thisContext._onMouseMoves.forEach((func) => {func(mouseX, mouseY)});
@@ -399,7 +399,7 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
       thisContext._onMouseUps.forEach((func) => {func(mouseX, mouseY)});
     };
     thisContext._spriteCanvas.addEventListener("mouseup", thisContext._onMouseUpHandler);
-    
+
     thisContext._onKeyDownHandler = event => {
       var key = Woof.prototype.keyCodeToString(event.keyCode);
       thisContext._onKeyDowns.forEach((func) => {func(key)});
@@ -410,34 +410,34 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
       thisContext._onKeyUps.forEach((func) => {func(key)});
     };
     document.body.addEventListener("keyup", thisContext._onKeyUpHandler);
-    
+
   })
   // The following methods is where we keep track of user's events
   thisContext._onMouseMoves = [];
   thisContext.onMouseMove = func => {
     if (typeof func != "function") { throw new TypeError("onMouseMove(function) requires one function input."); }
-    thisContext._onMouseMoves.push(func); 
+    thisContext._onMouseMoves.push(func);
   };
   thisContext._onMouseDowns = [];
   thisContext.onMouseDown = func => {
     if (typeof func != "function") { throw new TypeError("onMouseDown(function) requires one function input."); }
-    thisContext._onMouseDowns.push(func); 
+    thisContext._onMouseDowns.push(func);
   };
   thisContext._onMouseUps = [];
   thisContext.onMouseUp = func => {
     if (typeof func != "function") { throw new TypeError("onMouseUp(function) requires one function input."); }
-    thisContext._onMouseUps.push(func); 
+    thisContext._onMouseUps.push(func);
   };
-  
+
   thisContext._onKeyDowns = [];
   thisContext.onKeyDown = func => {
     if (typeof func != "function") { throw new TypeError("onKeyDown(function) requires one function input."); }
-    thisContext._onKeyDowns.push(func); 
+    thisContext._onKeyDowns.push(func);
   };
   thisContext._onKeyUps = [];
   thisContext.onKeyUp = func => {
     if (typeof func != "function") { throw new TypeError("onKeyUp(function) requires one function input."); }
-    thisContext._onKeyUps.push(func); 
+    thisContext._onKeyUps.push(func);
   };
 
   thisContext._everys = [];
@@ -446,7 +446,7 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
     // if the user inputs something like () => random(1, 10) for the time parameter, re-evaluate the function every time it's run, and update the frequency
     if (typeof time == "function") {
       if (typeof time() != "number") { throw new TypeError("every(time, units, function) requires a time function that returns a number")}
-      
+
       // create a variable that will be used to store the value of the previous setTimeout()
       var theFunction = function(timeoutValue) {
         var ms = Woof.prototype.unitsToMiliseconds(time(), units);
@@ -470,19 +470,19 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
       thisContext._everys.push(setInterval(func, milis));
     }
   };
-  
+
   // thisContext.every = (time, units, func) => {
   //   var milis = Woof.prototype.unitsToMiliseconds(time, units);
   //   if (typeof func != "function" || typeof time != "number") { throw new TypeError("every(time, units, function) requires a number, unit and function input."); }
   //   func();
   //   thisContext._everys.push(setInterval(func, milis));
   // };
-  
+
   thisContext.forever = (func) => {
     if (typeof func != "function") { throw new TypeError("forever(function) requires one function input."); }
     thisContext.repeatUntil(() => false, func);
   };
-  
+
   thisContext.when = (condition, func) => {
     if (typeof func != "function" || typeof condition != "function") { throw new TypeError("when(conditionFunction, function) requires two function inputs."); }
     thisContext.forever(() => {
@@ -498,7 +498,7 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
       };
     });
   };
-  
+
   // Woof repeats differ from a traditional JavaScript while or for-loop:
   // 1. JavaScript loops are synchronous, and Woof loops are asynchronous
   // 2. JavaScript loops are wicked fast, and Woof loops happen as fast as Woof forevers (about 30 times per second, in line with 30fps) which allow users to animate with them
@@ -517,29 +517,29 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
     });
     thisContext._repeats = thisContext._repeats.filter(repeat => {return !repeat.done});
   };
-    
+
   // thisContext._afters isn't read from as of commit 967, and only contains the IDs returned by setTimeout()
   // These IDs could conceivably be used by clearTimeout() to cancel things in the future,
   //   but could get cleaned up (though this is low priority)
-  thisContext._afters = []; 
+  thisContext._afters = [];
   thisContext.after = (time, units, func) => {
     var milis = Woof.prototype.unitsToMiliseconds(time, units);
     if (typeof func != "function" || typeof time != "number") { throw new TypeError("after(time, units, function) requires a number, unit and function input."); }
     thisContext._afters.push(setTimeout(func, milis));
   };
-  
+
   thisContext._renderSprites = () => {
     thisContext._spriteContext.clearRect(0, 0, thisContext.width, thisContext.height);
     thisContext.sprites.forEach((sprite) => {
       sprite._render(thisContext._spriteContext);
     });
   };
-  
+
   thisContext.clearPen = function() {
     if (arguments.length > 0) { throw new TypeError("clearPen() requires no inputs."); }
     thisContext._penContext.clearRect(0, 0, thisContext.width, thisContext.height);
   }
-  
+
   thisContext._calculateMouseSpeed = () => {
     thisContext.mouseXSpeed = thisContext.mouseX - thisContext.pMouseX;
     thisContext.mouseYSpeed = thisContext.mouseY - thisContext.pMouseY;
@@ -566,7 +566,7 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
     thisContext._renderSprites();
   };
   thisContext.ready(thisContext._render);
-  
+
   thisContext.collider = () => {
     return new SAT.Polygon(new SAT.Vector(), [
     new SAT.Vector(-thisContext.width/2, thisContext.height/2),
@@ -576,7 +576,7 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
   ]);
 }
 
-  
+
 };
 
 Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, rotationStyle = "ROTATE", showing = true, penColor = "black", penWidth = 1, penDown = false, showCollider = false, brightness = 100} = {}) {
@@ -587,10 +587,10 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
       throw new TypeError("When not in global mode, you must supply your {project: project} to each Sprite.")
     }
   } else {
-    this.project = project.global ? window : project;  
+    this.project = project.global ? window : project;
   }
   this.project.sprites.push(this);
-  
+
   Object.defineProperty(this, 'x', {
     get: function() {
       return this.privateX;
@@ -601,7 +601,7 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
       this.project.ready(this.trackPen); // any change to x, is tracked for the pen
     }
   });
-  
+
   Object.defineProperty(this, 'y', {
     get: function() {
       return this.privateY;
@@ -628,7 +628,7 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
   this.toJSON = () => {
     return {x: this.x, y: this.y, angle: this.angle, rotationStyle: this.rotationStyle, showing: this.showing, penDown: this._penDown, penColor: this.penColor, penWidth: this.penWidth, deleted: this.deleted};
   };
-  
+
   [this.lastX, this.lastY] = [this.x, this.y];
   this.trackPen = () => {
     if (this._penDown) {
@@ -646,7 +646,7 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
     }
     [this.lastX, this.lastY] = [this.x, this.y];
   };
-  
+
   // SAT collision for touching, works with rotated sprites
   this.rotatedVector = function(x, y){
     var rotatedX;
@@ -662,12 +662,12 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
     }
     return new SAT.Vector(rotatedX, rotatedY);
   }
-  
+
   // Makes collider vector vertices relative to the point 'pos'
   this.translatedVector = function(pos, v){
-    return new SAT.Vector(v.x - pos.x, v.y - pos.y); 
+    return new SAT.Vector(v.x - pos.x, v.y - pos.y);
   }
-  
+
   // Creates collider from vector vertices
   this.collider = function() {
     // If sprite is a circle, create circle collider
@@ -693,19 +693,19 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
       return new SAT.Polygon(pos, [v1, v2, v3, v4])
     }
   }
-   
+
   // for debugging purposes, this function displays the collider on the screen according to type of sprite
   this._renderCollider = function(context){
     var collider = this.collider()
-    
+
     context.save();
     context.beginPath();
-    
+
     if (collider.constructor.name == "Circle") {
       context.arc(...this.project.translateToCanvas(collider.pos.x, collider.pos.y), collider.r, 0, 2*Math.PI);
     } else {
     context.moveTo(...this.project.translateToCanvas(collider.calcPoints[0].x + collider.pos.x, collider.calcPoints[0].y + collider.pos.y));
-    
+
     for (var i = 1; i < this.collider().edges.length; i++) {
         context.lineTo(...this.project.translateToCanvas(collider.calcPoints[i].x + collider.pos.x, collider.calcPoints[i].y + collider.pos.y));
     }
@@ -715,18 +715,18 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
     context.strokeStyle = "green";
     context.lineWidth = 4;
     context.stroke();
-    
+
     context.restore();
   }
 
   this._render = function(context) {
     if (this.showing && !this.deleted && this.overlap(this.project.bounds())) {
       if (this.showCollider) { this._renderCollider(context); }
-      
+
       context.save();
       context.translate(Math.round(this.canvasX()), Math.round(this.canvasY()));
       context.globalAlpha = this.brightness / 100;
-      
+
       if (this.rotationStyle == "ROTATE") {
         context.rotate(-this.radians());
       } else if (this.rotationStyle == "NO ROTATE"){
@@ -738,12 +738,12 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
           // no rotate
         }
       }
-      
+
       this.render(context);
       context.restore();
     }
   };
-  
+
   this.distanceTo = function distanceTo(xGiven, yGiven){
     if (arguments.length === 1) {
       if (typeof xGiven == "object"){
@@ -752,16 +752,16 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
         return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
       } else {
         throw new TypeError("distanceTo(sprite) requires one sprite input.")
-      } 
+      }
     } else if (typeof xGiven != "number" || typeof yGiven != "number") {
-      throw new TypeError("distanceTo(x,y) requires two number inputs."); 
+      throw new TypeError("distanceTo(x,y) requires two number inputs.");
     } else {
       var x = this.x - xGiven;
       var y = this.y - yGiven;
       return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
     }
   };
-  
+
   this.move = function(steps = 1){
     if (typeof steps != "number") { throw new TypeError("move(steps) requires one number input."); }
     // we modify privateX and privateY here before tracking pen so that the pen thinks they changed at the same time
@@ -769,7 +769,7 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
     this.privateY += steps * Math.sin(this.radians());
     this.project.ready(this.trackPen);
   };
-  
+
   this.setRotationStyle = style => {
     if (style == "ROTATE"){
       this.rotationStyle = "ROTATE";
@@ -781,41 +781,41 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
       throw TypeError("Unrecognized rotation style: " + style);
     }
   };
-  
+
   this.radians = () => {
     return this.angle * Math.PI / 180;
   };
-  
+
   this.canvasX = () => {
     return (this.x - this.project.cameraX) + (this.project.width / 2) ;
   };
-  
+
   this.canvasY = () => {
     return (this.project.height / 2) - (this.y - this.project.cameraY);
   };
-  
+
   this.bounds = () => {
     var halfWidth = (this.width / 2);
     var halfHeight = (this.height / 2);
-    
+
     var left = this.x - halfWidth;
     var right = this.x + halfWidth;
     var bottom = this.y - halfHeight;
     var top = this.y + halfHeight;
     return {left: left, right: right, top: top, bottom: bottom};
   };
-  
+
   this.collisionCanvas = document.createElement('canvas');
   this.collisionContext = this.collisionCanvas.getContext('2d');
 
   this.touching = (sprite, precise) => {
     if (!(typeof sprite == "object")) { throw new TypeError("touching(sprite) requires one sprite input."); }
-      
+
     if (this.deleted || !this.showing) { return false; }
     if (sprite.deleted || !sprite.showing) { return false; }
-    
+
     if (!detectCollision(this.collider(), sprite.collider())) { return false; }
-    
+
     if (!precise) { return true; }
 
     // this code scans the pixels of both sprites to see if they are touching
@@ -826,14 +826,14 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
     var top = Math.max(r1.top, r2.top);
     var right = Math.max(r1.right, r2.right);
     var bottom = Math.min(r1.bottom, r2.bottom);
-    
+
     this.collisionCanvas.width = this.project.width;
     this.collisionCanvas.height = this.project.height;
 
     this._render(this.collisionContext);
     this.collisionContext.globalCompositeOperation = 'source-in';
     sprite._render(this.collisionContext);
-    var [canvasLeft, canvasTop] = this.project.translateToCanvas(left, top) 
+    var [canvasLeft, canvasTop] = this.project.translateToCanvas(left, top)
 
     try {
       var data = this.collisionContext.getImageData(canvasLeft, canvasTop, right - left, top - bottom).data;
@@ -844,7 +844,7 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
         return true;
       }
     }
-  
+
     var length = (right - left) * (top - bottom) * 4;
     for (var j = 0; j < length; j += 4) {
       if (data[j + 3]) {
@@ -852,25 +852,25 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
       }
     }
     return false;
-    
+
   };
-  
+
   this.overlap = ({left, right, top, bottom}) => {
-  
+
     if (this.collider().constructor.name == "Circle") {
       return SAT.testPolygonCircle(this.project.collider(), this.collider(),  new SAT.Response())
     }
     return SAT.testPolygonPolygon(this.project.collider(), this.collider(), new SAT.Response())
-    
+
   }
-  
+
   this.over = (x, y) => {
     if (typeof x != "number" || typeof y != "number") { throw new TypeError("over(x, y) requires two number inputs."); }
     if (this.deleted || !this.showing) { return false; }
-    
+
     var collider = this.collider();
-    
-    // If shape is an oval, find point in oval. SAT.js does not include this in library. 
+
+    // If shape is an oval, find point in oval. SAT.js does not include this in library.
     // This is more exact than a collider polygon drawn around it.
     if (this.type == "oval") {
       return Math.pow(x-this.x, 2) / Math.pow(this.width/2, 2) + Math.pow(y-this.y, 2) / Math.pow(this.height/2, 2) <= 1;
@@ -884,43 +884,43 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
       return SAT.pointInPolygon(new SAT.Vector(x,y), this.collider())
     }
   };
-  
+
   Object.defineProperty(this, 'mouseOver', {
     get: function() {
       if (this.deleted || !this.showing) { return false; }
       return this.over(this.project.mouseX, this.project.mouseY);
     }
   });
-  
+
   Object.defineProperty(this, 'mouseDown', {
     get: function() {
       if (this.deleted || !this.showing) { return false; }
       return this.mouseOver && this.project.mouseDown;
     }
   });
-  
+
   this.turnLeft = (degrees = 1) => {
     if (typeof degrees != "number") { throw new TypeError("turnLeft(degrees) requires one number input."); }
     this.angle += degrees;
   };
-  
+
   this.turnRight = (degrees = 1) => {
     if (typeof degrees != "number") { throw new TypeError("turnRight(degrees) requires one number input."); }
     this.angle -= degrees;
   };
-  
+
   this.sendToBack = function() {
     if (arguments.length > 0) { throw new TypeError("sendToBack() requires no inputs."); }
     var sprites = this.project.sprites;
     sprites.splice(0, 0, sprites.splice(sprites.indexOf(this), 1)[0]);
   };
-  
+
   this.sendToFront = function() {
     if (arguments.length > 0) { throw new TypeError("sendToFront() requires no inputs."); }
     var sprites = this.project.sprites;
     sprites.splice(sprites.length, 0, sprites.splice(sprites.indexOf(this), 1)[0]);
   };
-  
+
   Object.defineProperty(this, 'penDown', {
     get: () => {
       return () => { this._penDown = true; };
@@ -933,7 +933,7 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
 
   this.show = () => { this.showing = true; }
   this.hide = () => { this.showing = false; }
-  
+
   this.pointTowards = function(x2,y2) {
     if (arguments.length === 1) {
       if (typeof x2 == "object"){
@@ -941,19 +941,19 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
         this.angle = Math.atan2(x2.y - this.y, x2.x - this.x) * 180 / Math.PI;
       } else {
         throw new TypeError("pointTowards(sprite) requires one sprite input.")
-      } 
+      }
     } else if (typeof x2 != "number" || typeof y2 != "number") {
-      throw new TypeError("pointTowards(x, y) requires two number inputs."); 
+      throw new TypeError("pointTowards(x, y) requires two number inputs.");
     } else {
       this.angle = Math.atan2(y2 - this.y, x2 - this.x) * 180 / Math.PI;
     }
   };
-  
+
   // track user events specfically for this sprite
   this._onMouseDowns = [];
   this.onMouseDown = func => {
     if (typeof func != "function") { throw new TypeError("onMouseDown(function) requires one function input."); }
-    this._onMouseDowns.push(func); 
+    this._onMouseDowns.push(func);
   };
   this._onMouseDownHandler = event => {
     var [mouseX, mouseY] = this.project.translateToCenter(event.clientX, event.clientY);
@@ -964,7 +964,7 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
   this._onMouseUps = [];
   this.onMouseUp = func => {
     if (typeof func != "function") { throw new TypeError("onMouseUp(function) requires one function input."); }
-    this._onMouseUps.push(func); 
+    this._onMouseUps.push(func);
   };
   this._onMouseUpHandler = event => {
     var [mouseX, mouseY] = this.project.translateToCenter(event.clientX, event.clientY);
@@ -976,7 +976,7 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
     this.project._spriteCanvas.addEventListener("mousedown", this._onMouseDownHandler);
     this.project._spriteCanvas.addEventListener("mouseup", this._onMouseUpHandler);
   });
-  
+
   this.delete = function() {
     if (arguments.length > 0) { throw new TypeError("delete() requires no inputs."); }
     if (this.deleted) { return; }
@@ -999,7 +999,7 @@ Woof.prototype.Text = function({project = undefined, text = "Text", size = 12, c
   // TODO remove text align or make the collider take it into account
   // currently, the collider doesn't know about textAlign so things can be quite inaccurate
   this.textAlign = textAlign;
-  
+
   Object.defineProperty(this, 'width', {
     get: function() {
       var width;
@@ -1012,7 +1012,7 @@ Woof.prototype.Text = function({project = undefined, text = "Text", size = 12, c
       throw new TypeError("You cannot modify the width of Text. You can only change its size.");
     }
   });
-  
+
   Object.defineProperty(this, 'height', {
     get: function() {
       var height;
@@ -1027,20 +1027,20 @@ Woof.prototype.Text = function({project = undefined, text = "Text", size = 12, c
       throw new TypeError("You cannot modify the height of Text. You can only change its size.");
     }
   });
-  
+
   // this function saves us from copy-and-pasing the font declarations all over
   this._applyInContext = (func) => {
     this.project._spriteContext.save();
-  
+
     this.project._spriteContext.font = this.size + "px " + this.fontFamily;
     this.project._spriteContext.fillStyle = this.color;
     this.project._spriteContext.textAlign = this.textAlign;
-    
+
     func();
-    
+
     this.project._spriteContext.restore();
   };
-  
+
   this.textEval = () => {
     if (typeof(this.text) == "function"){
       // if we get a functions for text, evaluate it every time we are asked to render the text
@@ -1049,7 +1049,7 @@ Woof.prototype.Text = function({project = undefined, text = "Text", size = 12, c
       return this.text;
     }
   }
-  
+
   this.render = (context) => {
     this._applyInContext(() => {
       context.fillText(this.textEval(), 0, this.height / 2);
@@ -1062,7 +1062,7 @@ Woof.prototype.Circle = function({project = undefined, radius = 10, color = "bla
   Woof.prototype.Sprite.call(this, arguments[0]);
   this.radius = Math.abs(radius);
   this.color = color;
-  
+
   Object.defineProperty(this, 'width', {
     get: function() {
       return 2 * this.radius;
@@ -1071,7 +1071,7 @@ Woof.prototype.Circle = function({project = undefined, radius = 10, color = "bla
       throw new TypeError("You cannot modify the width of Circle. You can only change its radius.");
     }
   });
-  
+
   Object.defineProperty(this, 'height', {
     get: function() {
       return 2 * this.radius;
@@ -1079,8 +1079,8 @@ Woof.prototype.Circle = function({project = undefined, radius = 10, color = "bla
     set: function(value) {
       throw new TypeError("You cannot modify the height of Circle. You can only change its radius.");
     }
-  });  
-  
+  });
+
   this.render = (context) => {
     context.beginPath();
     context.arc(0, 0, this.radius, 0, 2*Math.PI);
@@ -1095,7 +1095,7 @@ Woof.prototype.Rectangle = function({project = undefined, height = 10, width = 1
   this.rectangleHeight = Math.abs(height);
   this.rectangleWidth = Math.abs(width);
   this.color = color;
-  
+
   Object.defineProperty(this, 'width', {
     get: function() {
       return this.rectangleWidth;
@@ -1105,7 +1105,7 @@ Woof.prototype.Rectangle = function({project = undefined, height = 10, width = 1
       this.rectangleWidth = value;
     }
   });
-  
+
   Object.defineProperty(this, 'height', {
     get: function() {
       return this.rectangleHeight;
@@ -1114,8 +1114,8 @@ Woof.prototype.Rectangle = function({project = undefined, height = 10, width = 1
       if (typeof value != "number") { throw new TypeError("rectangle.height can only be set to a number."); }
       this.rectangleHeight = value;
     }
-  });  
-  
+  });
+
   this.render = (context) => {
     context.fillStyle=this.color;
     context.fillRect(-this.width / 2, -this.height / 2, this.width, this.height);
@@ -1128,7 +1128,7 @@ Woof.prototype.Oval = function({project = undefined, height = 50, width = 20, co
   this.ovalHeight = Math.abs(height);
   this.ovalWidth = Math.abs(width);
   this.color = color;
-  
+
   Object.defineProperty(this, 'width', {
     get: function() {
       return this.ovalWidth;
@@ -1138,7 +1138,7 @@ Woof.prototype.Oval = function({project = undefined, height = 50, width = 20, co
       this.ovalWidth = value;
     }
   });
-  
+
   Object.defineProperty(this, 'height', {
     get: function() {
       return this.ovalHeight;
@@ -1147,8 +1147,8 @@ Woof.prototype.Oval = function({project = undefined, height = 50, width = 20, co
       if (typeof value != "number") { throw new TypeError("oval.height can only be set to a number."); }
       this.ovalHeight = value;
     }
-  });  
-  
+  });
+
   this.render = (context) => {
     context.fillStyle=this.color;
     context.beginPath();
@@ -1163,7 +1163,7 @@ Woof.prototype.Polygon = function({project = undefined, sides = 3, length = 100,
   this.polygonSides = Math.abs(sides);
   this.polygonLength = Math.abs(length);
   this.color = color;
-  
+
   Object.defineProperty(this, 'sides', {
     get: function() {
       return this.polygonSides;
@@ -1173,7 +1173,7 @@ Woof.prototype.Polygon = function({project = undefined, sides = 3, length = 100,
       this.polygonSides = sides;
     }
   });
-  
+
   Object.defineProperty(this, 'length', {
     get: function() {
       return this.polygonLength;
@@ -1182,8 +1182,8 @@ Woof.prototype.Polygon = function({project = undefined, sides = 3, length = 100,
       if (typeof value != "number") { throw new TypeError("polygon.length can only be set to a number."); }
       this.polygonLength = value;
     }
-  });  
-  
+  });
+
   this.render = (context) => {
     context.fillStyle=this.color;
     context.beginPath();
@@ -1203,7 +1203,7 @@ Woof.prototype.Line = function({project = undefined, width = 1, x1 = 10, y1 = 10
   this.y1 = y1;
   this.color = color;
   this.lineWidth = Math.abs(width);
-  
+
   Object.defineProperty(this, 'width', {
     get: function() {
       return this.lineWidth;
@@ -1213,17 +1213,17 @@ Woof.prototype.Line = function({project = undefined, width = 1, x1 = 10, y1 = 10
       this.lineWidth = value;
     }
   });
-  
+
   // Sets height property to hypotenuse of triangle created from x and x1 and y and y1 - this is the length of the 'line'
   Object.defineProperty(this, 'height', {
     get: function() {
       return Math.sqrt((Math.pow((this.x - this.x1), 2)) + (Math.pow((this.y - this.y1), 2)));
     },
     set: function(value) {
-      throw new TypeError("You cannot set line.height directly. You can only modify line.height by changing the length of your line through moving its points."); 
+      throw new TypeError("You cannot set line.height directly. You can only modify line.height by changing the length of your line through moving its points.");
     }
-  }); 
-  
+  });
+
   // Rotates rectangle by the angle between x1 and x and y1 and y
   // Add 90 to the angle because "height" and "width" are essentially reversed in comparison to a rectangle sprite
   Object.defineProperty(this, 'angle', {
@@ -1231,18 +1231,18 @@ Woof.prototype.Line = function({project = undefined, width = 1, x1 = 10, y1 = 10
       return (Math.atan2(-this.x1 + this.x, this.y1 - this.y) * 180 / Math.PI) + 90;
     },
     set: function(value) {
-      throw new TypeError("You cannot set line.angle directly. You can only modify line.angle by changing the position of the line's points."); 
+      throw new TypeError("You cannot set line.angle directly. You can only modify line.angle by changing the position of the line's points.");
     }
-  }); 
-  
+  });
+
   // using move() with lines is tricky, so throw an error (should probably be fixed at some point)
   this.move = function() { throw new TypeError("You cannot move lines with move() unfortunately! Change the x, y, x1, and y1 values instead."); };
-  
+
   // subtract 90 from the angle of a line before calculating radians (undoing the correction in line.angle above)
   this.radians = function() {
     return (this.angle - 90) * Math.PI / 180;
   };
-  
+
   this.render = (context) => {
     context.fillStyle=this.color;
     context.fillRect(-this.width / 2, -this.height, this.width, this.height);
@@ -1254,8 +1254,8 @@ Woof.prototype.Image = function({project = undefined, url = "./images/SMJjVCL.pn
   Woof.prototype.Sprite.call(this, arguments[0]);
   this.imageHeight = Math.abs(height);
   this.imageWidth = Math.abs(width);
-  
-  this.setImageURL = function(url){    
+
+  this.setImageURL = function(url){
     this.image = new window.BrowserImage();
     this.image.src = url;
     this.image.onerror = function(e){
@@ -1276,7 +1276,7 @@ Woof.prototype.Image = function({project = undefined, url = "./images/SMJjVCL.pn
       this.imageWidth = value;
     }
   });
-  
+
   Object.defineProperty(this, 'height', {
     get: function() {
       return this.imageHeight || this.image.height;
@@ -1285,8 +1285,8 @@ Woof.prototype.Image = function({project = undefined, url = "./images/SMJjVCL.pn
       if (typeof value != "number") { throw new TypeError("image.width can only be set to a number."); }
       this.imageHeight = value;
     }
-  }); 
-  
+  });
+
   this.render = (context) => {
     // checking if the image is loaded and not broken via https://stackoverflow.com/a/34726863/2180575
     if (this.image.complete && this.image.naturalHeight !== 0) {
@@ -1298,7 +1298,7 @@ Woof.prototype.Image = function({project = undefined, url = "./images/SMJjVCL.pn
 Woof.prototype.Sound = function({url = '', loop = "false", volume = "normal", speed = "normal"} = {}) {
 
   this.isPlaying = false
-    
+
   // Create new audio object with given url
   this.audio = new Audio(url);
   this.audio.loop = loop;
@@ -1316,7 +1316,7 @@ Woof.prototype.Sound = function({url = '', loop = "false", volume = "normal", sp
       normal: 1
     }
   }
-  
+
   // Convert given value to corresponding audio object value
   // Throw error if given value not found in allowed values
   const soundVolumeToAudioVolume = val => {
@@ -1343,7 +1343,7 @@ Woof.prototype.Sound = function({url = '', loop = "false", volume = "normal", sp
       throw Error(val + " is not an accepted value for volume.")
     }
   }
-  
+
   const soundSpeedToAudioSpeed = val => {
     if (typeof val == "number") {
       if (val >= 0.5 && val <= 2) {
@@ -1368,8 +1368,8 @@ Woof.prototype.Sound = function({url = '', loop = "false", volume = "normal", sp
       throw Error(val + " is not an accepted value for speed.")
     }
   }
-  
-  
+
+
   this.audio.playbackRate = soundSpeedToAudioSpeed(speed);
   this.audio.volume = soundVolumeToAudioVolume(volume);
 
@@ -1382,7 +1382,7 @@ Woof.prototype.Sound = function({url = '', loop = "false", volume = "normal", sp
       this.audio.playbackRate = soundSpeedToAudioSpeed(value);
     }
   });
-  
+
   // Allow user to get and set volume
   Object.defineProperty(this, 'volume', {
     get: function() {
@@ -1392,7 +1392,7 @@ Woof.prototype.Sound = function({url = '', loop = "false", volume = "normal", sp
       this.audio.volume = soundVolumeToAudioVolume(value);
     }
   });
-  
+
   // Allow user to get and set loop
   Object.defineProperty(this, 'loop', {
     get: function() {
@@ -1400,7 +1400,7 @@ Woof.prototype.Sound = function({url = '', loop = "false", volume = "normal", sp
     },
     set: function(value) {
       if (typeof value != "boolean") {
-        throw new Error("Loop must be set to true or false."); 
+        throw new Error("Loop must be set to true or false.");
       }
       this.audio.loop = value;
     }
@@ -1415,7 +1415,7 @@ Woof.prototype.Sound = function({url = '', loop = "false", volume = "normal", sp
       throw new TypeError("You can't set the duration of a sound!");
     }
   });
-  
+
   // allow the user to get and set the time
   Object.defineProperty(this, 'currentTime', {
     get: function() {
@@ -1437,11 +1437,11 @@ Woof.prototype.Sound = function({url = '', loop = "false", volume = "normal", sp
     this.audio.play();
     this.isPlaying = true;
   };
-  
+
   // Stop the sound
   this.stopPlaying = function() {
     this.audio.pause();
-    this.isPlaying = false;  
+    this.isPlaying = false;
     this.currentTime = 0
   };
 
@@ -1450,7 +1450,7 @@ Woof.prototype.Sound = function({url = '', loop = "false", volume = "normal", sp
     this.isPlaying = false;
     this.audio.pause();
   };
-  
+
   // Check if the sound has never been played
   this.neverPlayed = function() {
     return this.audio.played.length === 0;
@@ -1472,7 +1472,7 @@ Woof.prototype.Repeat = function(times, func, after) {
   this.curTimes = 0;
   this.times = Math.floor(times);
   this.done = false;
-  
+
   this.next = () => {
     if (this.done){
       return;
@@ -1497,7 +1497,7 @@ Woof.prototype.Repeat = function(times, func, after) {
     }
   };
 };
-  
+
 Woof.prototype.RepeatUntil = function(condition, func, after){
   // TODO if (typeof condition !== "string") { throw Error("You must give repeatUntil a string condition in quotes. You gave it: " + condition); }
   this.func = func;
@@ -1505,7 +1505,7 @@ Woof.prototype.RepeatUntil = function(condition, func, after){
   // the number of times it's been repeated. Only gets used if the functions func or after have an argument
   this.condition = condition;
   this.done = false;
-  
+
   this.next = () => {
     if (this.done){
       return;
@@ -1517,7 +1517,7 @@ Woof.prototype.RepeatUntil = function(condition, func, after){
       console.error("Error in Repeat Until condition");
       throw e;
     }
-    
+
     if (cond){
       this.done = true;
       if (after) {
@@ -1530,7 +1530,7 @@ Woof.prototype.RepeatUntil = function(condition, func, after){
       return;
     } else {
       // increment even if func doesn't expect argument in case after does
-      this.curTimes++; 
+      this.curTimes++;
       if (this.func.length) {
         this.func(this.curTimes);
       } else {
@@ -1641,15 +1641,15 @@ Woof.prototype.unitsToMiliseconds = function(time, units) {
 
 Woof.prototype.random = function(a, b) {
   if (typeof a != "number" || typeof b != "number") { throw new TypeError("random(a, b) requires two number inputs."); }
-  
+
   var min = Math.min(a, b),
     max = Math.max(a, b);
   var rand = Math.random() * (max - min) + min;
   // this will return the number of decimals, and if it's an integer, it will return 0
   // source: http://stackoverflow.com/a/17369384
-  var countDecimals = function (value) { 
-    if ((value % 1) != 0) 
-        return value.toString().split(".")[1].length;  
+  var countDecimals = function (value) {
+    if ((value % 1) != 0)
+        return value.toString().split(".")[1].length;
     return 0;
   }
   // store the greater number of decimals and use that to round the number appropriately
@@ -1756,14 +1756,14 @@ Array.prototype.remove = function(item) {
 // for example, a user can only get a point every 2 seconds
 function throttle (callback, limit) {
   if (typeof callback != "function" || typeof limit != "number") { throw new TypeError("throttle(function, limit) requires one function input and one number."); }
-  var wait = false;                   
+  var wait = false;
   return function () {
     var context = this, args = arguments;
-    if (!wait) {                   
-      callback.apply(context, args);          
-      wait = true;               
-      setTimeout(function () {   
-        wait = false;          
+    if (!wait) {
+      callback.apply(context, args);
+      wait = true;
+      setTimeout(function () {
+        wait = false;
       }, limit);
     }
   }
@@ -1892,7 +1892,7 @@ const getData = (url, callback) => {
 // find the woof.js script tag in the page
 var currentScript = document.currentScript || Array.prototype.slice.call(document.getElementsByTagName('script')).find(s => s.src.includes('woof.js'))
 
-if (JSON.parse(currentScript.getAttribute('global')) !== false) { 
+if (JSON.parse(currentScript.getAttribute('global')) !== false) {
   // unless the script tag containing Woof has an attribute global="false", start Woof in global mode
   Woof.prototype.extend(window, new Woof({global: true, fullScreen: true}));
 }

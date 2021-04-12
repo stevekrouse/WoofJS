@@ -14,23 +14,23 @@
     storageBucket: "woofjs-d1b27.appspot.com",
     messagingSenderId: "397293370524"
   };
-  
+
   firebase.initializeApp(config);
-  
+
   window.onhashchange = function() {
     window.location.reload()
   }
-  
+
   var getID = function() {
     return window.location.hash.substring(1, window.location.hash.length).split("/")[0];
   }
 
-  
+
   document.title = getID()
-  
+
   var firepadRef = firebase.database().ref("/team/" + getID());
   var headless = new Firepad.Headless(firepadRef);
-  
+
   headless.getText(function(text) {
     if (text == ""){
       alert("There's no project called '" + getID() + "'. Sorry :(")

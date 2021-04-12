@@ -250,7 +250,7 @@
       border-bottom: 4px solid transparent;
       border-top: 4px solid transparent;
     }
-    
+
     #code-status {
       background-color: #4390bf;
       padding: 0px 4px;
@@ -262,70 +262,70 @@
 
     #error-block {
       display: none;
-      margin: 0; 
+      margin: 0;
       border-radius: 0;
       white-space: pre-line;
       color: #000000;
       background-color: #f9efc0;
       border-color: #f2f4f4;
     }
-   
+
     #error-block p {
       margin: 10px 0 0;
     }
-   
+
     #error-block input {
       width: 50%;
       display: inline-block;
       margin: 10px 10px 0 0;
       height: 26px;
     }
-   
+
     #error-block .btn {
       padding: 2px 6px;
     }
-   
+
     #error-block input:focus {
       outline-style: none;
       box-shadow: none;
-      border-color: transparent;   
+      border-color: transparent;
     }
-   
+
     #error-block div  {
       list-style: none;
       margin-top: 10px;
       padding: 0;
       font-style: italic;
     }
-    
+
     #error-block a {
       cursor: pointer;
       color: #a94442;
       text-decoration: underline;
     }
-    
+
     #error-block div a {
       padding: 0 7px 0 3px;
     }
-    
+
     .error-highlight  {
       padding: 4px 0;
       background-color: #f2dede !important;
     }
-    
+
     .error-highlight span {
       color: #a94442 !important;
     }
-        
+
     .error-highlight .CodeMirror-selectedtext  {
       color: #000 !important;
       background-color: #ebe6e6 !important;
     }
-    
+
     .errorCursorStyle .CodeMirror-cursor {
       border-left: 1px solid #000;
     }
-    
+
     .errorCursorStyle .CodeMirror-matchingbracket {
       color: #a94442 !important;
       background-color: #f2dede !important;
@@ -383,7 +383,7 @@
             <li><a @click="share()"><span class="glyphicon glyphicon-share-alt"></span> Share</a></li>
           </ul>
         </div>
-        <button style="display: none" :style="{display: 'inline-block'}" style="margin-right: 5px; background-color:#4390BF !important; ; border:none; color:white; " class="btn btn-medium" :class="styles" onclick="save()">{{ status == "SAVED" ? 'Saved' : 'Save' }}</button> 
+        <button style="display: none" :style="{display: 'inline-block'}" style="margin-right: 5px; background-color:#4390BF !important; ; border:none; color:white; " class="btn btn-medium" :class="styles" onclick="save()">{{ status == "SAVED" ? 'Saved' : 'Save' }}</button>
       </span>
     </div>
 
@@ -545,7 +545,7 @@
           </div>
 
           <div class="modal-body" :style="{display: loginSignUpView == 'RESETPASSWORDSUCCESS' ? 'block' : 'none'}" :class="{animated: loginSignUpView == 'RESETPASSWORDSUCCESS', fadeIn: loginSignUpView == 'RESETPASSWORDSUCCESS'}">
-            <h5>If there is an account associated with that email address, we have sent it a password reset email.</h5>   
+            <h5>If there is an account associated with that email address, we have sent it a password reset email.</h5>
           </div>
 
         </div>
@@ -582,7 +582,7 @@
             </div>
             <h4 class="modal-body text-danger" :style="{display: !getID() ? 'block' : 'none'}">You must save a project in order to share it.</h4>
             <div class="modal-body" :style="{display: getID() ? 'block' : 'none'}">
-          
+
 
               <div class="form-group">
                 <label for="link">Code & Output</label>
@@ -600,7 +600,7 @@
           </div>
         </div>
       </div>
-    
+
       <div id="docsbar" v-show="docsbar" @click="docsbar= !docsbar" :style="{display: 'flex'}">
         <span class="rotate" style="font-size: 1.65em">Documentation</span>
       </div>
@@ -667,7 +667,7 @@
           <div v-if="suggestions.length > 0">You may be looking for: <a v-for="suggestion in suggestions" @click="replaceMisspelledWord(suggestion)"><code>{{suggestion}}</code></a></div>
 	</div>
       </div>
-    
+
     </div>
   </div>
   <script>
@@ -709,7 +709,7 @@
         cursorOnErrorLine: false,
         selectedTheme:'eclipse',
         autoRunChecked: true,
-        shortcut: CodeMirror.keyMap["default"] == CodeMirror.keyMap.macDefault ? 'Cmd' : 'Ctrl',     
+        shortcut: CodeMirror.keyMap["default"] == CodeMirror.keyMap.macDefault ? 'Cmd' : 'Ctrl',
         projectNameRequest: "NOT LOADING", // or "LOADING" or "NAME TAKEN"
         projectNameInputValue: "",
         projectNameLastKeyIllegal: false,
@@ -748,7 +748,7 @@
           'btn-default': this.status == "NEW"
         } },
         canClean: function(){
-          return !this.error 
+          return !this.error
         },
       },
       methods: {
@@ -774,7 +774,7 @@
             }
             // Get alphanumeric user code
             var userCode = editor.getValue().replace(/(?:https?|ftp?|\.\/)[\n\S]+/g,'').match(/[a-zA-Z0-9]+/g);
-            // Add Woof methods to the user code 
+            // Add Woof methods to the user code
             userCode.push("onKeyDown", "onMouseDown", "onMouseUp", "onMouseMove", "penDown", "Image", "Rectangle", "Polygon", "Circle", "Line", "Oval", "move", "turnRight", "turnLeft", "angle", "pointTowards", "setRotationStyle", "show", "hide", "sendToFront", "sendToBack", "play", "Audio", "clearPen", "penUp", "penDown", "Text", "remove", "includes", "forEach", "find", "setBackdropURL", "setBackdropStyle", "after", "every", "repeat", "forever", "if", "else", "mouseX", "mouseY", "repeatUntil", "when", "freeze", "defrost", "delete", "remove", "push", "throttle", "mouseOver", "randomX", "randomY", "touching", "distanceTo", "prompt", "alert", "keysDown", "mouseDown", "pMouseX", "pMousecY", "mouseXSpeed", "mouseYSpeed", "hour", "hourMilitary", "minute", "second", "dayOfMonth", "dayOfWeek", "month", "year", "mobile", "random", "randomColor", "between", "substring", "round", "sqrt", "abs", "floor", "ceiling", "importCodeURL", "timer", "resetTimer", "minX", "maxX", "minY", "maxY")
             // Search user code for suggestions
             for (var i = 0; i < userCode.length; i++) {
@@ -925,7 +925,7 @@
           editor.setOption("theme", newTheme);
           if(firebase.auth().currentUser){
             firebase.database().ref("/user/" + firebase.auth().currentUser.uid + "/theme").set(newTheme)
-          } 
+          }
         },
         switchToSignUp: function(){
           this.loginSignUpView = 'SIGNUP'
@@ -1014,10 +1014,10 @@
         },
       }
     })
-    
+
     // Initalizes the popover for the comment code button in the tools menu
     $(document).ready(function(){
-        $('[data-toggle="popover"]').popover();   
+        $('[data-toggle="popover"]').popover();
     });
 
     var clipboard = new Clipboard('.btn-clipboard');
@@ -1035,7 +1035,7 @@
         });
 
     })
-    
+
     var myCode = false
     scratch.src = scratch.src // the documentation sometimes doesn't load unless you remind it to here, strange VueJS bug
     projectsIframe.src = projectsIframe.src // ditto for the project's iframe
@@ -1143,9 +1143,9 @@
           }
         });
 
-      } 
+      }
     }
-    
+
     function login() {
       app.loginButtonState = "LOADING"
 
@@ -1176,7 +1176,7 @@
         app.emailValid = "NOTEMAIL"
       } else if (/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email)){
         app.emailValid = "VALID"
-      } 
+      }
       if (password == ''){
         app.passwordValid = "EMPTY"
       } else if (!/^.{6,}$/.test(password)){
@@ -1207,7 +1207,7 @@
                   displayName: app.signUpUsername
                 })
 
-                
+
                 app.userNameForMenu = app.signUpUsername
                 app.projects = []
 
@@ -1279,8 +1279,8 @@
         if (user){
           ga('set', 'userId', user.uid);
         }
-      }      
-      
+      }
+
       // if user is logging in
       if (user){
         // get and set editor theme
@@ -1290,7 +1290,7 @@
             editor.setOption("theme", snapshot.val());
           }
         })
-        
+
         if (user.displayName){
           handleLogin(user.displayName, user.uid)
 
@@ -1304,7 +1304,7 @@
         } else if (app.signUpUsername){
           handleLogin(app.signUpUsername, user.uid)
         }
-        
+
         // this puts the user's most recent project under their name
         firebase.database().ref('/code-meta-data/').orderByChild("uid").equalTo(user.uid).once('value').then(function(snapshot) {
           if (snapshot.val()){
@@ -1314,7 +1314,7 @@
               var t = project.currentVersionTime
               app.projects.push({key: key, time: t, code: project.code})
             }
-          } 
+          }
           // sort the proejcts by most recently touched
           app.projects.sort(function(a,b) {
             if (a.time < b.time)
@@ -1328,7 +1328,7 @@
         handleLogout()
       }
     });
-    
+
     var makeClean = function() {
       app.status = "SAVED"
       currentHash = window.location.hash
@@ -1355,7 +1355,7 @@
       firebase.database().ref('/code-meta-data/' + getID()).once('value').then(function(snapshot) {
         if (snapshot.val()){
           myCode = firebase.auth().currentUser && snapshot.val()["uid"] == firebase.auth().currentUser.uid
-          
+
           var revision = parseInt(window.location.hash.substring(1, window.location.hash.length).split("/")[1])
           var keys = Object.keys(snapshot.val()["version"])
           if (!isNaN(revision) && (revision !== 0 && revision !== -1 * keys.length) && Math.abs(revision) < keys.length + 1){
@@ -1363,7 +1363,7 @@
               revision = keys.length + revision // -1 gives the previous revision
             }
             var key = keys[revision - 1] // 1-indexed, so the first version is 1
-            
+
             firebase.database().ref('/code/' + getID() + '/' + key).once('value').then(function(snapshot) {
               editor.setValue(snapshot.val().code)
             })
@@ -1407,7 +1407,7 @@
         }
       });
     }
-    
+
     function saveProjectFirebase({name, newProject}) {
       var updates = {}
 
@@ -1417,7 +1417,7 @@
         time: firebase.database.ServerValue.TIMESTAMP,
         uid: firebase.auth().currentUser && firebase.auth().currentUser.uid
       }
-      
+
       if (newProject) {
         if (firebase.auth().currentUser) {
           updates["/code/" + name + "/--uid"] = firebase.auth().currentUser.uid
@@ -1428,7 +1428,7 @@
       updates["/code-meta-data/"+ name + "/currentVersionTime"] = firebase.database.ServerValue.TIMESTAMP
       updates["/code-meta-data/"+ name + "/uid"] = firebase.auth().currentUser && firebase.auth().currentUser.uid
       updates["/code-meta-data/"+ name + "/version/" + revisionId] = firebase.database.ServerValue.TIMESTAMP
-      
+
       firebase.database().ref().update(updates).then(function(){
         window.location.hash = name
         setUserUploadImageListener() // sync user-uploaded photos for this project name
@@ -1524,7 +1524,7 @@
         // Added to allow users to see if highlighted error line is selected.
         styleSelectedText: true
     });
-    
+
     // Track Codemirror cursor activity
     editor.on('cursorActivity', function(){
       var activeLine = editor.getCursor().line + 1;
@@ -1536,7 +1536,7 @@
         else {
          app.cursorOnErrorLine = false;
         }
-      } 
+      }
       else {
         app.cursorOnErrorLine = false;
       }
@@ -1569,16 +1569,16 @@
       if (!app.autoRunChecked){
         makeDirty()
         debouncedRunCode()
-        setTimeout(function() {WoofJSLint()}, 1000); 
+        setTimeout(function() {WoofJSLint()}, 1000);
       }
     }
 
-    // run the code (debounced) on every change to the editor 
+    // run the code (debounced) on every change to the editor
     editor.on("change", function(){
       if (app.autoRunChecked){
         makeDirty()
         debouncedRunCode()
-        setTimeout(function() {WoofJSLint()}, 1000); 
+        setTimeout(function() {WoofJSLint()}, 1000);
       }
     });
     runCode()
@@ -1668,7 +1668,7 @@
     }
 
     function runCode() {
-        
+
         document.getElementById("preview").remove();
         var iframe = document.createElement("iframe");
         iframe.id = "preview";
@@ -1701,26 +1701,27 @@
             }
         }, 10)
     }
-    
+
     window.onmessage = function(e){
       if (!(e.data instanceof File)){
-        return
+        return 'error';
       }
       if (!firebase.auth().currentUser) {
         alert('Please login to upload images.')
-        return
+        return 'error'
       }
       if (!getID()) {
         alert('Please save your project to upload images.')
-        return
+        return 'error'
       }
       if (!myCode) {
         alert('Please save this project to your account to upload images.')
+        return 'error'
       }
-      
-      var uniqueId = Math.random().toString(36).substring(2) 
+
+      var uniqueId = Math.random().toString(36).substring(2)
                + (new Date()).getTime().toString(36);
-      
+
       var ref = firebase.storage().ref()
         .child('UserImageUpload')
         .child(firebase.auth().currentUser.uid)
@@ -1745,7 +1746,7 @@
     // load user images and watch for new uploads
     var ref
     setUserUploadImageListener = function() {
-      ref && ref.off() 
+      ref && ref.off()
       ref = firebase.database().ref()
         .child('code-image-uploads')
         .child(getID())
@@ -1759,10 +1760,10 @@
         } else {
           scratch.contentDocument.addEventListener('DOMContentLoaded', addImagesFunc, false);
         }
-      })  
+      })
     }
     getID() && setUserUploadImageListener()
-    
+
     function debounce(func, wait, immediate) {
       var timeout;
       return function() {

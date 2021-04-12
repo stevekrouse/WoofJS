@@ -127,14 +127,14 @@
         } else {
           sorted = _.sortBy(this.rows, row => this.sortColumn.func(row, this.joins))
         }
-        
+
         return sorted
       }
     }
   })
-  
+
   var aggregateColumns = [
-  
+
     {
       name: "Projects Created Today",
       func: function(row, joins) {
@@ -162,7 +162,7 @@
     {
       name: "Total Projects",
       func: function(row, joins) {
-        return joins.projects.length 
+        return joins.projects.length
       }
     },
     {
@@ -172,14 +172,14 @@
       }
     }
   ]
-  
+
   var projectColumns = [
     {
       name: "Project",
       func: function(project, joins) {
         return project.key
       }
-      
+
     },
     {
       name: "Created By",
@@ -190,7 +190,7 @@
     {
       name: "Last Revision",
       func: function(project, joins) {
-        return project.currentVersionTime      
+        return project.currentVersionTime
       },
       type: "DATE"
     },
@@ -208,7 +208,7 @@
       }
     }
   ]
-  
+
   var userColumns = [
       {
         name: "Name",
@@ -227,14 +227,14 @@
         func: function(user, joins){
           return user.createdDate
         },
-        type: "DATE" 
+        type: "DATE"
       },
       {
         name: "First Revision",
         func: function(user, joins){
           return user.projects.map(project => project.projectCreatedTime).sort()[0]
         },
-        type: "DATE" 
+        type: "DATE"
       },
       {
         name: "Last Active",
@@ -246,7 +246,7 @@
             // account created
             return user.projects.map(project => project.projectCreatedTime).sort()[0]
           }
-          
+
         },
         type: "DATE"
       },
@@ -254,17 +254,17 @@
         name: "Number of Projects",
         func: function(user, joins){
           return user.projects.length
-        }  
+        }
       },
       {
         name: "Number of Revisions",
         func: function(user, joins){
           return user.projects.reduce((a,b) => a + b.revisions.length, 0)
-      
+
         }
       }
   ]
-  
+
   var app = new Vue({
       el: '#page',
       data: {
@@ -276,9 +276,9 @@
         authenticated: false,
       }
   })
-    
+
   app.authenticated = prompt("Password") == 'codingspace'
-    
+
   var config = {
     apiKey: "AIzaSyBYHv7dCiD0bWiHRlcp4VIZCIqzoMnB4yY",
     authDomain: "woofjs-d1b27.firebaseapp.com",
@@ -286,9 +286,9 @@
     storageBucket: "woofjs-d1b27.appspot.com",
     messagingSenderId: "397293370524"
   };
-  
+
   firebase.initializeApp(config);
-  
+
   var objectOfObjectsToArray = function(obj, keyName = "key"){
     return Object.keys(obj).map(function(key) {
       var child = obj[key]
@@ -296,35 +296,35 @@
       return child;
     })
   }
-  
+
   firebase.database().ref('/user/').on('value', function(snapshot) {
     app.users = objectOfObjectsToArray(snapshot.val())
     app.users.forEach(user => user.projects = [])
   });
-  
+
   var accountsCreatedByDay, revisions, revisionsByDay, projectsCreatedByDay, projectsEditedByDay, usersActiveByDay
-  
+
   firebase.database().ref('/code-meta-data/').on('value', function(snapshot) {
     app.projects = objectOfObjectsToArray(snapshot.val())
-    
+
     // make revisions objects
     app.projects.forEach(function(project) {
       if (project.version) {
-        project.revisions = Object.keys(project.version).map(key => { return {key: key, time: project.version[key], project: project} })  
+        project.revisions = Object.keys(project.version).map(key => { return {key: key, time: project.version[key], project: project} })
       } else {
         project.revisions = []
       }
     })
-    
+
     // join projects to users and users to projects
     app.projects.forEach(function(project) {
-      project.user = app.users.find(user => user.key == project['uid']) 
+      project.user = app.users.find(user => user.key == project['uid'])
       project.revisions.forEach(r => r.project.user = project.user)
       if (project.user){
         project.user.projects.push(project)
       }
     })
-    
+
     // Graph data
     function MGbyDay(rows, date) {
       //rows.forEach(row => console.log(row.time))
@@ -338,9 +338,9 @@
       })
       return byDay
     }
-    
+
     accountsCreatedByDay = MGbyDay(app.users, "createdDate")
-    
+
     revisions = _.flatten(_.map(app.projects, "revisions"))
 
 

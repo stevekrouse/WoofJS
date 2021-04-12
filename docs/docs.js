@@ -365,13 +365,13 @@ Prism.languages.javascript = Prism.languages.extend("clike", {
 
 
 $('#Jsbin').click(function() {
-     
+
   window.open('https://jsbin.com/lizuzuz/edit?js,output')
 
 });
 
 $('#Github').click(function() {
-     
+
   window.open('http://www.thecodingspace.com/setting-up-jsbin.html')
 
 });
