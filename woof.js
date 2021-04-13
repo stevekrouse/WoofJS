@@ -527,6 +527,31 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
     if (typeof func != "function" || typeof time != "number") { throw new TypeError("after(time, units, function) requires a number, unit and function input."); }
     thisContext._afters.push(setTimeout(func, milis));
   };
+	
+  thisContext.wait = (time, unit) => {
+    if (time < 0) { return false; }
+	  
+    switch (unit) {
+	    case "seconds": {
+		let now = Date.now();
+		const target = now + (time * 1000);
+		
+		while (now < target) {
+			now = Date.now();
+		}
+		break;
+	    }
+	    case "milliseconds": {
+		let now = Date.now();
+		const target = now + time;
+
+		while (now < target) {
+			now = Date.now();
+		}
+		break;
+	    }
+    }
+  };
   
   thisContext._renderSprites = () => {
     thisContext._spriteContext.clearRect(0, 0, thisContext.width, thisContext.height);
