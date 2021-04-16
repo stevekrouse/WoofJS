@@ -1719,8 +1719,8 @@
         return 'error'
       }
 
-      var uniqueId = Math.random().toString(36).substring(2)
-               + (new Date()).getTime().toString(36);
+      // Date.now() so easily sortable
+      var uniqueId = Date.now() + Math.random().toString(36).substring(6);
 
       var ref = firebase.storage().ref()
         .child('UserImageUpload')
@@ -1752,8 +1752,11 @@
         .child(getID())
       ref.on('value', function(snapshot) {
         var addImagesFunc = () => {
-          var images = snapshot.val() || {}
-          scratch.contentWindow.app.setUserUploadImages(Object.values(images))
+          var imageValue = snapshot.val() || {}
+          var orderedKeys = Object.keys(imageValue).sort()
+          var images = orderedKeys.map(key => imageValue[key])
+
+          scratch.contentWindow.app.setUserUploadImages(images)
         }
         if (scratch.contentWindow.app){
           addImagesFunc()
