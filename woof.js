@@ -1781,12 +1781,29 @@ Woof.prototype.extend = function(a, b){
 };
 
 // users can use this funcition to import external scripts to their Woof projects, like firebase
+// this can take a string (url) or an array of strings. In the case of an array,
+// it will finish importing the first one before importing the second,
+// and finish importing all of them before executing the callback
 Woof.prototype.importCodeURL = function(url, callback) {
-  var lib = document.createElement("script");
-  lib.type = "text/javascript";
-  lib.src = url;
-  lib.onload = callback;
-  document.body.appendChild(lib);
+  if (typeof url == "string") {
+    var lib = document.createElement("script");
+    lib.type = "text/javascript";
+    lib.src = url;
+    lib.onload = callback;
+    document.body.appendChild(lib);
+  } else if (Array.isArray(url)) {
+    // if we've imported all of the array, just do the callback
+    if (url.length === 0) {
+      callback();
+    } else {
+	// use the first element as a url to actually import it
+	importCodeURL(url[0],
+	// build a callback function that processes the remaining urls
+		      () => { importCodeURL(url.slice(1), callback)})
+    }
+  } else {
+    throw new TypeError("importCodeURL requires either a string or URL of strings as its first argument");
+  }
 };
 
 // Detect if the user is on mobile -- return TRUE if on mobile, FALSE otherwise
