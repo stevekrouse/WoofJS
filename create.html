@@ -380,10 +380,11 @@
             <li><a @click="comment()"><span class="fa fa-code"></span> Comment Code <span><kbd>{{shortcut}}</kbd>+<kbd>/</kbd></span></a></li>
             <li role="separator" class="divider"></li>
             <li><a><input onclick="autoRunClicked()" type="checkbox" id="checkbox" v-model="autoRunChecked"></span> Auto Run</a></li>
+            <li><a><input type="checkbox" id="checkbox" v-model="autoSaveChecked"></span> Auto Save</a></li>
             <li><a @click="share()"><span class="glyphicon glyphicon-share-alt"></span> Share</a></li>
           </ul>
         </div>
-        <button style="display: none" :style="{display: 'inline-block'}" style="margin-right: 5px; background-color:#4390BF !important; ; border:none; color:white; " class="btn btn-medium" :class="styles" onclick="save()">{{ status == "SAVED" ? 'Saved' : 'Save' }}</button> 
+        <button style="display: none" :style="{display: 'inline-block'}" style="margin-right: 5px; background-color:#4390BF !important; ; border:none; color:white; " class="btn btn-medium" :class="styles" onclick="save()">{{ status == "SAVED" ? (autosaveStatus ? 'Autosaved' : 'Saved') : 'Save' }}</button> 
       </span>
     </div>
 
@@ -708,6 +709,10 @@
         errorMessage: '',
         cursorOnErrorLine: false,
         selectedTheme:'eclipse',
+        autosaveStatus: false,
+        autosaveProgress: 0,
+        autosaveTime: new Date().getTime,
+        autoSaveChecked: true,
         autoRunChecked: true,
         shortcut: CodeMirror.keyMap["default"] == CodeMirror.keyMap.macDefault ? 'Cmd' : 'Ctrl',     
         projectNameRequest: "NOT LOADING", // or "LOADING" or "NAME TAKEN"
@@ -1406,6 +1411,10 @@
           saveProjectFirebase({name: name, newProject: true})
         }
       });
+      app.autosaveProgress = 0;
+      app.autosaveTime = new Date().getTime();
+      // assume it's not autosaved, though the autosave function will overwrite if appropriate
+      app.autosaveStatus = false; 
     }
     
     function saveProjectFirebase({name, newProject}) {
@@ -1575,8 +1584,11 @@
 
     // run the code (debounced) on every change to the editor 
     editor.on("change", function(){
+      makeDirty()
       if (app.autoRunChecked){
-        makeDirty()
+        if (app.autoSaveChecked) {
+          debouncedAutosave()
+        }
         debouncedRunCode()
         setTimeout(function() {WoofJSLint()}, 1000); 
       }
@@ -1777,8 +1789,26 @@
       };
     };
     // helper function to prevent runCode from running too often
-    var debouncedRunCode = debounce(runCode, 1000, false)
+    var debouncedRunCode = debounce(runCode, 1000, false);
 
+    // function to autosave
+    function autosaveCheck() {
+      // need to be logged in and working on a project for autosave to be valid
+      if (app.loginState == "LOGGEDIN" && getID()) {
+        app.autosaveProgress++
+        // save after a certain number of changes
+        // OR if it's been 10 minutes since the last save
+        // magic nums of 10 changes and 10 minutes should be options
+        if ((app.autosaveProgress >= 10) ||
+	    (((new Date()).getTime() - app.autosaveTime) > 600000)) {
+	  save()
+	  app.autosaveStatus = true
+	}
+      }
+    }
+				
+    var debouncedAutosave = debounce(autosaveCheck, 1000, false);
+				  
   </script>
   <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
