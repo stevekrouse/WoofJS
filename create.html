@@ -712,8 +712,10 @@
         autoSaveStatus: false,
         autoSaveProgress: 0,
         autoSaveEndOfClass: 0, // to keep track of setTimeout that saves at :25 and :55
-        autoSaveTime: new Date().getTime,
+        autoSaveTimeout: 0,
         autoSaveChecked: true,
+        autoSaveAfterChanges: 10, // how many (debounced) changes will trigger an autosave
+        autoSaveAfterTime: 300000, // how long to schedule an autosave for (in ms, currently 5 mins)
         autoRunChecked: true,
         shortcut: CodeMirror.keyMap["default"] == CodeMirror.keyMap.macDefault ? 'Cmd' : 'Ctrl',     
         projectNameRequest: "NOT LOADING", // or "LOADING" or "NAME TAKEN"
@@ -1412,8 +1414,9 @@
           saveProjectFirebase({name: name, newProject: true})
         }
       });
+      // since we just saved, reset autosaving logic (besides scheduled end-of-class ones)
       app.autoSaveProgress = 0;
-      app.autoSaveTime = new Date().getTime();
+      app.autoSaveTimeout = 0;
       // assume it's not autosaved, though the autosave function will overwrite if appropriate
       app.autoSaveStatus = false; 
     }
@@ -1813,12 +1816,15 @@
     function autoSaveCheck() {
       // need to be logged in and working on a project for autosave to be valid
       if (app.loginState == "LOGGEDIN" && getID()) {
+        if (!app.autoSaveTimeout) {
+          app.autoSaveTimeout = setTimeout(() => {
+	    save()
+	    app.autoSaveStatus = true
+	  }, app.autoSaveAfterTime)
+        }
         app.autoSaveProgress++
         // save after a certain number of changes
-        // OR if it's been 10 minutes since the last save
-        // magic nums of 10 changes and 10 minutes should be options
-        if ((app.autoSaveProgress >= 10) ||
-	    (((new Date()).getTime() - app.autoSaveTime) > 600000)) {
+        if (app.autoSaveProgress >= app.autoSaveAfterChanges) {
 	  save()
 	  app.autoSaveStatus = true
 	}
