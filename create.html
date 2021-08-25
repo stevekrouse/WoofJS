@@ -384,7 +384,7 @@
             <li><a @click="share()"><span class="glyphicon glyphicon-share-alt"></span> Share</a></li>
           </ul>
         </div>
-        <button style="display: none" :style="{display: 'inline-block'}" style="margin-right: 5px; background-color:#4390BF !important; ; border:none; color:white; " class="btn btn-medium" :class="styles" onclick="save()">{{ status == "SAVED" ? (autosaveStatus ? 'Autosaved' : 'Saved') : 'Save' }}</button> 
+        <button style="display: none" :style="{display: 'inline-block'}" style="margin-right: 5px; background-color:#4390BF !important; ; border:none; color:white; " class="btn btn-medium" :class="styles" onclick="save()">{{ status == "SAVED" ? (autoSaveStatus ? 'Autosaved' : 'Saved') : 'Save' }}</button> 
       </span>
     </div>
 
@@ -709,9 +709,10 @@
         errorMessage: '',
         cursorOnErrorLine: false,
         selectedTheme:'eclipse',
-        autosaveStatus: false,
-        autosaveProgress: 0,
-        autosaveTime: new Date().getTime,
+        autoSaveStatus: false,
+        autoSaveProgress: 0,
+        autoSaveEndOfClass: 0, // to keep track of setTimeout that saves at :25 and :55
+        autoSaveTime: new Date().getTime,
         autoSaveChecked: true,
         autoRunChecked: true,
         shortcut: CodeMirror.keyMap["default"] == CodeMirror.keyMap.macDefault ? 'Cmd' : 'Ctrl',     
@@ -1411,10 +1412,10 @@
           saveProjectFirebase({name: name, newProject: true})
         }
       });
-      app.autosaveProgress = 0;
-      app.autosaveTime = new Date().getTime();
+      app.autoSaveProgress = 0;
+      app.autoSaveTime = new Date().getTime();
       // assume it's not autosaved, though the autosave function will overwrite if appropriate
-      app.autosaveStatus = false; 
+      app.autoSaveStatus = false; 
     }
     
     function saveProjectFirebase({name, newProject}) {
@@ -1585,10 +1586,27 @@
     // run the code (debounced) on every change to the editor 
     editor.on("change", function(){
       makeDirty()
-      if (app.autoRunChecked){
-        if (app.autoSaveChecked) {
-          debouncedAutosave()
+      if (app.autoSaveChecked) {
+        debouncedAutoSave()
+        if (!app.autoSaveEndOfClass) {
+	  let d = new Date();
+	  let scheduledAutoSave = function() {
+	    save();
+	    app.autoSaveStatus = true;
+	    app.autoSaveEndOfClass = 0;
+          }
+	  let timeToAutoSave		   
+	  if (d.getMinutes() < 25) {
+	    timeToAutoSave = (25 - d.getMinutes()) * 60 * 1000
+          } else if (d.getMinutes() < 55) {
+	    timeToAutoSave = (55 - d.getMinutes()) * 60 * 1000
+	  } else {
+	    timeToAutoSave = (85 - d.getMinutes()) * 60 * 1000
+	  }
+	  app.autoSaveEndOfClass = setTimeout(scheduledAutoSave, timeToAutoSave);
         }
+      }
+      if (app.autoRunChecked){
         debouncedRunCode()
         setTimeout(function() {WoofJSLint()}, 1000); 
       }
@@ -1792,22 +1810,22 @@
     var debouncedRunCode = debounce(runCode, 1000, false);
 
     // function to autosave
-    function autosaveCheck() {
+    function autoSaveCheck() {
       // need to be logged in and working on a project for autosave to be valid
       if (app.loginState == "LOGGEDIN" && getID()) {
-        app.autosaveProgress++
+        app.autoSaveProgress++
         // save after a certain number of changes
         // OR if it's been 10 minutes since the last save
         // magic nums of 10 changes and 10 minutes should be options
-        if ((app.autosaveProgress >= 10) ||
-	    (((new Date()).getTime() - app.autosaveTime) > 600000)) {
+        if ((app.autoSaveProgress >= 10) ||
+	    (((new Date()).getTime() - app.autoSaveTime) > 600000)) {
 	  save()
-	  app.autosaveStatus = true
+	  app.autoSaveStatus = true
 	}
       }
     }
 				
-    var debouncedAutosave = debounce(autosaveCheck, 1000, false);
+    var debouncedAutoSave = debounce(autoSaveCheck, 1000, false);
 				  
   </script>
   <script>
