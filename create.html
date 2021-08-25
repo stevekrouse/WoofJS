@@ -331,6 +331,18 @@
       background-color: #f2dede !important;
     }
 
+    .redText {
+      color: red;
+      font-size: small;
+      margin-right: 5px;
+    }
+
+    .whiteText {
+      color: white;
+      font-size: smaller;
+      margin-right: 5px;
+    }
+    
   </style>
 </head>
 <body>
@@ -357,7 +369,7 @@
 
       <img  style= "width:160px; height: 40px;" src="./images/logowhite.png">
       <span style="margin:8px" id="save">
-	<span id="autosaveDescription" style="color: white; font-size: smaller;">{{saveMessage}}</span>
+	<span id="saveDescription" v-bind:class="{ redText: ((status == 'DIRTY') && !getID()), whiteText: ((status != 'DIRTY') || getID())}">{{saveMessage}}</span>
         <div class="dropdown" style="display:inline;">
           <button class="btn btn-primary btn-medium dropdown-toggle" type="button" id="toolsDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style='border:none;'>
             Tools
@@ -384,7 +396,7 @@
             <li><a @click="share()"><span class="glyphicon glyphicon-share-alt"></span> Share</a></li>
           </ul>
         </div>
-        <button style="display: none" :style="{display: 'inline-block'}" style="margin-right: 5px; background-color:#4390BF !important; ; border:none; color:white; " class="btn btn-medium" :class="styles" onclick="save()">{{ status == "SAVED" ? (autoSaveStatus ? 'Autosaved' : 'Saved') : 'Save' }}</button> 
+        <button style="display: none" :style="{display: 'inline-block'}" style="margin-right: 5px; background-color:#4390BF !important; ; border:none; color:white; " class="btn btn-medium" :class="styles" onclick="save()">{{ status == "SAVED" ? (autoSaveStatus ? 'Autosaved' : 'Saved') : "Save" }}</button> 
       </span>
     </div>
 
@@ -755,7 +767,7 @@
            // styles for the "Save" button
           'btn-warning': this.status == 'DIRTY',
           'btn-success': this.status == 'SAVED',
-          'btn-default': this.status == "NEW"
+          'btn-default': this.status == 'NEW',
         } },
         canClean: function(){
           return !this.error 
@@ -1615,6 +1627,9 @@
     // run the code (debounced) on every change to the editor 
     editor.on("change", function(){
       makeDirty()
+      if (!getID()) {
+        app.saveMessage = "Never Saved"
+      }
       if (app.autoSaveChecked) {
         debouncedAutoSave()
         if (!app.autoSaveEndOfClass) {
