@@ -357,7 +357,7 @@
 
       <img  style= "width:160px; height: 40px;" src="./images/logowhite.png">
       <span style="margin:8px" id="save">
-
+	<span id="autosaveDescription" style="color: white; font-size: smaller;">{{saveMessage}}</span>
         <div class="dropdown" style="display:inline;">
           <button class="btn btn-primary btn-medium dropdown-toggle" type="button" id="toolsDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style='border:none;'>
             Tools
@@ -709,6 +709,8 @@
         errorMessage: '',
         cursorOnErrorLine: false,
         selectedTheme:'eclipse',
+        saveMessage: '',
+        saveInterval: 0,
         autoSaveStatus: false,
         autoSaveProgress: 0,
         autoSaveEndOfClass: 0, // to keep track of setTimeout that saves at :25 and :55
@@ -1413,12 +1415,36 @@
           app.projectNameRequest = "NOT LOADING"
           saveProjectFirebase({name: name, newProject: true})
         }
+        // since we just saved, reset autosaving logic (besides scheduled end-of-class ones)
+        app.autoSaveProgress = 0;
+        app.autoSaveTimeout = 0;
+        if (app.saveInterval) {
+          clearInterval(app.saveInterval);
+        }
+        if (app.autoSaveStatus) {
+          app.saveMessage = "Autosaved Just Now";
+        } else {
+          app.saveMessage = "Saved Just Now";
+	}		   
+        let saveTime = 0
+	app.saveInterval = setInterval(() => {
+	  saveTime++;
+          if (saveTime == 1) {
+            app.saveMessage = "1 Minute Ago";
+          } else {
+	    app.saveMessage = saveTime + " Minutes Ago";
+	  }
+	  if (app.autoSaveStatus) {
+            app.saveMessage = "Autosaved " + app.saveMessage;
+          } else {
+            app.saveMessage = "Saved " + app.saveMessage;
+	  }
+        }, 60000)
       });
-      // since we just saved, reset autosaving logic (besides scheduled end-of-class ones)
-      app.autoSaveProgress = 0;
-      app.autoSaveTimeout = 0;
       // assume it's not autosaved, though the autosave function will overwrite if appropriate
-      app.autoSaveStatus = false; 
+      // (this needs to go outside of the .then because it needs to happen durring save()
+      // so if this is an autosave, we can overwrite this value to true
+      app.autoSaveStatus = false;
     }
     
     function saveProjectFirebase({name, newProject}) {
