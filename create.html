@@ -331,6 +331,18 @@
       background-color: #f2dede !important;
     }
 
+    .redText {
+      color: red;
+      font-size: small;
+      margin-right: 5px;
+    }
+
+    .whiteText {
+      color: white;
+      font-size: smaller;
+      margin-right: 5px;
+    }
+    
   </style>
 </head>
 <body>
@@ -357,7 +369,7 @@
 
       <img  style= "width:160px; height: 40px;" src="./images/logowhite.png">
       <span style="margin:8px" id="save">
-
+	<span id="saveDescription" v-bind:class="{ redText: ((status == 'DIRTY') && !getID()), whiteText: ((status != 'DIRTY') || getID())}">{{saveMessage}}</span>
         <div class="dropdown" style="display:inline;">
           <button class="btn btn-primary btn-medium dropdown-toggle" type="button" id="toolsDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style='border:none;'>
             Tools
@@ -380,10 +392,11 @@
             <li><a @click="comment()"><span class="fa fa-code"></span> Comment Code <span><kbd>{{shortcut}}</kbd>+<kbd>/</kbd></span></a></li>
             <li role="separator" class="divider"></li>
             <li><a><input onclick="autoRunClicked()" type="checkbox" id="checkbox" v-model="autoRunChecked"></span> Auto Run</a></li>
+            <li><a><input type="checkbox" id="checkbox" v-model="autoSaveChecked"></span> Auto Save</a></li>
             <li><a @click="share()"><span class="glyphicon glyphicon-share-alt"></span> Share</a></li>
           </ul>
         </div>
-        <button style="display: none" :style="{display: 'inline-block'}" style="margin-right: 5px; background-color:#4390BF !important; ; border:none; color:white; " class="btn btn-medium" :class="styles" onclick="save()">{{ status == "SAVED" ? 'Saved' : 'Save' }}</button> 
+        <button style="display: none" :style="{display: 'inline-block'}" style="margin-right: 5px; background-color:#4390BF !important; ; border:none; color:white; " class="btn btn-medium" :class="styles" onclick="save()">{{ status == "SAVED" ? (autoSaveStatus ? 'Autosaved' : 'Saved') : "Save" }}</button> 
       </span>
     </div>
 
@@ -708,6 +721,15 @@
         errorMessage: '',
         cursorOnErrorLine: false,
         selectedTheme:'eclipse',
+        saveMessage: '',
+        saveInterval: 0,
+        autoSaveStatus: false,
+        autoSaveProgress: 0,
+        autoSaveEndOfClass: 0, // to keep track of setTimeout that saves at :25 and :55
+        autoSaveTimeout: 0,
+        autoSaveChecked: true,
+        autoSaveAfterChanges: 10, // how many (debounced) changes will trigger an autosave
+        autoSaveAfterTime: 300000, // how long to schedule an autosave for (in ms, currently 5 mins)
         autoRunChecked: true,
         shortcut: CodeMirror.keyMap["default"] == CodeMirror.keyMap.macDefault ? 'Cmd' : 'Ctrl',     
         projectNameRequest: "NOT LOADING", // or "LOADING" or "NAME TAKEN"
@@ -745,7 +767,7 @@
            // styles for the "Save" button
           'btn-warning': this.status == 'DIRTY',
           'btn-success': this.status == 'SAVED',
-          'btn-default': this.status == "NEW"
+          'btn-default': this.status == 'NEW',
         } },
         canClean: function(){
           return !this.error 
@@ -1405,7 +1427,36 @@
           app.projectNameRequest = "NOT LOADING"
           saveProjectFirebase({name: name, newProject: true})
         }
+        // since we just saved, reset autosaving logic (besides scheduled end-of-class ones)
+        app.autoSaveProgress = 0;
+        app.autoSaveTimeout = 0;
+        if (app.saveInterval) {
+          clearInterval(app.saveInterval);
+        }
+        if (app.autoSaveStatus) {
+          app.saveMessage = "Autosaved Just Now";
+        } else {
+          app.saveMessage = "Saved Just Now";
+	}		   
+        let saveTime = 0
+	app.saveInterval = setInterval(() => {
+	  saveTime++;
+          if (saveTime == 1) {
+            app.saveMessage = "1 Minute Ago";
+          } else {
+	    app.saveMessage = saveTime + " Minutes Ago";
+	  }
+	  if (app.autoSaveStatus) {
+            app.saveMessage = "Autosaved " + app.saveMessage;
+          } else {
+            app.saveMessage = "Saved " + app.saveMessage;
+	  }
+        }, 60000)
       });
+      // assume it's not autosaved, though the autosave function will overwrite if appropriate
+      // (this needs to go outside of the .then because it needs to happen durring save()
+      // so if this is an autosave, we can overwrite this value to true
+      app.autoSaveStatus = false;
     }
     
     function saveProjectFirebase({name, newProject}) {
@@ -1575,8 +1626,31 @@
 
     // run the code (debounced) on every change to the editor 
     editor.on("change", function(){
+      makeDirty()
+      if (!getID()) {
+        app.saveMessage = "Never Saved"
+      }
+      if (app.autoSaveChecked) {
+        debouncedAutoSave()
+        if (!app.autoSaveEndOfClass) {
+	  let d = new Date();
+	  let scheduledAutoSave = function() {
+	    save();
+	    app.autoSaveStatus = true;
+	    app.autoSaveEndOfClass = 0;
+          }
+	  let timeToAutoSave		   
+	  if (d.getMinutes() < 25) {
+	    timeToAutoSave = (25 - d.getMinutes()) * 60 * 1000
+          } else if (d.getMinutes() < 55) {
+	    timeToAutoSave = (55 - d.getMinutes()) * 60 * 1000
+	  } else {
+	    timeToAutoSave = (85 - d.getMinutes()) * 60 * 1000
+	  }
+	  app.autoSaveEndOfClass = setTimeout(scheduledAutoSave, timeToAutoSave);
+        }
+      }
       if (app.autoRunChecked){
-        makeDirty()
         debouncedRunCode()
         setTimeout(function() {WoofJSLint()}, 1000); 
       }
@@ -1777,8 +1851,29 @@
       };
     };
     // helper function to prevent runCode from running too often
-    var debouncedRunCode = debounce(runCode, 1000, false)
+    var debouncedRunCode = debounce(runCode, 1000, false);
 
+    // function to autosave
+    function autoSaveCheck() {
+      // need to be logged in and working on a project for autosave to be valid
+      if (app.loginState == "LOGGEDIN" && getID()) {
+        if (!app.autoSaveTimeout) {
+          app.autoSaveTimeout = setTimeout(() => {
+	    save()
+	    app.autoSaveStatus = true
+	  }, app.autoSaveAfterTime)
+        }
+        app.autoSaveProgress++
+        // save after a certain number of changes
+        if (app.autoSaveProgress >= app.autoSaveAfterChanges) {
+	  save()
+	  app.autoSaveStatus = true
+	}
+      }
+    }
+				
+    var debouncedAutoSave = debounce(autoSaveCheck, 1000, false);
+				  
   </script>
   <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
