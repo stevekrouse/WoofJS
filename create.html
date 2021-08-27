@@ -357,6 +357,7 @@
 
       <img  style= "width:160px; height: 40px;" src="./images/logowhite.png">
       <span style="margin:8px" id="save">
+	<span id="autosaveDescription" style="color: white; font-size: smaller;">{{saveMessage}}</span>
         <div class="dropdown" style="display:inline;">
           <button class="btn btn-primary btn-medium dropdown-toggle" type="button" id="toolsDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style='border:none;'>
             Tools
@@ -383,9 +384,7 @@
             <li><a @click="share()"><span class="glyphicon glyphicon-share-alt"></span> Share</a></li>
           </ul>
         </div>
-        <button style="display: none" :style="{display: 'inline-block'}" style="margin-right: 5px; background-color:#4390BF !important; ; border:none; color:white; " class="btn btn-medium" :class="styles" onclick="save()">{{ status == "SAVED" ? (autoSaveStatus ? 'Autosaved' : 'Saved') : 'Save' }}<br>
-          <span id="autosaveDescription" style="color: white; font-size: x-small;">{{saveMessage}}</span>
-	</button> 
+        <button style="display: none" :style="{display: 'inline-block'}" style="margin-right: 5px; background-color:#4390BF !important; ; border:none; color:white; " class="btn btn-medium" :class="styles" onclick="save()">{{ status == "SAVED" ? (autoSaveStatus ? 'Autosaved' : 'Saved') : 'Save' }}</button> 
       </span>
     </div>
 
@@ -1422,7 +1421,11 @@
         if (app.saveInterval) {
           clearInterval(app.saveInterval);
         }
-        app.saveMessage = "<1 Minute Ago";
+        if (app.autoSaveStatus) {
+          app.saveMessage = "Autosaved Just Now";
+        } else {
+          app.saveMessage = "Saved Just Now";
+	}		   
         let saveTime = 0
 	app.saveInterval = setInterval(() => {
 	  saveTime++;
@@ -1430,6 +1433,11 @@
             app.saveMessage = "1 Minute Ago";
           } else {
 	    app.saveMessage = saveTime + " Minutes Ago";
+	  }
+	  if (app.autoSaveStatus) {
+            app.saveMessage = "Autosaved " + app.saveMessage;
+          } else {
+            app.saveMessage = "Saved " + app.saveMessage;
 	  }
         }, 60000)
       });
