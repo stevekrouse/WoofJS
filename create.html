@@ -1632,7 +1632,7 @@
       }
       if (app.autoSaveChecked) {
         debouncedAutoSave()
-        if (!app.autoSaveEndOfClass) {
+        if (!app.autoSaveEndOfClass && app.loginState == "LOGGEDIN") {
 	  let d = new Date();
 	  let scheduledAutoSave = function() {
 	    save();
