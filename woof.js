@@ -26,7 +26,17 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
   var thisContext = this.global ? window : this;
 
   thisContext.global = global;
-  thisContext.sprites = [];
+  thisContext._sprites = [];
+
+    Object.defineProperty(thisContext, 'sprites', {
+	get: function() {
+	    return thisContext._sprites;
+	},
+	set: function() {
+	    throw new TypeError("sprites is used internaly by Woof and should not be modified");
+	}
+    });
+    
   thisContext.backdrop = {color: null, type: null, url: null, size: "100% 100%", repeat: "no-repeat"};
   thisContext.stopped = true;
   // internally named fullScreen1 because the keyword "fullScreen" on the global scope was wonky in firefox
@@ -65,6 +75,44 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
     },
     set: function(value) {
       thisContext.fullScreen1 = value;
+    }
+  });
+
+  thisContext._width = width;
+  thisContext._height = height;
+  Object.defineProperty(thisContext, 'width', {
+    get: function() {
+      return thisContext._width;
+    },
+    set: function(value) {
+      // throw an error if we're in fullscreen and it's updating to a invalid value
+      if (thisContext.fullScreen1 && value != window.innerWidth) {
+	throw new TypeError("width can't be changed if you are in fullscreen mode");
+      } else if (!thisContext.fullScreen1) {
+	// if we're not in fullscreen, this is the 'approved' way to modify
+        thisContext.setBackdropSize(value, thisContext._height);
+      } else {
+	// presumably this is from a resizing event, so just changes the private variable
+	thisContext._width = value;
+      }
+    }
+  });
+
+  Object.defineProperty(thisContext, 'height', {
+    get: function() {
+      return thisContext._height;
+    },
+    set: function(value) {
+      // throw an error if we're in fullscreen and it's updating to a invalid value
+      if (thisContext.fullScreen1 && value != window.innerHeight) {
+	throw new TypeError("height can't be changed if you are in fullscreen mode");
+      } else if (!thisContext.fullScreen1) {
+	// if we're not in fullscreen, this is the 'approved' way to modify
+        thisContext.setBackdropSize(thisContext._width, value);
+      } else {
+	// presumably this is from a resizing event, so just changes the private variable
+	thisContext._height = value;
+      }
     }
   });
   
@@ -152,8 +200,8 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
   }
   
   thisContext._setCanvasSize = (width, height) => {
-    thisContext.height = height;
-    thisContext.width = width;
+    thisContext._height = height;
+    thisContext._width = width;
     thisContext.minX = thisContext.cameraX - thisContext.width / 2;
     thisContext.maxX = thisContext.cameraX + thisContext.width / 2;
     thisContext.minY = thisContext.cameraY - thisContext.height / 2;
@@ -530,7 +578,7 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
   
   thisContext._renderSprites = () => {
     thisContext._spriteContext.clearRect(0, 0, thisContext.width, thisContext.height);
-    thisContext.sprites.forEach((sprite) => {
+    thisContext._sprites.forEach((sprite) => {
       sprite._render(thisContext._spriteContext);
     });
   };
@@ -589,7 +637,7 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
   } else {
     this.project = project.global ? window : project;  
   }
-  this.project.sprites.push(this);
+  this.project._sprites.push(this);
   
   Object.defineProperty(this, 'x', {
     get: function() {
@@ -911,14 +959,14 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
   
   this.sendToBack = function() {
     if (arguments.length > 0) { throw new TypeError("sendToBack() requires no inputs."); }
-    var sprites = this.project.sprites;
-    sprites.splice(0, 0, sprites.splice(sprites.indexOf(this), 1)[0]);
+    var _sprites = this.project._sprites;
+    _sprites.splice(0, 0, _sprites.splice(_sprites.indexOf(this), 1)[0]);
   };
   
   this.sendToFront = function() {
     if (arguments.length > 0) { throw new TypeError("sendToFront() requires no inputs."); }
-    var sprites = this.project.sprites;
-    sprites.splice(sprites.length, 0, sprites.splice(sprites.indexOf(this), 1)[0]);
+    var _sprites = this.project._sprites;
+    _sprites.splice(_sprites.length, 0, _sprites.splice(_sprites.indexOf(this), 1)[0]);
   };
   
   Object.defineProperty(this, 'penDown', {
@@ -982,8 +1030,8 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
     if (this.deleted) { return; }
     this.showing = false;
     this.deleted = true;
-    if (this.project.sprites.includes(this)){
-      this.project.sprites.splice(this.project.sprites.indexOf(this), 1);
+    if (this.project._sprites.includes(this)){
+      this.project._sprites.splice(this.project._sprites.indexOf(this), 1);
       this.project._spriteCanvas.removeEventListener("mousedown", this._onClickHandler);
     }
   };
