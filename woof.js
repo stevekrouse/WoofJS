@@ -28,14 +28,14 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
   thisContext.global = global;
   thisContext._sprites = [];
 
-    Object.defineProperty(thisContext, 'sprites', {
-	get: function() {
-	    return thisContext._sprites;
-	},
-	set: function() {
-	    throw new TypeError("sprites is used internaly by Woof and should not be modified");
-	}
-    });
+  Object.defineProperty(thisContext, 'sprites', {
+    get: function() {
+      return thisContext._sprites;
+    },
+    set: function() {
+      throw new TypeError("sprites is used internaly by Woof and should not be modified");
+    }
+  });
     
   thisContext.backdrop = {color: null, type: null, url: null, size: "100% 100%", repeat: "no-repeat"};
   thisContext.stopped = true;
