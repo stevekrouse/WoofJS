@@ -67,6 +67,44 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
       thisContext.fullScreen1 = value;
     }
   });
+
+  thisContext._width = width;
+  thisContext._height = height;
+  Object.defineProperty(thisContext, 'width', {
+    get: function() {
+      return thisContext._width;
+    },
+    set: function(value) {
+      // throw an error if we're in fullscreen and it's updating to a invalid value
+      if (thisContext.fullScreen1 && value != window.innerWidth) {
+	throw new Error("width can't be changed if you are in fullscreen mode");
+      } else if (!thisContext.fullScreen1) {
+	// if we're not in fullscreen, this is the 'approved' way to modify
+        thisContext.setBackdropSize(value, thisContext._height);
+      } else {
+	// presumably this is from a resizing event, so just changes the private variable
+	thisContext._width = value;
+      }
+    }
+  });
+
+  Object.defineProperty(thisContext, 'height', {
+    get: function() {
+      return thisContext._height;
+    },
+    set: function(value) {
+      // throw an error if we're in fullscreen and it's updating to a invalid value
+      if (thisContext.fullScreen1 && value != window.innerHeight) {
+	throw new Error("height can't be changed if you are in fullscreen mode");
+      } else if (!thisContext.fullScreen1) {
+	// if we're not in fullscreen, this is the 'approved' way to modify
+        thisContext.setBackdropSize(thisContext._width, value);
+      } else {
+	// presumably this is from a resizing event, so just changes the private variable
+	thisContext._height = value;
+      }
+    }
+  });
   
   if (thisContext.fullScreen1) {
     width = window.innerWidth;
@@ -152,8 +190,8 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
   }
   
   thisContext._setCanvasSize = (width, height) => {
-    thisContext.height = height;
-    thisContext.width = width;
+    thisContext._height = height;
+    thisContext._width = width;
     thisContext.minX = thisContext.cameraX - thisContext.width / 2;
     thisContext.maxX = thisContext.cameraX + thisContext.width / 2;
     thisContext.minY = thisContext.cameraY - thisContext.height / 2;
