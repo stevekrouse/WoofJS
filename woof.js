@@ -780,9 +780,13 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
       } else if (this.rotationStyle == "NO ROTATE"){
           // no rotate
       } else if (this.rotationStyle == "ROTATE LEFT RIGHT"){
-        if (this.angle%360 >= 90 && this.angle%360 < 270){
+        if ((this.angle%360 >= 90 && this.angle%360 < 270) ||
+	    (this.angle%360 <= -90 && this.angle%360 > -270)){
           context.scale(-1, 1);
-        } else if (this.angle%360 >=0 && this.angle%360 < 90 || this.angle%360 <= 360 && this.angle%360 >=270){
+        } else if ((this.angle%360 >=0 && this.angle%360 < 90) ||
+		   (this.angle%360 <= 360 && this.angle%360 >=270) ||
+		   (this.angle%360 <= 0 && this.angle%360 > -90) ||
+		   (this.angle%360 >= -360 && this.angle%360 <= -270)){
           // no rotate
         }
       }
