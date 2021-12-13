@@ -1222,7 +1222,7 @@ Woof.prototype.Polygon = function({project = undefined, sides = 3, length = 100,
     },
     set: function(value) {
       if (typeof value != "number" || value < 3) { throw new TypeError("polygon.sides can only be set to a number that is greater than or equal to 3."); }
-      this.polygonSides = sides;
+      this.polygonSides = value;
     }
   });
   
@@ -1239,9 +1239,9 @@ Woof.prototype.Polygon = function({project = undefined, sides = 3, length = 100,
   this.render = (context) => {
     context.fillStyle=this.color;
     context.beginPath();
-    context.moveTo(length*1,length*0);
-    for(i = 1; i<sides; i++){
-      context.lineTo(length*Math.cos(i*(2*Math.PI/sides)),length*Math.sin(i*(2*Math.PI/sides)))
+    context.moveTo(this.polygonLength*1,this.polygonLength*0);
+    for(i = 1; i<this.polygonSides; i++){
+      context.lineTo(this.polygonLength*Math.cos(i*(2*Math.PI/this.polygonSides)),this.polygonLength*Math.sin(i*(2*Math.PI/this.polygonSides)))
     }
     context.fill();
   };
