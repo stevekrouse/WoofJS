@@ -146,7 +146,14 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
     document.documentElement.style.height = "100%";
     document.body.style.width = "100%";
     document.body.style.height = "100%";
-    
+
+    // if the project already exists, remove it so we don't have duplicates
+    //  (this shouldn't happen, but firefox
+    //   was firing this code twice which led to bugs)
+    if (document.getElementById('project') != null) {
+      document.getElementById('project').remove();
+    }
+      
     // create the main div that Woof lives in
     thisContext._mainDiv = document.createElement("div");
     document.body.appendChild(thisContext._mainDiv);
