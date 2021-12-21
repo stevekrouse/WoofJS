@@ -1767,10 +1767,13 @@
             iframe.contentWindow.document.body.appendChild(script);
 
             script.onload = function() {
-                // when the woof.js library loads, run the user's code
-                var evt = document.createEvent('Event');
-                evt.initEvent('load', false, false);
-                iframe.contentWindow.dispatchEvent(evt);
+		// when the woof.js library loads, run the user's code
+		// firefox automatically fires these events, so don't do it
+		if (!navigator.userAgent.match(/firefox/i)) {		      
+		    var evt = document.createEvent('Event');
+                    evt.initEvent('load', false, false);
+		    iframe.contentWindow.dispatchEvent(evt);
+		}
                 tryRunningCode();
             }
         }, 10)
