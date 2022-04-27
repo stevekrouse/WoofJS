@@ -1,34 +1,58 @@
 <script>
-    var getID = function() {
-      return window.location.hash.substring(1, window.location.hash.length);
-    }
-    if (getID() != '') {
-        window.location = './create.html#' + getID()
-    }
+	var getID = function () {
+		return window.location.hash.substring(1, window.location.hash.length);
+	};
+	if (getID() != '') {
+		window.location = './create.html#' + getID();
+	}
 </script>
-<link rel="shortcut icon" type="image/png" href="./favicon.png"/>
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:url" content="https://woofjs.com">
-   <meta name="twitter:title" content="WoofJS">
-<meta name="twitter:description" content="WoofJS is a Scratch-inspired Javascript library for making games.">
-<meta name="twitter:image" content="./images/qIgC8Ae.png">
-    
-   
-    <meta property="og:image" content="./images/qIgC8Ae.png">
-    <meta property="og:title" content="WoofJS">
-<meta property="og:description" content="WoofJS is a Scratch-inspired Javascript library for making games.">
+<link rel="shortcut icon" type="image/png" href="./favicon.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:url" content="https://woofjs.com" />
+<meta name="twitter:title" content="WoofJS" />
+<meta
+	name="twitter:description"
+	content="WoofJS is a Scratch-inspired Javascript library for making games."
+/>
+<meta name="twitter:image" content="./images/qIgC8Ae.png" />
 
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="./vendor/codemirror/codemirror.css">
-<script src="//load.sumome.com/" data-sumo-site-id="44245233c319d8fe9fb7ce8c7ed64db9381aa56477888a10319261f655cfffe2" async="async"></script>
+<meta property="og:image" content="./images/qIgC8Ae.png" />
+<meta property="og:title" content="WoofJS" />
+<meta
+	property="og:description"
+	content="WoofJS is a Scratch-inspired Javascript library for making games."
+/>
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" href="./vendor/codemirror/codemirror.css" />
+<script
+	src="//load.sumome.com/"
+	data-sumo-site-id="44245233c319d8fe9fb7ce8c7ed64db9381aa56477888a10319261f655cfffe2"
+	async="async"
+></script>
 <script type="text/javascript" src="./vendor/codemirror/codemirror.js"></script>
 <script type="text/javascript" src="./vendor/codemirror/javascript.js"></script>
-<script type="text/javascript" src="./vendor/codemirror/closebrackets.js"></script>
-<script type="text/javascript" src="./vendor/codemirror/javascript-hint.js"></script>
-<script type="text/javascript" src="./vendor/codemirror/javascript-lint.js"></script>
-<script type="text/javascript" src="./vendor/codemirror/matchbrackets.js"></script>
+<script
+	type="text/javascript"
+	src="./vendor/codemirror/closebrackets.js"
+></script>
+<script
+	type="text/javascript"
+	src="./vendor/codemirror/javascript-hint.js"
+></script>
+<script
+	type="text/javascript"
+	src="./vendor/codemirror/javascript-lint.js"
+></script>
+<script
+	type="text/javascript"
+	src="./vendor/codemirror/matchbrackets.js"
+></script>
 <script type="text/javascript" src="./vendor/codemirror/search.js"></script>
-<script type="text/javascript" src="./vendor/codemirror/searchcursor.js"></script>
+<script
+	type="text/javascript"
+	src="./vendor/codemirror/searchcursor.js"
+></script>
 <script type="text/javascript" src="./vendor/codemirror/show-hint.js"></script>
 <script type="text/javascript" src="./vendor/codemirror/comment.js"></script>
 <script type="text/javascript" src="./vendor/codemirror/sublime.js"></script>
@@ -38,212 +62,238 @@
 <script src="./vendor/codemirror/foldgutter.js"></script>
 <script src="./vendor/codemirror/brace-fold.js"></script>
 <script src="./vendor/codemirror/comment-fold.js"></script>
-<link rel="stylesheet" href="./vendor/codemirror/dialog.css">
-<link rel="stylesheet" href="./vendor/codemirror/show-hint.css">
+<link rel="stylesheet" href="./vendor/codemirror/dialog.css" />
+<link rel="stylesheet" href="./vendor/codemirror/show-hint.css" />
 <script src="./vendor/codemirror/dialog.js"></script>
-<link rel="stylesheet" href="./vendor/codemirror/lint.css">
+<link rel="stylesheet" href="./vendor/codemirror/lint.css" />
 <script src="./vendor/codemirror/jshint.min.js"></script>
 <script src="./vendor/codemirror/lint.js"></script>
 
 <style type="text/css">
-    @media (max-width: 600px) {
-        #all {
-            width: 95% !important;
-            height: 60% !important;
-        }
-        button {
-            width: 100% !important;
-        }
-        
-        #start{display:none;}
-    }
-    
-    #all {
-        margin: auto;
-        z-index: 100;
-        position: absolute;
-        /* left: 45%; */
-        top: 30px;
-        left: 0;
-        right: 0;
-        height: 75%;
-        width: 60%;
-        background: rgba(255, 255, 255, 0.5);
-    }
-    
-    .CodeMirror {
-        height: 100%;
-        background: rgba(255, 255, 255, 0.5);
-        font-size: 1.4em;
-    }
-    
-    iframe {
-        width: 100%;
-        height: 97%;
-        border: none;
-        overflow: hidden;
-        z-index: -100;
-    }
-    
-    button {
-        z-index: 200;
-        width: 375px;
-        height: 80px;
-        border: none;
-        margin-left: auto;
-        margin-right: auto;
-        margin: 10px;
-        background-color: #AD5FC2;
-        border-radius: 20px;
-        color: white;
-        font-size: 150%;
-    }
-    
-    #start {
-        background-color: #6FCF97;
-    }
-    
-    #educator {
-        background-color: #56CCF2;
-    }
-    
-    #click {
-        display: flex;
-        width: 100%;
-        margin-left: auto;
-        margin-right: auto;
-    }
+	@media (max-width: 600px) {
+		#all {
+			width: 95% !important;
+			height: 60% !important;
+		}
+		button {
+			width: 100% !important;
+		}
+
+		#start {
+			display: none;
+		}
+	}
+
+	#all {
+		margin: auto;
+		z-index: 100;
+		position: absolute;
+		/* left: 45%; */
+		top: 30px;
+		left: 0;
+		right: 0;
+		height: 75%;
+		width: 60%;
+		background: rgba(255, 255, 255, 0.5);
+	}
+
+	.CodeMirror {
+		height: 100%;
+		background: rgba(255, 255, 255, 0.5);
+		font-size: 1.4em;
+	}
+
+	iframe {
+		width: 100%;
+		height: 97%;
+		border: none;
+		overflow: hidden;
+		z-index: -100;
+	}
+
+	button {
+		z-index: 200;
+		width: 375px;
+		height: 80px;
+		border: none;
+		margin-left: auto;
+		margin-right: auto;
+		margin: 10px;
+		background-color: #ad5fc2;
+		border-radius: 20px;
+		color: white;
+		font-size: 150%;
+	}
+
+	#start {
+		background-color: #6fcf97;
+	}
+
+	#educator {
+		background-color: #56ccf2;
+	}
+
+	#click {
+		display: flex;
+		width: 100%;
+		margin-left: auto;
+		margin-right: auto;
+	}
 </style>
 <div id="all">
-    <div id="editor"></div>
-    <div id="click" style="display: flex; flex-direction: row; flex-wrap: wrap; justify-content: center; align-content: center; align-items: center;">
-        <a href="./create.html"><button id="start">Start Coding</button></a>
-        <a href="./teach.html"><button id="educator">For Educators</button></a>
-    </div>
+	<div id="editor"></div>
+	<div
+		id="click"
+		style="
+			display: flex;
+			flex-direction: row;
+			flex-wrap: wrap;
+			justify-content: center;
+			align-content: center;
+			align-items: center;
+		"
+	>
+		<a href="./create.html"><button id="start">Start Coding</button></a>
+		<a href="./teach.html"><button id="educator">For Educators</button></a>
+	</div>
 </div>
 <iframe id="output"></iframe>
 
 <script>
-   var readOnly = true
-    var cm = CodeMirror(document.getElementById('editor'), {
-        value: "",
-        mode: "javascript",
-        theme: "eclipse",
-        keyMap: "sublime",
-        lineWrapping: true,
-        scrollbarStyle: "null",
-        autofocus: false,
-        readOnly: readOnly
-    });
-    
-    cm.on("mousedown", function(e) {
-      if (readOnly) {
-        e.preventDefault()  
-      }
-    })
-    
-    cm.on("touchstart", function(e) {
-      if (readOnly) {
-        e.preventDefault()  
-      }
-    })
-    
-    var pos = 0
-    var code = "// Hey there, welcome to WoofJS! WoofJS is a Scratch-inspired JavaScript library for making games.\n" +
-        "\n" +
-        "// Want to code something together? :-)\n" +
-        "every(.001, 'seconds', () => {" +
-        "  var circle = new Circle()\n" +
-        "\n" +
-        "  // Go, little circles, go!\n" +
-        "  forever(() => {\n" +
-        "    circle.move(5)\n" +
-        "  })\n\n" +
-        "  // Let's randomize size\n" +
-        "  circle.radius = random(5, 20)\n\n" +
-        "  // Colors are fun!\n" +
-        "  circle.color = randomColor()\n" +
-        "\n" +
-        "  // I say scatter!\n" +
-        "  circle.angle = random(0, 360)\n\n" +
-        "  // Now it's your turn. Play with this code by changing any of the numbers above.";
+	var readOnly = true;
+	var cm = CodeMirror(document.getElementById('editor'), {
+		value: '',
+		mode: 'javascript',
+		theme: 'eclipse',
+		keyMap: 'sublime',
+		lineWrapping: true,
+		scrollbarStyle: 'null',
+		autofocus: false,
+		readOnly: readOnly,
+	});
 
+	cm.on('mousedown', function (e) {
+		if (readOnly) {
+			e.preventDefault();
+		}
+	});
 
-    function runCode() {
-        var iframe = document.getElementById('output');
+	cm.on('touchstart', function (e) {
+		if (readOnly) {
+			e.preventDefault();
+		}
+	});
 
+	var pos = 0;
+	let code = `// Hey there, welcome to WoofJS! WoofJS is a Scratch-inspired JavaScript library for making games.\n\n 
+        // Want to code something together? :-)\n
+        every(.001, 'seconds', () => {
+          var circle = new Circle()\n
+        \n 
+          // Go, little circles, go!\n
+          forever(() => {\n
+            circle.move(5)\n
+          })\n\n
+          // Let's randomize size\n
+          circle.radius = random(5, 20)\n\n
+          // Colors are fun!\n
+          circle.color = randomColor()\n
+        \n
+          // I say scatter!\n
+          circle.angle = random(0, 360)\n\n
+          // Now it's your turn. Play with this code by changing any of the numbers above.`;
 
-        iframe.src = "";
-        setTimeout(function() {
-            var script = iframe.contentWindow.document.createElement("script");
-            script.type = "text/javascript";
-            script.src = "./woof.js";
-            iframe.contentWindow.document.body.appendChild(script);
-            iframe.contentWindow.document.body.style.overflow = "hidden"
+	function runCode() {
+		var iframe = document.getElementById('output');
 
-            script.onload = function() {
-                var evt = document.createEvent('Event');
-                evt.initEvent('load', false, false);
-                iframe.contentWindow.dispatchEvent(evt);
-                document.getElementById('output').contentWindow.eval(cm.getValue());
-            }
-        }, 10)
-    }
-    function debounce(func, wait, immediate) {
-    	var timeout;
-    	return function() {
-    		var context = this, args = arguments;
-    		var later = function() {
-    			timeout = null;
-    			if (!immediate) func.apply(context, args);
-    		};
-    		var callNow = immediate && !timeout;
-    		clearTimeout(timeout);
-    		timeout = setTimeout(later, wait);
-    		if (callNow) func.apply(context, args);
-    	};
-    };
-    var debouncedRunCode = debounce(runCode, 1000, false)
+		iframe.src = '';
+		setTimeout(function () {
+			var script = iframe.contentWindow.document.createElement('script');
+			script.type = 'text/javascript';
+			script.src = './woof.js';
+			iframe.contentWindow.document.body.appendChild(script);
+			iframe.contentWindow.document.body.style.overflow = 'hidden';
 
-    var doc = cm.getDoc()
-    setInterval(function() {
-        if (pos < code.length) {
-            doc.replaceSelection(code[pos])
-            pos++
-            if (code.substring(pos - 9, pos) == ", () => {") {
-                doc.replaceSelection("\n\n\n")
-                doc.replaceSelection("})")
-                doc.setCursor({
-                    line: doc.getCursor().line - 2,
-                    ch: 1
-                })
-            }
-            cm.scrollIntoView({
-                line: doc.getCursor().line + 2
-            })
-            if (code[pos] == "\n" && !doc.getLine(doc.getCursor().line).startsWith('//')) {
-                runCode()
-            }
-        }
-        else if (pos == code.length) {
-            runCode()
-            pos++
-            cm.setOption("readOnly", false)
-            readOnly = false
-            cm.on("change", function(){
-              debouncedRunCode()
-            });
-        }
-    }, 50)
+			script.onload = function () {
+				var evt = document.createEvent('Event');
+				evt.initEvent('load', false, false);
+				iframe.contentWindow.dispatchEvent(evt);
+				document.getElementById('output').contentWindow.eval(cm.getValue());
+			};
+		}, 10);
+	}
+	function debounce(func, wait, immediate) {
+		var timeout;
+		return function () {
+			var context = this,
+				args = arguments;
+			var later = function () {
+				timeout = null;
+				if (!immediate) func.apply(context, args);
+			};
+			var callNow = immediate && !timeout;
+			clearTimeout(timeout);
+			timeout = setTimeout(later, wait);
+			if (callNow) func.apply(context, args);
+		};
+	}
+	var debouncedRunCode = debounce(runCode, 1000, false);
+
+	var doc = cm.getDoc();
+	setInterval(function () {
+		if (pos < code.length) {
+			doc.replaceSelection(code[pos]);
+			pos++;
+			if (code.substring(pos - 9, pos) == ', () => {') {
+				doc.replaceSelection('\n\n\n');
+				doc.replaceSelection('})');
+				doc.setCursor({
+					line: doc.getCursor().line - 2,
+					ch: 1,
+				});
+			}
+			cm.scrollIntoView({
+				line: doc.getCursor().line + 2,
+			});
+			if (
+				code[pos] == '\n' &&
+				!doc.getLine(doc.getCursor().line).startsWith('//')
+			) {
+				runCode();
+			}
+		} else if (pos == code.length) {
+			runCode();
+			pos++;
+			cm.setOption('readOnly', false);
+			readOnly = false;
+			cm.on('change', function () {
+				debouncedRunCode();
+			});
+		}
+	}, 50);
 </script>
 
 <script>
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-  
-    ga('create', 'UA-82374072-1', 'auto');
-    ga('send', 'pageview');
-  
-  </script>
+	(function (i, s, o, g, r, a, m) {
+		i['GoogleAnalyticsObject'] = r;
+		(i[r] =
+			i[r] ||
+			function () {
+				(i[r].q = i[r].q || []).push(arguments);
+			}),
+			(i[r].l = 1 * new Date());
+		(a = s.createElement(o)), (m = s.getElementsByTagName(o)[0]);
+		a.async = 1;
+		a.src = g;
+		m.parentNode.insertBefore(a, m);
+	})(
+		window,
+		document,
+		'script',
+		'https://www.google-analytics.com/analytics.js',
+		'ga'
+	);
+
+	ga('create', 'UA-82374072-1', 'auto');
+	ga('send', 'pageview');
+</script>
