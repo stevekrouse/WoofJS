@@ -1317,9 +1317,15 @@
                     Control: [{
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f723677595838632e706e67",
                         code: 'after(4, "seconds", () => {\n  \/* do something here */\n})',
-                        description: 'There is no wait block in JavaScript. Instead, you can use after():',
+                        description: 'To execute a function after a certain amount of time, use after()',
                         tags: "wait after seconds control"
-                    }, {
+                    },
+			{
+                        code: 'wait(1, "seconds")\n\\\Or if you want to use milliseconds\nwait(1000, "milliseconds")',
+                        description: 'The WoofJS equivalent of the wait block.',
+                        tags: "wait every seconds control"
+                    },
+			{
                         code: 'every(3, "seconds", () => {\n  \/* do something here */\n})',
                         description: 'If you want to wait at regular intervals, use every():',
                         tags: "wait every seconds control"
