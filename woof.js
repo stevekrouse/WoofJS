@@ -260,7 +260,7 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
   
 
   thisContext.setBackdropURL = function(url){
-    if (typeof url != "string") { throw new TypeError("setBackDropUrl(url) requires one string input."); }
+    if (typeof url != "string") { throw new TypeError("setBackDropURL(url) requires one string input."); }
     thisContext.backdrop.url =  url;
     thisContext.backdrop.type = 'url'
     
