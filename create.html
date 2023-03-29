@@ -1709,7 +1709,7 @@
         document.getElementById('preview').contentWindow.addEventListener("error", function(event) {
           var error = event.error
           if (error.type == "ImageLoadError") {
-            if (error.url === "" || error.url === undefined) {
+            if (error.url === "" || error.url === undefined || error.url === "undefined") {
                 var emptyURLTypes = ["setBackdropURL('')", 'setBackdropURL("")', 'setBackdropURL()', 'url: ""', "url: ''"]
                 var emptyURLType = emptyURLTypes.find(t => code.includes(t))
                 if (emptyURLType) {
