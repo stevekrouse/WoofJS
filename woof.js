@@ -731,21 +731,30 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
     }
     // If sprite is a polygon, create polygon collider
     else if (this.type == "polygon") {
-      var pos = this.rotatedVector(this.x, this.y)
+	var pos = new SAT.Vector(this.x, this.y)
       var vs = [new SAT.Vector(this.length*1, this.length*0)];
       for (var i = 1; i < this.sides; i++) {
         vs.push(new SAT.Vector(this.length*Math.cos(i*(2*Math.PI/this.sides)),this.length*Math.sin(i*(2*Math.PI/this.sides))));
       }
-      return new SAT.Polygon(pos, vs).rotate(this.radians());
+      return new SAT.Polygon(pos, vs);
     }
     // Otherwise, create 4-sided collider around sprite
     else {
-      var pos = this.rotatedVector(this.x - this.width / 2, this.y - this.height / 2)
-      var v1 = new SAT.Vector(0, 0)
-      var v2 = this.translatedVector(pos, this.rotatedVector(this.x + this.width / 2, this.y - this.height / 2))
-      var v3 = this.translatedVector(pos, this.rotatedVector(this.x + this.width / 2, this.y + this.height / 2))
-      var v4 = this.translatedVector(pos, this.rotatedVector(this.x - this.width / 2, this.y + this.height / 2))
-      return new SAT.Polygon(pos, [v1, v2, v3, v4])
+      if (this.rotationStyle == "ROTATE") {
+        var pos = this.rotatedVector(this.x - this.width / 2, this.y - this.height / 2)
+        var v1 = new SAT.Vector(0, 0)
+        var v2 = this.translatedVector(pos, this.rotatedVector(this.x + this.width / 2, this.y - this.height / 2))
+        var v3 = this.translatedVector(pos, this.rotatedVector(this.x + this.width / 2, this.y + this.height / 2))
+        var v4 = this.translatedVector(pos, this.rotatedVector(this.x - this.width / 2, this.y + this.height / 2))
+	return new SAT.Polygon(pos, [v1, v2, v3, v4])
+      } else { // rotation style is LEFT RIGHT or NO ROTATE, which should have non-rotated collider
+	var pos = new SAT.Vector(this.x - this.width/2, this.y - this.height/2)
+	var v1 = new SAT.Vector(0,0)
+	var v2 = this.translatedVector(pos, new SAT.Vector(this.x + this.width / 2, this.y - this.height / 2))
+        var v3 = this.translatedVector(pos, new SAT.Vector(this.x + this.width / 2, this.y + this.height / 2))
+        var v4 = this.translatedVector(pos, new SAT.Vector(this.x - this.width / 2, this.y + this.height / 2))
+	return new SAT.Polygon(pos, [v1, v2, v3, v4])
+      }
     }
   }
    
