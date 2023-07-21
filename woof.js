@@ -1328,6 +1328,7 @@ Woof.prototype.Image = function({project = undefined, url = "./images/SMJjVCL.pn
 
   Object.defineProperty(this, 'url', {
     get: function() {
+      console.log("Reading URL of an image");
       return this.image.src;
     },
     set: function(value) {
