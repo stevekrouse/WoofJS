@@ -1326,6 +1326,15 @@ Woof.prototype.Image = function({project = undefined, url = "./images/SMJjVCL.pn
   };
   this.setImageURL(url);
 
+  Object.defineProperty(this, 'url', {
+    get: function() {
+      return this.image.src;
+    },
+    set: function(value) {
+      this.setImageURL(value);
+    }
+  })
+	
   Object.defineProperty(this, 'width', {
     get: function() {
       return this.imageWidth || this.image.width;
