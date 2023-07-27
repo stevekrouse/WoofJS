@@ -1709,8 +1709,8 @@
         document.getElementById('preview').contentWindow.addEventListener("error", function(event) {
           var error = event.error
           if (error.type == "ImageLoadError") {
-            if (error.url === "") {
-                var emptyURLTypes = ["setBackdropURL('')", 'setBackdropURL("")', 'url: ""', "url: ''"]
+            if (error.url === "" || error.url === undefined || error.url === "undefined") {
+                var emptyURLTypes = ["setBackdropURL('')", 'setBackdropURL("")', 'setBackdropURL()', 'url: ""', "url: ''"]
                 var emptyURLType = emptyURLTypes.find(t => code.includes(t))
                 if (emptyURLType) {
                   app.error = {message: "You forgot to include an image or background URL.", lineno: code.substring(0, code.indexOf(emptyURLType)).split('\n').length}

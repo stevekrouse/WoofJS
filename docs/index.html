@@ -127,7 +127,7 @@
                             {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                             {
                                 description:"Here is a walk through of how to display the current temperature and conditions in NYC:",
-                                code:'// First set up temporary text that will be replaced\nvar temp = new Text({\n text: "...", \n size: 30, \n color: "black", \nfontFamily: "arial",\n})\n// Then set your variable for the request\nvar city = "New York, NY"\n// Then set the url for your request\nvar url =  "https://query.yahooapis.com/v1/public/yql?q=select * from weather.forecast where woeid in (select woeid from geo.places(1) where text=\'" + city + "\')&format=json"\n// Finaly call the getData() function\ngetData(url, data => {\n // Replace the temporary text\n temp.text = data.query.results.channel.item.condition.temp + "° | " + data.query.results.channel.item.condition.text\n})',
+                                code:'// First set up temporary text that will be replaced\nvar temp = new Text({\n text: () => "...", \n size: 30, \n color: "black", \nfontFamily: "arial",\n})\n// Then set your variable for the request\nvar city = "New York, NY"\n// Then set the url for your request\nvar url =  "https://query.yahooapis.com/v1/public/yql?q=select * from weather.forecast where woeid in (select woeid from geo.places(1) where text=\'" + city + "\')&format=json"\n// Finaly call the getData() function\ngetData(url, data => {\n // Replace the temporary text\n temp.text = data.query.results.channel.item.condition.temp + "° | " + data.query.results.channel.item.condition.text\n})',
                                 tags:"weather temperature integration"
                             },
                             {
@@ -173,12 +173,12 @@
                             {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                             {
                                 description:"Here is a walk through of a program shows how much $5 is currently worth in EUR.",
-                                code:'// First set up temporary text that will be replaced\nvar temp = new Text({\n text: "...", \n size: 60, \n color: "white", \n fontFamily: "arial",\n})\n// Then set your variables for the request\nvar base = "USD"\n// Then set the url for your request\nvar url = "http://api.fixer.io/latest?base=" + base\n// Finaly call the getData() function\ngetData(url, data => {\n // Replace the temporary text with the converted amoung\n temp.text = Math.round(5 * data.rates.EUR * 100) / 100 + " EUR"\n}) ',
+                                code:'// First set up temporary text that will be replaced\nvar temp = new Text({\n text: () => "...", \n size: 60, \n color: "white", \n fontFamily: "arial",\n})\n// Then set your variables for the request\nvar base = "USD"\n// Then set the url for your request\nvar url = "http://api.fixer.io/latest?base=" + base\n// Finaly call the getData() function\ngetData(url, data => {\n // Replace the temporary text with the converted amoung\n temp.text = Math.round(5 * data.rates.EUR * 100) / 100 + " EUR"\n}) ',
                                 tags:"currency conversion integration"
                             },
                             {
                                 description:"Here is a walk through of a program shows how much 10 GBP is currently worth in USD.",
-                                code:'// First set up temporary text that will be replaced\nvar temp = new Text({\n text: "...", \n size: 60, \n color: "white", \n fontFamily: "arial",\n})\n// Then set your variables for the request\nvar base = "GBP"\n// Then set the url for your request\nvar url = "http://api.fixer.io/latest?base=" + base\n// Finaly call the getData() function\ngetData(url, data => {\n // Replace the temporary text with the converted amoung\n temp.text = Math.round(10 * data.rates.USD * 100) / 100 + " USD"\n}) ',
+                                code:'// First set up temporary text that will be replaced\nvar temp = new Text({\n text: () => "...", \n size: 60, \n color: "white", \n fontFamily: "arial",\n})\n// Then set your variables for the request\nvar base = "GBP"\n// Then set the url for your request\nvar url = "http://api.fixer.io/latest?base=" + base\n// Finaly call the getData() function\ngetData(url, data => {\n // Replace the temporary text with the converted amoung\n temp.text = Math.round(10 * data.rates.USD * 100) / 100 + " USD"\n}) ',
                                 tags:"currency conversion integration"
                             },
                             {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
@@ -199,12 +199,12 @@
                             {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                             {
                                 description:"Here is a walk through of how to display today's sunrise time in NYC:",
-                                code:'// First set up temporary text that will be replaced\nvar temp = new Text({\n text: "...", \n size: 60, \n color: "white", \nfontFamily: "arial",\n})\n// Then set your variables for the request\nvar lat = 40.7128\nvar lng = -74.0059 \n// Then set the url for your request\nvar url = "https://api.sunrise-sunset.org/json?lat=" + lat + "&lng=" + lng\n// Finaly call the getData() function\ngetData(url, data => {\n // Replace the temporary text\n temp.text = data.results.sunrise\n}) ',
+                                code:'// First set up temporary text that will be replaced\nvar temp = new Text({\n text: () => "...", \n size: 60, \n color: "white", \nfontFamily: "arial",\n})\n// Then set your variables for the request\nvar lat = 40.7128\nvar lng = -74.0059 \n// Then set the url for your request\nvar url = "https://api.sunrise-sunset.org/json?lat=" + lat + "&lng=" + lng\n// Finaly call the getData() function\ngetData(url, data => {\n // Replace the temporary text\n temp.text = data.results.sunrise\n}) ',
                                 tags:"sunrise sunset url integration"
                             },
                             {
                                 description:"Here is a walk through of how to display today's sunset time in NYC:",
-                                code:'// First set up temporary text that will be replaced\nvar temp = new Text({\n text: "...", \n size: 60, \n color: "white", \nfontFamily: "arial",\n})\n// Then set your variables for the request\nvar lat = 40.7128\nvar lng = -74.0059 \n// Then set the url for your request\nvar url = "https://api.sunrise-sunset.org/json?lat=" + lat + "&lng=" + lng\n// Finaly call the getData() function\ngetData(url, data => {\n // Replace the temporary text\n temp.text = data.results.sunset\n}) ',
+                                code:'// First set up temporary text that will be replaced\nvar temp = new Text({\n text: () => "...", \n size: 60, \n color: "white", \nfontFamily: "arial",\n})\n// Then set your variables for the request\nvar lat = 40.7128\nvar lng = -74.0059 \n// Then set the url for your request\nvar url = "https://api.sunrise-sunset.org/json?lat=" + lat + "&lng=" + lng\n// Finaly call the getData() function\ngetData(url, data => {\n // Replace the temporary text\n temp.text = data.results.sunset\n}) ',
                                 tags:"sunrise sunset url integration"
                             },
                             {
@@ -222,12 +222,12 @@
                             {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                             {
                                 description:"Here is a walk through of how to display the derivative of x^2 + 2x:",
-                                code:'// First set up temporary text that will be replaced\nvar temp = new Text({\n text: "...", \n size: 15, \n color: "black", \nfontFamily: "arial",\n})\n// Then set your variables for the request\nvar operation = "derive"\nvar expression = "x^2+2x"\n// Then set the url for your request\nvar url = "https://newton.now.sh/" + operation + "/" + expression\n// Finaly call the getData() function\ngetData(url, data => {\n // Replace the temporary text\n temp.text = data.result\n})',
+                                code:'// First set up temporary text that will be replaced\nvar temp = new Text({\n text: () => "...", \n size: 15, \n color: "black", \nfontFamily: "arial",\n})\n// Then set your variables for the request\nvar operation = "derive"\nvar expression = "x^2+2x"\n// Then set the url for your request\nvar url = "https://newton.now.sh/" + operation + "/" + expression\n// Finaly call the getData() function\ngetData(url, data => {\n // Replace the temporary text\n temp.text = data.result\n})',
                                 tags:"math calculations derivative calculator scientific integration"
                             },
                             {
                                 description:"Here is a walk through of how to display the factorization of x^2 + 2x:",
-                                code:'// First set up temporary text that will be replaced\nvar temp = new Text({\n text: "...", \n size: 15, \n color: "black", \nfontFamily: "arial",\n})\n// Then set your variables for the request\nvar operation = "factor"\nvar expression = "x^2+2x"\n// Then set the url for your request\nvar url = "https://newton.now.sh/" + operation + "/" + expression\n// Finaly call the getData() function\ngetData(url, data => {\n // Replace the temporary text\n temp.text = data.result\n})',
+                                code:'// First set up temporary text that will be replaced\nvar temp = new Text({\n text: () => "...", \n size: 15, \n color: "black", \nfontFamily: "arial",\n})\n// Then set your variables for the request\nvar operation = "factor"\nvar expression = "x^2+2x"\n// Then set the url for your request\nvar url = "https://newton.now.sh/" + operation + "/" + expression\n// Finaly call the getData() function\ngetData(url, data => {\n // Replace the temporary text\n temp.text = data.result\n})',
                                 tags:"math calculations derivative factorization integration"
                             },
                             {
@@ -244,7 +244,7 @@
                             {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                             {
                                 description:"Here is a walk through of how to display the a random computer trivia question and its answer:",
-                                code:'// First set up temporary text that will be replaced\nvar temp = new Text({\n text: "...", \n size: 15, \n color: "black", \nfontFamily: "arial",\n})\n// Then set the url for your request\nvar url = "https://opentdb.com/api.php?amount=1&category=18&type=multiple"\n// Finaly call the getData() function\ngetData(url, data => {\n // Replace the temporary text\n temp.text = data.results[0].question + "Answer:" + data.results[0].correct_answer\n})',
+                                code:'// First set up temporary text that will be replaced\nvar temp = new Text({\n text: () => "...", \n size: 15, \n color: "black", \nfontFamily: "arial",\n})\n// Then set the url for your request\nvar url = "https://opentdb.com/api.php?amount=1&category=18&type=multiple"\n// Finaly call the getData() function\ngetData(url, data => {\n // Replace the temporary text\n temp.text = data.results[0].question + "Answer:" + data.results[0].correct_answer\n})',
                                 tags:"trivia integration"
                             },
                             {
@@ -272,7 +272,7 @@
                             {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                             {
                                 description:"getData() works by taking an url and a function to do with the returned data. This is an example using the Sunrise-Sunset integration.",
-                                 code:'// First set up temporary text that will be replaced\nvar temp = new Text({\n text: "...", \n size: 60, \n color: "white", \nfontFamily: "arial",\n})\n// Then set your variables for the request\nvar lat = 40.7128\nvar lng = -74.0059 \n// Then set the url for your request\nvar url = "https://api.sunrise-sunset.org/json?lat=" + lat + "&lng=" + lng\n// Finaly call the getData() function\ngetData(url, data => {\n // Replace the temporary text\n temp.text = data.results.sunset\n}) ',
+                                 code:'// First set up temporary text that will be replaced\nvar temp = new Text({\n text: () => "...", \n size: 60, \n color: "white", \nfontFamily: "arial",\n})\n// Then set your variables for the request\nvar lat = 40.7128\nvar lng = -74.0059 \n// Then set the url for your request\nvar url = "https://api.sunrise-sunset.org/json?lat=" + lat + "&lng=" + lng\n// Finaly call the getData() function\ngetData(url, data => {\n // Replace the temporary text\n temp.text = data.results.sunset\n}) ',
                                 tags:"get request json http custom integration"
                             },
                             {

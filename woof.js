@@ -50,8 +50,8 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
     },
     set: function(value) {
       // whenever the camera is changed, update relevant values
-      thisContext.maxX = value + this.width / 2;
-      thisContext.minX = value - this.width / 2;
+      thisContext.maxX = Math.round(value + this.width / 2);
+      thisContext.minX = Math.round(value - this.width / 2);
       thisContext.mouseX += (value - thisContext._cameraX)
       thisContext._cameraX = value;
     }
@@ -62,8 +62,8 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
     },
     set: function(value) {
       // whenever the camera is changed, update relevant values
-      thisContext.maxY = value + this.height / 2;
-      thisContext.minY = value - this.height / 2;
+      thisContext.maxY = value + Math.round(this.height / 2);
+      thisContext.minY = value - Math.round(this.height / 2);
       thisContext.mouseY += (value - thisContext._cameraY)
       thisContext._cameraY = value;
     }
@@ -209,10 +209,10 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
   thisContext._setCanvasSize = (width, height) => {
     thisContext._height = height;
     thisContext._width = width;
-    thisContext.minX = thisContext.cameraX - thisContext.width / 2;
-    thisContext.maxX = thisContext.cameraX + thisContext.width / 2;
-    thisContext.minY = thisContext.cameraY - thisContext.height / 2;
-    thisContext.maxY = thisContext.cameraY + thisContext.height / 2;
+    thisContext.minX = Math.round(thisContext.cameraX - thisContext.width / 2);
+    thisContext.maxX = Math.round(thisContext.cameraX + thisContext.width / 2);
+    thisContext.minY = Math.round(thisContext.cameraY - thisContext.height / 2);
+    thisContext.maxY = Math.round(thisContext.cameraY + thisContext.height / 2);
     
     thisContext.ready(() => {
       thisContext._spriteCanvas.width = thisContext.width;
@@ -260,7 +260,7 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
   
 
   thisContext.setBackdropURL = function(url){
-    if (typeof url != "string") { throw new TypeError("setBackDropUrl(url) requires one string input."); }
+    if (typeof url != "string") { throw new TypeError("setBackDropURL(url) requires one string input."); }
     thisContext.backdrop.url =  url;
     thisContext.backdrop.type = 'url'
     
@@ -1328,7 +1328,6 @@ Woof.prototype.Image = function({project = undefined, url = "./images/SMJjVCL.pn
 
   Object.defineProperty(this, 'url', {
     get: function() {
-      console.log("Reading URL of an image");
       return this.image.src;
     },
     set: function(value) {
