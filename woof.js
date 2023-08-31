@@ -1441,6 +1441,21 @@ Woof.prototype.Sound = function({url = '', loop = "false", volume = "normal", sp
   this.audio.playbackRate = soundSpeedToAudioSpeed(speed);
   this.audio.volume = soundVolumeToAudioVolume(volume);
 
+  Object.defineProperty(this, 'url', {
+    get: function() {
+      return this.audio.src
+    },
+    set: function(url) {
+      let holdVol = this.audio.volume
+      let holdRate = this.audio.playbackRate
+      let holdLoop = this.audio.loop
+      this.audio = new Audio(url);
+      this.audio.volume = holdVol
+      this.audio.playbackRate = holdRate
+      this.audio.loop = holdLoop
+    }
+  })
+  
   // Allow user to get and set speed
   Object.defineProperty(this, 'speed', {
     get: function() {
