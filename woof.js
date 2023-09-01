@@ -731,12 +731,24 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
     }
     // If sprite is a polygon, create polygon collider
     else if (this.type == "polygon") {
-	var pos = new SAT.Vector(this.x, this.y)
+	    var pos
+      if (this.rotationStyle == "ROTATE") {
+        pos = this.rotatedVector(this.x, this.y)
+      } else {
+        pos = new SAT.Vector(this.x, this.y)
+      }
       var vs = [new SAT.Vector(this.length*1, this.length*0)];
       for (var i = 1; i < this.sides; i++) {
         vs.push(new SAT.Vector(this.length*Math.cos(i*(2*Math.PI/this.sides)),this.length*Math.sin(i*(2*Math.PI/this.sides))));
       }
-      return new SAT.Polygon(pos, vs);
+      if (this.rotationStyle == "ROTATE") {
+        return new SAT.Polygon(pos, vs).rotate(this.radians());
+      } else if (this.rotationStyle == "ROTATE LEFT RIGHT" && ((this.angle%360 >= 90 && this.angle%360 < 270) ||
+	    (this.angle%360 <= -90 && this.angle%360 > -270))) { // this math should match code in this._render
+        return new SAT.Polygon(pos, vs).rotate(Math.PI);
+      } else {
+        return new SAT.Polygon(pos, vs);
+      }
     }
     // Otherwise, create 4-sided collider around sprite
     else {
@@ -746,14 +758,14 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
         var v2 = this.translatedVector(pos, this.rotatedVector(this.x + this.width / 2, this.y - this.height / 2))
         var v3 = this.translatedVector(pos, this.rotatedVector(this.x + this.width / 2, this.y + this.height / 2))
         var v4 = this.translatedVector(pos, this.rotatedVector(this.x - this.width / 2, this.y + this.height / 2))
-	return new SAT.Polygon(pos, [v1, v2, v3, v4])
+	      return new SAT.Polygon(pos, [v1, v2, v3, v4])
       } else { // rotation style is LEFT RIGHT or NO ROTATE, which should have non-rotated collider
-	var pos = new SAT.Vector(this.x - this.width/2, this.y - this.height/2)
-	var v1 = new SAT.Vector(0,0)
-	var v2 = this.translatedVector(pos, new SAT.Vector(this.x + this.width / 2, this.y - this.height / 2))
+      	var pos = new SAT.Vector(this.x - this.width/2, this.y - this.height/2)
+      	var v1 = new SAT.Vector(0,0)
+      	var v2 = this.translatedVector(pos, new SAT.Vector(this.x + this.width / 2, this.y - this.height / 2))
         var v3 = this.translatedVector(pos, new SAT.Vector(this.x + this.width / 2, this.y + this.height / 2))
         var v4 = this.translatedVector(pos, new SAT.Vector(this.x - this.width / 2, this.y + this.height / 2))
-	return new SAT.Polygon(pos, [v1, v2, v3, v4])
+	      return new SAT.Polygon(pos, [v1, v2, v3, v4])
       }
     }
   }
@@ -1290,7 +1302,13 @@ Woof.prototype.Line = function({project = undefined, width = 1, x1 = 10, y1 = 10
     set: function(value) {
       throw new TypeError("You cannot set line.height directly. You can only modify line.height by changing the length of your line through moving its points."); 
     }
-  }); 
+  });
+
+  this.setRotationStyle = (style) => {
+    if (style != "ROTATE") {
+      throw TypeError("You cannot set the rotation style of a Line, you must adjust the start and end points.");
+    }
+  }
   
   // Rotates rectangle by the angle between x1 and x and y1 and y
   // Add 90 to the angle because "height" and "width" are essentially reversed in comparison to a rectangle sprite
