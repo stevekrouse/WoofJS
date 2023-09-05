@@ -127,7 +127,7 @@
                             {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                             {
                                 description:"Here is a walk through of how to display the current temperature and conditions in NYC:",
-                                code:'// First set up temporary text that will be replaced\nvar temp = new Text({\n text: "...", \n size: 30, \n color: "black", \nfontFamily: "arial",\n})\n// Then set your variable for the request\nvar city = "New York, NY"\n// Then set the url for your request\nvar url =  "https://query.yahooapis.com/v1/public/yql?q=select * from weather.forecast where woeid in (select woeid from geo.places(1) where text=\'" + city + "\')&format=json"\n// Finaly call the getData() function\ngetData(url, data => {\n // Replace the temporary text\n temp.text = data.query.results.channel.item.condition.temp + "° | " + data.query.results.channel.item.condition.text\n})',
+                                code:'// First set up temporary text that will be replaced\nvar temp = new Text()\ntemp.text = () => "..."\ntemp.size = 30\ntemp.color = "black"\ntemp.fontFamily = "arial"\n// Then set your variable for the request\nvar city = "New York, NY"\n// Then set the url for your request\nvar url =  "https://query.yahooapis.com/v1/public/yql?q=select * from weather.forecast where woeid in (select woeid from geo.places(1) where text=\'" + city + "\')&format=json"\n// Finaly call the getData() function\ngetData(url, data => {\n // Replace the temporary text\n temp.text = data.query.results.channel.item.condition.temp + "° | " + data.query.results.channel.item.condition.text\n})',
                                 tags:"weather temperature integration"
                             },
                             {
@@ -160,7 +160,7 @@
                             },
                             {
                                 description:"Display your local storage.",
-                                code:'var textSprite = new Text({\n  text: () => localStorage.highscore, \n  size: 12, \n  color: "rgb(100, 50, 240)", \n  fontFamily: "arial", \n  textAlign: "left"\n})',
+                                code:'var textSprite = new Text()\ntextSprite.text = () => localStorage.highScore\ntextSprite.size = 12\ntextSprite.color = "rgb(100, 50, 240)"\ntextSprite.fontFamily = "arial"\ntextSprite.textAlign = "left"',
                                 tags:"local storage high score storage integration" 
                             }
                         ],
@@ -173,12 +173,12 @@
                             {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                             {
                                 description:"Here is a walk through of a program shows how much $5 is currently worth in EUR.",
-                                code:'// First set up temporary text that will be replaced\nvar temp = new Text({\n text: "...", \n size: 60, \n color: "white", \n fontFamily: "arial",\n})\n// Then set your variables for the request\nvar base = "USD"\n// Then set the url for your request\nvar url = "http://api.fixer.io/latest?base=" + base\n// Finaly call the getData() function\ngetData(url, data => {\n // Replace the temporary text with the converted amoung\n temp.text = Math.round(5 * data.rates.EUR * 100) / 100 + " EUR"\n}) ',
+                                code:'// First set up temporary text that will be replaced\nvar temp = new Text()\ntemp.text = () => "..."\ntemp.size = 60\ntemp.color = "white"\ntemp.fontFamily = "arial"\n// Then set your variables for the request\nvar base = "USD"\n// Then set the url for your request\nvar url = "http://api.fixer.io/latest?base=" + base\n// Finaly call the getData() function\ngetData(url, data => {\n // Replace the temporary text with the converted amoung\n temp.text = Math.round(5 * data.rates.EUR * 100) / 100 + " EUR"\n}) ',
                                 tags:"currency conversion integration"
                             },
                             {
                                 description:"Here is a walk through of a program shows how much 10 GBP is currently worth in USD.",
-                                code:'// First set up temporary text that will be replaced\nvar temp = new Text({\n text: "...", \n size: 60, \n color: "white", \n fontFamily: "arial",\n})\n// Then set your variables for the request\nvar base = "GBP"\n// Then set the url for your request\nvar url = "http://api.fixer.io/latest?base=" + base\n// Finaly call the getData() function\ngetData(url, data => {\n // Replace the temporary text with the converted amoung\n temp.text = Math.round(10 * data.rates.USD * 100) / 100 + " USD"\n}) ',
+                                code:'// First set up temporary text that will be replaced\nvar temp = new Text()\ntemp.text = () => "..."\ntemp.size = 60\ntemp.color = "white"\ntemp.fontFamily = "arial"\n// Then set your variables for the request\nvar base = "GBP"\n// Then set the url for your request\nvar url = "http://api.fixer.io/latest?base=" + base\n// Finaly call the getData() function\ngetData(url, data => {\n // Replace the temporary text with the converted amoung\n temp.text = Math.round(10 * data.rates.USD * 100) / 100 + " USD"\n}) ',
                                 tags:"currency conversion integration"
                             },
                             {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
@@ -199,12 +199,12 @@
                             {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                             {
                                 description:"Here is a walk through of how to display today's sunrise time in NYC:",
-                                code:'// First set up temporary text that will be replaced\nvar temp = new Text({\n text: "...", \n size: 60, \n color: "white", \nfontFamily: "arial",\n})\n// Then set your variables for the request\nvar lat = 40.7128\nvar lng = -74.0059 \n// Then set the url for your request\nvar url = "https://api.sunrise-sunset.org/json?lat=" + lat + "&lng=" + lng\n// Finaly call the getData() function\ngetData(url, data => {\n // Replace the temporary text\n temp.text = data.results.sunrise\n}) ',
+                                code:'// First set up temporary text that will be replaced\nvar temp = new Text()\ntemp.text = () => "..."\ntemp.size = 60\ntemp.color = "white"\ntemp.fontFamily = "arial"\n// Then set your variables for the request\nvar lat = 40.7128\nvar lng = -74.0059 \n// Then set the url for your request\nvar url = "https://api.sunrise-sunset.org/json?lat=" + lat + "&lng=" + lng\n// Finaly call the getData() function\ngetData(url, data => {\n // Replace the temporary text\n temp.text = data.results.sunrise\n}) ',
                                 tags:"sunrise sunset url integration"
                             },
                             {
                                 description:"Here is a walk through of how to display today's sunset time in NYC:",
-                                code:'// First set up temporary text that will be replaced\nvar temp = new Text({\n text: "...", \n size: 60, \n color: "white", \nfontFamily: "arial",\n})\n// Then set your variables for the request\nvar lat = 40.7128\nvar lng = -74.0059 \n// Then set the url for your request\nvar url = "https://api.sunrise-sunset.org/json?lat=" + lat + "&lng=" + lng\n// Finaly call the getData() function\ngetData(url, data => {\n // Replace the temporary text\n temp.text = data.results.sunset\n}) ',
+                                code:'// First set up temporary text that will be replaced\nvar temp = new Text()\ntemp.text = () => "..."\ntemp.size = 60\ntemp.color = "white"\ntemp.fontFamily = "arial"\n// Then set your variables for the request\nvar lat = 40.7128\nvar lng = -74.0059 \n// Then set the url for your request\nvar url = "https://api.sunrise-sunset.org/json?lat=" + lat + "&lng=" + lng\n// Finaly call the getData() function\ngetData(url, data => {\n // Replace the temporary text\n temp.text = data.results.sunset\n}) ',
                                 tags:"sunrise sunset url integration"
                             },
                             {
@@ -222,12 +222,12 @@
                             {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                             {
                                 description:"Here is a walk through of how to display the derivative of x^2 + 2x:",
-                                code:'// First set up temporary text that will be replaced\nvar temp = new Text({\n text: "...", \n size: 15, \n color: "black", \nfontFamily: "arial",\n})\n// Then set your variables for the request\nvar operation = "derive"\nvar expression = "x^2+2x"\n// Then set the url for your request\nvar url = "https://newton.now.sh/" + operation + "/" + expression\n// Finaly call the getData() function\ngetData(url, data => {\n // Replace the temporary text\n temp.text = data.result\n})',
+                                code:'// First set up temporary text that will be replaced\nvar temp = new Text()\ntemp.text = () => "..."\ntemp.size = 15\ntemp.color = "black"\ntemp.fontFamily = "arial"\n// Then set your variables for the request\nvar operation = "derive"\nvar expression = "x^2+2x"\n// Then set the url for your request\nvar url = "https://newton.now.sh/" + operation + "/" + expression\n// Finaly call the getData() function\ngetData(url, data => {\n // Replace the temporary text\n temp.text = data.result\n})',
                                 tags:"math calculations derivative calculator scientific integration"
                             },
                             {
                                 description:"Here is a walk through of how to display the factorization of x^2 + 2x:",
-                                code:'// First set up temporary text that will be replaced\nvar temp = new Text({\n text: "...", \n size: 15, \n color: "black", \nfontFamily: "arial",\n})\n// Then set your variables for the request\nvar operation = "factor"\nvar expression = "x^2+2x"\n// Then set the url for your request\nvar url = "https://newton.now.sh/" + operation + "/" + expression\n// Finaly call the getData() function\ngetData(url, data => {\n // Replace the temporary text\n temp.text = data.result\n})',
+                                code:'// First set up temporary text that will be replaced\nvar temp = new Text()\ntemp.text = () => "..."\ntemp.size = 15\ntemp.color = "black"\ntemp.fontFamily = "arial"\n// Then set your variables for the request\nvar operation = "factor"\nvar expression = "x^2+2x"\n// Then set the url for your request\nvar url = "https://newton.now.sh/" + operation + "/" + expression\n// Finaly call the getData() function\ngetData(url, data => {\n // Replace the temporary text\n temp.text = data.result\n})',
                                 tags:"math calculations derivative factorization integration"
                             },
                             {
@@ -244,7 +244,7 @@
                             {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                             {
                                 description:"Here is a walk through of how to display the a random computer trivia question and its answer:",
-                                code:'// First set up temporary text that will be replaced\nvar temp = new Text({\n text: "...", \n size: 15, \n color: "black", \nfontFamily: "arial",\n})\n// Then set the url for your request\nvar url = "https://opentdb.com/api.php?amount=1&category=18&type=multiple"\n// Finaly call the getData() function\ngetData(url, data => {\n // Replace the temporary text\n temp.text = data.results[0].question + "Answer:" + data.results[0].correct_answer\n})',
+                                code:'// First set up temporary text that will be replaced\nvar temp = new Text()\ntemp.text = () => "..."\ntemp.size = 15\ntemp.color = "black"\ntemp.fontFamily = "arial"\n// Then set the url for your request\nvar url = "https://opentdb.com/api.php?amount=1&category=18&type=multiple"\n// Finaly call the getData() function\ngetData(url, data => {\n // Replace the temporary text\n temp.text = data.results[0].question + "Answer:" + data.results[0].correct_answer\n})',
                                 tags:"trivia integration"
                             },
                             {
@@ -272,7 +272,7 @@
                             {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                             {
                                 description:"getData() works by taking an url and a function to do with the returned data. This is an example using the Sunrise-Sunset integration.",
-                                 code:'// First set up temporary text that will be replaced\nvar temp = new Text({\n text: "...", \n size: 60, \n color: "white", \nfontFamily: "arial",\n})\n// Then set your variables for the request\nvar lat = 40.7128\nvar lng = -74.0059 \n// Then set the url for your request\nvar url = "https://api.sunrise-sunset.org/json?lat=" + lat + "&lng=" + lng\n// Finaly call the getData() function\ngetData(url, data => {\n // Replace the temporary text\n temp.text = data.results.sunset\n}) ',
+                                 code:'// First set up temporary text that will be replaced\nvar temp = new Text()\ntemp.text = () => "..."\ntemp.size = 60\ntemp.color = "white"\ntemp.fontFamily = "arial"\n// Then set your variables for the request\nvar lat = 40.7128\nvar lng = -74.0059 \n// Then set the url for your request\nvar url = "https://api.sunrise-sunset.org/json?lat=" + lat + "&lng=" + lng\n// Finaly call the getData() function\ngetData(url, data => {\n // Replace the temporary text\n temp.text = data.results.sunset\n}) ',
                                 tags:"get request json http custom integration"
                             },
                             {
@@ -435,33 +435,33 @@
                         Text: [ 
                         {
                            description: "Create new text:",
-                           code: 'var textSprite1 = new Text({\n  text: () => "Hello world!", \n  size: 12, \n  color: "rgb(100, 50, 240)", \n  fontFamily: "arial", \n  textAlign: "left"\n})',
+                           code: 'var textSprite1 = new Text()\ntextSprite1.text = () => "Hello World!"\ntextSprite1.size = 12\ntextSprite1.color = "rgb(100, 50, 240)"',
                            tags: 'create make new text words string'
                          },
                          {
                              description: "Set location:",
-                             code: "x: 50, y: -100",
+                             code: "textSprite1.x = 50\ntextSprite1.y = -100",
                              tags: "text words string location x y"
                          },
                          {
                              description: "Set color:",
-                             code: "color: rgb(100, 50, 240)",
+                             code: "textSprite1.color = rgb(100, 50, 240)",
                              tags: "text font words string color"
                          },
                          {
                              description: "Set font:",
-                             code: "fontFamily: 'arial'",
+                             code: "textSprite1.fontFamily = 'arial'",
                              tags: "text words string font family"
                          }, 
                          {
                              description: "Text alignment:",
                              html: "<img src=\"./images/textAlign.png\"><p>The red line is where the x value of the text is.</p>",
-                             code: 'textAlign: "start"\ntextAlign: "end"\ntextAlign: "left"\ntextAlign: "center"\ntextAlign: "right"',
+                             code: 'textSprite1.textAlign = "start"\ntextSprite1.textAlign = "end"\ntextSprite1.textAlign = "left"\ntextSprite1.textAlign = "center"\ntextSprite1.textAlign = "right"',
                              tags: "text font words string alignment left center right start end"
                          },
                          {
                              description: "Font size",
-                             code: "size: 12",
+                             code: "textSprite1.size = 12",
                              tags: "text font words string size"
                          }
                         ],
@@ -473,536 +473,536 @@
                             },
                             {
                                 url: "./images/kpU9y5M.png",
-                                code: 'var unicorn = new Image({\n  url: "./docs/images/unicorn.png",\n  width: 120, \n  height: 80,\n})',
+                                code: 'var unicorn = new Image()\nunicorn.url = "./docs/images/unicorn.png"\nunicorn.width = 120\nunicorn.height = 80',
                                 tags: "unicorn sprite animal",
                             },
 
                             {
                                 url: "./images/SuJhyZq.png",
-                                code: 'var bb8 = new Image({\n  url: "./docs/images/BB8.png",\n  width: 150, \n  height: 220,\n})',
+                                code: 'var bb8 = new Image()\nbb8.url = "./docs/images/BB8.png"\nbb8.width = 150\nbb8.height = 220',
                                 tags: "bb8 star wars sprite",
                             },
                             
                              {
                                 url: "./images/2lhEgxT.png",
-                                code: 'var sushi = new Image({\n  url: "./docs/images/sushi.png",\n  width: 110, \n  height: 80,\n})',
+                                code: 'var sushi = new Image()\nsushi.url = "./docs/images/sushi.png"\nsushi.width = 110\nsushi.height = 80',
                                 tags: "sushi sprite",
                             },
                             
                              {
                                 url: "./images/zp0zzaG.png",
-                                code: 'var nyanCat = new Image({\n  url: "./docs/images/nyancat.png",\n  width: 160, \n  height: 80,\n})',
+                                code: 'var nyanCat = new Image()\nnyanCat.url = "./docs/images/nyancat.png"\nnyanCat.width = 160\nnyanCat.height = 80',
                                 tags: "cat sprite rainbow animal",
                             },
                             
                              {
                                 url: "./images/4B3ex6S.png",
-                                code: 'var car = new Image({\n  url: "./docs/images/car.png",\n  width: 250, \n  height: 80,\n})',
+                                code: 'var car = new Image()\ncar.url = "./docs/images/car.png"\ncar.width = 250\ncar.height = 80',
                                 tags: "car sprite",
                             },
 
                             {
                                 url: "./images/Q4zxvEN.png",
-                                code: 'var pikachu = new Image({\n  url: "./docs/images/pikachu.png",\n  width: 120, \n  height: 100,\n})',
+                                code: 'var pikachu = new Image()\npikachu.url = "./docs/images/pikachu.png"\npikachu.width = 120\npikachu.height = 100',
                                 tags: "pikachu sprite animal",
                             },
 
                             {
                                 url: "./images/G7PpFgz.png",
-                                code: 'var taco = new Image({\n  url: "./docs/images/taco.png",\n  width: 300, \n  height: 170,\n})',
+                                code: 'var taco = new Image()\ntaco.url = "./docs/images/taco.png"\ntaco.width = 300\ntaco.height = 170',
                                 tags: "taco sprite food",
                             },
                             
                             {
                                 url: "./images/ajkO60k.png",
-                                code: 'var iceCream = new Image({\n  url: "./docs/images/icecream.png",\n  width: 130, \n  height: 170,\n})',
+                                code: 'var iceCream = new Image()\niceCream.url = "./docs/images/icecream.png"\niceCream.width = 130\niceCream.height = 170',
                                 tags: "ice cream sprite food",
                             },
 
                             {
                                 url: "./images/mZnRmHr.png",
-                                code: 'var minecraft = new Image({\n  url: "./docs/images/minecraft.png",\n  width: 120, \n  height: 100,\n})',
+                                code: 'var minecraft = new Image()\nminecraft.url = "./docs/images/minecraft.png"\nminecraft.width = 120\nminecraft.height = 100',
                                 tags: "minecraft sprite person",
                             },
 
                             {
                                 url: "./images/614de0J.jpg",
-                                code: 'var mario = new Image({\n  url: "./docs/images/mario.png",\n  width: 150, \n  height: 200,\n})',
+                                code: 'var mario = new Image()\nmario.url = "./docs/images/mario.png"\nmario.width = 150\nmario.height = 200',
                                 tags: "mario sprite person",
                             },
 
                             {
                                 url: "./images/0ioLJsk.jpg",
-                                code: 'var cupcake = new Image({\n  url: "./docs/images/cupcake.png",\n  width: 170, \n  height: 170,\n})',
+                                code: 'var cupcake = new Image()\ncupcake.url = "./docs/images/cupcake.png"\ncupcake.width = 170\ncupcake.height = 170',
                                 tags: "cupcake sprite food",
                             },
 
                             {
                                 url: "./images/FArFDtL.png",
-                                code: 'var snitch = new Image({\n  url: "./docs/images/snitch.png",\n  width: 250, \n  height: 150,\n})',
+                                code: 'var snitch = new Image()\nsnitch.url = "./docs/images/snitch.png"\nsnitch.width = 250\nsnitch.height = 150',
                                 tags: "snitch harry potter sprite",
                             },
                             
                             {
                                 url: "./images/Gf0MwWP.png",
-                                code: 'var bird = new Image({\n  url: "./docs/images/bird.png",\n  width: 120, \n  height: 80,\n})',
+                                code: 'var bird = new Image()\nbird.url = "./docs/images/bird.png"\nbird.width = 120\nbird.height = 80',
                                 tags: "flappy bird sprite animal",
                             },
 
                             {
                                 url: "./images/SepKsyn.png",
-                                code: 'var puppy = new Image({\n  url: "./docs/images/puppy.png",\n  width: 150, \n  height: 210,\n})',
+                                code: 'var puppy = new Image()\npuppy.url = "./docs/images/puppy.png"\npuppy.width = 150\npuppy.height = 210',
                                 tags: "puppy dog animal sprite",
                             },
 
                             {
                                 url: "./images/fnKpvEY.png",
-                                code: 'var pusheen = new Image({\n  url: "./docs/images/pusheen.png",\n  width: 120, \n  height: 80,\n})',
+                                code: 'var pusheen = new Image()\npusheen.url = "./docs/images/pusheen.png"\npusheen.width = 120\npusheen.height = 80',
                                 tags: "pusheen cat animal sprite",
                             },
 
                             {
                                 url: "./images/GfYgZJo.png",
-                                code: 'var spiderman = new Image({\n  url: "./docs/images/spiderman.png",\n  width: 150, \n  height: 170,\n})',
+                                code: 'var spiderman = new Image()\nspiderman.url = "./docs/images/spiderman.png"\nspiderman.width = 150\nspiderman.height = 170',
                                 tags: "spiderman person sprite",
                             },
 
                             {
                                 url: "./images/50LlixQ.png",
-                                code: 'var apple = new Image({\n  url: "./docs/images/apple.png",\n  width: 150, \n  height: 170,\n})',
+                                code: 'var apple = new Image()\napple.url = "./docs/images/apple.png"\napple.width = 150\napple.height = 170',
                                 tags: "apple food sprite",
                             },
 
                             {
                                 url: "./images/B4kqEPt.png",
-                                code: 'var spaceShip = new Image({\n  url: "./docs/images/space_ship.png",\n  width: 300, \n  height: 170,\n})',
+                                code: 'var spaceShip = new Image()\nspaceShip.url = "./docs/images/space_ship.png"\nspaceShip.width = 300\nspaceShip.height = 170',
                                 tags: "space ship sprite",
                             },
                             
                             {
                                 url: "./images/9EkQfhM.png",
-                                code: 'var coolEmoji = new Image({\n  url: "./docs/images/emoji-glasses.png",\n  width: 120, \n  height: 120,\n})',
+                                code: 'var coolEmoji = new Image()\ncoolEmoji.url = "./docs/images/emoji-glasses.png"\ncoolEmoji.width = 120\ncoolEmoji.height = 120',
                                 tags: "glasses emoji sprite",
                             },
                             
                             {
                                 url: "./images/9BTkkuc.png",
-                                code: 'var emoji = new Image({\n  url: "./docs/images/emoji.png",\n  width: 120, \n  height: 120,\n})',
+                                code: 'var emoji = new Image()\nemoji.url = "./docs/images/emoji.png"\nemoji.width = 120\nemoji.height = 120',
                                 tags: "emoji heart eyes sprite",
                             },
                                                       
                              {
                                 url: "./images/rGnUiWC.png",
-                                code: 'var sadEmoji = new Image({\n  url: "./docs/images/emojilaugh.png",\n  width: 120, \n  height: 120,\n})',
+                                code: 'var sadEmoji = new Image()\nsadEmoji.url = "./docs/images/emojilaugh.png"\nsadEmoji.width = 120\nsadEmoji.height = 120',
                                 tags: "sad laugh emoji sprite",
                             },
                             
                              {
                                 url: "./images/B9v5lZJ.png",
-                                code: 'var partyEmoji = new Image({\n  url: "./docs/images/emoji-party.png",\n  width: 120, \n  height: 120,\n})',
+                                code: 'var partyEmoji = new Image()\npartyEmoji.url = "./docs/images/emoji-party.png"\npartyEmoji.width = 120\npartyEmoji.height = 120',
                                 tags: "party hat emoji sprite",
                             },
                             
                               {
                                 url: "./images/ZU8UBCM.png",
-                                code: 'var puppyEmoji = new Image({\n  url: "./docs/images/emojipuppy.png",\n  width: 120, \n  height: 120,\n})',
+                                code: 'var puppyEmoji = new Image()\npuppyEmoji.url = "./docs/images/emojipuppy.png"\npuppyEmoji.width = 120\npuppyEmoji.height = 120',
                                 tags: "dog puppy animal emoji sprite",
                             },
                             
                                {
                                 url: "./images/zzNfW5S.png",
-                                code: 'var sillyEmoji = new Image({\n  url: "./docs/images/emojieyes.jpg",\n  width: 120, \n  height: 120,\n})',
+                                code: 'var sillyEmoji = new Image()\nsillyEmoji.url = "./docs/images/emojieyes.jpg"\nsillyEmoji.width = 120\nsillyEmoji.height = 120',
                                 tags: "silly tongue emoji sprite",
                             },
 
                             {
                                 url: "./images/8rBZ8cu.png",
-                                code: 'var dragon = new Image({\n  url: "./docs/images/dragon.png",\n  width: 300, \n  height: 170,\n})',
+                                code: 'var dragon = new Image()\ndragon.url = "./docs/images/dragon.png"\ndragon.width = 300\ndragon.height = 170',
                                 tags: "dragon animal sprite",
                             },
 
                             {
                                 url: "./images/tt5zoZq.png",
-                                code: 'var elephant = new Image({\n  url: "./docs/images/elephant.png",\n  width: 200, \n  height: 170,\n})',
+                                code: 'var elephant = new Image()\nelephant.url = "./docs/images/elephant.png"\nelephant.width = 200\nelephant.height = 170',
                                 tags: "elephant animal sprite",
                             },
 
                             {
                                 url: "./images/uvKjnQI.png",
-                                code: 'var soccer = new Image({\n  url: "./docs/images/soccer.png",\n  width: 180, \n  height: 200,\n})',
+                                code: 'var soccer = new Image()\nsoccer.url = "./docs/images/soccer.png"\nsoccer.width = 180\nsoccer.height = 200',
                                 tags: "soccer ball sprite",
                             },
                             {
                                 url: "./images/rocket.png",
-                                code: 'var rocket = new Image({\n  url: "./docs/images/rocket.png",\n  width: 120, \n  height: 60,\n})',
+                                code: 'var rocket = new Image()\nrocket.url = "./docs/images/rocket.png"\nrocket.width = 120\nrocket.height = 60',
                                 tags: "rocket ship sprite",
                             },
                             {
                                 url: "./images/crab.png",
-                                code: 'var crab = new Image({\n  url: "./docs/images/crab.png",\n  width: 150, \n  height: 100,\n})',
+                                code: 'var crab = new Image()\ncrab.url = "./docs/images/crab.png"\ncrab.width = 150\ncrab.height = 100',
                                 tags: "crab animal sprite",
                             },
                             {
                                 url: "./images/fish.png",
-                                code: 'var fish = new Image({\n  url: "./docs/images/fish.png",\n  width: 70, \n  height: 30,\n})',
+                                code: 'var fish = new Image()\nfish.url = "./docs/images/fish.png"\nfish.width = 70\nfish.height = 30',
                                 tags: "fish animal sprite",
                             },
                             {
                                 url: "./images/bottomPipe.png",
-                                code: 'var bottomPipe = new Image({\n  url: "./docs/images/bottomPipe.png",\n  width: 100, \n  height: 500,\n})',
+                                code: 'var bottomPipe = new Image()\nbottomPipe.url = "./docs/images/bottomPipe.png"\nbottomPipe.width = 100\nbottomPipe.height = 500',
                                 tags: "bottom pipe flappy bird sprite",
                             },
                             {
                                 url: "./images/topPipe.png",
-                                code: 'var topPipe = new Image({\n  url: "./docs/images/topPipe.png",\n  width: 100, \n  height: 500,\n})',
+                                code: 'var topPipe = new Image()\ntopPipe.url = "./docs/images/topPipe.png"\ntopPipe.width = 100\ntopPipe.height = 500',
                                 tags: "top pipe flappy bird sprite",
                             },
                             
                             {
                                 url: "./images/explosion.png",
-                                code: 'var explosion = new Image({\n  url: "./docs/images/explosion.png",\n  width: 100, \n  height: 100,\n})',
+                                code: 'var explosion = new Image()\nexplosion.url = "./docs/images/explosion.png"\nexplosion.width = 100\nexplosion.height = 100',
                                 tags: "explosion sprite",
                             },
                             
                             {
                                 url: "./images/boss-bomb.png",
-                                code: 'var bomb = new Image({\n  url: "./docs/images/boss-bomb.png",\n  width: 100, \n  height: 100,\n})',
+                                code: 'var bomb = new Image()\nbomb.url = "./docs/images/boss-bomb.png"\nbomb.width = 100\nbomb.height = 100',
                                 tags: "bomb sprite",
                             },
                             
                             {
                                 url: "./images/boss-blaser.png",
-                                code: 'var bossLaser = new Image({\n  url: "./docs/images/boss-blaser.png",\n  width: 120, \n  height: 80,\n})',
+                                code: 'var bossLaser = new Image()\nbossLaser.url = "./docs/images/boss-blaser.png"\nbossLaser.width = 120\nbossLaser.height = 80',
                                 tags: "laser sprite",
                             },
                             
                             {
                                 url: "./images/boss-boss.png",
-                                code: 'var bossShip = new Image({\n  url: "./docs/images/boss-boss.png",\n  width: 100, \n  height: 100,\n})',
+                                code: 'var bossShip = new Image()\nbossShip.url = "./docs/images/boss-boss.png"\nbossShip.width = 100\nbossShip.height = 100',
                                 tags: "boss ship sprite",
                             },
                             
                             {
                                 url: "./images/boss-laser.png",
-                                code: 'var laser2 = new Image({\n  url: "./docs/images/boss-laser.png",\n  width: 100, \n  height: 100,\n})',
+                                code: 'var laser2 = new Image()\nlaser2.url = "./docs/images/boss-laser.png"\nlaser2.width = 100\nlaser2.height = 100',
                                 tags: "laser sprite",
                             },
                             
                             {
                                 url: "./images/boss-ship.png",
-                                code: 'var bossShip2 = new Image({\n  url: "./docs/images/boss-ship.png",\n  width: 100, \n  height: 100,\n})',
+                                code: 'var bossShip2 = new Image()\nbossShip2.url = "./docs/images/boss-ship.png"\nbossShip2.width = 100\nbossShip2.height = 100',
                                 tags: "ship sprite",
                             },
                             
                             {
                                 url: "./images/boss-warning.jpg",
-                                code: 'var warning = new Image({\n  url: "./docs/images/boss-warning.jpg",\n  width: 100, \n  height: 80,\n})',
+                                code: 'var warning = new Image()\nwarning.url = "./docs/images/boss-warning.jpg"\nwarning.width = 100\nwarning.height = 80',
                                 tags: "warning sprite",
                             },
                             
                             {
                                 url: "./images/bubbles-bowl.png",
-                                code: 'var candyBowl = new Image({\n  url: "./docs/images/bubbles-bowl.png",\n  width: 100, \n  height: 100,\n})',
+                                code: 'var candyBowl = new Image()\ncandyBowl.url = "./docs/images/bubbles-bowl.png"\ncandyBowl.width = 100\ncandyBowl.height = 100',
                                 tags: "candy bowl sprite",
                             },
                             
                             {
                                 url: "./images/bubbles-candy.png",
-                                code: 'var candy = new Image({\n  url: "./docs/images/bubbles-candy.png",\n  width: 100, \n  height: 60,\n})',
+                                code: 'var candy = new Image()\ncandy.url = "./docs/images/bubbles-candy.png"\ncandy.width = 100\ncandy.height = 60',
                                 tags: "candy sprite",
                             },
                             
                             {
                                 url: "./images/bubbles-girl.png",
-                                code: 'var girl = new Image({\n  url: "./docs/images/bubbles-girl.png",\n  width: 70, \n  height: 100,\n})',
+                                code: 'var girl = new Image()\ngirl.url = "./docs/images/bubbles-girl.png"\ngirl.width = 70\ngirl.height = 100',
                                 tags: "girl sprite",
                             },
                             
                             {
                                 url: "./images/bubbles-wand.png",
-                                code: 'var bubbleWand = new Image({\n  url: "./docs/images/bubbles-wand.png",\n  width: 70, \n  height: 100,\n})',
+                                code: 'var bubbleWand = new Image()\nbubbleWand.url = "./docs/images/bubbles-wand.png"\nbubbleWand.width = 70\nbubbleWand.height = 100',
                                 tags: "wand sprite",
                             },
                             
                             {
                                 url: "./images/candyland-mint.png",
-                                code: 'var mint = new Image({\n  url: "./docs/images/candyland-mint.png",\n  width: 100, \n  height: 100,\n})',
+                                code: 'var mint = new Image()\nmint.url = "./docs/images/candyland-mint.png"\nmint.width = 100\nmint.height = 100',
                                 tags: "mint food sprite",
                             },
                             
                             {
                                 url: "./images/candyland-obstacle.png",
-                                code: 'var lollipop = new Image({\n  url: "./docs/images/candyland-obstacle.png",\n  width: 100, \n  height: 100,\n})',
+                                code: 'var lollipop = new Image()\nlollipop.url = "./docs/images/candyland-obstacle.png"\nlollipop.width = 100\nlollipop.height = 100',
                                 tags: "lollipop food sprite",
                             },
                             
                             {
                                 url: "./images/fly-fly.png",
-                                code: 'var fly = new Image({\n  url: "./docs/images/fly-fly.png",\n  width: 100, \n  height: 100,\n})',
+                                code: 'var fly = new Image()\nfly.url = "./docs/images/fly-fly.png"\nfly.width = 100\nfly.height = 100',
                                 tags: "fly animal sprite",
                             },
                             
                             {
                                 url: "./images/fly-frog.png",
-                                code: 'var frog = new Image({\n  url: "./docs/images/fly-frog.png",\n  width: 120, \n  height: 90,\n})',
+                                code: 'var frog = new Image()\nfrog.url = "./docs/images/fly-frog.png"\nfrog.width = 120\nfrog.height = 90',
                                 tags: "frog animal sprite",
                             },
                             
                             {
                                 url: "./images/fly-lilypad.png",
-                                code: 'var lilypad = new Image({\n  url: "./docs/images/fly-lilypad.png",\n  width: 100, \n  height: 85,\n})',
+                                code: 'var lilypad = new Image()\nlilypad.url = "./docs/images/fly-lilypad.png"\nlilypad.width = 100\nlilypad.height = 85',
                                 tags: "lilypad sprite",
                             },
                             
                             {
                                 url: "./images/magic-dove.jpg",
-                                code: 'var dove = new Image({\n  url: "./docs/images/magic-dove.jpg",\n  width: 100, \n  height: 105,\n})',
+                                code: 'var dove = new Image()\ndove.url = "./docs/images/magic-dove.jpg"\ndove.width = 100\ndove.height = 105',
                                 tags: "dove animal sprite",
                             },
                             
                             {
                                 url: "./images/magic-hat.png",
-                                code: 'var hat = new Image({\n  url: "./docs/images/magic-hat.png",\n  width: 100, \n  height: 90,\n})',
+                                code: 'var hat = new Image()\nhat.url = "./docs/images/magic-hat.png"\nhat.width = 100\nhat.height = 90',
                                 tags: "hat clothing sprite",
                             },
                             
                             {
                                 url: "./images/picnic-basket.png",
-                                code: 'var picnicBasket = new Image({\n  url: "./docs/images/picnic-basket.png",\n  width: 110, \n  height: 80,\n})',
+                                code: 'var picnicBasket = new Image()\npicnicBasket.url = "./docs/images/picnic-basket.png"\npicnicBasket.width = 110\npicnicBasket.height = 80',
                                 tags: "picnic basket sprite",
                             },
                             
                             {
                                 url: "./images/picnic-cheese.png",
-                                code: 'var cheese = new Image({\n  url: "./docs/images/picnic-cheese.png",\n  width: 100, \n  height: 60,\n})',
+                                code: 'var cheese = new Image()\ncheese.url = "./docs/images/picnic-cheese.png"\ncheese.width = 100\ncheese.height = 60',
                                 tags: "cheese food sprite",
                             },
                             
                             {
                                 url: "./images/picnic-eat.png",
-                                code: 'var picnic = new Image({\n  url: "./docs/images/picnic-eat.png",\n  width: 110, \n  height: 110,\n})',
+                                code: 'var picnic = new Image()\npicnic.url = "./docs/images/picnic-eat.png"\npicnic.width = 110\npicnic.height = 110',
                                 tags: "picnic people sprite",
                             },
                             
                             {
                                 url: "./images/picnic-milk.png",
-                                code: 'var milk = new Image({\n  url: "./docs/images/picnic-milk.png",\n  width: 100, \n  height: 100,\n})',
+                                code: 'var milk = new Image()\nmilk.url = "./docs/images/picnic-milk.png"\nmilk.width = 100\nmilk.height = 100',
                                 tags: "picnic milk food sprite",
                             },
                             
                             {
                                 url: "./images/picnic-sandwich.png",
-                                code: 'var sandwich = new Image({\n  url: "./docs/images/picnic-sandwich.png",\n  width: 100, \n  height: 100,\n})',
+                                code: 'var sandwich = new Image()\nsandwich.url = "./docs/images/picnic-sandwich.png"\nsandwich.width = 100\nsandwich.height = 100',
                                 tags: "sandwich food sprite",
                             },
                             
                             {
                                 url: "./images/picnic-watermelon.png",
-                                code: 'var watermelon = new Image({\n  url: "./docs/images/picnic-watermelon.png",\n  width: 100, \n  height: 100,\n})',
+                                code: 'var watermelon = new Image()\nwatermelon.url = "./docs/images/picnic-watermelon.png"\nwatermelon.width = 100\nwatermelon.height = 100',
                                 tags: "watermelon food sprite",
                             },
                             
                             {
                                 url: "./images/platformer-boss.png",
-                                code: 'var boss1 = new Image({\n  url: "./docs/images/platformer-boss.png",\n  width: 90, \n  height: 90,\n})',
+                                code: 'var boss1 = new Image()\nboss1.url = "./docs/images/platformer-boss.png"\nboss1.width = 90\nboss1.height = 90',
                                 tags: "platformer boss animal sprite",
                             },
                             
                             {
                                 url: "./images/platformer-boss2.png",
-                                code: 'var boss2 = new Image({\n  url: "./docs/images/platformer-boss.png",\n  width: 100, \n  height: 100,\n})',
+                                code: 'var boss2 = new Image()\nboss2.url = "./docs/images/platformer-boss.png"\nboss2.width = 100\nboss2.height = 100',
                                 tags: "platformer boss animal sprite",
                             },
                             
                             {
                                 url: "./images/platformer-enemy.png",
-                                code: 'var enemy = new Image({\n  url: "./docs/images/platformer-enemy.png",\n  width: 100, \n  height: 100,\n})',
+                                code: 'var enemy = new Image()\nenemy.url = "./docs/images/platformer-enemy.png"\nenemy.width = 100\nenemy.height = 100',
                                 tags: "platformer boss animal sprite",
                             },
                             
                             {
                                 url: "./images/platformer-enemy2.png",
-                                code: 'var enemy2 = new Image({\n  url: "./docs/images/platformer-enemy2.png",\n  width: 100, \n  height: 100,\n})',
+                                code: 'var enemy2 = new Image()\nenemy2.url = "./docs/images/platformer-enemy2.png"\nenemy2.width = 100\nenemy2.height = 100',
                                 tags: "platformer boss animal sprite",
                             },
                             
                             {
                                 url: "./images/platformer-game-over.png",
-                                code: 'var gameOver = new Image({\n  url: "./docs/images/platformer-game-over.png",\n  width: 100, \n  height: 90,\n})',
+                                code: 'var gameOver = new Image()\ngameOver.url = "./docs/images/platformer-game-over.png"\ngameOver.width = 100\ngameOver.height = 90',
                                 tags: "game over sprite",
                             },
                             
                             {
                                 url: "./images/platformer-heart.png",
-                                code: 'var pixelHeart = new Image({\n  url: "./docs/images/platformer-heart.png",\n  width: 100, \n  height: 100,\n})',
+                                code: 'var pixelHeart = new Image()\npixelHeart.url = "./docs/images/platformer-heart.png"\npixelHeart.width = 100\npixelHeart.height = 100',
                                 tags: "heart shape sprite",
                             },
                             
                             {
                                 url: "./images/platformer-next-level.png",
-                                code: 'var nextLevel = new Image({\n  url: "./docs/images/platformer-next-level.png",\n  width: 130, \n  height: 120,\n})',
+                                code: 'var nextLevel = new Image()\nnextLevel.url = "./docs/images/platformer-next-level.png"\nnextLevel.width = 130\nnextLevel.height = 120',
                                 tags: "next level sprite",
                             },
                             
                             {
                                 url: "./images/platformer-player.png",
-                                code: 'var player = new Image({\n  url: "./docs/images/platformer-player.png",\n  width: 100, \n  height: 100,\n})',
+                                code: 'var player = new Image()\nplayer.url = "./docs/images/platformer-player.png"\nplayer.width = 100\nplayer.height = 100',
                                 tags: "player sprite",
                             },
                             
                              {
                                 url: "./images/platformer-you-win.png",
-                                code: 'var youWin = new Image({\n  url: "./docs/images/platformer-you-win.png",\n  width: 110, \n  height: 110,\n})',
+                                code: 'var youWin = new Image()\nyouWin.url = "./docs/images/platformer-you-win.png"\nyouWin.width = 110\nyouWin.height = 110',
                                 tags: "you win sprite",
                             },
                             
                             {
                                 url: "./images/river-canoe1.png",
-                                code: 'var canoe = new Image({\n  url: "./docs/images/river-canoe1.png",\n  width: 30, \n  height: 130,\n})',
+                                code: 'var canoe = new Image()\ncanoe.url = "./docs/images/river-canoe1.png"\ncanoe.width = 30\ncanoe.height = 130',
                                 tags: "canoe boat river sprite",
                             },
                             
                             {
                                 url: "./images/river-coconut.png",
-                                code: 'var coconut = new Image({\n  url: "./docs/images/river-coconut.png",\n  width: 100, \n  height: 100,\n})',
+                                code: 'var coconut = new Image()\ncoconut.url = "./docs/images/river-coconut.png"\ncoconut.width = 100\ncoconut.height = 100',
                                 tags: "coconut food sprite",
                             },
                             
                             {
                                 url: "./images/river-gator.png",
-                                code: 'var gator = new Image({\n  url: "./docs/images/river-gator.png",\n  width: 130, \n  height: 80,\n})',
+                                code: 'var gator = new Image()\ngator.url = "./docs/images/river-gator.png"\ngator.width = 130\ngator.height = 80',
                                 tags: "gator animal sprite",
                             },
                             
                             {
                                 url: "./images/river-tree.png",
-                                code: 'var tree = new Image({\n  url: "./docs/images/river-tree.png",\n  width: 90, \n  height: 130,\n})',
+                                code: 'var tree = new Image()\ntree.url = "./docs/images/river-tree.png"\ntree.width = 90\ntree.height = 130',
                                 tags: "tree sprite",
                             },
                             
                             {
                                 url: "./images/rr-gameover.png",
-                                code: 'var gameOver2 = new Image({\n  url: "./docs/images/rr-gameover.png",\n  width: 140, \n  height: 90,\n})',
+                                code: 'var gameOver2 = new Image()\ngameOver2.url = "./docs/images/rr-gameover.png"\ngameOver2.width = 140\ngameOver2.height = 90',
                                 tags: "game over sprite",
                             },
                             
                             {
                                 url: "./images/rr-planet.png",
-                                code: 'var planet = new Image({\n  url: "./docs/images/rr-planet.png",\n  width: 100, \n  height: 100,\n})',
+                                code: 'var planet = new Image()\nplanet.url = "./docs/images/rr-planet.png"\nplanet.width = 100\nplanet.height = 100',
                                 tags: "planet sprite",
                             },
                             
                             {
                                 url: "./images/rr-star.png",
-                                code: 'var star = new Image({\n  url: "./docs/images/rr-star.png",\n  width: 100, \n  height: 100,\n})',
+                                code: 'var star = new Image()\nstar.url = "./docs/images/rr-star.png"\nstar.width = 100\nstar.height = 100',
                                 tags: "star sprite",
                             },
                             
                             {
                                 url: "./images/squidchase-fish.png",
-                                code: 'var fish = new Image({\n  url: "./docs/images/squidchase-fish.png",\n  width: 100, \n  height: 115,\n})',
+                                code: 'var fish = new Image()\nfish.url = "./docs/images/squidchase-fish.png"\nfish.width = 100\nfish.height = 115',
                                 tags: "fish sprite",
                             },
                             
                             {
                                 url: "./images/squidchase-squid.png",
-                                code: 'var squid = new Image({\n  url: "./docs/images/squidchase-squid.png",\n  width: 100, \n  height: 115,\n})',
+                                code: 'var squid = new Image()\nsquid.url = "./docs/images/squidchase-squid.png"\nsquid.width = 100\nsquid.height = 115',
                                 tags: "squid animal sprite",
                             },
                             
                             {
                                 url: "./images/tomato-attack-splat.png",
-                                code: 'var splat = new Image({\n  url: "./docs/images/tomato-attack-splat.png",\n  width: 110, \n  height: 100,\n})',
+                                code: 'var splat = new Image()\nsplat.url = "./docs/images/tomato-attack-splat.png"\nsplat.width = 110\nsplat.height = 100',
                                 tags: "splat sprite",
                             },
                             
                             {
                                 url: "./images/tomato-attack-tomato.png",
-                                code: 'var tomato = new Image({\n  url: "./docs/images/tomato-attack-tomato.png",\n  width: 110, \n  height: 100,\n})',
+                                code: 'var tomato = new Image()\ntomato.url = "./docs/images/tomato-attack-tomato.png"\ntomato.width = 110\ntomato.height = 100',
                                 tags: "tomato food sprite",
                             },
                         
                         ],
                         Rectangle: [{
                             description: "Create new rectangle:",
-                            code: 'var rectangleSprite1 = new Rectangle({\n  width: 20, \n  height: 55, \n  color: "pink"\n})',
+                            code: 'var rectangleSprite1 = new Rectangle()\nrectangleSprite1.width = 20\nrectangleSprite1.height = 55\nrectangleSprite1.color = "pink"',
                             tags: "create new rectangle"
                         }, {
                             description: "Set location:",
-                            code: "x: 50, y: -100",
+                            code: "rectangleSprite1.x = 50\nrectangleSprite1.y = -100",
                             tags: "rectangle location x y"
                         }, {
                             description: "Set color:",
-                            code: "color: rgb(100, 50, 240)"
+                            code: "rectangleSprite1.color = rgb(100, 50, 240)"
                         }, {
                             description: "Set width and height:",
-                            code: "width: 30, height: 30"
+                            code: "rectangleSprite1.width = 30\nrectangleSprite1.height = 30"
                         }],
                        
                          Polygon: [{
                             description: "Create new polygon:",
-                            code: 'var polygonSprite1 = new Polygon({\n  sides: 6, \n  length: 100, \n  color: "orange"\n})',
+                            code: 'var polygonSprite1 = new Polygon()\npolygonSprite1.sides = 6\npolygonSprite1.length = 100\npolygonSprite1.color = "orange"',
                             tags: "create new polygon gon"
                         }, {
                             description: "Set location:",
-                            code: "x: 50, y: -100",
+                            code: "polygonSprite1.x = 50\npolygonSprite1.y = -100",
                             tags: "polygon gon location x y"
                         }, {
                             description: "Set color:",
-                            code: "color: rgb(100, 50, 240)"
+                            code: "polygonSprite1.color = rgb(100, 50, 240)"
                         }, {
-                            description: "Set sides and length:",
-                            code: "sides: 12, length: 120"
+                            description: "Set sides and length: (length is the distance from the center of the polygon to the vertex)",
+                            code: "polygonSprite1.sides = 12\npolygonSprite1.length: 120"
                         }],
                         
                         Circle: [{
                             description: "Create new circle:",
-                            code: 'var circleSprite1 = new Circle({\n  radius: 10, \n  color: "#ffffff", \n  x: 0, \n  y: 0\n})',
+                            code: 'var circleSprite1 = new Circle()\ncircleSprite1.radius = 10\ncircleSprite1.color = "white"',
                             tags: "create make new circle"
                         }, {
                             description: "Set location:",
-                            code: "x: 50, y: -100",
+                            code: "circleSprite1.x = 50\ncircleSprite1.y = -100",
                             tags: "circle location x y"
                         }, {
                             description: "Set color:",
-                            code: "color: rgb(100, 50, 240)",
+                            code: "circleSprite1.color = rgb(100, 50, 240)",
                             tags: "circle color"
                         }, {
                             description: "Set size:",
-                            code: "radius: 12",
+                            code: "circleSprite1.radius = 12",
                             tags: "circle size radius"
                         }],
                         
                          Oval: [{
                             description: "Create new oval:",
-                            code: 'var ovalSprite1 = new Oval({\n  width: 20, \n  height: 55, \n  color: "green"\n})',
+                            code: 'var ovalSprite1 = new Oval()\novalSprite1.width = 20\novalSprite1.height = 55\novalSprite1.color = "green"',
                             tags: "create new oval ellipse"
                         }, {
                             description: "Set location:",
-                            code: "x: 50, y: -100",
+                            code: "ovalSprite1.x = 50\novalSprite1.y = -100",
                             tags: "oval ellipse location x y"
                         }, {
                             description: "Set color:",
-                            code: "color: rgb(100, 50, 240)"
+                            code: "ovalSprite1.color = rgb(100, 50, 240)"
                         }, {
                             description: "Set width and height:",
-                            code: "width: 30, height: 30"
+                            code: "ovalSprite1.width = 30\novalSprite1.height = 30"
                         }],
                          Line: [{
                             description: "Create new line:",
-                            code: 'var lineSprite1 = new Line({color: "pink", \n  width: 10, \n  x: -100, \n  y: 100, \n  x1: 10, \n  y1: 20\n})'
+                            code: 'var lineSprite1 = new Line()\nlineSprite1.color = "pink"\nlineSprite1.width = 10\nlineSprite1.x = -100\nlineSprite1.y = 100\nlineSprite1.x1 = 10\nlineSprite1.y1 = 20'
                         }, {
                             description: "Set starting point:",
-                            code: "x: 50, y: -100"
+                            code: "lineSprite1.x = 50\nlineSprite1.y = -100"
                         }, {
                             description: "Set ending point:",
-                            code: "x1: 50, y1: -100"
+                            code: "lineSprite1.x1 = -50\nlineSprite1.y1 = 100"
                         }, {
                             description: "Set line width:",
-                            code: "width: 10"
+                            code: "lineSprite1.width = 10"
                         }, {
                             description: "Set color:",
-                            code: "color: rgb(100, 50, 240)"
+                            code: "lineSprite1.color = rgb(100, 50, 240)"
                         } ],
                     },
                     Motion: [{
@@ -1197,7 +1197,7 @@
                     {
                         url:"./images/sayAndThink.png",
                         description:"These blocks do not exist in WoofJS, but you can use text for a similar effect. Here is an example:",
-                        code:'// First create your speech bubble image sprite\nvar speechBubble = new Image({\n  url: "./docs/images/speechBubble.png",\n  width: 150, \n  height: 75,\n})\n// Then create text\nvar text = new Text({\n text: () => "Hello!", \n size: 25\n})\nforever(() => {\n // Align the speech bubble with your sprite\n // uncomment the following lines and change sprite1 to the name of your sprite:\n // speechBubble.x = sprite1.x + (speechBubble.width / 2) + (sprite1.width / 2)\n // speechBubble.y = sprite1.y + (speechBubble.height / 2) + (sprite1.height / 2)\n // Keep the text aligned with the bubble \n text.x = speechBubble.x\n text.y = speechBubble.y + 10\n})',
+                        code:'// First create your speech bubble image sprite\nvar speechBubble = new Image()\nspeechBubble.url = "./docs/images/speechBubble.png"\nspeechBubble.width = 150\nspeechBubble.height = 75\n// Then create text\nvar text = new Text()\ntext.text = () => "Hello!"\ntext.size = 25\nforever(() => {\n // Align the speech bubble with your sprite\n // uncomment the following lines and change sprite1 to the name of your sprite:\n // speechBubble.x = sprite1.x + (speechBubble.width / 2) + (sprite1.width / 2)\n // speechBubble.y = sprite1.y + (speechBubble.height / 2) + (sprite1.height / 2)\n // Keep the text aligned with the bubble \n text.x = speechBubble.x\n text.y = speechBubble.y + 10\n})',
                         tags:"looks say think hello seconds"
                     },
                     {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
@@ -1335,7 +1335,7 @@
                         tags: "repeat times control"
                     }, {
 	                html: "If you want your code to depend on how many times it's been repeated so far, you can use a variable in the <code>repeat()</code>, which counts up from 1:",
-                        code: 'repeat(8, timesSoFar => {\n  new Polygon({\n    \/\/ we don\'t want polygons with 1 or 2 sides\n    sides: timesSoFar + 2,\n    length: 20,\n    color: "red",\n    x: minX + (timesSoFar * 50)\n  })\n})',
+                        code: 'repeat(8, timesSoFar => {\n  var poly = new Polygon()\n  \/\/ we don\'t want polygons with 1 or 2 sides\n  poly.sides = timesSoFar + 2\n  poly.length = 20\n  poly.color = "red"\n  poly.x = minX + (timesSoFar * 50)\n})',
                         tags: "repeat times control for index"
                     }, {
                         html: "When you use <code>repeat()</code>, your code doesn't repeat as fast as the computer can run it.\
@@ -1395,7 +1395,7 @@
                      {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f674e7a547053302e706e67",
                         html:"Cloning in WoofJS is very difficult. We reccomend starting with the <a href='http://coding.space/woof/cloning-tutorial.html' target='_blank'>Cloning Tutorial</a>. You can also find it in the Tutorials tab.",
-                        code: '// create a list to store all of the clones\nvar clones = []\nevery(4, "seconds", () => {\n  // create a clone every 4 seconds\n  var clone = new Circle({radius: 10, color: "pink", x:\nrandomX(), y: randomY()})\n  // add each clone to the list\n  clones.push(clone)\n})\n\nforever(() => {\n  // forever, for each clone in clones\n  clones.forEach(clone => {\n    // move it to the right\n    clone.x++\n    if (clone.x > maxX) {\n      // delete it if it goes off the screen\n      clone.delete()\n      // remove it from the list\n      clones.remove(clone)\n    }\n  })\n})',
+                        code: '// create a list to store all of the clones\nvar clones = []\nevery(4, "seconds", () => {\n  // create a clone every 4 seconds\n  var clone = new Circle()\n  clone.radius = 10\n  clone.color = "pink"\n  clone.x = randomX()\n  clone.y = randomY()\n  // add each clone to the list\n  clones.push(clone)\n})\n\nforever(() => {\n  // forever, for each clone in clones\n  clones.forEach(clone => {\n    // move it to the right\n    clone.x++\n    if (clone.x > maxX) {\n      // delete it if it goes off the screen\n      clone.delete()\n      // remove it from the list\n      clones.remove(clone)\n    }\n  })\n})',
                         tags: 'clone copy control'
                     }, {
                         code: 'sprite1.delete()',
@@ -1410,95 +1410,95 @@
                     Sound: [{
                         sound: "./sounds/mario-jump.wav",
                         url: "./images/playmario.png",
-                        code: 'var mario = new Sound({\n  url: "./docs/sounds/mario-jump.wav",\n  loop: false,\n  speed: "normal",\n  volume: "normal"\n})\n\nmario.startPlaying()',
+                        code: 'var mario = new Sound()\nmario.url = "./docs/sounds/mario-jump.wav"\nmario.loop = false\nmario.speed = "normal"\nmario.volume = "normal"\n\nmario.startPlaying()',
                         tags: "music play sounds audio"
                     }, {
                         sound: "./sounds/asteroids-saucer.wav",
                         url: "./images/asteroids-saucer.png",
-                        code: 'var saucer = new Sound({\n  url: "./docs/sounds/asteroids-saucer.wav",\n  loop: false,\n  speed: "normal",\n  volume: "normal"\n})\n\nsaucer.startPlaying()',
+                        code: 'var saucer = new Sound()\nsaucer.url = "./docs/sounds/asteroids-saucer.wav"\nsaucer.loop = false\nsaucer.speed = "normal"\nsaucer.volume = "normal"\n\nsaucer.startPlaying()',
                         tags: "music play sounds audio"
                     }, {
                         sound: "./sounds/alien.mp3",
                         url: "./images/playalien.png",
-                        code:  'var alien = new Sound({\n  url: "./docs/sounds/alien.mp3",\n  loop: false,\n  speed: "normal",\n  volume: "normal"\n})\n\nalien.startPlaying()',
+                        code:  'var alien = new Sound()\nalien.url = "./docs/sounds/alien.mp3"\nalien.loop = false\nalien.speed = "normal"\nalien.volume = "normal"\n\nalien.startPlaying()',
                         tags: "music play sounds audio"
                     }, {
                         sound: "./sounds/applause.mp3",
                         url: "./images/playapplause.png",
-                        code: 'var applause = new Sound({\n  url: "./docs/sounds/applause.mp3",\n  loop: false,\n  speed: "normal",\n  volume: "normal"\n})\n\napplause.startPlaying()',
+                        code: 'var applause = new Sound()\napplause.url = "./docs/sounds/applause.mp3"\napplause.loop = false\napplause.speed = "normal"\napplause.volume = "normal"\n\napplause.startPlaying()',
                         tags: "applause music play sounds audio"
                     }, {
                         sound: "./sounds/bark.mp3",
                         url: "./images/playbark.png",
-                        code: 'var bark = new Sound({\n  url: "./docs/sounds/bark.mp3",\n  loop: false,\n  speed: "normal",\n  volume: "normal"\n})\n\nbark.startPlaying()',
+                        code: 'var bark = new Sound()\nbark.url = "./docs/sounds/bark.mp3"\nbark.loop = false\nbark.speed = "normal"\nbark.volume = "normal"\n\nbark.startPlaying()',
                         tags: "bark dog music play sounds audio"
                     }, {
                         sound: "./sounds/switch.mp3",
                         url: "./images/playswitch.png",
-                        code: 'var switchSound = new Sound({\n  url: "./docs/sounds/switch.mp3",\n  loop: false,\n  speed: "normal",\n  volume: "normal"\n})\n\nswitchSound.startPlaying()',
+                        code: 'var switchSound = new Sound()\nswitchSound.url = "./docs/sounds/switch.mp3"\nswitchSound.loop = false\nswitchSound.speed = "normal"\nswitchSound.volume = "normal"\n\nswitchSound.startPlaying()',
                         tags: "switch music play sounds audio"
                     }, {
                         sound: "./sounds/mario-coin.wav",
                         url: "./images/playlevel.png",
-                        code: 'var levelUp = new Sound({\n  url: "./docs/sounds/mario-coin.wav",\n  loop: false,\n  speed: "normal",\n  volume: "normal"\n})\n\nlevelUp.startPlaying()',
+                        code: 'var levelUp = new Sound()\nlevelUp.url = "./docs/sounds/mario-coin.wav"\nlevelUp.loop = false\nlevelUp.speed = "normal"\nlevelUp.volume = "normal"\n\nlevelUp.startPlaying()',
                         tags: "mario music level play sounds audio"
                     }, {
                         sound: "./sounds/meow.mp3",
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f4c387a6e6d4f622e706e67",
-                        code: 'var meow = new Sound({\n  url: "./docs/sounds/meow.mp3",\n  loop: false,\n  speed: "normal",\n  volume: "normal"\n})\n\nmeow.startPlaying()',
+                        code: 'var meow = new Sound()\nmeow.url = "./docs/sounds/meow.mp3"\nmeow.loop = false\nmeow.speed = "normal"\nmeow.volume = "normal"\n\nmeow.startPlaying()',
                         tags: "meow cat music play sounds audio"
                     }, {
                         sound: "./sounds/text-alert.mp3",
                         url: "./images/playtext.png",
-                        code: 'var textAlert = new Sound({\n  url: "./docs/sounds/text-alert.mp3",\n  loop: false,\n  speed: "normal",\n  volume: "normal"\n})\n\ntextAlert.startPlaying()',
+                        code: 'var textAlert = new Sound()\ntextAlert.url = "./docs/sounds/text-alert.mp3"\ntextAlert.loop = false\ntextAlert.speed = "normal"\ntextAlert.volume = "normal"\n\ntextAlert.startPlaying()',
                         tags: "music play sounds audio text alert"
                     }, {
                         sound: "./sounds/fart.wav",
                         url: "./images/playfart.png",
-                        code: 'var fart = new Sound({\n  url: "./docs/sounds/fart.wav",\n  loop: false,\n  speed: "normal",\n  volume: "normal"\n})\n\nfart.startPlaying()',
+                        code: 'var fart = new Sound()\nfart.url = "./docs/sounds/fart.wav"\nfart.loop = false\nfart.speed = "normal"\nfart.volume = "normal"\n\nfart.startPlaying()',
                         tags: "fart music play sounds audio"
                     }, {
                         sound: "./sounds/river-ride.mp3",
                         url: "./images/river-ride.png",
-                        code: 'var riverRide = new Sound({\n  url: "./docs/sounds/river-ride.mp3",\n  loop: false,\n  speed: "normal",\n  volume: "normal"\n})\n\nriverRide.startPlaying()',
+                        code: 'var riverRide = new Sound()\nriverRide.url = "./docs/sounds/river-ride.mp3"\nriverRide.loop = false\nriverRide.speed = "normal"\nriverRide.volume = "normal"\n\nriverRide.startPlaying()',
                         tags: "music play sounds audio"
                     }, {
                         sound: "./sounds/star-wars.mp3",
                         url: "./images/playstarwars.png",
-                        code: 'var starWars = new Sound({\n  url: "./docs/sounds/star-wars.mp3",\n  loop: false,\n  speed: "normal",\n  volume: "normal"\n})\n\nstarWars.startPlaying()',
+                        code: 'var starWars = new Sound()\nstarWars.url = "./docs/sounds/star-wars.mp3"\nstarWars.loop = false\nstarWars.speed = "normal"\nstarWars.volume = "normal"\n\nstarWars.startPlaying()',
                         tags: "star wards music play sounds audio"
                     }, {
                         sound: "./sounds/round_new.mp3",
                         url: "./images/playround.png",
-                        code: 'var newRound = new Sound({\n  url: "./docs/sounds/round_new.mp3",\n  loop: false,\n  speed: "normal",\n  volume: "normal"\n})\n\nnewRound.startPlaying()',
+                        code: 'var newRound = new Sound()\nnewRound.url = "./docs/sounds/round_new.mp3"\nnewRound.loop = false\nnewRound.speed = "normal"\nnewRound.volume = "normal"\n\nnewRound.startPlaying()',
                         tags: "level up music play sounds audio"
                     }, {
                         sound: "./sounds/pop.wav",
                         url: "./images/pop.png",
-                        code: 'var pop = new Sound({\n  url: "./docs/sounds/pop.wav",\n  loop: false,\n  speed: "normal",\n  volume: "normal"\n})\n\npop.startPlaying()',
+                        code: 'var pop = new Sound()\npop.url = "./docs/sounds/pop.wav"\npop.loop = false\npop.speed = "normal"\npop.volume = "normal"\n\npop.startPlaying()',
                         tags: "pop music play sounds audio"
                     }, {
                         sound: "./sounds/bang.wav",
                         url: "./images/bang.png",
-                        code: 'var bang = new Sound({\n  url: "./docs/sounds/bang.wav",\n  loop: false,\n  speed: "normal",\n  volume: "normal"\n})\n\nbang.startPlaying()',
+                        code: 'var bang = new Sound()\nbang.url = "./docs/sounds/bang.wav"\nbang.loop = false\nbang.speed = "normal"\nbang.volume = "normal"\n\nbang.startPlaying()',
                         tags: "bang music play sounds audio"
                     }, {
                         sound: "./sounds/shoot.wav",
                         url: "./images/shoot.png",
-                        code: 'var shoot = new Sound({\n  url: "./docs/sounds/shoot.wav",\n  loop: false,\n  speed: "normal",\n  volume: "normal"\n})\n\nshoot.startPlaying()',
+                        code: 'var shoot = new Sound()\nshoot.url = "./docs/sounds/shoot.wav"\nshoot.loop = false\nshoot.speed = "normal"\nshoot.volume = "normal"\n\nshoot.startPlaying()',
                         tags: "shoot music play sounds audio"
                     }, {
                         description: "Loop:",
-                        code: 'loop: "false"\nloop: "true"',
+                        code: 'mySound.loop = "false"mySound.loop = "true"',
                         tags: "sound sounds audio loop"
 		    }, {
                         description: "Speed: (use string or number value)",
-                        code: '// Slow\nspeed: "slow"\nspeed: 0.5\n\n// Normal\nspeed: "normal"\nspeed: 1\n\n// Fast\nspeed: "fast"\nspeed: 2',
+                        code: '// Slow\nmySound.speed = "slow"\nmySound.speed = 0.5\n\n// Normal\nmySound.speed = "normal"\nmySound.speed = 1\n\n// Fast\nmySound.speed = "fast"\nmySound.speed = 2',
                         tags: "sound sounds audio speed"
                     }, {
                         url: "./images/set-volume.png",
                         description: "(use string or number value between 0 and 1)",
-                        code: '// Mute\nvolume: "mute"\nvolume: 0\n\n// Low\nvolume: "low"\nvolume: 0.5\n\n// Normal\nvolume: "normal"\nvolume: 1',
+                        code: '// Mute\nmySound.volume = "mute"\nmySound.volume = 0\n\n// Low\nmySound.volume = "low"\nmySound.volume = 0.5\n\n// Normal\nmySound.volume = "normal"\nmySound.volume = 1',
                         tags: "sound audio volume"
 		    }, {
                         html: "<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"
@@ -1979,7 +1979,7 @@
                         tags: "increase add plus change by data change decrease"
                     }, {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f4447323649634e2e706e67",
-                        code: 'new Text({\n  text: () => "variable1: " + variable1,\n  x: 0,\n  y: 0,\n  size: 30\n})',
+                        code: 'var variableTextSprite = new Text()\nvariableTextSprite.text = () => "variable1: " + variable1\nvariableTextSprite.x = 0\nvariableTextSprite.y = 0\nvariableTextSprite.size = 30\n',
                         description: '"Showing a variable" works by giving a Text Sprite a function instead of a "string in quotes" as its text attribute. The Text Sprite constantly reevaluates the function which keeps the value on the screen in sync with the value of the variable.',
                         tags: "show variable text data"
                     }, 
@@ -2012,7 +2012,7 @@
                         tags: "contains includes array list data"
                     }, {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f5949473973746c2e706e67",
-                        code: 'new Text({text: () => "array1: " + array1})',
+                        code: 'var arrayTextSprite = new Text()\narrayTextSprite = text: () => "array1: " + array1',
                         tags: "show list data"
                     }, {
                         description: 'Do something for each thing in an array:',

@@ -50,8 +50,8 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
     },
     set: function(value) {
       // whenever the camera is changed, update relevant values
-      thisContext.maxX = value + this.width / 2;
-      thisContext.minX = value - this.width / 2;
+      thisContext.maxX = Math.round(value + this.width / 2);
+      thisContext.minX = Math.round(value - this.width / 2);
       thisContext.mouseX += (value - thisContext._cameraX)
       thisContext._cameraX = value;
     }
@@ -62,8 +62,8 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
     },
     set: function(value) {
       // whenever the camera is changed, update relevant values
-      thisContext.maxY = value + this.height / 2;
-      thisContext.minY = value - this.height / 2;
+      thisContext.maxY = value + Math.round(this.height / 2);
+      thisContext.minY = value - Math.round(this.height / 2);
       thisContext.mouseY += (value - thisContext._cameraY)
       thisContext._cameraY = value;
     }
@@ -209,10 +209,10 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
   thisContext._setCanvasSize = (width, height) => {
     thisContext._height = height;
     thisContext._width = width;
-    thisContext.minX = thisContext.cameraX - thisContext.width / 2;
-    thisContext.maxX = thisContext.cameraX + thisContext.width / 2;
-    thisContext.minY = thisContext.cameraY - thisContext.height / 2;
-    thisContext.maxY = thisContext.cameraY + thisContext.height / 2;
+    thisContext.minX = Math.round(thisContext.cameraX - thisContext.width / 2);
+    thisContext.maxX = Math.round(thisContext.cameraX + thisContext.width / 2);
+    thisContext.minY = Math.round(thisContext.cameraY - thisContext.height / 2);
+    thisContext.maxY = Math.round(thisContext.cameraY + thisContext.height / 2);
     
     thisContext.ready(() => {
       thisContext._spriteCanvas.width = thisContext.width;
@@ -260,7 +260,7 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
   
 
   thisContext.setBackdropURL = function(url){
-    if (typeof url != "string") { throw new TypeError("setBackDropUrl(url) requires one string input."); }
+    if (typeof url != "string") { throw new TypeError("setBackDropURL(url) requires one string input."); }
     thisContext.backdrop.url =  url;
     thisContext.backdrop.type = 'url'
     
@@ -731,21 +731,42 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
     }
     // If sprite is a polygon, create polygon collider
     else if (this.type == "polygon") {
-      var pos = this.rotatedVector(this.x, this.y)
+	    var pos
+      if (this.rotationStyle == "ROTATE") {
+        pos = this.rotatedVector(this.x, this.y)
+      } else {
+        pos = new SAT.Vector(this.x, this.y)
+      }
       var vs = [new SAT.Vector(this.length*1, this.length*0)];
       for (var i = 1; i < this.sides; i++) {
         vs.push(new SAT.Vector(this.length*Math.cos(i*(2*Math.PI/this.sides)),this.length*Math.sin(i*(2*Math.PI/this.sides))));
       }
-      return new SAT.Polygon(pos, vs).rotate(this.radians());
+      if (this.rotationStyle == "ROTATE") {
+        return new SAT.Polygon(pos, vs).rotate(this.radians());
+      } else if (this.rotationStyle == "ROTATE LEFT RIGHT" && ((this.angle%360 >= 90 && this.angle%360 < 270) ||
+	    (this.angle%360 <= -90 && this.angle%360 > -270))) { // this math should match code in this._render
+        return new SAT.Polygon(pos, vs).rotate(Math.PI);
+      } else {
+        return new SAT.Polygon(pos, vs);
+      }
     }
     // Otherwise, create 4-sided collider around sprite
     else {
-      var pos = this.rotatedVector(this.x - this.width / 2, this.y - this.height / 2)
-      var v1 = new SAT.Vector(0, 0)
-      var v2 = this.translatedVector(pos, this.rotatedVector(this.x + this.width / 2, this.y - this.height / 2))
-      var v3 = this.translatedVector(pos, this.rotatedVector(this.x + this.width / 2, this.y + this.height / 2))
-      var v4 = this.translatedVector(pos, this.rotatedVector(this.x - this.width / 2, this.y + this.height / 2))
-      return new SAT.Polygon(pos, [v1, v2, v3, v4])
+      if (this.rotationStyle == "ROTATE") {
+        var pos = this.rotatedVector(this.x - this.width / 2, this.y - this.height / 2)
+        var v1 = new SAT.Vector(0, 0)
+        var v2 = this.translatedVector(pos, this.rotatedVector(this.x + this.width / 2, this.y - this.height / 2))
+        var v3 = this.translatedVector(pos, this.rotatedVector(this.x + this.width / 2, this.y + this.height / 2))
+        var v4 = this.translatedVector(pos, this.rotatedVector(this.x - this.width / 2, this.y + this.height / 2))
+	      return new SAT.Polygon(pos, [v1, v2, v3, v4])
+      } else { // rotation style is LEFT RIGHT or NO ROTATE, which should have non-rotated collider
+      	var pos = new SAT.Vector(this.x - this.width/2, this.y - this.height/2)
+      	var v1 = new SAT.Vector(0,0)
+      	var v2 = this.translatedVector(pos, new SAT.Vector(this.x + this.width / 2, this.y - this.height / 2))
+        var v3 = this.translatedVector(pos, new SAT.Vector(this.x + this.width / 2, this.y + this.height / 2))
+        var v4 = this.translatedVector(pos, new SAT.Vector(this.x - this.width / 2, this.y + this.height / 2))
+	      return new SAT.Polygon(pos, [v1, v2, v3, v4])
+      }
     }
   }
    
@@ -1281,7 +1302,13 @@ Woof.prototype.Line = function({project = undefined, width = 1, x1 = 10, y1 = 10
     set: function(value) {
       throw new TypeError("You cannot set line.height directly. You can only modify line.height by changing the length of your line through moving its points."); 
     }
-  }); 
+  });
+
+  this.setRotationStyle = (style) => {
+    if (style != "ROTATE") {
+      throw TypeError("You cannot set the rotation style of a Line, you must adjust the start and end points.");
+    }
+  }
   
   // Rotates rectangle by the angle between x1 and x and y1 and y
   // Add 90 to the angle because "height" and "width" are essentially reversed in comparison to a rectangle sprite
@@ -1326,6 +1353,15 @@ Woof.prototype.Image = function({project = undefined, url = "./images/SMJjVCL.pn
   };
   this.setImageURL(url);
 
+  Object.defineProperty(this, 'url', {
+    get: function() {
+      return this.image.src;
+    },
+    set: function(value) {
+      this.setImageURL(value);
+    }
+  })
+	
   Object.defineProperty(this, 'width', {
     get: function() {
       return this.imageWidth || this.image.width;
@@ -1432,6 +1468,21 @@ Woof.prototype.Sound = function({url = '', loop = "false", volume = "normal", sp
   this.audio.playbackRate = soundSpeedToAudioSpeed(speed);
   this.audio.volume = soundVolumeToAudioVolume(volume);
 
+  Object.defineProperty(this, 'url', {
+    get: function() {
+      return this.audio.src
+    },
+    set: function(url) {
+      let holdVol = this.audio.volume
+      let holdRate = this.audio.playbackRate
+      let holdLoop = this.audio.loop
+      this.audio = new Audio(url);
+      this.audio.volume = holdVol
+      this.audio.playbackRate = holdRate
+      this.audio.loop = holdLoop
+    }
+  })
+  
   // Allow user to get and set speed
   Object.defineProperty(this, 'speed', {
     get: function() {
