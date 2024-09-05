@@ -2127,7 +2127,7 @@
                     newImages.splice(1, 0, ...images.map(imageURL => {
                         return {
                             url: imageURL,
-                            code: 'var sprite1 = new Image({url: "' + imageURL + '"})',
+                            code: 'var sprite1 = new Image()\nsprite1.url = "' + imageURL + '"',
                             tags: "upload image picture",
                             userUploadImage: true
                         }
