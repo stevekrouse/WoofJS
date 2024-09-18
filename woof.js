@@ -2012,7 +2012,11 @@ const getData = (url, callback) => {
   fetch(url,{mode:'cors',header:{'Access-Control-Allow-Origin':'*'}}).then(result => {
     result.json().then(data => {
       callback(data)
+    }).catch(error => {
+	console.log(error)
     })
+  }).catch(error => {
+      console.error(error)
   })
 }
 

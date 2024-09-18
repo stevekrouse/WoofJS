@@ -120,20 +120,20 @@
                     "Integrations": {
                         "Weather":[
                             {
-                                integrationDescription:"Use the Yahoo Weather integration to get current tempertures and other weather data.",
+                                integrationDescription:"Use the Open Metro integration to get current tempertures and other weather data.",
                                 integrationDescriptionClass:"alert-info",
-                                integrationDocumentationLink:"https://developer.yahoo.com/weather/"
+                                integrationDocumentationLink:"https://open-meteo.com/en/docs"
                             },
                             {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                             {
                                 description:"Here is a walk through of how to display the current temperature and conditions in NYC:",
-                                code:'// First set up temporary text that will be replaced\nvar temp = new Text()\ntemp.text = () => "..."\ntemp.size = 30\ntemp.color = "black"\ntemp.fontFamily = "arial"\n// Then set your variable for the request\nvar city = "New York, NY"\n// Then set the url for your request\nvar url =  "https://query.yahooapis.com/v1/public/yql?q=select * from weather.forecast where woeid in (select woeid from geo.places(1) where text=\'" + city + "\')&format=json"\n// Finaly call the getData() function\ngetData(url, data => {\n // Replace the temporary text\n temp.text = data.query.results.channel.item.condition.temp + "° | " + data.query.results.channel.item.condition.text\n})',
-                                tags:"weather temperature integration"
+                                code:'// First set up temporary text that will be replaced\nvar temp = new Text()\ntemp.text = "..."\ntemp.size = 30\ntemp.color = "grey"\n// Then set the url for your request\nvar url =  "https://api.open-meteo.com/v1/forecast?latitude=40.7143&longitude=-74.006&current=temperature_2m,weather_code&daily=sunrise,sunset&temperature_unit=fahrenheit&timezone=America%2FNew_York"\n// Finaly call the getData() function\ngetData(url, data => {\n // Replace the temporary text\n temp.text = "It\'s currently " + data.current.temperature_2m + "°F in NYC"\n})',
+                                tags:"weather temperature integration API"
                             },
                             {
-                                description:"There is even more you can do with the Yahoo Weather integration:",
-                                code:'// Wind:\ndata.query.results.channel.wind.speed\ndata.query.results.channel.wind.direction\ndata.query.results.channel.wind.chill\n// Atmosphere:\ndata.query.results.channel.atmosphere.humidity\ndata.query.results.channel.atmosphere.pressure\ndata.query.results.channel.atmosphere.rising\n// Current Condtions\ndata.query.results.channel.item.condition.temp\ndata.query.results.channel.item.condition.text\n// Today\'s Forecast\ndata.query.results.channel.item.forecast[0].high\ndata.query.results.channel.item.forecast[0].low\ndata.query.results.channel.item.forecast[0].text\n// Tomorrow\'s Forecast\ndata.query.results.channel.item.forecast[1].high\ndata.query.results.channel.item.forecast[1].low\ndata.query.results.channel.item.forecast[1].text\n',
-                                tags:"weather temperature integration"
+                                description:"There is even more you can do with the Open Metro Weather integration! Explore their documentation to find wind speeds, precipitation, forecasts, and more, which will likely require updating your API URL:",
+                                code:'// Yesterday:\ndata.daily.temperature_2m_max[0]\ndata.daily.temperature_2m_min[0]\ndata.daily.precipitation_sum[0]\ndata.daily.wind_speed_10m_max[0]\n// Tomorrow:\ndata.daily.temperature_2m_max[2]\ndata.daily.temperature_2m_min[2]\ndata.daily.precipitation_sum[2]\ndata.daily.wind_speed_10m_max[2]',
+                                tags:"weather temperature integration API"
                             }
                         ],
                         "Local Storage": [
@@ -166,26 +166,26 @@
                         ],
                         "Currency Conversion":[
                             {
-                                integrationDescription:"Use the Currency Conversion integration to get current conversion rates.",
+                                integrationDescription:"Use the Currency Conversion integration by Exchange Rate API to get current conversion rates.",
                                 integrationDescriptionClass:"alert-info",
-                                integrationDocumentationLink:"http://fixer.io/"
+                                integrationDocumentationLink:"https://www.exchangerate-api.com"
                             },
                             {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                             {
                                 description:"Here is a walk through of a program shows how much $5 is currently worth in EUR.",
-                                code:'// First set up temporary text that will be replaced\nvar temp = new Text()\ntemp.text = () => "..."\ntemp.size = 60\ntemp.color = "white"\ntemp.fontFamily = "arial"\n// Then set your variables for the request\nvar base = "USD"\n// Then set the url for your request\nvar url = "http://api.fixer.io/latest?base=" + base\n// Finaly call the getData() function\ngetData(url, data => {\n // Replace the temporary text with the converted amoung\n temp.text = Math.round(5 * data.rates.EUR * 100) / 100 + " EUR"\n}) ',
+                                code:'// First set up temporary text that will be replaced\nvar temp = new Text()\ntemp.text = () => "..."\ntemp.size = 60\ntemp.color = "grey"\ntemp.fontFamily = "arial"\n// Then set your variables for the request\nvar base = "USD"\n// Then set the url for your request\nvar url = "https://open.er-api.com/v6/latest/" + base\n// Finaly call the getData() function\ngetData(url, data => {\n // Replace the temporary text with the converted amoung\n temp.text = "5 USD = " + Math.round(5 * data.rates.EUR * 100) / 100 + " EUR"\n}) ',
                                 tags:"currency conversion integration"
                             },
                             {
                                 description:"Here is a walk through of a program shows how much 10 GBP is currently worth in USD.",
-                                code:'// First set up temporary text that will be replaced\nvar temp = new Text()\ntemp.text = () => "..."\ntemp.size = 60\ntemp.color = "white"\ntemp.fontFamily = "arial"\n// Then set your variables for the request\nvar base = "GBP"\n// Then set the url for your request\nvar url = "http://api.fixer.io/latest?base=" + base\n// Finaly call the getData() function\ngetData(url, data => {\n // Replace the temporary text with the converted amoung\n temp.text = Math.round(10 * data.rates.USD * 100) / 100 + " USD"\n}) ',
+                                code:'// First set up temporary text that will be replaced\nvar temp = new Text()\ntemp.text = () => "..."\ntemp.size = 60\ntemp.color = "grey"\ntemp.fontFamily = "arial"\n// Then set your variables for the request\nvar base = "GBP"\n// Then set the url for your request\nvar url = "https://open.er-api.com/v6/latest/" + base\n// Finaly call the getData() function\ngetData(url, data => {\n // Replace the temporary text with the converted amoung\n temp.text = "10 GBP = " + Math.round(10 * data.rates.USD * 100) / 100 + " USD"\n}) ',
                                 tags:"currency conversion integration"
                             },
                             {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                             {
-                                integrationDescription:"For other currencies visit the integration's documentation for help.",
+                                integrationDescription:"For other currencies visit the integration's documentation for help. Each call will retrieve rates between the base currency and ALL other currencies, you just need to find the 3-letter-code for the currency you're interested in.",
                                 integrationDescriptionClass:"alert-info",
-                                integrationDocumentationLink:"http://fixer.io/"
+                                integrationDocumentationLink:"https://www.exchangerate-api.com/docs/free"
                             },
                         ],
                         "Sunrise and Sunset Data":[
@@ -198,13 +198,8 @@
                             },
                             {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                             {
-                                description:"Here is a walk through of how to display today's sunrise time in NYC:",
-                                code:'// First set up temporary text that will be replaced\nvar temp = new Text()\ntemp.text = () => "..."\ntemp.size = 60\ntemp.color = "white"\ntemp.fontFamily = "arial"\n// Then set your variables for the request\nvar lat = 40.7128\nvar lng = -74.0059 \n// Then set the url for your request\nvar url = "https://api.sunrise-sunset.org/json?lat=" + lat + "&lng=" + lng\n// Finaly call the getData() function\ngetData(url, data => {\n // Replace the temporary text\n temp.text = data.results.sunrise\n}) ',
-                                tags:"sunrise sunset url integration"
-                            },
-                            {
-                                description:"Here is a walk through of how to display today's sunset time in NYC:",
-                                code:'// First set up temporary text that will be replaced\nvar temp = new Text()\ntemp.text = () => "..."\ntemp.size = 60\ntemp.color = "white"\ntemp.fontFamily = "arial"\n// Then set your variables for the request\nvar lat = 40.7128\nvar lng = -74.0059 \n// Then set the url for your request\nvar url = "https://api.sunrise-sunset.org/json?lat=" + lat + "&lng=" + lng\n// Finaly call the getData() function\ngetData(url, data => {\n // Replace the temporary text\n temp.text = data.results.sunset\n}) ',
+                                description:"Here is a walk through of how to display today's sunrise and sunset time in NYC:",
+                                code:'// First set up temporary text that will be replaced\nvar temp = new Text()\ntemp.text = () => "..."\ntemp.size = 60\ntemp.color = "grey"\ntemp.fontFamily = "arial"\n// Then set your variables for the request\nvar lat = 40.7128\nvar lng = -74.0059 \n// Then set the url for your request\nvar url = "https://api.sunrise-sunset.org/json?lat=" + lat + "&lng=" + lng\n// Finaly call the getData() function\ngetData(url, data => {\n // Replace the temporary text\n temp.text = ""Sunrise: " + data.results.sunrise + " Sunset: " + data.results.sunset\n})',
                                 tags:"sunrise sunset url integration"
                             },
                             {
@@ -221,13 +216,17 @@
                             },
                             {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                             {
+	                        html: "When sending mathematical formulas as a URL for an API request, many special characters will need to be encoded to be properly understood. Use a tool like <a target='_blank' href='https://www.urlencoder.org/'>this one</a> to ensure your expression will be understood.",
+	                        tags: "math calculations derivative factor factorization calculator scientific integration"
+	                    },
+                            {
                                 description:"Here is a walk through of how to display the derivative of x^2 + 2x:",
-                                code:'// First set up temporary text that will be replaced\nvar temp = new Text()\ntemp.text = () => "..."\ntemp.size = 15\ntemp.color = "black"\ntemp.fontFamily = "arial"\n// Then set your variables for the request\nvar operation = "derive"\nvar expression = "x^2+2x"\n// Then set the url for your request\nvar url = "https://newton.now.sh/" + operation + "/" + expression\n// Finaly call the getData() function\ngetData(url, data => {\n // Replace the temporary text\n temp.text = data.result\n})',
+                                code:'// First set up temporary text that will be replaced\nvar temp = new Text()\ntemp.text = () => "..."\ntemp.size = 15\ntemp.color = "black"\ntemp.fontFamily = "arial"\n// Then set your variables for the request\nvar operation = "derive"\nvar expression = "x%5E2%2B2x" // URL Encode x^2 + 2x\n// Then set the url for your request\nvar url = "https://newton.now.sh/api/v2/" + operation + "/" + expression\n// Finaly call the getData() function\ngetData(url, data => {\n // Replace the temporary text\n temp.text = data.result\n})',
                                 tags:"math calculations derivative calculator scientific integration"
                             },
-                            {
+	                    {
                                 description:"Here is a walk through of how to display the factorization of x^2 + 2x:",
-                                code:'// First set up temporary text that will be replaced\nvar temp = new Text()\ntemp.text = () => "..."\ntemp.size = 15\ntemp.color = "black"\ntemp.fontFamily = "arial"\n// Then set your variables for the request\nvar operation = "factor"\nvar expression = "x^2+2x"\n// Then set the url for your request\nvar url = "https://newton.now.sh/" + operation + "/" + expression\n// Finaly call the getData() function\ngetData(url, data => {\n // Replace the temporary text\n temp.text = data.result\n})',
+                                code:'// First set up temporary text that will be replaced\nvar temp = new Text()\ntemp.text = () => "..."\ntemp.size = 15\ntemp.color = "black"\ntemp.fontFamily = "arial"\n// Then set your variables for the request\nvar operation = "factor"\nvar expression = "x%5E2%2B2x"// URL Encode x^2 + 2x\n// Then set the url for your request\nvar url = "https://newton.now.sh/api/v2/" + operation + "/" + expression\n// Finaly call the getData() function\ngetData(url, data => {\n // Replace the temporary text\n temp.text = data.result\n})',
                                 tags:"math calculations derivative factorization integration"
                             },
                             {
@@ -244,7 +243,7 @@
                             {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                             {
                                 description:"Here is a walk through of how to display the a random computer trivia question and its answer:",
-                                code:'// First set up temporary text that will be replaced\nvar temp = new Text()\ntemp.text = () => "..."\ntemp.size = 15\ntemp.color = "black"\ntemp.fontFamily = "arial"\n// Then set the url for your request\nvar url = "https://opentdb.com/api.php?amount=1&category=18&type=multiple"\n// Finaly call the getData() function\ngetData(url, data => {\n // Replace the temporary text\n temp.text = data.results[0].question + "Answer:" + data.results[0].correct_answer\n})',
+                                code:'// First set up temporary text that will be replaced\nvar temp = new Text()\ntemp.text = () => "..."\ntemp.size = 15\ntemp.color = "black"\ntemp.fontFamily = "arial"\n// Then set the url for your request\nvar url = "https://opentdb.com/api.php?amount=1&category=18&type=multiple"\n// Finaly call the getData() function\ngetData(url, data => {\n // Replace the temporary text\n temp.text = data.results[0].question + " Answer:" + data.results[0].correct_answer\n})',
                                 tags:"trivia integration"
                             },
                             {
@@ -270,14 +269,19 @@
                                 integrationDescriptionClass:"alert-info",
                             },
                             {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
+			    {
+			        html: "There are a lot of APIs with interesting data that can be retrieved using <code>getData()</code>. Many of them will require you to create an account and use a provided API Key for security reasons. To avoid excessive API calls, it is encouraged to turn off Auto Run while working on projects using <code>getData()</code>. If you reload the game too often, some API sites will stop processing your requests for varying amounts of time.",
+				tags: "get getData data request json http custom integration",
+			    },
                             {
-                                description:"getData() works by taking an url and a function to do with the returned data. This is an example using the Sunrise-Sunset integration.",
-                                 code:'// First set up temporary text that will be replaced\nvar temp = new Text()\ntemp.text = () => "..."\ntemp.size = 60\ntemp.color = "white"\ntemp.fontFamily = "arial"\n// Then set your variables for the request\nvar lat = 40.7128\nvar lng = -74.0059 \n// Then set the url for your request\nvar url = "https://api.sunrise-sunset.org/json?lat=" + lat + "&lng=" + lng\n// Finaly call the getData() function\ngetData(url, data => {\n // Replace the temporary text\n temp.text = data.results.sunset\n}) ',
-                                tags:"get request json http custom integration"
-                            },
+                                html:"<code>getData()</code> works by taking an url and a function to do with the returned data. This is an example using the Sunrise-Sunset integration.",
+                                code:'// First set up temporary text that will be replaced\nvar temp = new Text()\ntemp.text = () => "..."\ntemp.size = 60\ntemp.color = "grey"\ntemp.fontFamily = "arial"\n// Then set your variables for the request\nvar lat = 40.7128\nvar lng = -74.0059 \n// Then set the url for your request\nvar url = "https://api.sunrise-sunset.org/json?lat=" + lat + "&lng=" + lng\n// Finaly call the getData() function\ngetData(url, data => {\n // Replace the temporary text\n console.log(data)\n temp.text = data.results.sunset\n}) ',
+                                tags:"get getData request json http custom integration"
+			    },
                             {
-                                 html:"<a target='_blank'  href='https://joebeachjoebeach.github.io/json-path-finder/'>Use this Path Finder to help you find the correct path for the data you are looking to retreive.</a>",
-                                integrationDescriptionClass:"alert-info"
+                                html:"Use this <a target='_blank'  href='https://jsonpathfinder.com/'>Path Finder</a> to help you find the correct path for the data you are looking to retreive. If you navigate to your API URL, you can copy and paste the JSON into the path finding tool to help navigate to the data you are interested in.",
+			        integrationDescriptionClass:"alert-info",
+				tags: "getData get data json custom integration path"
                             },
                         ]
                      },
@@ -1335,7 +1339,7 @@
                         tags: "repeat times control"
                     }, {
 	                html: "If you want your code to depend on how many times it's been repeated so far, you can use a variable in the <code>repeat()</code>, which counts up from 1:",
-                        code: 'repeat(8, timesSoFar => {\n  var poly = new Polygon()\n  \/\/ we don\'t want polygons with 1 or 2 sides\n  poly.sides = timesSoFar + 2\n  poly.length = 20\n  poly.color = "red"\n  poly.x = minX + (timesSoFar * 50)\n})',
+                        code: "repeat(8, timesSoFar => {\n  var poly = new Polygon()\n  \/\/ we don't want polygons with 1 or 2 sides\n  poly.sides = timesSoFar + 2\n  poly.length = 20\n  poly.color = 'red'\n  poly.x = minX + (timesSoFar * 50)\n})",
                         tags: "repeat times control for index"
                     }, {
                         html: "When you use <code>repeat()</code>, your code doesn't repeat as fast as the computer can run it.\
@@ -1402,7 +1406,7 @@
                         description: "Delete an object. (Note: This only deletes it from the screen. To truly delete it, you may need to remove it from any arrays it is in.)",
                         tags: ' delete remove destroy clones copy control'
                     }, {
-                        code: '// after a mousedown, you won\'t be able to trigger this event again for 1000 milliseconds\nonMouseDown(throttle(() => score++, 1000))',
+                        code: "// after a mousedown, you won\'t be able to trigger this event again for 1000 milliseconds\nonMouseDown(throttle(() => score++, 1000))",
                         description: 'Only allow something to happen once every X miliseconds:',
                         tags: "debounce throttle control"
                     },
@@ -2059,6 +2063,7 @@
                         code: "forever(() => {\n  sprite.x++\n})",
                         tags: "anonymous function more blocks"
                     },
+	            {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                     {
                         description: "Import JavaScript code from an external URL. The second input happens after the code is imported.",
                         code: "// import the lodash utility library\n// https://lodash.com/docs/4.17.4\nimportCodeURL('https://cdn.jsdelivr.net/lodash/4.17.4/lodash.min.js', () => {\n _.flatten([1, [2, [3, [4]], 5]])\n})",
@@ -2069,7 +2074,12 @@
                         code: "importCodeURL(['https://www.gstatic.com/firebasejs/8.6.7/firebase-app.js',\n'https://www.gstatic.com/firebasejs/8.6.7/firebase-analytics.js',\n'https://www.gstatic.com/firebasejs/8.6.7/firebase-firestore.js'], runGame)",
                         tags: "import code url require firebase library module more blocks"
                     },
-                    
+	            {
+	                html: "To retrieve data from an external website, you can use <code>getData()</code>. For more examples of <code>getData()</code> in use, check out Integrations.",
+	                code: "var url = 'https://opentdb.com/api.php?amount=1&type=multiple'\n\ngetData(url, data => {\n  var question = new Text()\n  question.text = data.results[0].question\n})",
+	                tags: "getData get data request json more blocks integration",
+	            },
+	            {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                     {
                         description: "A comment is a piece of code that is ignored by your browser. You can use it to separate long code into sections, making it easier to read through and edit. Add a comment block like \"Instructions\" or \"Create Sprites\" to your code.",
                         code: "//------------------------------------------\n//------Instruction Screen Sprites----------\n//------------------------------------------",
