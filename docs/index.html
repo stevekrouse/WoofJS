@@ -166,9 +166,9 @@
                         ],
                         "Currency Conversion":[
                             {
-                                integrationDescription:"Use the Currency Conversion integration by Exchange Rate API to get current conversion rates.",
+                                integrationDescription:"Use the Currency Conversion integration by <a target='_blank' href='https://www.exchangerate-api.com'>Exchange Rate API</a> to get current conversion rates.",
                                 integrationDescriptionClass:"alert-info",
-                                integrationDocumentationLink:"https://www.exchangerate-api.com"
+                                integrationDocumentationLink:"https://www.exchangerate-api.com/docs/free"
                             },
                             {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                             {
@@ -221,12 +221,12 @@
 	                    },
                             {
                                 description:"Here is a walk through of how to display the derivative of x^2 + 2x:",
-                                code:'// First set up temporary text that will be replaced\nvar temp = new Text()\ntemp.text = () => "..."\ntemp.size = 15\ntemp.color = "black"\ntemp.fontFamily = "arial"\n// Then set your variables for the request\nvar operation = "derive"\nvar expression = "x%5E2%2B2x" // URL Encode x^2 + 2x\n// Then set the url for your request\nvar url = "https://newton.now.sh/api/v2/" + operation + "/" + expression\n// Finaly call the getData() function\ngetData(url, data => {\n // Replace the temporary text\n temp.text = data.result\n})',
+                                code:'// First set up temporary text that will be replaced\nvar temp = new Text()\ntemp.text = () => "..."\ntemp.size = 15\ntemp.color = "grey"\ntemp.fontFamily = "arial"\n// Then set your variables for the request\nvar operation = "derive"\nvar expression = "x%5E2%2B2x" // URL Encode x^2 + 2x\n// Then set the url for your request\nvar url = "https://newton.now.sh/api/v2/" + operation + "/" + expression\n// Finaly call the getData() function\ngetData(url, data => {\n // Replace the temporary text\n temp.text = data.result\n})',
                                 tags:"math calculations derivative calculator scientific integration"
                             },
 	                    {
                                 description:"Here is a walk through of how to display the factorization of x^2 + 2x:",
-                                code:'// First set up temporary text that will be replaced\nvar temp = new Text()\ntemp.text = () => "..."\ntemp.size = 15\ntemp.color = "black"\ntemp.fontFamily = "arial"\n// Then set your variables for the request\nvar operation = "factor"\nvar expression = "x%5E2%2B2x"// URL Encode x^2 + 2x\n// Then set the url for your request\nvar url = "https://newton.now.sh/api/v2/" + operation + "/" + expression\n// Finaly call the getData() function\ngetData(url, data => {\n // Replace the temporary text\n temp.text = data.result\n})',
+                                code:'// First set up temporary text that will be replaced\nvar temp = new Text()\ntemp.text = () => "..."\ntemp.size = 15\ntemp.color = "grey"\ntemp.fontFamily = "arial"\n// Then set your variables for the request\nvar operation = "factor"\nvar expression = "x%5E2%2B2x"// URL Encode x^2 + 2x\n// Then set the url for your request\nvar url = "https://newton.now.sh/api/v2/" + operation + "/" + expression\n// Finaly call the getData() function\ngetData(url, data => {\n // Replace the temporary text\n temp.text = data.result\n})',
                                 tags:"math calculations derivative factorization integration"
                             },
                             {
@@ -243,7 +243,7 @@
                             {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                             {
                                 description:"Here is a walk through of how to display the a random computer trivia question and its answer:",
-                                code:'// First set up temporary text that will be replaced\nvar temp = new Text()\ntemp.text = () => "..."\ntemp.size = 15\ntemp.color = "black"\ntemp.fontFamily = "arial"\n// Then set the url for your request\nvar url = "https://opentdb.com/api.php?amount=1&category=18&type=multiple"\n// Finaly call the getData() function\ngetData(url, data => {\n // Replace the temporary text\n temp.text = data.results[0].question + " Answer:" + data.results[0].correct_answer\n})',
+                                code:'// First set up temporary text that will be replaced\nvar temp = new Text()\ntemp.text = () => "..."\ntemp.size = 15\ntemp.color = "grey"\ntemp.fontFamily = "arial"\n// Then set the url for your request\nvar url = "https://opentdb.com/api.php?amount=1&category=18&type=multiple"\n// Finaly call the getData() function\ngetData(url, data => {\n // Replace the temporary text\n temp.text = data.results[0].question + " Answer:" + data.results[0].correct_answer\n})',
                                 tags:"trivia integration"
                             },
                             {
