@@ -925,7 +925,37 @@
                                 code: 'var tomato = new Image()\ntomato.url = "./docs/images/tomato-attack-tomato.png"\ntomato.width = 110\ntomato.height = 100',
                                 tags: "tomato food sprite",
                             },
-                        
+		            {
+                                url: "./images/runCycle1.png",
+                                code: 'var runCycle1 = new Image()\nrunCycle1.url = "./docs/images/runCycle1.png"\nrunCycle1.width = 60\nrunCycle1.height = 90',
+                                tags: "run cycle runcycle animation costume sprite",
+                            },
+			    {
+                                url: "./images/runCycle2.png",
+                                code: 'var runCycle2 = new Image()\nrunCycle2.url = "./docs/images/runCycle2.png"\nrunCycle2.width = 60\nrunCycle2.height = 90',
+                                tags: "run cycle runcycle animation costume sprite",
+			    },
+			    {
+                                url: "./images/runCycle3.png",
+                                code: 'var runCycle3 = new Image()\nrunCycle3.url = "./docs/images/runCycle3.png"\nrunCycle3.width = 60\nrunCycle3.height = 90',
+                                tags: "run cycle runcycle animation costume sprite",
+			    },
+			    {
+                                url: "./images/runCycle4.png",
+                                code: 'var runCycle4 = new Image()\nrunCycle4.url = "./docs/images/runCycle4.png"\nrunCycle4.width = 60\nrunCycle4.height = 90',
+                                tags: "run cycle runcycle animation costume sprite",
+			    },
+			    {
+                                url: "./images/runCycle5.png",
+                                code: 'var runCycle5 = new Image()\nrunCycle5.url = "./docs/images/runCycle5.png"\nrunCycle5.width = 60\nrunCycle5.height = 90',
+                                tags: "run cycle runcycle animation costume sprite",
+                            },
+                            {
+                                url: "./images/runCycle6.png",
+                                code: 'var runCycle6 = new Image()\nrunCycle6.url = "./docs/images/runCycle6.png"\nrunCycle6.width = 60\nrunCycle6.height = 90',
+                                tags: "run cycle runcycle animation costume sprite",
+                            },
+
                         ],
                         Rectangle: [{
                             description: "Create new rectangle:",
@@ -1223,10 +1253,10 @@
                     {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
                     {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f513078533746662e706e67",
-                        code: "imageSprite1.setImageURL('./images/SMJjVCL.png')",
+                        code: "imageSprite1.url = './images/SMJjVCL.png'",
                         tags: "costume image url picture switch looks"
                     }, {
-                        description: "You can only setImageURL() for Images.\nChange the color for rectangles, text, lines and circles:",
+                        description: "You can only set the url property for Image Sprites.\nChange the color for rectangles, text, lines and circles:",
                         tags: "change color looks"
                     }, {
                         code: 'rectangleSprite1.color = "purple"',
@@ -1992,7 +2022,11 @@
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f7366536d6f44542e706e67",
                         code: "var array1 = []",
                         tags: "array list make data"
-                    }, {
+		    }, {
+		        description: 'You can create lists with some data already inside.',
+			code: "var array1 = [5, 'apple', 13, 42, 'banana']",
+			tags: "array list make data"
+		    }, {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f304b306e5144332e706e67",
                         code: "array1.push('thing')",
                         description: "You can add anything to an array in JavaScript, including numbers, strings, but even Sprites, functions, and other arrays.",

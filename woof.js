@@ -858,7 +858,7 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
     } else if (style == "ROTATE LEFT RIGHT") {
       this.rotationStyle = "ROTATE LEFT RIGHT";
     } else {
-      throw TypeError("Unrecognized rotation style: " + style);
+      throw TypeError("Unrecognized rotation style: " + style + ". setRotationStyle only accepts 'ROTATE', 'NO ROTATE', and 'ROTATE LEFT RIGHT'");
     }
   };
   
