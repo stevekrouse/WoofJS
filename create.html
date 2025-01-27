@@ -1666,10 +1666,22 @@
 
     // warns the user when they try to close the page without saving
     window.onbeforeunload = function(e) {
-       if (app.status == "DIRTY") {
+      if (app.status == "DIRTY") {
+	 // this isn't actually displayed to users - modern browsers don't allow this level of control
+	 //   I'm keeping this in because I'm a coward and don't want to change things
          var dialogText = 'Make sure to copy and paste your work somewhere safe.';
          e.returnValue = dialogText;
-         return dialogText;
+
+	 // this is a stupid hack that approximates attaching a callback function to the 'cancel' button
+	 //   of the prompt created by this beforeUnload event. If the user allows the reload, it *should*
+	 //   reload the page before this timeout has an effect. I am not fully confident this is true, but
+	 //   it seems to work in the testing I have done.
+	 // See issue #623 for what this is addressing
+	 setTimeout(() => {
+	   // set the URL back to the previously saved URL
+	   window.location.hash = currentHash
+	 }, 0)
+	 return dialogText;
        }
     };
 
