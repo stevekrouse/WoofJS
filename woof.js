@@ -752,19 +752,27 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
     }
     // Otherwise, create 4-sided collider around sprite
     else {
+      var textXOffset = 0
+      if (this.type == "text") {
+	if (this.textAlign == "start" || this.textAlign == "left") {
+	  textXOffset = this.width / 2
+	} else if (this.textAlign == "end" || this.textAlign == "right") {
+	  textXOffset = - this.width / 2
+	}
+      }
       if (this.rotationStyle == "ROTATE") {
-        var pos = this.rotatedVector(this.x - this.width / 2, this.y - this.height / 2)
+        var pos = this.rotatedVector(this.x - this.width / 2 + textXOffset, this.y - this.height / 2)
         var v1 = new SAT.Vector(0, 0)
-        var v2 = this.translatedVector(pos, this.rotatedVector(this.x + this.width / 2, this.y - this.height / 2))
-        var v3 = this.translatedVector(pos, this.rotatedVector(this.x + this.width / 2, this.y + this.height / 2))
-        var v4 = this.translatedVector(pos, this.rotatedVector(this.x - this.width / 2, this.y + this.height / 2))
+        var v2 = this.translatedVector(pos, this.rotatedVector(this.x + this.width / 2 + textXOffset, this.y - this.height / 2))
+        var v3 = this.translatedVector(pos, this.rotatedVector(this.x + this.width / 2 + textXOffset, this.y + this.height / 2))
+        var v4 = this.translatedVector(pos, this.rotatedVector(this.x - this.width / 2 + textXOffset, this.y + this.height / 2))
 	      return new SAT.Polygon(pos, [v1, v2, v3, v4])
       } else { // rotation style is LEFT RIGHT or NO ROTATE, which should have non-rotated collider
-      	var pos = new SAT.Vector(this.x - this.width/2, this.y - this.height/2)
+      	var pos = new SAT.Vector(this.x - this.width/2 + textXOffset, this.y - this.height/2)
       	var v1 = new SAT.Vector(0,0)
-      	var v2 = this.translatedVector(pos, new SAT.Vector(this.x + this.width / 2, this.y - this.height / 2))
-        var v3 = this.translatedVector(pos, new SAT.Vector(this.x + this.width / 2, this.y + this.height / 2))
-        var v4 = this.translatedVector(pos, new SAT.Vector(this.x - this.width / 2, this.y + this.height / 2))
+      	var v2 = this.translatedVector(pos, new SAT.Vector(this.x + this.width / 2 + textXOffset, this.y - this.height / 2))
+        var v3 = this.translatedVector(pos, new SAT.Vector(this.x + this.width / 2 + textXOffset, this.y + this.height / 2))
+        var v4 = this.translatedVector(pos, new SAT.Vector(this.x - this.width / 2 + textXOffset, this.y + this.height / 2))
 	      return new SAT.Polygon(pos, [v1, v2, v3, v4])
       }
     }
@@ -1077,8 +1085,6 @@ Woof.prototype.Text = function({project = undefined, text = "Text", size = 12, c
   this.size = Math.abs(size);
   this.color = color;
   this.fontFamily = fontFamily;
-  // TODO remove text align or make the collider take it into account
-  // currently, the collider doesn't know about textAlign so things can be quite inaccurate
   this.textAlign = textAlign;
   
   Object.defineProperty(this, 'width', {
