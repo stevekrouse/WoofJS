@@ -654,7 +654,12 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
       if (typeof value != "number") { throw new TypeError("sprite.x can only be set to a number."); }
       this.privateX = value;
       this.project.ready(this.trackPen); // any change to x, is tracked for the pen
-    }
+    },
+      // to allow bundles to modify behavior
+      //   this is a bit spooky, but seems necessary to make bundles,
+      //   and I don't think leads to accidental breaking of student projects
+      configurable: true
+      
   });
   
   Object.defineProperty(this, 'y', {
@@ -665,7 +670,8 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
       if (typeof value != "number") { throw new TypeError("sprite.y can only be set to a number."); }
       this.privateY = value;
       this.project.ready(this.trackPen); // any change to y to tracked for the pen
-    }
+    },
+    configurable: true // to allow bundles to modify behavior
   });
 
   this.privateX = x;
@@ -826,7 +832,7 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
           // no rotate
         }
       }
-      
+
       this.render(context);
       context.restore();
     }
@@ -901,6 +907,10 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
       
     if (this.deleted || !this.showing) { return false; }
     if (sprite.deleted || !sprite.showing) { return false; }
+
+    if (sprite.type == "bundle") {
+      return sprite.touching(this, precise);
+    }
     
     if (!detectCollision(this.collider(), sprite.collider())) { return false; }
     
@@ -977,24 +987,32 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
     get: function() {
       if (this.deleted || !this.showing) { return false; }
       return this.over(this.project.mouseX, this.project.mouseY);
-    }
+    },
+    configurable: true // to allow spriteBundles to overwrite behavior
   });
   
   Object.defineProperty(this, 'mouseDown', {
     get: function() {
       if (this.deleted || !this.showing) { return false; }
       return this.mouseOver && this.project.mouseDown;
-    }
+    },
+    configurable: true // to allow spriteBundles to overwrite behavior
   });
   
   this.turnLeft = (degrees = 1) => {
     if (typeof degrees != "number") { throw new TypeError("turnLeft(degrees) requires one number input."); }
     this.angle += degrees;
+    while (this.angle > 360) {
+      this.angle -= 360
+    }
   };
   
   this.turnRight = (degrees = 1) => {
     if (typeof degrees != "number") { throw new TypeError("turnRight(degrees) requires one number input."); }
     this.angle -= degrees;
+    while (this.angle < 0) {
+      this.angle += 360
+    }
   };
   
   this.sendToBack = function() {
@@ -1077,6 +1095,251 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
     }
   };
 };
+
+Woof.prototype.Bundle = function({project = undefined, components = [], x = 0, y = 0, angle = 0} = {}) {
+  this.type = "bundle"
+  this.components = components
+
+  Woof.prototype.Sprite.call(this);  
+    
+  this.addComponent = function(sprite, offsetX=0, offsetY=0, offsetAngle=0) {
+    sprite.offsetX = offsetX
+    sprite.offsetY = offsetY
+    sprite.offsetAngle = offsetAngle
+    this.components.push(sprite)
+    this.arrangeComponents()  
+  }
+
+  // set the components where they should be based on this
+  //   sprite's position and their offsets. From:
+  // https://math.stackexchange.com/questions/2581058/rotating-rectangle-by-its-center
+  this.arrangeComponents = () => {
+    components.forEach(comp => {
+      comp.x = comp.offsetX * Math.cos(this.radians()) -
+	    comp.offsetY * Math.sin(this.radians()) + this.x
+      comp.y = comp.offsetX * Math.sin(this.radians()) +
+	    comp.offsetY * Math.cos(this.radians()) + this.y
+      comp.angle = this.angle + comp.offsetAngle
+    })
+    return;
+  }
+
+  Object.defineProperty(this, 'x', {
+    get: function() {
+      return this.privateX;
+    },
+    set: function(value) {
+      if (typeof value != "number") {
+	throw new TypeError("sprite.x can only be set to a number.");
+      }
+      this.privateX = value;
+      this.project.ready(this.trackPen);
+      this.arrangeComponents();
+    }
+  })
+
+  Object.defineProperty(this, 'y', {
+    get: function() {
+      return this.privateY;
+    },
+    set: function(value) {
+      if (typeof value != "number") {
+	throw new TypeError("sprite.x can only be set to a number.");
+      }
+      this.privateY = value;
+      this.project.ready(this.trackPen);
+      this.arrangeComponents();
+    }
+  })
+
+  Object.defineProperty(this, 'angle', {
+    get: function() {
+      return this.privateAngle;
+    },
+    set: function(value) {
+      if (typeof value != "number") {
+	throw new TypeError("sprite.angle can only be set to a number");
+      }
+      while (value > 360) {
+	value -= 360
+      }
+      while (value < 0) {
+	value += 360
+      }
+      this.arrangeComponents();
+      this.privateAngle = value
+    }
+  })
+
+  this.angle = angle
+  this.x = x
+  this.y = y
+
+    // this intentionally doesn't delete the component.
+    //   Most calls to removeComponent should probably call sprite.delete(),
+    //   but leaving that up to the user for cases where that isn't true
+  this.removeComponent = function(sprite) {
+    this.components.remove(sprite)
+  }
+
+  // this doesn't make sense for bundles, shouldn't be called,
+  //   and thus is intentionally broken
+  this.collider = function() {
+    return null
+  }
+
+  this._render = function(context) {
+    return null
+      /* the component sprites are already sprites that
+	 are getting rendered, so this meta-container doesn't
+	 need to do anything to render (?)
+    this.components.forEach((sprite) => {
+      sprite._render(context)
+    }) */
+  }
+
+  this.setRotationStyle = function(style) {
+    this.components.forEach((sprite) => {
+      sprite.setRotationStyle(style)
+    })
+    this.rotationStyle = style
+  }
+
+  // I'm not convinced this is ever used, so not implementing it for now
+  this.bounds = function() {
+    return {}
+  }
+
+  this.touching = (sprite, precise) => {
+    var isTouching = false
+    this.components.forEach((ourSprite) => {  
+      if (sprite.type == "bundle") {
+        sprite.components.forEach((objSprite) => {
+	  if (ourSprite.touching(objSprite)) {
+	    isTouching = true
+	  }
+	})
+      } else {
+	if (ourSprite.touching(sprite)) {
+	  isTouching = true
+	}
+      }
+    })
+    return isTouching
+  }
+
+  // These don't make sense for bundles, shouldn't be called,
+  //   and thus are intentionally broken
+  this.overlap = ({left, right, top, bottom}) => {
+    return null
+  }
+
+  this.over = (x, y) => {
+    return null
+  }
+
+  Object.defineProperty(this, 'mouseOver', {
+    get: function() {
+      var retVal = false
+      if (this.deleted || !this.showing) { return false }
+      this.components.forEach((sprite) => {
+	if (sprite.over(this.project.mouseX, this.project.mouseY)) {
+	  retVal = true
+	}
+      })
+      return retVal
+    }
+  });
+
+  Object.defineProperty(this, 'mouseDown', {
+      get: function() {
+	if (this.deleted || !this.showing || !this.project.mouseDown) { return false }
+	var retVal = false
+	this.components.forEach((sprite) => {
+	  if (sprite.mouseOver) {
+	    retVal = true
+	  }
+	})
+	return retVal
+      }
+  });
+
+  this.sendToFront = function() {
+    if (arguments.length > 0) { throw new TypeError("sendToFront() requires no inputs."); }
+    this.components.forEach((sprite) => {
+      sprite.sendToFront()
+    })
+  }
+
+  this.sendToBack = function() {
+    if (arguments.length > 0) { throw new TypeError("sendToBack() requires no inputs."); }
+    this.components.forEach((sprite) => {
+      sprite.sendToBack()
+    })
+  }
+
+  // this._onMouseDowns = []; // not needed as it is inherited
+  this.onMouseDown = (func) => {
+    if (typeof func != "function") { throw new TypeError("onMouseDown(function) requires one function input."); }
+    this._onMouseDowns.push(func);  
+  };
+  this._onMouseDownHandler = (event) => {
+    var [mouseX, mouseY] = this.project.translateToCenter(event.clientX, event.clientY);
+    var shouldTrigger = false
+    this.components.forEach((sprite) => {
+      if (sprite.showing && sprite.over(mouseX, mouseY)) {
+	shouldTrigger = true
+      }
+    })
+    if (shouldTrigger) {
+      this._onMouseDowns.forEach((func) => {
+	func(mouseX, mouseY)
+      })
+    }
+  }
+
+  this.onMouseUp = (func) => {
+    if (typeof func != "function") { throw new TypeError("onMouseDown(function) requires one function input."); }
+    this._onMouseUps.push(func);  
+  };
+  this._onMouseUpHandler = (event) => {
+    var [mouseX, mouseY] = this.project.translateToCenter(event.clientX, event.clientY);
+    var shouldTrigger = false
+    this.components.forEach((sprite) => {
+      if (sprite.showing && sprite.over(mouseX, mouseY)) {
+	shouldTrigger = true
+      }
+    })
+    if (shouldTrigger) {
+      this._onMouseUps.forEach((func) => {
+	func(mouseX, mouseY)
+      })
+    }
+  }
+    
+  this.project.ready(() => {
+    this.project._spriteCanvas.addEventListener("mousedown", this._onMouseDownHandler);
+    this.project._spriteCanvas.addEventListener("mouseup", this._onMouseUpHandler);
+  })
+    
+  this.delete = function() {
+    if (arguments.length > 0) {
+      throw new TypeError("delete() requires no inputs");
+    }
+    if (this.deleted) { return }
+    this.showing = false;
+    this.deleted = true;
+    this.components.forEach((sprite) => {
+      sprite.delete()
+    })
+    if (this.project._sprites.includes(this)) {
+      this.project._sprites.splice(this.project._sprites.indexOf(this), 1);
+      this.project._spriteCanvas.removeEventListener("mousedown", this._onMouseDownHandler);
+    }
+  }
+}
+
+Object.setPrototypeOf(Woof.prototype.Bundle, Woof.prototype.Sprite);
 
 Woof.prototype.Text = function({project = undefined, text = "Text", size = 12, color = "black", fontFamily = "arial", textAlign = "center"} = {}) {
   this.type = "text"
