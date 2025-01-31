@@ -809,6 +809,10 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
     context.restore();
   }
 
+  // this orients before rendering, and then calls this.render to
+  //   actually render. All instances of sprites must have a render
+  //   method, but Sprite essentially an abstract class so leaves the
+  //   implementation to subclasses
   this._render = function(context) {
     if (this.showing && !this.deleted && this.overlap(this.project.bounds())) {
       if (this.showCollider) { this._renderCollider(context); }
@@ -1175,9 +1179,9 @@ Woof.prototype.Bundle = function({project = undefined, components = [], x = 0, y
   this.x = x
   this.y = y
 
-    // this intentionally doesn't delete the component.
-    //   Most calls to removeComponent should probably call sprite.delete(),
-    //   but leaving that up to the user for cases where that isn't true
+  // this intentionally doesn't delete the component.
+  //   Most calls to removeComponent should call sprite.delete(),
+  //   but leaving that up to the user
   this.removeComponent = function(sprite) {
     this.components.remove(sprite)
   }
@@ -1278,7 +1282,8 @@ Woof.prototype.Bundle = function({project = undefined, components = [], x = 0, y
     })
   }
 
-  // this._onMouseDowns = []; // not needed as it is inherited
+  // this._onMouseDowns is not needed as it is inherited
+  //   (similarly omitted for _onMouseUps)
   this.onMouseDown = (func) => {
     if (typeof func != "function") { throw new TypeError("onMouseDown(function) requires one function input."); }
     this._onMouseDowns.push(func);  
@@ -1339,9 +1344,167 @@ Woof.prototype.Bundle = function({project = undefined, components = [], x = 0, y
   }
 }
 
-Object.setPrototypeOf(Woof.prototype.Bundle, Woof.prototype.Sprite);
-
 Woof.prototype.Text = function({project = undefined, text = "Text", size = 12, color = "black", fontFamily = "arial", textAlign = "center"} = {}) {
+  Woof.prototype.Bundle.call(this);
+
+  this.text = text;
+  this.privateSize = size;
+  this.privateColor = color;
+  this.privateFontFamily = fontFamily;
+  this.privateTextAlign = textAlign;
+
+  Object.defineProperty(this, 'size', {
+    get: function() {
+      return this.privateSize;
+    },
+    set: function(value) {
+      if (typeof value != "number") {
+	throw new TypeError("text.size can only be set to a number, given: " + value);
+      }
+      if (value < 0) {
+	throw new TypeError("text.size must be positive, given: " + value);
+      }
+      this.components.forEach(comp => {
+	comp.size = value
+      })
+      this.privateSize = value
+    }
+  })
+
+  Object.defineProperty(this, 'color', {
+    get: function() {
+      return this.privateColor;
+    },
+    set: function(value) {
+      if (typeof value != "string") {
+	throw new TypeError("text.color can only be set to a string, given: " + value);
+      }
+      this.components.forEach(comp => {
+	comp.color = value
+      })
+      this.privateColor = value
+    }
+  })
+
+  Object.defineProperty(this, 'textAlign', {
+    get: function() {
+      return this.privateTextAlign;
+    },
+    set: function(value) {
+      if (typeof value != "string" ||
+	  !(value.toLowerCase() == 'start' ||
+	    value.toLowerCase() == 'end' ||
+	    value.toLowerCase() == 'left' ||
+	    value.toLowerCase() == 'right' ||
+	    value.toLowerCase() == 'center')) {
+	  throw new TypeError("text.textAlign can only be set to center, left, right, start, or end");
+      }
+      this.components.forEach(comp => {
+	comp.textAlign = value
+      })
+      this.privateTextAlign = value
+    }
+  })
+
+  Object.defineProperty(this, 'fontFamily', {
+    get: function() {
+      return this.privateFontFamily;
+    },
+    set: function(value) {
+      if (typeof value != "string") {
+	throw new TypeError("text.fontFamily can only be set to a string, given: " + value);
+      }
+      this.components.forEach(comp => {
+	comp.fontFamily = value
+      })
+      this.privateFontFamily = value
+    }
+  })
+
+  Object.defineProperty(this, 'showCollider', {
+    get: function() {
+      return this.privateShowCollider;
+    },
+    set: function(value) {
+      this.components.forEach(comp => {
+	comp.showCollider = value
+      })
+      this.privateShowCollider = value
+    }
+  })
+
+  Object.defineProperty(this, 'width', {
+    get: function() {
+      var maxWidth = 0;
+      this.components.forEach(comp => {
+	if (comp.width > maxWidth) {
+	  maxWidth = comp.width
+	}
+      })
+      return maxWidth;
+    },
+    set: function(value) {
+      throw new TypeError("You cannot modify the width of Text. You can only change its size.");
+    }
+  })
+
+  Object.defineProperty(this, 'height', {
+    get: function() {
+      return this.components[0].height * this.components.length;
+    },
+    set: function(value) {
+      throw new TypeError("You cannot modify the height of Text. You can only change its size.");
+    }
+  })
+    
+  this.textEval = () => {
+    if (typeof(this.text) == "function"){
+      // if we get a functions for text, evaluate it every time we are asked to render the text
+      try { return this.text().toString(); } catch (e) { console.error("Error with text function: " + e.message); }
+    } else {
+      return this.text;
+    }
+  }
+
+    // this relies on this bundle being rendered before the
+    //   TextPrimatives in components. That should generally be
+    //   true but is not a super strong assumption
+  this._render = function(context) {
+    let textList = this.textEval().split("\n")
+    // make the component text sprites equal the number of lines
+    let changed = false;
+    while (textList.length < this.components.length) {
+      let toDel = this.components[this.components.length-1];
+      this.removeComponent(toDel);
+      toDel.delete();
+      changed = true;
+    }
+    while (textList.length > this.components.length) {
+	this.addComponent(new TextPrimative({
+	    size: this.size,
+	    color: this.color,
+	    fontFamily: this.fontFamily,
+	    textAlign: this.textAlign,
+	    showCollider: this.showCollider
+	}));
+      changed = true;
+    }
+
+    if (true) {
+      range(0, textList.length).forEach(i => {
+	this.components[i].text = textList[i]
+	  this.components[i].offsetY = this.size * (-i + ((textList.length - 1) / 2));
+      })
+    }
+    this.arrangeComponents();
+  }
+}
+
+// this is how we handle one line of text. It was the only text
+//   sprite, but didn't handle newlines, and so is now mainly
+//   internal after a refactor. It also only allows strings
+//   in the text field (before it also allowed functions)
+Woof.prototype.TextPrimative = function({project = undefined, text = "Text", size = 12, color = "black", fontFamily = "arial", textAlign = "center"} = {}) {
   this.type = "text"
   Woof.prototype.Sprite.call(this, arguments[0]);
   this.text = text;
@@ -1392,12 +1555,7 @@ Woof.prototype.Text = function({project = undefined, text = "Text", size = 12, c
   };
   
   this.textEval = () => {
-    if (typeof(this.text) == "function"){
-      // if we get a functions for text, evaluate it every time we are asked to render the text
-      try { return this.text(); } catch (e) { console.error("Error with text function: " + e.message); }
-    } else {
-      return this.text;
-    }
+    return this.text;
   }
   
   this.render = (context) => {
