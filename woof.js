@@ -689,6 +689,12 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
   this.toJSON = () => {
     return {x: this.x, y: this.y, angle: this.angle, rotationStyle: this.rotationStyle, showing: this.showing, penDown: this._penDown, penColor: this.penColor, penWidth: this.penWidth, deleted: this.deleted};
   };
+
+  // this is deliberately simple to make it so showing sprites via
+  //   text is somewhat informative and not overwhelming
+  this.toString = () => {
+    return this.type + "@(" + this.x + "," + this.y + ")";
+  }
   
   [this.lastX, this.lastY] = [this.x, this.y];
   this.trackPen = () => {
