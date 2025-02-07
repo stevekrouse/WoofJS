@@ -115,7 +115,7 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
       }
     }
   });
-  
+
   if (thisContext.fullScreen1) {
     width = window.innerWidth;
     height = window.innerHeight;
@@ -616,7 +616,7 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
     thisContext._render = () => {
     thisContext._runRepeats(); // we need to run the repeats even if stopped because the defrost() code likely lives in a repeat
     thisContext._calculateMouseSpeed();
-    thisContext.renderInterval = window.requestAnimationFrame(thisContext._render); // WARNING this line makes render recursive. Only call is once and it will continue to call itself ~30fps.
+    thisContext.renderInterval = window.requestAnimationFrame(thisContext._render); // WARNING this line makes render recursive. Only call is once and it will continue to call itself ~60fps.
     if (thisContext.stopped) { return; }
     thisContext._renderSprites();
   };
@@ -631,8 +631,15 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
   ]);
 }
 
-  
 };
+
+// make the toString more explicitly a list
+//   (especially helpful for 0 or 1 element lists)
+// I'm not confident where this toString definition "should" go,
+//   it also works fine inside the Woof function (in the above curly bracket)
+Array.prototype.toString = function() {
+  return '[' + this.join(',') + ']'
+}
 
 Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, rotationStyle = "ROTATE", showing = true, penColor = "black", penWidth = 1, penDown = false, showCollider = false, brightness = 100} = {}) {
   if (!project) {
