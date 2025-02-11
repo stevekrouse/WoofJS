@@ -115,7 +115,7 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
       }
     }
   });
-  
+
   if (thisContext.fullScreen1) {
     width = window.innerWidth;
     height = window.innerHeight;
@@ -616,7 +616,7 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
     thisContext._render = () => {
     thisContext._runRepeats(); // we need to run the repeats even if stopped because the defrost() code likely lives in a repeat
     thisContext._calculateMouseSpeed();
-    thisContext.renderInterval = window.requestAnimationFrame(thisContext._render); // WARNING this line makes render recursive. Only call is once and it will continue to call itself ~30fps.
+    thisContext.renderInterval = window.requestAnimationFrame(thisContext._render); // WARNING this line makes render recursive. Only call is once and it will continue to call itself ~60fps.
     if (thisContext.stopped) { return; }
     thisContext._renderSprites();
   };
@@ -631,8 +631,15 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
   ]);
 }
 
-  
 };
+
+// make the toString more explicitly a list
+//   (especially helpful for 0 or 1 element lists)
+// I'm not confident where this toString definition "should" go,
+//   it also works fine inside the Woof function (in the above curly bracket)
+Array.prototype.toString = function() {
+  return '[' + this.join(',') + ']'
+}
 
 Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, rotationStyle = "ROTATE", showing = true, penColor = "black", penWidth = 1, penDown = false, showCollider = false, brightness = 100} = {}) {
   if (!project) {
@@ -654,7 +661,12 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
       if (typeof value != "number") { throw new TypeError("sprite.x can only be set to a number."); }
       this.privateX = value;
       this.project.ready(this.trackPen); // any change to x, is tracked for the pen
-    }
+    },
+      // to allow bundles to modify behavior
+      //   this is a bit spooky, but seems necessary to make bundles,
+      //   and I don't think leads to accidental breaking of student projects
+      configurable: true
+      
   });
   
   Object.defineProperty(this, 'y', {
@@ -665,7 +677,8 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
       if (typeof value != "number") { throw new TypeError("sprite.y can only be set to a number."); }
       this.privateY = value;
       this.project.ready(this.trackPen); // any change to y to tracked for the pen
-    }
+    },
+    configurable: true // to allow bundles to modify behavior
   });
 
   this.privateX = x;
@@ -683,6 +696,12 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
   this.toJSON = () => {
     return {x: this.x, y: this.y, angle: this.angle, rotationStyle: this.rotationStyle, showing: this.showing, penDown: this._penDown, penColor: this.penColor, penWidth: this.penWidth, deleted: this.deleted};
   };
+
+  // this is deliberately simple to make it so showing sprites via
+  //   text is somewhat informative and not overwhelming
+  this.toString = () => {
+    return this.type + "@(" + this.x + "," + this.y + ")";
+  }
   
   [this.lastX, this.lastY] = [this.x, this.y];
   this.trackPen = () => {
@@ -752,19 +771,27 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
     }
     // Otherwise, create 4-sided collider around sprite
     else {
+      var textXOffset = 0
+      if (this.type == "text") {
+	if (this.textAlign == "start" || this.textAlign == "left") {
+	  textXOffset = this.width / 2
+	} else if (this.textAlign == "end" || this.textAlign == "right") {
+	  textXOffset = - this.width / 2
+	}
+      }
       if (this.rotationStyle == "ROTATE") {
-        var pos = this.rotatedVector(this.x - this.width / 2, this.y - this.height / 2)
+        var pos = this.rotatedVector(this.x - this.width / 2 + textXOffset, this.y - this.height / 2)
         var v1 = new SAT.Vector(0, 0)
-        var v2 = this.translatedVector(pos, this.rotatedVector(this.x + this.width / 2, this.y - this.height / 2))
-        var v3 = this.translatedVector(pos, this.rotatedVector(this.x + this.width / 2, this.y + this.height / 2))
-        var v4 = this.translatedVector(pos, this.rotatedVector(this.x - this.width / 2, this.y + this.height / 2))
+        var v2 = this.translatedVector(pos, this.rotatedVector(this.x + this.width / 2 + textXOffset, this.y - this.height / 2))
+        var v3 = this.translatedVector(pos, this.rotatedVector(this.x + this.width / 2 + textXOffset, this.y + this.height / 2))
+        var v4 = this.translatedVector(pos, this.rotatedVector(this.x - this.width / 2 + textXOffset, this.y + this.height / 2))
 	      return new SAT.Polygon(pos, [v1, v2, v3, v4])
       } else { // rotation style is LEFT RIGHT or NO ROTATE, which should have non-rotated collider
-      	var pos = new SAT.Vector(this.x - this.width/2, this.y - this.height/2)
+      	var pos = new SAT.Vector(this.x - this.width/2 + textXOffset, this.y - this.height/2)
       	var v1 = new SAT.Vector(0,0)
-      	var v2 = this.translatedVector(pos, new SAT.Vector(this.x + this.width / 2, this.y - this.height / 2))
-        var v3 = this.translatedVector(pos, new SAT.Vector(this.x + this.width / 2, this.y + this.height / 2))
-        var v4 = this.translatedVector(pos, new SAT.Vector(this.x - this.width / 2, this.y + this.height / 2))
+      	var v2 = this.translatedVector(pos, new SAT.Vector(this.x + this.width / 2 + textXOffset, this.y - this.height / 2))
+        var v3 = this.translatedVector(pos, new SAT.Vector(this.x + this.width / 2 + textXOffset, this.y + this.height / 2))
+        var v4 = this.translatedVector(pos, new SAT.Vector(this.x - this.width / 2 + textXOffset, this.y + this.height / 2))
 	      return new SAT.Polygon(pos, [v1, v2, v3, v4])
       }
     }
@@ -795,6 +822,10 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
     context.restore();
   }
 
+  // this orients before rendering, and then calls this.render to
+  //   actually render. All instances of sprites must have a render
+  //   method, but Sprite essentially an abstract class so leaves the
+  //   implementation to subclasses
   this._render = function(context) {
     if (this.showing && !this.deleted && this.overlap(this.project.bounds())) {
       if (this.showCollider) { this._renderCollider(context); }
@@ -818,7 +849,7 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
           // no rotate
         }
       }
-      
+
       this.render(context);
       context.restore();
     }
@@ -893,6 +924,10 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
       
     if (this.deleted || !this.showing) { return false; }
     if (sprite.deleted || !sprite.showing) { return false; }
+
+    if (sprite.type == "bundle") {
+      return sprite.touching(this, precise);
+    }
     
     if (!detectCollision(this.collider(), sprite.collider())) { return false; }
     
@@ -969,24 +1004,32 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
     get: function() {
       if (this.deleted || !this.showing) { return false; }
       return this.over(this.project.mouseX, this.project.mouseY);
-    }
+    },
+    configurable: true // to allow spriteBundles to overwrite behavior
   });
   
   Object.defineProperty(this, 'mouseDown', {
     get: function() {
       if (this.deleted || !this.showing) { return false; }
       return this.mouseOver && this.project.mouseDown;
-    }
+    },
+    configurable: true // to allow spriteBundles to overwrite behavior
   });
   
   this.turnLeft = (degrees = 1) => {
     if (typeof degrees != "number") { throw new TypeError("turnLeft(degrees) requires one number input."); }
     this.angle += degrees;
+    while (this.angle > 360) {
+      this.angle -= 360
+    }
   };
   
   this.turnRight = (degrees = 1) => {
     if (typeof degrees != "number") { throw new TypeError("turnRight(degrees) requires one number input."); }
     this.angle -= degrees;
+    while (this.angle < 0) {
+      this.angle += 360
+    }
   };
   
   this.sendToBack = function() {
@@ -1070,15 +1113,417 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
   };
 };
 
+Woof.prototype.Bundle = function({project = undefined, components = [], x = 0, y = 0, angle = 0} = {}) {
+  this.type = "bundle"
+  this.components = components
+
+  Woof.prototype.Sprite.call(this);  
+    
+  this.addComponent = function(sprite, offsetX=0, offsetY=0, offsetAngle=0) {
+    sprite.offsetX = offsetX
+    sprite.offsetY = offsetY
+    sprite.offsetAngle = offsetAngle
+    this.components.push(sprite)
+    this.arrangeComponents()  
+  }
+
+  // set the components where they should be based on this
+  //   sprite's position and their offsets. From:
+  // https://math.stackexchange.com/questions/2581058/rotating-rectangle-by-its-center
+  this.arrangeComponents = () => {
+    components.forEach(comp => {
+      comp.x = comp.offsetX * Math.cos(this.radians()) -
+	    comp.offsetY * Math.sin(this.radians()) + this.x
+      comp.y = comp.offsetX * Math.sin(this.radians()) +
+	    comp.offsetY * Math.cos(this.radians()) + this.y
+      comp.angle = this.angle + comp.offsetAngle
+    })
+    return;
+  }
+
+  Object.defineProperty(this, 'x', {
+    get: function() {
+      return this.privateX;
+    },
+    set: function(value) {
+      if (typeof value != "number") {
+	throw new TypeError("sprite.x can only be set to a number.");
+      }
+      this.privateX = value;
+      this.project.ready(this.trackPen);
+      this.arrangeComponents();
+    }
+  })
+
+  Object.defineProperty(this, 'y', {
+    get: function() {
+      return this.privateY;
+    },
+    set: function(value) {
+      if (typeof value != "number") {
+	throw new TypeError("sprite.x can only be set to a number.");
+      }
+      this.privateY = value;
+      this.project.ready(this.trackPen);
+      this.arrangeComponents();
+    }
+  })
+
+  Object.defineProperty(this, 'angle', {
+    get: function() {
+      return this.privateAngle;
+    },
+    set: function(value) {
+      if (typeof value != "number") {
+	throw new TypeError("sprite.angle can only be set to a number");
+      }
+      while (value > 360) {
+	value -= 360
+      }
+      while (value < 0) {
+	value += 360
+      }
+      this.arrangeComponents();
+      this.privateAngle = value
+    }
+  })
+
+  this.angle = angle
+  this.x = x
+  this.y = y
+
+  // this intentionally doesn't delete the component.
+  //   Most calls to removeComponent should call sprite.delete(),
+  //   but leaving that up to the user
+  this.removeComponent = function(sprite) {
+    this.components.remove(sprite)
+  }
+
+  // this doesn't make sense for bundles, shouldn't be called,
+  //   and thus is intentionally broken
+  this.collider = function() {
+    return null
+  }
+
+  this._render = function(context) {
+    return null
+      /* the component sprites are already sprites that
+	 are getting rendered, so this meta-container doesn't
+	 need to do anything to render (?)
+    this.components.forEach((sprite) => {
+      sprite._render(context)
+    }) */
+  }
+
+  this.setRotationStyle = function(style) {
+    this.components.forEach((sprite) => {
+      sprite.setRotationStyle(style)
+    })
+    this.rotationStyle = style
+  }
+
+  // I'm not convinced this is ever used, so not implementing it for now
+  this.bounds = function() {
+    return {}
+  }
+
+  this.touching = (sprite, precise) => {
+    var isTouching = false
+    this.components.forEach((ourSprite) => {  
+      if (sprite.type == "bundle") {
+        sprite.components.forEach((objSprite) => {
+	  if (ourSprite.touching(objSprite)) {
+	    isTouching = true
+	  }
+	})
+      } else {
+	if (ourSprite.touching(sprite)) {
+	  isTouching = true
+	}
+      }
+    })
+    return isTouching
+  }
+
+  // These don't make sense for bundles, shouldn't be called,
+  //   and thus are intentionally broken
+  this.overlap = ({left, right, top, bottom}) => {
+    return null
+  }
+
+  this.over = (x, y) => {
+    return null
+  }
+
+  Object.defineProperty(this, 'mouseOver', {
+    get: function() {
+      var retVal = false
+      if (this.deleted || !this.showing) { return false }
+      this.components.forEach((sprite) => {
+	if (sprite.over(this.project.mouseX, this.project.mouseY)) {
+	  retVal = true
+	}
+      })
+      return retVal
+    }
+  });
+
+  Object.defineProperty(this, 'mouseDown', {
+      get: function() {
+	if (this.deleted || !this.showing || !this.project.mouseDown) { return false }
+	var retVal = false
+	this.components.forEach((sprite) => {
+	  if (sprite.mouseOver) {
+	    retVal = true
+	  }
+	})
+	return retVal
+      }
+  });
+
+  this.sendToFront = function() {
+    if (arguments.length > 0) { throw new TypeError("sendToFront() requires no inputs."); }
+    this.components.forEach((sprite) => {
+      sprite.sendToFront()
+    })
+  }
+
+  this.sendToBack = function() {
+    if (arguments.length > 0) { throw new TypeError("sendToBack() requires no inputs."); }
+    this.components.forEach((sprite) => {
+      sprite.sendToBack()
+    })
+  }
+
+  // this._onMouseDowns is not needed as it is inherited
+  //   (similarly omitted for _onMouseUps)
+  this.onMouseDown = (func) => {
+    if (typeof func != "function") { throw new TypeError("onMouseDown(function) requires one function input."); }
+    this._onMouseDowns.push(func);  
+  };
+  this._onMouseDownHandler = (event) => {
+    var [mouseX, mouseY] = this.project.translateToCenter(event.clientX, event.clientY);
+    var shouldTrigger = false
+    this.components.forEach((sprite) => {
+      if (sprite.showing && sprite.over(mouseX, mouseY)) {
+	shouldTrigger = true
+      }
+    })
+    if (shouldTrigger) {
+      this._onMouseDowns.forEach((func) => {
+	func(mouseX, mouseY)
+      })
+    }
+  }
+
+  this.onMouseUp = (func) => {
+    if (typeof func != "function") { throw new TypeError("onMouseDown(function) requires one function input."); }
+    this._onMouseUps.push(func);  
+  };
+  this._onMouseUpHandler = (event) => {
+    var [mouseX, mouseY] = this.project.translateToCenter(event.clientX, event.clientY);
+    var shouldTrigger = false
+    this.components.forEach((sprite) => {
+      if (sprite.showing && sprite.over(mouseX, mouseY)) {
+	shouldTrigger = true
+      }
+    })
+    if (shouldTrigger) {
+      this._onMouseUps.forEach((func) => {
+	func(mouseX, mouseY)
+      })
+    }
+  }
+    
+  this.project.ready(() => {
+    this.project._spriteCanvas.addEventListener("mousedown", this._onMouseDownHandler);
+    this.project._spriteCanvas.addEventListener("mouseup", this._onMouseUpHandler);
+  })
+    
+  this.delete = function() {
+    if (arguments.length > 0) {
+      throw new TypeError("delete() requires no inputs");
+    }
+    if (this.deleted) { return }
+    this.showing = false;
+    this.deleted = true;
+    this.components.forEach((sprite) => {
+      sprite.delete()
+    })
+    if (this.project._sprites.includes(this)) {
+      this.project._sprites.splice(this.project._sprites.indexOf(this), 1);
+      this.project._spriteCanvas.removeEventListener("mousedown", this._onMouseDownHandler);
+    }
+  }
+}
+
 Woof.prototype.Text = function({project = undefined, text = "Text", size = 12, color = "black", fontFamily = "arial", textAlign = "center"} = {}) {
+  Woof.prototype.Bundle.call(this);
+
+  this.text = text;
+  this.privateSize = size;
+  this.privateColor = color;
+  this.privateFontFamily = fontFamily;
+  this.privateTextAlign = textAlign;
+
+  Object.defineProperty(this, 'size', {
+    get: function() {
+      return this.privateSize;
+    },
+    set: function(value) {
+      if (typeof value != "number") {
+	throw new TypeError("text.size can only be set to a number, given: " + value);
+      }
+      if (value < 0) {
+	throw new TypeError("text.size must be positive, given: " + value);
+      }
+      this.components.forEach(comp => {
+	comp.size = value
+      })
+      this.privateSize = value
+    }
+  })
+
+  Object.defineProperty(this, 'color', {
+    get: function() {
+      return this.privateColor;
+    },
+    set: function(value) {
+      if (typeof value != "string") {
+	throw new TypeError("text.color can only be set to a string, given: " + value);
+      }
+      this.components.forEach(comp => {
+	comp.color = value
+      })
+      this.privateColor = value
+    }
+  })
+
+  Object.defineProperty(this, 'textAlign', {
+    get: function() {
+      return this.privateTextAlign;
+    },
+    set: function(value) {
+      if (typeof value != "string" ||
+	  !(value.toLowerCase() == 'start' ||
+	    value.toLowerCase() == 'end' ||
+	    value.toLowerCase() == 'left' ||
+	    value.toLowerCase() == 'right' ||
+	    value.toLowerCase() == 'center')) {
+	  throw new TypeError("text.textAlign can only be set to center, left, right, start, or end");
+      }
+      this.components.forEach(comp => {
+	comp.textAlign = value
+      })
+      this.privateTextAlign = value
+    }
+  })
+
+  Object.defineProperty(this, 'fontFamily', {
+    get: function() {
+      return this.privateFontFamily;
+    },
+    set: function(value) {
+      if (typeof value != "string") {
+	throw new TypeError("text.fontFamily can only be set to a string, given: " + value);
+      }
+      this.components.forEach(comp => {
+	comp.fontFamily = value
+      })
+      this.privateFontFamily = value
+    }
+  })
+
+  Object.defineProperty(this, 'showCollider', {
+    get: function() {
+      return this.privateShowCollider;
+    },
+    set: function(value) {
+      this.components.forEach(comp => {
+	comp.showCollider = value
+      })
+      this.privateShowCollider = value
+    }
+  })
+
+  Object.defineProperty(this, 'width', {
+    get: function() {
+      var maxWidth = 0;
+      this.components.forEach(comp => {
+	if (comp.width > maxWidth) {
+	  maxWidth = comp.width
+	}
+      })
+      return maxWidth;
+    },
+    set: function(value) {
+      throw new TypeError("You cannot modify the width of Text. You can only change its size.");
+    }
+  })
+
+  Object.defineProperty(this, 'height', {
+    get: function() {
+      return this.components[0].height * this.components.length;
+    },
+    set: function(value) {
+      throw new TypeError("You cannot modify the height of Text. You can only change its size.");
+    }
+  })
+    
+  this.textEval = () => {
+    if (typeof(this.text) == "function"){
+      // if we get a functions for text, evaluate it every time we are asked to render the text
+      try { return this.text().toString(); } catch (e) { console.error("Error with text function: " + e.message); }
+    } else {
+      return this.text;
+    }
+  }
+
+    // this relies on this bundle being rendered before the
+    //   TextPrimatives in components. That should generally be
+    //   true but is not a super strong assumption
+  this._render = function(context) {
+    let textList = this.textEval().split("\n")
+    // make the component text sprites equal the number of lines
+    let changed = false;
+    while (textList.length < this.components.length) {
+      let toDel = this.components[this.components.length-1];
+      this.removeComponent(toDel);
+      toDel.delete();
+      changed = true;
+    }
+    while (textList.length > this.components.length) {
+	this.addComponent(new TextPrimative({
+	    size: this.size,
+	    color: this.color,
+	    fontFamily: this.fontFamily,
+	    textAlign: this.textAlign,
+	    showCollider: this.showCollider
+	}));
+      changed = true;
+    }
+
+    if (true) {
+      range(0, textList.length).forEach(i => {
+	this.components[i].text = textList[i]
+	  this.components[i].offsetY = this.size * (-i + ((textList.length - 1) / 2));
+      })
+    }
+    this.arrangeComponents();
+  }
+}
+
+// this is how we handle one line of text. It was the only text
+//   sprite, but didn't handle newlines, and so is now mainly
+//   internal after a refactor. It also only allows strings
+//   in the text field (before it also allowed functions)
+Woof.prototype.TextPrimative = function({project = undefined, text = "Text", size = 12, color = "black", fontFamily = "arial", textAlign = "center"} = {}) {
   this.type = "text"
   Woof.prototype.Sprite.call(this, arguments[0]);
   this.text = text;
   this.size = Math.abs(size);
   this.color = color;
   this.fontFamily = fontFamily;
-  // TODO remove text align or make the collider take it into account
-  // currently, the collider doesn't know about textAlign so things can be quite inaccurate
   this.textAlign = textAlign;
   
   Object.defineProperty(this, 'width', {
@@ -1123,12 +1568,7 @@ Woof.prototype.Text = function({project = undefined, text = "Text", size = 12, c
   };
   
   this.textEval = () => {
-    if (typeof(this.text) == "function"){
-      // if we get a functions for text, evaluate it every time we are asked to render the text
-      try { return this.text(); } catch (e) { console.error("Error with text function: " + e.message); }
-    } else {
-      return this.text;
-    }
+    return this.text;
   }
   
   this.render = (context) => {

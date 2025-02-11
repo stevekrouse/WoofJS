@@ -437,11 +437,21 @@
 
                         ],
                         Text: [ 
-                        {
-                           description: "Create new text:",
-                           code: 'var textSprite1 = new Text()\ntextSprite1.text = () => "Hello World!"\ntextSprite1.size = 12\ntextSprite1.color = "rgb(100, 50, 240)"',
-                           tags: 'create make new text words string'
+                         {
+                             description: "Create new text:",
+                             code: 'var textSprite1 = new Text()\ntextSprite1.text = () => "Hello World!"\ntextSprite1.size = 12\ntextSprite1.color = "rgb(100, 50, 240)"',
+                             tags: 'create make new text words string'
                          },
+	                 {
+	                     description: "Set text:",
+	                     code: "textSprite1.text = () => variable1",
+	                     tags: "text words string"
+	                 },
+	                 {
+	                     description: "You can use \\n to make multiple lines of text:",
+	                     code: 'textSprite1.text = () => "First line\\nSecond Line"',
+	                     tags: "text words string multiple lines"
+	                 },
                          {
                              description: "Set location:",
                              code: "textSprite1.x = 50\ntextSprite1.y = -100",
