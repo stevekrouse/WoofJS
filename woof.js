@@ -1116,6 +1116,7 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
 Woof.prototype.Bundle = function({project = undefined, components = [], x = 0, y = 0, angle = 0} = {}) {
   this.type = "bundle"
   this.components = components
+  this.privateShowing = true
 
   Woof.prototype.Sprite.call(this);  
     
@@ -1123,6 +1124,7 @@ Woof.prototype.Bundle = function({project = undefined, components = [], x = 0, y
     sprite.offsetX = offsetX
     sprite.offsetY = offsetY
     sprite.offsetAngle = offsetAngle
+    sprite.showing = this.privateShowing
     this.components.push(sprite)
     this.arrangeComponents()  
   }
@@ -1188,6 +1190,22 @@ Woof.prototype.Bundle = function({project = undefined, components = [], x = 0, y
     }
   })
 
+  Object.defineProperty(this, 'showing', {
+    get: function() {
+      return this.privateShowing
+    },
+    set: function(value) {
+      this.privateShowing = value
+      this.components.forEach(sprite => {
+	if (value) {
+	  sprite.show()
+	} else {
+	  sprite.hide()
+	}
+      })
+    }
+  })
+    
   this.angle = angle
   this.x = x
   this.y = y
