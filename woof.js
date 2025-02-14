@@ -2164,6 +2164,9 @@ Woof.prototype.keyCodeToString = function(keyCode) {
   else if (keyCode == 220){
     return "\\";
   }
+  else if (keyCode == 221){
+    return "]"
+  }
   else if (keyCode == 191){
     return "/";
   }
