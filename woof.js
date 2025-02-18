@@ -1378,12 +1378,25 @@ Woof.prototype.Bundle = function({project = undefined, components = [], x = 0, y
 Woof.prototype.Text = function({project = undefined, text = "Text", size = 12, color = "black", fontFamily = "arial", textAlign = "center"} = {}) {
   Woof.prototype.Bundle.call(this);
 
-  this.text = text;
+  this.privateText = text;
   this.privateSize = size;
   this.privateColor = color;
   this.privateFontFamily = fontFamily;
   this.privateTextAlign = textAlign;
 
+  Object.defineProperty(this, 'text', {
+    get: function() {
+      return this.privateText;
+    },
+    set: function(value) {
+      if (!(typeof value == 'function' || typeof value == 'string')) {
+	throw new TypeError("Text.text must be set to a function or a string, given: " + value);
+      }
+      this.privateText = value;
+      this._render();
+    }
+  })
+    
   Object.defineProperty(this, 'size', {
     get: function() {
       return this.privateSize;
@@ -1398,7 +1411,8 @@ Woof.prototype.Text = function({project = undefined, text = "Text", size = 12, c
       this.components.forEach(comp => {
 	comp.size = value
       })
-      this.privateSize = value
+      this.privateSize = value;
+      this._render();
     }
   })
 
@@ -1448,7 +1462,8 @@ Woof.prototype.Text = function({project = undefined, text = "Text", size = 12, c
       this.components.forEach(comp => {
 	comp.fontFamily = value
       })
-      this.privateFontFamily = value
+      this.privateFontFamily = value;
+      this._render();
     }
   })
 
@@ -1497,9 +1512,9 @@ Woof.prototype.Text = function({project = undefined, text = "Text", size = 12, c
     }
   }
 
-    // this relies on this bundle being rendered before the
-    //   TextPrimatives in components. That should generally be
-    //   true but is not a super strong assumption
+  // this relies on this bundle being rendered before the
+  //   TextPrimatives in components. That should generally be
+  //   true but is not a super strong assumption
   this._render = function(context) {
     let textList = this.textEval().split("\n")
     // make the component text sprites equal the number of lines
@@ -1538,40 +1553,12 @@ Woof.prototype.Text = function({project = undefined, text = "Text", size = 12, c
 Woof.prototype.TextPrimative = function({project = undefined, text = "Text", size = 12, color = "black", fontFamily = "arial", textAlign = "center"} = {}) {
   this.type = "text"
   Woof.prototype.Sprite.call(this, arguments[0]);
-  this.text = text;
-  this.size = Math.abs(size);
+  this.privateText = text;
+  this.privateSize = Math.abs(size);
   this.color = color;
-  this.fontFamily = fontFamily;
+  this.privateFontFamily = fontFamily;
   this.textAlign = textAlign;
-  
-  Object.defineProperty(this, 'width', {
-    get: function() {
-      var width;
-      this._applyInContext(() => {
-        width = this.project._spriteContext.measureText(this.textEval()).width;
-      });
-      return width;
-    },
-    set: function(value) {
-      throw new TypeError("You cannot modify the width of Text. You can only change its size.");
-    }
-  });
-  
-  Object.defineProperty(this, 'height', {
-    get: function() {
-      var height;
-      this._applyInContext(() => {
-        // the height of text is notoriously difficult to measure
-        // the width of the letter "M" in that font is usually a good proxy
-        height = this.project._spriteContext.measureText("M").width;
-      });
-      return height;
-    },
-    set: function(value) {
-      throw new TypeError("You cannot modify the height of Text. You can only change its size.");
-    }
-  });
-  
+
   // this function saves us from copy-and-pasing the font declarations all over
   this._applyInContext = (func) => {
     this.project._spriteContext.save();
@@ -1584,16 +1571,96 @@ Woof.prototype.TextPrimative = function({project = undefined, text = "Text", siz
     
     this.project._spriteContext.restore();
   };
+
+  this._updateWidth = function() {
+    let width
+    this._applyInContext(() => {
+      width = this.project._spriteContext.measureText(this.privateText).width;
+    });
+    this.privateWidth = width;
+  }
+
+  this._updateHeight = function() {
+    let height
+    this._applyInContext(() => {
+      height = this.project._spriteContext.measureText("M").width;
+    });
+    this.privateHeight = height;
+  };
+  
+  Object.defineProperty(this, 'width', {
+    get: function() {
+      return this.privateWidth;
+    },
+    set: function(value) {
+      throw new TypeError("You cannot modify the width of Text. You can only change its size.");
+    }
+  });
+  
+  Object.defineProperty(this, 'height', {
+    get: function() {
+      return this.privateHeight;
+    },
+    set: function(value) {
+      throw new TypeError("You cannot modify the height of Text. You can only change its size.");
+    }
+  });
+
+  Object.defineProperty(this, 'text', {
+    get: function() {
+      return this.privateText;
+    },
+    set: function(value) {
+      if (typeof value != "string") {
+	throw new TypeError("TextPrimative's text attribute can only be set to a string, given: ", value);
+      }
+      if (value === this.privateText) {
+	return;
+      }
+      this.privateText = value;
+      this._updateWidth();
+      this._updateHeight();
+    }
+  })
   
   this.textEval = () => {
     return this.text;
   }
-  
+
+  Object.defineProperty(this, 'size', {
+    get: function() {
+      return this.privateSize;
+    },
+    set: function(value) {
+      if (typeof value != "number") {
+	throw new TypeError("The size of a text must be set to a number, given: ", value);
+      }
+      this._updateWidth();
+      this._updateHeight();
+      this.privateSize = value;
+    }
+  });
+
+  Object.defineProperty(this, 'fontFamily', {
+    get: function() {
+      return this.privateFontFamily;
+    },
+    set: function(value) {
+      this._updateWidth();
+      this._updateHeight();
+      this.privateFontFamily = value;
+    }
+  });
+
   this.render = (context) => {
     this._applyInContext(() => {
       context.fillText(this.textEval(), 0, this.height / 2);
     });
   };
+
+  // we set width and height once at the end of the constructor
+  this._updateWidth();
+  this._updateHeight();
 };
 
 Woof.prototype.Circle = function({project = undefined, radius = 10, color = "black"} = {}) {
