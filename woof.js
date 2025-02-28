@@ -1518,30 +1518,26 @@ Woof.prototype.Text = function({project = undefined, text = "Text", size = 12, c
   this._render = function(context) {
     let textList = this.textEval().split("\n")
     // make the component text sprites equal the number of lines
-    let changed = false;
     while (textList.length < this.components.length) {
       let toDel = this.components[this.components.length-1];
       this.removeComponent(toDel);
       toDel.delete();
-      changed = true;
     }
     while (textList.length > this.components.length) {
-	this.addComponent(new TextPrimative({
-	    size: this.size,
-	    color: this.color,
-	    fontFamily: this.fontFamily,
-	    textAlign: this.textAlign,
-	    showCollider: this.showCollider
-	}));
-      changed = true;
+      this.addComponent(new TextPrimative({
+	size: this.size,
+	color: this.color,
+	fontFamily: this.fontFamily,
+	textAlign: this.textAlign,
+	showCollider: this.showCollider
+      }));
     }
 
-    if (true) {
-      range(0, textList.length).forEach(i => {
-	this.components[i].text = textList[i]
-	  this.components[i].offsetY = this.size * (-i + ((textList.length - 1) / 2));
-      })
-    }
+    // update changes in text
+    range(0, textList.length).forEach(i => {
+      this.components[i].text = textList[i]
+      this.components[i].offsetY = this.size * (-i + ((textList.length - 1) / 2));
+    })
     this.arrangeComponents();
   }
 }
@@ -1635,9 +1631,9 @@ Woof.prototype.TextPrimative = function({project = undefined, text = "Text", siz
       if (typeof value != "number") {
 	throw new TypeError("The size of a text must be set to a number, given: ", value);
       }
+      this.privateSize = value;
       this._updateWidth();
       this._updateHeight();
-      this.privateSize = value;
     }
   });
 
