@@ -138,7 +138,10 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
   thisContext._runReadys = () => {
     thisContext.stopped = false;
     thisContext._readys.forEach(func => { func() });
-    thisContext._readys = [];
+      // this timeout is to fix an issue in firefox - see #633
+      setTimeout(() => { 
+      thisContext._readys = [];
+    }, 100);
   };
   
   window.addEventListener("load", () => {
