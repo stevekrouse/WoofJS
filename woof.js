@@ -138,10 +138,8 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
   thisContext._runReadys = () => {
     thisContext.stopped = false;
     thisContext._readys.forEach(func => { func() });
-      // this timeout is to fix an issue in firefox - see #633
-      setTimeout(() => { 
-      thisContext._readys = [];
-    }, 100);
+    // commenting this out to fix firefox issue #633
+    // thisContext._readys = [];
   };
   
   window.addEventListener("load", () => {
@@ -1099,8 +1097,8 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
     }
   };
   this.project.ready(() => {
-  this.project._spriteCanvas.addEventListener("mousedown", this._onMouseDownHandler);
-  this.project._spriteCanvas.addEventListener("mouseup", this._onMouseUpHandler);
+    this.project._spriteCanvas.addEventListener("mousedown", this._onMouseDownHandler);
+    this.project._spriteCanvas.addEventListener("mouseup", this._onMouseUpHandler);
   });
   
   this.delete = function() {
