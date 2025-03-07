@@ -147,8 +147,7 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
     document.documentElement.style.height = "100%";
     document.body.style.width = "100%";
     document.body.style.height = "100%";
-    
-    console.log("Adding project div");
+
     // if the project already exists, remove it so we don't have duplicates
     //  (this shouldn't happen, but firefox
     //   was firing this code twice which led to bugs)
