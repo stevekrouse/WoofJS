@@ -128,7 +128,7 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
   thisContext._readys = [];
   thisContext.ready = (func) => {
     if (typeof func != "function") { throw new TypeError("ready(function) requires one function input."); }
-    
+
     if (thisContext.stopped) {
       thisContext._readys.push(func);
     } else {
@@ -136,10 +136,12 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
     }
   }
   thisContext._runReadys = () => {
-    thisContext.stopped = false;
     thisContext._readys.forEach(func => { func() });
-    // commenting this out to fix firefox issue #633
-    // thisContext._readys = [];
+    // delaying this to fix firefox issue #633
+    setTimeout(() => {
+      thisContext.stopped = false;
+      thisContext._readys = [];
+    }, 0)
   };
   
   window.addEventListener("load", () => {
@@ -401,14 +403,6 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
   }
   
   thisContext.ready(() => {
-    thisContext._spriteCanvas.addEventListener("mousedown", (event) => {
-      thisContext.mouseDown = true;
-      [thisContext.mouseX, thisContext.mouseY] = thisContext.translateToCenter(event.clientX, event.clientY);
-    });
-    window.addEventListener("mouseup", (event) => {
-      thisContext.mouseDown = false;
-      [thisContext.mouseX, thisContext.mouseY] = thisContext.translateToCenter(event.clientX, event.clientY);
-    });
     thisContext._spriteCanvas.addEventListener("touchstart", (event) => {
       thisContext.mouseDown = true;
       [thisContext.mouseX, thisContext.mouseY] = thisContext.translateToCenter(event.targetTouches[0].clientX, event.targetTouches[0].clientY);
@@ -420,13 +414,11 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
       // touch events mirror mouse events
       setTimeout(() => {thisContext.mouseDown = false;}, 0);
     });
-    thisContext._spriteCanvas.addEventListener("mousemove", (event) => { 
-      [thisContext.mouseX, thisContext.mouseY] = thisContext.translateToCenter(event.clientX, event.clientY);
-    });
     thisContext._spriteCanvas.addEventListener("touchmove", event => {
       [thisContext.mouseX, thisContext.mouseY] = thisContext.translateToCenter(event.targetTouches[0].clientX, event.targetTouches[0].clientY);
       event.preventDefault();
     });
+
     document.body.addEventListener("keydown", event => {
       var key = Woof.prototype.keyCodeToString(event.keyCode);
       if (!thisContext.keysDown.includes(key)){
@@ -441,17 +433,19 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
     });
     
     thisContext._onMouseMoveHandler = event => {
-      var [mouseX, mouseY] = thisContext.translateToCenter(event.clientX, event.clientY);
-      thisContext._onMouseMoves.forEach((func) => {func(mouseX, mouseY)});
+      [thisContext.mouseX, thisContext.mouseY] = thisContext.translateToCenter(event.clientX, event.clientY);
+      thisContext._onMouseMoves.forEach((func) => {func(thisContext.mouseX, thisContext.mouseY)});
     };
     thisContext._spriteCanvas.addEventListener("mousemove", thisContext._onMouseMoveHandler);
     thisContext._onMouseDownHandler = event => {
-      var [mouseX, mouseY] = thisContext.translateToCenter(event.clientX, event.clientY);
-      thisContext._onMouseDowns.forEach((func) => {func(mouseX, mouseY)});
+      thisContext.mouseDown = true;
+      [thisContext.mouseX, thisContext.mouseY] = thisContext.translateToCenter(event.clientX, event.clientY);
+      thisContext._onMouseDowns.forEach((func) => {func(thisContext.mouseX, thisContext.mouseY)});
     };
     thisContext._spriteCanvas.addEventListener("mousedown", thisContext._onMouseDownHandler);
     thisContext._onMouseUpHandler = event => {
-      var [mouseX, mouseY] = thisContext.translateToCenter(event.clientX, event.clientY);
+      [thisContext.mouseX, thisContext.mouseY] = thisContext.translateToCenter(event.clientX, event.clientY);
+      thisContext.mouseDown = false;
       thisContext._onMouseUps.forEach((func) => {func(mouseX, mouseY)});
     };
     thisContext._spriteCanvas.addEventListener("mouseup", thisContext._onMouseUpHandler);
