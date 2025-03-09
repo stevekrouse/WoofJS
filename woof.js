@@ -128,7 +128,7 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
   thisContext._readys = [];
   thisContext.ready = (func) => {
     if (typeof func != "function") { throw new TypeError("ready(function) requires one function input."); }
-    
+
     if (thisContext.stopped) {
       thisContext._readys.push(func);
     } else {
@@ -136,9 +136,12 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
     }
   }
   thisContext._runReadys = () => {
-    thisContext.stopped = false;
     thisContext._readys.forEach(func => { func() });
-    thisContext._readys = [];
+    // delaying this to fix firefox issue #633
+    setTimeout(() => {
+      thisContext.stopped = false;
+      thisContext._readys = [];
+    }, 0)
   };
   
   window.addEventListener("load", () => {
@@ -400,14 +403,6 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
   }
   
   thisContext.ready(() => {
-    thisContext._spriteCanvas.addEventListener("mousedown", (event) => {
-      thisContext.mouseDown = true;
-      [thisContext.mouseX, thisContext.mouseY] = thisContext.translateToCenter(event.clientX, event.clientY);
-    });
-    window.addEventListener("mouseup", (event) => {
-      thisContext.mouseDown = false;
-      [thisContext.mouseX, thisContext.mouseY] = thisContext.translateToCenter(event.clientX, event.clientY);
-    });
     thisContext._spriteCanvas.addEventListener("touchstart", (event) => {
       thisContext.mouseDown = true;
       [thisContext.mouseX, thisContext.mouseY] = thisContext.translateToCenter(event.targetTouches[0].clientX, event.targetTouches[0].clientY);
@@ -419,13 +414,11 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
       // touch events mirror mouse events
       setTimeout(() => {thisContext.mouseDown = false;}, 0);
     });
-    thisContext._spriteCanvas.addEventListener("mousemove", (event) => { 
-      [thisContext.mouseX, thisContext.mouseY] = thisContext.translateToCenter(event.clientX, event.clientY);
-    });
     thisContext._spriteCanvas.addEventListener("touchmove", event => {
       [thisContext.mouseX, thisContext.mouseY] = thisContext.translateToCenter(event.targetTouches[0].clientX, event.targetTouches[0].clientY);
       event.preventDefault();
     });
+
     document.body.addEventListener("keydown", event => {
       var key = Woof.prototype.keyCodeToString(event.keyCode);
       if (!thisContext.keysDown.includes(key)){
@@ -440,17 +433,19 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
     });
     
     thisContext._onMouseMoveHandler = event => {
-      var [mouseX, mouseY] = thisContext.translateToCenter(event.clientX, event.clientY);
-      thisContext._onMouseMoves.forEach((func) => {func(mouseX, mouseY)});
+      [thisContext.mouseX, thisContext.mouseY] = thisContext.translateToCenter(event.clientX, event.clientY);
+      thisContext._onMouseMoves.forEach((func) => {func(thisContext.mouseX, thisContext.mouseY)});
     };
     thisContext._spriteCanvas.addEventListener("mousemove", thisContext._onMouseMoveHandler);
     thisContext._onMouseDownHandler = event => {
-      var [mouseX, mouseY] = thisContext.translateToCenter(event.clientX, event.clientY);
-      thisContext._onMouseDowns.forEach((func) => {func(mouseX, mouseY)});
+      thisContext.mouseDown = true;
+      [thisContext.mouseX, thisContext.mouseY] = thisContext.translateToCenter(event.clientX, event.clientY);
+      thisContext._onMouseDowns.forEach((func) => {func(thisContext.mouseX, thisContext.mouseY)});
     };
     thisContext._spriteCanvas.addEventListener("mousedown", thisContext._onMouseDownHandler);
     thisContext._onMouseUpHandler = event => {
-      var [mouseX, mouseY] = thisContext.translateToCenter(event.clientX, event.clientY);
+      [thisContext.mouseX, thisContext.mouseY] = thisContext.translateToCenter(event.clientX, event.clientY);
+      thisContext.mouseDown = false;
       thisContext._onMouseUps.forEach((func) => {func(mouseX, mouseY)});
     };
     thisContext._spriteCanvas.addEventListener("mouseup", thisContext._onMouseUpHandler);
@@ -1096,8 +1091,8 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
     }
   };
   this.project.ready(() => {
-  this.project._spriteCanvas.addEventListener("mousedown", this._onMouseDownHandler);
-  this.project._spriteCanvas.addEventListener("mouseup", this._onMouseUpHandler);
+    this.project._spriteCanvas.addEventListener("mousedown", this._onMouseDownHandler);
+    this.project._spriteCanvas.addEventListener("mouseup", this._onMouseUpHandler);
   });
   
   this.delete = function() {
@@ -1118,7 +1113,7 @@ Woof.prototype.Bundle = function({project = undefined, components = [], x = 0, y
   this.components = components
   this.privateShowing = true
 
-  Woof.prototype.Sprite.call(this);  
+  Woof.prototype.Sprite.call(this, arguments[0]);
     
   this.addComponent = function(sprite, offsetX=0, offsetY=0, offsetAngle=0) {
     sprite.offsetX = offsetX
@@ -1376,7 +1371,7 @@ Woof.prototype.Bundle = function({project = undefined, components = [], x = 0, y
 }
 
 Woof.prototype.Text = function({project = undefined, text = "Text", size = 12, color = "black", fontFamily = "arial", textAlign = "center"} = {}) {
-  Woof.prototype.Bundle.call(this);
+  Woof.prototype.Bundle.call(this, arguments[0]);
 
   this.privateText = text;
   this.privateSize = size;
@@ -1508,7 +1503,7 @@ Woof.prototype.Text = function({project = undefined, text = "Text", size = 12, c
       // if we get a functions for text, evaluate it every time we are asked to render the text
       try { return this.text().toString(); } catch (e) { console.error("Error with text function: " + e.message); }
     } else {
-      return this.text;
+      return this.text.toString();
     }
   }
 
@@ -1518,30 +1513,26 @@ Woof.prototype.Text = function({project = undefined, text = "Text", size = 12, c
   this._render = function(context) {
     let textList = this.textEval().split("\n")
     // make the component text sprites equal the number of lines
-    let changed = false;
     while (textList.length < this.components.length) {
       let toDel = this.components[this.components.length-1];
       this.removeComponent(toDel);
       toDel.delete();
-      changed = true;
     }
     while (textList.length > this.components.length) {
-	this.addComponent(new TextPrimative({
-	    size: this.size,
-	    color: this.color,
-	    fontFamily: this.fontFamily,
-	    textAlign: this.textAlign,
-	    showCollider: this.showCollider
-	}));
-      changed = true;
+      this.addComponent(new TextPrimative({
+	size: this.size,
+	color: this.color,
+	fontFamily: this.fontFamily,
+	textAlign: this.textAlign,
+	showCollider: this.showCollider
+      }));
     }
 
-    if (true) {
-      range(0, textList.length).forEach(i => {
-	this.components[i].text = textList[i]
-	  this.components[i].offsetY = this.size * (-i + ((textList.length - 1) / 2));
-      })
-    }
+    // update changes in text
+    range(0, textList.length).forEach(i => {
+      this.components[i].text = textList[i]
+      this.components[i].offsetY = this.size * (-i + ((textList.length - 1) / 2));
+    })
     this.arrangeComponents();
   }
 }
@@ -1635,9 +1626,9 @@ Woof.prototype.TextPrimative = function({project = undefined, text = "Text", siz
       if (typeof value != "number") {
 	throw new TypeError("The size of a text must be set to a number, given: ", value);
       }
+      this.privateSize = value;
       this._updateWidth();
       this._updateHeight();
-      this.privateSize = value;
     }
   });
 
