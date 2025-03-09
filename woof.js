@@ -1113,7 +1113,7 @@ Woof.prototype.Bundle = function({project = undefined, components = [], x = 0, y
   this.components = components
   this.privateShowing = true
 
-  Woof.prototype.Sprite.call(this);  
+  Woof.prototype.Sprite.call(this, arguments[0]);
     
   this.addComponent = function(sprite, offsetX=0, offsetY=0, offsetAngle=0) {
     sprite.offsetX = offsetX
@@ -1371,7 +1371,7 @@ Woof.prototype.Bundle = function({project = undefined, components = [], x = 0, y
 }
 
 Woof.prototype.Text = function({project = undefined, text = "Text", size = 12, color = "black", fontFamily = "arial", textAlign = "center"} = {}) {
-  Woof.prototype.Bundle.call(this);
+  Woof.prototype.Bundle.call(this, arguments[0]);
 
   this.privateText = text;
   this.privateSize = size;
