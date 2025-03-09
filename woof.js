@@ -1503,7 +1503,7 @@ Woof.prototype.Text = function({project = undefined, text = "Text", size = 12, c
       // if we get a functions for text, evaluate it every time we are asked to render the text
       try { return this.text().toString(); } catch (e) { console.error("Error with text function: " + e.message); }
     } else {
-      return this.text;
+      return this.text.toString();
     }
   }
 
