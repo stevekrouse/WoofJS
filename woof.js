@@ -137,11 +137,8 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
   }
   thisContext._runReadys = () => {
     thisContext._readys.forEach(func => { func() });
-    // delaying this to fix firefox issue #633
-    setTimeout(() => {
-      thisContext.stopped = false;
-      thisContext._readys = [];
-    }, 0)
+    thisContext.stopped = false;
+    thisContext._readys = [];
   };
   
   window.addEventListener("load", () => {
@@ -150,11 +147,11 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
     document.body.style.width = "100%";
     document.body.style.height = "100%";
 
-    // if the project already exists, remove it so we don't have duplicates
-    //  (this shouldn't happen, but firefox
-    //   was firing this code twice which led to bugs)
+    // if the project already exists, we shouldn't do anything
+    //  (this shouldn't happen, but firefox was firing
+    //   the load event twice which led to bugs)
     if (document.getElementById('project') != null) {
-      document.getElementById('project').remove();
+      return;
     }
       
     // create the main div that Woof lives in
