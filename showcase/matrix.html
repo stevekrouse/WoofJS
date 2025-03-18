@@ -1,0 +1,67 @@
+<head>
+  <script src="../woof.js"></script>
+<!--  <script src="https://cdn.jsdelivr.net/gh/stevekrouse/WoofJS@c387d23dd6b81e3bec30dd171fdeca8bcf818a24/woof.js"></script> -->
+  <script>
+setBackdropColor('black')
+
+var textSize = 30
+var digs = []
+
+every(() => random(10,30)/200, 'second', () => {
+  var hold = new Text()
+  hold.color = 'green'
+  hold.fontFamily = 'Courier New'
+  hold.size = textSize
+  hold.brightness = 100
+  hold.text = random(1,9).toString()
+  hold.x = randomX()
+  hold.x -= hold.x%(Math.floor(textSize*0.7))
+  hold.y = randomY()
+  hold.y -= hold.y % textSize
+  digs.push(hold)
+})
+
+var frameCounter = 0
+forever(() => {
+  frameCounter++
+  if (frameCounter%6===0) {
+    var toAdd = []
+    var toRemove = []
+    digs.forEach(dig => {
+      if (dig.brightness == 100 && dig.y > minY) {
+         var hold = new Text()
+         hold.color = 'green'
+         hold.fontFamily = 'Courier New'
+         hold.size = textSize
+         hold.brightness = 100
+         if (random(1,3) == 1) {
+           hold.text = random(1,9).toString()       
+         } else {
+           hold.text = dig.text
+         }
+         hold.x = dig.x
+         hold.y = dig.y - textSize
+         toAdd.push(hold)
+      }
+      dig.brightness -= 10
+      if (dig.brightness < 5) {
+        toRemove.push(dig)
+      }
+    })
+    toAdd.forEach(d => {
+      digs.push(d)
+    })
+    toRemove.forEach(d => {
+      digs.remove(d)
+      d.delete()
+    })
+  }
+})
+
+// var diag = new Text()
+// diag.color = 'white'
+// diag.y = maxY - 30
+// diag.size = 30
+// diag.text = () => digs.length    
+  </script>
+</head>

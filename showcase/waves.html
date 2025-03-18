@@ -1,0 +1,51 @@
+<head>
+  <script src="https://cdn.jsdelivr.net/gh/stevekrouse/WoofJS@16e2f13972707e47e284b73667e2552f193aab39/woof.js"></script>
+  <script>
+setBackdropURL('../images/outerspace.jpg')
+
+var x = minX
+
+var circles = []
+
+var circle
+var counter = 0
+
+// new Rectangle({
+//   width: width,
+//   height: 1,
+//   color: "white"
+// })
+
+for (x = minX; x < maxX; x+=10) {
+  circle = new Circle({
+    x: x,
+    radius: 5,
+    color: "red"
+  })
+  counter++
+  circle.counter = counter
+  circle.ySpeed = 5
+  if (counter%3 == 1) {
+    circle.color = "blue"
+    circle.ySpeed = 6
+  } else if (counter%3 == 2) {
+    circle.color = "green"
+    circle.ySpeed = 7
+  }
+  circles.push(circle)
+}
+
+counter = 0
+var diff
+forever(() => {
+  circles.forEach(circle => {
+    if (counter > circle.counter * 75) {
+      circle.y += circle.ySpeed
+      diff = sqrt(abs(circle.y)) * ((circle.counter % 3) + 2) / 150
+      circle.ySpeed += (circle.y > 0) ? -diff : diff
+    }
+    counter++
+  })
+})    
+  </script>
+</head>

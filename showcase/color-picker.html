@@ -1,0 +1,62 @@
+<head>
+  <script src="https://cdn.jsdelivr.net/gh/stevekrouse/WoofJS@16e2f13972707e47e284b73667e2552f193aab39/woof.js"></script>
+  <script>
+resolution = 20
+
+var pixels = []
+var xRects = Math.round(maxX-minX / resolution)
+var yRects = Math.round((maxY-minY-resolution*3) / resolution)
+
+var text = new Text()
+text.y = maxY - resolution * 2
+text.text = ''
+
+var blueVal = 128
+
+var yPos = minY
+repeatUntil(() => yPos >= maxY-resolution*3, () => {
+  range(minX, maxX, resolution).forEach(x => {
+    var px = new Rectangle({
+      x: x,
+      y: yPos,
+      width: resolution,
+      height: resolution,
+      color: rgb((x-minX)/width * 255, (yPos-minY)/height * 255, 0)
+    })
+    px.red = (x-minX)/width * 255
+    px.green = (yPos-minY)/height * 255
+    pixels.push(px)
+    px.onMouseDown(() => {
+      text.text = 'rgb(' + Math.round(px.red) + ',' +
+                           Math.round(px.green) + ',' + 
+                           Math.round(blueVal) + ')'
+    })
+  })
+  yPos += resolution
+})
+
+var sliderBG = new Rectangle({
+  width: width,
+  y: maxY - resolution/2,
+  height: resolution
+})
+var slider = new Rectangle({
+  width: width,
+  y: maxY - resolution/2,
+  height: resolution,
+  color: "blue",
+  x: minX
+})
+
+sliderBG.onMouseDown(() => {
+  repeatUntil(() => !mouseDown, () => {
+    slider.width = mouseX-minX
+    slider.x = (mouseX-minX)/2+minX
+    blueVal = (mouseX-minX)/width * 255
+    pixels.forEach(px => {
+      px.color = rgb(px.red, px.green, blueVal)
+    })
+  })
+})    
+  </script>
+</head>

@@ -66,15 +66,18 @@
         top: 30px;
         left: 0;
         right: 0;
-        height: 75%;
-        width: 60%;
+        height: 88%;
+        width: 90%;
         background: rgba(255, 255, 255, 0.5);
     }
     
     .CodeMirror {
-        height: 100%;
+        height: 80%;
+	width: 80%;
         background: rgba(255, 255, 255, 0.5);
         font-size: 1.4em;
+	margin-left: auto;
+	margin-right: auto;
     }
     
     iframe {
@@ -87,7 +90,7 @@
     
     button {
         z-index: 200;
-        width: 375px;
+        width: 250px;
         height: 80px;
         border: none;
         margin-left: auto;
@@ -106,6 +109,10 @@
     #educator {
         background-color: #56CCF2;
     }
+
+    #showcase {
+        background-color: #CA65E6;
+    }
     
     #click {
         display: flex;
@@ -119,6 +126,7 @@
     <div id="click" style="display: flex; flex-direction: row; flex-wrap: wrap; justify-content: center; align-content: center; align-items: center;">
         <a href="./create.html"><button id="start">Start Coding</button></a>
         <a href="./teach.html"><button id="educator">For Educators</button></a>
+	<a href="./showcase.html"><button id="showcase">Project Showcase</button></a>
     </div>
 </div>
 <iframe id="output"></iframe>

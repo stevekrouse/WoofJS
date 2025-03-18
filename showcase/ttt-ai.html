@@ -1,0 +1,339 @@
+<head>
+  <script src="https://cdn.jsdelivr.net/gh/stevekrouse/WoofJS@16e2f13972707e47e284b73667e2552f193aab39/woof.js"></script>
+  <script>
+var turn = "X"
+var useMem = true // setting this to false makes the AI unacceptably slow
+var showTime = false
+var winText = new Text({
+  text: "",
+  y: maxY - 20
+})
+
+var gridSize = (width < height ? width : height) / 4
+
+var line1 = new Line({
+  x: -gridSize / 2,
+  y: -gridSize * 1.5,
+  x1: -gridSize / 2,
+  y1: gridSize * 1.5,
+  width: 3
+})
+
+var line2 = new Line({
+  x: gridSize / 2,
+  y: -gridSize * 1.5,
+  x1: gridSize / 2,
+  y1: gridSize * 1.5,
+  width: 3
+})
+
+var line3 = new Line({
+  x: -gridSize * 1.5,
+  y: -gridSize / 2,
+  x1: gridSize * 1.5,
+  y1: -gridSize / 2,
+  width: 3
+})
+
+var line4 = new Line({
+  x: -gridSize * 1.5,
+  y: gridSize / 2,
+  x1: gridSize * 1.5,
+  y1: gridSize / 2,
+  width: 3
+})
+
+var squares = []
+var grid = []
+
+range(0, 3).forEach(i => {
+  grid.push([0, 0, 0])
+  range(0, 3).forEach(j => {
+    var square = new Rectangle({
+      color: randomColor(),
+      brightness: 30,
+      width: gridSize,
+      height: gridSize,
+      y: i * gridSize - gridSize,
+      x: -j * gridSize + gridSize
+    })
+    square.row = j
+    square.col = i
+    square.sprite = new Text({
+      text: () => grid[i][j] ? (grid[i][j] == 1 ? "X" : "O") : "",
+      size: 50,
+      x: square.x,
+      y: square.y,
+      color: "black"
+    })
+    square.onMouseDown(() => {
+      if (0 === checkWin(grid)) {
+        if (grid[i][j] === 0) {
+          if (turn == "X") {
+            grid[i][j] = 1
+            turn = "O"
+          } else {
+            grid[i][j] = 2
+            turn = "X"
+          }
+          //console.log(grid)
+          if (checkWin(grid) === 0) {
+            after(0.25, 'second', () => {
+              var move = computeMove(grid, turn2player(turn))
+            grid[move.row][move.col] = turn2player(turn)
+            checkWin(grid)
+            turn = swapTurn(turn)
+            })
+            
+          }
+        }
+      }
+    })
+  })
+})
+
+
+// returns a move for player (as an object with .row and .col properties)
+// grid is a 3x3 matrix where 0 is blank, 1 is X, and 2 is O
+// player is an integer of 1 if X is taking a turn, 2 if O is taking a turn
+function computeMove(grid, player) {
+  console.log("Computing move for " + player + " on grid " + grid)
+  var possibleMoves = allMoves(grid, player)
+  
+  var bestWeight = -1
+  var bestMove
+  possibleMoves.forEach(move => {
+    console.log("Player: " + player + " at " + move.row + "," + move.col + ":" + move.evaluation)
+    if (move.evaluation > bestWeight) {
+      bestMove = move
+      bestWeight = move.evaluation
+    } else if (move.evaluation == bestWeight && random(1,2)==1) {
+      bestMove = move
+      bestWeight = move.evaluation
+    }
+  })
+  return bestMove
+  /*
+  var sumWeight = 0
+  possibleMoves.forEach(move => {
+    sumWeight += move.evaluation
+  })
+  if (sumWeight === 0) { // if they're all losing
+    return possibleMoves[random(0,possibleMoves.length)]
+  }
+  var choice = Math.random() * sumWeight
+  var ind = 0
+  var done = false
+  possibleMoves.forEach((move, i) => {
+    if (done) {
+      return
+    }
+    choice -= move.evaluation
+    if (choice < 0) {
+      ind = i
+      done = true
+    }
+  })
+  return possibleMoves[ind] */
+}
+
+var evalDict = []
+
+var counter = 0
+// new Text({
+//   text: () => counter,
+//   y: maxY-30
+// })
+
+// give a float (0-1) describing how good the board is for this player
+function evaluateMove(grid, player) {
+  var thisHash = grid2Hash(grid) + "" + player
+  if (evalDict[thisHash] !== undefined && useMem) {
+    counter++
+    return evalDict[thisHash]
+  }
+  
+  var curState = checkWin(grid)
+  
+  if (curState == player) {
+    evalDict[thisHash] = 1
+    return 1 // win
+  } else if (curState == 3) {
+    evalDict[thisHash] = 0.5
+    return 0.5 // tie
+  } else if (curState > 0) {
+    evalDict[thisHash] = 0
+    return 0 // loss
+  } else {
+    // need to recurse
+    var moves = allMoves(grid, swapPlayer(player))
+    var adverseEval = 2
+    moves.forEach(move => {
+      let hold = 1-evaluateMove(move, swapPlayer(player))
+      if (hold < adverseEval) {
+        adverseEval = hold
+      }
+      
+    })
+    if (adverseEval === 0) {
+      //adverseEval = 0.01 // a forced loss is better than a guarenteed loss
+    }
+    evalDict[thisHash] = adverseEval
+    return adverseEval
+  }
+}
+
+function swapPlayer(player) {
+  return player == 1 ? 2 : 1
+}
+
+// a memoization dictionary for allMoves to reduce recursive duplication
+var allMovesDict = []
+
+function allMoves (grid, player) {
+  var thisHash = grid2Hash(grid) + player
+  if (allMovesDict[thisHash] !== undefined && useMem) {
+    return allMovesDict[thisHash]
+  }
+  
+  var returnVal = []
+  range(0,3).forEach(rowMove => {
+    range(0,3).forEach(colMove => {
+      var myGrid = copyGrid(grid)
+      if (myGrid[rowMove][colMove] === 0) {
+        myGrid[rowMove][colMove] = player
+        myGrid.row = rowMove
+        myGrid.col = colMove
+        myGrid.evaluation = evaluateMove(myGrid,player)
+        returnVal.push(myGrid)
+      }
+    })
+  })
+  allMovesDict[thisHash] = returnVal
+  return returnVal
+}
+
+function copyGrid(grid) {
+  let returnVal = []
+  grid.forEach(row => {
+    let newRow = []
+    row.forEach(val => {
+      newRow.push(val)
+    })
+    returnVal.push(newRow)
+  })
+  return returnVal
+}
+
+
+// this function will return 0 if the game is ongoing, 
+//   1 if X wins, 2 if O wins, and 3 in the case of a tie
+function checkWin(grid) {
+  instructions.hide()
+  winText.text = "Game is ongoing"
+  var tie = true
+  var returnVal = 0
+  range(0, 3).forEach(i => {
+    if (grid[i][0] == grid[i][1] && grid[i][1] == grid[i][2]) {
+      if (grid[i][0] == 1) {
+        winText.text = "X wins!"
+        returnVal = 1
+      } else if (grid[i][0] == 2) {
+        winText.text = "O wins!"
+        returnVal = 2
+      }
+    }
+    if (grid[0][i] == grid[1][i] && grid[1][i] == grid[2][i]) {
+      if (grid[0][i] == 1) {
+        winText.text = "X wins!"
+        returnVal = 1
+      } else if (grid[0][i] == 2) {
+        winText.text = "O wins!"
+        returnVal = 2
+      }
+    }
+    range(0, 3).forEach(j => {
+      if (grid[i][j] === 0) {
+        tie = false
+      }
+    })
+  })
+  if (grid[0][0] == grid[1][1] && grid[1][1] == grid[2][2]) {
+    if (grid[0][0] == 1) {
+      winText.text = "X wins!"
+      returnVal = 1
+    } else if (grid[0][0] == 2) {
+      winText.text = "O wins!"
+      returnVal = 2
+    }
+  }
+  if (grid[0][2] == grid[1][1] && grid[1][1] == grid[2][0]) {
+    if (grid[0][2] == 1) {
+      winText.text = "X wins!"
+      returnVal = 1
+    } else if (grid[0][2] == 2) {
+      winText.text = "O wins!"
+      returnVal = 2
+    }
+  }
+  if (tie && winText.text == "Game is ongoing") {
+    winText.text = "Tie"
+    returnVal = 3
+  }
+  return returnVal
+}
+
+function grid2Hash(grid) {
+  var returnVal = ""
+  grid.forEach(row => {
+    row.forEach(val => {
+      returnVal += val
+    })
+  })
+  return returnVal
+}
+
+var aiTurnRect = new Rectangle()
+aiTurnRect.y = minY + 30
+aiTurnRect.width = 70
+aiTurnRect.height = 20
+aiTurnRect.color = 'orange'
+
+var aiTurnText = new Text()
+aiTurnText.y = minY + 30
+aiTurnText.size = 16
+aiTurnText.text = 'AI Move'
+
+function turn2player(val) {
+  if (val == "X")
+    return 1
+  if (val == "O")
+    return 2
+}
+
+function swapTurn(val) {
+  if (val == "X")
+    return "O"
+  if (val == "O")
+    return "X"
+}
+
+aiTurnRect.onMouseDown(() => {
+  var time = timer()
+  var move = computeMove(grid, turn2player(turn))
+  grid[move.row][move.col] = turn2player(turn)
+  checkWin(grid)
+  turn = swapTurn(turn)
+  if (showTime) { 
+    winText.text = timer()-time
+  }
+})
+
+var instructions = new Text()
+instructions.y = gridSize*1.75
+instructions.size = 16
+instructions.text = "Tic Tac Toe - click to move" +
+  "\nThe AI will move after you," +
+  "\nor when you press the AI Move button"    
+  </script>
+</head>

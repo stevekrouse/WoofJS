@@ -1,0 +1,454 @@
+<head>
+  <script src="https://cdn.jsdelivr.net/gh/stevekrouse/WoofJS@c387d23dd6b81e3bec30dd171fdeca8bcf818a24/woof.js"></script>
+  <script>
+setBackdropColor("#a05fa5")
+
+// parameters for creating the tree
+//   making too many will break stuff down
+var curDrawing = true
+var params = {
+  numBranches: 2,
+  depth: 5,
+  jitter: 1,
+  branchAngle: 50,
+  widthScale: 0.7,
+  lengthScale: 0.7
+}
+
+// code allowing modification of parameters + associated UI
+{
+  // num branches
+  {
+    var branchesDown = new Polygon()
+    branchesDown.sides = 3
+    branchesDown.length = 10
+    branchesDown.angle = 180
+    branchesDown.x = minX + 15
+    branchesDown.y = maxY - 20
+    branchesDown.color = 'red'
+    branchesDown.onMouseDown(() => {
+      params.numBranches -= 1
+      remakeTree(root,params)
+    })
+    var branchesText = new Text()
+    branchesText.color = 'white'
+    branchesText.y = maxY - 20
+    branchesText.x = minX + 60
+    branchesText.text = () => 'Branches: ' + params.numBranches
+    var branchesUp = new Polygon()
+    branchesUp.sides = 3
+    branchesUp.length = 10
+    branchesUp.angle = 0
+    branchesUp.x = minX + 105
+    branchesUp.y = maxY - 20
+    branchesUp.color = 'red'
+    branchesUp.onMouseDown(() => {
+      params.numBranches += 1
+      remakeTree(root, params)
+    })
+  }
+  
+  // depth
+  {
+    var depthDown = new Polygon()
+    depthDown.sides = 3
+    depthDown.length = 10
+    depthDown.angle = 180
+    depthDown.x = minX + 15
+    depthDown.y = maxY - 50
+    depthDown.color = 'red'
+    depthDown.onMouseDown(() => {
+      params.depth -= 1
+      trimTree(root, params)
+      setTree(root,params)
+    })
+    var depthText = new Text()
+    depthText.color = 'white'
+    depthText.y = maxY - 50
+    depthText.x = minX + 60
+    depthText.text = () => 'Depth: ' + params.depth
+    var depthUp = new Polygon()
+    depthUp.sides = 3
+    depthUp.length = 10
+    depthUp.angle = 0
+    depthUp.x = minX + 105
+    depthUp.y = maxY - 50
+    depthUp.color = 'red'
+    depthUp.onMouseDown(() => {
+      params.depth += 1
+      extendTree(root, params)
+      setTree(root,params)
+    })
+  }
+  
+  // jitter
+  {
+    var jitterBox = new Rectangle()
+    jitterBox.color = 'white'
+    jitterBox.x = minX + 135
+    jitterBox.y = maxY - 20
+    jitterBox.width = 18
+    jitterBox.height = 18
+    var jitterText = new Text()
+    jitterText.x = minX + 168
+    jitterText.y = maxY - 20
+    jitterText.text = "Jitter?"
+    jitterText.color = 'white'
+    var jitterCrossA = new Line()
+    var jitterCrossB = new Line()
+    jitterCrossA.width = jitterCrossB. width = 4
+    jitterCrossA.x = jitterCrossB.x1 = minX + 128
+    jitterCrossA.y = jitterCrossB.y = maxY - 12
+    jitterCrossA.x1 = jitterCrossB.x = minX + 142
+    jitterCrossA.y1 = jitterCrossB.y1 = maxY - 27
+    jitterBox.onMouseDown(() => {
+      if (jitterCrossA.showing) {
+        jitterCrossA.hide()
+        jitterCrossB.hide()
+        params.jitter = 0
+        setTree(root, params)
+      } else {
+        jitterCrossA.show()
+        jitterCrossB.show()
+        params.jitter = 1
+        setTree(root, params)
+      }
+    })
+  }
+  
+  // rejitter
+  {
+    var rejiggerRect = new Rectangle()
+    rejiggerRect.width = 60
+    rejiggerRect.height = 20
+    rejiggerRect.x = minX + 155
+    rejiggerRect.y = maxY - 50
+    rejiggerRect.color = 'yellow'
+    var rejiggerText = new Text()
+    rejiggerText.text = "Rejitter"
+    rejiggerText.x = minX + 155
+    rejiggerText.y = maxY - 50
+    rejiggerRect.onMouseDown(() => {
+      rejitterTree(root, params)
+      setTree(root, params)
+    })
+  }
+  
+  // angle
+  {
+    var angleBack = new Rectangle()
+    angleBack.width = 90
+    angleBack.height = 20
+    angleBack.x = minX + 245
+    angleBack.y = maxY - 20
+    var angleFront = new Line()
+    angleFront.width = 20
+    angleFront.x1 = angleBack.x - 45
+    angleFront.y1 = maxY - 20
+    angleFront.color = 'green'
+    angleFront.x = angleFront.x1 + 59
+    angleFront.y = maxY - 20
+    var angleText = new Text()
+    angleText.text = '0     Angle     90'
+    angleText.color = 'yellow'
+    angleText.x = angleBack.x
+    angleText.y = maxY - 20
+    angleBack.onMouseDown(() => {
+      repeatUntil(() => !mouseDown || !angleBack.mouseOver, () => {
+        angleFront.x = mouseX
+        params.branchAngle = angleFront.x - angleFront.x1
+        setTree(root, params)
+      })
+    }) 
+  }
+  
+  // widthScale
+  {
+    var widthBack = new Rectangle()
+    widthBack.width = 90
+    widthBack.height = 20
+    widthBack.x = minX + 245
+    widthBack.y = maxY - 50
+    var widthFront = new Line()
+    widthFront.width = 20
+    widthFront.x1 = widthBack.x - 45
+    widthFront.y1 = widthFront.y = widthBack.y
+    widthFront.color = 'green'
+    widthFront.x = widthFront.x1 + widthBack.width * params.widthScale/1.2
+    var widthText = new Text()
+    widthText.color = 'yellow'
+    widthText.text = '0    Width    1.2'
+    widthText.x = widthBack.x
+    widthText.y = widthBack.y
+    widthBack.onMouseDown(() => {
+      repeatUntil(() => !mouseDown || !widthBack.mouseOver, () => {
+        widthFront.x = mouseX
+        params.widthScale = (mouseX - widthFront.x1) * 1.2 / widthBack.width 
+        setTree(root, params)
+      })
+    })
+  }
+  
+  // lengthScale
+  {
+    var lengthBack = new Rectangle()
+    lengthBack.width = 90
+    lengthBack.height = 20
+    lengthBack.x = minX + 355
+    lengthBack.y = maxY - 20
+    var lengthFront = new Line()
+    lengthFront.width = 20
+    lengthFront.color = 'green'
+    lengthFront.x1 = lengthBack.x - 45
+    lengthFront.y = lengthFront.y1 = lengthBack.y
+    lengthFront.x = lengthFront.x1 + lengthBack.width * params.lengthScale/2
+    var lengthText = new Text()
+    lengthText.color = 'yellow'
+    lengthText.text = '0  LengthMult  2'
+    lengthText.x = lengthBack.x
+    lengthText.y = lengthBack.y
+    lengthBack.onMouseDown(() => {
+      repeatUntil(() => !mouseDown || !lengthBack.mouseOver, () => {
+        lengthFront.x = mouseX
+        params.lengthScale = (mouseX - lengthFront.x1) * 2 / lengthBack.width
+        setTree(root, params)
+      })
+    })
+  }
+  
+  // baseLength
+  {
+    var baseLengthBack = new Rectangle()
+    baseLengthBack.width = 90
+    baseLengthBack.height = 20
+    baseLengthBack.x = minX + 355
+    baseLengthBack.y = maxY - 50
+    var baseLengthFront = new Line()
+    baseLengthFront.width = 20
+    baseLengthFront.color = 'green'
+    baseLengthFront.x1 = baseLengthBack.x - 45
+    baseLengthFront.y = baseLengthFront.y1 = baseLengthBack.y
+    baseLengthFront.x = baseLengthFront.x1 + 45
+    var baseLengthText = new Text()
+    baseLengthText.color = 'yellow'
+    baseLengthText.x = baseLengthBack.x
+    baseLengthText.y = baseLengthBack.y
+    baseLengthText.text = '0  RootLen  400'
+    baseLengthBack.onMouseDown(() => {
+      repeatUntil(() => !mouseDown || !baseLengthBack.mouseOver, () => {
+        baseLengthFront.x = mouseX
+        root.length = 400 * (mouseX - baseLengthFront.x1) / baseLengthBack.width
+        setLine(root)
+        setTree(root, params)
+      })
+    })
+  }
+  
+  // colorFunction
+}
+
+var root = new Line()
+root.x = 0
+root.y = minY
+root.depth = 0
+root.length = height/4
+root.width = height/25
+root.lAngle = 0
+root.parent = null
+
+var frames = 0
+forever(() => {
+  frames++
+})
+var reporter = new Text()
+reporter.y = maxY - 10
+reporter.x = maxX - 75
+reporter.color = 'white'
+reporter.text = () => 'FPS: ' + Math.round(frames * 10 / timer()) / 10 + " Sprites: " + sprites.length
+after(0.5, 'seconds', () => {
+  resetTimer()
+  frames = 0
+})
+onKeyDown(() => {
+  if (keysDown.includes('R')) {
+    resetTimer()
+    frames = 0
+  }
+})
+
+function setLine(myLine) {
+  myLine.x1 = myLine.x + myLine.length * sin(myLine.lAngle)
+  myLine.y1 = myLine.y + myLine.length * cos(myLine.lAngle)
+}
+setLine(root)
+root.children = []
+
+function makeTree(branch, depth, params) {
+  if (depth >= params.depth || !curDrawing) {
+    curDrawing = false
+    return
+  }
+  range(0, params.numBranches).forEach(i => {
+    var child = spawn(branch, params, i, depth)
+    
+    after(0, 'second', () => {
+      makeTree(child, depth + 1, params)
+    })
+  })
+}
+
+
+function spawn(branch, params, i, depth) {
+  var child = new Line()
+  child.onMouseDown(() => {
+    var xoff = mouseX - child.x
+    var yoff = mouseY - child.y
+    repeatUntil(() => !mouseDown, () => {
+      child.x = mouseX - xoff
+      child.y = mouseY - yoff
+      propegateDown(child)
+      setTree(root, params)
+    })
+  })
+  
+  child.x = branch.x1
+  child.y = branch.y1
+  child.depth = depth
+  child.parent = branch
+  child.color = rgb(0, (1-(params.depth - child.depth)/params.depth) * 255, 0)
+  child.widthJ = Math.random() * params.widthScale/3 - params.widthScale/6
+  child.width = branch.width * (params.widthScale + params.jitter * child.widthJ)
+  child.lengthJ = (Math.random() * params.lengthScale/3 - params.lengthScale/6)
+  child.length = branch.length * (params.lengthScale + params.jitter * child.lengthJ)
+  child.angleOJ = (Math.random() * params.branchAngle/10 - params.branchAngle/20)
+  child.angleOffset = -((params.branchAngle/2) * (params.numBranches-1)) + (i * params.branchAngle) + params.jitter * child.angleOJ
+  child.lAngle = Math.round(branch.lAngle + child.angleOffset)
+  child.children = []
+  setLine(child)
+  
+  branch.children.push(child)
+  return child
+}
+
+makeTree(root, 0, params)
+
+function trimTree(branch, params) {
+  if (branch.depth+1 < params.depth) {
+    branch.children.forEach(child => {
+      trimTree(child, params)
+    })
+  } else {
+    pruneTree(branch)
+  }
+}
+
+function extendTree(branch, params) {
+  if (branch.childern === null || branch.children.length < params.numBranches) {
+    range(0, params.numBranches).forEach(i => {
+      spawn(branch, params, i, params.depth)
+    })
+  } else {
+    branch.children.forEach(child => {
+      extendTree(child, params)
+    })
+  }
+}
+
+function pruneTree(root) {
+  root.children.forEach(child => {
+    cutTree(child)
+  })
+  root.children = []
+}
+
+function cutTree(branch) {
+  branch.children.forEach(child => {
+    cutTree(child)
+  })
+  branch.delete()
+}
+
+function remakeTree(root, params) {
+  if (curDrawing) {
+    curDrawing = false
+    after(0.1, 'second', () => {
+      curDrawing = true
+      pruneTree(root)
+      makeTree(root, 0, params)
+    })
+  } else {
+    curDrawing = true
+    pruneTree(root)
+    makeTree(root, 0, params)
+  }
+}
+
+function greenFxn(depth, params) {
+  return rgb(0, (1-(params.depth - depth)/params.depth) * 255, 0)
+}
+
+function setTree(branch, params) {
+  setLine(branch)
+  branch.children.forEach((child, i) => {
+    child.x = branch.x1
+    child.y = branch.y1
+    child.color = rgb(0, (1-(params.depth - child.depth)/params.depth) * 255, 0)
+    child.width = branch.width * (params.widthScale + params.jitter * child.widthJ)
+    child.length = branch.length * (params.lengthScale + params.jitter * child.lengthJ)
+    child.angleOffset = Math.round(-((params.branchAngle/2) * (params.numBranches-1)) + (i * params.branchAngle) + params.jitter * child.angleOJ)
+    child.lAngle = Math.round(branch.lAngle + child.angleOffset)
+    while (child.lAngle > 360) {
+      child.lAngle -= 360
+    }
+    setTree(child, params)
+  })
+}
+
+function rejitterTree(branch, params) {
+  branch.widthJ = Math.random() * params.widthScale/3 - params.widthScale/6
+  branch.lengthJ = (Math.random() * params.lengthScale/3 - params.lengthScale/6)
+  branch.angleOJ = (Math.random() * params.branchAngle/10 - params.branchAngle/20)
+  branch.children.forEach(child => {
+    rejitterTree(child, params)
+  })
+}
+
+forever(() => {
+  if (keysDown.includes('LEFT')) {
+    root.lAngle -= 1
+    setTree(root, params)
+  } else if (keysDown.includes('RIGHT')) {
+    root.lAngle += 1
+    setTree(root, params)
+  }
+})
+
+/*var selected = root
+var t = new Text()
+t.text = () => Math.round(selected.angle) + " " + Math.round(selected.lAngle)
+t.y = minY + 20
+t.color = 'white'*/
+
+root.onMouseDown(() => {
+  var xoff = mouseX - root.x
+  var yoff = mouseY - root.y
+  repeatUntil(() => !mouseDown, () => {
+    root.x = mouseX - xoff
+    root.y = mouseY - yoff
+    setTree(root, params)
+  })
+})
+
+function propegateDown(branch) {
+  if (branch.parent !== null) {
+    var parent = branch.parent
+    parent.x1 = branch.x
+    parent.y1 = branch.y
+    parent.lAngle = branch.lAngle - branch.angleOffset
+    parent.x = parent.x1 - parent.length * sin(parent.lAngle)
+    parent.y = parent.y1 - parent.length * cos(parent.lAngle)
+    propegateDown(parent)
+  }
+}    
+  </script>
+</head>

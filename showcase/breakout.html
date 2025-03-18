@@ -1,0 +1,189 @@
+<head>
+  <script src="https://cdn.jsdelivr.net/gh/stevekrouse/WoofJS@16e2f13972707e47e284b73667e2552f193aab39/woof.js"></script>
+  <script>
+setBackdropColor("black")
+
+function glide(sprite, xStart, yStart, xEnd, yEnd, frames, fxn) {
+  repeat(frames, i => {
+    var timeFracion = i / frames
+    if (fxn) {
+      sprite.x = xStart * (1-fxn(timeFracion)) + xEnd * fxn(timeFracion)
+      sprite.y = yStart * (1-fxn(timeFracion)) + yEnd * fxn(timeFracion)
+    } else {
+      sprite.x = xStart * (1-timeFracion) + xEnd * timeFracion
+      sprite.y = yStart * (1-timeFracion) + yEnd * timeFracion
+    }
+  })
+}
+
+function softStopGen(exp) {
+  if (exp === undefined) {
+    exp = 2
+  }
+  return (input) => {
+    let flip = 1-input
+    return 1-myPow(flip, exp) 
+  }
+}
+
+function softStartGen(exp) {
+  if (exp === undefined) {
+    exp = 2
+  }
+  return (input) => {
+    return myPow(input, exp)
+  }
+}
+
+function blend2Fxn(fxn1, fxn2, fraction=0.5) {
+  return (input) => {
+    return fraction * fxn1(input) + (1-fraction) * fxn2(input)
+  }
+}
+
+function myFact(num) {
+  if (num <= 1) {
+    return 1
+  } else {
+    return myFact(num-1) * num
+  }
+}
+
+function binCoef(n,k) { // add in error checking
+  if (k === 0 || n == k) {
+    return 1
+  }
+  return myFact(n) / (myFact(k) * myFact(n-k))
+}
+
+// only works when exp is a positive integer
+function myPow(base, exp) {
+  let result = 1
+  for (var i = 0; i < exp; i++) {
+    result *= base
+  }
+  return result
+}
+
+function makeBez(ps) {
+  return (input) => {
+    let result = 0
+    range(0,ps.length).forEach(i => {
+      result += ps[i] * binCoef(ps.length-1, i) * myPow(input, i) * myPow(1-input, ps.length-i-1)
+    })
+    return result
+  }
+}
+
+var paddle = new Rectangle({
+  color: "red",
+  width: 150,
+  height: 20,
+  y: minY + 30
+})
+
+forever(() => {
+  paddle.dir = 0
+  if(keysDown.includes('LEFT') || keysDown.includes('A')) {
+    paddle.x -= 5
+    paddle.dir -= 5
+  }
+  if (keysDown.includes('RIGHT') || keysDown.includes('D')) {
+    paddle.x += 5
+    paddle.dir += 5
+  }
+})
+
+var ball = new Circle()
+ball.color = 'white'
+ball.y = minY + 200
+ball.xSpeed = random(-4,4)
+ball.ySpeed = -3
+
+var rects = []
+
+var numCols = Math.round(width/60)
+
+range(1,numCols).forEach(colInd => {
+  range(1,15).forEach(rowInd => {
+    rects.push(new Rectangle({
+      color: "orange",
+      width: 50,
+      height: 20,
+      x: colInd * 60 + minX,
+      y: maxY - rowInd * 25 + 300
+    }))
+    rects[rects.length-1].targetY = minY - rowInd * 25 + 650
+  })
+})
+
+rects.forEach(rect => {
+  glide(rect, rect.x, rect.y, rect.x, rect.targetY, 35, (input) => 1-Math.abs(1-makeBez([0,1.5,1,1.5,0.5,1,1,1])(input)))
+})
+// after(1, 'second', () => {
+//   rects.forEach(rect => {
+//     rect.y = rect.targetY
+//   })
+// })
+
+
+forever(() => {
+  ball.x += ball.xSpeed
+  ball.y += ball.ySpeed
+  // if it touches something that should bounce vertically
+  if (ball.touching(paddle) || ball.y + ball.radius >= maxY || ball.y <= minY) {
+    if (ball.touching(paddle)) {
+      ball.xSpeed += 2 * (Math.random() - 0.5 * (0.2 * paddle.dir))
+      while (ball.touching(paddle)) {
+        ball.y++
+      }
+    }
+    if (ball.y <= minY) {
+      resultText.text = 'You Lose!'
+      resultText.show()
+      freeze()
+    }
+    ball.y -= ball.ySpeed
+    ball.ySpeed *= -1
+  }
+
+  // if it hits a side wall
+  if (ball.x + ball.radius >= maxX || ball.x - ball.radius <= minX) {
+    ball.xSpeed *= -1
+  }
+  
+  rects.forEach(rect => {
+    if (ball.touching(rect)) {
+      if (isCollisionVertical(ball, rect)) {
+        ball.ySpeed *= -1
+      } else {
+        ball.xSpeed *= -1
+      }
+      rect.delete()
+      rects.remove(rect)
+    }
+  })
+})
+
+forever(() => {
+  if (rects.length === 0) {
+    freeze()
+    resultText.show()
+    resultText.text = 'You Win!'
+  }
+})
+
+function isCollisionVertical(ball, rect) {
+  if (ball.x + ball.radius*0.9 >= rect.x - rect.width/2 &&
+      ball.x - ball.radius*0.9 <= rect.x + rect.width/2) {
+    return true
+  }
+  return false
+}
+
+var resultText = new Text()
+resultText.size = 40
+resultText.color = 'green'
+resultText.hide()
+  </script>
+</head>

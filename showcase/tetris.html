@@ -1,0 +1,605 @@
+<head>
+  <script src="https://cdn.jsdelivr.net/gh/stevekrouse/WoofJS@16e2f13972707e47e284b73667e2552f193aab39/woof.js"></script>
+  <script>
+setBackdropColor('lightblue')
+
+var shapes = ["T", "I", "Z", "S", "L", "R", "O"]
+var colors = ['purple', 'yellow', 'green', 'blue', 'orange', 'hotpink', 'grey']
+var lines = 0
+
+
+class TetrisBlock {
+  constructor(obj) {
+    // need to add checking to constructor
+    this.shape = obj.shape.toUpperCase() // valid: T, I, Z, S, L, R, O
+    this.size = obj.size
+    this.facing = obj.facing.toUpperCase()
+    this.color = obj.color
+    this.x = obj.x
+    this.y = obj.y
+    
+    this._blocks = []
+    range(0, 4).forEach(() => {
+      var hold = new Rectangle({
+        color: obj.color,
+        width: obj.size-1,
+        height: obj.size-1,
+        x: obj.x,
+        y: obj.y
+      })
+      this._blocks.push(hold)
+    })
+    this.updateShape()
+  }
+  
+  updateColor() {
+    this._blocks.forEach(block => {
+      block.color = this.color
+    })
+  }
+  
+  updateShape() {
+    range(0,4).forEach(i => {
+      this._blocks[i].x = this.x
+      this._blocks[i].y = this.y
+    })
+    
+    if (this.shape == "O") {
+      this._blocks[1].x = this.x + this.size
+      this._blocks[2].y = this.y + this.size
+      this._blocks[3].x = this.x + this.size
+      this._blocks[3].y = this.y + this.size
+    }
+    if (this.shape == "T") {
+      if (this.facing != "LEFT") {
+        this._blocks[0].x = this.x + this.size
+      }
+      if (this.facing != "RIGHT") {
+        this._blocks[1].x = this.x - this.size
+      }
+      if (this.facing != "DOWN") {
+        this._blocks[2].y = this.y + this.size  
+      }
+      if (this.facing != "UP") {
+        this._blocks[3].y = this.y - this.size
+      }
+    }
+    
+    if (this.shape == "L") {
+      if (this.facing == "DOWN") {
+        this._blocks[1].y = this.y - this.size
+        this._blocks[2].x = this.x + this.size
+        this._blocks[2].y = this.y - this.size
+        this._blocks[3].y = this.y + this.size
+      }
+      if (this.facing == "LEFT") {
+        this._blocks[1].x = this.x - this.size
+        this._blocks[2].x = this.x - this.size
+        this._blocks[2].y = this.y - this.size
+        this._blocks[3].x = this.x + this.size
+      }
+      if (this.facing == "UP") {
+        this._blocks[1].y = this.y + this.size
+        this._blocks[2].x = this.x - this.size
+        this._blocks[2].y = this.y + this.size
+        this._blocks[3].y = this.y - this.size
+      }
+      if (this.facing == "RIGHT") {
+        this._blocks[1].x = this.x + this.size
+        this._blocks[2].x = this.x + this.size
+        this._blocks[2].y = this.y + this.size
+        this._blocks[3].x = this.x - this.size
+      }
+    }
+    
+    if (this.shape == "R") {
+      if (this.facing == "DOWN") {
+        this._blocks[1].y = this.y - this.size
+        this._blocks[2].x = this.x - this.size
+        this._blocks[2].y = this.y - this.size
+        this._blocks[3].y = this.y + this.size
+      }
+      if (this.facing == "LEFT") {
+        this._blocks[1].x = this.x - this.size
+        this._blocks[2].x = this.x - this.size
+        this._blocks[2].y = this.y + this.size
+        this._blocks[3].x = this.x + this.size
+      }
+      if (this.facing == "UP") {
+        this._blocks[1].y = this.y + this.size
+        this._blocks[2].x = this.x + this.size
+        this._blocks[2].y = this.y + this.size
+        this._blocks[3].y = this.y - this.size
+      }
+      if (this.facing == "RIGHT") {
+        this._blocks[1].x = this.x + this.size
+        this._blocks[2].x = this.x + this.size
+        this._blocks[2].y = this.y - this.size
+        this._blocks[3].x = this.x - this.size
+      }
+    }
+    
+    if (this.shape == "I") {
+      if (this.facing == "DOWN") {
+        this._blocks[1].y = this.y - this.size
+        this._blocks[2].y = this.y - this.size * 2
+        this._blocks[3].y = this.y + this.size
+      }
+      if (this.facing == "LEFT") {
+        this._blocks[1].x = this.x - this.size
+        this._blocks[2].x = this.x - this.size * 2
+        this._blocks[3].x = this.x + this.size
+      }
+      if (this.facing == "UP") {
+        this._blocks[1].y = this.y + this.size
+        this._blocks[2].y = this.y + this.size * 2
+        this._blocks[3].y = this.y - this.size
+      }
+      if (this.facing == "RIGHT") {
+        this._blocks[1].x = this.x + this.size
+        this._blocks[2].x = this.x + this.size * 2
+        this._blocks[3].x = this.x - this.size
+      }
+    }
+    
+    if (this.shape == "S") {
+      if (this.facing == "DOWN") {
+        this._blocks[1].y = this.y - this.size
+        this._blocks[2].x = this.x - this.size
+        this._blocks[2].y = this.y - this.size
+        this._blocks[3].x = this.x + this.size
+      }
+      if (this.facing == "LEFT") {
+        this._blocks[1].x = this.x - this.size
+        this._blocks[2].x = this.x - this.size
+        this._blocks[2].y = this.y + this.size
+        this._blocks[3].y = this.y - this.size
+      }
+      if (this.facing == "UP") {
+        this._blocks[1].y = this.y + this.size
+        this._blocks[2].x = this.x + this.size
+        this._blocks[2].y = this.y + this.size
+        this._blocks[3].x = this.x - this.size
+      }
+      if (this.facing == "RIGHT") {
+        this._blocks[1].x = this.x + this.size
+        this._blocks[2].x = this.x + this.size
+        this._blocks[2].y = this.y - this.size
+        this._blocks[3].y = this.y + this.size
+      }
+    }
+    
+    if (this.shape == "Z") {
+      if (this.facing == "DOWN") {
+        this._blocks[1].y = this.y + this.size
+        this._blocks[2].x = this.x - this.size
+        this._blocks[2].y = this.y + this.size
+        this._blocks[3].x = this.x + this.size
+      }
+      if (this.facing == "LEFT") {
+        this._blocks[1].x = this.x + this.size
+        this._blocks[2].x = this.x + this.size
+        this._blocks[2].y = this.y + this.size
+        this._blocks[3].y = this.y - this.size
+      }
+      if (this.facing == "UP") {
+        this._blocks[1].y = this.y - this.size
+        this._blocks[2].x = this.x + this.size
+        this._blocks[2].y = this.y - this.size
+        this._blocks[3].x = this.x - this.size
+      }
+      if (this.facing == "RIGHT") {
+        this._blocks[1].x = this.x - this.size
+        this._blocks[2].x = this.x - this.size
+        this._blocks[2].y = this.y - this.size
+        this._blocks[3].y = this.y + this.size
+      }
+    }
+  }
+  
+  turnRight() {
+    if (this.facing == "RIGHT") { this.facing = "DOWN" }
+    else if (this.facing == "DOWN") { this.facing = "LEFT" }
+    else if (this.facing == "LEFT") { this.facing = "UP" }
+    else if (this.facing == "UP") { this.facing = "RIGHT" }
+    this.updateShape()
+  }
+  
+  turnLeft() {
+    if (this.facing == "RIGHT") { this.facing = "UP" }
+    else if (this.facing == "DOWN") { this.facing = "RIGHT" }
+    else if (this.facing == "LEFT") { this.facing = "DOWN" }
+    else if (this.facing == "UP") { this.facing = "LEFT" }
+    this.updateShape()
+  }
+  
+  
+  
+  touching(sprite) {
+    if (typeof sprite != "object") {
+      alert("tetrisBlock.touching(sprite) expects a sprite or tetris block as its argument")
+      return
+    }
+    var value = false
+    if (sprite instanceof TetrisBlock) {
+      range(0,4).forEach(i => {
+        range(0,4).forEach(j => {
+          if (this._blocks[i].touching(sprite._blocks[j]))
+            value = true
+        })
+      })
+    } else {
+      range(0,4).forEach(i => {
+        if (this._blocks[i].touching(sprite))
+          value = true
+      })
+    }
+    return value
+  }
+}
+
+class Grid {
+  constructor(obj) {
+    this.bottom = obj.bottom
+    this.left = obj.left
+    this.blockSize = obj.blockSize // how many pixels a single block occupies
+    this.blockWidth = obj.blockWidth // how many blocks L-R
+    this.blockHeight = obj.blockHeight // how many blocks to the top
+    
+    this._blocks = []
+    range(0,obj.blockHeight).forEach(() => {
+      var newRow = []
+      range(0, obj.blockWidth).forEach(() => {
+        newRow.push(0)
+      })
+      this._blocks.push(newRow)
+    })
+    
+    this.leftBorder = new Line({
+      x: this.left - 3,
+      x1: this.left - 3,
+      y: this.bottom - 3,
+      y1: this.bottom + this.blockHeight*this.blockSize + 3,
+      width: 5,
+      color: "black"
+    })
+    this.botBorder = new Line({
+      width: 5,
+      color: "black",
+      x: this.left - 6,
+      x1: this.left + this.blockWidth*this.blockSize + 6,
+      y: this.bottom - 3,
+      y1: this.bottom - 3
+    })
+    this.rightBorder = new Line({
+      width: 5,
+      color: "black",
+      x: this.left + this.blockWidth*this.blockSize + 3,
+      x1: this.left + this.blockWidth*this.blockSize + 3,
+      y: this.bottom - 3,
+      y1: this.bottom + this.blockHeight*this.blockSize + 3
+    })
+    
+    this.addBlock = (block) => {
+      var col = Math.round((block.x - (this.left + (this.blockSize/2)))/this.blockSize)
+      var row = Math.round((block.y - (this.bottom + (this.blockSize/2)))/this.blockSize)
+      this._blocks[row][col] = block
+    }
+    
+    this.addTetrisBlock = function(tetrisPiece) {
+      tetrisPiece._blocks.forEach(this.addBlock)
+    }
+    
+    this.touching = (tetrisPiece) => {
+      var isTouching = false
+      tetrisPiece._blocks.forEach(block => {
+        if (!isTouching) {
+          if (block.touching(this.leftBorder) ||
+              block.touching(this.botBorder) ||
+              block.touching(this.rightBorder)) {
+            isTouching = true
+            return
+          }
+          this._blocks.forEach(gridRow => {
+            gridRow.forEach(gridBlock => {
+              if (gridBlock === 0) {
+                return
+              }
+              if (gridBlock.touching(block)) {
+                isTouching = true
+              }
+            })
+          })
+        }
+      })
+      return isTouching
+    }
+    
+    this.checkLine = () => {
+      for (var i = 0; i < this._blocks.length; i++) {
+        var hasZeroes = false
+        for (var k = 0; k < this._blocks[i].length; k++) {
+          if (this._blocks[i][k] === 0) {
+            hasZeroes = true
+            break
+          }
+        }
+        if (!hasZeroes) {
+          lines++
+          var nextRow = []
+          this._blocks[i].forEach(block => {
+            block.delete()
+            nextRow.push(0)
+          })
+          this._blocks.splice(i,1)
+          for (var j = i; j < this._blocks.length; j++) {
+            this._blocks[j].forEach(block => {
+              if (block !== 0) {
+                block.y -= this.blockSize
+              }
+            })
+          }
+          this._blocks.push(nextRow)
+          this.checkLine()
+          return
+        }
+      }
+    }
+  }
+}
+
+var nextBlock = null
+
+var bag = range(0,7)
+
+
+function createBlock(x, y) {
+  if (bag.length < 4) {
+    range(0,7).forEach(i => {
+      bag.push(i)
+    })
+  }
+  var ind = random(0,bag.length-1)
+  var i = bag[ind]
+  bag.splice(ind,1)
+  return new TetrisBlock({
+    color: colors[i],
+    shape: shapes[i],
+    size: 20,
+    x: x,
+    y: y,
+    facing: "down"
+  })
+}
+
+function spawnBlock(x, y) {
+  if (nextBlock === null) {
+    nextBlock = createBlock(-180, 130)
+  }
+  retVal = nextBlock
+  retVal.x = x
+  retVal.y = y
+  retVal.updateShape()
+  nextBlock = createBlock(-180, 130)
+  return retVal
+}
+
+var myBlock = spawnBlock(10,150)
+
+//var myBlock2 = spawnBlock(50,50)
+/*
+myBlock._blocks[0].color = "black"
+myBlock._blocks[1].color = "red"
+myBlock._blocks[2].color = "green"
+myBlock._blocks[3].color = "blue"
+*/
+
+// new Text({
+//   text: () => myBlock2.touching(myBlock),
+//   y: 50
+// })
+
+var gameOver = new Text({
+  text: "Game Over",
+  size: 30,
+  color: "red"
+})
+gameOver.hide()
+
+var pause = new Text({
+  text: "Paused (Esc to unpause)",
+  size: 25,
+  color: "yellow"
+})
+pause.hide()
+
+var heldBlock = null
+var canHold = true
+
+onKeyDown(() => {
+  if (keysDown.includes('ESC')) {
+    if (pause.showing) {
+      pause.hide()
+    } else {
+      pause.show()
+    }
+  }
+  
+  if (!pause.showing) {
+  if (keysDown.includes('H') && canHold) {
+    if (heldBlock === null) {
+      heldBlock = spawnBlock(-180, 0)
+    }
+    // swap current block to reserve, held block to top
+    heldBlock.x = 10
+    heldBlock.y = 150
+    myBlock.x = -180
+    myBlock.y = 0
+    myBlock.updateShape()
+    heldBlock.updateShape()
+    // make it so we control the block that was previous held
+    var hold = myBlock
+    myBlock = heldBlock
+    heldBlock = hold
+    shadowBlock.color = myBlock.color
+    shadowBlock.updateColor()
+    canHold = false
+  }
+  
+  if (keysDown.includes('UP')) {
+    myBlock.turnRight()
+    if (grid.touching(myBlock)) {
+      myBlock.turnLeft()
+    }
+  }
+  if (keysDown.includes('LEFT')) {
+    myBlock.x -= myBlock.size
+    myBlock.updateShape()
+    if (grid.touching(myBlock)) {
+      myBlock.x += myBlock.size
+      myBlock.updateShape()
+    }
+  }
+  if (keysDown.includes('RIGHT')) {
+    myBlock.x += myBlock.size
+    myBlock.updateShape()
+    if (grid.touching(myBlock)) {
+      myBlock.x -= myBlock.size
+      myBlock.updateShape()
+    }
+  }
+  if (keysDown.includes('DOWN')) {
+    myBlock.y -= myBlock.size
+    myBlock.updateShape()
+    checkRest()
+  }
+  if (keysDown.includes('SPACE')) {
+    while (!grid.touching(myBlock)) {
+      myBlock.y -= myBlock.size
+      myBlock.updateShape()
+    }
+    checkRest()
+  }
+  
+  updateShadow()
+  }
+})
+
+function updateShadow() {
+  shadowBlock.shape = myBlock.shape
+  shadowBlock.color = myBlock.color
+  shadowBlock.x = myBlock.x
+  shadowBlock.y = myBlock.y
+  shadowBlock.facing = myBlock.facing
+  shadowBlock.updateShape()
+  while (!grid.touching(shadowBlock)) {
+    shadowBlock.y -= shadowBlock.size
+    shadowBlock.updateShape()
+  }
+  shadowBlock.y += shadowBlock.size
+  shadowBlock.updateShape() 
+  shadowBlock.updateColor()
+}
+
+function getTimeInterval() {
+  return 50/(lines+30)
+}
+
+after(1, 'second', () => {
+  every(getTimeInterval, 'seconds', () => {
+    if (!pause.showing) {
+      myBlock.y -= myBlock.size
+      myBlock.updateShape()
+      checkRest()  
+    }
+  })
+})
+
+//myBlock._initialize()
+var shadowBlock = spawnBlock(myBlock.x, myBlock.y)
+shadowBlock.shape = myBlock.shape
+shadowBlock.color = myBlock.color
+shadowBlock.facing = myBlock.facing
+shadowBlock._blocks.forEach(block => {
+  block.brightness = 40
+})
+
+var grid = new Grid({
+  bottom: -200,
+  left: -100,
+  blockSize: 20,
+  blockWidth: 10,
+  blockHeight: 20
+})
+
+updateShadow()
+function checkRest() {
+  if (grid.touching(myBlock)) {
+    myBlock.y += myBlock.size
+    myBlock.updateShape()
+    grid.addTetrisBlock(myBlock)
+    grid.checkLine()
+    canHold = true
+      // gridText.updateRender()
+    myBlock = spawnBlock(10, 150)
+    if (grid.touching(myBlock)) {
+      gameOver.show()
+      gameOver.sendToFront()
+      freeze()
+    }
+    shadowBlock.color = myBlock.color
+    updateShadow()
+  }
+}
+
+var heldRect = new Rectangle({
+  x: -180,
+  y: 0,
+  width: 110,
+  height: 100,
+  color: 'black',
+})
+heldRect.sendToBack()
+
+var heldRectText = new Text({
+  text: "HOLD",
+  color: "white",
+  x: -180,
+  y: 35
+})
+
+var nextRect = new Rectangle({
+  x: -180,
+  y: 130,
+  width: 110,
+  height: 140,
+  color: 'black',
+})
+
+var nextRectText = new Text({
+  text: "NEXT",
+  color: "white",
+  x: -180,
+  y: 185
+})
+
+var linesCleared = new Text({
+  text: () => "Lines: " + lines,
+  color: "black",
+  size: 18,
+  x: -180,
+  y: 220
+})
+
+var instructions = new Text()
+instructions.x = -180
+instructions.y = -120
+instructions.size = 16
+instructions.text = "Left/Right to move" +
+  "\nUp to rotate" +
+  "\nDown to speed up" +
+  "\nSpace to slam" +
+  "\nH to hold" +
+  "\nEsc to pause"
+  </script>
+</head>

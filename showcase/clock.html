@@ -1,0 +1,46 @@
+<head>
+  <script src="https://cdn.jsdelivr.net/gh/stevekrouse/WoofJS@16e2f13972707e47e284b73667e2552f193aab39/woof.js"></script>
+  <script>
+setBackdropColor('black')
+
+var face = new Circle()
+face.color = 'white'
+face.radius = 150
+
+var hourHand = new Line()
+var minuteHand = new Line()
+var secondHand = new Line()
+
+hourHand.width = 10
+minuteHand.width = 5
+secondHand.width = 3
+
+secondHand.color = 'red'
+
+hourHand.x1 = minuteHand.x1 = secondHand.x1 = 0
+hourHand.y1 = minuteHand.y1 = secondHand.y1 = 0
+
+hourHand.y = 100
+minuteHand.x = 75
+minuteHand.y = 75
+secondHand.x = 130
+
+function ang2coords(angle) {
+  return [sin(angle), cos(angle)]
+}
+
+forever(() => {
+  var hold = ang2coords(second()/60 * 360)
+  secondHand.x = hold[0] * 130
+  secondHand.y = hold[1] * 130
+  
+  hold = ang2coords(minute()/60 * 360)
+  minuteHand.x = hold[0] * 130
+  minuteHand.y = hold[1] * 130
+  
+  hold = ang2coords(hour()%12 / 12 * 360)
+  hourHand.x = hold[0] * 100
+  hourHand.y = hold[1] * 100
+})    
+  </script>
+</head>

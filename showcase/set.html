@@ -1,0 +1,604 @@
+<head>
+  <script src="https://cdn.jsdelivr.net/gh/stevekrouse/WoofJS@16e2f13972707e47e284b73667e2552f193aab39/woof.js"></script>
+  <script>
+setBackdropColor("grey")
+
+function conversion(color, shape, shade) {
+  var colorNum, shapeNum, shadeNum
+  if (isNaN(color)) {
+    if (color == "red") colorNum = 0
+    if (color == "green") colorNum = 1
+    if (color == "blue") colorNum = 2
+  } else {
+    colorNum = color
+  }
+  if (isNaN(shape)) {
+    if (shape == "oval") shapeNum = 0
+    if (shape == "squiggle") shapeNum = 1
+    if (shape == "diamond") shapeNum = 2
+  } else {
+    shapeNum = shape
+  }
+  if (isNaN(shade)) {
+    if (shade == "open") shadeNum = 0
+    if (shade == "shade") shadeNum = 1
+    if (shade == "solid") shadeNum = 2
+  } else {shadeNum = shade}
+  return colorNum * 9 + shapeNum * 3 + shadeNum
+}
+
+var shapeURLs = [
+  "https://firebasestorage.googleapis.com/v0/b/woofjs-d1b27.appspot.com/o/UserImageUpload%2FVvgAme7GsGVXfL7fOMzISpiOApA2%2Fhallpell_set%2Fezm0rwmz0r8k6wweq25?alt=media&token=208fa7a7-fd8c-4394-af08-7b6f106789ab",
+  "https://firebasestorage.googleapis.com/v0/b/woofjs-d1b27.appspot.com/o/UserImageUpload%2FVvgAme7GsGVXfL7fOMzISpiOApA2%2Fhallpell_set%2Fvds9i69mjxk6wxhfaz?alt=media&token=9c21512d-3f83-4991-bb30-3b8749f209fd",
+  "https://firebasestorage.googleapis.com/v0/b/woofjs-d1b27.appspot.com/o/UserImageUpload%2FVvgAme7GsGVXfL7fOMzISpiOApA2%2Fhallpell_set%2Fj32i94bm83fk6wxhrov?alt=media&token=c367831a-2965-4212-82ea-c80f67b8c297",
+  "https://firebasestorage.googleapis.com/v0/b/woofjs-d1b27.appspot.com/o/UserImageUpload%2FVvgAme7GsGVXfL7fOMzISpiOApA2%2Fhallpell_set%2F9m7f9nidrc4k6wxh90g?alt=media&token=2ba9b8ee-4bb4-48da-933b-4f67c8069fd3",
+  "https://firebasestorage.googleapis.com/v0/b/woofjs-d1b27.appspot.com/o/UserImageUpload%2FVvgAme7GsGVXfL7fOMzISpiOApA2%2Fhallpell_set%2Fzqzdgbktgzfk6wxhimw?alt=media&token=15744038-dea0-4997-a2d4-85a52efb85e3",
+  "https://firebasestorage.googleapis.com/v0/b/woofjs-d1b27.appspot.com/o/UserImageUpload%2FVvgAme7GsGVXfL7fOMzISpiOApA2%2Fhallpell_set%2Fse8fgae4qepk6wxhug9?alt=media&token=f526d4b1-16fa-4669-93fc-1edf6efd0698",
+  "https://firebasestorage.googleapis.com/v0/b/woofjs-d1b27.appspot.com/o/UserImageUpload%2FVvgAme7GsGVXfL7fOMzISpiOApA2%2Fhallpell_set%2Fnefdkvq4emk6wxh622?alt=media&token=2ed7157e-4530-4a49-9f5b-84786155a785",
+  "https://firebasestorage.googleapis.com/v0/b/woofjs-d1b27.appspot.com/o/UserImageUpload%2FVvgAme7GsGVXfL7fOMzISpiOApA2%2Fhallpell_set%2Fmtjxzzbldrnk6wxhccf?alt=media&token=7c42ef3b-821e-4d0a-89d8-b718b414aabc",
+  "https://firebasestorage.googleapis.com/v0/b/woofjs-d1b27.appspot.com/o/UserImageUpload%2FVvgAme7GsGVXfL7fOMzISpiOApA2%2Fhallpell_set%2F44rxm0w12ilk6wxhnak?alt=media&token=3ca6c3f1-2be7-465b-a1f1-327cdc11cf98",
+  "https://firebasestorage.googleapis.com/v0/b/woofjs-d1b27.appspot.com/o/UserImageUpload%2FVvgAme7GsGVXfL7fOMzISpiOApA2%2Fhallpell_set%2Fgknys6vp6iok6wxge3t?alt=media&token=3c848f68-8171-4a52-935a-7ce36065728c",
+  "https://firebasestorage.googleapis.com/v0/b/woofjs-d1b27.appspot.com/o/UserImageUpload%2FVvgAme7GsGVXfL7fOMzISpiOApA2%2Fhallpell_set%2Flr5ohj3zyek6wxgon8?alt=media&token=f706a61c-e9c0-4ff2-9f28-3d07b25a1db2",
+  "https://firebasestorage.googleapis.com/v0/b/woofjs-d1b27.appspot.com/o/UserImageUpload%2FVvgAme7GsGVXfL7fOMzISpiOApA2%2Fhallpell_set%2F886057bz7adk6wxgygd?alt=media&token=b3606837-3a5d-4f76-8dcb-5683053f41c2",
+  "https://firebasestorage.googleapis.com/v0/b/woofjs-d1b27.appspot.com/o/UserImageUpload%2FVvgAme7GsGVXfL7fOMzISpiOApA2%2Fhallpell_set%2Faa3s6rkjfn8k6wxggcc?alt=media&token=f2a6f9e4-dd80-4a59-b990-20cb0102f2c2",
+  "https://firebasestorage.googleapis.com/v0/b/woofjs-d1b27.appspot.com/o/UserImageUpload%2FVvgAme7GsGVXfL7fOMzISpiOApA2%2Fhallpell_set%2Fhok7xyo94f4k6wxgra8?alt=media&token=29aedd2a-5769-4b0e-b42f-006a0022e9a4",
+  "https://firebasestorage.googleapis.com/v0/b/woofjs-d1b27.appspot.com/o/UserImageUpload%2FVvgAme7GsGVXfL7fOMzISpiOApA2%2Fhallpell_set%2Fcynsln2xr3ck6wxh1d2?alt=media&token=21993331-d498-4ba7-ac7a-8339318fa8e5",
+  "https://firebasestorage.googleapis.com/v0/b/woofjs-d1b27.appspot.com/o/UserImageUpload%2FVvgAme7GsGVXfL7fOMzISpiOApA2%2Fhallpell_set%2Flh837bwdgmk6wxgbq5?alt=media&token=6aac72e2-3e63-4c28-a660-0cf8906ae862",
+  "https://firebasestorage.googleapis.com/v0/b/woofjs-d1b27.appspot.com/o/UserImageUpload%2FVvgAme7GsGVXfL7fOMzISpiOApA2%2Fhallpell_set%2Fpfhvt165ik9k6wxgjz2?alt=media&token=86172b9b-c850-4282-85cd-e06df496fd88",
+  "https://firebasestorage.googleapis.com/v0/b/woofjs-d1b27.appspot.com/o/UserImageUpload%2FVvgAme7GsGVXfL7fOMzISpiOApA2%2Fhallpell_set%2Fq3bfipumo2rk6wxgv9l?alt=media&token=6d9f6f51-2398-44cb-83d5-73101f1b1bec",
+  "https://firebasestorage.googleapis.com/v0/b/woofjs-d1b27.appspot.com/o/UserImageUpload%2FVvgAme7GsGVXfL7fOMzISpiOApA2%2Fhallpell_set%2Fe7twvd6gfsk6wx84if?alt=media&token=1f68f0f3-0476-47ed-84ed-366fd33bb14f",
+  "https://firebasestorage.googleapis.com/v0/b/woofjs-d1b27.appspot.com/o/UserImageUpload%2FVvgAme7GsGVXfL7fOMzISpiOApA2%2Fhallpell_set%2Fv464cnocwdok6wx8gnm?alt=media&token=fa580d8d-70cf-4483-8aa3-3f716d464b29",
+  "https://firebasestorage.googleapis.com/v0/b/woofjs-d1b27.appspot.com/o/UserImageUpload%2FVvgAme7GsGVXfL7fOMzISpiOApA2%2Fhallpell_set%2F26620fpzgfak6wx8t3g?alt=media&token=bfc8c980-296c-41e7-b270-6cee0ee6945f",
+  "https://firebasestorage.googleapis.com/v0/b/woofjs-d1b27.appspot.com/o/UserImageUpload%2FVvgAme7GsGVXfL7fOMzISpiOApA2%2Fhallpell_set%2Fr706tlk40cfk6wx8b75?alt=media&token=a368edae-cec1-4ba4-8431-883250260bef",
+  "https://firebasestorage.googleapis.com/v0/b/woofjs-d1b27.appspot.com/o/UserImageUpload%2FVvgAme7GsGVXfL7fOMzISpiOApA2%2Fhallpell_set%2F4bhivlntlnkk6wx8itv?alt=media&token=8576d4d9-659d-4f4b-b3ad-aea9e09b5464",
+  "https://firebasestorage.googleapis.com/v0/b/woofjs-d1b27.appspot.com/o/UserImageUpload%2FVvgAme7GsGVXfL7fOMzISpiOApA2%2Fhallpell_set%2Fi5qvvro6xehk6wx8vq3?alt=media&token=fc81c7a9-e97a-4480-989c-6ab35c4e0269",
+  "https://firebasestorage.googleapis.com/v0/b/woofjs-d1b27.appspot.com/o/UserImageUpload%2FVvgAme7GsGVXfL7fOMzISpiOApA2%2Fhallpell_set%2Fr9k7ff28zdk6wx8150?alt=media&token=6c43d44e-5105-46d0-9900-d22ce4df3234",
+  "https://firebasestorage.googleapis.com/v0/b/woofjs-d1b27.appspot.com/o/UserImageUpload%2FVvgAme7GsGVXfL7fOMzISpiOApA2%2Fhallpell_set%2F1nqiqvh1vsak6wx8dwk?alt=media&token=96588e43-a11d-4c28-aa21-1088af87d6f2",
+  "https://firebasestorage.googleapis.com/v0/b/woofjs-d1b27.appspot.com/o/UserImageUpload%2FVvgAme7GsGVXfL7fOMzISpiOApA2%2Fhallpell_set%2Fqm0p77zrgsnk6wx8mg7?alt=media&token=f341dbe4-8c76-4f6e-abc1-e6dd31260c75"
+]
+
+// 1st Color (RGB)
+// 2nd Shape (Oval, Squiggle, Diamond)
+// 3rd Shade (Open, Shade, Solid)
+// 27 elements, red is 0-8, green oval solid is 11
+
+class SetCard {
+  constructor(obj) {
+    // if a input property doesn't exist or is improper, set a default value
+    if (!obj.hasOwnProperty('x') || isNaN(obj.x)) {
+      obj.x = 0
+    }
+    if (!obj.hasOwnProperty('y') || isNaN(obj.y)) {
+      obj.x = 0
+    }
+    if (!obj.hasOwnProperty('number') || isNaN(obj.number)) {
+      obj.x = 1
+    }
+    if (!obj.hasOwnProperty('color')) {
+      obj.color = 'red'
+    }
+    if (!obj.hasOwnProperty('shape')) {
+      obj.shape = 'oval'
+    }
+    if (!obj.hasOwnProperty('shade')) {
+      obj.shade = 'open'
+    }
+    
+    // copy the inputs into permanent fields
+    this.color = obj.color
+    this.number = obj.number
+    this.shape = obj.shape
+    this.shade = obj.shade
+    this.highlightShowing = 0
+    
+    // create a highlight for the card
+    this.cardHighlight = new Rectangle({
+      color: "black",
+      width: 136,
+      height: 86,
+      x: obj.x,
+      y: obj.y
+    })
+    this.cardHighlight.hide()
+    
+    // create a background for the card
+    this.cardBackground = new Rectangle({
+      color: "white",
+      width: 130,
+      height: 80,
+      x: obj.x,
+      y: obj.y
+    })
+    
+    // make the card highlight when it is clicked
+    //   (need to add another onMouseDown for doing stuff with it)
+    this.isClicked = function() {
+      this.toggleHighlight()
+      debugColor = this.color
+      debugNumber = this.number
+      debugShade = this.shade
+      debugShape = this.shape
+      debugX = this.cardBackground.x
+      debugY = this.cardBackground.y
+      debugHighlight = this.highlightShowing
+      this.updateSymbols()
+    }
+   
+    // make the symbols show correctly
+    this.updateSymbols()
+  } // constructor
+  
+  toggleHighlight() {
+    if (this.highlightShowing == 1) {
+      this.cardHighlight.hide()
+      this.highlightShowing = 0
+    } else {
+      this.cardHighlight.show()
+      this.highlightShowing = 1
+    }
+  }
+  
+  // recalculate everything about the symbols based on Card's variables
+  updateSymbols () {
+    // look up the proper URL for the sprite
+    let tempURL = shapeURLs[conversion(this.color, this.shape, this.shade)]
+    debugLookup = conversion(this.color, this.shape, this.shade)
+    if (typeof this.symbol1 == 'undefined') { // if we haven't made symbols yet
+      this.symbol1 = new Image({
+        url: tempURL,
+        width: 64,
+        height: 64,
+        x: this.cardBackground.x,
+        y: this.cardBackground.y
+      })
+      this.symbol2 = new Image({
+        url: tempURL,
+        width: 64,
+        height: 64,
+        x: this.cardBackground.x,
+        y: this.cardBackground.y
+      })
+      this.symbol3 = new Image({
+        url: tempURL,
+        width: 64,
+        height: 64,
+        x: this.cardBackground.x,
+        y: this.cardBackground.y
+      })
+    } else { // if we have made symbols, just set new URLs
+      this.symbol1.setImageURL(tempURL)
+      this.symbol2.setImageURL(tempURL)
+      this.symbol3.setImageURL(tempURL)
+    }
+    
+    this.symbol1.y = this.symbol2.y = this.symbol3.y = this.cardBackground.y
+    
+    // make them appear in the proper spots based on the number
+    if (this.number == 1) {
+      this.symbol1.show()
+      this.symbol1.x = this.cardBackground.x
+      this.symbol2.hide()
+      this.symbol3.hide()
+    } else if (this.number == 2) {
+      this.symbol1.show()
+      this.symbol2.show()
+      this.symbol3.hide()
+      this.symbol1.x = this.cardBackground.x - 20
+      this.symbol2.x = this.cardBackground.x + 20
+    } else if (this.number == 3) {
+      this.symbol1.show()
+      this.symbol2.show()
+      this.symbol3.show()
+      this.symbol1.x = this.cardBackground.x
+      this.symbol2.x = this.cardBackground.x - 40
+      this.symbol3.x = this.cardBackground.x + 40
+    } else {
+      alert ("improper number entered!")
+    }
+  } // updateSymbols
+  
+  update() {
+    this.cardHighlight.x = this.cardBackground.x = this.x
+    this.cardHighlight.y = this.cardBackground.y = this.y
+    this.updateSymbols()
+  } // update
+  
+  // "deleting" this is just deleting all the sprites it contains
+  //   This object still exists (but only stores integers/strings), 
+  //   so hopefully that doesn't use up too much memory
+  delete() {
+    this.symbol1.delete()
+    this.symbol2.delete()
+    this.symbol3.delete()
+    this.cardBackground.delete()
+    this.cardHighlight.delete()
+  }
+  
+  // return a template that could be used to recreate this card
+  //   (just the 4 game-relevant properties)
+  getTemplate() {
+    return {
+      color: this.color,
+      shape: this.shape,
+      shade: this.shade,
+      number: this.number
+    }
+  }
+  
+  // getters
+  getNumber() { return this.number }
+  getColor() { return this.color }
+  getShape() { return this.shape }
+  getShade() { return this.shade }
+  getX() { return this.cardBackground.x }
+  getY() { return this.cardBackground.y }
+  
+  // setters (need to update contained card and symbols)
+  setX(x) {
+    this.cardHighlight.x = this.cardBackground.x = x
+    this.updateSymbols()
+  }
+  setY(y) {
+    this.cardHighlight.y = this.cardBackground.y = y
+    this.updateSymbols()
+  }
+  setNumber(number) {
+    this.number = number
+    this.updateSymbols()
+  }
+  setColor(color) {
+    this.color = color
+    this.updateSymbols()
+  }
+  setShape(shape) {
+    this.shape = shape
+    this.updateSymbols()
+  }
+  setShade(shade) {
+    this.shade = shade
+    this.updateSymbols()
+  }
+} // class SetCard
+
+// a temporary variable for making new cards to shove into arrays
+var myCard1
+// declare the valid options for cards
+var colors = ['red', 'green', 'blue']
+var shapes = ['oval', 'squiggle', 'diamond']
+var shades = ['open', 'shade', 'solid']
+
+var discardTemplateDeck = []
+
+var templateDeck = []
+range(0,3).forEach(i => {
+  range(0,3).forEach(j => {
+    range(0,3).forEach(k => {
+      range(0,3).forEach(l => {
+        templateDeck.push({
+          color: colors[i],
+          shape: shapes[j],
+          shade: shades[k],
+          number: l+1
+        })
+      })
+    })
+  })
+})
+
+var templateDeckLengthText = new Text({
+  text: () => templateDeck.length,
+  y: minY + 15
+})
+templateDeckLengthText.hide()
+
+// make containers for cards
+var tableu = []
+var selection = []
+var minTableuSize = 15
+
+tableu.organize = () => {
+  let i=0, j=0
+  tableu.forEach(card => {
+    card.setX((i-1) * 150)
+    card.setY(maxY - 50 - (j*100))
+    
+    i++
+    if (i == 3) {
+      j++
+      i = 0
+    }
+  })
+}
+
+var deckSprite = new Rectangle({
+  color: "white",
+  width: 130,
+  height: 80,
+  y: minY + 50
+})
+
+var deckSize = new Text({
+  color: "black",
+  text: () => "Remaining Cards: " + templateDeck.length,
+  y: minY + 50
+})
+
+// at 23 sets, we've run through the deck
+var pace = new Text({
+  color: "black",
+  text: () => "On pace for: " + Math.round(timer() / setsFound * 23),
+  y: minY + 30
+})
+pace.update = () => {
+  pace.text = "On pace for: " + Math.round(timer() / setsFound * 23)
+}
+pace.hide()
+
+var setsFound = 0
+
+// returns 0 on success, 1 on failure
+function addCard() {
+  if (templateDeck.length === 0) {
+    return 1
+  }
+  let index = Math.floor(Math.random() * templateDeck.length)
+  myCard1 = new SetCard(templateDeck[index])
+  myCard1.selected = 0
+  
+  // get rid of the template from possible cards to draw
+  templateDeck.remove(templateDeck[index])
+
+  // add the card to the tableu
+  tableu.push(myCard1)
+  return 0
+}
+
+// populate the tableu
+for (var i = 0; i < minTableuSize; i++) {
+  // draw a random card from the deck of templates
+  addCard()
+  tableu.organize()
+}
+
+// add a button to deal 3 more cards if you can't find a set
+var moreCards = new Rectangle({
+  color: "orange",
+  x: minX + 80,
+  y: minY + 30,
+  width: 120,
+  height: 40
+})
+var moreCardsText = new Text({
+  text: () => "Deal 3 more cards",
+  x: minX + 80,
+  y: minY + 30
+})
+
+moreCards.onMouseDown(() => {
+  //let tempY = maxY - 50 - ((tableu.length / 3) * 100)
+  for (var i = 0; i < 3; i++) {
+    addCard()
+    tableu.organize()
+  }
+})
+
+// add a button to reshuffle the discard pile into the deck
+var instructionRequest = new Rectangle({
+  color: "orange",
+  x: maxX - 80,
+  y: minY + 30,
+  width: 120,
+  height: 40
+})
+var instructionRequestText = new Text({
+  text: () => "Instructions",
+  x: maxX - 80,
+  y: minY + 30
+})
+
+var instructionsHolder = new Rectangle()
+instructionsHolder.width = 500
+instructionsHolder.height = 200
+instructionsHolder.color = 'green'
+
+var instructionsHolderX = new Rectangle()
+instructionsHolderX.width = 25
+instructionsHolderX.height = 25
+instructionsHolderX.x = 230
+instructionsHolderX.y = 80
+instructionsHolderX.color = 'lightgreen'
+var instructionsHolderX1 = new Line()
+instructionsHolderX1.x = 220
+instructionsHolderX1.x1 = 240
+instructionsHolderX1.y = 70
+instructionsHolderX1.y1 = 90
+instructionsHolderX1.width = 3
+var instructionsHolderX2 = new Line()
+instructionsHolderX2.x = 220
+instructionsHolderX2.x1 = 240
+instructionsHolderX2.y1 = 70
+instructionsHolderX2.y = 90
+instructionsHolderX2.width = 3
+
+
+
+var instructions = new Text()
+instructions.text = "This is the game of SET, where we are looking for sets of 3 cards." +
+  "\nEach card has 4 properties: color, shape, shading, and number" + 
+  "\nThree cards are a set if, for each property," +
+  "\nthe three cards are either all the same or all different." +
+  "\nClick on cards to select them, select 3 cards to test if they are a set." + 
+  "\nWhen you test a set, they will disappear if they are a set." +
+  "\nIf they are not a set, text will appear telling you what property (or properties)" + 
+  "\nprevented it from being a set." +
+  "\n\nFor more details, you can look for Set (card game) on wikipedia"
+
+instructionsHolderX.onMouseDown(() => {
+  instructions.hide()
+  instructionsHolder.hide()
+  instructionsHolderX.hide()
+  instructionsHolderX1.hide()
+  instructionsHolderX2.hide()
+})
+
+instructionRequest.onMouseDown(() => {
+  instructions.show()
+  instructionsHolder.show()
+  instructionsHolderX.show()
+  instructionsHolderX1.show()
+  instructionsHolderX2.show()
+  instructionsHolder.sendToFront()
+  instructionsHolderX.sendToFront()
+  instructionsHolderX1.sendToFront()
+  instructionsHolderX2.sendToFront()
+  instructions.sendToFront()
+})
+
+var feedbackText = new Text({
+  text: () => "Good Job, you found a set",
+  y: maxY - 100
+})
+feedbackText.hide()
+
+var debugColor, debugNumber, debugShade, debugShape, debugX, debugY, debugLookup, debugHighlight
+var debuggingCardInfo = new Text({
+  text: () => "Card: " + debugX + "," + debugY + " color: '" + debugColor + "', number: '" + debugNumber + 
+              "' shade: '" + debugShade + "' shape: '" + debugShape + "' Lookup: " + debugLookup + " Highlight" + debugHighlight,
+  x: minX + 4,
+  y: maxY - 18,
+  textAlign: "left"
+})
+debuggingCardInfo.hide()
+
+var selectionText = new Text ({
+  text: () => "Selection: " + selection.length + 
+    " Tableu: " + tableu.length,
+  x: minX + 4,
+  y: maxY - 6,
+  textAlign: "left"
+})
+selectionText.hide()
+
+// add the ability to select cards
+onMouseDown(() => {
+  after(0.01, 'second', () => { // without this delay, a click will register to hightlight
+    // the new card in the clicked spot when a set is found in the card's highlight, but not
+    // in this code for selection, and I hate it and it's terrible
+  if (instructions.showing) { // if the instructions are showing, don't allow clicks
+    return
+  }
+  tableu.forEach(card => {
+    if (card.cardBackground.mouseOver) {
+      // if a card is clicked and isn't already selected
+      card.isClicked()
+      if (card.selected === 0) {
+        // select it
+        selection.push(card)
+        card.selected = 1
+        // if we have 3 cards selected
+        if (selection.length == 3) {
+          // find out what they are
+          let card1 = selection[0]
+          let card2 = selection[1]
+          let card3 = selection[2]
+          // see if they make a set
+          if (tripleCompare(card1.getColor(), card2.getColor(), card3.getColor()) &&
+              tripleCompare(card1.getShape(), card2.getShape(), card3.getShape()) &&
+              tripleCompare(card1.getShade(), card2.getShade(), card3.getShade()) &&
+              tripleCompare(card1.getNumber(), card2.getNumber(), card3.getNumber())) {
+            feedbackText.text = () => "Good Job, you found a set!"
+            feedbackText.show()
+            setsFound++
+            pace.update()
+            pace.show()
+            after(2, 'second', () => { 
+              feedbackText.hide()
+              // after 2 seconds, replace the cards
+            })
+            
+            // delete the cards in the set and shuffle them back into the "deck"
+            discardTemplateDeck.push(card1.getTemplate())
+            card1.delete()
+            tableu.remove(card1)
+            
+            discardTemplateDeck.push(card2.getTemplate())
+            card2.delete()
+            tableu.remove(card2)
+            
+            discardTemplateDeck.push(card3.getTemplate())
+            card3.delete()
+            tableu.remove(card3)
+            if (tableu.length < minTableuSize) { // if there's less than 12 cards, add 3
+              // if the first attempt fails, game over
+              if (addCard() == 1) {
+                feedbackText.text = "Game over! It took you " + Math.round(timer()) + " seconds to get through all the cards"
+                feedbackText.show()
+                after(2.01, 'second', () => {
+                  feedbackText.show() // because we found a set, it will be hiding in 2 seconds
+                })
+              } else { // there will be cards left
+                addCard()
+                addCard()
+              }
+            } 
+            tableu.organize()
+            
+          } else { // the 3 selected are not a set
+            // find the reason(s) it wasn't a set
+            let reason = ""
+            if (!tripleCompare(card1.getColor(), card2.getColor(), card3.getColor())) {
+              reason += "color, "
+            }
+            if (!tripleCompare(card1.getShape(), card2.getShape(), card3.getShape())) {
+              reason += "shape, "
+            }
+            if (!tripleCompare(card1.getShade(), card2.getShade(), card3.getShade())) {
+              reason += "shade, "
+            }
+            if (!tripleCompare(card1.getNumber(), card2.getNumber(), card3.getNumber())) {
+              reason += "number, "
+            }
+            
+            reason = reason.substring(0, reason.length - 2)
+            
+            // say why it wasn't a set
+            feedbackText.text = () => "That's not a set because of " + reason + " try again"
+            feedbackText.show()
+            after(3, 'second', () => { feedbackText.hide()})
+            
+            // flash the highlights for 2 seconds
+            for (var k = 0; k < 2.25; k += 0.25) {
+              after(k, 'second', () => {
+                card1.toggleHighlight()
+                card2.toggleHighlight()
+                card3.toggleHighlight()
+              })
+            }
+          } // else it's not a set
+          // deselect the cards
+          selection.remove(card1)
+          card1.selected = 0
+          selection.remove(card2)
+          card2.selected = 0
+          selection.remove(card3)
+          card3.selected = 0
+            
+        } // if we selected 3 things
+      } else { // if the thing was already selected
+        selection.remove(card)
+        card.selected = 0
+      }
+    }
+  })
+  })
+})
+
+function tripleCompare(one, two, three) {
+  if (((one == two) && (two == three)) || ((one != two) && (two != three) && (one != three))) {
+    return true
+  } else {
+    return false 
+  }
+}    
+  </script>
+</head>

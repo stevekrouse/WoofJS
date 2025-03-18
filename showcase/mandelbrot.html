@@ -1,0 +1,221 @@
+<head>
+  <script src="https://cdn.jsdelivr.net/gh/stevekrouse/WoofJS@c387d23dd6b81e3bec30dd171fdeca8bcf818a24/woof.js"></script>
+  <script>
+/*new Text({
+ text: () => "X: " + Math.round(curZoomMinX) + " to " + Math.round(curZoomMaxX) + " Y: " + Math.round(curZoomMinY) + " to " + Math.round(curZoomMaxY)
+})*/
+var val
+var rect = new Rectangle()
+rect.hide()
+var startingRes = 4
+var maxres = 1
+
+var colorFactor = 4
+var maxIteration = 255*3 * colorFactor
+var curZoomMinX, curZoomMaxX, curZoomMinY, curZoomMaxY
+var isRendering = false
+
+var instructions = new Text()
+instructions.y = maxY - 40
+instructions.size = 20
+instructions.text = "Click and drag to zoom in\nPress 'Z' to zoom out\nPress up or down to adjust color\nClick these instructions to hide them"
+instructions.onMouseDown(() => {
+  instructions.hide()
+})
+
+onKeyDown(() => {
+  if(keysDown.includes('UP')){
+    colorFactor = Math.round(colorFactor * 2)
+    maxIteration = 255*3 * colorFactor
+  }
+  if (keysDown.includes('DOWN')) {
+    colorFactor = Math.round(colorFactor / 2)
+    maxIteration = 255*3 * colorFactor
+  }
+  if(keysDown.includes('R')) {
+    renderBackground(curZoomMinX, curZoomMaxX, curZoomMinY, curZoomMaxY, startingRes)
+  }
+})
+
+var reporterText = new Text({
+  text: () => isRendering + " " + rect.penWidth + " " + rect.y + " " + colorFactor + " " + maxIteration,
+  x: minX + 10,
+  y: maxY- 10,
+  textAlign: "left"
+})
+reporterText.hide()
+
+function colorScale(x) {
+  if (x >= maxIteration) {
+    return "black"
+  }
+  x = x / colorFactor
+  if (x < 255) {
+    return rgb(255,0,x)  
+  } else if (x <255*2) {
+    return rgb(255, x%255, 255)  
+  } else {
+    return rgb(255-x%255, 255, 255)
+  }
+}
+
+// range(0,maxIteration).forEach(i => {
+//   new Rectangle({
+//     x: i * 1 + minX,
+//     width: 1,
+//     height: 10,
+//     color: colorScale(i)
+//   })
+// })
+
+function scaryMath(x0,y0) {
+  x0/= 200
+  y0/= 200
+  var y = 0
+  var x = 0
+  var xtemp
+  var iter = 0
+  while (iter < maxIteration) {
+    xtemp = x*x - y*y + x0
+    y = 2 * x * y + y0
+    x = xtemp
+    iter += 1
+    if (x*x +  y*y > 4) {
+      break
+    }
+    
+  }
+  return iter
+  
+  //return sin(x) + sin(y) + sin(x * x * 0.005) + cos(y * y * 0.005)
+}
+
+// screen coordinates are what mouseX and mouseY report
+// zoom coordinates are based on where we're "looking"
+
+function screen2zoomX(zoomMinX, zoomMaxX, screenX) {
+  return ((screenX - minX) / width) * (zoomMaxX - zoomMinX) + zoomMinX
+}
+
+function screen2zoomY(zoomMinY, zoomMaxY, screenY) {
+  return ((screenY - minY) / height) * (zoomMaxY - zoomMinY) + zoomMinY
+}
+
+function zoom2screenX(zoomMinX, zoomMaxX, zoomX) {
+  return ((zoomX - zoomMinX) / (zoomMaxX - zoomMinX)) * width + minX
+}
+
+function zoom2screenY(zoomMinY, zoomMaxY, zoomY) {
+  return ((zoomY - zoomMinY) / (zoomMaxY - zoomMinY)) * height + minY
+}
+
+var renderQueue = false
+function renderBackground(zoomMinX, zoomMaxX, zoomMinY, zoomMaxY,res) {
+  if (isRendering) {
+    renderQueue = true
+    after(0.1, 'second', () => {
+      renderBackground(zoomMinX, zoomMaxX, zoomMinY, zoomMaxY, res)
+    })
+    return
+  }
+  isRendering = true
+  if (renderQueue === true && res == startingRes) {
+    renderQueue = false
+  }
+  //clearPen()
+  curZoomMinX = zoomMinX
+  curZoomMaxX = zoomMaxX
+  curZoomMinY = zoomMinY
+  curZoomMaxY = zoomMaxY
+  rect.y = minY
+  rect.penWidth = res
+  //range(minY, maxY, res).forEach(() => {
+  repeatUntil(() => rect.y > maxY || renderQueue, () => {
+    var startTime = timer()
+    // keep drawing lines until we run out of time
+    while(timer() - startTime < 0.03) { 
+      rect.x = minX
+      rect.penDown()
+      for (var x = minX; x < maxX; x+= res) {
+        rect.x = x
+        rect.penColor = colorScale(scaryMath(screen2zoomX(zoomMinX, zoomMaxX, rect.x),
+                        screen2zoomY(zoomMinY, zoomMaxY, rect.y)))
+        // if (val > 0) {
+        //   rect.penColor = rgb(0, 200-val*30, 0)
+        // } else {
+        //   rect.penColor = rgb(150+val*100, 150+val*100, 255)
+        // }
+      }
+      rect.penUp()
+      rect.y += res
+    }
+  }, () => {
+    isRendering = false
+    if (renderQueue === false && res > 1) {
+      renderBackground(zoomMinX, zoomMaxX, zoomMinY, zoomMaxY,res/2)
+    }
+  })
+  
+}
+
+renderBackground(minX, maxX, minY, maxY,startingRes)
+
+onMouseDown(() => {
+  var top = new Line({width: 1, x: mouseX, y: mouseY, x1: mouseX, y1: mouseY})
+  var left = new Line({width: 1, x: mouseX, y: mouseY, x1: mouseX, y1: mouseY})
+  var right = new Line({width: 1, x: mouseX, y: mouseY, x1: mouseX, y1: mouseY})
+  var bottom = new Line({width: 1, x: mouseX, y: mouseY, x1: mouseX, y1: mouseY})
+  var clickX = mouseX
+  var clickY = mouseY
+  repeatUntil(() => !mouseDown, () => {
+    top.x1 = mouseX
+    left.x = mouseX
+    left.x1 = mouseX
+    left.y1 = mouseY
+    bottom.x = mouseX
+    bottom.y = mouseY
+    bottom.y1 = mouseY
+    right.y1 = mouseY
+  }, () => { // when done
+    top.delete()
+    left.delete()
+    right.delete()
+    bottom.delete()
+    if (abs(mouseX-clickX) < 3 && abs(mouseY-clickY) < 3) {
+      return
+    }
+    let newZoomMinX, newZoomMaxX, newZoomMinY, newZoomMaxY
+    if (mouseX >= clickX) {
+      newZoomMinX = clickX
+      newZoomMaxX = mouseX
+    } else {
+      newZoomMinX = mouseX
+      newZoomMaxX = clickX
+    }
+    
+    if (mouseY >= clickY) {
+      newZoomMinY = clickY
+      newZoomMaxY = mouseY
+    } else {
+      newZoomMinY = mouseY
+      newZoomMaxY = clickY
+    }
+    renderBackground(screen2zoomX(curZoomMinX, curZoomMaxX, newZoomMinX),
+                     screen2zoomX(curZoomMinX, curZoomMaxX, newZoomMaxX),
+                     screen2zoomY(curZoomMinY, curZoomMaxY, newZoomMinY),
+                     screen2zoomY(curZoomMinY, curZoomMaxY, newZoomMaxY),startingRes);
+  })
+})
+
+onKeyDown(() => {
+  if(keysDown.includes('Z')) {
+    var xOffset = curZoomMaxX - curZoomMinX
+    var yOffset = curZoomMaxY - curZoomMinY
+    renderBackground(screen2zoomX(curZoomMinX, curZoomMaxX, mouseX)-xOffset,
+                     screen2zoomX(curZoomMinX, curZoomMaxX, mouseX)+xOffset,
+                     screen2zoomY(curZoomMinY, curZoomMaxY, mouseY)-yOffset,
+                     screen2zoomY(curZoomMinY, curZoomMaxY, mouseY)+yOffset,startingRes);
+  }
+})    
+  </script>
+</head>

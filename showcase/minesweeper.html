@@ -1,0 +1,287 @@
+<head>
+  <script src="https://cdn.jsdelivr.net/gh/stevekrouse/WoofJS@16e2f13972707e47e284b73667e2552f193aab39/woof.js"></script>
+  <script>
+//setBackdropURL('../docs/images/outerspace.jpg')
+
+var numSquares = 15
+var squareWidth = 1.0 * width / numSquares
+var squareHeight = 1.0 * height / numSquares
+var screenDistScalar = 0.6 * sqrt(width * width + height * height)/ 255
+//var rectangles = []
+
+var myColors = ["black", "blue", "green", "red", "orange"]
+
+range(1,numSquares).forEach(i => {
+  new Line({
+    x: minX,
+    x1: maxX,
+    y: minY + i * squareHeight,
+    y1: minY + i * squareHeight,
+  })
+  new Line({
+    x: minX + i * squareWidth,
+    x1: minX + i * squareWidth,
+    y: minY,
+    y1: maxY,
+  })
+})
+
+// a 2D grid (numSquares x numSquares)
+//  -1 is unexplored and safe
+//  -2 is unexplored and mine
+//  >=0 is explored and this many mine neighbors
+var grid = []
+grid.mines = Math.round(numSquares*numSquares / 6)
+grid.safeRemaining = numSquares*numSquares - grid.mines
+
+range(0,numSquares).forEach(i => {
+  var myRow = []
+  range(0,numSquares).forEach(j => {
+    /*rectangles.push(new Rectangle({
+      width: squareWidth,
+      height: squareHeight,
+      x: minX + (i + 0.5) * squareWidth,
+      y: minY + (j + 0.5) * squareHeight,
+      
+      //color: rgb(i*255/numSquares,j*255/numSquares, 255)
+    }))
+    rectangles[rectangles.length-1].red = i * 255/numSquares
+    rectangles[rectangles.length-1].green = j * 255/numSquares
+    rectangles[rectangles.length-1].i = i
+    rectangles[rectangles.length-1].j = j*/
+    
+    myRow.push(-1)
+    /*new Text({
+      text: () => { 
+        if (grid[i][j] < 0) {
+          if (grid[i][j] == -2) {
+            return ""
+          } else {
+            return ""
+          }
+        }
+        return grid[i][j]
+      },
+      x: minX + (i + 0.5) * squareWidth,
+      y: minY + (j + 0.5) * squareHeight,
+    })*/
+    // rectangles[rectangles.length-1].onMouseDown(() => {
+    //   clickSquare(i,j)
+    // })
+  })
+  grid.push(myRow)
+  //grid[i][random(0,numSquares)] = i
+})
+
+onMouseDown(() => {
+  clickSquare(Math.floor((mouseX-minX)/squareWidth),
+              Math.floor((mouseY-minY)/squareHeight))
+})
+
+// function generateMines(mines) {
+//   grid.mines = 0
+//   while (mines > 0) {
+//     var row = random(0, numSquares-1)
+//     var col = random(0, numSquares-1)
+  
+//     if (grid[row][col] == -1) {
+//       grid[row][col] = -2
+//       mines--
+//       grid.mines++
+//     }
+//   }
+// }
+
+function safeGenerateMines(grid, safeRow, safeCol) {
+  var hold = 0
+  while (hold < grid.mines) {
+    var row = random(0, numSquares-1)
+    var col = random(0, numSquares-1)
+    
+    // if it is not already a mine and not "seen" by the safeRow/safeCol
+    if (grid[row][col] == -1 && (Math.abs(row-safeRow)>1 || Math.abs(col-safeCol)>1)) {
+      grid[row][col] = -2
+      hold++
+    }
+  }
+}
+
+var haveStarted = 0
+var haveEnded = false
+
+function clickSquare(row, col) {
+  if (haveEnded)
+    return
+  if (haveStarted === 0) {
+    safeGenerateMines(grid, row, col)
+    haveStarted = 1
+    intro.delete()
+    intro2.delete()
+    intro3.delete()
+    intro4.delete()
+  }
+  if ((keysDown.includes('SPACE') || keysDown.includes('M')) &&
+     grid[row][col] < 0 && grid[row][col] > -3) {
+    var partyEmoji = new Image({
+      url: "../docs/images/emoji-party.png",
+      width: squareWidth,
+      height: squareHeight,
+      x: minX + (row + 0.5) * squareWidth,
+      y: minY + (col + 0.5) * squareHeight,
+    })
+    partyEmoji.sendToBack()
+    grid[row][col] -= 2
+    grid.mines--
+    partyEmoji.onMouseDown(() => {
+      if (keysDown.includes('SPACE') || keysDown.includes('M')) {
+        partyEmoji.delete()
+        grid[row][col] += 2
+        grid.mines++
+      }
+    })
+  } else {
+    if (grid[row][col] == -2) {
+      new Image({
+        url: "../docs/images/explosion.png",
+        width: squareWidth,
+        height: squareHeight,
+        x: minX + (row + 0.5) * squareWidth,
+        y: minY + (col + 0.5) * squareHeight,
+      })
+      var gameOver = new Text()
+      gameOver.text = "Game Over"
+      gameOver.color = 'red'
+      gameOver.size = 30
+      haveEnded = true
+    } else if (grid[row][col] == -1) {
+      grid[row][col] = getNeighborNum(row, col)
+      grid.safeRemaining--;
+      new Text({
+        text: grid[row][col],
+        x: minX + (row + 0.5) * squareWidth,
+        y: minY + (col + 0.5) * squareHeight,
+        size: squareWidth * 0.8,
+        color: myColors[grid[row][col]]
+      })
+      if (grid[row][col] === 0) {
+        range(-1, 2).forEach(i => {
+          if (row + i >= 0 && row + i < numSquares) {
+            range(-1, 2).forEach(j => {
+              if (col + j >= 0 && col + j < numSquares) {
+                clickSquare(row + i, col + j)
+              }
+            })
+          }
+        })
+      }
+      if (grid.safeRemaining === 0) {
+        haveEnded = true
+        new Text({
+          size: 50,
+          text: "You Win!",
+          color: "red"
+        })
+      }
+    }
+  }
+}
+
+function isMine(row,col) {
+  return grid[row][col] == -2 || grid[row][col] == -4
+}
+
+function getNeighborNum(row, col) {
+  var hold = 0
+  if (col > 0) {
+    if (isMine(row,col-1))
+      hold++
+    if (row > 0 && isMine(row-1,col-1))
+      hold++
+    if (row < numSquares-1 && isMine(row+1,col-1))
+      hold++
+  }
+  if (row > 0 && isMine(row-1,col))
+    hold++
+  if (row < numSquares-1 && isMine(row+1,col))
+    hold++
+  if (col < numSquares-1) {
+    if (isMine(row,col+1))
+      hold++
+    if (row > 0 && isMine(row-1,col+1))
+      hold++
+    if (row < numSquares-1 && isMine(row+1,col+1))
+      hold++
+  }
+  return hold
+}
+
+var minesText = new Text({
+  y: minY + 6,
+  text: () => "Mines remaining: " + grid.mines
+})
+
+var frames = 0
+// var framesText = new Text({
+//   text: () => "Sprites: " + _sprites.length + " Rects: " + numSquares*numSquares + ", numFrames: " + frames + ", Overall FPS: " + Math.round(10*frames/timer())/10 + " Last Second FPS: " + tempFPS,
+//   y: maxY - 6
+// })
+
+var lastSec = 0
+var lastFrame = 0
+var tempFPS = 0
+//framesText.hide()
+forever(() => {
+  if (frames === 0) {
+    //new Text({text: "Preload: " + timer(), y: maxY - 20})
+    resetTimer()
+  }
+  frames+=1
+  // rectangles.forEach(rect =>{
+  //   let dist2 = rect.distanceTo(mouseX,mouseY)/screenDistScalar
+  //   rect.color = rgb(rect.red,rect.green,255-dist2)
+  // })
+  // rectangles.forEach(rect => {
+  //   rect.brightness = 0
+  //   // rect.brightness = rect.distanceTo(mouseX,mouseY)/screenDistScalar
+  // })
+  
+  if (Math.floor(timer()) > lastSec) {
+    tempFPS = frames - lastFrame
+    lastFrame = frames
+    lastSec = Math.floor(timer())
+  }
+})
+
+var intro = new Text({
+  text: () => "Click on a square to sweep it.",
+  color: "red",
+  size: squareHeight * 0.6,
+  y: 0
+})
+var intro2 = new Text({
+  text: () => "Hold down space or M and click to mark it as a mine.",
+  color: "red",
+  size: squareHeight * 0.6,
+  y: -squareHeight
+})
+var intro3 = new Text({
+  text: () => "The number in a square tells you how many",
+  color: "red",
+  size: squareHeight * 0.6,
+  y: -squareHeight * 2
+})
+var intro4 = new Text({
+  text: () => "of its neighbors are mines.",
+  color: "red",
+  size: squareHeight * 0.6,
+  y: -squareHeight * 3
+})
+
+after(8, "seconds", () => {
+  intro.delete()
+  intro2.delete()
+  intro3.delete()
+  intro4.delete()
+})    
+  </script>
+</head>

@@ -1,0 +1,312 @@
+<head>
+  <script src="https://cdn.jsdelivr.net/gh/stevekrouse/WoofJS@16e2f13972707e47e284b73667e2552f193aab39/woof.js"></script>
+  <script>
+setBackdropColor("#ffffff")
+
+var instructions = new Text()
+instructions.y = maxY - 100
+instructions.color = 'blue'
+instructions.size = 16
+instructions.text = "Use A and D to go left and right" +
+  "\nPress Space to jump" +
+  "\nPress R to restart" +
+  "\nClick instructions to hide them"
+
+instructions.onMouseDown(() => {
+  instructions.hide()
+})
+
+function startGame() {
+  myCamera = {x: 0, y: 30, z: 50}
+  // delete all the sprites
+  my3DSprites = []
+  // readd a floor
+  my3DSprites.push({
+    x: [-1000, 1000],
+    y: [-0.5, 0],
+    z: [-1000, 100]
+  })
+  myLineSprites.forEach(line => {
+    line.hide()
+  })
+}
+
+onKeyDown(() => {
+  if (keysDown.includes('r')) {
+    startGame()
+    gameOver.hide()
+    cameraYSpeed = 0
+    defrost()
+  }
+})
+
+var gameOver = new Text({
+  text: () => "Game over",
+  size: 50,
+  color: "pink"
+})
+gameOver.hide()
+
+var mySize = 0.5
+
+
+var cameraObj = {
+  x: [0, 0],
+  y: [0, 0],
+  z: [0, 0]
+}
+
+var myCamera = {x: 0, y: 30, z: 50}
+
+var my3DSprites = []
+var myLineSprites = []
+// my3DSprites.push(squareObj)
+// my3DSprites.push(secondObj)
+startGame()
+
+every(0.15, 'second', () => {
+  generateObj()
+})
+
+function generateObj() {
+  var hold = {x: [random(-500,500)],
+              y: [random(0,200)],
+              z: [myCamera.z + random(10,30)]}
+  hold.x.push(hold.x[0] + random(100,500))
+  hold.y.push(hold.y[0] + 100 + random(0,100))
+  hold.z.push(hold.z[0] + random(2,5))
+  my3DSprites.push(hold)
+}
+
+// range(1,10).forEach(() => {
+//   generateObj()
+// })
+
+var displayZ = 1
+
+var myLineSpritesInd = 0
+var flag = 0
+var canJump = 10
+
+var minDist = 0.001
+
+// requires globals of myCamera, width, height, minDist
+function render3DSquare(obj, camera) {
+  // compute the naive projected points, which may break if behind camera
+  var AR = height/width
+  var proj = {
+      frontLeft: AR * (obj.x[0] - camera.x) / (obj.z[0] - camera.z),
+      backLeft: AR * (obj.x[0] - camera.x) / (obj.z[1] - camera.z),
+      frontRight: AR * (obj.x[1] - camera.x) / (obj.z[0] - camera.z),
+      backRight: AR * (obj.x[1] - myCamera.x) / (obj.z[1] - camera.z),
+      frontTop: (obj.y[0] - camera.y) / (obj.z[0] - camera.z),
+      backTop: (obj.y[0] - camera.y) / (obj.z[1] - camera.z),
+      frontBot: (obj.y[1] - camera.y) / (obj.z[0] - camera.z),
+      backBot: (obj.y[1] - camera.y) / (obj.z[1] - camera.z),
+    }
+  // if everything is in front of the camera
+  if ((obj.z[0] - camera.z > minDist) && (obj.z[1] - camera.z > minDist)) {
+    // nothing to do
+  // else if the front is in front of the camera (but the back is behind)
+  } else if (obj.z[0] - myCamera.z > minDist) {
+    proj.backLeft *= (obj.z[1] - camera.z) / minDist
+    proj.backRight *= (obj.z[1] - camera.z) / minDist
+    proj.backTop *= (obj.z[1] - camera.z) / minDist
+    proj.backBot *= (obj.z[1] - camera.z) / minDist
+  // else if the back is in front of the camera (but the front is behind)
+  } else if (obj.z[1] - camera.z > minDist) {
+    proj.frontLeft *= (obj.z[0] - camera.z) / minDist
+    proj.frontRight *= (obj.z[0] - camera.z) / minDist
+    proj.frontTop *= (obj.z[0] - camera.z) / minDist
+    proj.frontBot *= (obj.z[0] - camera.z) / minDist
+  // else everything is behind the camera
+  } else {
+    if (myLineSprites.length > myLineSpritesInd * 12) {
+      range(0,12).forEach(i => {
+        myLineSprites[myLineSpritesInd*12 + i].hide()
+      })
+    }
+    return
+  }
+  
+  if (myLineSprites.length <= myLineSpritesInd * 12) {
+    range(0,12).forEach(i => {
+      myLineSprites.push(new Line())
+    })
+  }
+  
+  range(0,12).forEach(i => {
+    myLineSprites[myLineSpritesInd*12 + i].show()
+  })
+
+  myLineSprites[myLineSpritesInd*12].x = proj.frontLeft
+  myLineSprites[myLineSpritesInd*12].y = proj.frontTop
+  myLineSprites[myLineSpritesInd*12].x1 = proj.frontLeft
+  myLineSprites[myLineSpritesInd*12].y1 = proj.frontBot
+
+  myLineSprites[myLineSpritesInd*12+1].x = proj.frontLeft
+  myLineSprites[myLineSpritesInd*12+1].y = proj.frontTop
+  myLineSprites[myLineSpritesInd*12+1].x1 = proj.frontRight
+  myLineSprites[myLineSpritesInd*12+1].y1 = proj.frontTop
+  
+  myLineSprites[myLineSpritesInd*12+2].x = proj.frontRight
+  myLineSprites[myLineSpritesInd*12+2].y = proj.frontTop
+  myLineSprites[myLineSpritesInd*12+2].x1 = proj.frontRight
+  myLineSprites[myLineSpritesInd*12+2].y1 = proj.frontBot
+  
+  myLineSprites[myLineSpritesInd*12+3].x = proj.frontLeft
+  myLineSprites[myLineSpritesInd*12+3].y = proj.frontBot
+  myLineSprites[myLineSpritesInd*12+3].x1 = proj.frontRight
+  myLineSprites[myLineSpritesInd*12+3].y1 = proj.frontBot
+  
+  myLineSprites[myLineSpritesInd*12+4].x = proj.backLeft
+  myLineSprites[myLineSpritesInd*12+4].y = proj.backTop
+  myLineSprites[myLineSpritesInd*12+4].x1 = proj.backLeft
+  myLineSprites[myLineSpritesInd*12+4].y1 = proj.backBot
+
+  myLineSprites[myLineSpritesInd*12+5].x = proj.backLeft
+  myLineSprites[myLineSpritesInd*12+5].y = proj.backTop
+  myLineSprites[myLineSpritesInd*12+5].x1 = proj.backRight
+  myLineSprites[myLineSpritesInd*12+5].y1 = proj.backTop
+  
+  myLineSprites[myLineSpritesInd*12+6].x = proj.backRight
+  myLineSprites[myLineSpritesInd*12+6].y = proj.backTop
+  myLineSprites[myLineSpritesInd*12+6].x1 = proj.backRight
+  myLineSprites[myLineSpritesInd*12+6].y1 = proj.backBot
+  
+  myLineSprites[myLineSpritesInd*12+7].x = proj.backLeft
+  myLineSprites[myLineSpritesInd*12+7].y = proj.backBot
+  myLineSprites[myLineSpritesInd*12+7].x1 = proj.backRight
+  myLineSprites[myLineSpritesInd*12+7].y1 = proj.backBot
+  
+  myLineSprites[myLineSpritesInd*12+8].x = proj.frontLeft
+  myLineSprites[myLineSpritesInd*12+8].y = proj.frontTop
+  myLineSprites[myLineSpritesInd*12+8].x1 = proj.backLeft
+  myLineSprites[myLineSpritesInd*12+8].y1 = proj.backTop
+
+  myLineSprites[myLineSpritesInd*12+9].x = proj.frontLeft
+  myLineSprites[myLineSpritesInd*12+9].y = proj.frontBot
+  myLineSprites[myLineSpritesInd*12+9].x1 = proj.backLeft
+  myLineSprites[myLineSpritesInd*12+9].y1 = proj.backBot
+  
+  myLineSprites[myLineSpritesInd*12+10].x = proj.frontRight
+  myLineSprites[myLineSpritesInd*12+10].y = proj.frontTop
+  myLineSprites[myLineSpritesInd*12+10].x1 = proj.backRight
+  myLineSprites[myLineSpritesInd*12+10].y1 = proj.backTop
+  
+  myLineSprites[myLineSpritesInd*12+11].x = proj.frontRight
+  myLineSprites[myLineSpritesInd*12+11].y = proj.frontBot
+  myLineSprites[myLineSpritesInd*12+11].x1 = proj.backRight
+  myLineSprites[myLineSpritesInd*12+11].y1 = proj.backBot
+}
+
+
+function getCameraObj(myCamera) {
+  return {x: [myCamera.x - mySize, myCamera.x + mySize],
+          y: [myCamera.y - mySize-25, myCamera.y + mySize],
+          z: [myCamera.z - mySize, myCamera.z + mySize]}
+}
+	
+var cameraYSpeed = 0
+forever(() => {
+  myLineSpritesInd = 0
+  my3DSprites.forEach(obj => {
+    render3DSquare(obj, myCamera)
+    myLineSpritesInd++
+  })
+  
+  var changeObj = {x: 0, y: 0, z: 0}
+  //myCamera.x = -mouseX
+  //myCamera.y = -mouseY
+  //myCamera.z--
+
+    changeObj.z += 0.2
+    
+    if (!attemptChange(changeObj, myCamera)) {
+      gameOver.show()
+      freeze()
+    }
+    
+  
+  var changeObj = {x: 0, y: 0, z: 0}
+    if (keysDown.includes('A')) {
+      changeObj.x-=15
+    }
+    if (keysDown.includes('D')) {
+      changeObj.x+=15
+    }
+  attemptChange(changeObj, myCamera)
+  
+  changeObj = {x: 0, y: 0, z: 0}
+ 
+  if (keysDown.includes('space') && canJump) {
+    cameraYSpeed = 20
+  } else if (keysDown.includes('space')) {
+    cameraYSpeed += 0.1
+  }
+  
+  cameraYSpeed -= 0.4
+  changeObj.y += cameraYSpeed
+  
+  //console.log(changeObj.y)
+  
+  if (!attemptChange(changeObj, myCamera)) {
+    // while(Math.abs(changeObj.y) > 0.21) { // while we're still trying to move "fast"
+    //   changeObj.y *= 0.8; // try moving less
+    //   if (attemptChange(changeObj)) { // if it succeeds, break
+    //     break; 
+    //   }
+    // }
+    cameraYSpeed = 0
+    canJump = 10
+    // it's possible that we hit the ground too fast and don't collide (because the floor is thin)
+  } else {
+    canJump = (canJump > 0) ? canJump-1 : 0
+  }
+  
+  if (myCamera.y <= 0) {
+    myCamera.y = 0.5
+    cameraYSpeed = 0
+    gameOver.show()
+    freeze()
+  }
+})
+//render3DSquare(squareObj)
+
+function attemptChange(changeObj, camera) {
+  myCamera.x += changeObj.x
+  myCamera.y += changeObj.y
+  myCamera.z += changeObj.z
+  var cameraObj = getCameraObj(camera)
+  flag = false
+  my3DSprites.forEach(obj => {
+    if (touching(obj, cameraObj)) {
+      flag = true
+    }
+  })
+  if (flag) {
+    myCamera.x -= changeObj.x
+    myCamera.y -= changeObj.y
+    myCamera.z -= changeObj.z
+  }
+  return !flag
+}
+
+/*var debugDisplay = new Text({
+  text: () => "(" + Math.round(myCamera.x*1000)/1000 +
+              "," + Math.round(myCamera.y*1000)/1000 +
+              "," + Math.round(myCamera.z*1000)/1000 + ")",
+  y: -50
+})*/
+
+// requires that the arrays holding x1 and x2 are ordered such that x[0]<x[1]
+function touching(obj1, obj2) {
+  if (obj1.x[0] >= obj2.x[1] || obj1.x[1] <= obj2.x[0] ||
+      obj1.y[0] >= obj2.y[1] || obj1.y[1] <= obj2.y[0] ||
+      obj1.z[0] >= obj2.z[1] || obj1.z[1] <= obj2.z[0]) {
+    return false
+  }
+  return true
+}    
+  </script>
+</head>

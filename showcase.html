@@ -1,0 +1,169 @@
+<style type="text/css">
+  h1 {
+    margin: 0;
+    font-weight: 200;
+  }
+  
+  .level-container {
+    border-radius: 5px;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    font-family: helvetica, sans-serif;
+    font-weight: 300;
+    justify-content: center;
+    padding: 10px;
+    margin: 3px;
+  }
+  
+  .project-list {
+    justify-content: center;
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  #art {
+    background-color: #00449F;
+  }
+  
+  #games {
+    background-color: #006A63;
+  }
+  
+  .project-block {
+    flex: 0 1 150px;
+    margin: 10px;
+  }
+  
+  .project-block>a>img {
+    width: 100%;
+    height: 150px;
+    border-radius: 5px;
+    margin-bottom: 5px;
+  }
+  
+  .project-block>a:hover,
+  .project-block>a {
+    text-decoration: none;
+    cursor: pointer;
+    color: white;
+  }
+  
+  .start-here {
+    color: yellow;
+    margin-top: 5px;
+    display: block;
+  }
+  
+  .first-project {
+    border-right: 10px solid rgb(255, 255, 255);
+    border-right: 10px solid rgba(255, 255, 255, 0.3);
+    padding-right: 20px;
+  }
+</style>
+<div id="projects" style="width: 100%; flex-direction: column; display:flex; margin:auto; text-align:center;">
+
+  <div class="level-container" id="art">
+    <h1>Art Showcase</h1>
+    <div class="project-list">
+      <div class="project-block">
+        <a href="./showcase/clock.html">
+          <img class="project-image" src="./images/clock-screenshot.png">
+          <div>Clock</div>
+        </a>
+      </div>
+
+      <div class="project-block">
+        <a href="./showcase/fractal-trees.html">
+          <img class="project-image" src="./images/fractal-trees-screenshot.png">
+          <div>Fractal Trees</div>
+        </a>
+      </div>
+
+      <div class="project-block">
+        <a href="./showcase/mandelbrot.html">
+          <img class="project-image" src="./images/mandelbrot-screenshot.png">
+          <div>Mandelbrot</div>
+        </a>
+      </div>
+
+      <div class="project-block">
+        <a href="./showcase/matrix.html">
+          <img class="project-image" src="./images/matrix-screenshot.gif">
+          <div>Matrix</div>
+        </a>
+      </div>
+      
+      <div class="project-block">
+        <a href="./showcase/waves.html">
+          <img class="project-image" src="./images/waves-screenshot.gif">
+          <div>Waves</div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="level-container" id="games">
+    <h1>Game Showcase</h1>
+    <div class="project-list">
+      <div class="project-block">
+        <a href="./showcase/3d-runner.html">
+          <img class="project-image" src="./images/3d-runner-screenshot.png">
+          <div>3D Runner</div>
+        </a>
+      </div>
+
+      <div class="project-block">
+        <a href="./showcase/breakout.html">
+          <img class="project-image" src="./images/breakout-screenshot.png">
+          <div>Breakout</div>
+        </a>
+      </div>
+
+      <div class="project-block">
+        <a href="./showcase/color-picker.html">
+          <img class="project-image" src="./images/color-picker-screenshot.png">
+          <div>Color Picker</div>
+        </a>
+      </div>
+
+      <div class="project-block">
+        <a href="./showcase/minesweeper.html">
+          <img class="project-image" src="./images/minesweeper-screenshot.png">
+          <div>Minesweeper</div>
+        </a>
+      </div>
+
+      <div class="project-block">
+        <a href="./showcase/set.html">
+          <img class="project-image" src="./images/set-screenshot.png">
+          <div>Set</div>
+        </a>
+      </div>
+
+      <div class="project-block">
+        <a href="./showcase/tetris.html">
+          <img class="project-image" src="./images/tetris-screenshot.png">
+          <div>Tetris</div>
+        </a>
+      </div>
+
+      <div class="project-block">
+        <a href="./showcase/ttt-ai.html">
+          <img class="project-image" src="./images/ttt-ai-screenshot.png">
+          <div>Tic-Tac-Toe (vs AI)</div>
+        </a>
+      </div>
+
+      <div class="project-block">
+        <a href="./showcase/typing.html">
+          <img class="project-image" src="./images/typing-screenshot.png">
+          <div>Typing Test</div>
+        </a>
+      </div>
+
+      
+    </div>
+  </div>
+
+</div>
