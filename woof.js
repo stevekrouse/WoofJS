@@ -1091,7 +1091,14 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
     this.project._spriteCanvas.addEventListener("mousedown", this._onMouseDownHandler);
     this.project._spriteCanvas.addEventListener("mouseup", this._onMouseUpHandler);
   });
-  
+
+  this.detachListeners = function() {
+    if (this.project != null && this.project._spriteCanvas != null) {
+      this.project._spriteCanvas.removeEventListener("mousedown", this._onMouseDownHandler);
+      this.project._spriteCanvas.removeEventListener("mouseup", this._onMouseUpHandler);
+    }
+  }
+    
   this.delete = function() {
     if (arguments.length > 0) { throw new TypeError("delete() requires no inputs."); }
     if (this.deleted) { return; }
@@ -1099,18 +1106,22 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
     this.deleted = true;
     if (this.project._sprites.includes(this)){
       this.project._sprites.splice(this.project._sprites.indexOf(this), 1);
-      this.project._spriteCanvas.removeEventListener("mousedown", this._onMouseDownHandler);
-      this.project._spriteCanvas.removeEventListener("mouseup", this._onMouseUpHandler);
+      this.detachListeners();
     }
   };
 };
 
-Woof.prototype.Bundle = function({project = undefined, components = [], x = 0, y = 0, angle = 0} = {}) {
+Woof.prototype.Bundle = function({project = undefined, components = [], x = 0, y = 0, angle = 0, brightness = 100} = {}) {
   this.type = "bundle"
   this.components = components
   this.privateShowing = true
+  this.privateBrightness = brightness
 
-  Woof.prototype.Sprite.call(this, arguments[0]);
+  Woof.prototype.Sprite.call(this, this.arguments[0]);
+
+  // detach the event listeners from the superclass, we will be
+  //   creating and attaching new ones later
+  this.detachListeners();
     
   this.addComponent = function(sprite, offsetX=0, offsetY=0, offsetAngle=0) {
     sprite.offsetX = offsetX
@@ -1194,6 +1205,21 @@ Woof.prototype.Bundle = function({project = undefined, components = [], x = 0, y
 	} else {
 	  sprite.hide()
 	}
+      })
+    }
+  })
+
+  Object.defineProperty(this, 'brightness', {
+    get: function() {
+      return this.privateBrightness;
+    },
+    set: function(value) {
+      if (typeof value != "number") {
+	  throw new TypeError("sprite.brightness can only be set to a number");
+      }	
+      this.privateBrightness = value;
+      this.components.forEach((sprite) => {
+	sprite.brightness = value;
       })
     }
   })
@@ -1344,12 +1370,14 @@ Woof.prototype.Bundle = function({project = undefined, components = [], x = 0, y
       })
     }
   }
+
+  this.detachListeners(); // detach the listeners from the superclass
     
   this.project.ready(() => {
     this.project._spriteCanvas.addEventListener("mousedown", this._onMouseDownHandler);
     this.project._spriteCanvas.addEventListener("mouseup", this._onMouseUpHandler);
   })
-    
+
   this.delete = function() {
     if (arguments.length > 0) {
       throw new TypeError("delete() requires no inputs");
@@ -1363,6 +1391,7 @@ Woof.prototype.Bundle = function({project = undefined, components = [], x = 0, y
     if (this.project._sprites.includes(this)) {
       this.project._sprites.splice(this.project._sprites.indexOf(this), 1);
       this.project._spriteCanvas.removeEventListener("mousedown", this._onMouseDownHandler);
+      this.project._spriteCanvas.removeEventListener("mouseup", this._onMouseUpHandler);
     }
   }
 }
@@ -1505,7 +1534,7 @@ Woof.prototype.Text = function({project = undefined, text = "Text", size = 12, c
   //   TextPrimatives in components. That should generally be
   //   true but is not a super strong assumption
   this._render = function(context) {
-    if (!this.project || this.project.stopped) {
+    if (this.project == null || this.project._spriteContext == null) {
       return;
     }
     let textList = this.textEval().split("\n")
