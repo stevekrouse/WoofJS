@@ -1,0 +1,30 @@
+<head>
+  <script src="../woof.js"></script>
+<!--  <script src="https://cdn.jsdelivr.net/gh/stevekrouse/WoofJS@c387d23dd6b81e3bec30dd171fdeca8bcf818a24/woof.js"></script> -->
+  <script>
+    var t = new Text()
+    t.text = () => "Stuff"
+    t.size = 30
+    t.color = 'black'
+
+
+    var s = []
+
+onKeyDown(() => {
+  s.push(new Text())
+  s[s.length-1].x = randomX()
+  s[s.length-1].y = randomY()
+  s[s.length-1].onMouseDown(() => {
+    s[s.length-1].delete()
+    s.remove(s[s.length-1])
+  })
+})
+
+/*onKeyDown(() => {
+  if (s.length > 0) {
+    s[s.length-1].delete()
+    s.remove(s[s.length-1])
+  }
+})*/
+  </script>
+</head>

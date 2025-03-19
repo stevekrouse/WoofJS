@@ -1,0 +1,631 @@
+<head>
+  <script src="https://cdn.jsdelivr.net/gh/stevekrouse/WoofJS@16e2f13972707e47e284b73667e2552f193aab39/woof.js"></script>
+  <script>
+setBackdropColor("white")
+
+// Okay, so first we need to set up a grid of cells. Here's an array to hold the cells.
+var grid = []
+
+// This code determines the size of the grid. Feel free to adjust it!
+// Don't go too big - any bigger than 30 x 30 and it lagsssss
+var gridWidth = 20
+var gridHeight = 20
+
+// This code adjusts the grid and GridCell size to fit the current window size.
+var gridMaxD = gridWidth
+if(gridMaxD < gridHeight) {
+  gridMaxD = gridHeight
+}
+var gridSize = floor(height / (1.25 * gridMaxD))
+if (gridSize > floor(width / (1.25 * gridMaxD))) {
+  gridSize = floor(width / 25)
+}
+
+// The text names for each algorithm in a neat little array.
+var algorithms = ["Breadth First", "Dijkstra's", "Greedy Best First", "A*"]
+
+// This integer determines which algorithm will run. Starts on A* as the default.
+var currentAlgorithm = 3
+
+// This value determines the aggressiveness of the greedy heuristic.
+// Keep this value between the min/max cost values (1 and 9). 5 is the average.
+var greed = 5 
+
+// All of these variables are used in the pathfinding algorithms, just setting them up here.
+var start, end, current, frontier, path, totalPathCost, pathLoopsUsed, tickTimer
+
+// This string tracks which state the program is in.
+var pathfindingStatus = "done"
+
+// There are four instruction text objects.
+var instructions1 = new Text({
+  text: () => "Click to create or remove walls. Press A to switch algorithms.",
+  size: gridSize * 0.8,
+  color: "red",
+  fontFamily: "arial",
+  textAlign: "center",
+  x: 0,
+  y: maxY - (height - (gridHeight * gridSize)) / 5
+})
+// This one changes depending on context using a nifty function.
+var instructions2 = new Text({
+  text: () => {
+    if(pathfindingStatus == "impossible") {
+      return "No possible path! Remove some walls and try again."
+    } else if(pathfindingStatus == "done") {
+      return "Currently ready to use " + algorithms[currentAlgorithm] + " Search Algorithm"
+    }
+    else if(pathfindingStatus != "travel") {
+      return "Currently using " + algorithms[currentAlgorithm] + " Search Algorithm"
+    } else {
+      return "Total cost for the found path is " + totalPathCost + ". It took " + pathLoopsUsed + " loops to find this path."
+    }
+  },
+  size: gridSize * 0.5,
+  color: "red",
+  fontFamily: "arial",
+  textAlign: "center",
+  x: 0,
+  y: maxY - (height - (gridHeight * gridSize)) / 2.5
+})
+var instructions3 = new Text({
+  text: () => "Press space to pathfind to the mouse's location.",
+  size: gridSize * 0.6,
+  color: "red",
+  fontFamily: "arial",
+  textAlign: "center",
+  x: 0,
+  y: minY + (height - (gridHeight * gridSize)) / 2.5
+})
+var instructions4 = new Text({
+  text: () => "Press R to randomize the map.",
+  size: gridSize * 0.6,
+  color: "red",
+  fontFamily: "arial",
+  textAlign: "center",
+  x: 0,
+  y: minY + (height - (gridHeight * gridSize)) / 5.5
+})
+
+// This class defines any object which exists on the grid.
+class GridObject extends Image {
+  // Grid objects have an image url as well as a grid XY coordinate.
+  // The grid coordinates start with 0, 0 at the top left corner and go up to the right and down
+  constructor({
+    url,
+    gx,
+    gy
+  }) {
+    super({
+      url: url,
+      width: gridSize,
+      height: gridSize
+    })
+    this.gx = gx
+    this.gy = gy
+    this.setGrid()
+  }
+
+  // This function pushes the grid object to a particular position
+  // It can also be used to apply the object's grid position to it's actual XY position
+  setGrid(x = this.gx, y = this.gy) {
+    this.gx = x
+    this.gy = y
+    this.ngx = x
+    this.ngy = y
+    this.x = (gridSize / 2) + (this.gx * gridSize) - (gridWidth / 2 * gridSize)
+    this.y = (-gridSize / 2) + (this.gy * -1 * gridSize) + (gridHeight / 2 * gridSize)
+    this.moveSpeed = 10
+    this.moveTick = this.moveSpeed
+  }
+
+  // This function returns a boolean representing whether or not the player is currently moving.
+  moving() {
+    return this.gx != this.ngx || this.gy != this.ngy
+  }
+
+  // This function is the movement loop which makes the smooth sliding movement work.
+  // It uses a timer and some clever math - see if you can figure out how it works!
+  movement() {
+    if (this.moving() && this.moveTick > 0) {
+      this.moveTick--
+
+        var dx = this.ngx - this.gx
+      var dy = -(this.ngy - this.gy)
+
+      this.x = ((gridSize / 2) + (this.ngx * gridSize) - (gridWidth / 2 * gridSize)) - (((dx * this.moveTick) / this.moveSpeed) * gridSize)
+      this.y = (-gridSize / 2) + (this.ngy * -1 * gridSize) + (gridHeight / 2 * gridSize) - (((dy * this.moveTick) / this.moveSpeed) * gridSize)
+    } else {
+      this.setGrid(this.ngx, this.ngy)
+    }
+  }
+}
+
+// This is an object to show where the path is going.
+var endSprite = new GridObject({
+  url: "https://firebasestorage.googleapis.com/v0/b/woofjs-d1b27.appspot.com/o/UserImageUpload%2FgYJ8HA2gs2fRmyKlNblSKuDKQ3D2%2Fa*%2Fjevabpv7biko0hsrk2?alt=media&token=633bc439-4a08-44de-af15-fe54d7533b08",
+  width: gridSize,
+  height: gridSize,
+  gx: 0,
+  gy: 0
+})
+endSprite.hide()
+
+// This is the character who the path starts at.
+var coolEmoji = new GridObject({
+  url: "../docs/images/emoji-glasses.png",
+  gx: 0,
+  gy: 0
+})
+
+// This code allows you to move the coolEmoji with the arrows when the pathfinding state is "done".
+// It has a bunch of checks to prevent moving while the pathfinding algorithm is running or moving through walls.
+coolEmoji.control = () => {
+  if(pathfindingStatus == "done" && !coolEmoji.moving()) {
+    if(keysDown.includes('UP') && coolEmoji.gy > 0) {
+      if(!grid[coolEmoji.gx][coolEmoji.gy - 1].wall) {
+        coolEmoji.ngy = coolEmoji.gy - 1
+      }
+    } else if(keysDown.includes('DOWN') && coolEmoji.gy < gridHeight - 1) {
+      if(!grid[coolEmoji.gx][coolEmoji.gy + 1].wall) {
+        coolEmoji.ngy = coolEmoji.gy + 1
+      }
+    } else if(keysDown.includes('LEFT') && coolEmoji.gx > 0) {
+      if(!grid[coolEmoji.gx - 1][coolEmoji.gy].wall) {
+        coolEmoji.ngx = coolEmoji.gx - 1
+      }
+    } else if(keysDown.includes('RIGHT') && coolEmoji.gx < gridWidth - 1) {
+      if(!grid[coolEmoji.gx + 1][coolEmoji.gy].wall) {
+        coolEmoji.ngx = coolEmoji.gx + 1
+      }
+    }
+  }
+}
+
+// This update code allows the coolEmoji to move and be controlled.
+coolEmoji.update = () => {
+  coolEmoji.sendToFront()
+  coolEmoji.control()
+  coolEmoji.movement()
+}
+
+// The lines of the grid are separate from the grid objects - they don't do anything, they just exist.
+// You can actually toggle them on/off by pressing G.
+var gridLines = []
+var gridLinesShowing = true
+
+// This code generates all the vertical grid lines.
+var x, y, l
+for (x = 0; x < gridWidth + 1; x++) {
+  l = new Line({
+    color: "black",
+    width: 1,
+    x: (x * gridSize) - (gridWidth * gridSize / 2),
+    y: gridHeight / 2 * gridSize,
+    x1: (x * gridSize) - (gridWidth * gridSize / 2),
+    y1: -gridHeight / 2 * gridSize
+  })
+  gridLines.push(l)
+}
+// This code generates all the horizontal grid lines.
+for (y = 0; y < gridHeight + 1; y++) {
+  l = new Line({
+    color: "black",
+    width: 1,
+    x: gridWidth / 2 * gridSize,
+    y: (y * gridSize) - (gridHeight * gridSize / 2),
+    x1: -gridWidth / 2 * gridSize,
+    y1: (y * gridSize) - (gridHeight * gridSize / 2),
+  })
+  gridLines.push(l)
+}
+
+// This class defines the cells which represent each grid location.
+class GridCell extends Rectangle {
+  // Each GridCell has it's grid position as well as a variety of other information.
+  constructor(gridX, gridY) {
+    super({
+      width: gridSize,
+      height: gridSize,
+      color: "black",
+    })
+    this.gx = gridX
+    this.gy = gridY
+    this.wall = false // Is this cell blocked?
+    this.parent = null // Used by pathfinding
+    this.cost = random(1, 9) // Cost of moving through this cell
+    this.hide()
+    this.setGrid()
+    if (random(0, 4) === 0 && !(this.gx === 0 && this.gy === 0)) {
+      this.toggle(true)
+    }
+    this.costDisplay = new Text({
+      text: () => this.cost,
+      color: "black",
+      size: gridSize / 2,
+      textAlign: "center",
+      x: this.x,
+      y: this.y
+    })
+  }
+  
+  // Same idea as the setGrid in the GridObject class
+  setGrid() {
+    this.x = (gridSize / 2) + (this.gx * gridSize) - (gridWidth / 2 * gridSize)
+    this.y = (-gridSize / 2) + (this.gy * -1 * gridSize) + (gridHeight / 2 * gridSize)
+  }
+  
+  // This function is used for turning the wall on and off
+  toggle(on=!this.wall) {
+    this.wall = on
+    if (this.wall) {
+      this.color = "black"
+      this.width = gridSize
+      this.height = gridSize
+      this.brightness = 100
+      this.setGrid()
+      this.show()
+    } else {
+      this.hide()
+    }
+  }
+  
+  // This function calculates the cost to get to this cell based on the currently found path.
+  totalCost() {
+    var c = this.cost
+    var p = this.parent
+    while (p !== null) {
+      c += p.cost
+      p = p.parent
+    }
+    return c
+  }
+  
+  // This function calculates the estimated cost using manhattan distance as a heuristic.
+  estimatedCost() {
+    return this.manhattanDistance(end) * greed
+  }
+  
+  // Manhattan distance is a simple way of estimating distance on a grid.
+  manhattanDistance(cell) {
+    return abs(this.gx - cell.gx) + abs(this.gy - cell.gy)
+  }
+}
+
+// Generating the GridCells using two loops.
+for (x = 0; x < gridWidth; x++) {
+  var row = []
+  for (y = 0; y < gridHeight; y++) {
+    let cell = new GridCell(x, y)
+    row.push(cell)
+  }
+  grid.push(row)
+}
+
+// Calculate which grid position the mouse is currently hovering over.
+function mouseGridX() {
+  return floor((mouseX / gridSize) + (gridWidth / 2))
+}
+function mouseGridY() {
+  return floor((-mouseY / gridSize) + (gridWidth / 2))
+}
+
+// Determines if a particular grid position is on the grid at all!
+function gridPositionOnScreen(gx, gy) {
+  return gx >= 0 && gx < gridWidth && gy >= 0 && gy < gridHeight
+}
+
+// Combines the above functions to determine if the mouse is at a valid grid position.
+function mouseGridPositionOnScreen() {
+  return gridPositionOnScreen(mouseGridX(), mouseGridY())
+}
+
+// Resets the cells to be ready for a new path.
+function resetGridCells() {
+  grid.forEach(row => {
+    row.forEach(cell => {
+      cell.parent = null
+      if(cell.color != "black") {
+        cell.hide()
+      }
+    })
+  })
+}
+
+// Detecting mouse clicks to toggle the walls.
+onMouseDown(() => {
+  if (mouseGridPositionOnScreen() && pathfindingStatus == "done" && !coolEmoji.moving() && !(coolEmoji.gx == mouseGridX() && coolEmoji.gy == mouseGridY())) {
+    grid[mouseGridX()][mouseGridY()].toggle()
+  }
+})
+
+// Each of the key controls is here.
+// Note that they require the pathfinding status to be "done" and the coolEmoji to not be moving.
+onKeyDown(() => {
+  if (keysDown.includes('A') && pathfindingStatus == "done" && !coolEmoji.moving()) {
+    currentAlgorithm++
+    if (currentAlgorithm > algorithms.length - 1) {
+      currentAlgorithm = 0
+    }
+  }
+  if (keysDown.includes('R') && pathfindingStatus == "done" && !coolEmoji.moving()) {
+    grid.forEach(row => {
+      row.forEach(cell => {
+        cell.cost = random(1, 9)
+        if (random(0, 4) === 0 && !(cell.gx === coolEmoji.gx && cell.gy === coolEmoji.gy)) {
+          cell.toggle(true)
+        } else {
+          cell.toggle(false)
+        }
+      })
+    })
+  }
+  if (keysDown.includes('SPACE') && mouseGridPositionOnScreen() && pathfindingStatus == "done" && !coolEmoji.moving()) {
+    start = grid[coolEmoji.gx][coolEmoji.gy]
+    end = grid[mouseGridX()][mouseGridY()]
+
+    if (!end.wall && !(end.gx == coolEmoji.gx && end.gy == coolEmoji.gy)) {
+      endSprite.setGrid(end.gx, end.gy)
+      endSprite.show()
+
+      resetGridCells()
+      pathLoopsUsed = 0
+
+      path = []
+      frontier = []
+      current = start
+      current.color = "red"
+      current.brightness = 50
+      current.show()
+
+      pathfindingStatus = "search"
+    }
+  }
+  if(keysDown.includes('G')) {
+    gridLinesShowing = !gridLinesShowing
+    gridLines.forEach(l => {
+      if(gridLinesShowing) {
+        l.show()
+      } else {
+        l.hide()
+      }
+    })
+  }
+})
+
+// Now for the actual pathfinding code!
+
+// This function is used to grab all the neighbors of a cell which are not blocked.
+function openNeighbors(cell) {
+  var n = []
+
+  if (cell.gx > 0) {
+    var left = grid[cell.gx - 1][cell.gy]
+    if (!left.wall) {
+      n.push(left)
+    }
+  }
+  if (cell.gy > 0) {
+    var up = grid[cell.gx][cell.gy - 1]
+    if (!up.wall) {
+      n.push(up)
+    }
+  }
+  if (cell.gx < gridWidth - 1) {
+    var right = grid[cell.gx + 1][cell.gy]
+    if (!right.wall) {
+      n.push(right)
+    }
+  }
+  if (cell.gy < gridHeight - 1) {
+    var down = grid[cell.gx][cell.gy + 1]
+    if (!down.wall) {
+      n.push(down)
+    }
+  }
+
+  return n
+}
+
+// We are going to store the four algorithm functions in an array so we can index it just like the algorithm names.
+var algorithmFunctions = []
+
+// Breadth First
+// This algorithm just grabs all the neighbors and explores them each in order.
+algorithmFunctions.push(() => {
+  var n = openNeighbors(current) // grab the neighbors
+  n.forEach(cell => { // for each one
+    if (pathfindingStatus != "trace") { // as long as we aren't done
+      if (cell == end) { // check if it's the end, if it is we are done
+        pathfindingStatus = "trace"
+        cell.parent = current
+        current = cell
+      } else if (cell.parent === null && cell != start) { // otherwise, check if the cell has been visited before
+        // if not, mark the cell and add it to the frontier
+        cell.parent = current
+        cell.color = "cyan"
+        cell.brightness = 50
+        cell.show()
+        frontier.push(cell)
+      }
+    }
+  })
+  if (pathfindingStatus != "trace") { // if you aren't done
+    current.color = "red" // mark the old cell as red
+    current = frontier.shift() // grab a new cell from the frontier
+  }
+})
+
+// Dijkstra's
+// This algorithm grabs the neighbors and prioritizes exploring ones with lower movement costs.
+algorithmFunctions.push(() => {
+  var n = openNeighbors(current) // grab the neighbors
+  n.forEach(cell => { // for each one
+    if (pathfindingStatus != "trace") { // as long as we aren't done
+      if (cell == end) { // check if it's the end, if it is we are done
+        pathfindingStatus = "trace"
+        cell.parent = current
+        current = cell
+      } else if (cell != start) {
+        // otherwise, check if the cell has been visited before
+        // also you can add it if we found a lower-cost path to it than before
+        if(cell.parent === null || cell.totalCost() > current.totalCost() + cell.cost) {
+          // mark the cell and add it to the frontier
+          cell.parent = current
+          cell.color = "cyan"
+          cell.brightness = 50
+          cell.show()
+          frontier.push(cell)
+        }
+      }
+    }
+  })
+  if (pathfindingStatus != "trace") { // if you aren't done
+    var next = frontier[0]
+    frontier.forEach(cell => {
+      if(cell.totalCost() < next.totalCost()) { // find the cell with the lowest cost
+        next = cell
+      }
+    })
+    current.color = "red"
+    current = next
+    frontier.splice(frontier.indexOf(next), 1)
+  }
+})
+
+// Greedy Best First
+// This algorithm grabs the neighbors and prioritizes exploring ones with lower estimated distance to the end.
+algorithmFunctions.push(() => {
+  var n = openNeighbors(current) // grab the neighbors
+  n.forEach(cell => { // for each one
+    if (pathfindingStatus != "trace") { // as long as we aren't done
+      if (cell == end) { // check if it's the end, if it is we are done
+        pathfindingStatus = "trace"
+        cell.parent = current
+        current = cell
+      } else if (cell != start) {
+        if(cell.parent === null) { // otherwise, check if the cell has been visited before
+          // mark the cell and add it to the frontier
+          cell.parent = current
+          cell.color = "cyan"
+          cell.brightness = 50
+          cell.show()
+          frontier.push(cell)
+        }
+      }
+    }
+  })
+  if (pathfindingStatus != "trace") { // if you aren't done
+    var next = frontier[0]
+    frontier.forEach(cell => {
+      if(cell.estimatedCost() < next.estimatedCost()) { // find the cell with the lowest estimated cost
+        next = cell
+      }
+    })
+    current.color = "red"
+    current = next
+    frontier.splice(frontier.indexOf(next), 1)
+  }
+})
+
+// A*
+// This algorithm combines Dijkstra's and Greedy Best First.
+algorithmFunctions.push(() => {
+  var n = openNeighbors(current) // grab the neighbors
+  n.forEach(cell => { // for each one
+    if (pathfindingStatus != "trace") { // as long as we aren't done
+      if (cell == end) {
+        pathfindingStatus = "trace"
+        cell.parent = current
+        current = cell
+      } else if (cell != start) {
+        if(cell.parent === null || cell.totalCost() > current.totalCost() + cell.cost) { // otherwise, check if the cell has been visited before
+          // mark the cell and add it to the frontier
+          cell.parent = current
+          cell.color = "cyan"
+          cell.brightness = 50
+          cell.show()
+          frontier.push(cell)
+        }
+      }
+    }
+  })
+  if (pathfindingStatus != "trace") { // if you aren't done
+    var next = frontier[0]
+    frontier.forEach(cell => {
+      if(cell.totalCost() + cell.estimatedCost() < next.totalCost() + next.estimatedCost()) { // find the cell with the lowest combined cost
+        next = cell
+      }
+    })
+    current.color = "red"
+    current = next
+    frontier.splice(frontier.indexOf(next), 1)
+  }
+})
+
+// This forever loop does things which need to be updated constantly.
+forever(() => {
+  endSprite.sendToFront() // Keep the end flag on top!
+  coolEmoji.update() // Update the coolEmoji
+  pathfindingLoop() // Run the pathfinding loop
+})
+
+// This is the loop which runs the pathfinding.
+function pathfindingLoop() {
+  if(pathfindingStatus == "impossible") { // If there's no possible path
+    tickTimer-- // wait for the timer to end
+    if (tickTimer < 1) { // when it does
+      resetGridCells() // reset everything
+      endSprite.hide() // hide the end sprite
+      pathfindingStatus = "done" // and back to done
+    }
+  }else if (pathfindingStatus == "search") { // If you are currently searching
+    if(current === undefined) { // no more places to search, it must be impossible
+      pathfindingStatus = "impossible"
+      tickTimer = 80 // time out after impossible
+    } else { // let's do one pathfinding loop!
+      pathLoopsUsed++ // track how many it took
+      algorithmFunctions[currentAlgorithm]() // run the particular loop from the array
+    }
+  } else if (pathfindingStatus == "trace") { // tracing back the path after you find it
+    path.unshift(current) // pull out the current cell
+    current.color = "green" // color it properly
+    current.brightness = 60
+    current.show()
+    if (current.parent === null) { // once you're done tracing the path, time to travel along it!
+      pathfindingStatus = "travel"
+      totalPathCost = path[path.length - 1].totalCost() // add up the total cost for the text display
+      path.shift() // pull out the start
+      grid.forEach(row => {
+        row.forEach(cell => {
+          if (cell.color != "green" && cell.color != "black") { // remove all other coloring
+            cell.hide()
+          }
+        })
+      })
+    } else {
+      current = current.parent // move to the next cell to trace
+    }
+  } else if (pathfindingStatus == "travel") { // this runs while the coolEmoji is moving along the path
+    if (!coolEmoji.moving()) { // if it isn't moving, time to send it the next cell to move to
+      if (path.length > 0) { // if you are not out of spots to move to
+        current = path.shift() // go to the next spot!
+        coolEmoji.ngx = current.gx
+        coolEmoji.ngy = current.gy
+      } else { // otherwise, we're done!
+        // all this code is just cleaning up everything
+        grid.forEach(row => {
+          row.forEach(cell => {
+            if (cell.color != "black") {
+              cell.hide()
+            }
+          })
+        })
+        pathfindingStatus = "done" // back to the default status
+        endSprite.hide()
+      }
+    }
+  }
+}    
+  </script>
+</head>
