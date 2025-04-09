@@ -1791,7 +1791,7 @@
                         tags: "pen up draw"
                     },
                     {html:"<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"},
-                     {
+                    {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f504c744b5663762e706e67",
                         code: 'sprite1.penColor = "blue"\nsprite1.penColor = "#ff20ff"\nsprite1.penColor = "rgb(10, 100, 20)"',
                         tags: "pen color set"
@@ -1817,7 +1817,19 @@
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f4f7a59355a6a552e706e67",
                         code: 'sprite1.penWidth = 4',
                         tags: "pen width size"
-                    }
+                    },
+		    {
+			html: "To jump all at once when using pens, use <code>setPosition</code> will make smooth lines",
+			url: "./images/goToXY.png",
+			code: "sprite1.setPosition(50, 100)",
+                        tags: "pen teleport move location set x y go motion"
+		    },
+		    {
+			html: "To step all at once when using pens, using <code>changePosition</code> will make smooth lines",
+			url: "./images/changeX.png",
+			code: "sprite1.setPosition(50, 100)",
+                        tags: "pen teleport move location set x y go motion"
+		    }
                     ],
                     Operations: [{
                             url: "./images/68747470733a2f2f692e696d6775722e636f6d2f6e73446b436b742e706e67",

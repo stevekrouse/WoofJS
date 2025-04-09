@@ -872,7 +872,27 @@ Woof.prototype.Sprite = function({project = undefined, x = 0, y = 0, angle = 0, 
     this.privateY += steps * Math.sin(this.radians());
     this.project.ready(this.trackPen);
   };
-  
+
+  this.setPosition = function(x, y) {
+    if (arguments.length != 2) { throw new TypeError("setPosition requires 2 numeric arguments"); }
+    if (typeof x != "number" || typeof y != "number") {
+      throw new TypeError("setPosition requires 2 numeric arguments");
+    }
+    this.privateX = x
+    this.privateY = y
+    this.project.ready(this.trackPen);
+  }
+
+  this.changePosition = function(x, y) {
+    if (arguments.length != 2) { throw new TypeError("changePosition requires 2 numeric arguments"); }
+    if (typeof x != "number" || typeof y != "number") {
+      throw new TypeError("changePosition requires 2 numeric arguments");
+    }
+    this.privateX += x
+    this.privateY += y
+    this.project.ready(this.trackPen);
+  }
+
   this.setRotationStyle = style => {
     if (style == "ROTATE"){
       this.rotationStyle = "ROTATE";
