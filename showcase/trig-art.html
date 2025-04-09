@@ -1,0 +1,281 @@
+<head>
+  <script src="../woof.js"></script>
+<!--  <script src="https://cdn.jsdelivr.net/gh/stevekrouse/WoofJS@df60020dd4f1827dd4e4b847bd31e725d1bf88cf/woof.js"></script> -->
+  <script>
+setBackdropColor('lightblue')
+
+// period of current line
+
+var numLines = 4
+var curLine = 1
+var allLines = []
+var allRadius = []
+var allPeriod = []
+
+function addLine() {
+  allLines.push(new Line())
+  allLines[allLines.length-1].color = randomColor()
+  allLines[allLines.length-1].width = 3
+  allRadius.push(random(50,100))
+  allPeriod.push(random(-100,100) * Math.PI/100)
+}
+
+range(0,numLines).forEach(i => {
+  addLine()
+})
+
+// clear pen button
+{
+  var clearRect = new Rectangle()
+  clearRect.width = 45
+  clearRect.height = 22
+  clearRect.color = 'orange'
+  clearRect.x = minX + 30
+  clearRect.y = maxY - 20
+  var clearText = new Text()
+  clearText.text = 'Clear'
+  clearText.x = clearRect.x
+  clearText.y = clearRect.y
+  clearText.size = 16
+
+  clearRect.onMouseDown(() => {
+    clearPen()
+  })
+}
+
+// total lines
+{ // curly bracket just for organization
+  var linesDown = new Polygon()
+  linesDown.sides = 3
+  linesDown.length = 10
+  linesDown.angle = 180
+  linesDown.x = minX + 75
+  linesDown.y = maxY - 20
+  linesDown.color = 'red'
+
+  var linesText = new Text()
+  linesText.text = () => "Lines: " + numLines
+  linesText.x = linesDown.x + 40
+  linesText.y = linesDown.y
+  linesText.size = 16
+
+  var linesUp = new Polygon()
+  linesUp.sides = 3
+  linesUp.length = 10
+  linesUp.angle = 0
+  linesUp.x = linesText.x + 40
+  linesUp.y = maxY - 20
+  linesUp.color = 'red'
+
+  linesDown.onMouseDown(() => {
+    if (numLines == 1) {
+      return
+    }
+    numLines -= 1
+    drawer.penUp()
+    allLines[numLines].hide()
+    update()
+    drawer.penDown()
+  })
+
+  linesUp.onMouseDown(() => {
+    numLines += 1
+    drawer.penUp()
+    if (numLines > allLines.length) {
+      addLine()
+    } else {
+      allLines[numLines-1].show()
+    }
+    update()
+    drawer.penDown()
+  })
+}
+
+// radius of current line
+var radiusDisplayRect = new Rectangle()
+radiusDisplayRect.color = 'black'
+radiusDisplayRect.y = maxY - 50
+radiusDisplayRect.x = minX + 60
+radiusDisplayRect.width = 100
+radiusDisplayRect.height = 18
+
+var radiusDisplayFore = new Line()
+radiusDisplayFore.color = 'red'
+radiusDisplayFore.width = 18
+radiusDisplayFore.x1 = radiusDisplayRect.x - radiusDisplayRect.width / 2
+radiusDisplayFore.y = radiusDisplayFore.y1 = radiusDisplayRect.y
+radiusDisplayFore.x = radiusDisplayFore.x1 + allRadius[curLine - 1] / 2
+
+radiusDisplayRect.onMouseDown(() => {
+  repeatUntil(() => !mouseDown ||
+    mouseX < radiusDisplayRect.x - radiusDisplayRect.width / 2 ||
+    mouseX > radiusDisplayRect.x + radiusDisplayRect.width / 2, () => {
+      radiusDisplayFore.x = mouseX
+      allRadius[curLine - 1] = (radiusDisplayFore.x - radiusDisplayFore.x1) * 2
+    })
+})
+
+var radiusDisplayText = new Text()
+radiusDisplayText.color = 'yellow'
+radiusDisplayText.x = radiusDisplayRect.x
+radiusDisplayText.y = radiusDisplayRect.y
+radiusDisplayText.text = '0     Length     200'
+
+
+// rotation of current line
+var rotDisplayRect = new Rectangle()
+rotDisplayRect.color = 'black'
+rotDisplayRect.y = maxY - 50
+rotDisplayRect.x = minX + 180
+rotDisplayRect.width = 100
+rotDisplayRect.height = 18
+
+var rotDisplayFore = new Line()
+rotDisplayFore.color = 'red'
+rotDisplayFore.width = 18
+rotDisplayFore.x1 = rotDisplayRect.x - rotDisplayRect.width / 2
+rotDisplayFore.y = rotDisplayFore.y1 = rotDisplayRect.y
+rotDisplayFore.x = rotDisplayRect.x + allPeriod[curLine - 1] * -30 / Math.PI
+
+rotDisplayRect.onMouseDown(() => {
+  drawer.penUp()
+  repeatUntil(() => !mouseDown ||
+    mouseX < rotDisplayRect.x - rotDisplayRect.width / 2 ||
+    mouseX > rotDisplayRect.x + rotDisplayRect.width / 2, () => {
+      rotDisplayFore.x = mouseX
+      allPeriod[curLine - 1] = (rotDisplayRect.x - mouseX) * Math.PI / -30 // TODO
+    }, () => {
+      drawer.penDown()
+    })
+})
+
+var rotDisplayText = new Text()
+rotDisplayText.color = 'yellow'
+rotDisplayText.x = rotDisplayRect.x
+rotDisplayText.y = rotDisplayRect.y
+rotDisplayText.text = 'CCW  Speed  CW'
+
+// current line
+{ // curly bracket just for organization
+  var linesDown = new Polygon()
+  linesDown.sides = 3
+  linesDown.length = 10
+  linesDown.angle = 180
+  linesDown.x = minX + 195
+  linesDown.y = maxY - 20
+  linesDown.color = 'red'
+
+  var linesText = new Text()
+  linesText.text = () => "Current Line: " + curLine
+  linesText.x = linesDown.x + 65
+  linesText.y = linesDown.y
+  linesText.size = 16
+
+  var linesUp = new Polygon()
+  linesUp.sides = 3
+  linesUp.length = 10
+  linesUp.angle = 0
+  linesUp.x = linesText.x + 65
+  linesUp.y = maxY - 20
+  linesUp.color = 'red'
+
+  linesDown.onMouseDown(() => {
+    if (curLine == 1) {
+      return
+    }
+    curLine -= 1
+    radiusDisplayFore.x = radiusDisplayFore.x1 + allRadius[curLine - 1] / 2
+    rotDisplayFore.x = rotDisplayRect.x + allPeriod[curLine - 1] * -30 / Math.PI
+  })
+
+  linesUp.onMouseDown(() => {
+    if (curLine == numLines) {
+      return
+    }
+    curLine += 1
+    radiusDisplayFore.x = radiusDisplayFore.x1 + allRadius[curLine - 1] / 2
+    rotDisplayFore.x = rotDisplayRect.x + allPeriod[curLine - 1] * -30 / Math.PI
+  })
+}
+
+// export data
+{ // curly bracket just for organization
+  var exportRect = new Rectangle()
+  exportRect.width = 65
+  exportRect.height = 22
+  exportRect.color = 'orange'
+  exportRect.x = minX + 40
+  exportRect.y = maxY - 80
+  
+  var exportText = new Text()
+  exportText.text = 'Save Data'
+  exportText.x = exportRect.x
+  exportText.y = exportRect.y
+  
+  exportRect.onMouseDown(() => {
+    var exportString = ""
+    range(0,numLines).forEach(i => {
+      exportString += allRadius[i] + "," + Math.round(allPeriod[i]*1000)/1000 + ";"
+    })
+    alert(exportString)
+  })
+}
+
+// import data
+{ // curly bracket just for organization
+  var importRect = new Rectangle()
+  importRect.width = 70
+  importRect.height = 22
+  importRect.color = 'orange'
+  importRect.x = minX + 125
+  importRect.y = maxY - 80
+  
+  var importText = new Text()
+  importText.text = 'Import Data'
+  importText.x = importRect.x
+  importText.y = importRect.y
+  
+  importRect.onMouseDown(() => {
+    var importString = prompt("Please input saved data")
+    var lines = importString.split(";")
+    numLines = lines.length-1
+    allRadius = []
+    allPeriod = []
+    lines.forEach(line => {
+      var hold = line.split(",")
+      allRadius.push(Number(hold[0]))
+      allPeriod.push(Number(hold[1]+0))
+    })
+  })
+}
+
+allLines[0].x = allLines[0].y = 0
+
+function update() {
+  counter += 1
+  range(0,numLines).forEach(i => {
+    if (i !== 0) {
+      allLines[i-1].x1 = allLines[i].x = sin(counter * allPeriod[i-1]) * allRadius[i-1] + allLines[i-1].x
+      allLines[i-1].y1 = allLines[i].y = cos(counter * allPeriod[i-1]) * allRadius[i-1] + allLines[i-1].y
+    }
+  })
+  allLines[numLines-1].x1 = sin(counter * allPeriod[numLines-1]) * allRadius[numLines-1] + allLines[numLines-1].x
+  allLines[numLines-1].y1 = cos(counter * allPeriod[numLines-1]) * allRadius[numLines-1] + allLines[numLines-1].y
+  drawer.setPosition(allLines[numLines-1].x1,allLines[numLines-1].y1)
+}
+
+forever(() => {
+  update()
+})
+
+
+var counter = 0
+
+
+var drawer = new Circle()
+drawer.radius = 5
+after(0.05, 'second', () => {
+  drawer.penDown()
+})
+  </script>
+</head>
