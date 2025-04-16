@@ -1,0 +1,102 @@
+<head>
+  <script src="https://cdn.jsdelivr.net/gh/stevekrouse/WoofJS@df60020dd4f1827dd4e4b847bd31e725d1bf88cf/woof.js"></script>
+  <script>
+    setBackdropURL("../docs/images/rr-backdrop.jpg")
+setBackdropStyle("cover")
+
+var planet = new Circle ({
+  radius: 30,
+  color: "white"
+})
+
+var ship = new Image({
+  url: "../docs/images/rocket.png",
+  width: 60, 
+  height: 30,
+})
+ship.force = 0
+
+var grav = 30
+ship.xSpeed = 8
+ship.ySpeed = 0
+ship.y = 150
+
+var gravDisplay = new Rectangle({
+  color: "red",
+  width: 5,
+  height: 3
+})
+
+
+var speedDisplay = new Text({
+  text: () => "xSpeed: " + Math.round(ship.xSpeed*10)/10 + 
+  " ySpeed: " + Math.round(ship.ySpeed*10)/10,
+  y: maxY-16,
+  size: 16,
+  color: "lightblue"
+})
+var accelDisplay = new Text({
+  text: () => "xAccel: " + Math.round(ship.xAccel*100)/100 + 
+  " yAccel: " + Math.round(ship.yAccel*100)/100,
+  y: maxY-32,
+  size: 16,
+  color: "lightblue"
+})
+
+after(0.05, 'second', () => {
+  ship.penDown()
+})
+ship.penColor = "orange"
+ship.isPenDown = 1
+
+onKeyDown(() => {
+  if(keysDown.includes('R')) {
+    clearPen()
+    if(ship.isPenDown) {
+      ship.penUp()
+      ship.isPenDown = 0
+    } else {
+      ship.penDown()
+      ship.isPenDown = 1
+    }
+  }
+})
+
+forever(() => {
+  if (keysDown.includes('LEFT')) {
+    ship.turnLeft(5)
+  }
+  if (keysDown.includes('RIGHT')) {
+    ship.turnRight(5)
+  }
+  if (keysDown.includes('SPACE')) {
+    ship.xSpeed += cos(ship.angle)/50
+    ship.ySpeed += sin(ship.angle)/50
+  }
+  
+  ship.force = grav / ship.distanceTo(planet)
+  ship.xAccel = ship.force * (-ship.x / ship.distanceTo(planet))
+  ship.yAccel = ship.force * (-ship.y / ship.distanceTo(planet))
+  ship.xSpeed += ship.xAccel
+  ship.ySpeed += ship.yAccel
+  
+
+  ship.changePosition(ship.xSpeed,ship.ySpeed)
+  
+  // display the force the ship is experiencing
+  gravDisplay.x = ship.x
+  gravDisplay.y = ship.y
+  gravDisplay.pointTowards(planet)
+  gravDisplay.width = ship.force * 50
+  gravDisplay.move(gravDisplay.width/2)
+})
+
+var instructions = new Text()
+instructions.y = minY + 40
+instructions.size = 16
+instructions.color = 'lightblue'
+instructions.text = "Left/Right to Turn\nSpace to accelerate (slowly)" + 
+  "\nR to turn on/off trail" + 
+  "\nSee how circular you can make your orbit!"
+  </script>
+</head>
