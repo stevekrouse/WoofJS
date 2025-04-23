@@ -1543,8 +1543,15 @@ Woof.prototype.Text = function({project = undefined, text = "Text", size = 12, c
     
   this.textEval = () => {
     if (typeof(this.text) == "function"){
-      // if we get a functions for text, evaluate it every time we are asked to render the text
-      try { return this.text().toString(); } catch (e) { console.error("Error with text function: " + e.message); }
+      // if we get a function for text, evaluate it every time we are asked to render the text
+      try {
+	let retVal = this.text().toString();
+	if (retVal === undefined) {
+	  return "";
+	} else {
+	  return retVal;
+	}
+      } catch (e) { console.error("Error with text function: " + e.message); }
     } else {
       return this.text.toString();
     }
