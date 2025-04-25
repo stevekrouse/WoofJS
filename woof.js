@@ -1545,13 +1545,21 @@ Woof.prototype.Text = function({project = undefined, text = "Text", size = 12, c
     if (typeof(this.text) == "function"){
       // if we get a function for text, evaluate it every time we are asked to render the text
       try {
-	let retVal = this.text().toString();
-	if (retVal === undefined) {
-	  return "";
+	let textRet = this.text();
+	if (textRet === undefined) {
+	  return "undefined";
 	} else {
-	  return retVal;
+	  return textRet.toString();
 	}
-      } catch (e) { console.error("Error with text function: " + e.message); }
+      } catch (e) {
+	if (e.message.includes('defined')) {
+	  throw new ReferenceError(e.message);
+	} else {
+	  throw e;    
+	}
+      }
+    } else if (this.text == null) {
+	return "";
     } else {
       return this.text.toString();
     }
