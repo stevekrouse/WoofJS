@@ -1535,7 +1535,7 @@
                         code: 'mySound.loop = "false"mySound.loop = "true"',
                         tags: "sound sounds audio loop"
 		    }, {
-                        description: "Speed: (use string or number value)",
+                        description: "Speed: (use string or number value between 0.5 and 2)",
                         code: '// Slow\nmySound.speed = "slow"\nmySound.speed = 0.5\n\n// Normal\nmySound.speed = "normal"\nmySound.speed = 1\n\n// Fast\nmySound.speed = "fast"\nmySound.speed = 2',
                         tags: "sound sounds audio speed"
                     }, {
@@ -1547,27 +1547,27 @@
                         html: "<hr style=\"height:7px;border:none;color:#e0e0e0;background-color:#e0e0e0;\"/>"
                     }, {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f58396b6b3679572e706e67",
-			description: "Stop this sound playing.",
-                        code: "mario.stopPlaying()",
+			html: "Stop this sound playing. If you <code>.startPlaying()</code> after this, it will start from the beginning.",
+                        code: "mySound.stopPlaying()",
                         tags: "pause music stop sounds audio"
 		    }, {
 			html: "Pause this sound. If you <code>.startPlaying()</code> after this, it will resume where it was paused.",
-			code: "mario.pausePlaying()",
+			code: "mySound.pausePlaying()",
 			tags: "pause music stop sounds audio"
 		    }, {
 			description: "The time (in seconds) that a sound is playing:",
-                        code: '// Get the current time of a sound\nmario.currentTime\n\n// Go back to the start of a sound\nmario.currentTime = 0',
+                        code: '// Get the current time of a sound\nmySound.currentTime\n\n// Go back to the start of a sound\nmySound.currentTime = 0',
                         tags: "sound sounds music audio time current"
 		    }, {
 			description: "The duration of a sound (in seconds):",
-                        code: 'mario.duration',
+                        code: 'mySound.duration',
                         tags: "sound sounds music audio time duration"
                     }, {
-                        code: "if (mario.neverPlayed()){\n /* then do stuff here */\n}",
+                        code: "if (mySound.neverPlayed()){\n /* then do stuff here */\n}",
                         html: "Use the <code>.neverPlayed()</code> function to check if your sound has been played before:",
                         tags: "sound play music played audio"
 		    }, {
-                        code: "if (mario.isPlaying){\n /* then do stuff here */\n}",
+                        code: "if (mySound.isPlaying){\n /* then do stuff here */\n}",
                         html: "Use the <code>.isPlaying</code> attribute to check if your sound is playing:",
                         tags: "sound play music played pause stop audio"
                     }, {

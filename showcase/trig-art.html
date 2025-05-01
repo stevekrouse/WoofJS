@@ -1,6 +1,5 @@
 <head>
-  <script src="../woof.js"></script>
-<!--  <script src="https://cdn.jsdelivr.net/gh/stevekrouse/WoofJS@df60020dd4f1827dd4e4b847bd31e725d1bf88cf/woof.js"></script> -->
+  <script src="https://cdn.jsdelivr.net/gh/stevekrouse/WoofJS@df60020dd4f1827dd4e4b847bd31e725d1bf88cf/woof.js"></script>
   <script>
 setBackdropColor('lightblue')
 
@@ -239,13 +238,20 @@ rotDisplayText.text = 'CCW  Speed  CW'
     var importString = prompt("Please input saved data")
     var lines = importString.split(";")
     numLines = lines.length-1
-    allRadius = []
-    allPeriod = []
-    lines.forEach(line => {
-      var hold = line.split(",")
-      allRadius.push(Number(hold[0]))
-      allPeriod.push(Number(hold[1]+0))
+    drawer.penUp()
+    range(0,numLines).forEach(i => { // range
+      var hold = lines[i].split(",")
+      if (i >= allLines.length) {
+        addLine()
+      }
+      allRadius[i] = Number(hold[0])
+      allPeriod[i] = Number(hold[1]+0)
     })
+    range(numLines,allLines.length).forEach(i => {
+      allLines[i].hide()
+    })
+    update()
+    drawer.penDown()
   })
 }
 
