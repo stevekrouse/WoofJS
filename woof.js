@@ -2155,36 +2155,24 @@ Woof.prototype.customSprite = function(subClass) {
   }
 }
 
-Woof.prototype.Repeat = function(times, func, after) {
-  this.func = func;
-  this.curTimes = 0;
-  this.times = Math.floor(times);
-  this.done = false;
-  
-  this.next = () => {
-    if (this.done){
-      return;
-    }
-    if (this.curTimes >= this.times){
-      this.done = true;
-      if (after) {
-        if (after.length) {
-	  after(this.curTimes);
-	} else {
-	  after();
-	}
-      }
-      return;
-    } else {
-      this.curTimes++;
-      if (this.func.length) {
-        this.func(this.curTimes);
-      } else {
-        this.func();
-      }
-    }
-  };
+Woof.prototype.Repeat = function (times, func, after) {
+  const count = Math.max(0, Math.floor(times));   // sanitise input
+  this.done   = false;
+  this.func   = func;
+
+  for (let idx = 0; idx < count; idx++) {
+    func.length ? func(idx) : func();            
+  }
+
+  if (typeof after === 'function') {
+    after.length ? after(count) : after();
+  }
+
+  //Mark finished and replace .next with a no op
+  this.done = true;
+  this.next = () => {};                           //no op
 };
+
   
 Woof.prototype.RepeatUntil = function(condition, func, after){
   // TODO if (typeof condition !== "string") { throw Error("You must give repeatUntil a string condition in quotes. You gave it: " + condition); }
