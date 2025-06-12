@@ -60,6 +60,7 @@
   <script src="./vendor/codemirror/lint.js"></script>
   <script src="./vendor/levenshtein.js"></script>
   <script src="./vendor/codemirror/scrollpastend.js"></script>
+  <script src="./run-code.js"></script>
   <link rel="stylesheet" href="./vendor/codemirror/3024-night.css">
   <link rel="stylesheet" href="./vendor/codemirror/ambiance.css">
   <link rel="stylesheet" href="./vendor/codemirror/base16-dark.css">
@@ -572,7 +573,7 @@
           <span style="margin-right:8px">
             <span style="display: none; font-family: monospace; font-size: 11px" :style="{display: status ? 'inline-block' : 'none'}">mouseX: {{mouseX}}</span>
             <span style="display: none; font-family: monospace; font-size: 11px" :style="{display: status ? 'inline-block' : 'none'}">mouseY: {{mouseY}}</span>
-            <img onclick="runCode(); focusPreview()" id="pop" style="margin: 2px; width: 17px; height:17px" src="./images/refresh.png" title="Reload">
+            <img onclick="createRunCode(); focusPreview()" id="pop" style="margin: 2px; width: 17px; height:17px" src="./images/refresh.png" title="Reload">
             <img  onclick="popout()" id="pop" style="margin: 2px; width: 17px; height:17px" src="./images/pop.png" title="Open in new tab">
             <img  @click="previewbar = !previewbar"  style="margin: 5px; width: 16px; height:18px; cursor:pointer" src="./images/minimize.png" title="Minimize">
           </span>
@@ -804,7 +805,7 @@
           }
           else {
             // Split error message by line break
-            var errorDesc = this.error.message.split("\n");
+	    var errorDesc = this.error.message.split("\n");
             // Display first line of error message
             // Remove 'unknown' from first line if it exists
             var t = errorDesc[0].split(" ");
@@ -1447,7 +1448,7 @@
 	  }
         }, 60000)
       });
-      // assume it's not autosaved, though the autosave function will overwrite if appropriate
+      // assume it is not autosaved, though the autosave function will overwrite if appropriate
       // (this needs to go outside of the .then because it needs to happen durring save()
       // so if this is an autosave, we can overwrite this value to true
       app.autoSaveStatus = false;
@@ -1587,8 +1588,6 @@
       }
     });
 
-
-
     onkeydown = function(e){
       if(e.ctrlKey && e.key == '/'){
         e.preventDefault();
@@ -1649,7 +1648,7 @@
         setTimeout(function() {WoofJSLint()}, 1000); 
       }
     });
-    runCode()
+    createRunCode()
 
     // focus on the preview when refreshed
      function focusPreview() {
@@ -1667,7 +1666,7 @@
     window.onbeforeunload = function(e) {
       if (app.status == "DIRTY") {
 	 // this isn't actually displayed to users - modern browsers don't allow this level of control
-	 //   I'm keeping this in because I'm a coward and don't want to change things
+	 //   I'm keeping this in because I'm a coward and do not want to change things
          var dialogText = 'Make sure to copy and paste your work somewhere safe.';
          e.returnValue = dialogText;
 
@@ -1684,102 +1683,66 @@
        }
     };
 
-    function tryRunningCode() {
-      app.code = editor.getValue()
-      app.error = undefined
-      for (var i = 0; i < editor.lineCount(); i++) {
-        editor.removeLineClass(i, 'text', 'error-highlight');
-      }
-      try {
-        var result = Babel.transform(editor.getValue(), {
-          presets: [['es2015', {'modules': false}]], // modules: false to remove strict mode
-          retainLines: true
-        })
-        var code = result.code
-        document.getElementById('preview').contentWindow.addEventListener("mousemove", function(event) {
-          app.mouseX = Math.round(document.getElementById('preview').contentWindow.mouseX)
-          if (app.mouseX >= Math.round(document.getElementById('preview').contentWindow.maxX - 2)) {
-            app.mouseX += " (maxX)"
-          }
-          if (app.mouseX <= Math.round(document.getElementById('preview').contentWindow.minX + 1)) {
-            app.mouseX += " (minX)"
-          }
-          app.mouseY = Math.round(document.getElementById('preview').contentWindow.mouseY)
-          if (app.mouseY >= Math.round(document.getElementById('preview').contentWindow.maxY - 1)) {
-            app.mouseY += " (maxY)"
-          }
-          if (app.mouseY <= Math.round(document.getElementById('preview').contentWindow.minY + 3)) {
-            app.mouseY += " (minY)"
-          }
-        })
-        document.getElementById('preview').contentWindow.addEventListener("error", function(event) {
-          var error = event.error
-          if (error.type == "ImageLoadError") {
-            if (error.url === "" || error.url === undefined || error.url === "undefined") {
-                var emptyURLTypes = ["setBackdropURL('')", 'setBackdropURL("")', 'setBackdropURL()', 'url: ""', "url: ''"]
-                var emptyURLType = emptyURLTypes.find(t => code.includes(t))
-                if (emptyURLType) {
-                  app.error = {message: "You forgot to include an image or background URL.", lineno: code.substring(0, code.indexOf(emptyURLType)).split('\n').length}
-                } else {
-                  // We can't figure out the lineno if it's set to an empty string variable
-                  // https://woofjs.com/create#image-url-issue
-                  app.error = {message: "You forgot to include an image or background URL.", lineno: null}
-                }
-              } else {
-              app.error = {message: "Your image URL (" + error.url +") is misspelled or not correct.", lineno: code.substring(0, code.indexOf(error.url)).split('\n').length}
-              }
-          }
-          else {
-            app.error = event
-          }
-          app.processError()
-          CodeMirror.commands.markGutter(editor, "error", app.error.lineno, app.error.message)
-        });
-        var script = document.createElement("script");
-        script.type = "text/javascript";
-        script.crossorigin = "anonymous"
-        script.text = code
-        document.getElementById('preview').contentDocument.body.appendChild(script)
-      }
-      catch (e) {
-        app.error = e
-        app.processError()
-      }
-    }
-
-    function runCode() {
-        
+    function createRunCode() {
+        app.error = undefined
+	for (var i = 0; i < editor.lineCount(); i++) {
+            editor.removeLineClass(i, 'text', 'error-highlight');
+	}
+	
+	// make the iframe that the project will run in, and attach event handlers
         document.getElementById("preview").remove();
         var iframe = document.createElement("iframe");
         iframe.id = "preview";
         document.getElementById("output").appendChild(iframe);
+	var iframeWindow = iframe.contentWindow
 
-        setTimeout(function() {
-
-            // add doctype to iframe
-            iframe.contentWindow.document.open();
-            iframe.contentWindow.document.write('<!DOCTYPE html>');
-            iframe.contentWindow.document.close();
-
-            // add a base tag to the page so it knows where to pull relative image urls
-            var base = iframe.contentWindow.document.createElement("base");
-            base.href = document.baseURI
-            iframe.contentWindow.document.body.appendChild(base);
-
-            // then we create a script tag with the woof code and add it to the page
-            var script = iframe.contentWindow.document.createElement("script");
-            script.type = "text/javascript";
-            script.src = "./woof.js";
-            iframe.contentWindow.document.body.appendChild(script);
-
-            script.onload = function() {
-		// when the woof.js library loads, run the user's code
-		var evt = document.createEvent('Event');
-                evt.initEvent('load', false, false);
-		iframe.contentWindow.dispatchEvent(evt);
-                tryRunningCode();
+	iframeWindow.addEventListener("mousemove", function(event) {
+            app.mouseX = Math.round(iframeWindow.mouseX)
+            if (app.mouseX >= Math.round(iframeWindow.maxX - 2)) {
+		app.mouseX += " (maxX)"
             }
-        }, 10)
+            if (app.mouseX <= Math.round(iframeWindow.minX + 1)) {
+		app.mouseX += " (minX)"
+            }
+            app.mouseY = Math.round(iframeWindow.mouseY)
+            if (app.mouseY >= Math.round(iframeWindow.maxY - 1)) {
+		app.mouseY += " (maxY)"
+            }
+            if (app.mouseY <= Math.round(iframeWindow.minY + 3)) {
+		app.mouseY += " (minY)"
+            }
+        })
+
+	iframeWindow.addEventListener("error", function(event) {
+            var error = event.error
+            if (error.type == "ImageLoadError") {
+		if (error.url === "" || error.url === undefined || error.url === "undefined") {
+                    var emptyURLTypes = ["setBackdropURL('')", 'setBackdropURL("")', 'setBackdropURL()', 'url: ""', "url: ''"]
+                    var emptyURLType = emptyURLTypes.find(t => code.includes(t))
+                    if (emptyURLType) {
+			app.error = {message: "You forgot to include an image or background URL.", lineno: code.substring(0, code.indexOf(emptyURLType)).split('\n').length}
+                    } else {
+			// We can't figure out the lineno if it's set to an empty string variable
+			// https://woofjs.com/create#image-url-issue
+			app.error = {message: "You forgot to include an image or background URL.", lineno: null}
+                    }
+		} else {
+		    app.error = {message: "Your image URL (" + error.url +") is misspelled or not correct.", lineno: code.substring(0, code.indexOf(error.url)).split('\n').length}
+		}
+            }
+            else {
+		app.error = event
+            }
+            app.processError()
+            CodeMirror.commands.markGutter(editor, "error", app.error.lineno, app.error.message)
+        });
+
+	// run the user code in the iframe document
+	runCode(iframe.contentWindow.document, editor.getValue(),
+		(e) => {
+		    app.error = e;
+		    app.processError()
+		})
     }
     
     window.onmessage = function(e){
@@ -1856,8 +1819,8 @@
         if (callNow) func.apply(context, args);
       };
     };
-    // helper function to prevent runCode from running too often
-    var debouncedRunCode = debounce(runCode, 1000, false);
+    // helper function to prevent createRunCode from running too often
+    var debouncedRunCode = debounce(createRunCode, 1000, false);
 
     // function to autosave
     function autoSaveCheck() {

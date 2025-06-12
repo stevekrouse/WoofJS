@@ -3,7 +3,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <script src="https://www.gstatic.com/firebasejs/3.4.0/firebase.js"></script>
 <script data-presets="es2017" src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.14.0/babel.min.js"></script>
-<script type="text/javascript" src="./woof.js"></script>
+<script type="text/javascript" src="./run-code.js"></script>
 <script>
 
   var config = {
@@ -46,13 +46,10 @@
   
   firebase.database().ref('/code/' + getID()).once('value').then(function(snapshot) {
     if (snapshot.val()){
-      document.title = getID()
-      var c = Babel.transform(getCurrentRevisionCode(snapshot.val()), { presets: ['es2015'] }).code
-      c = c.replace("'use strict';", '')
-      var script = document.createElement( "script" );
-      script.type = "text/javascript";
-      script.text = c
-      document.body.appendChild(script)
+	document.title = getID()
+	runCode(document, getCurrentRevisionCode(snapshot.val()), (e) => {
+	    console.error(e)
+	})
     } else {
       alert("There's no project called '" + getID() + "'. Sorry :(")
     }

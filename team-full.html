@@ -4,7 +4,7 @@
 <script src="https://www.gstatic.com/firebasejs/3.4.0/firebase.js"></script>
 <script src="https://cdn.firebase.com/libs/firepad/1.4.0/firepad.min.js"></script>
 <script data-presets="es2017" src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.14.0/babel.min.js"></script>
-<script type="text/javascript" src="./woof.js"></script>
+<script type="text/javascript" src="./run-code.js"></script>
 <script>
 
   var config = {
@@ -35,12 +35,7 @@
     if (text == ""){
       alert("There's no project called '" + getID() + "'. Sorry :(")
     } else {
-      var c = Babel.transform(text, { presets: ['es2015'] }).code
-      c = c.replace("'use strict';", '')
-      var script = document.createElement( "script" );
-      script.type = "text/javascript";
-      script.text = c
-      document.body.appendChild(script)
+      runCode(document, text, (e) => console.error(e))
     }
   });
 
