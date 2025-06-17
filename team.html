@@ -46,6 +46,7 @@
   <script type="text/javascript" src="./vendor/codemirror/comment.js"></script>
   <script type="text/javascript" src="./vendor/codemirror/sublime.js"></script>
   <script type="text/javascript" src="./vendor/codemirror/foldcode.js"></script>
+  <script type="text/javascript" src="./run-code.js"></script>
   <link rel="stylesheet" href="./vendor/codemirror/foldgutter.css" />
   <script src="./vendor/codemirror/foldcode.js"></script>
   <script src="./vendor/codemirror/foldgutter.js"></script>
@@ -276,7 +277,7 @@
           <span style="margin-right:8px">
             <span style="display: none; font-family: monospace; font-size: 11px" :style="{display: status ? 'inline-block' : 'none'}">mouseX: {{mouseX}}</span>
             <span style="display: none; font-family: monospace; font-size: 11px" :style="{display: status ? 'inline-block' : 'none'}">mouseY: {{mouseY}}</span>
-            <img onclick="runCode(); focusPreview()" id="pop" style="margin: 2px; width: 17px; height:17px" src="./images/refresh.png" title="Reload">
+            <img onclick="teamRunCode(); focusPreview()" id="pop" style="margin: 2px; width: 17px; height:17px" src="./images/refresh.png" title="Reload">
             <img  onclick="popout()" id="pop" style="margin: 2px; width: 17px; height:17px" src="./images/pop.png" title="Open in new tab">
             <img  @click="previewbar = !previewbar"  style="margin: 5px; width: 16px; height:18px; cursor:pointer" src="./images/minimize.png" title="Minimize">
           </span>
@@ -696,7 +697,7 @@
       debouncedRunCode()
       setTimeout(function() {WoofJSLint()}, 1000); 
     });
-    runCode()
+    teamRunCode()
     
     // focus on the preview when refreshed
      function focusPreview() {
@@ -720,37 +721,33 @@
        }		
     };
     
-    
-    
-    function tryRunningCode() {
-      app.code = editor.getValue()
-      app.error = undefined
-    
-      try {
-        var result = Babel.transform(editor.getValue(), {
-          presets: [['es2015', {'modules': false}]], // modules: false to remove strict mode
-          retainLines: true
-        })
-        var code = result.code
-        try {
-          document.getElementById('preview').contentWindow.addEventListener("mousemove", function(event) {
-            app.mouseX = Math.round(document.getElementById('preview').contentWindow.mouseX)
-            if (app.mouseX >= Math.round(document.getElementById('preview').contentWindow.maxX - 2)) {
+    function teamRunCode() {
+        app.error = undefined
+        document.getElementById("preview").remove();
+        var iframe = document.createElement("iframe");
+        iframe.id = "preview";
+        document.getElementById("output").appendChild(iframe);
+
+	var iframeWindow = iframe.contentWindow
+
+        iframeWindow.addEventListener("mousemove", function(event) {
+            app.mouseX = Math.round(iframeWindow.mouseX)
+            if (app.mouseX >= Math.round(iframeWindow.maxX - 2)) {
               app.mouseX += " (maxX)"
             }
-            if (app.mouseX <= Math.round(document.getElementById('preview').contentWindow.minX + 1)) {
+            if (app.mouseX <= Math.round(iframeWindow.minX + 1)) {
               app.mouseX += " (minX)"
             }
             
-            app.mouseY = Math.round(document.getElementById('preview').contentWindow.mouseY)
-            if (app.mouseY >= Math.round(document.getElementById('preview').contentWindow.maxY - 1)) {
+            app.mouseY = Math.round(iframeWindow.mouseY)
+            if (app.mouseY >= Math.round(iframeWindow.maxY - 1)) {
               app.mouseY += " (maxY)"
             }
-            if (app.mouseY <= Math.round(document.getElementById('preview').contentWindow.minY + 3)) {
+            if (app.mouseY <= Math.round(iframeWindow.minY + 3)) {
               app.mouseY += " (minY)"
             }
-          })
-          document.getElementById('preview').contentWindow.addEventListener("error", function(event) {
+        })
+        iframeWindow.addEventListener("error", function(event) {
             var error = event.error
             app.seenError = false
             if (error.type == "ImageLoadError") {
@@ -759,57 +756,13 @@
               app.error = event
             }
             
-          });
-          var script = document.createElement("script");
-          script.type = "text/javascript";
-          script.crossorigin = "anonymous"
-          script.text = code
-          document.getElementById('preview').contentDocument.body.appendChild(script)
-        }
-        catch (e) {
-          app.seenError = false
-          app.error = e;
-        }
-      }
-      catch (e) {
-        app.seenError = false
-        app.error = e
-      }
-    }
-    
-    function runCode() {
-        
-        document.getElementById("preview").remove();
-        var iframe = document.createElement("iframe");
-        iframe.id = "preview";
-        document.getElementById("output").appendChild(iframe);
-        
-        setTimeout(function() {
-        
-            // add doctype to iframe
-            iframe.contentWindow.document.open();
-            iframe.contentWindow.document.write('<!DOCTYPE html>');
-            iframe.contentWindow.document.close();
-            
-            // add a base tag to the page so it knows where to pull relative image urls
-            var base = iframe.contentWindow.document.createElement("base");
-            base.href = document.baseURI
-            iframe.contentWindow.document.body.appendChild(base);
-          
-            // then we create a script tag with the woof code and add it to the page
-            var script = iframe.contentWindow.document.createElement("script");
-            script.type = "text/javascript";
-            script.src = "./woof.js";
-            iframe.contentWindow.document.body.appendChild(script);
-            
-            script.onload = function() {
-                // when the woof.js library loads, run the user's code
-                var evt = document.createEvent('Event');  
-                evt.initEvent('load', false, false);  
-                iframe.contentWindow.dispatchEvent(evt);
-                tryRunningCode();
-            }
-        }, 10)
+        });
+  
+        runCode(iframe.contentWindow.document, editor.getValue(),
+                (e) => {
+                    app.seenError = false;
+                    app.error = e
+               })
     }
     
     function debounce(func, wait, immediate) {
@@ -826,8 +779,8 @@
     		if (callNow) func.apply(context, args);
     	};
     };
-    // helper function to prevent runCode from running too often
-    var debouncedRunCode = debounce(runCode, 1000, false)
+    // helper function to prevent teamRunCode from running too often
+    var debouncedRunCode = debounce(teamRunCode, 1000, false)
 
   </script>
   <script>
