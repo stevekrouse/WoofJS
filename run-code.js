@@ -1,11 +1,67 @@
+// a helper function that uses esprima to insert break conditions into
+//   loops to prevent infinite/too long loops from hanging the page
+//   heavily cribbed from https://github.com/codepen/InfiniteLoopBuster
+function loopBuster(code) {
+  var LOOP_CHECK = 'if (_shouldThrowError(%d)){break;}';
+
+  var loopId = 1;
+  var patches = [];
+
+  esprima.parse(code, {
+    range: true,
+    tolerant: false,
+    sourceType: "script",
+    jsx: true,
+    loc: true
+  }, function (node) {
+    switch (node.type) {
+    case 'DoWhileStatement':
+    case 'ForStatement':
+    case 'ForInStatement':
+    case 'ForOfStatement':
+    case 'WhileStatement':
+      var start = 1 + node.body.range[0];
+      var end = node.body.range[1];
+      var prolog = LOOP_CHECK.replace('%d', loopId + ", " + node.loc.start.line);
+      var epilog = '';
+
+      if (node.body.type !== 'BlockStatement') {
+        // `while(1) doThat()` becomes `while(1) {doThat()}`
+        prolog = '{' + prolog;
+        epilog = '}';
+        --start;
+      }
+
+      patches.push({ pos: start, str: prolog });
+      patches.push({ pos: end, str: epilog });
+      ++loopId;
+      break;
+
+    default:
+      break;
+    }
+  });
+
+  patches.sort(function (a, b) {
+    return b.pos - a.pos;
+  }).forEach(function (patch) {
+    code = code.slice(0, patch.pos) + patch.str + code.slice(patch.pos);
+  });
+
+  return code;
+}
+
 // this is a helper function that should only be called by runCode
 function tryRunningCode(doc, codeValue, errorCallback) {
     try {
+	// transform code into backwards compatable format
         var result = Babel.transform(codeValue, {
             presets: [['es2015', {'modules': false}]], // modules: false to remove strict mode
             retainLines: true
         })
-        var code = result.code
+	// take the result and loop-buster it
+        var code = loopBuster(result.code)
+	
 	var script = doc.createElement("script");
 	script.type = "text/javascript";
 	script.crossorigin = "anonymous";
@@ -26,6 +82,13 @@ function tryRunningCode(doc, codeValue, errorCallback) {
 // this is the main function that should be used
 //
 // this runs the user's code in the provided document
+//
+// Prerequisites:
+//   This uses babel for initial parsing (possibly unnecessary),
+//     and esprima to prevent infinite loops from hanging the page
+//   HTML pages that import this should also have the following imports:
+//     <script data-presets="es2015" src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.14.0/babel.min.js"></script>
+//     <script src="https://unpkg.com/esprima@~3.1/dist/esprima.js"></script>
 //
 // Parameters:
 // doc - an HTML document that code should be run in.

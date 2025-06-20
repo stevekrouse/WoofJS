@@ -564,6 +564,48 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
     });
     thisContext._repeats = thisContext._repeats.filter(repeat => {return !repeat.done});
   };
+
+  // this is the logic for preventing infinite loops from hanging the whole page (which prevents saving, etc)
+  //   this is re-implementing https://github.com/codepen/InfiniteLoopBuster/blob/master/stopExecutionOnTimeout.js
+  //   in here to allow users to modify parameters if they do want a loop to run for a long time
+
+  // how long (in ms)  of a grace period we give at the start of running (to allow for loading)
+  thisContext._START_MONITORING_LOOPS = 2000
+  // how long (in ms) we are allowed to be in a loop before throwing an error
+  thisContext._MAX_LOOP_TIME = 2000
+
+  thisContext._loopTimers = {}
+  // the low level function that tracks each loop
+  thisContext._shouldStopLoop = (ind) => {
+    let now = new Date() - thisContext.woofEpoch;
+
+    // if Woof has not been running for long, let the loop continue
+    if (now < thisContext._START_MONITORING_LOOPS) {
+      return false;
+    }
+
+    // the first time we encounter a loop, note the time
+    if (!(ind in thisContext._loopTimers)) {
+      thisContext._loopTimers[ind] = now;
+      return false;
+    }
+
+    // if we encounter it later, if it has been running for too long, it should stop
+    if (now - thisContext._loopTimers[ind] >= thisContext._MAX_LOOP_TIME) {
+	return true;
+    }
+
+    return false;
+  }
+    
+  // the high level function that is given a loopID and throws an error if needed
+  thisContext._shouldThrowError = (ind, lineNo) => {
+    var shouldStop = thisContext._shouldStopLoop(ind);
+    if (shouldStop) {
+      throw new TypeError("A loop ran for too long", "woof.js", lineNo)
+    }
+    return shouldStop;
+  }
     
   // thisContext._afters isn't read from as of commit 967, and only contains the IDs returned by setTimeout()
   // These IDs could conceivably be used by clearTimeout() to cancel things in the future,
@@ -606,13 +648,16 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
     };
 
     thisContext._render = () => {
-    thisContext._runRepeats(); // we need to run the repeats even if stopped because the defrost() code likely lives in a repeat
-    thisContext._calculateMouseSpeed();
-    thisContext.renderInterval = window.requestAnimationFrame(thisContext._render); // WARNING this line makes render recursive. Only call is once and it will continue to call itself ~60fps.
-    if (thisContext.stopped) { return; }
-    thisContext._renderSprites();
-  };
-  thisContext.ready(thisContext._render);
+      // reset "fast" loop timers (we only have an issue if they take too long within one frame)
+      thisContext._loopTimers = {}
+      // we need to run the repeats even if stopped because the defrost() code likely lives in a repeat
+      thisContext._runRepeats();
+      thisContext._calculateMouseSpeed();
+      thisContext.renderInterval = window.requestAnimationFrame(thisContext._render); // WARNING this line makes render recursive. Only call is once and it will continue to call itself ~60fps.
+      if (thisContext.stopped) { return; }
+      thisContext._renderSprites();
+    };
+    thisContext.ready(thisContext._render);
   
   thisContext.collider = () => {
     return new SAT.Polygon(new SAT.Vector(), [
