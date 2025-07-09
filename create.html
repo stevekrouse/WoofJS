@@ -775,11 +775,12 @@
           this.suggestions = []
           this.errorMessage = []
           this.renameSprite = false
+          let lineNum = -1; // for extracting line number from messages (initially added for loop busting)
           // Remove error line highlight
           if (this.errorLineNumber) {
             editor.removeLineClass(this.errorLineNumber - 1, 'text', 'error-highlight');
           }
-          if (this.error.message.includes("Uncaught ReferenceError") || this.error.message.includes("Uncaught TypeError")) {
+            if (this.error.message.includes("Uncaught ReferenceError") || (this.error.message.includes("Uncaught TypeError") && (!this.error.message.includes('A loop ran for too long')))) {
             // Remove 'Uncaught..' from error message
             this.errorMessage = this.error.message.split(" ").slice(2).join(" ");
             // If error message is 'VAR not defined', ask user to rename VAR
@@ -804,7 +805,14 @@
               }
             }
           }
-	  else {
+	  else if (this.error.message.includes('A loop ran for too long')) {
+	    var errorDesc = this.error.message.split("\n");
+	    if (errorDesc[0].includes("Uncaught TypeError:")) {
+	      errorDesc[0] = errorDesc[0].substr(20)
+	      lineNum = parseInt(errorDesc[1])
+	    }
+	    this.errorMessage = errorDesc[0];
+	  } else {
             // Split error message by line break
 	    var errorDesc = this.error.message.split("\n");
             // Display first line of error message
@@ -818,11 +826,14 @@
             }
           }
           // Show error line number if it is accurate
-          if (this.error.lineno <= editor.lineCount()) {
+          if (this.error.lineno <= editor.lineCount() && lineNum == -1) {
             this.errorLineNumber = this.error.lineno;
             // Add highlight to error line
             editor.addLineClass(this.errorLineNumber - 1, 'text', 'error-highlight');
-          } else {
+	  } else if (lineNum != -1) {
+	    this.errorLineNumber = lineNum;
+	    editor.addLineClass(this.errorLineNumber - 1, 'text', 'error-highlight');
+	  } else {
             this.errorLineNumber = undefined
           }
         },

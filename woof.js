@@ -602,7 +602,7 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
   thisContext._shouldThrowError = (ind, lineNo) => {
     var shouldStop = thisContext._shouldStopLoop(ind);
     if (shouldStop) {
-      throw new TypeError("A loop ran for too long", "woof.js", lineNo)
+	throw new TypeError("A loop ran for too long\n" + lineNo)
     }
     return shouldStop;
   }
