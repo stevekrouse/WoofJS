@@ -1,66 +1,65 @@
-// a helper function that uses esprima to insert break conditions into
-//   loops to prevent infinite/too long loops from hanging the page
-//   heavily cribbed from https://github.com/codepen/InfiniteLoopBuster
-function loopBuster(code) {
-  var LOOP_CHECK = 'if (_shouldThrowError(%d)){break;}';
-
-  var loopId = 1;
-  var patches = [];
-
-  esprima.parse(code, {
-    range: true,
-    tolerant: false,
-    sourceType: "script",
-    jsx: true,
-    loc: true
-  }, function (node) {
-    switch (node.type) {
-    case 'DoWhileStatement':
-    case 'ForStatement':
-    case 'ForInStatement':
-    case 'ForOfStatement':
-    case 'WhileStatement':
-      var start = 1 + node.body.range[0];
-      var end = node.body.range[1];
-      var prolog = LOOP_CHECK.replace('%d', loopId + ", " + node.loc.start.line);
-      var epilog = '';
-
-      if (node.body.type !== 'BlockStatement') {
-        // `while(1) doThat()` becomes `while(1) {doThat()}`
-        prolog = '{' + prolog;
-        epilog = '}';
-        --start;
-      }
-
-      patches.push({ pos: start, str: prolog });
-      patches.push({ pos: end, str: epilog });
-      ++loopId;
-      break;
-
-    default:
-      break;
-    }
-  });
-
-  patches.sort(function (a, b) {
-    return b.pos - a.pos;
-  }).forEach(function (patch) {
-    code = code.slice(0, patch.pos) + patch.str + code.slice(patch.pos);
-  });
-
-  return code;
+// this builds a babel plugin that will inject break statements into loops
+//   to prevent them from running for too long. Inspired by:
+//   https://github.com/codepen/InfiniteLoopBuster
+function buildBreakCheck(loopID, lineNum, t) {
+  return t.ifStatement(
+    t.callExpression(
+      t.identifier('_shouldThrowError'),
+      [
+        t.numericLiteral(loopID), 
+        t.numericLiteral(lineNum)
+      ]
+    ),
+    t.blockStatement([
+      t.breakStatement()
+    ])
+  );
 }
+
+let loopIdCounter = 1;
+
+function inject(path, t) {
+  // this if statement seems necessary when parsing classes(?)
+  if (!path.node.loc) {
+    return
+  }
+  const { line } = path.node.loc.start;
+
+  const body = path.node.body;
+  if (!t.isBlockStatement(body)) {
+      path.node.body = t.blockStatement([buildBreakCheck(loopIdCounter, line, t), body]);
+  } else {
+      body.body.unshift(buildBreakCheck(loopIdCounter, line, t));
+  }
+  loopIdCounter++;   
+}
+
+const injectLoopBreakerPlugin = ({types: t}) => ({
+  visitor: {
+    ForStatement(path) {
+	inject(path, t);
+    },
+    WhileStatement(path) {
+	inject(path, t);
+    },
+    ForInStatement(path) {
+	inject(path, t);
+    },
+    ForOfStatement(path) {
+	inject(path, t);
+    },
+  },
+});
 
 // this is a helper function that should only be called by runCode
 function tryRunningCode(doc, codeValue, errorCallback) {
     try {
-	// transform code into backwards compatable format
+	// loop-bust the code (this used to do backwards compatibility as well)
         var result = Babel.transform(codeValue, {
-            presets: [['es2015', {'modules': false}]], // modules: false to remove strict mode
-            retainLines: true
+	    plugins: [injectLoopBreakerPlugin],
+            retainLines: true,
         })
-	// take the result and loop-buster it
-        var code = loopBuster(result.code)
+        var code = result.code;
 	
 	var script = doc.createElement("script");
 	script.type = "text/javascript";
@@ -84,11 +83,9 @@ function tryRunningCode(doc, codeValue, errorCallback) {
 // this runs the user's code in the provided document
 //
 // Prerequisites:
-//   This uses babel for initial parsing (possibly unnecessary),
-//     and esprima to prevent infinite loops from hanging the page
-//   HTML pages that import this should also have the following imports:
-//     <script data-presets="es2015" src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.14.0/babel.min.js"></script>
-//     <script src="https://unpkg.com/esprima@~3.1/dist/esprima.js"></script>
+//   This uses babel for parsing and busting infinite loops
+//   HTML pages that import this should also import:
+//   <script src="https://unpkg.com/@babel/standalone@7.21.4/babel.min.js"></script>
 //
 // Parameters:
 // doc - an HTML document that code should be run in.
@@ -97,6 +94,12 @@ function tryRunningCode(doc, codeValue, errorCallback) {
 // codeValue - a string containing all the user code to run.
 // errorCallback - a function that will handle errors
 //
+// Properties:
+// The code provided in codeValue will be attached to doc to be run.
+//   There may be some modifications that do not effect the code for compatibility purposes
+//   Any For/While loops will have an extra conditional inserted at the beginning of the
+//     body of the loop to check for a long-running loop, which will break with an error
+//     in order to avoid the page hanging, which can result in the inability to save work
 // If codeValue is improperly formatted, codeValue will not be attached to doc,
 //   and the errorCallback will be called with the Error event.
 // This is not the only way the user's code can create errors! "Run-time" errors are not
