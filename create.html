@@ -779,7 +779,7 @@
           if (this.errorLineNumber) {
             editor.removeLineClass(this.errorLineNumber - 1, 'text', 'error-highlight');
           }
-            if (this.error.message.includes("Uncaught ReferenceError") || (this.error.message.includes("Uncaught TypeError") && (!this.error.message.includes('A loop ran for too long')))) {
+          if (this.error.message.includes("Uncaught ReferenceError") || (this.error.message.includes("Uncaught TypeError") && (!this.error.message.includes('A loop ran for too long')))) {
             // Remove 'Uncaught..' from error message
             this.errorMessage = this.error.message.split(" ").slice(2).join(" ");
             // If error message is 'VAR not defined', ask user to rename VAR

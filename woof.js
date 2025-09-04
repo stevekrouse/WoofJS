@@ -635,29 +635,29 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
     [thisContext.pMouseX, thisContext.pMouseY] = [thisContext.mouseX, thisContext.mouseY];
   };
 
-   // The timer begins when Woof is loaded
-   thisContext.woofEpoch = new Date();
-   thisContext.timer = function(){
-        if (arguments.length > 0) { throw new TypeError("timer() requires no inputs."  ); }
-        let date = new Date();
-        return ( date - thisContext.woofEpoch ) / 1000;
-    };
-    thisContext.resetTimer = function(){
-        if (arguments.length > 0) { throw new TypeError("resetTimer() requires no inputs."); }
-        thisContext.woofEpoch = new Date();
-    };
+  // The timer begins when Woof is loaded
+  thisContext.woofEpoch = new Date();
+  thisContext.timer = function(){
+    if (arguments.length > 0) { throw new TypeError("timer() requires no inputs."  ); }
+    let date = new Date();
+    return ( date - thisContext.woofEpoch ) / 1000;
+  };
+  thisContext.resetTimer = function(){
+    if (arguments.length > 0) { throw new TypeError("resetTimer() requires no inputs."); }
+    thisContext.woofEpoch = new Date();
+  };
 
-    thisContext._render = () => {
-      // reset "fast" loop timers (we only have an issue if they take too long within one frame)
-      thisContext._loopTimers = {}
-      // we need to run the repeats even if stopped because the defrost() code likely lives in a repeat
-      thisContext._runRepeats();
-      thisContext._calculateMouseSpeed();
-      thisContext.renderInterval = window.requestAnimationFrame(thisContext._render); // WARNING this line makes render recursive. Only call is once and it will continue to call itself ~60fps.
-      if (thisContext.stopped) { return; }
-      thisContext._renderSprites();
-    };
-    thisContext.ready(thisContext._render);
+  thisContext._render = () => {
+    // reset "fast" loop timers (we only have an issue if they take too long within one frame)
+    thisContext._loopTimers = {}
+    // we need to run the repeats even if stopped because the defrost() code likely lives in a repeat
+    thisContext._runRepeats();
+    thisContext._calculateMouseSpeed();
+    thisContext.renderInterval = window.requestAnimationFrame(thisContext._render); // WARNING this line makes render recursive. Only call is once and it will continue to call itself ~60fps.
+    if (thisContext.stopped) { return; }
+    thisContext._renderSprites();
+  };
+  thisContext.ready(thisContext._render);
   
   thisContext.collider = () => {
     return new SAT.Polygon(new SAT.Vector(), [
