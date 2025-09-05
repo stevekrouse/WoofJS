@@ -1382,14 +1382,13 @@
                         tags: "repeat times control for index"
                     }, {
                         html: "When you use <code>repeat()</code>, your code doesn't repeat as fast as the computer can run it.\
-                        Instead, we slow it down, which makes things like animation and motion work well. But, if you want your code to repeat instantly,\
-                        as fast as the computer can do it, you can combine the <code>range()</code> function with the <code>forEach()</code> function:\
-                        <br><br>Example: Repeat your code instantly 10 times, starting <code>counter</code> at 0 and going up by one each repetition, stopping before it gets to 10:",
+                               It runs slower, which makes things like animation and motion work well.\
+	                       <br><br>If you want your code to repeat as fast as the computer can do it,\
+			       you can combine the <code>range()</code> function with the <code>forEach()</code> function:",
                         code: "range(0, 10).forEach(counter => {\n  \/* something to repeat */\n})",
                         tags: "repeat range array forEach control for index"
                     }, {
-                        html: "If you are familiar with <code>for</code> loops, you might realize that this does the same thing.\
-                        We recommend using <code>range().forEach()</code> instead of <code>for</code>."
+	                html: "If you want more control when repeating quickly, you can look up how to use <code>for</code> or <code>while</code> loops."
                     }, {
                         url: "./images/68747470733a2f2f692e696d6775722e636f6d2f675a4f6a4c444d2e706e67",
                         code: 'forever(() => {\n  \/* do stuff here */\n})',

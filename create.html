@@ -73,7 +73,7 @@
   <link rel="stylesheet" href="./vendor/codemirror/midnight.css">
   <link rel="stylesheet" href="./vendor/codemirror/monokai.css">
   <script src="https://unpkg.com/vue@2.0.1/dist/vue.js"></script>
-  <script data-presets="es2015" src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.14.0/babel.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.21.4/babel.min.js"></script>
   <script src="https://rawcdn.githack.com/beautify-web/js-beautify/1b52eb1f90daaefa6ff0fa7736f97fbfc58093c1/js/lib/beautify.js"></script>
   <style>
 
@@ -774,11 +774,12 @@
           this.suggestions = []
           this.errorMessage = []
           this.renameSprite = false
+          let lineNum = -1; // for extracting line number from messages (initially added for loop busting)
           // Remove error line highlight
           if (this.errorLineNumber) {
             editor.removeLineClass(this.errorLineNumber - 1, 'text', 'error-highlight');
           }
-          if (this.error.message.includes("Uncaught ReferenceError") || this.error.message.includes("Uncaught TypeError")) {
+            if (this.error.message.includes("Uncaught ReferenceError") || (this.error.message.includes("Uncaught TypeError") && (!this.error.message.includes('A loop ran for too long')))) {
             // Remove 'Uncaught..' from error message
             this.errorMessage = this.error.message.split(" ").slice(2).join(" ");
             // If error message is 'VAR not defined', ask user to rename VAR
@@ -803,7 +804,14 @@
               }
             }
           }
-          else {
+	  else if (this.error.message.includes('A loop ran for too long')) {
+	    var errorDesc = this.error.message.split("\n");
+	    if (errorDesc[0].includes("Uncaught TypeError:")) {
+	      errorDesc[0] = errorDesc[0].substr(20)
+	      lineNum = parseInt(errorDesc[1])
+	    }
+	    this.errorMessage = errorDesc[0];
+	  } else {
             // Split error message by line break
 	    var errorDesc = this.error.message.split("\n");
             // Display first line of error message
@@ -817,11 +825,14 @@
             }
           }
           // Show error line number if it is accurate
-          if (this.error.lineno <= editor.lineCount()) {
+          if (this.error.lineno <= editor.lineCount() && lineNum == -1) {
             this.errorLineNumber = this.error.lineno;
             // Add highlight to error line
             editor.addLineClass(this.errorLineNumber - 1, 'text', 'error-highlight');
-          } else {
+	  } else if (lineNum != -1) {
+	    this.errorLineNumber = lineNum;
+	    editor.addLineClass(this.errorLineNumber - 1, 'text', 'error-highlight');
+	  } else {
             this.errorLineNumber = undefined
           }
         },
@@ -1734,7 +1745,8 @@
 		app.error = event
             }
             app.processError()
-            CodeMirror.commands.markGutter(editor, "error", app.error.lineno, app.error.message)
+	    CodeMirror.commands.markGutter(editor, "error", app.error.lineno, app.error.message)
+	    event.preventDefault();
         });
 
 	// run the user code in the iframe document
