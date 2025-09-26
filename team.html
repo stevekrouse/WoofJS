@@ -418,6 +418,7 @@
           }
         },
         cleanAll: function(){
+	  // this is not called currently, but left in just in case
           var beautiful = js_beautify(editor.getValue(), {space_after_anon_function: true, indent_size: 2, indent_with_tabs: false })
           editor.setValue(beautiful)
         },
@@ -594,6 +595,9 @@
     var ctrl = mac ? "Cmd-" : "Ctrl-";
     var keymap = {}
     keymap[ctrl + "B"] = function(cm) {
+      if (cm.getSelection() == "") {
+        cm.execCommand("selectAll")
+      }
       var beautiful = js_beautify(cm.getSelection(), {space_after_anon_function: true, indent_size: 2, indent_with_tabs: false })
       cm.replaceSelection(beautiful)
     }
