@@ -382,8 +382,8 @@
             <li><a @click="find()"><span class="fa fa-search"></span> Find <span><kbd>{{shortcut}}</kbd>+<kbd>F</kbd></span></a></li>
             <li><a @click="replace()"><span class="fa fa-search-plus"></span> Replace <span><kbd>{{shortcut}}</kbd>+<kbd>H</kbd></span></a></li>
             <li role="separator" class="divider"></li>
-            <li><a @click="cleanAll()" :style="{display: canClean ? 'block' : 'none'}"><span class="glyphicon glyphicon-align-left"></span> Clean Code <span><kbd>{{shortcut}}</kbd>+<kbd>B</kbd></span></a></li>
-            <li class='disabled'><a @click="cleanAll()"  :style="{display: canClean ? 'none' : 'block'}" data-toggle="popover" data-trigger="hover" data-content="You can't clean when there's an error." data-placement="top"><span class="glyphicon glyphicon-align-left"></span> Clean Code <span><kbd>{{shortcut}}</kbd>+<kbd>B</kbd></span></a></li>
+            <li><a @click="cleanCode()" :style="{display: canClean ? 'block' : 'none'}"><span class="glyphicon glyphicon-align-left"></span> Clean Code <span><kbd>{{shortcut}}</kbd>+<kbd>B</kbd></span></a></li>
+            <li class='disabled'><a @click="cleanCode()"  :style="{display: canClean ? 'none' : 'block'}" data-toggle="popover" data-trigger="hover" data-content="You can't clean when there's an error." data-placement="top"><span class="glyphicon glyphicon-align-left"></span> Clean Code <span><kbd>{{shortcut}}</kbd>+<kbd>B</kbd></span></a></li>
             <li><a @click="comment()"><span class="fa fa-code"></span> Comment Code <span><kbd>{{shortcut}}</kbd>+<kbd>/</kbd></span></a></li>
             <li role="separator" class="divider"></li>
             <li><a><input onclick="autoRunClicked()" type="checkbox" id="checkbox" v-model="autoRunChecked"></span> Auto Run</a></li>
@@ -779,7 +779,7 @@
           if (this.errorLineNumber) {
             editor.removeLineClass(this.errorLineNumber - 1, 'text', 'error-highlight');
           }
-            if (this.error.message.includes("Uncaught ReferenceError") || (this.error.message.includes("Uncaught TypeError") && (!this.error.message.includes('A loop ran for too long')))) {
+          if (this.error.message.includes("Uncaught ReferenceError") || (this.error.message.includes("Uncaught TypeError") && (!this.error.message.includes('A loop ran for too long')))) {
             // Remove 'Uncaught..' from error message
             this.errorMessage = this.error.message.split(" ").slice(2).join(" ");
             // If error message is 'VAR not defined', ask user to rename VAR
@@ -856,11 +856,14 @@
         goToErrorLine: function() {
           editor.scrollIntoView({line: this.errorLineNumber, ch:0}, editor.getScrollInfo().clientHeight / 2);
         },
-        cleanAll: function(){
-          if (!this.error && this.code != js_beautify(this.code, {space_after_anon_function: true, indent_size: 2, indent_with_tabs: false })){
-            var beautiful = js_beautify(editor.getValue(), {space_after_anon_function: true, indent_size: 2, indent_with_tabs: false })
-            editor.setValue(beautiful)
-          }
+        cleanCode: function(){
+	  if (!this.error) {
+	    if (editor.getSelection() == ""){
+	      editor.execCommand("selectAll");
+	    }
+	    var beautiful = js_beautify(editor.getSelection(), {space_after_anon_function: true, indent_size: 2, indent_with_tabs: false })
+	    editor.replaceSelection(beautiful)
+	  }
         },
         share: function(){
           $('#shareModal').modal('show')
@@ -1539,11 +1542,7 @@
     var ctrl = mac ? "Cmd-" : "Ctrl-";
     var keymap = {}
     keymap[ctrl + "B"] = function(cm) {
-       if (cm.getSelection() == ""){
-        cm.execCommand("selectAll");
-       }
-      var beautiful = js_beautify(cm.getSelection(), {space_after_anon_function: true, indent_size: 2, indent_with_tabs: false })
-      cm.replaceSelection(beautiful)
+      app.cleanCode()
     }
     keymap.Tab = function(cm) {
       if (cm.somethingSelected()) {
