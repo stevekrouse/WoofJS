@@ -680,14 +680,16 @@
   </div>
   <script>
 
-    var getID = function() {
-      // returns the name of a project, not including the current revision
-      return window.location.hash.substring(1, window.location.hash.length).split("/")[0];
-    }
     var getIDWithRevision = function() {
       // returns the name of a project, inlcuding the current revision
-      return window.location.hash.substring(1, window.location.hash.length);
+      return decodeURI(window.location.hash.substring(1, window.location.hash.length));
     }
+	  
+    var getID = function() {
+      // returns the name of a project, not including the current revision
+      return getIDWithRevision().split("/")[0];
+    }
+
     var currentHash = window.location.hash
 
     var app = new Vue({
