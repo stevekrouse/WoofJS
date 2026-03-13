@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html style="height:100%">
+<html>
 <head>
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:url" content="http://woofjs.com/create">
@@ -301,6 +301,110 @@
     .workflowTaskChildren {
       margin-left: 20px;
     }
+
+    .ml-5 {
+      margin-left: 5px;
+    }
+
+    .workflow-title {
+      display: inline-block;
+    }
+
+    .save-controls {
+      margin: 8px;
+    }
+
+    .inline-dropdown {
+      display: inline;
+    }
+
+    .tools-dropdown-toggle {
+      border: none;
+    }
+
+    .tools-dropdown-menu {
+      margin-top: 12px;
+    }
+
+    .form-group-center {
+      text-align: center;
+    }
+
+    .btn-full {
+      width: 100%;
+    }
+
+    .spinner-center {
+      margin: 0 auto;
+    }
+
+    .muted-note {
+      color: grey;
+    }
+
+    .action-link {
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .muted-link {
+      color: grey;
+    }
+
+    .helper-inline {
+      display: inline-block;
+    }
+
+    .pane-title {
+      margin-left: 8px;
+      margin-top: 4px;
+    }
+
+    .pane-controls {
+      margin-right: 8px;
+    }
+
+    .mouse-readout {
+      display: none;
+      font-family: monospace;
+      font-size: 11px;
+    }
+
+    .pane-icon {
+      width: 16px;
+      height: 18px;
+      cursor: pointer;
+    }
+
+    .pane-icon-tight {
+      margin: 5px;
+    }
+
+    .pane-icon-left {
+      margin-left: 5px;
+    }
+
+    .preview-tool-icon {
+      margin: 2px;
+      width: 17px;
+      height: 17px;
+    }
+
+    .pane-rotate-label {
+      font-size: 1.65em;
+    }
+
+    .merge-header {
+      width: 100%;
+    }
+
+    .merge-columns {
+      display: flex;
+    }
+
+    .merge-column {
+      width: 50%;
+    }
   </style>
 </head>
 <body>
@@ -308,11 +412,11 @@
     <div id="navbar">
 
     <div class="btn-group" role="group" aria-label="..." id='loginSingupGroup' :class='{show: loginState == "LOGGEDOUT", hide: loginState == "LOGGEDIN"}'>
-      <button style="margin-left: 5px;" class="btn btn-medium btn-primary" type="button" id="login" :class='{show: loginState == "LOGGEDOUT", hide: loginState == "LOGGEDIN"}' onclick="$('#loginModal').modal('show');" @click="switchToLogin()">Login</button>
+      <button class="btn btn-medium btn-primary ml-5" type="button" id="login" :class='{show: loginState == "LOGGEDOUT", hide: loginState == "LOGGEDIN"}' onclick="$('#loginModal').modal('show');" @click="switchToLogin()">Login</button>
       <button class="btn btn-medium btn-success" type="button" id="signup" :class='{show: loginState == "LOGGEDOUT", hide: loginState == "LOGGEDIN"}' onclick="$('#loginModal').modal('show');" @click="switchToSignUp()">Sign Up</button>
     </div>
 
-      <div style="margin-left: 5px" id="logggedin" class="hide dropdown" :class='{hide: loginState == "LOGGEDOUT", show: loginState == "LOGGEDIN"}'>
+      <div id="logggedin" class="hide dropdown ml-5" :class='{hide: loginState == "LOGGEDOUT", show: loginState == "LOGGEDIN"}'>
         <button class="btn btn-medium btn-info dropdown-toggle" type="button" id="loggedin-name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">{{userNameForMenu}} <span class="caret"></span></button>
         <ul class="dropdown-menu" aria-labelledby="loggedin-name">
           <li><a href="./workflow.html">New Project</a></li>
@@ -333,8 +437,8 @@
        
         <div id="topworkfLowtaskContainer">
           <div>
-            <h4 style="display: inline-block" :style="{textDecoration: workflowPathTasks[workflowPathTasks.length - 1].done ? 'line-through' : 'none'}">{{ workflowPathTasks[workflowPathTasks.length - 1].name }}</h4>
-            <button class="btn btn-xs btn-success" v-show="(workflowPathTasks[workflowPathTasks.length - 1].parentPath || []).length !== 0 && !workflowMerging" @click="workflowTaskMerge()">Merge <img src="https://cdn4.iconfinder.com/data/icons/mini-arrows-3/16/122-512.png" width="10px"></img></button>
+            <h4 class="workflow-title" :style="{textDecoration: workflowPathTasks[workflowPathTasks.length - 1].done ? 'line-through' : 'none'}">{{ workflowPathTasks[workflowPathTasks.length - 1].name }}</h4>
+            <button class="btn btn-xs btn-success" v-show="(workflowPathTasks[workflowPathTasks.length - 1].parentPath || []).length !== 0 && !workflowMerging" @click="workflowTaskMerge()">Merge <img src="https://cdn4.iconfinder.com/data/icons/mini-arrows-3/16/122-512.png" width="10px" alt=""></img></button>
           </div>
           <div v-if="!workflowPathTasks[workflowPathTasks.length - 1].subtasks.length" @click="addFirstTask()">+</div>
           <workflow-task v-for="subtask in (workflowPathTasks[workflowPathTasks.length - 1]).subtasks" :task="subtask" :key="subtask.id"></workflow-task>
@@ -345,16 +449,16 @@
         </div>
      </div>
     
-      <span style="margin:8px" id="save">
+      <span class="save-controls" id="save">
 
       
         <button id="error" class="btn btn-danger" @click="showError()" :style="{display: error ? 'inline-block' : 'none', animation: seenError ? 'none' : 'glowing 1200ms infinite'}"><span class="glyphicon glyphicon-exclamation-sign"></span> Error</button>
-        <div class="dropdown" style="display:inline;">
-          <button class="btn btn-primary btn-medium dropdown-toggle" type="button" id="toolsDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style='border:none;'>
+        <div class="dropdown inline-dropdown">
+          <button class="btn btn-primary btn-medium dropdown-toggle tools-dropdown-toggle" type="button" id="toolsDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
             Tools
             <span class="caret"></span>
           </button>
-          <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="toolsDropdown" style="margin-top:12px;">
+          <ul class="dropdown-menu dropdown-menu-right tools-dropdown-menu" aria-labelledby="toolsDropdown">
             <li><a @click="undo()"><span class="fa fa-undo"></span> Undo <span><kbd>{{shortcut}}</kbd>+<kbd>Z</kbd></span></a></li>
             <li><a @click="redo()"><span class="fa fa-repeat"></span> Redo <span><kbd>{{shortcut}}</kbd>+<kbd>Shift</kbd>+<kbd>Z</kbd></span></a></li>
             <li><a @click="selectAll()"><span class="fa fa-bars"></span> Select All <span><kbd>{{shortcut}}</kbd>+<kbd>A</kbd></span></a></li>
@@ -382,7 +486,7 @@
               <input type="text" class="form-control" id="projectName" placeholder="my-project" :value="projectNameInputValue" @input="validate($event)" @keyDown.enter="saveName(projectNameInputValue)">
               <span id="nameTaken" :style="{opacity: projectNameRequest == 'NAME TAKEN' ? '1' : '0'}" class="text-danger">That project name has already been taken. Try another one.</span>
             </div>
-            <span id="illegalCharacter" class="text-danger" :class="{animated: projectNameLastKeyIllegal, shake: projectNameLastKeyIllegal}" style="display: inline-block" :style="{opacity: projectNameLastKeyIllegal ? '1' : '0'}">You cannot include {{ projectNameLastKeyIllegal }} in project names.</span>
+            <span id="illegalCharacter" class="text-danger helper-inline" :class="{animated: projectNameLastKeyIllegal, shake: projectNameLastKeyIllegal}" :style="{opacity: projectNameLastKeyIllegal ? '1' : '0'}">You cannot include {{ projectNameLastKeyIllegal }} in project names.</span>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -412,18 +516,18 @@
               <input onkeydown="if (event.keyCode == 13){login()}"  type="password" v-model="loginPassword" class="form-control" id="password" placeholder="Password" aria-describedby="passwordHelp">
               <span id="passwordHelp" class="help-block" :style="{display: loginError == 'WRONGPASSWORD' ? 'block' : 'none'}">Invalid password. Please try again.</span>
             </div>
-            <div class="form-group" style="text-align:center;">
+            <div class="form-group form-group-center">
               <div>
-                <button type="submit" class="btn btn-primary" style="width:100%;" :class="{disabled: loginButtonState == 'LOADING'}" onclick="login()">
-                  <i class="fa fa-spinner fa-pulse fa-fw" style="margin:0 auto;" :style="{display: loginButtonState == 'LOADING' ? 'block' : 'none'}"></i>
+                <button type="submit" class="btn btn-primary btn-full" :class="{disabled: loginButtonState == 'LOADING'}" onclick="login()">
+                  <i class="fa fa-spinner fa-pulse fa-fw spinner-center" :style="{display: loginButtonState == 'LOADING' ? 'block' : 'none'}"></i>
                   <span :style="{display: loginButtonState == 'NORMAL' ? 'block' : 'none'}">Log In</span>
                 </button>
                 <br>
                 <br>
-                <small style="color:grey;">Don't have an account? <a @click="switchToSignUp()" style="cursor: pointer;text-decoration:none;">Sign Up</a></small>
+                <small class="muted-note">Don't have an account? <a @click="switchToSignUp()" class="action-link">Sign Up</a></small>
                 <br>
                 <br>
-                <small style="color:grey;"><a @click="switchToPasswordReset()" style="cursor: pointer;color:grey;">Forgot your password?</a></small>
+                <small class="muted-note"><a @click="switchToPasswordReset()" class="action-link muted-link">Forgot your password?</a></small>
               </div>
             </div>
           </div>
@@ -439,7 +543,7 @@
               <label for='username'>Username</label>
               <input v-model='signUpUsername' onfocus="$('#usernameCreate').tooltip('toggle')" data-placement="top" title="Don't use your real name" type="text" class="form-control" id="usernameCreate" placeholder="Username" aria-describedby="usernameCreateHelp" @input="usernameValidate($event)">
               <span id="usernameCreateHelp" class="help-block" :style="{display: usernameValid == 'TAKEN' ? 'block' : 'none'}">This username is already taken. Please try another username.</span>
-              <span id="usernameCreateHelp" class="help-block" style='color:#BD362F;' :style="{display: usernameLastKeyIllegal ? 'block' : 'none'}">You cannot include {{ usernameLastKeyIllegal }} in usernames.</span>
+              <span id="usernameCreateHelp" class="help-block text-danger" :style="{display: usernameLastKeyIllegal ? 'block' : 'none'}">You cannot include {{ usernameLastKeyIllegal }} in usernames.</span>
             </div>
             <div class="form-group" :class="{'has-success': emailValid == 'VALID', 'has-error': emailValid == 'TAKEN' || emailValid == 'NOTEMAIL',  animated: emailValid == 'TAKEN' || emailValid == 'NOTEMAIL',  shake: emailValid == 'TAKEN' || emailValid == 'NOTEMAIL'}">
               <label for='username'>Email</label>
@@ -457,15 +561,15 @@
                 <input type="checkbox" v-model='signUpChecked'> I want to recieve updates about WoofJS
               </label>
             </div>
-            <div class="form-group" style="text-align:center;">
+            <div class="form-group form-group-center">
               <div>
-                <button type="submit" class="btn btn-primary" style="width:100%;" :class="{disabled: signUpButtonState == 'LOADING'}" onclick="signUp()">
-                  <i class="fa fa-spinner fa-pulse fa-fw" style="margin:0 auto;" :style="{display: signUpButtonState == 'LOADING' ? 'block' : 'none'}"></i>
+                <button type="submit" class="btn btn-primary btn-full" :class="{disabled: signUpButtonState == 'LOADING'}" onclick="signUp()">
+                  <i class="fa fa-spinner fa-pulse fa-fw spinner-center" :style="{display: signUpButtonState == 'LOADING' ? 'block' : 'none'}"></i>
                   <span :style="{display: signUpButtonState == 'LOADING' ? 'none' : 'block'}">Sign Up</span>
                 </button>
                 <br>
                 <br>
-                <small style="color:grey;">Already have an account? <a @click="switchToLogin()" style="cursor: pointer;text-decoration:none;">Log In</a></small>
+                <small class="muted-note">Already have an account? <a @click="switchToLogin()" class="action-link">Log In</a></small>
               </div>
             </div>
           </div>
@@ -484,14 +588,14 @@
               <label for='emailReset'>Email</label>
               <input onkeydown="if (event.keyCode == 13){resetPassword()}" type="email" v-model="resetEmail" class="form-control" id="emailReset" placeholder="Email">
             </div>
-            <div class="form-group" style="text-align:center;">
+            <div class="form-group form-group-center">
               <div>
-                <button type="submit" class="btn btn-primary" style="width:100%;" onclick="resetPassword()" >
+                <button type="submit" class="btn btn-primary btn-full" onclick="resetPassword()" >
                   Send
                 </button>
                 <br>
                 <br>
-                <small style="color:grey;">Remember your password? <a @click="switchToLogin()" style="cursor: pointer;text-decoration:none;">Log In</a></small>
+                <small class="muted-note">Remember your password? <a @click="switchToLogin()" class="action-link">Log In</a></small>
               </div>
             </div>
           </div>
@@ -509,17 +613,17 @@
     <div id="container">
 
       <div id="previewbar" v-show="previewbar" @click="previewbar= !previewbar" :style="{display: 'flex'}">
-        <span class="rotate" style="font-size: 1.65em">Preview</span>
+        <span class="rotate pane-rotate-label">Preview</span>
       </div>
       <div v-show="outputPane" :style="{display: !previewbar ? 'flex' : 'none'}" id="output">
         <div id="PreviewNav">
-          <span style="margin-left:8px; margin-top:4px">Preview</span>
-          <span style="margin-right:8px">
-            <span style="display: none; font-family: monospace; font-size: 11px" :style="{display: status ? 'inline-block' : 'none'}">mouseX: {{mouseX}}</span>
-            <span style="display: none; font-family: monospace; font-size: 11px" :style="{display: status ? 'inline-block' : 'none'}">mouseY: {{mouseY}}</span>
-            <img onclick="runCode(); focusPreview()" id="pop" style="margin: 2px; width: 17px; height:17px" src="./images/refresh.png" title="Reload">
-            <img  onclick="popout()" id="pop" style="margin: 2px; width: 17px; height:17px" src="./images/pop.png" title="Open in new tab">
-            <img  @click="previewbar = !previewbar"  style="margin: 5px; width: 16px; height:18px; cursor:pointer" src="./images/minimize.png" title="Minimize">
+          <span class="pane-title">Preview</span>
+          <span class="pane-controls">
+            <span class="mouse-readout" :style="{display: status ? 'inline-block' : 'none'}">mouseX: {{mouseX}}</span>
+            <span class="mouse-readout" :style="{display: status ? 'inline-block' : 'none'}">mouseY: {{mouseY}}</span>
+            <img onclick="runCode(); focusPreview()" id="pop" class="preview-tool-icon" src="./images/refresh.png" title="Reload" alt="Reload preview">
+            <img onclick="popout()" id="pop" class="preview-tool-icon" src="./images/pop.png" title="Open in new tab" alt="Open preview in new tab">
+            <img @click="previewbar = !previewbar" class="pane-icon pane-icon-tight" src="./images/minimize.png" title="Minimize" alt="Minimize preview pane">
           </span>
         </div>
         <iframe scrolling="no" id="preview"></iframe>
@@ -554,13 +658,13 @@
       </div>
     
       <div id="docsbar" v-show="docsbar" @click="docsbar= !docsbar" :style="{display: 'flex'}">
-        <span class="rotate" style="font-size: 1.65em">Documentation</span>
+        <span class="rotate pane-rotate-label">Documentation</span>
       </div>
       <div v-show="docsPane" :style="{display: !docsbar ? 'flex' : 'none'}" id="docs">
         <div id="DocsNav">
-          <span style="margin-left:8px;  margin-top:4px">Documentation</span>
-          <span style="margin-right:8px">
-            <img   @click="docsbar = !docsbar"  style="margin-left:5px; width: 16px; height:18px; cursor:pointer" src="./images/minimize.png"  title="Minimize">
+          <span class="pane-title">Documentation</span>
+          <span class="pane-controls">
+            <img @click="docsbar = !docsbar" class="pane-icon pane-icon-left" src="./images/minimize.png" title="Minimize" alt="Minimize documentation pane">
           </span>
         </div>
         <iframe src="./docs/index.html" id="scratch"></iframe>
@@ -568,13 +672,13 @@
 
 
       <div id="projectbar" v-show="projectbar" @click="projectbar= !projectbar" :style="{display: 'flex'}" @click="projectsPane = !projectsPane">
-        <span class="rotate" style="font-size:1.65em">Tutorials</span>
+        <span class="rotate pane-rotate-label">Tutorials</span>
       </div>
       <div v-show="projectsPane" :style="{display: !projectbar ? 'flex' : 'none'}"  :style="{display: 'flex'}" id="projects">
         <div id="ProjectsNav">
-          <span style="margin-left:8px; margin-top:4px">Tutorials</span>
-          <span style="margin-right:8px">
-            <img @click="projectbar = !projectbar" style="margin: 5px; width: 16px; height:18px; cursor:pointer" src="./images/minimize.png" title="Minimize">
+          <span class="pane-title">Tutorials</span>
+          <span class="pane-controls">
+            <img @click="projectbar = !projectbar" class="pane-icon pane-icon-tight" src="./images/minimize.png" title="Minimize" alt="Minimize tutorials pane">
           </span>
         </div>
         <iframe id="projectsIframe" src="//coding.space/woof/index.html"></iframe>
@@ -582,24 +686,24 @@
 
 
       <div id="codebar" v-show="codebar" @click="codebar= !codebar" :style="{display: 'flex'}">
-        <span class="rotate" style="font-size:1.65em">Code</span>
+        <span class="rotate pane-rotate-label">Code</span>
       </div>
       <div v-show="codePane" :style="{display: !codebar ? 'flex' : 'none'}" id="code">
         <div id="CodeNav">
-          <span style="margin-left:8px; margin-top:4px">Code</span>
-          <span style="margin-right:8px">
-            <img @click="codebar = !codebar" style="margin: 5px; width: 16px; height:18px; cursor:pointer" src="./images/minimize.png" title="Minimize">
+          <span class="pane-title">Code</span>
+          <span class="pane-controls">
+            <img @click="codebar = !codebar" class="pane-icon pane-icon-tight" src="./images/minimize.png" title="Minimize" alt="Minimize code pane">
           </span>
         </div>
         <div v-show="!workflowMerging" id="code-editor"></div>
         <div v-show="workflowMerging" id="merge-editor">
-          <div style="width:100%">
+          <div class="merge-header">
             <div>
-              <button class="btn btn-md btn-success" style="width:100%" @click="workflowMergeDone()">Done</button>
+              <button class="btn btn-md btn-success btn-full" @click="workflowMergeDone()">Done</button>
             </div>
-            <div style="display: flex">
-              <div style="width: 50%"><code>{{workflowMergeParentName}}</code></div>
-              <div style="width: 50%"><code>{{workflowMergeChildName}}</code></div>
+            <div class="merge-columns">
+              <div class="merge-column"><code>{{workflowMergeParentName}}</code></div>
+              <div class="merge-column"><code>{{workflowMergeChildName}}</code></div>
             </div>
           </div>
         </div>
