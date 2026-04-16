@@ -1781,10 +1781,13 @@
         .child(getID())
         .child(uniqueId)
 
+      console.log("Writing image to ", ref);
+
       var file = e.data
       ref.put(file)
         .then(function(snapshot){
           if (getID()) {
+            console.log("Added image successfully");
             firebase.database().ref()
               .child('code-image-uploads')
               .child(getID())
@@ -1802,7 +1805,9 @@
       ref = firebase.database().ref()
         .child('code-image-uploads')
         .child(getID())
+      console.log("Attaching uploaded image listener to", ref);
       ref.on('value', function(snapshot) {
+        console.log("Retrieved user uploaded images");
         var addImagesFunc = () => {
           var images = snapshot.val() || {}
           scratch.contentWindow.app.setUserUploadImages(Object.values(images))
@@ -1812,7 +1817,7 @@
         } else {
           scratch.contentDocument.addEventListener('DOMContentLoaded', addImagesFunc, false);
         }
-      })  
+      })
     }
     getID() && setUserUploadImageListener()
     
