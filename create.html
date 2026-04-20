@@ -1755,8 +1755,9 @@
 		    app.processError()
 		})
     }
-    
-    window.onmessage = function(e){
+
+    // this catches the message from docs/index.html indicating that the user is uploading an image
+    window.onmessage = function(e){ 
       if (!(e.data instanceof File)){
         return
       }
@@ -1770,6 +1771,7 @@
       }
       if (!myCode) {
         alert('Please save this project to your account to upload images.')
+        return
       }
       
       var uniqueId = Math.random().toString(36).substring(2) 
@@ -1812,7 +1814,7 @@
         } else {
           scratch.contentDocument.addEventListener('DOMContentLoaded', addImagesFunc, false);
         }
-      })  
+      })
     }
     getID() && setUserUploadImageListener()
     
