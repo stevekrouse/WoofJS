@@ -1755,8 +1755,9 @@
 		    app.processError()
 		})
     }
-    
-    window.onmessage = function(e){
+
+    // this catches the message from docs/index.html indicating that the user is uploading an image
+    window.onmessage = function(e){ 
       if (!(e.data instanceof File)){
         return
       }
@@ -1770,6 +1771,7 @@
       }
       if (!myCode) {
         alert('Please save this project to your account to upload images.')
+        return
       }
       
       var uniqueId = Math.random().toString(36).substring(2) 
@@ -1781,13 +1783,10 @@
         .child(getID())
         .child(uniqueId)
 
-      console.log("Writing image to ", ref);
-
       var file = e.data
       ref.put(file)
         .then(function(snapshot){
           if (getID()) {
-            console.log("Added image successfully");
             firebase.database().ref()
               .child('code-image-uploads')
               .child(getID())
@@ -1805,9 +1804,7 @@
       ref = firebase.database().ref()
         .child('code-image-uploads')
         .child(getID())
-      console.log("Attaching uploaded image listener to", ref);
       ref.on('value', function(snapshot) {
-        console.log("Retrieved user uploaded images");
         var addImagesFunc = () => {
           var images = snapshot.val() || {}
           scratch.contentWindow.app.setUserUploadImages(Object.values(images))
