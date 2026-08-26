@@ -2201,11 +2201,11 @@
                     var newImages = this.menus['Sprites & Backgrounds']['Image'].filter(
                         block => !block.userUploadImage
                     )
-                    images.reverse() // show the newest first
-                    newImages.splice(1, 0, ...images.map(imageURL => {
+                    images.sort((a, b) => b.time - a.time) // show the newest first
+                    newImages.splice(1, 0, ...images.map(image => {
                         return {
-                            url: imageURL,
-                            code: 'var sprite1 = new Image()\nsprite1.url = "' + imageURL + '"',
+                            url: image.downloadURL,
+                            code: 'var sprite1 = new Image()\nsprite1.url = "' + image.downloadURL + '"',
                             tags: "upload image picture",
                             userUploadImage: true
                         }

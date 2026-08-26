@@ -801,7 +801,10 @@
               .child('team-code-image-uploads')
               .child(getID())
               .child(uniqueId)
-              .set(snapshot.downloadURL)
+              .set({
+                downloadURL: snapshot.downloadURL,
+                time: firebase.database.ServerValue.TIMESTAMP
+              })
           }
         }).catch(function(error){
           alert('There was an error uploading your image: ' + error.message)
