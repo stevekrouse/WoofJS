@@ -613,8 +613,15 @@ function Woof({global = false, fullScreen = false, height = 500, width = 350} = 
   thisContext._afters = []; 
   thisContext.after = (time, units, func) => {
     var milis = Woof.prototype.unitsToMiliseconds(time, units);
-    if (typeof func != "function" || typeof time != "number") { throw new TypeError("after(time, units, function) requires a number, unit and function input."); }
-    thisContext._afters.push(setTimeout(func, milis));
+      if (typeof func != "function" || typeof time != "number") { throw new TypeError("after(time, units, function) requires a number, unit and function input."); }
+      const timeoutID = setTimeout(() => {
+	  // when we evaluate the after, first delete the timeoutID from _afters
+	  const ind = thisContext._afters.indexOf(timeoutID);
+	  thisContext._afters.splice(ind, 1);
+	  
+	  func()
+      }, milis);
+      thisContext._afters.push(timeoutID);
   };
   
   thisContext._renderSprites = () => {
