@@ -1492,7 +1492,7 @@
       firebase.database().ref().update(updates).then(function(){
         window.location.hash = name
         setUserUploadImageListener() // sync user-uploaded photos for this project name
-        myCode = firebase.auth().currentUser
+        myCode = true
         // This save was initiated by the user clicking the popout button
         // Now that the project is saved, popout the project in a new window
         if(app.popoutAfterSave){
@@ -1610,7 +1610,7 @@
 
     function WoofJSLint(){
       if (app.error) { return }
-      const code = js_beautify(app.code, {space_after_anon_function: true, indent_size: 2, indent_with_tabs: false})
+	const code = js_beautify(editor.getValue(), {space_after_anon_function: true, indent_size: 2, indent_with_tabs: false})
       const regEx = /  ((\w)*\.)?(ready|onKeyDown|onKeyUp|onMouseDown|onMouseUp|onMouseMove|forever|repeatUntil)/g   // matches any event indented with two spaces
       var result;
       while ((result = regEx.exec(code)) !== null) {
@@ -1728,6 +1728,7 @@
             if (error.type == "ImageLoadError") {
 		if (error.url === "" || error.url === undefined || error.url === "undefined") {
                     var emptyURLTypes = ["setBackdropURL('')", 'setBackdropURL("")', 'setBackdropURL()', 'url: ""', "url: ''"]
+		    var code = editor.getValue();
                     var emptyURLType = emptyURLTypes.find(t => code.includes(t))
                     if (emptyURLType) {
 			app.error = {message: "You forgot to include an image or background URL.", lineno: code.substring(0, code.indexOf(emptyURLType)).split('\n').length}
